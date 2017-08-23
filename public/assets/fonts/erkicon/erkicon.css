@@ -1,0 +1,103 @@
+/*
+  Icon Font: fontcustom
+*/
+
+@font-face {
+  font-family: "fontcustom";
+  src: url("./fontcustom_856d94debdc6d586975858bcd23f8546.eot");
+  src: url("./fontcustom_856d94debdc6d586975858bcd23f8546.eot?#iefix") format("embedded-opentype"),
+       url("./fontcustom_856d94debdc6d586975858bcd23f8546.woff") format("woff"),
+       url("./fontcustom_856d94debdc6d586975858bcd23f8546.ttf") format("truetype"),
+       url("./fontcustom_856d94debdc6d586975858bcd23f8546.svg#fontcustom") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "fontcustom";
+    src: url("./fontcustom_856d94debdc6d586975858bcd23f8546.svg#fontcustom") format("svg");
+  }
+}
+
+[data-icon]:before { content: attr(data-icon); }
+
+[data-icon]:before,
+.mi-angle-down:before,
+.mi-angle-left:before,
+.mi-angle-right:before,
+.mi-angle-up:before,
+.mi-bupet:before,
+.mi-cabinet:before,
+.mi-caret-down:before,
+.mi-caret-left:before,
+.mi-caret-right:before,
+.mi-caret-up:before,
+.mi-chair:before,
+.mi-check-box:before,
+.mi-close:before,
+.mi-cross:before,
+.mi-cross-box:before,
+.mi-edit:before,
+.mi-eye:before,
+.mi-ganti-uang:before,
+.mi-heart:before,
+.mi-langsung:before,
+.mi-map-marker:before,
+.mi-minus-box:before,
+.mi-nihil:before,
+.mi-paper:before,
+.mi-plus:before,
+.mi-sofa:before,
+.mi-tambah-uang:before,
+.mi-tipi:before,
+.mi-trash:before,
+.mi-tv:before,
+.mi-uang-persediaan:before,
+.mi-warning:before {
+  display: inline-block;
+  font-family: "fontcustom";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+
+.mi-angle-down:before { content: "\f125"; }
+.mi-angle-left:before { content: "\f103"; }
+.mi-angle-right:before { content: "\f104"; }
+.mi-angle-up:before { content: "\f10e"; }
+.mi-bupet:before { content: "\f127"; }
+.mi-cabinet:before { content: "\f122"; }
+.mi-caret-down:before { content: "\f10f"; }
+.mi-caret-left:before { content: "\f110"; }
+.mi-caret-right:before { content: "\f111"; }
+.mi-caret-up:before { content: "\f112"; }
+.mi-chair:before { content: "\f123"; }
+.mi-check-box:before { content: "\f113"; }
+.mi-close:before { content: "\f128"; }
+.mi-cross:before { content: "\f126"; }
+.mi-cross-box:before { content: "\f115"; }
+.mi-edit:before { content: "\f116"; }
+.mi-eye:before { content: "\f117"; }
+.mi-ganti-uang:before { content: "\f118"; }
+.mi-heart:before { content: "\f119"; }
+.mi-langsung:before { content: "\f11a"; }
+.mi-map-marker:before { content: "\f106"; }
+.mi-minus-box:before { content: "\f11b"; }
+.mi-nihil:before { content: "\f11c"; }
+.mi-paper:before { content: "\f11d"; }
+.mi-plus:before { content: "\f11e"; }
+.mi-sofa:before { content: "\f129"; }
+.mi-tambah-uang:before { content: "\f11f"; }
+.mi-tipi:before { content: "\f12a"; }
+.mi-trash:before { content: "\f120"; }
+.mi-tv:before { content: "\f124"; }
+.mi-uang-persediaan:before { content: "\f121"; }
+.mi-warning:before { content: "\f107"; }

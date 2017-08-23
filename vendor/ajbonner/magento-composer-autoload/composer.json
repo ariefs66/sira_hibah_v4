@@ -1,0 +1,16 @@
+{
+    "name": "ajbonner/magento-composer-autoload",
+    "homepage": "https://github.com/ajbonner/magento-composer-autoload",
+    "description": "Extension of Magento's class autoloader making it composer vendor library aware",
+    "type": "magento-module",
+    "license": "MIT",
+    "authors": [
+    {
+        "name":"Aaron Bonner",
+        "email":"aaron@aaronbonner.io"
+    }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    }
+}

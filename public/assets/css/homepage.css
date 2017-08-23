@@ -1,0 +1,203 @@
+/* 
+*/
+@import url(mighticon.css);
+html {
+  background-color: #00b0ef;
+}
+
+body {
+  
+  font-family: "Open Sans", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.42857143;
+  color: #58666e;
+  background-color: #00b0ef;
+}
+
+
+#homepage-header{
+  padding: 75px 0;
+}
+#homepage-header .logo img{
+  max-height: 56px;
+}
+#homepage-header nav ul li{
+  float: left;
+  margin-left: 45px;
+}
+#homepage-header nav ul li a{
+  font-weight: 600;
+  font-size: 14px;
+  color: #bbedff;
+  padding-bottom: 10px;
+  transition: .3s;
+  -moz-transition: .3s;
+  -webkit-transition: .3s;
+  border-bottom: 2px solid #00b0ef;
+}
+#homepage-header nav ul li a:hover,#homepage-header nav ul li a:focus,#homepage-header nav ul li.active a{
+  border-bottom: 2px solid #14befb;
+  color: #ffffff; 
+}
+#homepage-header nav ul li.sub-menu ul{
+  position: absolute;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: .3s;
+  -moz-transition: .3s;
+  -webkit-transition: .3s;
+
+}
+#homepage-header nav ul li.sub-menu{
+  cursor: pointer;
+}
+#homepage-header nav ul li.sub-menu i{
+    font-size: 10px;
+    margin-left: 10px;
+    float: right;
+    margin-top: 5px;
+}
+#homepage-header nav ul li.sub-menu ul li{
+  width: 200px;
+  margin-left: 0;
+  padding-top: 10px;
+  margin-top: 15px;
+}
+#homepage-header nav ul li.sub-menu:hover > ul{
+  opacity: 1;
+  visibility: visible;
+}
+.main-page{
+  height: 510px;
+  max-height: 510px;
+}
+
+.main-page h4{
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.main-page form input.input-dark{
+  background-color: #019bd2;
+  border-color: #019bd2;
+  font-size: 14px;
+  color: #fff;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  padding: 6px 15px;
+}
+.main-page .input-group .form-control:not(:first-child):not(:last-child){
+  border-radius: 5px 0 0 5px;
+  -moz-border-radius: 5px 0 0 5px;
+  -webkit-border-radius: 5px 0 0 5px;
+}
+
+.main-page form input.input-dark:-moz-placeholder {
+  color: #e6e6e6;
+  font-size: 14px;
+}
+.main-page form input.input-dark::-moz-placeholder {
+  color: #e6e6e6;
+  font-size: 14px;
+}
+.main-page form input.input-dark:-ms-input-placeholder {
+  color: #e6e6e6;
+  font-size: 14px;
+}
+.main-page form input.input-dark::-webkit-input-placeholder {
+  color: #e6e6e6;
+  font-size: 14px;
+}
+.main-page form input.input-dark.placeholder {
+  color: #e6e6e6;
+  font-size: 14px;
+}
+.main-page button{
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  font-size: 14px;
+}
+.main-page .checkbox-remember{
+  padding-left: 8px;
+}
+.main-page .bootstrap-touchspin .input-group-btn-vertical>.btn{
+  padding: 9px 14px;
+  border-color: #14befb;
+  background-color: #14befb;
+}
+.main-page .bootstrap-touchspin .input-group-btn-vertical i {  
+    top: 3px;
+    left: 10px;
+    color: #fff;
+    font-size: 14px;
+  }
+.main-page .bootstrap-touchspin .input-group-btn-vertical .btn:first-child i{
+  top: 6px;
+}
+.main-page .bootstrap-touchspin .input-group-btn-vertical .btn:last-child i{
+  top: 0px; 
+}
+.main-page .i-checks input:checked + i:before {
+    top: 1px;
+    left: 1px;
+    width: 11px;
+    height: 11px;
+    background-color: #00b0ef;
+}
+.main-page .i-checks > i {    
+    width: 15px;
+    height: 15px;
+    background-color: #14befb;
+    border: 1px solid #14befb;
+    border-color: #14befb !important;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+.main-page .bootstrap-touchspin .input-group-btn-vertical .btn:first-child{
+  padding-top: 10px;
+}
+.main-page .bootstrap-touchspin .input-group-btn-vertical .btn:last-child{
+  padding-bottom: 10px;
+}
+.main-page .app-slider img{
+  max-width: 100%
+}
+
+.main-feature{
+  background-color: #ffffff;
+  padding: 100px 0;
+}
+
+.main-feature i {
+  font-size: 30px;
+  color: #555b70;
+  margin-bottom: 30px;
+}
+.main-feature h5{
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f1f1f;
+  margin-bottom: 25px;
+  margin-top: 15px;
+}
+.main-feature p{
+  font-size: 14px;
+  color: #555b70;
+  line-height: 26px;
+}
+
+footer{
+  background-color: #1c1c1c;
+  padding: 35px 0;  
+}
+footer p{
+  font-size: 14px;
+  color: #4c5265;
+  margin-bottom: 0;
+}
