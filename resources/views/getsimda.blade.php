@@ -180,7 +180,7 @@
             $('#load').removeClass('hide');
             $.ajax({
                 type  : "get",
-                url   : "{{ url('/') }}//auto/{{$tahun}}/trfProgramFromSimda",
+                url   : "{{ url('/') }}/auto/{{$tahun}}/trfProgramFromSimda",
                 success : function (data) {
                     $('#load').addClass('hide');
                     loadtable("program","PROGRAM");                    
@@ -196,7 +196,7 @@
             $('#load').removeClass('hide');
             $.ajax({
                 type  : "get",
-                url   : "{{ url('/') }}//auto/{{$tahun}}/trfKegiatanFromSimda",
+                url   : "{{ url('/') }}/auto/{{$tahun}}/trfKegiatanFromSimda",
                 success : function (data) {
                     $('#load').addClass('hide');
                     loadtable("kegiatan","KEGIATAN");                    
@@ -212,7 +212,7 @@
             $('#load').removeClass('hide');
             $.ajax({
                 type  : "get",
-                url   : "{{ url('/') }}//auto/{{$tahun}}/trfBelanjaFromSimda/"+kodeperubahan+"/"+kode,
+                url   : "{{ url('/') }}/auto/{{$tahun}}/trfBelanjaFromSimda/"+kodeperubahan+"/"+kode,
                 success : function (data) {
                     $('#load').addClass('hide');
                     loadtable("belanja","BELANJA<button class='btn btn-success pull-right' onclick='return transferbelanja(0)' style='margin-right:10px;'><i class='fa fa-retweet'></i></button>");                    
@@ -228,7 +228,7 @@
             $('#load').removeClass('hide');
             $.ajax({
                 type  : "get",
-                url   : "{{ url('/') }}//auto/{{$tahun}}/trfSubrincianFromSimda/"+kodeperubahan+"/"+kode,
+                url   : "{{ url('/') }}/auto/{{$tahun}}/trfSubrincianFromSimda/"+kodeperubahan+"/"+kode,
                 success : function (data) {
                     $('#load').addClass('hide');
                     loadtable("subrincian","SUBRINCIAN<button class='btn btn-success pull-right' onclick='return transfersubrincian(0)' style='margin-right:10px;'><i class='fa fa-retweet'></i></button>");                    
@@ -244,7 +244,7 @@
             $('#load').removeClass('hide');
             $.ajax({
                 type  : "get",
-                url   : "{{ url('/') }}//auto/{{$tahun}}/trfRincianFromSimda/"+kodeperubahan+"/"+kode,
+                url   : "{{ url('/') }}/auto/{{$tahun}}/trfRincianFromSimda/"+kodeperubahan+"/"+kode,
                 success : function (data) {
                     $('#load').addClass('hide');
                     loadtable("rincian","RINCIAN<button class='btn btn-success pull-right' onclick='return transferrincian(0)' style='margin-right:10px;'><i class='fa fa-retweet'></i></button>");                    
@@ -260,7 +260,7 @@
             $('#load').removeClass('hide');
             $.ajax({
                 type  : "get",
-                url   : "{{ url('/') }}//auto/{{$tahun}}/trfBTLFromSimda/"+kodeperubahan+"/"+kode,
+                url   : "{{ url('/') }}/auto/{{$tahun}}/trfBTLFromSimda/"+kodeperubahan+"/"+kode,
                 success : function (data) {
                     $('#load').addClass('hide');
                     loadtable("btl","BELANJA TIDAK LANGSUNG<button class='btn btn-success pull-right' onclick='return transferbtl(0)' style='margin-right:10px;'><i class='fa fa-retweet'></i></button>");                    
@@ -276,7 +276,7 @@
             $('#load').removeClass('hide');
             $.ajax({
                 type  : "get",
-                url   : "{{ url('/') }}//auto/{{$tahun}}/trfPendapatanFromSimda/"+kodeperubahan+"/"+kode,
+                url   : "{{ url('/') }}/auto/{{$tahun}}/trfPendapatanFromSimda/"+kodeperubahan+"/"+kode,
                 success : function (data) {
                     $('#load').addClass('hide');
                     loadtable("pendapatan","PENDAPATAN<button class='btn btn-success pull-right' onclick='return transferpendapatan(0)' style='margin-right:10px;'><i class='fa fa-retweet'></i></button>");                    
@@ -292,7 +292,7 @@
             $('#load').removeClass('hide');
             $.ajax({
                 type  : "get",
-                url   : "{{ url('/') }}//auto/{{$tahun}}/trfPembiayaanFromSimda/"+kodeperubahan+"/"+kode,
+                url   : "{{ url('/') }}/auto/{{$tahun}}/trfPembiayaanFromSimda/"+kodeperubahan+"/"+kode,
                 success : function (data) {
                     $('#load').addClass('hide');
                     loadtable("pembiayaan","PEMBIAYAAN<button class='btn btn-success pull-right' onclick='return transferpembiayaan(0)' style='margin-right:10px;'><i class='fa fa-retweet'></i></button>");                    
