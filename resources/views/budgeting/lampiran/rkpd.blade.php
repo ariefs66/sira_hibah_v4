@@ -126,16 +126,28 @@
 		<td width="1%"><b></b></td>
 		<td width="29%">&nbsp;&nbsp;<b>{{ $p->PROGRAM_NAMA }}</b></td>
 		@if(count($p->impact) != '0')
-		<td width="24%">
+		<td width="24%" style="padding: 0">
+			<table>
+				<?php $index = 0?>
 		@foreach($p->impact as $o)
-			<b>- {{ $o->IMPACT_TOLAK_UKUR }}<br></b>
+				@if($index != count($p->impact)-1)
+				<tr style="border-bottom: 1px solid">
+				@else
+				<tr>
+				@endif
+					<td>{{ $o->IMPACT_TOLAK_UKUR }}</td>
+					<td>{{ $o->IMPACT_TARGET }} {{ $o->satuan->SATUAN_NAMA }}</td>
+				</tr>
+				<?php $index++ ?>
+			{{-- <b>- {{ $o->IMPACT_TOLAK_UKUR }}<br></b> --}}
 		@endforeach
+			</table>
 		</td>
-		<td width="10%">
+		{{-- <td width="10%">
 		@foreach($p->impact as $o)
-			<b>{{ $o->IMPACT_TARGET }} {{ $o->satuan->SATUAN_NAMA }}<br></b>
+			<b><br></b>
 		@endforeach			
-		</td>
+		</td> --}}
 		@else
 		<td width="24%"><b>-</b></td>
 		<td width="10%"><b>-</b></td>

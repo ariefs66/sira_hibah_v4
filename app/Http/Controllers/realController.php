@@ -361,11 +361,13 @@ class realController extends Controller
 								->whereHas('urusan',function($q) use($tahun,$kdurusan){
 									$q->where('URUSAN_TAHUN',$tahun)->where('URUSAN_KODE',$kdurusan);
 							  })->value('PROGRAM_ID');
+			$nama 		= $this->utf8ize($p->Ket_Kegiatan);
 			$keg 	= new Kegiatan;
 			$keg->KEGIATAN_TAHUN 	= $tahun;
 			$keg->PROGRAM_ID 		= $program;
 			$keg->KEGIATAN_KODE 	= $kode;
-			$keg->KEGIATAN_NAMA 	= $p->Ket_Kegiatan;
+			$keg->KEGIATAN_NAMA 	= $nama;
+			$keg->KEGIATAN_KUNCI 	= 0;
 			$keg->save();
 		}
 		$count_lama = DB::connection('sqlsrv')
@@ -806,4 +808,15 @@ class realController extends Controller
 		$baru 	= UserBudget::where('TAHUN',$tahunakhir)->count();
 		return 'lama = '.$lama.'<br>baru = '.$baru;
 	}
+
+	public function utf8ize($d) {
+    if (is_array($d)) {
+        foreach ($d as $k => $v) {
+            $d[$k] = $this->utf8ize($v);
+        }
+    } else if (is_string ($d)) {
+        return utf8_encode($d);
+    }
+    return $d;
+    }
 }
