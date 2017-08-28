@@ -17,7 +17,7 @@
                 <li class="active"><i class="fa fa-angle-right"></i>{{ $tipe }}</li>                                
               </ul>
           </div>
-          <div class="wrapper-lg bg-dark-grey">
+          <div class="wrapper-lg bg-white">
             <div class="row">
               <div class="col-md-12">
                 <div class="panel bg-white">
