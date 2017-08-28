@@ -91,6 +91,7 @@ class staffController extends Controller
     public function getStaff($tahun,$status){
         $skpd   = $this->getSKPD($tahun);
         $data   = UserBudget::where('SKPD_ID',$skpd)
+                        ->where('TAHUN',$tahun)
                         ->whereHas('user',function($q){
                             $q->where('level',1);
                         })->orderBy('USER_ID')->get();
