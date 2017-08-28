@@ -410,6 +410,7 @@ class realController extends Controller
 									->where('PROGRAM_TAHUN',$tahun)
 									->where('PROGRAM_KODE',$kdprogram);
 								})->value('KEGIATAN_ID');
+
 			if($p->Kd_Sub < 10) $kodesub = '0'.$p->Kd_Sub;
 			else $kodesub = $p->Kd_Sub;
 			$skpd 	= $p->Kd_Urusan;
@@ -587,6 +588,7 @@ class realController extends Controller
 						->where('SUB_ID',$subunit)
 						->value('BL_ID');
 			$subrincian 	= Subrincian::where('BL_ID',$bl)->where('SUBRINCIAN_NAMA',$p->Keterangan_Rinc)->value('SUBRINCIAN_ID');
+			$nama 			= $this->utf8ize($p->Keterangan);
 			$rincian 		= new Rincian;
 			$rincian->SUBRINCIAN_ID 		= $subrincian;
 			$rincian->REKENING_ID 			= $idrek;
@@ -597,7 +599,7 @@ class realController extends Controller
 			$rincian->RINCIAN_TOTAL 		= $p->Total;
 			$rincian->PEKERJAAN_ID 			= 0;
 			$rincian->BL_ID 				= $bl;
-			$rincian->RINCIAN_KOMPONEN		= $p->Keterangan;
+			$rincian->RINCIAN_KOMPONEN		= $nama;
 			$rincian->RINCIAN_HARGA			= $p->Nilai_Rp;
 			$rincian->save();			
 		}
