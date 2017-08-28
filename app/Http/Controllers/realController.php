@@ -16,6 +16,8 @@ Use App\Model\Kegiatan;
 Use App\Model\Subunit;
 Use App\Model\Kunci;
 Use App\Model\Subrincian;
+Use App\Model\UserBudget;
+Use App\Model\SKPD;
 Use Response;
 Use DB;
 class realController extends Controller
@@ -787,5 +789,21 @@ class realController extends Controller
 		}
 
 		return number_format($count_baru/$count_lama*100,2,'.',',');
+	}
+
+	public function transferuser($tahunawal,$tahunakhir){
+		$data 	= UserBudget::where('TAHUN',$tahunawal)->get();
+		foreach($data as $data){
+			$skpdlama 	= SKPD::where('SKPD_ID',$data->SKPD_ID)->value('SKPD_KODE');
+			$skpdbaru 	= SKPD::where('SKPD_TAHUN',$tahunawal)->where('SKPD_KODE',$skpdlama)->value('SKPD_ID');
+			$userbudget 	= new UserBudget;
+			$userbudget->USER_ID 		= $data->USER_ID;
+			$userbudget->SKPD_ID 		= $skpdbaru;
+			$userbudget->TAHUN 			= $tahunakhir;
+			$userbudget->save();
+		}
+		$lama 	= count($data);
+		$baru 	= UserBudget::where('TAHUN',$tahunakhir)->count();
+		return 'lama = '.$lama.'<br>baru = '.$baru;
 	}
 }
