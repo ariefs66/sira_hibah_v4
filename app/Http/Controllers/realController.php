@@ -795,7 +795,7 @@ class realController extends Controller
 		$data 	= UserBudget::where('TAHUN',$tahunawal)->get();
 		foreach($data as $data){
 			$skpdlama 	= SKPD::where('SKPD_ID',$data->SKPD_ID)->value('SKPD_KODE');
-			$skpdbaru 	= SKPD::where('SKPD_TAHUN',$tahunawal)->where('SKPD_KODE',$skpdlama)->value('SKPD_ID');
+			$skpdbaru 	= SKPD::where('SKPD_TAHUN',$tahunakhir)->where('SKPD_KODE',$skpdlama)->value('SKPD_ID');
 			$userbudget 	= new UserBudget;
 			$userbudget->USER_ID 		= $data->USER_ID;
 			$userbudget->SKPD_ID 		= $skpdbaru;
