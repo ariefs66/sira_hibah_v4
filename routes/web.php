@@ -159,6 +159,7 @@ Route::get('/main/{tahun}/{status}/pengaturan/staff/getStaff/{id}', 'Budgeting\s
 Route::post('/main/{tahun}/{status}/pengaturan/staff/submitAdd', 'Budgeting\staffController@submitAdd');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/submitEdit', 'Budgeting\staffController@submitEdit');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/submitEharga', 'Budgeting\staffController@submitEharga');
+Route::post('/main/{tahun}/{status}/pengaturan/staff/submitEmonev', 'Budgeting\staffController@submitEmonev');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/hapus', 'Budgeting\staffController@hapus');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/reset', 'Budgeting\staffController@reset');
 //TAHAPAN

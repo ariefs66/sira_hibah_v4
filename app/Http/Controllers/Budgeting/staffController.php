@@ -13,25 +13,31 @@ use App\Model\User;
 class staffController extends Controller
 {
 	public function index($tahun,$status){
-        $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        $skpd   = $this->getSKPD($tahun);
         $data   = UserBudget::where('SKPD_ID',$skpd)
                         ->whereHas('user',function($q){
                             $q->where('level',1);
                         })->orderBy('USER_ID')->get();
         $userHarga  = "";
+        $userMonev  = "";
         foreach($data as $d){
-            $mod    = substr($d->user->mod, 3,1);
+            $mod        = substr($d->user->mod, 3,1);
+            $mod_monev  = substr($d->user->mod, 9,1);
             if($mod == "1"){
                $userHarga = User::where('id',$d->USER_ID)->first();
             }
+            if($mod_monev == "1"){
+               $userMonev = User::where('id',$d->USER_ID)->first();
+            }
         }
-		return view('budgeting.referensi.staff',['tahun'=>$tahun,'status'=>$status,'userharga'=>$userHarga]);
+		return view('budgeting.referensi.staff',['tahun'=>$tahun,'status'=>$status,'userharga'=>$userHarga,'usermonev'=>$userMonev]);
 	}
 
     public function getData($tahun){
-    	$skpd 	= UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+    	$skpd 	= $this->getSKPD($tahun);
         if(Auth::user()->level == 2){
             $data   = UserBudget::where('SKPD_ID',$skpd)
+                            ->where('TAHUN',$tahun)
                             ->whereHas('user',function($q){
                                 $q->where('level',1);
                             })->orderBy('USER_ID')->get();            
@@ -83,7 +89,7 @@ class staffController extends Controller
     }
 
     public function getStaff($tahun,$status){
-        $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        $skpd   = $this->getSKPD($tahun);
         $data   = UserBudget::where('SKPD_ID',$skpd)
                         ->whereHas('user',function($q){
                             $q->where('level',1);
@@ -131,14 +137,15 @@ class staffController extends Controller
     }
 
     public function submitEharga($tahun,$status){
-        $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        $skpd   = $this->getSKPD($tahun);
         $data   = UserBudget::where('SKPD_ID',$skpd)
+                        ->where('TAHUN',$tahun)
                         ->whereHas('user',function($q){
                             $q->where('level',1);
                         })->orderBy('USER_ID')->get();
         foreach($data as $d){
             $mod    = substr($d->user->mod, 3,1);
-            if($mod == 1){
+            if($mod == '1'){
                 $modAwal    = substr($d->user->mod, 0,3);
                 $modAkhir   = substr($d->user->mod, 4,7);
                 $modFix     = $modAwal."0".$modAkhir;
@@ -146,8 +153,32 @@ class staffController extends Controller
             }
         }
         $user   = User::where('id',Input::get('ID'))->first();
-        $modAwal    = substr($d->user->mod, 0,3);
-        $modAkhir   = substr($d->user->mod, 4,7);
+        $modAwal    = substr($user->mod, 0,3);
+        $modAkhir   = substr($user->mod, 4,7);
+        $modFix     = $modAwal."1".$modAkhir;
+        User::where('id',Input::get('ID'))->update(['mod'=>$modFix]);
+        return 'Set Berhasil!';
+    }
+
+    public function submitEmonev($tahun,$status){
+        $skpd   = $this->getSKPD($tahun);
+        $data   = UserBudget::where('SKPD_ID',$skpd)
+                        ->where('TAHUN',$tahun)
+                        ->whereHas('user',function($q){
+                            $q->where('level',1);
+                        })->orderBy('USER_ID')->get();
+        foreach($data as $d){
+            $mod    = substr($d->user->mod, 9,1);
+            if($mod == '1'){
+                $modAwal    = substr($d->user->mod, 0,9);
+                $modAkhir   = substr($d->user->mod, 10,1);
+                $modFix     = $modAwal."0".$modAkhir;
+                User::where('id',$d->USER_ID)->update(['mod'=>$modFix]);
+            }
+        }
+        $user   = User::where('id',Input::get('ID'))->first();
+        $modAwal    = substr($user->mod, 0,9);
+        $modAkhir   = substr($user->mod, 10,1);
         $modFix     = $modAwal."1".$modAkhir;
         User::where('id',Input::get('ID'))->update(['mod'=>$modFix]);
         return 'Set Berhasil!';

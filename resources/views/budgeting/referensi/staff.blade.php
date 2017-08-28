@@ -28,6 +28,7 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                       <li><a class="open-tahapan">Tambah Staff</a></li>
                       <li><a class="open-staff">Set Admin EHarga</a></li>
+                      <li><a class="open-staff-monev">Set Admin EMonev</a></li>
                     </ul>
                   </div>                  
                     <h5 class="inline font-semibold text-orange m-n ">Staff Tahun {{ $tahun }}</h5>
@@ -36,7 +37,7 @@
                         <div role="tabpanel" class="active tab-pane" id="tab-1">  
                             <div class="table-responsive dataTables_wrapper">
                              <table ui-jq="dataTable" ui-options="{
-                                      sAjaxSource: '{{ url('/') }}/main/{tahun}/{status}/pengaturan/staff/getData',
+                                      sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/staff/getData',
                                       aoColumns: [
                                       { mData: 'USER_ID',class:'hide'}, 
                                       { mData: 'NO'},
@@ -107,7 +108,7 @@
   </div>
  </div>
 
- <div class="overlay"></div>
+<div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar set-staff">
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
     <form id="form-urusan" class="form-horizontal">
@@ -131,6 +132,31 @@
     </form>
   </div>
  </div>
+
+  <div class="overlay"></div>
+<div class="bg-white wrapper-lg input-sidebar set-staff-monev">
+<a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
+    <form class="form-horizontal">
+      <div class="input-wrapper">
+        <h5>Set Staff EMonev</h5>
+          <div class="form-group">
+            <label class="col-sm-3">Staff</label>
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="staff_monev">
+                @if($usermonev == NULL)
+                <option value="">Pilih Staff</option>
+                @else
+                <option value="{{$usermonev->id}}">{{ $usermonev->email }} - {{ $usermonev->name }}</option>
+                @endif
+              </select>
+            </div>
+          </div>
+          <hr class="m-t-xl">
+          <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanMonev()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+      </div>
+    </form>
+  </div>
+ </div>
 @endsection
 
 @section('plugin')
@@ -150,6 +176,25 @@
       });
       $('.overlay').fadeIn('fast',function(){
         $('.set-staff').animate({'right':'0'},"linear");  
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+      }); 
+    });
+
+    $('.open-staff-monev').on('click',function(){
+      @if($usermonev == NULL)      
+      $('#staff_monev').find('option').remove().end().append('<option>Pilih Staff</option>');
+      @else 
+      $('#staff_monev').find('option').remove().end().append('<option value="{{ $usermonev->id }}">{{ $usermonev->email }} - {{ $usermonev->name }}</option>');
+      @endif
+      $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/staff/getStaff",
+      success : function (data) {
+          $('#staff_monev').append(data).trigger('chosen:updated');      
+        }
+      });
+      $('.overlay').fadeIn('fast',function(){
+        $('.set-staff-monev').animate({'right':'0'},"linear");  
         $("html, body").animate({ scrollTop: 0 }, "slow");
       }); 
     }); 
@@ -199,7 +244,29 @@
         success: function(msg){
             $.alert(msg);
             $('.table').DataTable().ajax.reload();
-            $('.set-staff').animate({'right':'-1050px'},function(){
+            // $('.set-staff').animate({'right':'-1050px'},function(){
+              // $('.overlay').fadeOut('fast');
+            // });
+          }
+        });
+    }
+  }
+
+  function simpanMonev(){
+    var staff       = $('#staff_monev').val();
+    var token       = $('#token').val();
+    if(staff == ""){
+      $.alert('Form harap diisi!');
+    }else{
+      $.ajax({
+        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/staff/submitEmonev",
+        type: "POST",
+        data: {'_token'       : token, 
+              'ID'            : staff},
+        success: function(msg){
+            $.alert(msg);
+            $('.table').DataTable().ajax.reload();
+            $('.set-staff-monev').animate({'right':'-1050px'},function(){
               $('.overlay').fadeOut('fast');
             });
           }
