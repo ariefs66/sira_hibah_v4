@@ -802,7 +802,7 @@ class realController extends Controller
 			$userbudget->TAHUN 			= $tahunakhir;
 			$userbudget->save();
 		}
-		$lama 	= count($data);
+		$lama 	= UserBudget::where('TAHUN',$tahunawal)->count();
 		$baru 	= UserBudget::where('TAHUN',$tahunakhir)->count();
 		return 'lama = '.$lama.'<br>baru = '.$baru;
 	}
