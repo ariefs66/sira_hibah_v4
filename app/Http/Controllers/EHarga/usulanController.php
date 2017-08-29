@@ -142,7 +142,7 @@ class usulanController extends Controller
                                     ->orderBy('USULAN_ID')
                                     ->get();
         }elseif(Auth::user()->level == 2){
-            $skpd      = $this->getSKPD($tahun);
+            $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
                             $q->where('mod','00010000000');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
@@ -151,7 +151,7 @@ class usulanController extends Controller
                 $i = 0;
                 foreach($pd as $pd){
                     $id     = $pd->SKPD_ID;
-                    $user[$i]   = UserBudget::where('SKPD_ID',$id)
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
                                                 $q->where('mod','00010000000');
                                             })->value('USER_ID');
@@ -163,7 +163,7 @@ class usulanController extends Controller
                 $i = 0;
                 foreach($pd as $pd){
                     $id     = $pd->SKPD_ID;
-                    $user[$i]   = UserBudget::where('SKPD_ID',$id)
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
                                                 $q->where('mod','00010000000');
                                             })->value('USER_ID');
@@ -300,13 +300,13 @@ class usulanController extends Controller
     public function getValid($tahun){
         //GET USULAN STAFF
         if(substr(Auth::user()->mod,3,1) == 1){
-            $skpd   = $this->getSKPD($tahun);
+            $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             if($skpd->skpd->SKPD_JENIS == 1){
                 $pd     = SKPD::where('SKPD_JENIS', 2)->get();
                 $i = 0;
                 foreach($pd as $pd){
                     $id     = $pd->SKPD_ID;
-                    $user[$i]   = UserBudget::where('SKPD_ID',$id)
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
                                                 $q->where('mod','00010000000');
                                             })->value('USER_ID');
@@ -318,7 +318,7 @@ class usulanController extends Controller
                 $i = 0;
                 foreach($pd as $pd){
                     $id     = $pd->SKPD_ID;
-                    $user[$i]   = UserBudget::where('SKPD_ID',$id)
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
                                                 $q->where('mod','00010000000');
                                             })->value('USER_ID');
@@ -362,7 +362,7 @@ class usulanController extends Controller
                                     ->orderBy('USULAN_ID')
                                     ->get();
         }elseif(Auth::user()->level == 2){
-            $skpd       = $this->getSKPD($tahun);
+            $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $dataUser   = UserBudget::where('SKPD_ID',$skpd->SKPD_ID)->select('USER_ID')->get();
             $data       = UsulanKomponen::where('USULAN_POSISI',4)
                                         ->where('SURAT_ID',null)
@@ -656,7 +656,7 @@ class usulanController extends Controller
                                     ->orderBy('USULAN_ID')                                
                                     ->get();
         }elseif(Auth::user()->level == 2){
-            $skpd       = $this->getSKPD($tahun);
+            $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $dataUser   = UserBudget::where('SKPD_ID',$skpd->SKPD_ID)->select('USER_ID')->get();
             $data       = UsulanKomponen::whereIn('USULAN_POSISI',$post)
                                         ->whereIn('USER_CREATED',$dataUser)
@@ -732,13 +732,13 @@ class usulanController extends Controller
     }
 
     public function getSurat(){
-            $skpd   = $this->getSKPD($tahun);
+            $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             if($skpd->skpd->SKPD_JENIS == 1){
                 $pd     = SKPD::where('SKPD_JENIS', 2)->get();
                 $i = 0;
                 foreach($pd as $pd){
                     $id     = $pd->SKPD_ID;
-                    $user[$i]   = UserBudget::where('SKPD_ID',$id)
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
                                                 $q->where('mod','00010000000');
                                             })->value('USER_ID');
@@ -750,7 +750,7 @@ class usulanController extends Controller
                 $i = 0;
                 foreach($pd as $pd){
                     $id     = $pd->SKPD_ID;
-                    $user[$i]   = UserBudget::where('SKPD_ID',$id)
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
                                                 $q->where('mod','00010000000');
                                             })->value('USER_ID');
@@ -972,7 +972,7 @@ class usulanController extends Controller
         if(substr(Auth::user()->mod,0,1 == 1)){
             return UsulanKomponen::where('USULAN_POSISI',4)->whereRaw('"SURAT_ID" IS NOT NULL')->count();
         }elseif(Auth::user()->level == 2){
-            $skpd      = $this->getSKPD($tahun);
+            $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
                             $q->where('mod','00010000000');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
@@ -981,7 +981,7 @@ class usulanController extends Controller
                 $i = 0;
                 foreach($pd as $pd){
                     $id     = $pd->SKPD_ID;
-                    $user[$i]   = UserBudget::where('SKPD_ID',$id)
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
                                                 $q->where('mod','00010000000');
                                             })->value('USER_ID');
@@ -993,7 +993,7 @@ class usulanController extends Controller
                 $i = 0;
                 foreach($pd as $pd){
                     $id     = $pd->SKPD_ID;
-                    $user[$i]   = UserBudget::where('SKPD_ID',$id)
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
                                                 $q->where('mod','00010000000');
                                             })->value('USER_ID');
