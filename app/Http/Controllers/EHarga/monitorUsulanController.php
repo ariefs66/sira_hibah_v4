@@ -44,7 +44,7 @@ class monitorUsulanController extends Controller
         }elseif(Auth::user()->level == 2){
             $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
-                            $q->where('mod','00010000000');
+                            $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
             if($skpd->skpd->SKPD_JENIS == 1){
                 $pd     = SKPD::where('SKPD_JENIS', 2)->get();
@@ -53,7 +53,7 @@ class monitorUsulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -65,7 +65,7 @@ class monitorUsulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -150,7 +150,7 @@ class monitorUsulanController extends Controller
         }elseif(Auth::user()->level == 2){
             $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
-                            $q->where('mod','00010000000');
+                            $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
             if($skpd->skpd->SKPD_JENIS == 1){
                 $pd     = SKPD::where('SKPD_JENIS', 2)->get();
@@ -159,7 +159,7 @@ class monitorUsulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -171,7 +171,7 @@ class monitorUsulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -209,7 +209,7 @@ class monitorUsulanController extends Controller
             }
         	if($opd != 'x'){
 	        	$datauser  = UserBudget::whereHas('user',function($q){
-	                            $q->where('mod','00010000000');
+	                            $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
 	                        })->where('SKPD_ID',$opd)->value('USER_ID');
 	            $data 		= $data->where('USER_CREATED',$datauser);
         	}
@@ -228,7 +228,7 @@ class monitorUsulanController extends Controller
             }
         	if($opd != 'x'){
 	        	$datauser  = UserBudget::whereHas('user',function($q){
-	                            $q->where('mod','00010000000');
+	                            $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
 	                        })->where('SKPD_ID',$opd)->value('USER_ID');
 	            $data 		= $data->where('USER_CREATED',$datauser);
         	}

@@ -144,7 +144,7 @@ class usulanController extends Controller
         }elseif(Auth::user()->level == 2){
             $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
-                            $q->where('mod','00010000000');
+                            $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
             if($skpd->skpd->SKPD_JENIS == 1){
                 $pd     = SKPD::where('SKPD_JENIS', 2)->get();
@@ -153,7 +153,7 @@ class usulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -165,7 +165,7 @@ class usulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -308,7 +308,7 @@ class usulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -320,7 +320,7 @@ class usulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -740,7 +740,7 @@ class usulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -752,7 +752,7 @@ class usulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -974,7 +974,7 @@ class usulanController extends Controller
         }elseif(Auth::user()->level == 2){
             $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
-                            $q->where('mod','00010000000');
+                            $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
             if($skpd->skpd->SKPD_JENIS == 1){
                 $pd     = SKPD::where('SKPD_JENIS', 2)->get();
@@ -983,7 +983,7 @@ class usulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
@@ -995,7 +995,7 @@ class usulanController extends Controller
                     $id     = $pd->SKPD_ID;
                     $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
                                             ->whereHas('user',function($q){
-                                                $q->where('mod','00010000000');
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                                             })->value('USER_ID');
                     $i++;
                 }
