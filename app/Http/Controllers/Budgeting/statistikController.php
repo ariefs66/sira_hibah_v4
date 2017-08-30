@@ -386,6 +386,7 @@ class statistikController extends Controller{
                         ->select("SELECT sum(Total) as Total 
                                   FROM dbo.Ta_RASK_Arsip rincian
                                   where rincian.Kd_Urusan = ".$Kd_urusan." 
+                                  and Kd_Perubahan = 4
                                   and rincian.Kd_Bidang = ".$Kd_bidang." 
                                   and rincian.Kd_unit = ".$Kd_unit." 
                                   and rincian.Kd_Prog != 0
