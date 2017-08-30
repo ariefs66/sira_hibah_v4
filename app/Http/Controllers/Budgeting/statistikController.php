@@ -24,6 +24,7 @@ use App\Model\Tag;
 use App\Model\Lokasi;
 use App\Model\Satuan;
 use App\Model\BL;
+use App\Model\BLPerubahan;
 use App\Model\Kamus;
 use App\Model\Usulan;
 use App\Model\UsulanReses;
@@ -34,12 +35,14 @@ use App\Model\Rekening;
 use App\Model\Komponen;
 use App\Model\Rekom;
 use App\Model\Rincian;
+use App\Model\RincianPerubahan;
 use App\Model\User;
 use App\Model\Staff;
 use App\Model\UserBudget;
 use App\Model\Tahapan;
 use App\Model\Log;
 use App\Model\Subrincian;
+use App\Model\SubrincianPerubahan;
 use App\Model\RekapRincian;
 use App\Model\Progunit;
 use App\Model\Output;
@@ -56,22 +59,56 @@ class statistikController extends Controller{
         $this->middleware('auth');
     }
 
+    public function setStatusBL($tahun,$status){
+      if($status == 'murni'){
+        return BL::where('BL_TAHUN',$tahun);
+      }else{
+        return BLPerubahan::where('BL_TAHUN',$tahun);
+      }
+    }
+
+    public function setStatusRincian($tahun,$status){
+      if($status == 'murni'){
+        return $this->setStatusRincian($tahun,$status)->whereHas('bl',function($bl) use($tahun){
+          $bl->where('BL_TAHUN',$tahun);
+        });
+      }else{
+        return RincianPerubahan::whereHas('bl',function($bl) use($tahun){
+          $bl->where('BL_TAHUN',$tahun);
+        });
+      }
+    }
+
+    public function setStatusSubrincian($tahun,$status){
+      if($status == 'murni'){
+        return Subrincian::whereHas('bl',function($bl) use($tahun){
+          $bl->where('BL_TAHUN',$tahun);
+        });
+      }else{
+        return SubrincianPerubahan::whereHas('bl',function($bl) use($tahun){
+          $bl->where('BL_TAHUN',$tahun);
+        });
+      }
+    }
+
     public function pd($tahun,$status){
-		  $template 	= Kegunit::count();
-    	$used 		= BL::whereHas('kegiatan',function($r){
-			    			$r->whereHas('program',function($s){
-								$s->whereNotIn('PROGRAM_KODE',['01','02','03','04','05','06']);
-			    			});
-			    		})->count();
-		  $adum 		= BL::whereHas('kegiatan',function($r){
-			    			$r->whereHas('program',function($s){
-								$s->whereIn('PROGRAM_KODE',['01','02','03','04','05','06']);
-			    			});
-			    		})->count();			    		
-    	$rincian 	= Rincian::whereHas('bl',function($q){
-                    $q->where('BL_DELETED',0);
+		  $template 	= Kegunit::whereHas('skpd',function($skpd) use($tahun){
+                      $skpd->where('SKPD_TAHUN',$tahun);
+                    })->count();
+    	$used 		= $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($r){
+    			    			$r->whereHas('program',function($s){
+    								  $s->whereNotIn('PROGRAM_KODE',['01','02','03','04','05','06','07','08']);
+    			    			});
+    			    		})->where('BL_TAHUN',$tahun)->count();
+		  $adum 		= $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($r){
+    			    			$r->whereHas('program',function($s){
+    								  $s->whereIn('PROGRAM_KODE',['01','02','03','04','05','06','07','08']);
+    			    			});
+    			    		})->where('BL_TAHUN',$tahun)->count();			    		
+    	$rincian 	= $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q)use($tahun){
+                    $q->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                   })->sum('RINCIAN_TOTAL');
-    	$pagu 		= BL::where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
+    	$pagu 		= $this->setStatusBL($tahun,$status)->where('BL_VALIDASI','1')->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
     	
     		if($template == 0 ) $p1 = 0;
     		else $p1 = ($used/$template)*100;
@@ -150,7 +187,7 @@ class statistikController extends Controller{
     }
 
     public function paketDetail($tahun,$status,$id){
-        $paket       = Subrincian::where('SUBRINCIAN_ID',$id)->first();
+        $paket       = $this->setStatusSubrincian($tahun,$status)->where('SUBRINCIAN_ID',$id)->first();
         $data = array('tahun'   => $tahun,
                       'status'  => $status,
                       'paket'   => $paket,
@@ -160,10 +197,10 @@ class statistikController extends Controller{
     }
 
     public function urusan($tahun,$status){
-      $rincian  = Rincian::whereHas('bl',function($q) use($tahun){
+      $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q) use($tahun){
                     $q->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                   })->sum('RINCIAN_TOTAL');
-      $pagu     = BL::where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
+      $pagu     = $this->setStatusBL($tahun,$status)->where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
       $data = array('tahun'   => $tahun,
                     'status'  => $status,
                     'pagu'    => $pagu,
@@ -192,10 +229,10 @@ class statistikController extends Controller{
     }
 
     public function program($tahun,$status){
-      $rincian  = Rincian::whereHas('bl',function($q){
+      $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q){
                     $q->where('BL_DELETED',0);
                   })->sum('RINCIAN_TOTAL');
-      $pagu     = BL::where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
+      $pagu     = $this->setStatusBL($tahun,$status)->where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
       $data = array('tahun'   => $tahun,
                     'status'  => $status,
                     'pagu'    => $pagu,
@@ -204,10 +241,10 @@ class statistikController extends Controller{
     }
 
     public function kegiatan($tahun,$status){
-      $rincian  = Rincian::whereHas('bl',function($q){
+      $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q){
                     $q->where('BL_DELETED',0);
                   })->sum('RINCIAN_TOTAL');
-      $pagu     = BL::where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
+      $pagu     = $this->setStatusBL($tahun,$status)->where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
       $data = array('tahun'   => $tahun,
                     'status'  => $status,
                     'pagu'    => $pagu,
@@ -216,10 +253,10 @@ class statistikController extends Controller{
     }
 
     public function kegiatanAdum($tahun,$status){
-      $rincian  = Rincian::whereHas('bl',function($q){
+      $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q){
                     $q->where('BL_DELETED',0);
                   })->sum('RINCIAN_TOTAL');
-      $pagu     = BL::where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
+      $pagu     = $this->setStatusBL($tahun,$status)->where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
       $data = array('tahun'   => $tahun,
                     'status'  => $status,
                     'pagu'    => $pagu,
@@ -250,10 +287,10 @@ class statistikController extends Controller{
     }
 
     public function rekening($tahun,$status){
-      $rincian  = Rincian::whereHas('bl',function($q){
+      $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q){
                     $q->where('BL_DELETED',0);
                   })->sum('RINCIAN_TOTAL');
-      $pagu     = BL::where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
+      $pagu     = $this->setStatusBL($tahun,$status)->where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
       $data = array('tahun'   => $tahun,
                     'status'  => $status,
                     'pagu'    => $pagu,
@@ -280,13 +317,13 @@ class statistikController extends Controller{
     }
 
     public function porsiAPBD($tahun,$status){
-        $musrenbang   =  Rincian::whereHas('bl',function($x){
+        $musrenbang   =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                               $x->where('BL_DELETED',0);
                           })->whereRaw('"RINCIAN_KETERANGAN" SIMILAR TO \'(Musrenbang RW|Emusrenbang)%\'')
                             // ->where('RINCIAN_KETERANGAN','LIKE','Musrenbang RW%')
                             // ->orWhere('RINCIAN_KETERANGAN','LIKE','EMusrenbang%')
                             ->sum('RINCIAN_TOTAL');
-        $etc          =  Rincian::whereHas('bl',function($x){
+        $etc          =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                             $x->where('BL_DELETED',0)
                               ->whereNotIn('KEGIATAN_ID',[3394,3395,3396,3397])
                               ->where('PAGU_ID','!=',15)
@@ -299,32 +336,32 @@ class statistikController extends Controller{
                             ->Where('RINCIAN_KETERANGAN','NOT LIKE','Emusrenbang%')
                             ->where('RINCIAN_KETERANGAN','NOT LIKE','Reses Dewan%')
                             ->sum('RINCIAN_TOTAL');                            
-        $reses        =  Rincian::whereHas('bl',function($x){
+        $reses        =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                               $x->where('BL_DELETED',0);
                           })->where('RINCIAN_KETERANGAN','LIKE','Reses Dewan %')->sum('RINCIAN_TOTAL');
-        $arahan       =  Rincian::whereHas('bl',function($x){
+        $arahan       =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                               $x->where('BL_DELETED',0)->where('PAGU_ID',15);
                           })->where('RINCIAN_KETERANGAN','NOT ILIKE','Reses Dewan %')
                             ->whereRaw('"RINCIAN_KETERANGAN" NOT SIMILAR TO \'(Musrenbang RW|Emusrenbang)%\'')
                             ->sum('RINCIAN_TOTAL');
-        $pippkrw      = Rincian::whereHas('bl',function($x){
+        $pippkrw      = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                             $x->where('BL_DELETED',0)
                               ->where('KEGIATAN_ID',3394);                            
                           })->sum('RINCIAN_TOTAL');
-        $pippkpkk     = Rincian::whereHas('bl',function($x){
+        $pippkpkk     = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                             $x->where('BL_DELETED',0)
                               ->where('KEGIATAN_ID',3395);
                           })->sum('RINCIAN_TOTAL');
-        $pippklpm     = Rincian::whereHas('bl',function($x){
+        $pippklpm     = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                             $x->where('BL_DELETED',0)
                               ->where('KEGIATAN_ID',3397);
                           })->sum('RINCIAN_TOTAL');
-        $pippkkarta   = Rincian::whereHas('bl',function($x){
+        $pippkkarta   = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                             $x->where('BL_DELETED',0)
                               ->where('KEGIATAN_ID',3396);
                           })->sum('RINCIAN_TOTAL');
         $pippk        = $pippkrw+$pippkkarta+$pippklpm+$pippkpkk;
-        $nonurusan    =  Rincian::whereHas('bl',function($x){
+        $nonurusan    =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                             $x->where('BL_DELETED',0)->whereHas('kegiatan',function($y){
                               $y->whereHas('program',function($z){
                                 $z->whereIn('PROGRAM_KODE',['01','02','03','04','05','06','07','08']);
@@ -349,7 +386,7 @@ class statistikController extends Controller{
     	foreach ($skpd as $skpd) {
     		$id 		= $skpd->SKPD_ID;
     		$template 	= Kegunit::where('SKPD_ID',$id)->count();
-    		$used 		= BL::whereHas('subunit',function($q) use ($id){
+    		$used 		= $this->setStatusBL($tahun,$status)->whereHas('subunit',function($q) use ($id){
 			    			$q->where('SKPD_ID',$id);
 			    		})->whereHas('kegiatan',function($r){
 			    			$r->whereHas('program',function($s){
@@ -357,19 +394,19 @@ class statistikController extends Controller{
 			    			});
 			    		})->where('BL_TAHUN',$tahun)->selectRaw('COUNT(DISTINCT("KEGIATAN_ID")) AS total')->first();
               $used = $used->total;
-			$adum 		= BL::whereHas('subunit',function($q) use ($id){
+			$adum 		= $this->setStatusBL($tahun,$status)->whereHas('subunit',function($q) use ($id){
 			    			$q->where('SKPD_ID',$id);
 			    		})->whereHas('kegiatan',function($r){
 			    			$r->whereHas('program',function($s){
 								$s->whereIn('PROGRAM_KODE',['01','02','03','04','05','06','07']);
 			    			});
 			    		})->where('BL_TAHUN',$tahun)->count();			    		
-    		$rincian 	= Rincian::whereHas('bl',function($q) use ($id,$tahun){
+    		$rincian 	= $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q) use ($id,$tahun){
 			    			$q->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->whereHas('subunit',function($r) use ($id){
 			    				$r->where('SKPD_ID',$id);
 			    			});
 			    		})->sum('RINCIAN_TOTAL');
-    		$pagu 		= BL::whereHas('subunit',function($q) use ($id){
+    		$pagu 		= $this->setStatusBL($tahun,$status)->whereHas('subunit',function($q) use ($id){
 			    			$q->where('SKPD_ID',$id);
 			    		})->where('BL_VALIDASI','1')->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
 
@@ -436,12 +473,12 @@ class statistikController extends Controller{
       $view           = array();      
       foreach ($skpd as $skpd) {
         $id     = $skpd->SKPD_ID;            
-        $rincian  = Rincian::whereHas('bl',function($q) use ($id){
+        $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q) use ($id){
                       $q->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->whereHas('subunit',function($r) use ($id){
                         $r->where('SKPD_ID',$id);
                       });
                     })->sum('RINCIAN_TOTAL');
-        $pagu       = BL::whereHas('subunit',function($r) use($id){
+        $pagu       = $this->setStatusBL($tahun,$status)->whereHas('subunit',function($r) use($id){
                           $r->whereHas('skpd',function($s) use($id){
                             $s->where('SKPD_ID',$id);
                           });
@@ -461,13 +498,13 @@ class statistikController extends Controller{
     }
 
     public function pdApiDetail($tahun,$status,$id){
-        $skpd   = BL::whereHas('subunit',function($q) use($id){
+        $skpd   = $this->setStatusBL($tahun,$status)->whereHas('subunit',function($q) use($id){
                         $q->where('SKPD_ID',$id);
                       })->where('BL_DELETED',0)
                       ->get();
         $view   = array();
         foreach ($skpd as $skpd) {
-            $rincian  = Rincian::where('BL_ID',$skpd->BL_ID)->sum('RINCIAN_TOTAL');
+            $rincian  = $this->setStatusRincian($tahun,$status)->where('BL_ID',$skpd->BL_ID)->sum('RINCIAN_TOTAL');
             array_push($view, array( 'ID'               =>$skpd->BL_ID,
                                      'KODE'             =>$skpd->kegiatan->program->urusan->URUSAN_KODE.".".$skpd->subunit->skpd->SKPD_KODE.".".$skpd->kegiatan->program->PROGRAM_KODE.".".$skpd->kegiatan->KEGIATAN_KODE,
                                      'NAMA'             =>$skpd->kegiatan->KEGIATAN_NAMA,
@@ -484,26 +521,26 @@ class statistikController extends Controller{
       $view     = array();      
       foreach ($urusan as $u) {
         $id         = $u->URUSAN_ID;
-        $totalgiat  = BL::whereHas('kegiatan',function($r) use($id){
+        $totalgiat  = $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($r) use($id){
                           $r->whereHas('program',function($s) use($id){
                             $s->where('URUSAN_ID',$id);
                           });
                         })->selectRaw('COUNT(DISTINCT("KEGIATAN_ID")) AS total')->first();
         $totalgiat = $totalgiat->total;
-        $totalgiatvalidasi  = BL::whereHas('kegiatan',function($r) use($id){
+        $totalgiatvalidasi  = $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($r) use($id){
                           $r->whereHas('program',function($s) use($id){
                             $s->where('URUSAN_ID',$id);
                           });
                         })->selectRaw('COUNT(DISTINCT("KEGIATAN_ID")) AS total')->where('BL_VALIDASI',1)->first();
         $totalgiatvalidasi = $totalgiatvalidasi->total;
-        $rincian    = Rincian::whereHas('bl',function($q) use($id,$tahun){
+        $rincian    = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q) use($id,$tahun){
                         $q->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->whereHas('kegiatan',function($r) use($id){
                           $r->whereHas('program',function($s) use($id){
                             $s->where('URUSAN_ID',$id);
                           });
                         });
                       })->sum('RINCIAN_TOTAL');
-        $pagu       = BL::whereHas('kegiatan',function($r) use($id){
+        $pagu       = $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($r) use($id){
                           $r->whereHas('program',function($s) use($id){
                             $s->where('URUSAN_ID',$id);
                           });
@@ -557,14 +594,14 @@ class statistikController extends Controller{
     }
 
     public function taggingApi($tahun,$status){
-      $tag   = BL::where('BL_VALIDASI',1)->where('BL_DELETED')->where('BL_PAGU','!=',0)->get();
-      $tag   = Rincian::whereHas('bl',function($x){
+      $tag   = $this->setStatusBL($tahun,$status)->where('BL_VALIDASI',1)->where('BL_DELETED')->where('BL_PAGU','!=',0)->get();
+      $tag   = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
         $x->where('BL_VALIDASI',1)->where('BL_DELETED',0);
       })->selectRaw('SUM("RINCIAN_TOTAL") AS total, "BL_ID"')->groupBy('BL_ID')->get();
       $view     = array();
       $data     = array(); 
         foreach($tag as $t){
-          $tagging         = BL::where('BL_ID',$t->BL_ID)->value('BL_TAG');
+          $tagging         = $this->setStatusBL($tahun,$status)->where('BL_ID',$t->BL_ID)->value('BL_TAG');
           $tagging         = str_replace('{', '', $tagging);
           $tagging         = str_replace('}', '', $tagging);
           $tagging         = explode(',', $tagging);
@@ -594,7 +631,7 @@ class statistikController extends Controller{
       $i        = 1;      
       foreach ($bl as $bl) {
         $id       = $bl->PAGU_ID;
-        $rincian  = Rincian::whereHas('bl',function($q) use($id){
+        $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q) use($id){
                       $q->where('PAGU_ID',$id)->where('BL_DELETED',0);
                     })->sum('RINCIAN_TOTAL');
         array_push($view, array('ID'        =>$id,
@@ -607,7 +644,7 @@ class statistikController extends Controller{
     }
 
     public function paguApiDetail($tahun,$status,$id){
-      $data     = Rincian::whereHas('bl',function($x) use($id){
+      $data     = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                           $x->where('BL_DELETED',0)->where('PAGU_ID',$id);
                         })->select('BL_ID')
                           ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL')
@@ -615,7 +652,7 @@ class statistikController extends Controller{
       $i = 1;
       $view   = array();
       foreach ($data as $data) {
-        $kegiatan   = BL::where('BL_ID',$data->BL_ID)->first();
+        $kegiatan   = $this->setStatusBL($tahun,$status)->where('BL_ID',$data->BL_ID)->first();
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $kegiatan->BL_ID,
                                 'NAMA'      => $kegiatan->kegiatan->KEGIATAN_NAMA,
@@ -627,7 +664,7 @@ class statistikController extends Controller{
     }
     
     public function rekeningApi($tahun,$status){
-      $rekening   = Rincian::whereHas('bl',function($q){
+      $rekening   = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q){
                     $q->where('BL_DELETED',0);
                   })->groupBy('REKENING_ID')->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL , "REKENING_ID"')->get();
       $view     = array();      
@@ -692,7 +729,7 @@ class statistikController extends Controller{
     }
 
     public function rekeningApiFilter($tahun,$status,$id,$jenis,$persentase){
-      $rekening   = Rincian::whereHas('bl',function($q){
+      $rekening   = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($q){
                     $q->where('BL_DELETED',0);
                   })->whereHas('rekening',function($x) use($jenis){
                     $x->where('REKENING_KODE','LIKE',$jenis.'%');
@@ -775,7 +812,7 @@ class statistikController extends Controller{
     }
 
     public function programApi($tahun,$status){
-      $bl     = BL::whereHas('kegiatan',function($q){
+      $bl     = $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($q){
                   $q->whereHas('program',function($r){
                     $r->whereNotIn('PROGRAM_KODE',['01','02','03','04','05','06']);
                   });
@@ -810,13 +847,13 @@ class statistikController extends Controller{
             $pd     = 'Kecamatan';
         }
 
-        $rincian  = Rincian::whereHas('bl',function($x) use($id){
+        $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                       $x->where('BL_DELETED',0)
                         ->whereHas('kegiatan',function($y) use($id){
                           $y->where('PROGRAM_ID',$id);
                         });
                     })->sum('RINCIAN_TOTAL');
-        $pagu     = BL::whereHas('kegiatan',function($x) use($id){
+        $pagu     = $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($x) use($id){
                       $x->where('PROGRAM_ID',$id);
                     })->where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
         array_push($view, array('NO'        => $i++,
@@ -1074,7 +1111,7 @@ class statistikController extends Controller{
     } 
 
     public function kegiatanApi($tahun,$status){
-      $bl     = BL::whereHas('kegiatan',function($q){
+      $bl     = $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($q){
                   $q->whereHas('program',function($r){
                     $r->whereNotIn('PROGRAM_KODE',['01','02','03','04','05','06']);
                   });
@@ -1097,10 +1134,10 @@ class statistikController extends Controller{
         }else{
             $pd     = "Kecamatan";
         }
-        $rincian  = Rincian::whereHas('bl',function($x) use($id){
+        $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                       $x->where('KEGIATAN_ID',$id)->where('BL_DELETED',0);
                     })->sum('RINCIAN_TOTAL');
-        $pagu     = BL::where('KEGIATAN_ID',$id)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
+        $pagu     = $this->setStatusBL($tahun,$status)->where('KEGIATAN_ID',$id)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $id,
                                 'NAMA'      => $bl->kegiatan->KEGIATAN_NAMA,
@@ -1127,10 +1164,10 @@ class statistikController extends Controller{
       foreach($bl as $bl){
         $id       = $bl->KEGIATAN_NAMA;
         $id       = Kegiatan::where('KEGIATAN_NAMA',$id)->select('KEGIATAN_ID')->get()->toArray();
-        $rincian  = Rincian::whereHas('bl',function($x) use($id){
+        $rincian  = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                       $x->whereIn('KEGIATAN_ID',$id)->where('BL_DELETED',0);
                     })->sum('RINCIAN_TOTAL');
-        $pagu     = BL::whereIn('KEGIATAN_ID',$id)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
+        $pagu     = $this->setStatusBL($tahun,$status)->whereIn('KEGIATAN_ID',$id)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $bl->KEGIATAN_NAMA,
                                 'NAMA'      => $bl->KEGIATAN_NAMA,
@@ -1142,7 +1179,7 @@ class statistikController extends Controller{
     }
 
     public function kegiatanApiAdumDetail($tahun,$status,$id){
-      $data     = Rincian::whereHas('bl',function($x) use($id){
+      $data     = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                       $x->where('BL_DELETED',0)
                         ->whereHas('kegiatan',function($y) use($id){
                           $y->where('KEGIATAN_NAMA',$id);
@@ -1152,7 +1189,7 @@ class statistikController extends Controller{
       $i = 1;
       $view   = array();
       foreach ($data as $data) {
-        $kegiatan   = BL::where('BL_ID',$data->BL_ID)->first();
+        $kegiatan   = $this->setStatusBL($tahun,$status)->where('BL_ID',$data->BL_ID)->first();
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $kegiatan->BL_ID,
                                 'NAMA'      => $kegiatan->kegiatan->KEGIATAN_NAMA,
@@ -1164,7 +1201,7 @@ class statistikController extends Controller{
     }
 
     public function rekeningApiDetail($tahun,$status,$id){
-      $data     = Rincian::where('REKENING_ID',$id)
+      $data     = $this->setStatusRincian($tahun,$status)->where('REKENING_ID',$id)
                     ->whereHas('bl',function($x){
                       $x->where('BL_DELETED',0);
                     })->select('BL_ID')->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL')
@@ -1172,7 +1209,7 @@ class statistikController extends Controller{
       $i = 1;
       $view   = array();
       foreach ($data as $data) {
-        $kegiatan   = BL::where('BL_ID',$data->BL_ID)->first();
+        $kegiatan   = $this->setStatusBL($tahun,$status)->where('BL_ID',$data->BL_ID)->first();
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $kegiatan->BL_ID,
                                 'NAMA'      => $kegiatan->kegiatan->KEGIATAN_NAMA,
@@ -1184,7 +1221,7 @@ class statistikController extends Controller{
     }
 
     public function komponenApi($tahun,$status){
-      $data     = Rincian::whereHas('bl',function($x){
+      $data     = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                     $x->where('BL_DELETED',0);
                   })->groupBy('KOMPONEN_ID')
                   ->select('KOMPONEN_ID')
@@ -1207,7 +1244,7 @@ class statistikController extends Controller{
     }
 
     public function komponenApiDetail($tahun,$status,$id){
-      $data     = Rincian::where('KOMPONEN_ID',$id)
+      $data     = $this->setStatusRincian($tahun,$status)->where('KOMPONEN_ID',$id)
                     ->whereHas('bl',function($x){
                       $x->where('BL_DELETED',0);
                     })->select('BL_ID')->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL')
@@ -1215,7 +1252,7 @@ class statistikController extends Controller{
       $i = 1;
       $view   = array();
       foreach ($data as $data) {
-        $kegiatan   = BL::where('BL_ID',$data->BL_ID)->first();
+        $kegiatan   = $this->setStatusBL($tahun,$status)->where('BL_ID',$data->BL_ID)->first();
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $kegiatan->BL_ID,
                                 'NAMA'      => $kegiatan->kegiatan->KEGIATAN_NAMA,
@@ -1227,7 +1264,7 @@ class statistikController extends Controller{
     }
 
     public function paketApi($tahun,$status){
-      $data     = Rincian::whereHas('bl',function($x){
+      $data     = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x){
                     $x->where('BL_DELETED',0);
                   })->groupBy('SUBRINCIAN_ID')
                   ->select('SUBRINCIAN_ID')
@@ -1237,7 +1274,7 @@ class statistikController extends Controller{
       $i  = 1;
       $view   = array();
       foreach ($data as $data) {
-        $nama   = Subrincian::where('SUBRINCIAN_ID',$data->SUBRINCIAN_ID)->first();
+        $nama   = $this->setStatusSubrincian($tahun,$status)->where('SUBRINCIAN_ID',$data->SUBRINCIAN_ID)->first();
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $data->SUBRINCIAN_ID,
                                 'NAMA'      => $nama->SUBRINCIAN_NAMA,
@@ -1248,7 +1285,7 @@ class statistikController extends Controller{
     }
 
     public function paketApiDetail($tahun,$status,$id){
-      $data     = Rincian::where('SUBRINCIAN_ID',$id)
+      $data     = $this->setStatusRincian($tahun,$status)->where('SUBRINCIAN_ID',$id)
                     ->whereHas('bl',function($x){
                       $x->where('BL_DELETED',0);
                     })->select('BL_ID')->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL')
@@ -1256,7 +1293,7 @@ class statistikController extends Controller{
       $i = 1;
       $view   = array();
       foreach ($data as $data) {
-        $kegiatan   = BL::where('BL_ID',$data->BL_ID)->first();
+        $kegiatan   = $this->setStatusBL($tahun,$status)->where('BL_ID',$data->BL_ID)->first();
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $kegiatan->BL_ID,
                                 'NAMA'      => $kegiatan->kegiatan->KEGIATAN_NAMA,
@@ -1293,7 +1330,7 @@ class statistikController extends Controller{
                                   and kegiatan.Ket_Kegiatan not like '%(Banprov)'
                                   and kegiatan.Ket_Kegiatan not like '%(DAK)'");
         $total2017  = $t2017[0]->Total;
-        $etc          =  Rincian::whereHas('bl',function($x) use($id){
+        $etc          =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->whereNotIn('KEGIATAN_ID',[3394,3395,3396,3397])
                               ->where('PAGU_ID','!=',15)
@@ -1308,7 +1345,7 @@ class statistikController extends Controller{
                               ->Where('RINCIAN_KETERANGAN','NOT LIKE','Emusrenbang%')
                               ->where('RINCIAN_KETERANGAN','NOT LIKE','Reses Dewan%')
                               ->sum('RINCIAN_TOTAL');
-        $musrenbang   =  Rincian::whereHas('bl',function($x) use($id){
+        $musrenbang   =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->whereHas('subunit',function($y) use($id){
                               $y->where('SKPD_ID',$id);
@@ -1316,13 +1353,13 @@ class statistikController extends Controller{
                           })->whereRaw('"RINCIAN_KETERANGAN" SIMILAR TO \'(Musrenbang RW|Emusrenbang)%\'')
                             // ->whereRaw('"RINCIAN_KETERANGAN" LIKE \'Musrenbang RW%\' OR "RINCIAN_KETERANGAN" LIKE \'EMusrenbang%\'')
                             ->sum('RINCIAN_TOTAL');
-        $reses        =  Rincian::whereHas('bl',function($x) use($id){
+        $reses        =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->whereHas('subunit',function($y) use($id){
                               $y->where('SKPD_ID',$id);
                             });
                           })->where('RINCIAN_KETERANGAN','LIKE','Reses Dewan%')->sum('RINCIAN_TOTAL');
-        $arahan       =  Rincian::whereHas('bl',function($x) use($id){
+        $arahan       =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->WHERE('PAGU_ID',15)
                               ->whereHas('subunit',function($y) use($id){
@@ -1331,28 +1368,28 @@ class statistikController extends Controller{
                           })->where('RINCIAN_KETERANGAN','NOT ILIKE','Reses Dewan%')
                             ->whereRaw('"RINCIAN_KETERANGAN" NOT SIMILAR TO \'(Musrenbang RW|Emusrenbang)%\'')
                             ->sum('RINCIAN_TOTAL');
-        $pippkrw      = Rincian::whereHas('bl',function($x) use($id){
+        $pippkrw      = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->where('KEGIATAN_ID',3394)                            
                               ->whereHas('subunit',function($y) use($id){
                               $y->where('SKPD_ID',$id);
                             });
                           })->sum('RINCIAN_TOTAL');
-        $pippkpkk     = Rincian::whereHas('bl',function($x) use($id){
+        $pippkpkk     = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->where('KEGIATAN_ID',3395)                            
                               ->whereHas('subunit',function($y) use($id){
                               $y->where('SKPD_ID',$id);
                             });
                           })->sum('RINCIAN_TOTAL');
-        $pippklpm     = Rincian::whereHas('bl',function($x) use($id){
+        $pippklpm     = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->where('KEGIATAN_ID',3397)                            
                               ->whereHas('subunit',function($y) use($id){
                               $y->where('SKPD_ID',$id);
                             });
                           })->sum('RINCIAN_TOTAL');
-        $pippkkarta   = Rincian::whereHas('bl',function($x) use($id){
+        $pippkkarta   = $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->where('KEGIATAN_ID',3396)
                               ->whereHas('subunit',function($y) use($id){
@@ -1360,7 +1397,7 @@ class statistikController extends Controller{
                             });
                           })->sum('RINCIAN_TOTAL');
         $pippk        = $pippkrw+$pippkkarta+$pippklpm+$pippkpkk;
-        $nonurusan    =  Rincian::whereHas('bl',function($x) use($id){
+        $nonurusan    =  $this->setStatusRincian($tahun,$status)->whereHas('bl',function($x) use($id){
                             $x->where('BL_DELETED',0)
                               ->whereHas('subunit',function($y) use($id){
                                 $y->where('SKPD_ID',$id);
@@ -1439,7 +1476,7 @@ class statistikController extends Controller{
     }
 
     public function kegiatanPrioritasApi($tahun,$status){
-      $data   = BL::whereHas('kegiatan',function($q){
+      $data   = $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($q){
                   $q->where('KEGIATAN_PRIORITAS',1);
                 })->get();
       $no     = 1;

@@ -11,10 +11,10 @@ class RincianPerubahan extends Model
     public $timestamps 		= false;
     public $incrementing 	= false;
 
-	public function subrincianperubahan(){
+	public function subrincian(){
         return $this->belongsTo('App\Model\SubrincianPerubahan', 'SUBRINCIAN_ID');
     }
-    public function blperubahan(){
+    public function bl(){
         return $this->belongsTo('App\Model\BLPerubahan', 'BL_ID');
     }
 	public function rekening(){

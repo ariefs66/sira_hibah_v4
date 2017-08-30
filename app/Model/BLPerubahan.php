@@ -48,10 +48,10 @@ class BLPerubahan extends Model
         return $this->hasOne('App\Model\Kunciperubahan', 'BL_ID');
     }
     public function subrincian(){
-        return $this->hasMany('App\Model\Subrincian', 'BL_ID');
+        return $this->hasMany('App\Model\SubrincianPerubahan', 'BL_ID');
     }
     public function rincian(){
-        return $this->hasMany('App\Model\Rincian', 'BL_ID');
+        return $this->hasMany('App\Model\RincianPerubahan', 'BL_ID');
     }
     public function staff(){
         return $this->hasMany('App\Model\Staff','BL_ID');

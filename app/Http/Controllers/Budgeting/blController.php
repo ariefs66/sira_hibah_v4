@@ -146,7 +146,7 @@ class blController extends Controller
                                     $q->where('SKPD_ID',$id);
                             })->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
             $pagu      = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
-            $rincian   = RincianPerubahan::whereHas('blperubahan',function($r) use($id){
+            $rincian   = RincianPerubahan::whereHas('bl',function($r) use($id){
                             $r->whereHas('subunit',function($s) use ($id){
                                     $s->where('SKPD_ID',$id);
                             });
@@ -872,7 +872,7 @@ class blController extends Controller
         $skpd       = $this->getSKPD($tahun);
         $totalOPD   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_PAGU');
         $now        = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
-        $nowOPD     = RincianPerubahan::whereHas('blperubahan',function($q) use($skpd){
+        $nowOPD     = RincianPerubahan::whereHas('bl',function($q) use($skpd){
                             $q->whereHas('subunit',function($r) use($skpd){
                                 $r->where('SKPD_ID',$skpd);
                             });
@@ -1506,7 +1506,7 @@ class blController extends Controller
         $skpd       = $skpd->subunit->SKPD_ID;
         $totalOPD   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_PAGU');
         $now        = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
-        $nowOPD     = RincianPerubahan::whereHas('blperubahan',function($q) use($skpd){
+        $nowOPD     = RincianPerubahan::whereHas('bl',function($q) use($skpd){
                             $q->where('BL_DELETED',0)->whereHas('subunit',function($r) use($skpd){
                                 $r->where('SKPD_ID',$skpd);
                             });
