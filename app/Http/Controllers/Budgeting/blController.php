@@ -322,8 +322,8 @@ class blController extends Controller
         $i         = 1;
         $pajak      = '';
         foreach ($data as $data) {
-            if(( $data->blperubahan->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
-                if($data->REKENING_ID == 0 or empty($data->subrincianperubahan)){
+            if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
+                if($data->REKENING_ID == 0 or empty($data->subrincian)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -334,7 +334,7 @@ class blController extends Controller
 
             if($data->RINCIAN_PAJAK == 10) $pajak = '<span class="text-success"><i class="fa fa-check"></i></span>';
             else $pajak = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-            if($data->subrincianperubahan) $sub = $data->subrincianperubahan->SUBRINCIAN_NAMA;
+            if($data->subrincian) $sub = $data->subrincian->SUBRINCIAN_NAMA;
             else $sub = '-';
             if($data->PEKERJAAN_ID == '4' || $data->PEKERJAAN_ID == '5'){
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $data->RINCIAN_KETERANGAN)[0].'</p>';
@@ -391,8 +391,8 @@ class blController extends Controller
         }
 
         foreach ($data_ as $data_) {
-            if(( $data_->blperubahan->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
-                if($data_->REKENING_ID == 0 or empty($data_->subrincianperubahan)){
+            if(( $data_->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
+                if($data_->REKENING_ID == 0 or empty($data_->subrincian)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -403,7 +403,7 @@ class blController extends Controller
 
             if($data_->RINCIAN_PAJAK == 10) $pajak = '<span class="text-success"><i class="fa fa-check"></i></span>';
             else $pajak = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-            if($data_->subrincianperubahan) $sub = $data_->subrincianperubahan->SUBRINCIAN_NAMA;
+            if($data_->subrincian) $sub = $data_->subrincian->SUBRINCIAN_NAMA;
             else $sub = '-';
             if($data_->PEKERJAAN_ID == '4' || $data_->PEKERJAAN_ID == '5'){
                 $namakomponen   = $data_->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $data_->RINCIAN_KETERANGAN)[0].'</p>';
