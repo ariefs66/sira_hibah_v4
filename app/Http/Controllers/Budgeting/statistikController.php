@@ -160,8 +160,8 @@ class statistikController extends Controller{
     }
 
     public function urusan($tahun,$status){
-      $rincian  = Rincian::whereHas('bl',function($q){
-                    $q->where('BL_DELETED',0);
+      $rincian  = Rincian::whereHas('bl',function($q) use($tahun){
+                    $q->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                   })->sum('RINCIAN_TOTAL');
       $pagu     = BL::where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
       $data = array('tahun'   => $tahun,
@@ -344,8 +344,8 @@ class statistikController extends Controller{
 
     //API
     public function pdApi($tahun,$status){
-    	$skpd 	= SKPD::whereNotIn('SKPD_KODE',['4.02.02','4.05.01','4.05.03'])->get();
-    	$view           = array();    	
+    	$skpd 	= SKPD::whereNotIn('SKPD_KODE',['4.02.02','4.05.01','4.05.03'])->where('SKPD_TAHUN',$tahun)->get();
+    	$view           = array();
     	foreach ($skpd as $skpd) {
     		$id 		= $skpd->SKPD_ID;
     		$template 	= Kegunit::where('SKPD_ID',$id)->count();
@@ -355,7 +355,7 @@ class statistikController extends Controller{
 			    			$r->whereHas('program',function($s){
 								$s->whereNotIn('PROGRAM_KODE',['01','02','03','04','05','06','07']);
 			    			});
-			    		})->selectRaw('COUNT(DISTINCT("KEGIATAN_ID")) AS total')->first();
+			    		})->where('BL_TAHUN',$tahun)->selectRaw('COUNT(DISTINCT("KEGIATAN_ID")) AS total')->first();
               $used = $used->total;
 			$adum 		= BL::whereHas('subunit',function($q) use ($id){
 			    			$q->where('SKPD_ID',$id);
@@ -363,15 +363,15 @@ class statistikController extends Controller{
 			    			$r->whereHas('program',function($s){
 								$s->whereIn('PROGRAM_KODE',['01','02','03','04','05','06','07']);
 			    			});
-			    		})->count();			    		
-    		$rincian 	= Rincian::whereHas('bl',function($q) use ($id){
-			    			$q->where('BL_DELETED',0)->whereHas('subunit',function($r) use ($id){
+			    		})->where('BL_TAHUN',$tahun)->count();			    		
+    		$rincian 	= Rincian::whereHas('bl',function($q) use ($id,$tahun){
+			    			$q->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->whereHas('subunit',function($r) use ($id){
 			    				$r->where('SKPD_ID',$id);
 			    			});
 			    		})->sum('RINCIAN_TOTAL');
     		$pagu 		= BL::whereHas('subunit',function($q) use ($id){
 			    			$q->where('SKPD_ID',$id);
-			    		})->where('BL_VALIDASI','1')->where('BL_DELETED',0)->sum('BL_PAGU');
+			    		})->where('BL_VALIDASI','1')->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
 
     		if($template == 0 ) $p1 = 0;
     		else $p1 = ($used/$template)*100;
@@ -381,31 +381,33 @@ class statistikController extends Controller{
         $Kd_urusan    = substr($skpd->SKPD_KODE, 0,1)*1;
         $Kd_bidang    = substr($skpd->SKPD_KODE, 2,2)*1;
         $Kd_unit      = substr($skpd->SKPD_KODE, 5,2)*1;
+        $tahunmin     = $tahun-1;
         $t2017        = DB::connection('sqlsrv')
                         ->select("SELECT sum(Total) as Total 
-                                  FROM dbo.Ta_Belanja_Rinc_Sub rincian
-                                  LEFT JOIN dbo.Ta_Kegiatan kegiatan
-                                  ON rincian.Kd_Urusan = kegiatan.Kd_Urusan
-                                  and rincian.Kd_Unit = kegiatan.Kd_Unit
-                                  and rincian.Kd_Bidang = kegiatan.Kd_Bidang 
-                                  and rincian.Kd_Sub = kegiatan.Kd_Sub 
-                                  and rincian.Kd_Prog = kegiatan.Kd_Prog 
-                                  and rincian.ID_Prog = kegiatan.ID_Prog 
-                                  and rincian.Kd_Keg = kegiatan.Kd_Keg 
+                                  FROM dbo.Ta_RASK_Arsip rincian
                                   where rincian.Kd_Urusan = ".$Kd_urusan." 
                                   and rincian.Kd_Bidang = ".$Kd_bidang." 
                                   and rincian.Kd_unit = ".$Kd_unit." 
                                   and rincian.Kd_Prog != 0
-                                  and kegiatan.Ket_Kegiatan not like '%(Banprov)'
-                                  and kegiatan.Ket_Kegiatan not like '%(DAK)'");
+                                  and rincian.Kd_Rek_1 = 5
+                                  and rincian.Kd_Rek_2 = 2
+                                  and Tahun = ".$tahunmin);
         $total2017  = $t2017[0]->Total;
 
         if($pagu < $total2017*1){
           $sel  = ($total2017*1) - $pagu;
+          if($total2017*1 != 0){
           $ket  = number_format(($sel/($total2017*1) * 100),2,'.',',')."<span class='text-danger'><i class='fa fa-arrow-circle-down'></i></span>";
+          }else{
+          $ket = "100";
+          }
         }elseif($total2017*1 < $pagu){
           $sel  = $pagu-($total2017*1);
+          if($total2017*1 != 0){
           $ket  = number_format(($sel/($total2017*1) * 100),2,'.',',')."<span class='text-success'><i class='fa fa-arrow-circle-up'></i></span>";
+          }else{
+          $ket = "100";
+          }
         }else{
           $ket  = "100";          
         }
@@ -429,20 +431,28 @@ class statistikController extends Controller{
     }
 
     public function pdApiInput($tahun,$status){
-      $skpd   = SKPD::whereNotIn('SKPD_KODE',['4.02.02','4.05.01','4.05.03'])->get();
+      $skpd   = SKPD::whereNotIn('SKPD_KODE',['4.02.02','4.05.01','4.05.03'])->where('SKPD_TAHUN',$tahun)->get();
       $view           = array();      
       foreach ($skpd as $skpd) {
         $id     = $skpd->SKPD_ID;            
         $rincian  = Rincian::whereHas('bl',function($q) use ($id){
-                      $q->where('BL_DELETED',0)->whereHas('subunit',function($r) use ($id){
+                      $q->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->whereHas('subunit',function($r) use ($id){
                         $r->where('SKPD_ID',$id);
                       });
                     })->sum('RINCIAN_TOTAL');
+        $pagu       = BL::whereHas('subunit',function($r) use($id){
+                          $r->whereHas('skpd',function($s) use($id){
+                            $s->where('SKPD_ID',$id);
+                          });
+                      })->where('BL_VALIDASI',1)
+                      ->where('BL_DELETED',0)
+                      ->where('BL_TAHUN',$tahun)
+                      ->sum('BL_PAGU');
         array_push($view, array( 'ID'              => $skpd->SKPD_ID,
                                   'KODE'           => $skpd->SKPD_KODE,
                                   'NAMA'           => $skpd->SKPD_NAMA,
-                                  'PAGU'           => number_format($skpd->SKPD_PAGU,'0','.',','),
-                                  'SELISIH'        => number_format($skpd->SKPD_PAGU - $rincian,'0','.',','),
+                                  'PAGU'           => number_format($pagu,'0','.',','),
+                                  'SELISIH'        => number_format($pagu - $rincian,'0','.',','),
                                   'RINCIAN'        => number_format($rincian,'0','.',',')));
       }
         $out = array("aaData"=>$view);      
@@ -469,7 +479,7 @@ class statistikController extends Controller{
     }  
 
     public function urusanApi($tahun,$status){
-      $urusan   = Urusan::all();
+      $urusan   = Urusan::where('URUSAN_TAHUN',$tahun)->get();
       $view     = array();      
       foreach ($urusan as $u) {
         $id         = $u->URUSAN_ID;
@@ -485,8 +495,8 @@ class statistikController extends Controller{
                           });
                         })->selectRaw('COUNT(DISTINCT("KEGIATAN_ID")) AS total')->where('BL_VALIDASI',1)->first();
         $totalgiatvalidasi = $totalgiatvalidasi->total;
-        $rincian    = Rincian::whereHas('bl',function($q) use($id){
-                        $q->where('BL_DELETED',0)->whereHas('kegiatan',function($r) use($id){
+        $rincian    = Rincian::whereHas('bl',function($q) use($id,$tahun){
+                        $q->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->whereHas('kegiatan',function($r) use($id){
                           $r->whereHas('program',function($s) use($id){
                             $s->where('URUSAN_ID',$id);
                           });
@@ -496,31 +506,37 @@ class statistikController extends Controller{
                           $r->whereHas('program',function($s) use($id){
                             $s->where('URUSAN_ID',$id);
                           });
-                      })->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
+                      })->where('BL_VALIDASI',1)
+                      ->where('BL_DELETED',0)
+                      ->where('BL_TAHUN',$tahun)
+                      ->sum('BL_PAGU');
         $idprog     = str_replace(".","",$u->URUSAN_KODE);
+        $tahunmin   = $tahun-1;
         $t2017        = DB::connection('sqlsrv')
                         ->select("SELECT sum(Total) as Total 
-                                  FROM dbo.Ta_Belanja_Rinc_Sub rincian
-                                  LEFT JOIN dbo.Ta_Kegiatan kegiatan
-                                  ON rincian.Kd_Urusan = kegiatan.Kd_Urusan
-                                  and rincian.Kd_Unit = kegiatan.Kd_Unit
-                                  and rincian.Kd_Bidang = kegiatan.Kd_Bidang
-                                  and rincian.Kd_Sub = kegiatan.Kd_Sub 
-                                  and rincian.Kd_Prog = kegiatan.Kd_Prog 
-                                  and rincian.ID_Prog = kegiatan.ID_Prog 
-                                  and rincian.Kd_Keg = kegiatan.Kd_Keg                                   
-                                  where rincian.Id_Prog = ".$idprog." 
+                                  FROM dbo.Ta_RASK_Arsip rincian
+                                  where rincian.Id_Prog = ".$idprog."
+                                  and Kd_Perubahan = 4
                                   and rincian.Kd_Prog != 0
-                                  and kegiatan.Ket_Kegiatan not like '%(Banprov)'
-                                  and kegiatan.Ket_Kegiatan not like '%(DAK)'");
+                                  and rincian.Kd_Rek_1 = 5
+                                  and rincian.Kd_Rek_2 = 2
+                                  and rincian.Tahun = ".$tahunmin);
         $total2017  = $t2017[0]->Total;
 
         if($pagu < $total2017*1){
           $sel  = ($total2017*1) - $pagu;
+          if($total2017*1 != 0){
           $ket  = number_format(($sel/($total2017*1) * 100),2,'.',',')."<span class='text-danger'><i class='fa fa-arrow-circle-down'></i></span>";
+          }else{
+          $ket  = "100<span class='text-danger'><i class='fa fa-arrow-circle-down'></i></span>";
+          }
         }elseif($total2017*1 < $pagu){
           $sel  = $pagu-($total2017*1);
+          if($total2017*1 != 0){
           $ket  = number_format(($sel/($total2017*1) * 100),2,'.',',')."<span class='text-success'><i class='fa fa-arrow-circle-up'></i></span>";
+          }else{
+          $ket  = "100<span class='text-success'><i class='fa fa-arrow-circle-up'></i></span>";
+          }
         }else{
           $ket  = "100";          
         }
