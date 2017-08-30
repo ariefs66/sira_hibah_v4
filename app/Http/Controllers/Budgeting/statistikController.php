@@ -69,7 +69,7 @@ class statistikController extends Controller{
 
     public function setStatusRincian($tahun,$status){
       if($status == 'murni'){
-        return $this->setStatusRincian($tahun,$status)->whereHas('bl',function($bl) use($tahun){
+        return Rincian::whereHas('bl',function($bl) use($tahun){
           $bl->where('BL_TAHUN',$tahun);
         });
       }else{
