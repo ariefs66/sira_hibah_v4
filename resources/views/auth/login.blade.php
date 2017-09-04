@@ -35,7 +35,8 @@
       <nav class="pull-right">
         <ul class="nav-menu">
           <!-- <li><a href="#">FAQ</a></li> -->
-          <li><a href="http://apbd.bandung.go.id:8000/">APBD 2017</a></li>
+         <!--  <li><a href="http://apbd.bandung.go.id:8000/">APBD 2017</a></li> -->
+          <li><a href="#">APBD 2017</a></li>
           <li class="sub-menu">
             <a href="#">Download <i class="mi-caret-down"></i></a>
 
