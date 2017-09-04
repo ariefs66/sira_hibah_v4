@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 Use App\Model\Pendapatan;
 Use App\Model\Pembiayaan;
 Use App\Model\BL;
+Use App\Model\BLPerubahan;
 Use App\Model\Rincian;
 Use App\Model\BTL;
 Use App\Model\Rekening;
@@ -18,6 +19,7 @@ Use App\Model\Kunci;
 Use App\Model\Subrincian;
 Use App\Model\UserBudget;
 Use App\Model\SKPD;
+Use App\Model\Realisasi;
 Use Response;
 Use DB;
 class realController extends Controller
@@ -809,6 +811,91 @@ class realController extends Controller
 		$lama 	= UserBudget::where('TAHUN',$tahunawal)->count();
 		$baru 	= UserBudget::where('TAHUN',$tahunakhir)->count();
 		return 'lama = '.$lama.'<br>baru = '.$baru;
+	}
+
+	public function getRealisasi($tahun){
+		$data 	= DB::connection('sqlsrv')
+    						->table('dbo.Ta_SPM_Rinc as spm')
+                            ->join('dbo.Ta_SP2D as sp2d',function($join){
+                                    $join->on("spm.No_SPM","=",'sp2d.No_SPM');
+                            })->where('spm.Tahun',$tahun)
+                            ->where('Kd_Rek_1',5)                                                  
+                            ->where('Kd_Rek_2',2)
+                            ->where('Kd_Prog','!=',0)  
+		    				->groupBy('spm.Tahun','spm.Kd_Urusan','spm.Kd_Bidang','spm.Kd_Unit','spm.Kd_Sub','spm.Kd_Prog','spm.ID_Prog','spm.Kd_Keg','Kd_Rek_1','Kd_Rek_2','Kd_Rek_3','Kd_Rek_4','Kd_Rek_5')
+		    				->select('spm.Tahun','spm.Kd_Urusan','spm.Kd_Bidang','spm.Kd_Unit','spm.Kd_Sub','spm.Kd_Prog','spm.ID_Prog','spm.Kd_Keg','Kd_Rek_1','Kd_Rek_2','Kd_Rek_3','Kd_Rek_4','Kd_Rek_5')
+                            ->selectRaw("SUM(spm.Nilai) AS TOTAL")
+                            ->get();
+        foreach($data as $p){
+			$urusan 	= substr($p->ID_Prog, 0,1).'.'.substr($p->ID_Prog,1,2);
+			$urusan 	= Urusan::where('URUSAN_KODE',$urusan)->where('URUSAN_TAHUN',$tahun)->value('URUSAN_ID');
+
+			$skpd 		= $p->Kd_Urusan;
+			if($p->Kd_Bidang < 10) $skpd 		= $skpd.'.0'.$p->Kd_Bidang;
+			else $skpd 							= $skpd.'.'.$p->Kd_Bidang;
+			if($p->Kd_Unit < 10) $skpd 			= $skpd.'.0'.$p->Kd_Unit;
+			else $skpd 							= $skpd.'.'.$p->Kd_Unit;
+			$skpd 		= SKPD::where('SKPD_TAHUN',$tahun)->where('SKPD_KODE',$skpd)->value('SKPD_ID');
+
+			if($p->Kd_Sub < 10) $sub 			= '0'.$p->Kd_Sub;
+			else $sub 							= $p->Kd_Sub;
+			$sub 		= Subunit::where('SKPD_ID',$skpd)->where('SUB_KODE',$sub)->value('SUB_ID');
+
+			if($p->Kd_Prog < 10) $prog 			= '0'.$p->Kd_Prog;
+			else $prog 							= $p->Kd_Prog;
+			$prog 		= Program::where('URUSAN_ID',$urusan)->where('PROGRAM_KODE',$prog)->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
+
+			if($p->Kd_Keg < 10) $keg 			= '00'.$p->Kd_Keg;
+			elseif($p->Kd_Keg < 100) $keg 		= '0'.$p->Kd_Keg;
+			else $keg 							= $p->Kd_Keg;
+			$keg 		= Kegiatan::where('PROGRAM_ID',$prog)->where('KEGIATAN_TAHUN',$tahun)->where('KEGIATAN_KODE',$keg)->value('KEGIATAN_ID');
+
+
+			$bl 		= BLPerubahan::where('KEGIATAN_ID',$keg)->where('SUB_ID',$sub)->value('BL_ID');
+			// $penyesuaiand		= DB::connection('sqlsrv')
+			// 							->table('dbo.Ta_Penyesuaian_Rinc')
+			// 							->where('Tahun',$p->Tahun)
+			// 							->where('Kd_Urusan',$p->Kd_Urusan)
+			// 							->where('Kd_Bidang',$p->Kd_Bidang)
+			// 							->where('Kd_Unit',$p->Kd_Unit)
+			// 							->where('Kd_Prog',$p->Kd_Prog)
+			// 							->where('ID_Prog',$p->ID_Prog)
+			// 							->where('Kd_Keg',$p->Kd_Keg)
+			// 							->where('D_K','D')
+			// 							->sum('Nilai');
+			$penyesuaiand 		= 0
+			// $penyesuaiank 		= DB::connection('sqlsrv')
+			// 							->table('dbo.Ta_Penyesuaian_Rinc')
+			// 							->where('Tahun',$p->Tahun)
+			// 							->where('Kd_Urusan',$p->Kd_Urusan)
+			// 							->where('Kd_Bidang',$p->Kd_Bidang)
+			// 							->where('Kd_Unit',$p->Kd_Unit)
+			// 							->where('Kd_Prog',$p->Kd_Prog)
+			// 							->where('ID_Prog',$p->ID_Prog)
+			// 							->where('Kd_Keg',$p->Kd_Keg)
+			// 							->where('D_K','K')
+			// 							->sum('Nilai');
+			$penyesuaiank 		= 0;
+			$realisasi 			= $p->TOTAL+$penyesuaiank-$penyesuaiand;
+			
+			$rekening 			= '5.2.'.$p->Kd_Rek_3;
+			if($p->Kd_Rek_4 < 10) $rekening 		= $rekening.'.0'.$p->Kd_Rek_4;
+			else $rekening 							= $rekening.'.'.$p->Kd_Rek_4; 
+			if($p->Kd_Rek_5 < 10) $rekening 		= $rekening.'.0'.$p->Kd_Rek_5;
+			else $rekening 							= $rekening.'.'.$p->Kd_Rek_5;
+			$rekening 		= Rekening::where('REKENING_TAHUN',$tahun)->where('REKENING_KODE',$rekening)->value('REKENING_ID');
+			$cek  			= Realisasi::where('BL_ID',$bl)->where('REKENING_ID',$rekening)->value('REALISASI_ID');
+			if($cek){
+				Realisasi::where('REALISASI_ID',$cek)->update(['REALISASI_TOTAL'=>$realisasi]);
+			}else{
+				$real 		= new Realisasi;
+				$real->BL_ID 			= $bl;
+				$real->REKENING_ID 		= $rekening;
+				$real->REALISASI_TOTAL 	= $realisasi;	
+				$real->save();			
+			}
+        }
+        return 'OK';
 	}
 
 	public function utf8ize($d) {

@@ -377,6 +377,7 @@ Route::get('/auto/{tahun}/getStatus/{param}/{kodeperubahan}', 'realController@ge
 //AUTO-PROCESS
 Route::get('/auto/{tahun}/trfUrusanFromSimda', 'realController@transferUrusanFromSimda');
 Route::get('/auto/{tahun}/trfProgramFromSimda', 'realController@transferProgramFromSimda');
+Route::get('/auto/{tahun}/trfRealisasiFromSimda', 'realController@getRealisasi');
 Route::get('/auto/{tahun}/trfKegiatanFromSimda', 'realController@transferKegiatanFromSimda');
 Route::get('/auto/{tahun}/trfBelanjaFromSimda/{kodeperubahan}/{skpd}', 'realController@transferBelanjaFromSimda');
 Route::get('/auto/{tahun}/trfSubrincianFromSimda/{kodeperubahan}/{skpd}', 'realController@transferSubrincianFromSimda');
