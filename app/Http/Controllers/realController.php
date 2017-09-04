@@ -863,7 +863,7 @@ class realController extends Controller
 			// 							->where('Kd_Keg',$p->Kd_Keg)
 			// 							->where('D_K','D')
 			// 							->sum('Nilai');
-			$penyesuaiand 		= 0
+			$penyesuaiand 		= 0;
 			// $penyesuaiank 		= DB::connection('sqlsrv')
 			// 							->table('dbo.Ta_Penyesuaian_Rinc')
 			// 							->where('Tahun',$p->Tahun)
