@@ -336,7 +336,10 @@
 @endsection
 
 @section('plugin')
+
 <script type="text/javascript">
+  alert({{$info}});
+
   @if(Auth::user()->level == 2)
   $(document).ready(function() {
     @if($pengumuman)
