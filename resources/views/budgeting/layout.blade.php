@@ -93,7 +93,7 @@
            <li class="dropdown padder-md">
               <p class="font-semibold m-t-lg text-white pull-left">Tahun Anggaran : </p>
              <div class="m-t-md pull-right">
-                  <select name="year" id="tahun-anggaran" class="form-control transparent-select">
+                  <select name="year" id="tahun-anggaran" class="form-control transparent-select" style="color:black;">
                   </select>
               </div>
            </li>
