@@ -2191,7 +2191,8 @@ class blController extends Controller
                                 })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();                
             }
         }else{
-            $skpd       = $this->getSKPD($tahun);
+            //$skpd       = $this->getSKPD($tahun);
+            $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->get();
             $skpd_      = array(); 
             $i = 0;
             foreach($skpd as $s){
