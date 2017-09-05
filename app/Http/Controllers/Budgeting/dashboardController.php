@@ -253,7 +253,7 @@ class dashboardController extends Controller
             $pengumuman     = PaguRincian::where('SKPD_ID',$idskpd)->get();
             if(empty($pengumuman)) $pengumuman = "";
         }
-        $info = "infooo";
+        $info = "Pilih Tahun Anggaran Terlebih Dahulu di Menu Header dengan Font yang Berwarna Hitam";
     	return View('budgeting.index',['tahun'=>$tahun, 'info'=>$info, 'status'=>$status,'pagu'=>$pagu,'btl'=>$btl,'pdp'=>$pdp,'blv'=>$blv,'bln'=>$bln,'rkpd'=>$rkpd,'ppas'=>$ppas,'rapbd'=>$rapbd,'apbd'=>$apbd,'staff'=>$staff,'b1'=>$b1,'b2'=>$b2,'b3'=>$b3,'jabatan'=>$jabatan,'alamat'=>$alamat,'musren'=>$musren,'musrenin'=>$musrenIn,'musrentotal'=>$musrenTotal,'musrentotalin'=>$musrenTotalIn,'musrentotal'=>$musrenTotal,'rkua'=>$rkua,'pengumuman'=>$pengumuman]);
     }
 
