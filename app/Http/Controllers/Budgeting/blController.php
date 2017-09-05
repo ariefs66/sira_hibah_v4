@@ -340,8 +340,8 @@ class blController extends Controller
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $data->RINCIAN_KETERANGAN)[0].'</p>';
                 $hargakomponen  = number_format(explode("#", $data->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
             }else{
-                $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->komponen->KOMPONEN_NAMA.'</p>';
-                $hargakomponen  = number_format($data->komponen->KOMPONEN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
+                $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->RINCIAN_KOMPONEN.'</p>';
+                $hargakomponen  = number_format($data->RINCIAN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
             }
             if(Auth::user()->level == 8){
                  $checkbox = '<div class="m-t-n-lg">
@@ -360,8 +360,8 @@ class blController extends Controller
                     $namakomponensebelum   = $rinciansebelum->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $rinciansebelum->RINCIAN_KETERANGAN)[0].'</p>';
                     $hargakomponensebelum  = number_format(explode("#", $rinciansebelum->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$rinciansebelum->RINCIAN_KOEFISIEN.'</p>';
                 }else{
-                    $namakomponensebelum   = $rinciansebelum->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$rinciansebelum->komponen->KOMPONEN_NAMA.'</p>';
-                    $hargakomponensebelum  = number_format($rinciansebelum->komponen->KOMPONEN_HARGA,0,'.',',').'<br><p class="text-orange">'.$rinciansebelum->RINCIAN_KOEFISIEN.'</p>';
+                    $namakomponensebelum   = $rinciansebelum->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$rinciansebelum->RINCIAN_KOMPONEN.'</p>';
+                    $hargakomponensebelum  = number_format($rinciansebelum->RINCIAN_HARGA,0,'.',',').'<br><p class="text-orange">'.$rinciansebelum->RINCIAN_KOEFISIEN.'</p>';
                 }
                 if($data->RINCIAN_TOTAL != $rinciansebelum->RINCIAN_TOTAL) $tanda = "<span class='text text-danger'><i class='fa fa-asterisk'></i></span>";
                 else $tanda = "";
@@ -409,8 +409,8 @@ class blController extends Controller
                 $namakomponen   = $data_->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $data_->RINCIAN_KETERANGAN)[0].'</p>';
                 $hargakomponen  = number_format(explode("#", $data_->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$data_->RINCIAN_KOEFISIEN.'</p>';
             }else{
-                $namakomponen   = $data_->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data_->komponen->KOMPONEN_NAMA.'</p>';
-                $hargakomponen  = number_format($data_->komponen->KOMPONEN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data_->RINCIAN_KOEFISIEN.'</p>';
+                $namakomponen   = $data_->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data_->RINCIAN_KOMPONEN.'</p>';
+                $hargakomponen  = number_format($data_->RINCIAN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data_->RINCIAN_KOEFISIEN.'</p>';
             }
             if(Auth::user()->level == 8){
                  $checkbox = '<div class="m-t-n-lg">
@@ -2191,7 +2191,6 @@ class blController extends Controller
                                 })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();                
             }
         }else{
-            //$skpd       = $this->getSKPD($tahun);
             $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->get();
             $skpd_      = array(); 
             $i = 0;

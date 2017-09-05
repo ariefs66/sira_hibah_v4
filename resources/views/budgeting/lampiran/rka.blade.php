@@ -308,19 +308,19 @@
   	  @endforeach
   	  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i></td>
 	  @else
-	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{ $k->komponen->KOMPONEN_NAMA }}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i></td>
+	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{ $k->RINCIAN_KOMPONEN }}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i></td>
 	  @endif
 	  <td class="border-rincian tengah">{{ $k->RINCIAN_VOLUME }}</td>
 	  <td class="border-rincian tengah">{{ $k->komponen->KOMPONEN_SATUAN }}</td>
 	  @if($k->PEKERJAAN_ID == 4 or $k->PEKERJAAN_ID == 5)
 	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA,0,',','.') }},00</td>
 	  @else
-	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA,0,',','.') }},00</td>
 	  @endif
 	  @if($k->RINCIAN_PAJAK == 0)
 	  <td class="border-rincian kanan">0,00</td>
 	  @else
-	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA/10,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA/10,0,',','.') }},00</td>
 	  @endif
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00</td>
 	 </tr>
