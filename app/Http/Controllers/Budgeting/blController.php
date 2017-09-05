@@ -853,6 +853,7 @@ class blController extends Controller
     public function submitRincianPerubahan($tahun,$status){
         $koef       = Input::get('VOL1').' '.Input::get('SAT1');
         $vol        = Input::get('VOL1');
+       // dd($vol);
         if(!empty(Input::get('VOL2'))){
             $koef   = $koef.' x '.Input::get('VOL2').' '.Input::get('SAT2');
             $vol    = $vol * Input::get('VOL2');
@@ -2210,6 +2211,17 @@ class blController extends Controller
             }
 
         }
+
+        $pagu_murni     = BL::whereHas('subunit',function($q) use ($filter){
+                                        $q->where('SKPD_ID',$filter);
+                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
+
+        $pagu_perubahan = BLPerubahan::whereHas('subunit',function($q) use ($filter){
+                                        $q->where('SKPD_ID',$filter);
+                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
+
+       // $pagu_skpd      = SKPD::select('SKPD_PAGU')->where('SKPD_ID',$filter)->get();
+
         $view       = array();
         $i          = 1;
         $kunci      = '';
@@ -2283,6 +2295,7 @@ class blController extends Controller
             // if(empty($rinciansebelum)) $rinciansebelum = 0;
             // else $rinciansebelum = number_format($rinciansebelum,0,'.',',');
             $realisasi  = Realisasi::where('BL_ID',$data->BL_ID)->sum('REALISASI_TOTAL');
+
             if(empty($realisasi)) $realisasi = 0;
             array_push($view, array( 'NO'             =>$no,
                                      'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
@@ -2293,7 +2306,10 @@ class blController extends Controller
                                      'STATUS'         =>$rincian.' Rincian<br>'.$validasi.' Validasi'));
             $i++;
         }
-        $out = array("aaData"=>$view);      
+        $out = array("aaData"=>$view,
+                    "pagu_murni"=>number_format($pagu_murni,0,'.',','),
+                    "pagu_perubahan"=>number_format($pagu_perubahan,0,'.',','),
+                    );      
         return Response::JSON($out);
         return $view;
     }
