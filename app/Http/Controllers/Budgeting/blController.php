@@ -1497,8 +1497,10 @@ class blController extends Controller
         // if($rinciannow < $vol and Input::get('BL_ID') != 5718){
         //     return 99;
         // }
-
-        $total      = ( Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA')*$vol))/100);
+        $harga = 0;
+        if(Input::get('KOMPONEN_ID') == 0) $harga = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->value('RINCIAN_HARGA');
+        else $harga      = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');
+        $total      = ( $harga * $vol ) + (( Input::get('RINCIAN_PAJAK')*($harga*$vol))/100);
         
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
         $totalBL    = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
