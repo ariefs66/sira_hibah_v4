@@ -86,7 +86,15 @@
                       </tr>
                     </thead>
                     <tbody>
-                    </tbody>                                  
+                    </tbody>  
+                    <tfoot>
+                      <tr>
+                        <td colspan="2"> </td>
+                        <td colspan="2"><b>Total Pagu Murni : Rp. <text id="pagu_murni"></text> </b></td>
+                        <td colspan="2"><b>Total Pagu Perubahan : Rp. <text id="pagu_perubahan"></text> </b></td>
+                        <td></td>
+                      </tr>  
+                    </tfoot>                                
                   </table>
                 </div>
               </div>
@@ -390,7 +398,11 @@ function setStaff(){
           { mData: 'RINCIAN_SEBELUM' },
           { mData: 'PAGU_SESUDAH' },
           { mData: 'RINCIAN_SESUDAH' },
-          { mData: 'STATUS' }]
+          { mData: 'STATUS' }],
+          initComplete:function(setting,json){
+            $("#pagu_murni").html(json.pagu_murni);
+            $("#pagu_perubahan").html(json.pagu_perubahan);
+        }
       });  
   });
 

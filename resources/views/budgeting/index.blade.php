@@ -297,6 +297,17 @@
   </div>
 </div>
 
+<div class="modal fade" id="info" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <h5 class="inline font-semibold text-orange m-n text16 ">{{$info}}</h5>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="pengumuman" tabindex="-1" role="dialog">
   <div class="modal-dialog bg-white">
     <div class="panel panel-default">
@@ -338,7 +349,12 @@
 @section('plugin')
 
 <script type="text/javascript">
-  alert({{$info}});
+ 
+  @if($info != '')
+  $(document).ready(function() {
+      $('#info').modal('show');
+  });
+  @endif
 
   @if(Auth::user()->level == 2)
   $(document).ready(function() {

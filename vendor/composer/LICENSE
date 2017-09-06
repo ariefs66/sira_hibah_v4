@@ -3,10 +3,14 @@ Upstream-Name: Composer
 Upstream-Contact: Jordi Boggiano <j.boggiano@seld.be>
 Source: https://github.com/composer/composer
 
+<<<<<<< HEAD
 Files: *
 Copyright: 2016, Nils Adermann <naderman@naderman.de>
            2016, Jordi Boggiano <j.boggiano@seld.be>
 License: Expat
+=======
+Copyright (c) 2016 Nils Adermann, Jordi Boggiano
+>>>>>>> 1fe14e84e49cbeccf5083420ca6efb0df22d158d
 
 Files: res/cacert.pem
 Copyright: 2015, Mozilla Foundation
