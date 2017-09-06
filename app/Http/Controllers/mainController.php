@@ -68,6 +68,12 @@ class mainController extends Controller
 				}else{
 				$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
 				}
+			}else if (Auth::user()->level==8){
+				if($tahun == $data->TAHUN and $status == $data->STATUS){
+				$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'" selected>'.$data->TAHUN.'-'.$data->STATUS.'</option>';
+				}else{
+				$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
+				}
 			}
 		}
 		return $view;
