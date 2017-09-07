@@ -29,7 +29,7 @@ class usulanController extends Controller
     }
 
     public function index($tahun,$status){
-        $skpd           = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        $skpd           = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
         $usulan         = Usulan::whereHas('kamus',function($q) use($skpd){
                                 $q->where('KAMUS_SKPD',$skpd);
                             })->where('USULAN_TUJUAN',1)->groupBy('KAMUS_ID')->select('KAMUS_ID')->get()->toArray();
@@ -40,7 +40,7 @@ class usulanController extends Controller
     }
 
     public function getMusrenbang($tahun,$status){
-        $skpd           = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        $skpd           = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
         $dataKamus      = Kamus::where('KAMUS_SKPD',$skpd)->select('KAMUS_ID')->get()->toArray();
         $data           = Usulan::whereIn('KAMUS_ID',$dataKamus)->get();
         $i =  1;
