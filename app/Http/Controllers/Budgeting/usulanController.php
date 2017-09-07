@@ -60,7 +60,7 @@ class usulanController extends Controller
     }
 
     public function getMusrenbangFilter($tahun,$status,$kamus,$giat){
-        $skpd           = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        $skpd           = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
         if($kamus != 'x' and $giat != 'x') 
             $dataKamus      = Kamus::where('KAMUS_SKPD',$skpd)->where('KAMUS_ID',$kamus)->where('KAMUS_KEGIATAN',$giat)->select('KAMUS_ID')->get()->toArray();
         elseif($kamus != 'x')
@@ -87,11 +87,12 @@ class usulanController extends Controller
     }
 
     public function getReses($tahun,$status){
-        $skpd           = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        $skpd           = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
         $dataKamus      = Kamus::where('KAMUS_SKPD',$skpd)->select('KAMUS_ID')->get()->toArray();
         $data           = UsulanReses::whereIn('KAMUS_ID',$dataKamus)->where('USULAN_STATUS',0)->where('USULAN_DELETED',0)->get();
         $i =  1;
         $view   = array();
+       // dd($data);
         foreach ($data as $data) {
             $anggaran   = $data->USULAN_VOLUME * Kamus::where('KAMUS_ID',$data->KAMUS_ID)->value('KAMUS_HARGA');
             $keg = Kegiatan::where('KEGIATAN_ID',$data->kamus->KAMUS_KEGIATAN)->first();

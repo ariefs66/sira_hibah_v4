@@ -62,7 +62,7 @@ class mainController extends Controller
 		$data  = TahunAnggaran::all();
 		$view 	= '';
 		foreach($data as $data){
-			if($data->TAHUN != '2018'){
+			if($data->TAHUN != ''){
 				if($tahun == $data->TAHUN and $status == $data->STATUS){
 				$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'" selected>'.$data->TAHUN.'-'.$data->STATUS.'</option>';
 				}else{
