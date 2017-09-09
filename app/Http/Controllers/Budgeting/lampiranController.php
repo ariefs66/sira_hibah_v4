@@ -105,14 +105,16 @@ class lampiranController extends Controller
     public function rkpd($tahun,$status,$id){
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD')->value('TAHAPAN_ID');
         $idSKPD         = SKPD::where('SKPD_ID',$id)->first();
-        $pagu           = BL::whereHas('subunit',function($x) use ($id){
+        if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+        else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);
+        $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
                         })
                         ->where('BL_VALIDASI',1)
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)
                         ->get();
-        $prog           = BL::whereHas('subunit',function($q) use ($id){
+        $prog           = $stat->whereHas('subunit',function($q) use ($id){
                                 $q->where('SKPD_ID',$id);
                         })
                         ->groupBy('KEGIATAN_ID')
@@ -132,7 +134,7 @@ class lampiranController extends Controller
         $i              = 0;
         foreach($program as $pr){
             $idprog            = $pr->PROGRAM_ID;
-            $paguprogram[$i]   = BL::whereHas('kegiatan',function($q) use ($idprog){
+            $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
                                 })->whereHas('subunit',function($x) use ($id){
                                     $x->where('SKPD_ID',$id);
@@ -151,14 +153,16 @@ class lampiranController extends Controller
     public function rkpdDownload($tahun,$status,$id){
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD')->value('TAHAPAN_ID');
         $idSKPD         = SKPD::where('SKPD_ID',$id)->first();
-        $pagu           = BL::whereHas('subunit',function($x) use ($id){
+        if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+        else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
+        $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
                         })
                         ->where('BL_VALIDASI',1)
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)
                         ->get();
-        $prog           = BL::whereHas('subunit',function($q) use ($id){
+        $prog           = $stat->whereHas('subunit',function($q) use ($id){
                                 $q->where('SKPD_ID',$id);
                         })
                         ->groupBy('KEGIATAN_ID')
@@ -178,7 +182,7 @@ class lampiranController extends Controller
         $i              = 0;
         foreach($program as $pr){
             $idprog            = $pr->PROGRAM_ID;
-            $paguprogram[$i]   = BL::whereHas('kegiatan',function($q) use ($idprog){
+            $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
                                 })->whereHas('subunit',function($x) use ($id){
                                     $x->where('SKPD_ID',$id);
@@ -197,14 +201,16 @@ class lampiranController extends Controller
     public function ppas($tahun,$status,$id){
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD')->value('TAHAPAN_ID');
         $idSKPD         = SKPD::where('SKPD_ID',$id)->first();
-        $pagu           = BL::whereHas('subunit',function($x) use ($id){
+        if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+        else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
+        $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
                         })
                         ->where('BL_VALIDASI',1)
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)                        
                         ->get();
-        $prog           = BL::whereHas('subunit',function($q) use ($id){
+        $prog           = $stat->whereHas('subunit',function($q) use ($id){
                                 $q->where('SKPD_ID',$id);
                         })
                         ->groupBy('KEGIATAN_ID')
@@ -224,7 +230,7 @@ class lampiranController extends Controller
         $i              = 0;
         foreach($program as $pr){
             $idprog            = $pr->PROGRAM_ID;
-            $paguprogram[$i]   = BL::whereHas('kegiatan',function($q) use ($idprog){
+            $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
                                 })->whereHas('subunit',function($x) use ($id){
                                     $x->where('SKPD_ID',$id);
@@ -243,14 +249,16 @@ class lampiranController extends Controller
     public function ppasDownload($tahun,$status,$id){
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD')->value('TAHAPAN_ID');
         $idSKPD         = SKPD::where('SKPD_ID',$id)->first();
-        $pagu           = BL::whereHas('subunit',function($x) use ($id){
+        if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+        else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
+        $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
                         })
                         ->where('BL_VALIDASI',1)
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)                        
                         ->get();
-        $prog           = BL::whereHas('subunit',function($q) use ($id){
+        $prog           = $stat->whereHas('subunit',function($q) use ($id){
                                 $q->where('SKPD_ID',$id);
                         })
                         ->groupBy('KEGIATAN_ID')
@@ -270,7 +278,7 @@ class lampiranController extends Controller
         $i              = 0;
         foreach($program as $pr){
             $idprog            = $pr->PROGRAM_ID;
-            $paguprogram[$i]   = BL::whereHas('kegiatan',function($q) use ($idprog){
+            $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
                                 })->whereHas('subunit',function($x) use ($id){
                                     $x->where('SKPD_ID',$id);
