@@ -133,6 +133,8 @@ class lampiranController extends Controller
         $paguprogram    = array();
         $i              = 0;
         foreach($program as $pr){
+            if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+            else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);
             $idprog            = $pr->PROGRAM_ID;
             $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
@@ -181,6 +183,8 @@ class lampiranController extends Controller
         $paguprogram    = array();
         $i              = 0;
         foreach($program as $pr){
+            if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+            else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);
             $idprog            = $pr->PROGRAM_ID;
             $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
@@ -229,6 +233,8 @@ class lampiranController extends Controller
         $paguprogram    = array();
         $i              = 0;
         foreach($program as $pr){
+            if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+            else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
             $idprog            = $pr->PROGRAM_ID;
             $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
@@ -277,6 +283,8 @@ class lampiranController extends Controller
         $paguprogram    = array();
         $i              = 0;
         foreach($program as $pr){
+            if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+            else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);
             $idprog            = $pr->PROGRAM_ID;
             $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
