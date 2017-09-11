@@ -24,7 +24,14 @@
                   <div class="wrapper-lg">
                     <h5 class="inline font-semibold text-orange m-n ">Lampiran {{$tipe}} {{ $tahun }}</h5>
                     @if($tipe == 'ppas')
-                    <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran-download/ppas"><i class="m-r-xs fa fa-download"></i> Download</a>
+                    <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+                      <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><i class="fa fa-chevron-down"></i> Download Program
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <li><a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran-download/ppas/pagu">Pagu</a></li>
+                        <li><a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran-download/ppas/rincian">Rincian</a></li>
+                      </ul>
+                    </div>
                     @endif
           					<div class="col-sm-1 pull-right m-t-n-sm">
                     	<select class="form-control dtSelect" id="dtSelect">
