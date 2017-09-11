@@ -407,7 +407,8 @@ class lampiranController extends Controller
         return $bulan[$i];
     }
 
-    public function ppasProgram($tahun,$status){
+    public function ppasProgram($tahun,$status,$tipe){
+        if($tipe == 'pagu')
         $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", SUM("BL_PAGU")
                             from "BUDGETING"."DAT_BL" bl
                             inner JOIN "REFERENSI"."REF_KEGIATAN" keg
@@ -420,9 +421,28 @@ class lampiranController extends Controller
                             on bl."SUB_ID" = sub."SUB_ID"
                             inner join "REFERENSI"."REF_SKPD" skpd
                             on sub."SKPD_ID" = skpd."SKPD_ID"
-                            WHERE "BL_DELETED" = 0
+                            WHERE "BL_DELETED" = 0 and "BL_TAHUN" = '.$tahun.'
                             GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA"
                             ORDER BY SKPD, "PROGRAM_KODE"');
+        else
+        $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", SUM("RINCIAN_TOTAL")
+                            from "BUDGETING"."DAT_BL" bl
+                            inner JOIN "REFERENSI"."REF_KEGIATAN" keg
+                            on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
+                            inner join "REFERENSI"."REF_PROGRAM" prog
+                            on keg."PROGRAM_ID" = prog."PROGRAM_ID"
+                            inner join "REFERENSI"."REF_URUSAN" ur 
+                            on prog."URUSAN_ID" = ur."URUSAN_ID"
+                            inner join "REFERENSI"."REF_SUB_UNIT" sub
+                            on bl."SUB_ID" = sub."SUB_ID"
+                            inner join "REFERENSI"."REF_SKPD" skpd
+                            on sub."SKPD_ID" = skpd."SKPD_ID"
+                            inner join "BUDGETING"."DAT_RINCIAN" rincian
+                            on bl."BL_ID" = rincian."BL_ID"
+                            WHERE "BL_DELETED" = 0 and "BL_TAHUN" = '.$tahun.'
+                            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA"
+                            ORDER BY SKPD, "PROGRAM_KODE"');
+
         $data = array_map(function ($value) {
             return (array)$value;
         }, $data);

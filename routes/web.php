@@ -83,7 +83,7 @@ Route::get('/main/{tahun}/{status}/lampiran/rkpd/{id}', 'Budgeting\lampiranContr
 Route::get('/main/{tahun}/{status}/lampiran/rkpddownload/{id}', 'Budgeting\lampiranController@rkpdDownload');
 Route::get('/main/{tahun}/{status}/lampiran/ppas/{id}', 'Budgeting\lampiranController@ppas');
 Route::get('/main/{tahun}/{status}/lampiran/ppasdownload/{id}', 'Budgeting\lampiranController@ppasDownload');
-Route::get('/main/{tahun}/{status}/lampiran-download/ppas', 'Budgeting\lampiranController@ppasProgram');
+Route::get('/main/{tahun}/{status}/lampiran-download/ppas/{tipe}', 'Budgeting\lampiranController@ppasProgram');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/1', 'Budgeting\lampiranController@lampiran1');
 //------------------------------------------------------------------------------------------------------------------------
 //BTL
