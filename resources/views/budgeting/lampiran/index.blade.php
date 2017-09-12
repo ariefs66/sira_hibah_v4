@@ -30,6 +30,7 @@
                       <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                         <li><a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran-download/ppas/pagu">Pagu</a></li>
                         <li><a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran-download/ppas/rincian">Rincian</a></li>
+                        <li><a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran-download/ppas/kegiatan">Kegiatan</a></li>
                       </ul>
                     </div>
                     @endif
