@@ -79,6 +79,14 @@
                   </thead>
                   <tbody>
                   </tbody>
+                  <tfoot>
+                      <tr>
+                        <td colspan="2"> </td>
+                        <td><b>Renja : <text id="renja"></text> </b></td>
+                        <td><b>Total Renja : Rp. <text id="total_renja"></text> </b></td>
+                        <td><b>Total Masuk : Rp. <text id="total_masuk"></text> </b></td>
+                      </tr>  
+                    </tfoot>
                 </table>
               </div>
             </div>
@@ -266,6 +274,11 @@
 
   $('.cari-renja').keyup( function () {
     $('#table-renja').DataTable().search($('.cari-renja').val()).draw();
+    initComplete:function(setting,json){
+            $("#renja").html(json.renja);
+            $("#total_renja").html(json.total_renja);
+            $("#total_masuk").html(json.total_masuk);
+        }
   });
   
   $('.cari-rw').keyup( function () {
