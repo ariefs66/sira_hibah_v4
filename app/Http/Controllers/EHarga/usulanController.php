@@ -731,7 +731,7 @@ class usulanController extends Controller
         return $surat;
     }
 
-    public function getSurat(){
+    public function getSurat($tahun){
             $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             if($skpd->skpd->SKPD_JENIS == 1){
                 $pd     = SKPD::where('SKPD_JENIS', 2)->get();
