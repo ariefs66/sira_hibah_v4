@@ -28,10 +28,10 @@
                <div class="nav-tabs-alt tabs-alt-1 b-t six-row" id="tab-jurnal" >
                 <ul class="nav nav-tabs" role="tablist">
                  <li class="active">
-                  <a data-target="#tab-1" role="tab" data-toggle="tab">Musrenbang</a>
+                  <a data-target="#tab-1" role="tab" data-toggle="tab" id="menu1">Musrenbang</a>
                 </li>
                 <li>
-                  <a data-target="#tab-2" role="tab" data-toggle="tab">Reses</a>
+                  <a data-target="#tab-2" role="tab" data-toggle="tab" id="menu2">Reses</a>
                 </li>
                 <li>
                   <a data-target="#tab-3" role="tab" data-toggle="tab">PIPPK RW</a>
@@ -105,8 +105,8 @@
                     <tr>
                       <th width="1%">No</th>
                       <th>Perangkat Deaerah</th>
-                      <th>Renja</th>
-                      <th>Total Renja</th>
+                      <th>Reses</th>
+                      <th>Total Reses</th>
                       <th>Total Masuk</th>
                     </tr>
                     <tr>
@@ -118,6 +118,14 @@
                   </thead>
                   <tbody>
                   </tbody>
+                  <tfoot>
+                      <tr>
+                        <td colspan="2"> </td>
+                        <td><b>Reses : <text id="reses"></text> </b></td>
+                        <td><b>Total Reses : Rp. <text id="total_reses"></text> </b></td>
+                        <td><b>Total Masuk : Rp. <text id="total_masuk"></text> </b></td>
+                      </tr>  
+                    </tfoot>
                 </table>
               </div>
             </div>
@@ -296,5 +304,37 @@
   $('.cari-lpm').keyup( function () {
     $('#table-lpm').DataTable().search($('.cari-lpm').val()).draw();
   });
+
+ $("#menu1").on("click",function(event) {
+
+    alert("cek trigger");
+  });
+
+  /*$(document).ready(function(){
+
+     $("#menu1").on("click",function(event) {
+
+    alert("dtah");
+  });
+    $("#menu1").on('click',function(e){
+      alert("asa");
+      $('#table-renja').DataTable({
+          sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/renja",
+           aoColumns: [
+            { mData: 'NO'},
+            { mData: 'PD'},
+            { mData: 'JUMLAH'},
+            { mData: 'TOTAL'},
+            { mData: 'IN'}
+          ],
+          "order": [[10, "asc"]],
+        initComplete:function(setting,json){
+            $("#total_renja").html(json.total_renja);
+            $("#total_masuk").html(json.total_masuk);
+        }
+    });
+    });
+    
+  });*/
 </script>
 @endsection
