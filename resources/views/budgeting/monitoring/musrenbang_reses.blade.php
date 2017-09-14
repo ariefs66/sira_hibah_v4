@@ -15,7 +15,7 @@
                 <li><a href= "{{ url('/') }}/main">Dashboard</a></li>
                 <li><i class="fa fa-angle-right"></i><a>Monitoring</a></li>
                 <li><i class="fa fa-angle-right"></i><a>Musrenbang</a></li>                                
-                <li class="active"><i class="fa fa-angle-right"></i>Renja</li>                                
+                <li class="active"><i class="fa fa-angle-right"></i>Reses</li>                                
               </ul>
           </div>
           <div class="wrapper-lg">
