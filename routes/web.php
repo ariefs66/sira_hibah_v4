@@ -358,6 +358,10 @@ Route::get('/main/{tahun}/{status}/statistik/pagu/api/{id}', 'Budgeting\statisti
 Route::get('/main/{tahun}/{status}/statistik/komponen/api', 'Budgeting\statistikController@komponenApi');
 Route::get('/main/{tahun}/{status}/statistik/komponen/api/{id}', 'Budgeting\statistikController@komponenApiDetail');
 Route::get('/main/{tahun}/{status}/statistik/porsi-apbd/api', 'Budgeting\statistikController@porsiAPDBApi');
+Route::get('/main/{tahun}/{status}/statistik/musrenbang/renja/{pd}', 'Budgeting\statistikController@renjaDetail');
+Route::get('/main/{tahun}/{status}/statistik/musrenbang/reses/{pd}', 'Budgeting\statistikController@resesDetail');
+Route::get('/main/{tahun}/{status}/statistik/musrenbang/renja/getData/{pd}', 'Budgeting\statistikController@renjaDetailGetData');
+Route::get('/main/{tahun}/{status}/statistik/musrenbang/reses/getData/{pd}', 'Budgeting\statistikController@resesDetailGetData');
 
 Route::get('/real/{tahun}','realController@index');
 Route::get('/real/{tahun}/getdata','realController@getdata');

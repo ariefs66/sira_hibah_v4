@@ -947,6 +947,7 @@ class statistikController extends Controller{
                                      'JUMLAH'           =>$musrenIn.' / '.$musren,
                                      'TOTAL'            =>number_format($total[0]->total,0,'.',','),
                                      'IN'               =>number_format($in[0]->total,0,'.',','),
+                                     'OPSI'             => '<a href="'.url('/main/'.$tahun.'/'.$status.'/statistik/musrenbang/renja/'.$data->KAMUS_SKPD).'" class="action-preveiw" title="lihat detail program/kegiatan renja"><i class="mi-eye"></i></a>'     
                                      ));
             $renja += $musrenIn;
             $renja_per += $musren;
@@ -997,7 +998,9 @@ class statistikController extends Controller{
                                      'PD'               =>$pd,
                                      'JUMLAH'           =>$musrenIn.' / '.$musren,
                                      'TOTAL'            =>number_format($total[0]->total,0,'.',','),
-                                     'IN'               =>number_format($in[0]->total,0,'.',',')));
+                                     'IN'               =>number_format($in[0]->total,0,'.',','),
+                                     'OPSI'             => '<a href="'.url('/main/'.$tahun.'/'.$status.'/statistik/musrenbang/reses/'.$data->KAMUS_SKPD).'" class="action-preveiw" title="lihat detail program/kegiatan reses"><i class="mi-eye"></i></a>'
+                                   ));
             $reses += $musrenIn;
             $reses_per += $musren;
             $total_reses += $total[0]->total;
@@ -1526,5 +1529,94 @@ class statistikController extends Controller{
       }
       $out = array("aaData"=>$view);      
       return Response::JSON($out);
-}
+    }
+
+    public function renjaDetail($tahun,$status,$pd){
+        $skpd = Skpd::where('SKPD_ID',$pd)->first();
+        $total = DB::table('MUSRENBANG.DAT_USULAN')
+                  ->join('REFERENSI.REF_KAMUS', 'REF_KAMUS.KAMUS_ID', '=', 'DAT_USULAN.KAMUS_ID')
+                  ->WHERE('REF_KAMUS.KAMUS_SKPD',$pd)->get();
+        $foot_anggaran = 0;          
+        foreach($total as $anggaran){
+                $total_anggaran = $anggaran->USULAN_VOLUME * $anggaran->KAMUS_HARGA;
+                $foot_anggaran +=  $total_anggaran;
+        }                 
+        $data = array('tahun' => $tahun,
+                    'status'  => $status,
+                    'skpd'   => $skpd,
+                    'foot_anggaran'   => number_format($foot_anggaran,0,'.',',') );
+        return View('budgeting.monitoring.musrenbang_renja',$data);          
+    }
+
+    public function resesDetail($tahun,$status,$pd){
+        $skpd = Skpd::where('SKPD_ID',$pd)->first();
+        $total = DB::table('RESES.DAT_USULAN')
+                  ->join('REFERENSI.REF_KAMUS', 'REF_KAMUS.KAMUS_ID', '=', 'DAT_USULAN.KAMUS_ID')
+                  ->WHERE('REF_KAMUS.KAMUS_SKPD',$pd)->get();
+        $foot_anggaran = 0;          
+        foreach($total as $anggaran){
+                $total_anggaran = $anggaran->USULAN_VOLUME * $anggaran->KAMUS_HARGA;
+                $foot_anggaran +=  $total_anggaran;
+        }                 
+        $data = array('tahun' => $tahun,
+                    'status'  => $status,
+                    'skpd'   => $skpd,
+                    'foot_anggaran'   => number_format($foot_anggaran,0,'.',',') );
+        return View('budgeting.monitoring.musrenbang_reses',$data);          
+    }
+
+    public function renjaDetailGetData($tahun,$status,$pd){
+      $data = DB::table('MUSRENBANG.DAT_USULAN')
+                  ->join('REFERENSI.REF_KAMUS', 'REF_KAMUS.KAMUS_ID', '=', 'DAT_USULAN.KAMUS_ID')
+                  ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'REF_KAMUS.KAMUS_KEGIATAN')
+                  ->join('REFERENSI.REF_PROGRAM', 'REF_PROGRAM.PROGRAM_ID', '=', 'REF_KEGIATAN.PROGRAM_ID')
+                  ->WHERE('REF_KAMUS.KAMUS_SKPD',$pd)->get();
+      //dd($data);            
+      $no     = 1;
+      $view   = array();
+      foreach($data as $data){
+        $anggaran = $data->USULAN_VOLUME * $data->KAMUS_HARGA;
+
+        if($data->USULAN_STATUS == 0 )  $status = '<i class="fa fa-refresh text-info"></i> Proses';
+        else if ($data->USULAN_STATUS == 1 ) $status = '<i class="fa fa-check text-success"></i> Terima';
+        else   $status = '<i class="fa fa-close text-danger"></i> Tolak';
+
+        array_push($view, array('ID'        => $no,
+                                'KEGIATAN'  => '<b>'.$data->KEGIATAN_NAMA.'</b><BR>'.$data->PROGRAM_NAMA,
+                                'ANGGARAN'  => 'Rp.'.number_format($anggaran,0,'.',','),
+                                'STATUS'    => $status,
+                              ));
+        $no++;
+      }
+      $out = array("aaData"=>$view);      
+      return Response::JSON($out);
+    }
+
+    public function resesDetailGetData($tahun,$status,$pd){
+      $data = DB::table('RESES.DAT_USULAN')
+                  ->join('REFERENSI.REF_KAMUS', 'REF_KAMUS.KAMUS_ID', '=', 'DAT_USULAN.KAMUS_ID')
+                  ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'REF_KAMUS.KAMUS_KEGIATAN')
+                  ->join('REFERENSI.REF_PROGRAM', 'REF_PROGRAM.PROGRAM_ID', '=', 'REF_KEGIATAN.PROGRAM_ID')
+                  ->WHERE('REF_KAMUS.KAMUS_SKPD',$pd)->get();
+      //dd($data);            
+      $no     = 1;
+      $view   = array();
+      foreach($data as $data){
+        $anggaran = $data->USULAN_VOLUME * $data->KAMUS_HARGA;
+
+        if($data->USULAN_STATUS == 0 )  $status = '<i class="fa fa-refresh text-info"></i> Proses';
+        else if ($data->USULAN_STATUS == 1 ) $status = '<i class="fa fa-check text-success"></i> Terima';
+        else   $status = '<i class="fa fa-close text-danger"></i> Tolak';
+
+        array_push($view, array('ID'        => $no,
+                                'KEGIATAN'  => '<b>'.$data->KEGIATAN_NAMA.'</b><BR>'.$data->PROGRAM_NAMA,
+                                'ANGGARAN'  => 'Rp.'.number_format($anggaran,0,'.',','),
+                                'STATUS'    => $status,
+                              ));
+        $no++;
+      }
+      $out = array("aaData"=>$view);      
+      return Response::JSON($out);
+    }
+
 }
