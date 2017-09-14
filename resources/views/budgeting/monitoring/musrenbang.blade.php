@@ -57,6 +57,7 @@
                  sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/renja',
                     aoColumns: [
                     { mData: 'NO'},
+                    { mData: 'OPSI'},
                     { mData: 'PD'},
                     { mData: 'JUMLAH'},
                     { mData: 'TOTAL'},
@@ -65,13 +66,14 @@
                   <thead>
                     <tr>
                       <th width="1%">No</th>
+                      <th>Opsi</th>
                       <th>Perangkat Deaerah</th>
                       <th>Renja</th>
                       <th>Total Renja</th>
                       <th>Total Masuk</th>
                     </tr>
                     <tr>
-                      <th colspan="5" class="th_search">
+                      <th colspan="6" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-renja form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -81,7 +83,7 @@
                   </tbody>
                   <tfoot>
                       <tr>
-                        <td colspan="2"> </td>
+                        <td colspan="3"> </td>
                         <td><b>Renja : <text id="renja"></text> </b></td>
                         <td><b>Total Renja : Rp. <text id="total_renja"></text> </b></td>
                         <td><b>Total Masuk : Rp. <text id="total_masuk"></text> </b></td>
@@ -96,6 +98,7 @@
                     sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/reses',
                     aoColumns: [
                     { mData: 'NO'},
+                    { mData: 'OPSI'},
                     { mData: 'PD'},
                     { mData: 'JUMLAH'},
                     { mData: 'TOTAL'},
@@ -104,13 +107,14 @@
                   <thead>
                     <tr>
                       <th width="1%">No</th>
+                      <th>Opsi</th>
                       <th>Perangkat Deaerah</th>
                       <th>Reses</th>
                       <th>Total Reses</th>
                       <th>Total Masuk</th>
                     </tr>
                     <tr>
-                      <th colspan="5" class="th_search">
+                      <th colspan="6" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-musrenbang form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
