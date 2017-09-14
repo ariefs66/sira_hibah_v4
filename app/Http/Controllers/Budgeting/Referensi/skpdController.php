@@ -59,7 +59,8 @@ class skpdController extends Controller
                                      'SKPD_KODE'  		=>$data->SKPD_KODE,
                                      'SKPD_NAMA'		=>$data->SKPD_NAMA,
                                      'SKPD_KEPALA'		=>$data->SKPD_KEPALA_NIP."<br><p class='text-orange'>".$data->SKPD_KEPALA."</p>",
-                                     'SKPD_BENDAHARA'	=>$data->SKPD_BENDAHARA_NIP."<br><p class='text-orange'>".$data->SKPD_BENDAHARA."</p>",
+                                     'SKPD_BENDAHARA'   =>$data->SKPD_BENDAHARA_NIP."<br><p class='text-orange'>".$data->SKPD_BENDAHARA."</p>",
+                                     'SKPD_PAGU'	=>"Rp.".number_format($data->SKPD_PAGU,0,'.',','),
                                      'aksi'				=>$aksi));
     		$no++;
     	}

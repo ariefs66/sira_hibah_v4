@@ -2062,7 +2062,19 @@ class blController extends Controller
             }else{
                 $data       = BL::whereHas('subunit',function($q) use ($filter){
                                         $q->where('SKPD_ID',$filter);
-                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();                
+                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
+
+                $pagu_foot       = BL::whereHas('subunit',function($q) use ($filter){
+                                        $q->where('SKPD_ID',$filter);
+                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
+                //$rincian_foot=0;
+                $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                                        ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
+                                        ->WHERE('REF_SUB_UNIT.SKPD_ID',$filter)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
+                                //dd($rincian_foot);
+
+
             }
         }else{
             $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
@@ -2164,9 +2176,14 @@ class blController extends Controller
                                      'PAGU'           =>number_format($data->BL_PAGU,0,'.',','),
                                      'RINCIAN'        =>$totalRincian,
                                      'STATUS'         =>$rincian.' Rincian<br>'.$validasi.' Validasi'));
+            //$pagu_foot    =+ $data->BL_PAGU;
+            //$rincian_foot =+ $data->rincian->sum('RINCIAN_TOTAL');
             $i++;
         }
-        $out = array("aaData"=>$view);      
+        $out = array("aaData"=>$view,
+                    "pagu_foot"=>number_format($pagu_foot,0,'.',','),
+                    "rincian_foot"=>number_format($rincian_foot,0,'.',','),
+            );      
         return Response::JSON($out);
         return $view;
     }

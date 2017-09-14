@@ -56,7 +56,15 @@
                     </tr>
                   </thead>
                   <tbody>
-                  </tbody>                                    
+                  </tbody> 
+                  <tfoot>
+                      <tr>
+                        <td colspan="2"><b>Total</b></td>
+                        <td><b>{{$pagu_foot}}</b></td>
+                        <td><b>{{$rincian_foot}}</b></td>
+                        <td></td>
+                      </tr>
+                    </tfoot>                                    
                 </table>
               </div>
             </div>

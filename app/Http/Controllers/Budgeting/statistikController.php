@@ -911,6 +911,10 @@ class statistikController extends Controller{
                             ->select('KAMUS_SKPD')->get();
         $i =  1;
         $view   = array();
+        $renja = 0;
+        $renja_per = 0;
+        $total_renja = 0;
+        $total_masuk = 0;
         foreach ($dataKamus as $data) {
             $pd     = SKPD::where('SKPD_ID',$data->KAMUS_SKPD)->first();
             if($pd)  $pd = $pd->SKPD_NAMA;
@@ -934,14 +938,26 @@ class statistikController extends Controller{
                           ->get();
             $id   = $data->KAMUS_SKPD;
             $musren      = Usulan::wherehas('kamus',function($q) use($id){$q->where('KAMUS_SKPD',$id);})->where('USULAN_TUJUAN',1)->count();
-            $musrenIn    = Usulan::wherehas('kamus',function($q) use($id){$q->where('KAMUS_SKPD',$id);})->where('USULAN_TUJUAN',1)->where('USULAN_STATUS',1)->count();                          
+            $musrenIn    = Usulan::wherehas('kamus',function($q) use($id){$q->where('KAMUS_SKPD',$id);})->where('USULAN_TUJUAN',1)->where('USULAN_STATUS',1)->count();    
+            
+           /* $total_renja_row = number_format($total[0]->total,0,'.',',');                      
+            $total_masuk_row = number_format($in[0]->total,0,'.',','); */                     
             array_push($view, array( 'NO'               =>$i++,
                                      'PD'               =>$pd,
                                      'JUMLAH'           =>$musrenIn.' / '.$musren,
                                      'TOTAL'            =>number_format($total[0]->total,0,'.',','),
-                                     'IN'               =>number_format($in[0]->total,0,'.',',')));
+                                     'IN'               =>number_format($in[0]->total,0,'.',','),
+                                     ));
+            $renja += $musrenIn;
+            $renja_per += $musren;
+            $total_renja += $total[0]->total;
+            $total_masuk += $in[0]->total;
         }
-        $out = array("aaData"=>$view);      
+        $out = array("aaData"=>$view,
+                     "renja"=>$renja.'/'.$renja_per,
+                     "total_renja"=>number_format($total_renja,0,'.',','),
+                     "total_masuk"=>number_format($total_masuk,0,'.',','),
+                     );      
         return Response::JSON($out);
     }
 
@@ -951,6 +967,10 @@ class statistikController extends Controller{
                             ->select('KAMUS_SKPD')->get();
         $i =  1;
         $view   = array();
+        $reses = 0;
+        $reses_per = 0;
+        $total_reses = 0;
+        $total_masuk = 0;
         foreach ($dataKamus as $data) {
             $pd     = SKPD::where('SKPD_ID',$data->KAMUS_SKPD)->first();
             if($pd)  $pd = $pd->SKPD_NAMA;
@@ -978,8 +998,16 @@ class statistikController extends Controller{
                                      'JUMLAH'           =>$musrenIn.' / '.$musren,
                                      'TOTAL'            =>number_format($total[0]->total,0,'.',','),
                                      'IN'               =>number_format($in[0]->total,0,'.',',')));
+            $reses += $musrenIn;
+            $reses_per += $musren;
+            $total_reses += $total[0]->total;
+            $total_masuk += $in[0]->total;
         }
-        $out = array("aaData"=>$view);      
+        $out = array("aaData"=>$view,
+                    "reses"=>$reses.'/'.$reses_per,
+                     "total_reses"=>number_format($total_reses,0,'.',','),
+                     "total_masuk"=>number_format($total_masuk,0,'.',','),
+                     );      
         return Response::JSON($out);
     }
 
@@ -1010,6 +1038,8 @@ class statistikController extends Controller{
                                     'TOTAL'=>number_format($sum,0,'.',','),
                                     'IN'=>number_format($in,0,'.',','),
                                     'PERSENTASE'=>number_format($present,0,'.',',')));
+            //$total += $sum;
+            //$total_masuk += $in;
         }
         $out = array("aaData"=>$view);      
         return Response::JSON($out);
@@ -1042,6 +1072,8 @@ class statistikController extends Controller{
                                     'TOTAL'=>number_format($sum,0,'.',','),
                                     'IN'=>number_format($in,0,'.',','),
                                     'PERSENTASE'=>number_format($present,0,'.',',')));
+            //$total += $sum;
+            //$total_masuk += $in;
         }
         $out = array("aaData"=>$view);      
         return Response::JSON($out);
@@ -1073,6 +1105,8 @@ class statistikController extends Controller{
                                     'TOTAL'=>number_format($sum,0,'.',','),
                                     'IN'=>number_format($in,0,'.',','),
                                     'PERSENTASE'=>number_format($present,0,'.',',')));
+            //$total += $sum;
+            //$total_masuk += $in;
         }
         $out = array("aaData"=>$view);      
         return Response::JSON($out);
@@ -1105,6 +1139,8 @@ class statistikController extends Controller{
                                     'TOTAL'=>number_format($sum,0,'.',','),
                                     'IN'=>number_format($in,0,'.',','),
                                     'PERSENTASE'=>number_format($present,0,'.',',')));
+           //$total += $sum;
+            //$total_masuk += $in;
         }
         $out = array("aaData"=>$view);      
         return Response::JSON($out);

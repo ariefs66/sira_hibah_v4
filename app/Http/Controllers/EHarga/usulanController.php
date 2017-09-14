@@ -105,6 +105,7 @@ class usulanController extends Controller
 
     public function getUsulan($tahun){
         //GET USULAN STAFF
+        $data='';
         if(substr(Auth::user()->mod,3,1) == 1){
         	$data 	= UsulanKomponen::where('USER_CREATED',Auth::user()->id)
                                     ->where('USULAN_TAHUN',$tahun)
@@ -181,7 +182,13 @@ class usulanController extends Controller
                                         ->where('USULAN_TAHUN',$tahun)
                                         ->orderBy('USULAN_ID')                                
                                         ->get();
+        }else if(Auth::user()->level == 8){
+            $data   = UsulanKomponen::where('USULAN_STATUS',0)
+                                        ->where('USULAN_TAHUN',$tahun)
+                                        ->orderBy('USULAN_ID')                                
+                                        ->get();
         }
+        //dd($data);
     	$i 		= 1;
     	$view 	= array();
 
@@ -299,6 +306,7 @@ class usulanController extends Controller
 
     public function getValid($tahun){
         //GET USULAN STAFF
+        $data='';
         if(substr(Auth::user()->mod,3,1) == 1){
             $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             if($skpd->skpd->SKPD_JENIS == 1){
@@ -370,7 +378,15 @@ class usulanController extends Controller
                                         ->whereIn('USER_CREATED',$dataUser)
                                         ->orderBy('USULAN_ID')
                                         ->get();
+        }elseif(Auth::user()->level == 8){
+            /*$skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
+            $dataUser   = UserBudget::where('SKPD_ID',$skpd->SKPD_ID)->select('USER_ID')->get();*/
+            $data       = UsulanKomponen::where('SURAT_ID',null)
+                                        ->where('USULAN_TAHUN',$tahun)      
+                                        ->orderBy('USULAN_ID')
+                                        ->get();
         }
+       // dd($data);
         $i      = 1;
         $view   = array();
         foreach ($data as $data) {

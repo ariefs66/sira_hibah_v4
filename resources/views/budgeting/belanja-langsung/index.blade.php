@@ -82,16 +82,14 @@
                     </thead>
                     <tbody>
                     </tbody>
-                    <!-- @if(Auth::user()->level == 1 or Auth::user()->level == 2)
                     <tfoot>
                       <tr>
                         <td colspan="2"><b>Total</b></td>
-                        <td><b>{{ number_format($blpagu,0,'.',',') }}</b></td>
-                        <td><b>{{ number_format($rincian,0,'.',',') }}</b></td>
+                        <td><b><text id="pagu_foot"></text></b></td>
+                        <td><b><text id="rincian_foot"></text></b></td>
                         <td></td>
                       </tr>
-                    </tfoot>
-                    @endif -->                                    
+                    </tfoot>                                   
                   </table>
                 </div>
               </div>
@@ -388,7 +386,11 @@ function setStaff(){
           { mData: 'KEGIATAN' },
           { mData: 'PAGU' },
           { mData: 'RINCIAN' },
-          { mData: 'STATUS' }]
+          { mData: 'STATUS' }],
+          initComplete:function(setting,json){
+            $("#pagu_foot").html(json.pagu_foot);
+            $("#rincian_foot").html(json.rincian_foot);
+        }
       });  
   });
 

@@ -66,6 +66,13 @@
                   </thead>
                   <tbody>
                   </tbody>
+                  <tfoot>
+                      <tr>
+                        <td><b>Total</b></td>
+                        <td><td>
+                        <td><b>Rp. {{$anggaran}}</b></td>
+                      </tr>
+                    </tfoot> 
                 </table>
               </div>
             </div>

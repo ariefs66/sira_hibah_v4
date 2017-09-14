@@ -44,6 +44,7 @@
                                     { mData: 'SKPD_NAMA' },
                                     { mData: 'SKPD_KEPALA' },
                                     { mData: 'SKPD_BENDAHARA' },
+                                    { mData: 'SKPD_PAGU' },
                                     { mData: 'aksi' }
                                     ]}" class="table table-striped b-t b-b">
                                     <thead>
@@ -53,6 +54,7 @@
                                         <th>Nama</th>
                                         <th>Kepala</th>
                                         <th>Bendahara</th>
+                                        <th>Pagu SKPD</th>
                                         <th width="15%">Aksi<br>
                                         @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)                        
                                           <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciAll()" id="kunciall"><i></i></label>
@@ -60,7 +62,7 @@
                                       </th>
                                       </tr>
                                       <tr>
-                                        <th colspan="6" class="th_search">
+                                        <th colspan="7" class="th_search">
                                             <i class="icon-bdg_search"></i>
                                             <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Urusan" aria-controls="DataTables_Table_0">
                                         </th>

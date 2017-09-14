@@ -46,7 +46,12 @@ class arsipBLController extends Controller
     }
     //SHOW
     public function index($tahun,$status){
-		return View('budgeting.belanja-langsung.arsip',['tahun'=>$tahun,'status'=>$status]);
+        $pagu_foot       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',1)->sum('BL_PAGU');
+        $rincian_foot    = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                                ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                                ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',1)
+                                ->sum('DAT_RINCIAN.RINCIAN_TOTAL');
+		return View('budgeting.belanja-langsung.arsip',['tahun'=>$tahun,'status'=>$status,'pagu_foot'=>number_format($pagu_foot,0,'.',','),'rincian_foot'=>number_format($rincian_foot,0,'.',',')]);
     }
 
     public function getData($tahun,$status){

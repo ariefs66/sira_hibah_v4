@@ -28,10 +28,10 @@
                <div class="nav-tabs-alt tabs-alt-1 b-t six-row" id="tab-jurnal" >
                 <ul class="nav nav-tabs" role="tablist">
                  <li class="active">
-                  <a data-target="#tab-1" role="tab" data-toggle="tab">Musrenbang</a>
+                  <a data-target="#tab-1" role="tab" data-toggle="tab" class="menu" data-status="1">Musrenbang</a>
                 </li>
                 <li>
-                  <a data-target="#tab-2" role="tab" data-toggle="tab">Reses</a>
+                  <a data-target="#tab-2" role="tab" data-toggle="tab" class="menu" data-status="2">Reses</a>
                 </li>
                 <li>
                   <a data-target="#tab-3" role="tab" data-toggle="tab">PIPPK RW</a>
@@ -54,7 +54,7 @@
               <div role="tabpanel" class="active tab-pane " id="tab-1">  
                 <div class="table-responsive dataTables_wrapper">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/renja',
+                 sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/renja',
                     aoColumns: [
                     { mData: 'NO'},
                     { mData: 'PD'},
@@ -79,6 +79,14 @@
                   </thead>
                   <tbody>
                   </tbody>
+                  <tfoot>
+                      <tr>
+                        <td colspan="2"> </td>
+                        <td><b>Renja : <text id="renja"></text> </b></td>
+                        <td><b>Total Renja : Rp. <text id="total_renja"></text> </b></td>
+                        <td><b>Total Masuk : Rp. <text id="total_masuk"></text> </b></td>
+                      </tr>  
+                    </tfoot>
                 </table>
               </div>
             </div>
@@ -97,8 +105,8 @@
                     <tr>
                       <th width="1%">No</th>
                       <th>Perangkat Deaerah</th>
-                      <th>Renja</th>
-                      <th>Total Renja</th>
+                      <th>Reses</th>
+                      <th>Total Reses</th>
                       <th>Total Masuk</th>
                     </tr>
                     <tr>
@@ -110,6 +118,14 @@
                   </thead>
                   <tbody>
                   </tbody>
+                  <tfoot>
+                      <tr>
+                        <td colspan="2"> </td>
+                        <td><b>Reses : <text id="reses"></text> </b></td>
+                        <td><b>Total Reses : Rp. <text id="total_reses"></text> </b></td>
+                        <td><b>Total Masuk : Rp. <text id="total_masuk"></text> </b></td>
+                      </tr>  
+                    </tfoot>
                 </table>
               </div>
             </div>
@@ -262,6 +278,57 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $("#app").trigger('click');
+
+    $(".menu").on("click",function(event) {
+      status = $(this).data('status'); 
+      if(status == 1)   resetTableRenja(); else resetTableReses();
+
+    });
+
+    function resetTableRenja(){
+     // alert("renja");
+      $('#table-renja').DataTable().destroy();
+      $('#table-renja').DataTable({
+            sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/renja",
+            aoColumns: [
+            { mData: 'NO' },
+            { mData: 'PD' },
+            { mData: 'JUMLAH' },
+            { mData: 'TOTAL' },
+            { mData: 'ISUKAMUS' },
+          ],
+          "order": [[100, "asc"]], 
+          initComplete:function(setting,json){
+              $("#renja").html(json.renja);
+              $("#total_renja").html(json.total_renja);
+              $("#total_masuk").html(json.total_masuk);
+          }
+      });
+
+  }
+
+  function resetTableReses(){
+     // alert("reses");
+     $('#table-renja').DataTable().destroy();
+        $('#table-renja').DataTable({
+              sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/renja",
+              aoColumns: [
+              { mData: 'NO' },
+              { mData: 'PD' },
+              { mData: 'JUMLAH' },
+              { mData: 'TOTAL' },
+              { mData: 'ISUKAMUS' },
+            ],
+            "order": [[100, "asc"]], 
+            initComplete:function(setting,json){
+                $("#renja").html(json.renja);
+                $("#total_renja").html(json.total_renja);
+                $("#total_masuk").html(json.total_masuk);
+            }
+        });
+
+  }
+
   });
 
   $('.cari-renja').keyup( function () {
@@ -283,5 +350,6 @@
   $('.cari-lpm').keyup( function () {
     $('#table-lpm').DataTable().search($('.cari-lpm').val()).draw();
   });
+
 </script>
 @endsection
