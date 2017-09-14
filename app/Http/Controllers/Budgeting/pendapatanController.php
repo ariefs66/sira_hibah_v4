@@ -36,7 +36,9 @@ class pendapatanController extends Controller
     public function index($tahun,$status){
 		$skpd 		= SKPD::all();
     	$rekening 	= Rekening::where('REKENING_KODE','like','4%')->whereRaw('length("REKENING_KODE") = 11')->get();
-        return View('budgeting.pendapatan.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening]);
+      $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN')->where('DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
+              ->sum('PENDAPATAN_TOTAL');
+        return View('budgeting.pendapatan.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',',')]);
     }
 
     public function submitAdd($tahun,$status){
