@@ -97,14 +97,6 @@
             <input type="text" ui-jq="daterangepicker" ui-options="{singleDatePicker:true,timePicker24Hour:true,format:'YYYY-MM-DD H:mm:ss',timePicker: true}" placeholder="Tanggal Awal" class="form-control" id="awal">
             </div> 
           </div>
-
-          <div class="form-group">
-            <label for="awal" class="col-md-3">Tanggal Akhir</label>          
-            <div class="col-sm-9">
-            <input type="text" ui-jq="daterangepicker" ui-options="{singleDatePicker:true,timePicker24Hour:true,format:'YYYY-MM-DD H:mm:ss',timePicker: true}" placeholder="Tanggal Akhir" class="form-control" id="akhir">
-            </div> 
-          </div>
-
           <div class="form-group">
             <label for="awal" class="col-md-3">Kunci Pagu OPD</label>          
             <div class="col-sm-9">
@@ -120,11 +112,56 @@
 
           <hr class="m-t-xl">
           <a class="btn input-xl m-t-md btn-warning pull-left" onclick="return tutupTahapan()" disabled="true" id="btn-tutup"><i class="fa fa-close m-r-xs "></i>Tutup Tahapan</a>
+          <a class="btn input-xl m-t-md btn-info pull-left m-l-md" onclick="return subTahapan()"><i class="fa fa-close m-r-xs "></i>Sub Tahapan</a>
           <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanTahapan()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
       </div>
     </form>
   </div>
  </div>
+
+ <div class="modal fade " id="modal_subtahapan" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <h5 class="inline font-semibold text-orange m-n text16 ">Sub Tahapan {{ $tahapan }}</h5>
+        <hr>
+        <div class="input-wrapper">
+          <div class="form-group col-md-12">
+          <label for="kode_urusan" class="col-md-3">Sub Tahapan</label>          
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="text_sub_tahapan">  
+          </div> 
+        </div>
+        <div class="form-group col-md-12">
+          <label for="awal" class="col-md-3">Tanggal Akhir</label>          
+          <div class="col-sm-9">
+            <input type="text" ui-jq="daterangepicker" ui-options="{singleDatePicker:true,timePicker24Hour:true,format:'YYYY-MM-DD H:mm:ss',timePicker: true}" placeholder="Tanggal Akhir" class="form-control" id="text_akhir_subtahapan">
+          </div> 
+        </div>
+        <div class="form-group col-md-12">
+          <button class="btn btn-success pull-right" onclick="return simpanSubTahapan()">Simpan</button>
+        </div>
+        </div>
+      </div>
+      <br><br>
+      <br><br>
+      <br><br>
+      <br><br>
+      <div class="table-responsive">
+        <table class="table table-popup table-striped b-t b-b table-komponen" id="tabel_subtahapan">
+          <thead>
+            <tr>
+              <th>Subtahapan</th>
+              <th>Tanggal Berakhir</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('plugin')
@@ -132,7 +169,6 @@
   function simpanTahapan(){
     var id_tahapan   = $('#id_tahapan').val();
     var awal         = $('#awal').val();
-    var akhir        = $('#akhir').val();
     var token        = $('#token').val();
     var tahapan      = $('#tahapan').val();
     if($('#kunci-giat').is(':checked')) giat = 1;
@@ -154,8 +190,7 @@
               'tahapan'         : tahapan, 
               'giat'            : giat, 
               'opd'             : opd, 
-              'awal'            : awal, 
-              'akhir'           : akhir},
+              'awal'            : awal},
         success: function(msg){
             if(msg == 1){
               $('#tahapan').val('');
@@ -278,6 +313,46 @@
         $('#id_tahapan').val('');
         $('#btn-tutup').attr('disabled',true);  
   });
+
+  function subTahapan(){
+    $('#modal_subtahapan').modal('show');
+    loadTableSub();
+  }
+
+  function simpanSubTahapan(){
+    var id_tahapan   = $('#id_tahapan').val();
+    var token        = $('#token').val();
+    var tahapan      = $('#text_sub_tahapan').val();
+    var akhir      = $('#text_akhir_subtahapan').val();
+    if(tahapan == "" || akhir == ""){
+      $.alert('Form harap diisi!');
+    }else{
+      $.ajax({
+        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/subtahapan/add/submit",
+        type: "POST",
+        data: {'_token'         : token,
+              'TAHAPAN_ID'      : id_tahapan,
+              'TAHAPAN_NAMA'    : tahapan, 
+              'TAHAPAN_AKHIR'   : akhir},
+        success: function(msg){
+              $.alert('OK!');
+              loadTableSub();
+          }
+      });
+    }    
+  }
+
+  function loadTableSub(){
+    id  = $('#id_tahapan').val();
+    $('#tabel_subtahapan').DataTable().destroy();
+    $('#tabel_subtahapan').DataTable({
+      sAjaxSource     : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/subtahapan/getData/"+id,
+          aoColumns       : [
+                              { mData: 'NAMA' },
+                              { mData: 'TGL'}
+                            ]
+      });    
+  }
 </script>
 @endsection
 

@@ -31,10 +31,12 @@ use App\Model\Rincian;
 use App\Model\User;
 use App\Model\Staff;
 use App\Model\Tahapan;
+use App\Model\Subtahapan;
 use App\Model\RekapRincian;
 use App\Model\RekapBL;
 use App\Model\Output;
-use App\Model\UserBudget;class tahapanController extends Controller
+use App\Model\UserBudget;
+class tahapanController extends Controller
 {
 	public function __construct(){
         $this->middleware('auth');
@@ -119,7 +121,6 @@ use App\Model\UserBudget;class tahapanController extends Controller
         $tahapan->TAHAPAN_STATUS      = Input::get('status');
         $tahapan->TAHAPAN_NAMA        = Input::get('tahapan');
         $tahapan->TAHAPAN_AWAL        = Input::get('awal');
-	    $tahapan->TAHAPAN_AKHIR		  = Input::get('akhir');
         $tahapan->TAHAPAN_KUNCI_GIAT  = Input::get('giat');
         $tahapan->TAHAPAN_KUNCI_OPD   = Input::get('opd');
 	    $tahapan->TAHAPAN_SELESAI	  = 0;
@@ -130,8 +131,7 @@ use App\Model\UserBudget;class tahapanController extends Controller
 
     public function submitEdit(){
     	Tahapan::where('TAHAPAN_ID',Input::get('id_tahapan'))
-    			->update(['TAHAPAN_AKHIR'      => Input::get('akhir'),
-                          'TAHAPAN_KUNCI_GIAT' => Input::get('giat'),
+    			->update(['TAHAPAN_KUNCI_GIAT' => Input::get('giat'),
                           'TAHAPAN_KUNCI_OPD' => Input::get('opd')]);
         return 1;
     }
@@ -211,5 +211,25 @@ use App\Model\UserBudget;class tahapanController extends Controller
 
         Tahapan::where('TAHAPAN_ID',Input::get('TAHAPAN_ID'))->update(['TAHAPAN_SELESAI'=>1]);
         return 'Berhasil!';
+    }
+
+    public function getSubTahapan($tahun,$status,$tahapan){
+        $data       = Subtahapan::where('TAHAPAN_ID',$tahapan)->get();
+        $view       = array();
+        foreach($data as $data){
+            array_push($view, array('NAMA'  => $data->TAHAPAN_NAMA,'TGL'=> $data->TAHAPAN_AKHIR));
+        }
+        $out        = array('aaData'=>$view);
+        return Response::JSON($out);
+    }
+
+    public function submitSubTahapan($tahun,$status){
+        $sub    = new Subtahapan;
+        $sub->TAHAPAN_ID        = Input::get('TAHAPAN_ID');
+        $sub->TAHAPAN_NAMA      = Input::get('TAHAPAN_NAMA');
+        $sub->TAHAPAN_AKHIR     = Input::get('TAHAPAN_AKHIR');
+        $sub->save();
+
+        Tahapan::where('TAHAPAN_ID',Input::get('TAHAPAN_ID'))->update(['TAHAPAN_AKHIR'=>Input::get('TAHAPAN_AKHIR')]);
     }
 }
