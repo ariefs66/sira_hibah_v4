@@ -166,8 +166,10 @@ Route::post('/main/{tahun}/{status}/pengaturan/staff/reset', 'Budgeting\staffCon
 Route::get('/main/{tahun}/{status}/pengaturan/tahapan', 'Budgeting\tahapanController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/tahapan/getData', 'Budgeting\tahapanController@getData');
 Route::get('/main/{tahun}/{status}/pengaturan/tahapan/getData/{id}', 'Budgeting\tahapanController@getDetail');
+Route::get('/main/{tahun}/{status}/pengaturan/subtahapan/getData/{id}', 'Budgeting\tahapanController@getSubTahapan');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/delete', 'Budgeting\tahapanController@delete');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/add/submit', 'Budgeting\tahapanController@submitAdd');
+Route::post('/main/{tahun}/{status}/pengaturan/subtahapan/add/submit', 'Budgeting\tahapanController@submitSubTahapan');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/edit/submit', 'Budgeting\tahapanController@submitEdit');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/tutup', 'Budgeting\tahapanController@tutupTahapan');
 //URUSAN
