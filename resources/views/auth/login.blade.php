@@ -135,4 +135,12 @@
     // $('#info').modal('show');
   })
 </script>
+@if(count($errors) > 0)
+    <script type="text/javascript">
+      $.alert({
+        title: 'Username atau Password yang anda Masukkan salah.',
+        content: 'Silahkan cek kembali username dan password yang anda masukkan ! Atau Silahkan Hubungi Admin TAPD untuk mereset password ',
+      });
+    </script>
+@endif
 </html>
