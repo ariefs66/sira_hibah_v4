@@ -560,5 +560,32 @@ function setStaff(){
       $('#urgensi_penerima_rincian').append('<option>Seluruh SKPD</option><option>SKPD Tertentu</option>');
     }
   });
+
+  function validasi(id){
+    var token        = $('#token').val();    
+    $.confirm({
+        title: 'Validasi!',
+        content: 'Yakin Validasi Kegiatan ?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/validasi",
+                      type: "POST",
+                      data: {'_token'         : token,
+                            'BL_ID'           : id},
+                      success: function(msg){
+                          $('#table-index').DataTable().ajax.reload();                          
+                          $.alert(msg);
+                        }
+                  });
+                }
+            },
+            Tidak: function () {
+            }
+        }
+    });
+}
 </script>
 @endsection

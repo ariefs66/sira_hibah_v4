@@ -77,8 +77,9 @@ class lampiranController extends Controller
                                         ->where('REKENING_ID',$r->REKENING_ID)
                                         ->groupBy('SUBRINCIAN_ID')
                                         ->groupBy('REKENING_ID')
+                                        ->groupBy('RINCIAN_PAJAK')
                                         ->orderBy('SUBRINCIAN_ID')
-                                        ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID"')
+                                        ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK"')
                                         ->get();
             $k = 0;
             foreach($paket[$i] as $p){
@@ -94,6 +95,7 @@ class lampiranController extends Controller
             $q++; 
             $s++; 
         }
+       // dd($paket);
         $totalBL    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
         return View('budgeting.lampiran.rka',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke]);
     }
