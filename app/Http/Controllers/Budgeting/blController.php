@@ -2041,6 +2041,7 @@ class blController extends Controller
     public function getDataMurni($tahun,$status,$filter){
         $pagu_foot    = 0;
         $rincian_foot = 0;
+        
         $now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->orderBy('TAHAPAN_ID','desc')->first();
         if($tahapan){
@@ -2059,14 +2060,17 @@ class blController extends Controller
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
 
-            $pagu_foot       = BL::whereHas('subunit',function($q) use ($skpd){
+            $pagu_foot    = 0;
+            $rincian_foot = 0;
+
+            /*$pagu_foot       = BL::whereHas('subunit',function($q) use ($skpd){
                                         $q->where('SKPD_ID',$skpd);
                                 })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
 
             $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                                     ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                                     ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
-                                    ->WHERE('REF_SUB_UNIT.SKPD_ID',$skpd)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
+                                    ->WHERE('REF_SUB_UNIT.SKPD_ID',$skpd)->sum('DAT_RINCIAN.RINCIAN_TOTAL');*/
 
 
 
