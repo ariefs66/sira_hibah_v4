@@ -2041,6 +2041,7 @@ class blController extends Controller
     public function getDataMurni($tahun,$status,$filter){
         $pagu_foot    = 0;
         $rincian_foot = 0;
+        
         $now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->orderBy('TAHAPAN_ID','desc')->first();
         if($tahapan){
