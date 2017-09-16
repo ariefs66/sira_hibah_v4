@@ -286,9 +286,7 @@ function kuncigiat(id){
 }
 
   function kuncirincian(id){
-    var token        = $('#token').val();  
-    //var getkuncirincian = $('input[id="kuncirincian-'+id+'"]').val();
-
+    var token        = $('#token').val();
     if($('#kuncirincian-'+id).is(':checked')){
       //kunci
       $.ajax({
