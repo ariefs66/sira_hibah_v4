@@ -25,7 +25,7 @@
                     @if($tutup == 1)
                     <button class="pull-right btn m-t-n-sm btn-success open-tahapan" id="btn-tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Tahapan</button>
                     @else
-                    <button class="pull-right btn m-t-n-sm btn-success open-tahapan hide" id="btn-tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Tahapan</button>                    
+                    <button class="pull-right btn m-t-n-sm btn-success open-tahapan" id="btn-tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Tahapan</button>                    
                     @endif
                     <h5 class="inline font-semibold text-orange m-n ">Tahapan Tahun {{ $tahun }}</h5>
                   </div>           
