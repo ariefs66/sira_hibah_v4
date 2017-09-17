@@ -2076,7 +2076,7 @@ class blController extends Controller
 
         }elseif(Auth::user()->level == 8 or Auth::user()->level == 0){
             if($filter == 0){
-                $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
+                $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take(1000)->get();
                 $pagu_foot    = 0;
                 $rincian_foot = 0;
             }else{
@@ -2106,7 +2106,7 @@ class blController extends Controller
             if($filter == 0){
                 $data       = BL::whereHas('subunit',function($q) use ($skpd_){
                                         $q->whereIn('SKPD_ID',$skpd_);
-                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
+                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take(1000)->get();
                 $pagu_foot    = 0;
                 $rincian_foot = 0;
             }else{
