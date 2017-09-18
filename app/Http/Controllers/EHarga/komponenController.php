@@ -13,9 +13,11 @@ use Response;
 use Session;
 use QrCode;
 use PDF;
+use Excel;
 use App\Model\Rekening;
 use App\Model\Rincian;
 use App\Model\Komponen;
+use App\Model\KomponenMember;
 use App\Model\Satuan;
 use App\Model\KatKom;
 use App\Model\UsulanKomponen;
@@ -176,5 +178,101 @@ class komponenController extends Controller
     public function kunci($tahun,$kunci){
         Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->update(['KOMPONEN_KUNCI'=>$kunci]);
         return 'Berhasil !';
+    }
+
+    public function uploadHSPK($tahun){
+        $fileupload     = Input::file('file_hspk');
+        $data       = Excel::selectSheetsByIndex(0)->load($fileupload,function($reader){
+                        $reader->limit(10000);
+                        $reader->select(array('nomor','uraian','koef','satuan','harga','jumlah','rekening'));                        
+                    })->get();
+        $komponen   = "";
+        foreach ($data as $data) {
+            if(substr($data->nomor,0,1)=="2"){
+                $komp       = new Komponen;
+                $komp->KOMPONEN_TAHUN       = $tahun;
+                $komp->KOMPONEN_KODE        = $data->nomor;
+                $komp->KOMPONEN_NAMA        = $data->uraian;
+                $komp->KOMPONEN_HARGA       = $data->jumlah;
+                $komp->KOMPONEN_SATUAN      = $data->satuan;
+                $komp->KOMPONEN_KUNCI       = 0;
+                $komp->save();
+
+                $komponen   = Komponen::where('KOMPONEN_TAHUN',$tahun)
+                                        ->where('KOMPONEN_KODE',$data->nomor)
+                                        ->value('KOMPONEN_ID');
+
+                $rekening   = Rekening::where('REKENING_TAHUN',$tahun)
+                                        ->where('REKENING_KODE',$data->rekening)
+                                        ->value('REKENING_ID');
+                if($komponen){
+                    $rekom  = new Rekom;
+                    $rekom->KOMPONEN_ID     = $komponen;
+                    $rekom->REKENING_ID     = $rekening;
+                    $rekom->REKOM_TAHUN     = $tahun;
+                    $rekom->save();
+                }
+            }
+            if(substr($data->nomor,0,1)=="1"){
+                $member     = new KomponenMember;
+                $member->KOMPONEN_ID        = $komponen;
+                $member->MEMBER_KOEF        = $data->koef;
+                $member->MEMBER_SATUAN      = $data->satuan;
+                $member->MEMBER_HARGA       = $data->harga;
+                $member->MEMBER_JUMLAH      = $data->jumlah;
+                $member->KOMPONEN_URAIAN    = $data->uraian;
+                $member->KOMPONEN_KODE      = $data->nomor;
+                $member->save();
+            }
+        }
+
+        return Redirect('harga/'.$tahun.'/komponen');
+    }
+
+    public function uploadASB($tahun){
+        $fileupload     = Input::file('file_asb');
+        $data       = Excel::selectSheetsByIndex(0)->load($fileupload,function($reader){
+                        $reader->limit(10000);
+                        $reader->select(array('kode','uraian','koef','satuan','harga','jumlah','rekening'));                        
+                    })->get();
+        foreach ($data as $data) {
+            $len    = strlen($data->kode);
+            if(substr($data->kode, $len-1,1)*1 != 0){
+                $komp       = new Komponen;
+                $komp->KOMPONEN_TAHUN       = $tahun;
+                $komp->KOMPONEN_KODE        = $data->kode;
+                $komp->KOMPONEN_NAMA        = $data->uraian;
+                $komp->KOMPONEN_HARGA       = $data->jumlah;
+                $komp->KOMPONEN_SATUAN      = $data->satuan;
+                $komp->KOMPONEN_KUNCI       = 0;
+                $komp->save();
+
+                $komponen   = Komponen::where('KOMPONEN_TAHUN',$tahun)
+                                        ->where('KOMPONEN_KODE',$data->kode)
+                                        ->value('KOMPONEN_ID');
+
+                $rekening   = Rekening::where('REKENING_TAHUN',$tahun)
+                                        ->where('REKENING_KODE',$data->rekening)
+                                        ->value('REKENING_ID');
+                if($komponen){
+                    $rekom  = new Rekom;
+                    $rekom->KOMPONEN_ID     = $komponen;
+                    $rekom->REKENING_ID     = $rekening;
+                    $rekom->REKOM_TAHUN     = $tahun;
+                    $rekom->save();
+                }     
+            }elseif($data->kode){
+                $member     = new KomponenMember;
+                $member->KOMPONEN_ID        = $komponen;
+                $member->MEMBER_KOEF        = $data->koef;
+                $member->MEMBER_SATUAN      = $data->satuan;
+                $member->MEMBER_HARGA       = $data->harga;
+                $member->MEMBER_JUMLAH      = $data->jumlah;
+                $member->KOMPONEN_URAIAN    = $data->uraian;
+                $member->KOMPONEN_KODE      = $data->kode;
+                $member->save();
+            }
+        }
+        return Redirect('harga/'.$tahun.'/komponen');
     }
 }

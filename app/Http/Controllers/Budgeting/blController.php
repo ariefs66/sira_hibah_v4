@@ -60,7 +60,8 @@ class blController extends Controller
     }
 
     public function showMurni($tahun,$status){
-        $now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
                             ->where('TAHAPAN_STATUS','murni')
                             ->orderBy('TAHAPAN_ID','desc')->first();
@@ -86,7 +87,7 @@ class blController extends Controller
             $skpd_[$i]   = $s->SKPD_ID;
             $i++;
         }
-        if(Auth::user()->level == 8 or Auth::user()->level == 0){
+        if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
             $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();
         }else{
             $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
@@ -112,7 +113,8 @@ class blController extends Controller
     }
 
     public function showPerubahan($tahun,$status){
-        $now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
                             ->where('TAHAPAN_STATUS','perubahan')
                             ->orderBy('TAHAPAN_ID','desc')->first();
@@ -134,7 +136,7 @@ class blController extends Controller
             $skpd_[$i]   = $s->SKPD_ID;
             $i++;
         }
-        if(Auth::user()->level == 8 or Auth::user()->level == 0){
+        if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
             $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();
         }else{
             $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
@@ -160,7 +162,8 @@ class blController extends Controller
     }
 
     public function showDetail($tahun,$status,$id){
-        $now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        $now = date('Y-m-d H:m:s');
         if($status == 'murni')
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         else
@@ -238,7 +241,8 @@ class blController extends Controller
     }
 
     public function showRincianMurni($tahun,$status,$id){
-        $now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
@@ -263,7 +267,7 @@ class blController extends Controller
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }
             }else{
-                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a><i class="fa fa-pencil-square"></i>Ubah <i class="fa fa-lock"></i></a></li><li><a><i class="fa fa-close"></i>Hapus <i class="fa fa-lock"></i> </a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
             }
 
             if($data->RINCIAN_PAJAK == 10) $pajak = '<span class="text-success"><i class="fa fa-check"></i></span>';
@@ -300,7 +304,8 @@ class blController extends Controller
     }
 
     public function showRincianPerubahan($tahun,$status,$id){
-        $now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
@@ -329,7 +334,7 @@ class blController extends Controller
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }
             }else{
-                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a><i class="fa fa-pencil-square"></i>Ubah <i class="fa fa-lock"></i></a></li><li><a><i class="fa fa-close"></i>Hapus <i class="fa fa-lock"></i> </a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
             }
 
             if($data->RINCIAN_PAJAK == 10) $pajak = '<span class="text-success"><i class="fa fa-check"></i></span>';
@@ -439,7 +444,8 @@ class blController extends Controller
     }
 
     public function showRincianArsip($tahun,$status,$id){
-        $now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        $now = date('Y-m-d H:m:s');
         // print_r($now);exit();
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
@@ -2041,8 +2047,8 @@ class blController extends Controller
     public function getDataMurni($tahun,$status,$filter){
         $pagu_foot    = 0;
         $rincian_foot = 0;
-
-        $now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->orderBy('TAHAPAN_ID','desc')->first();
         if($tahapan){
             if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
@@ -2054,29 +2060,29 @@ class blController extends Controller
             $thp = 0;
         }
 
+        //print_r(substr(Auth::user()->mod,1,1));exit;
+        //print_r(Auth::user()->level);exit;
+
         if((Auth::user()->level == 1 and substr(Auth::user()->mod,1,1) == 0) or Auth::user()->level == 2){
             $skpd       = $this->getSKPD($tahun);
             $data       = BL::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
 
-            $pagu_foot    = 0;
-            $rincian_foot = 0;
-
-            /*$pagu_foot       = BL::whereHas('subunit',function($q) use ($skpd){
+            $pagu_foot       = BL::whereHas('subunit',function($q) use ($skpd){
                                         $q->where('SKPD_ID',$skpd);
                                 })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
 
             $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                                     ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                                     ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
-                                    ->WHERE('REF_SUB_UNIT.SKPD_ID',$skpd)->sum('DAT_RINCIAN.RINCIAN_TOTAL');*/
+                                    ->WHERE('REF_SUB_UNIT.SKPD_ID',$skpd)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
 
 
 
-        }elseif(Auth::user()->level == 8 or Auth::user()->level == 0){
+        }elseif(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
             if($filter == 0){
-                $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take(1000)->get();
+                $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
                 $pagu_foot    = 0;
                 $rincian_foot = 0;
             }else{
@@ -2106,7 +2112,7 @@ class blController extends Controller
             if($filter == 0){
                 $data       = BL::whereHas('subunit',function($q) use ($skpd_){
                                         $q->whereIn('SKPD_ID',$skpd_);
-                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take(1000)->get();
+                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
                 $pagu_foot    = 0;
                 $rincian_foot = 0;
             }else{
@@ -2144,43 +2150,50 @@ class blController extends Controller
             else
             $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
 
-            // if($data->kunci->KUNCI_GIAT == 0 and $thp == 1){
-            //     if(substr(Auth::user()->mod,1,1) == 1){
-            //         $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
-            //     }else{
-            //         $kunci     = '<span class="text-success"><i class="fa fa-unlock"></i></span>';
-            //     }
-            //     if(Auth::user()->level == 4){
-            //     $no        .='<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/ubah/'.$data->BL_ID.'"><i class="fa fa-pencil-square"></i> Ubah</a></li>';
-            //     }
-            // }else{
-            //     if(substr(Auth::user()->mod,1,1) == 1){
-            //         $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
-            //     }else{
-            //         $kunci      = '<span class="text-danger"><i class="fa fa-lock"></i></span>';
-            //     }             
-            //     if(Auth::user()->level == 4){
-            //         $no        .='<li><a><i class="fa fa-pencil-square"></i> Ubah <i class="fa fa-lock"></i></a></li>';   
-            //     }
-            // }
+            if($data->kunci->KUNCI_GIAT == 0 and $thp == 1){
+                if(Auth::user()->level == 8){
+                    $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
+                }else{
+                    $kunci     = '<span class="text-success"><i class="fa fa-unlock kunci-giat"></i></span>';
+                }
+                //if(Auth::user()->level == 4){
+                //$no        .='<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/ubah/'.$data->BL_ID.'"><i class="fa fa-pencil-square"></i> Ubah</a></li>';
+                //}
+            }else{
+                if(Auth::user()->level == 8){
+                    $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
+                }else{
+                    $kunci      = '<span class="text-danger"><i class="fa fa-lock kunci-giat"></i></span>';
+                }             
+                //if(Auth::user()->level == 4){
+                //    $no        .='<li><a><i class="fa fa-pencil-square"></i> Ubah <i class="fa fa-lock"></i></a></li>';   
+                //}
+            }
 
             if($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1){
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
+                //if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
+                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
                     $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'"><i></i></label>';
                 }else{
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
                 }                
             }else{
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
-                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked><i></i></label>';
+                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
+                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked="checked"><i></i></label>';
                 }else{
                     $rincian    = '<span class="text-danger"><i class="fa fa-lock kunci-rincian"></i></span>';
                 }             
             }
 
-            if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
-                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
+            if((Auth::user()->level == 2 and $data->kunci->KUNCI_GIAT == 0) or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
+                //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
+                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';
             }
+
+            if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){
+                $no            .= '<li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
+            }
+
             //HAPUS BL
             //<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
             if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
@@ -2194,14 +2207,10 @@ class blController extends Controller
             
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
-                <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
-                <li class="divider"></li>
-                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
-                <li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }
             $no     .= '</ul></div>';
             if(empty($data->rincian)) $totalRincian = 0;
@@ -2210,7 +2219,7 @@ class blController extends Controller
                                      'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
                                      'PAGU'           =>number_format($data->BL_PAGU,0,'.',','),
                                      'RINCIAN'        =>$totalRincian,
-                                     'STATUS'         =>$rincian.' Rincian<br>'.$validasi.' Validasi'));
+                                     'STATUS'         =>$kunci.' Kegiatan<br>'.$rincian.' Rincian<br>'.$validasi.' Validasi'));
             //$pagu_foot    =+ $data->BL_PAGU;
             //$rincian_foot =+ $data->rincian->sum('RINCIAN_TOTAL');
             $i++;
@@ -2224,7 +2233,8 @@ class blController extends Controller
     }
 
     public function getDataPerubahan($tahun,$status,$filter){
-        $now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
@@ -2237,7 +2247,7 @@ class blController extends Controller
             $data       = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
-        }elseif(Auth::user()->level == 8 or Auth::user()->level == 0){
+        }elseif(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
             if($filter == 0){
                 $data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
             }else{
@@ -2293,42 +2303,49 @@ class blController extends Controller
             else
             $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
 
-            // if($data->kunci->KUNCI_GIAT == 0 and $thp == 1){
-            //     if(substr(Auth::user()->mod,1,1) == 1){
-            //         $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
-            //     }else{
-            //         $kunci     = '<span class="text-success"><i class="fa fa-unlock"></i></span>';
-            //     }
-            //     if(Auth::user()->level == 4){
-            //     $no        .='<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/ubah/'.$data->BL_ID.'"><i class="fa fa-pencil-square"></i> Ubah</a></li>';
-            //     }
-            // }else{
-            //     if(substr(Auth::user()->mod,1,1) == 1){
-            //         $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
-            //     }else{
-            //         $kunci      = '<span class="text-danger"><i class="fa fa-lock"></i></span>';
-            //     }             
-            //     if(Auth::user()->level == 4){
-            //         $no        .='<li><a><i class="fa fa-pencil-square"></i> Ubah <i class="fa fa-lock"></i></a></li>';   
-            //     }
-            // }
+            if($data->kunci->KUNCI_GIAT == 0 and $thp == 1){
+                if(Auth::user()->level == 8){
+                    $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
+                }else{
+                    $kunci     = '<span class="text-success"><i class="fa fa-unlock kunci-giat"></i></span>';
+                }
+                //if(Auth::user()->level == 4){
+                //$no        .='<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/ubah/'.$data->BL_ID.'"><i class="fa fa-pencil-square"></i> Ubah</a></li>';
+                //}
+            }else{
+                if(Auth::user()->level == 8){
+                    $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
+                }else{
+                    $kunci      = '<span class="text-danger"><i class="fa fa-lock kunci-giat"></i></span>';
+                }             
+                //if(Auth::user()->level == 4){
+                //    $no        .='<li><a><i class="fa fa-pencil-square"></i> Ubah <i class="fa fa-lock"></i></a></li>';   
+                //}
+            }
+
             if($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1){
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
+                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
                     $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'"><i></i></label>';
                 }else{
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
                 }                
             }else{
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
+                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
                     $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked><i></i></label>';
                 }else{
                     $rincian    = '<span class="text-danger"><i class="fa fa-lock kunci-rincian"></i></span>';
                 }             
             }
 
-            if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
-                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
+            if((Auth::user()->level == 2 and $data->kunci->KUNCI_GIAT == 0) or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
+                //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
+                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';
             }
+
+            if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){
+                $no            .= '<li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
+            }
+
             //HAPUS BL
             //<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
             if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8 or Auth::user()->level == 2){
@@ -2357,7 +2374,7 @@ class blController extends Controller
                                      'RINCIAN_SEBELUM'        =>number_format($realisasi,0,'.',','),
                                      'PAGU_SESUDAH'           =>number_format($data->BL_PAGU,0,'.',','),
                                      'RINCIAN_SESUDAH'        =>$totalRincian,
-                                     'STATUS'         =>$rincian.' Rincian<br>'.$validasi.' Validasi'));
+                                     'STATUS'         =>$kunci.' Kegiatan<br>'.$rincian.' Rincian<br>'.$validasi.' Validasi'));
             $i++;
         }
         $out = array("aaData"=>$view,
@@ -2479,7 +2496,8 @@ class blController extends Controller
     }
 
     public function showRekap($tahun,$status,$tipe,$id){
-        $now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        $now = date('Y-m-d H:m:s');
         $param      = '';
         if($tipe == 'rkpd') $param = 'RKPD';
         elseif($tipe == 'ppas') $param = 'KUA/PPAS';

@@ -24,12 +24,18 @@
               <div class="panel bg-white">
                 <div class="wrapper-lg">
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung</h5> 
+                  @if(Auth::user()->level == 2 or Auth::user()->level == 1)
+                  | 
+                  <h5 class="inline font-semibold text-success m-n ">Pagu : {{ number_format($pagu,0,'.',',') }}</h5>
+                  | 
+                  <h5 class="inline font-semibold text-success m-n ">Rincian : {{ number_format($rincian,0,'.',',') }}</h5>
+                  @endif
                   @if(Auth::user()->level == 2 and $thp == 1)
                   <a class="pull-right btn m-t-n-sm btn-success" href="{{ url('/') }}/main/{{$tahun}}/murni/belanja-langsung/tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Langsung</a>
                   @elseif($thp == 0)
                   <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
                   @endif
-                  @if(Auth::user()->level == 8 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1 )
+                  @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
                   <div class="col-sm-4 pull-right m-t-n-sm">
                    <select ui-jq="chosen" class="form-control" id="filter-skpd">
                      <option value="">- Pilih OPD -</option>
@@ -58,9 +64,12 @@
                         <th rowspan="2">Program/Kegiatan/Sub Unit</th>
                         <th colspan="2" style="text-align: center;">Anggaran</th>                                      
                         <th rowspan="2" width="16%">Status
-                          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)                        
+                          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)
+                            <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciGiatSKPD()" id="kuncigiatskpd"><i></i></label>
+                          @endif
+                          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9)
                             <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciRincianSKPD()" id="kuncirincianskpd"><i></i></label>
-                          @endif 
+                          @endif
                         </th>                                      
                       </tr>
                       <tr>
@@ -287,8 +296,6 @@ function kuncigiat(id){
 
   function kuncirincian(id){
     var token        = $('#token').val();  
-    //var getkuncirincian = $('input[id="kuncirincian-'+id+'"]').val();
-
     if($('#kuncirincian-'+id).is(':checked')){
       //kunci
       $.ajax({
@@ -560,32 +567,5 @@ function setStaff(){
       $('#urgensi_penerima_rincian').append('<option>Seluruh SKPD</option><option>SKPD Tertentu</option>');
     }
   });
-
-  function validasi(id){
-    var token        = $('#token').val();    
-    $.confirm({
-        title: 'Validasi!',
-        content: 'Yakin Validasi Kegiatan ?',
-        buttons: {
-            Ya: {
-                btnClass: 'btn-danger',
-                action: function(){
-                  $.ajax({
-                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/validasi",
-                      type: "POST",
-                      data: {'_token'         : token,
-                            'BL_ID'           : id},
-                      success: function(msg){
-                          $('#table-index').DataTable().ajax.reload();                          
-                          $.alert(msg);
-                        }
-                  });
-                }
-            },
-            Tidak: function () {
-            }
-        }
-    });
-}
 </script>
 @endsection
