@@ -2083,7 +2083,6 @@ class blController extends Controller
         }elseif(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
             if($filter == 0){
                 $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
-                //$data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take(100)->get();
                 $pagu_foot    = 0;
                 $rincian_foot = 0;
             }else{
@@ -2251,7 +2250,6 @@ class blController extends Controller
         }elseif(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
             if($filter == 0){
                 $data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
-                //$data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take(1000)->get();
             }else{
                 $data       = BLPerubahan::whereHas('subunit',function($q) use ($filter){
                                         $q->where('SKPD_ID',$filter);
