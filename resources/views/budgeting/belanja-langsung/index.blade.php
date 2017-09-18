@@ -26,7 +26,7 @@
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung</h5> 
                   @if(Auth::user()->level == 2 or Auth::user()->level == 1)
                   | 
-                  <h5 class="inline font-semibold text-success m-n ">Pagu : {{ number_format($pagu,0,'.',',') }}</h5>
+                  <h5 class="inline font-semibold text-success m-n ">Pagu : {{ number_format($blpagu,0,'.',',') }}</h5>
                   | 
                   <h5 class="inline font-semibold text-success m-n ">Rincian : {{ number_format($rincian,0,'.',',') }}</h5>
                   @endif
