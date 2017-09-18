@@ -26,7 +26,7 @@
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung</h5> 
                   @if(Auth::user()->level == 2 or Auth::user()->level == 1)
                   | 
-                  <h5 class="inline font-semibold text-success m-n ">Pagu : {{ number_format($pagu,0,'.',',') }}</h5>
+                  <h5 class="inline font-semibold text-success m-n ">Pagu : {{ number_format($blpagu,0,'.',',') }}</h5>
                   | 
                   <h5 class="inline font-semibold text-success m-n ">Rincian : {{ number_format($rincian,0,'.',',') }}</h5>
                   @endif
@@ -324,6 +324,34 @@ function kuncigiat(id){
       });
   }
 }
+
+function validasi(id){
+    var token        = $('#token').val();    
+    $.confirm({
+        title: 'Validasi!',
+        content: 'Yakin Validasi Kegiatan ?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/validasi",
+                      type: "POST",
+                      data: {'_token'         : token,
+                            'BL_ID'           : id},
+                      success: function(msg){
+                          $('#table-index').DataTable().ajax.reload();                          
+                          $.alert(msg);
+                        }
+                  });
+                }
+            },
+            Tidak: function () {
+            }
+        }
+    });
+}
+
 
 function staff(id){
   $('.overlay').fadeIn('fast',function(){
