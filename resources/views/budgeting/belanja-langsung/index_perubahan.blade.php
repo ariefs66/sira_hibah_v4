@@ -330,6 +330,33 @@ function kuncigiat(id){
   }
 }
 
+function validasi(id){
+    var token        = $('#token').val();    
+    $.confirm({
+        title: 'Validasi!',
+        content: 'Yakin Validasi Kegiatan ?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/validasi",
+                      type: "POST",
+                      data: {'_token'         : token,
+                            'BL_ID'           : id},
+                      success: function(msg){
+                          $('#table-index').DataTable().ajax.reload();                          
+                          $.alert(msg);
+                        }
+                  });
+                }
+            },
+            Tidak: function () {
+            }
+        }
+    });
+}
+
 function staff(id){
   $('.overlay').fadeIn('fast',function(){
     $('.input-staff').animate({'right':'0'},"linear");  
