@@ -670,10 +670,10 @@ class blController extends Controller
             $koef   = $koef.' x '.Input::get('VOL4').' '.Input::get('SAT4');
             $vol    = $vol * Input::get('VOL4');
         }
-        $total      = ( Komponen::where('KOMPONEN_ID',
-            Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA') * $vol ) + 
-        (( Input::get('RINCIAN_PAJAK')*(Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA')*$vol))/100);
-
+        // $total      = ( Komponen::where('KOMPONEN_ID',
+        //     Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA') * $vol ) + 
+        // (( Input::get('RINCIAN_PAJAK')*(Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA')*$vol))/100);
+        $total      = ( Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA')*$vol))/100);
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         $totalBL    = BL::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
         $skpd       = $this->getSKPD($tahun);
@@ -687,7 +687,7 @@ class blController extends Controller
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
-                if($total+$now < $totalBL){
+                if($total+$now <= $totalBL){
                     $rincian    = new Rincian;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -721,7 +721,7 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$now < $totalBL){
+                if($total+$now <= $totalBL){
                     $rincian    = new Rincian;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -758,7 +758,7 @@ class blController extends Controller
         }elseif($tahapan->TAHAPAN_KUNCI_OPD == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
-                if($total+$nowOPD < $totalOPD){
+                if($total+$nowOPD <= $totalOPD){
                     $rincian    = new Rincian;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -792,7 +792,7 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$nowOPD < $totalOPD){
+                if($total+$nowOPD <= $totalOPD){
                     $rincian    = new Rincian;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
