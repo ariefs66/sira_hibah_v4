@@ -109,6 +109,7 @@ class blController extends Controller
             $pagu       = 0;
             $rincian    = 0;
         }
+
         return View('budgeting.belanja-langsung.index',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
     }
 
