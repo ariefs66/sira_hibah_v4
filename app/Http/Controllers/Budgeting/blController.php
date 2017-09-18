@@ -670,7 +670,9 @@ class blController extends Controller
             $koef   = $koef.' x '.Input::get('VOL4').' '.Input::get('SAT4');
             $vol    = $vol * Input::get('VOL4');
         }
-        $total      = ( Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA')*$vol))/100);
+        $total      = ( Komponen::where('KOMPONEN_ID',
+            Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA') * $vol ) + 
+        (( Input::get('RINCIAN_PAJAK')*(Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA')*$vol))/100);
 
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         $totalBL    = BL::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
@@ -2211,7 +2213,8 @@ class blController extends Controller
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
+                <li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }
             $no     .= '</ul></div>';
             if(empty($data->rincian)) $totalRincian = 0;
@@ -2568,17 +2571,17 @@ class blController extends Controller
         return 'Berhasil!';
     }
 
-    public function getpagurincian($tahun,$status){
+    public function getpagurincian($tahun,$status,$id){
+        $blpagu         = BL::where('BL_ID',$id)->value('BL_PAGU');
+        $rincian_total   = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+
         $id        = $this->getSKPD($tahun);
         $pagu      = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
-        $rincian   = Rincian::whereHas('bl',function($r) use($id){
-                            $r->whereHas('subunit',function($s) use ($id){
-                                    $s->where('SKPD_ID',$id);
-                            });
-                        })->sum('RINCIAN_TOTAL');
-        $data      = array('pagu'=>$pagu,
-                           'rincian'=>$rincian,
-                           'sisa'=>$pagu - $rincian);
+
+        $data      = array('pagu'=>$blpagu,
+                           'rincian'=>$rincian_total,
+                           'sisa'=>$blpagu - $rincian_total);
+
         return Response::JSON($data);
     }
 
