@@ -25,6 +25,15 @@
                       <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                         <button class="btn btn-success dropdown-toggle open-form-btl"><i class="fa fa-plus"></i> Tambah</button>
                       </div>
+                    @elseif(Auth::user()->app == 4 and Auth::user()->level == 0)
+                      <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+                        <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Upload Komponen<i class="fa fa-chevron-down"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                          <li><a onclick="return openhspk()">HSPK</a></li>
+                          <li><a onclick="return openasb()">ASB</a></li>
+                        </ul>
+                      </div>
                     @endif
                     <h5 class="inline font-semibold text-orange m-n ">Daftar Komponen Tahun {{ $tahun }}</h5>
                     <div class="col-sm-1 pull-right m-t-n-sm">
@@ -124,6 +133,45 @@
           <tbody>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade " id="modal_upload_hspk" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <form action="{{url('/')}}/harga/{{$tahun}}/komponen/uploadHSPK" method="post" class="form-horizontal" enctype="multipart/form-data">
+        <h5 class="inline font-semibold text-orange m-n text16 " id="judul-modal">Upload HSPK</h5>
+        <hr>
+        <div class="form-group">
+          <input type="file" name="file_hspk" class="form-control">
+          <input type="hidden" name="_token"  value="{{ csrf_token() }}">
+        </div>
+        <button class="btn btn-default">Keluar</button>
+        <button class="btn btn-success pull-right" type="submit">Upload</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade " id="modal_upload_asb" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <form action="{{url('/')}}/harga/{{$tahun}}/komponen/uploadASB" method="post" class="form-horizontal" enctype="multipart/form-data">        
+        <h5 class="inline font-semibold text-orange m-n text16 " id="judul-modal">Upload ASB</h5>
+        <hr>
+        <div class="form-group">
+          <input type="file" name="file_asb" class="form-control">
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        </div>
+        <button class="btn btn-default">Keluar</button>
+        <button class="btn btn-success pull-right" type="submit">Upload</button>
+        </form>
+      </div>
       </div>
     </div>
   </div>
@@ -410,6 +458,15 @@
       }
     });
   }
+
+  function openhspk(){
+    $('#modal_upload_hspk').modal('show');
+  }
+
+  function openasb(){
+    $('#modal_upload_asb').modal('show');
+  }
+
 </script>
 @endsection
 

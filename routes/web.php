@@ -279,6 +279,8 @@ Route::get('/harga/{tahun}/komponen/getkategori/{jenis}', 'EHarga\komponenContro
 Route::post('/harga/{tahun}/komponen/kunci/{kunci}', 'EHarga\komponenController@kunci');
 Route::post('/harga/{tahun}/komponen/hapus', 'EHarga\komponenController@delete');
 Route::post('/harga/{tahun}/komponen/submit', 'EHarga\komponenController@submit');
+Route::post('/harga/{tahun}/komponen/uploadHSPK', 'EHarga\komponenController@uploadHSPK');
+Route::post('/harga/{tahun}/komponen/uploadASB', 'EHarga\komponenController@uploadASB');
 //MONITOR
 Route::get('/harga/{tahun}/monitor', 'EHarga\monitorUsulanController@index');
 Route::get('/harga/{tahun}/monitor/getData', 'EHarga\monitorUsulanController@getData');
