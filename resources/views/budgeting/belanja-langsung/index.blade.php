@@ -24,12 +24,7 @@
               <div class="panel bg-white">
                 <div class="wrapper-lg">
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung</h5> 
-                  @if(Auth::user()->level == 2 or Auth::user()->level == 1)
-                  | 
-                  <h5 class="inline font-semibold text-success m-n ">Pagu : {{ number_format($blpagu,0,'.',',') }}</h5>
-                  | 
-                  <h5 class="inline font-semibold text-success m-n ">Rincian : {{ number_format($rincian,0,'.',',') }}</h5>
-                  @endif
+                  
                   @if(Auth::user()->level == 2 and $thp == 1)
                   <a class="pull-right btn m-t-n-sm btn-success" href="{{ url('/') }}/main/{{$tahun}}/murni/belanja-langsung/tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Langsung</a>
                   @elseif($thp == 0)

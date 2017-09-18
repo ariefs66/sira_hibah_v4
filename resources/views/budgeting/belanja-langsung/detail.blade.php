@@ -549,17 +549,17 @@
     </div>          
     <hr class="m-t-xl">
     <div class="form-group" id="koef4">
-      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian SKPD</label>          
+      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian Kegiatan</label>          
       <div class="col-sm-3">
         <input type="text" id="rincian-skpd" class="form-control" readonly="">      
         <input type="hidden" id="rincian-skpd_" class="form-control" readonly="">      
       </div> 
-      <label for="no_spp" class="col-md-1">Pagu SKPD</label>          
+      <label for="no_spp" class="col-md-1">Pagu Kegiatan</label>          
       <div class="col-sm-3">
         <input type="text" id="pagu-skpd" class="form-control" readonly="">      
         <input type="hidden" id="pagu-skpd_" class="form-control" readonly="">      
       </div>
-      <label for="no_spp" class="col-md-1">Sisa Anggaran</label>          
+      <label for="no_spp" class="col-md-1">Sisa Anggaran Kegiatan</label>          
       <div class="col-sm-3">
         <input type="text" id="sisa-skpd" class="form-control" readonly="">      
         <input type="hidden" id="sisa-skpd_" class="form-control" readonly="">      
@@ -1089,7 +1089,7 @@
     }); 
   function getpagu(){
     $.ajax({
-        url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu",
+        url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu/{{$bl->BL_ID}}",
         type: "GET",
         success: function(msg){
           harga     = $('#harga-komponen').val();
