@@ -284,7 +284,8 @@ class usulanController extends Controller
         $usulan     = UsulanReses::where('USULAN_ID',$idUsulan)->first();
         $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
         $sub        = Subunit::where('SKPD_ID',$skpd)->select('SUB_ID')->get()->toArray();
-        $belanja    = BL::where('KEGIATAN_ID',$usulan->kamus->KAMUS_KEGIATAN)->whereIn('SUB_ID',$sub)->value('BL_ID');
+        $belanja    = BL::where('KEGIATAN_ID',$usulan->kamus->KAMUS_KEGIATAN)->value('BL_ID');
+        //$belanja    = BL::where('KEGIATAN_ID',$usulan->kamus->KAMUS_KEGIATAN)->whereIn('SUB_ID',$sub)->value('BL_ID');
         $komponen   = Komponen::where('KOMPONEN_KODE',$usulan->kamus->KAMUS_KODE_KOMPONEN)->value('KOMPONEN_ID');
             if($komponen){
                 if($belanja){

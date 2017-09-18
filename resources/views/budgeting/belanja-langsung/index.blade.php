@@ -35,7 +35,7 @@
                   @elseif($thp == 0)
                   <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
                   @endif
-                  @if(Auth::user()->level == 8 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
+                  @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
                   <div class="col-sm-4 pull-right m-t-n-sm">
                    <select ui-jq="chosen" class="form-control" id="filter-skpd">
                      <option value="">- Pilih OPD -</option>
@@ -64,9 +64,12 @@
                         <th rowspan="2">Program/Kegiatan/Sub Unit</th>
                         <th colspan="2" style="text-align: center;">Anggaran</th>                                      
                         <th rowspan="2" width="16%">Status
-                          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)                        
+                          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)
+                            <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciGiatSKPD()" id="kuncigiatskpd"><i></i></label>
+                          @endif
+                          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9)
                             <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciRincianSKPD()" id="kuncirincianskpd"><i></i></label>
-                          @endif 
+                          @endif
                         </th>                                      
                       </tr>
                       <tr>
