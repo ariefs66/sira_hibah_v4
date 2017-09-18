@@ -35,7 +35,7 @@ Route::get('/main/{tahun}/{status}/belanja-langsung/tambah', 'Budgeting\blContro
 Route::get('/main/{tahun}/{status}/belanja-langsung/ubah/{id}', 'Budgeting\blController@edit');
 Route::get('/main/{tahun}/{status}/belanja-langsung/indikator/{id}', 'Budgeting\blController@indikator');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rincian/{id}', 'Budgeting\blController@showRincian');
-Route::get('/main/{tahun}/{status}/belanja-langsung/rincian/pagu/getpagu', 'Budgeting\blController@getpagurincian');
+Route::get('/main/{tahun}/{status}/belanja-langsung/rincian/pagu/getpagu/{id}', 'Budgeting\blController@getpagurincian');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rincian/arsip/{id}', 'Budgeting\blController@showRincianArsip');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rincianrekap/{tipe}/{id}', 'Budgeting\blController@showRekap');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rincian/detail/{id}', 'Budgeting\blController@detailRincian');
