@@ -216,6 +216,12 @@ class lampiranController extends Controller
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)                        
                         ->get();
+        /*$blpagu = BL::join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL.SUB_ID') 
+                    ->where('REF_SUB_UNIT.SKPD_ID',$id)->where('BL_VALIDASI',1)
+                    ->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)
+                    ->sum('BL_PAGU');
+                    dd($blpagu);*/
+
         $prog           = $stat->whereHas('subunit',function($q) use ($id){
                                 $q->where('SKPD_ID',$id);
                         })
