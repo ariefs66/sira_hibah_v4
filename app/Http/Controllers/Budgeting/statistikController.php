@@ -109,6 +109,12 @@ class statistikController extends Controller{
                     $q->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                   })->sum('RINCIAN_TOTAL');
     	$pagu 		= $this->setStatusBL($tahun,$status)->where('BL_VALIDASI','1')->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
+      
+     /* $blpagu = BL::where('BL_VALIDASI',1)
+                    ->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)
+                    ->sum('BL_PAGU');
+                    
+      dd($blpagu);*/
     	
     		if($template == 0 ) $p1 = 0;
     		else $p1 = ($used/$template)*100;
