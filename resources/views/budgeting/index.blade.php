@@ -26,7 +26,7 @@
                   <div class="panel panel-default">
                     <div class="panel-body wrapper-sm">
                       <h2 class="m-t-xs text-orange font-semibold m-b-sm">{{ number_format($pagu,0,',','.') }}</h2>
-                      <p>Belanja Langsung</p>
+                      <p>Belanja Langsung Tervalidasi</p>
                     </div>
                   </div>
                 </div>
