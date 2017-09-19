@@ -1428,7 +1428,8 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$nowOPD < $totalOPD){
+               // if($total+$nowOPD < $totalOPD){
+                if($total < $totalOPD){
                     Rincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
