@@ -21,7 +21,7 @@
               <div class="col-md-12">
                 <div class="panel bg-white">
                   <div class="wrapper-lg">
-                    @if(substr(Auth::user()->mod,4,1)==1)
+                    @if(substr(Auth::user()->mod,4,1)==1 or substr(Auth::user()->mod,6,1)==1)
                       <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                         <button class="btn btn-success dropdown-toggle open-form-btl"><i class="fa fa-plus"></i> Tambah</button>
                       </div>
