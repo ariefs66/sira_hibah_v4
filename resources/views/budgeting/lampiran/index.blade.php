@@ -68,7 +68,10 @@
                                       <td>
                                         {{ $s->SKPD_NAMA }}
                                         <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/{{ $tipe }}download/{{ $s->SKPD_ID }}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-download"></i> XLS</a>
-                                        <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/{{ $tipe }}/{{ $s->SKPD_ID }}" class="btn btn-success pull-right m-t-n-sm m-r-xs" target="_blank"><i class="fa fa-print"></i> Cetak</a>
+                                        <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/{{ $tipe }}/{{ $s->SKPD_ID }}" class="btn btn-success pull-right m-t-n-sm m-r-xs" target="_blank"><i class="fa fa-print"></i> Cetak Per Pagu</a>
+                                        @if($tipe == 'ppas')
+                                        <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/ppasrincian/{{ $s->SKPD_ID }}" class="btn btn-success pull-right m-t-n-sm m-r-xs" target="_blank"><i class="fa fa-print"></i> Cetak Per Rincian</a>
+                                        @endif
                                       </td>
                                     </tr>
                                     @endforeach
