@@ -758,8 +758,8 @@ class blController extends Controller
         }elseif($tahapan->TAHAPAN_KUNCI_OPD == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
-               // if($total+$nowOPD <= $totalOPD){
-                if($total <= $totalOPD){
+                if($total+$nowOPD <= $totalOPD){
+               // if($total <= $totalOPD){
                     $rincian    = new Rincian;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -793,8 +793,8 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                // if($total+$nowOPD <= $totalOPD){
-                if($total <= $totalOPD){
+                 if($total+$nowOPD <= $totalOPD){
+                //if($total <= $totalOPD){
                     $rincian    = new Rincian;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -963,7 +963,8 @@ class blController extends Controller
         }elseif($tahapan->TAHAPAN_KUNCI_OPD == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
-                if($total+$nowOPD < $totalOPD){
+               // if($total+$nowOPD < $totalOPD){
+                if($total < $totalOPD){
                     $rincian    = new RincianPerubahan;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -997,7 +998,8 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$nowOPD < $totalOPD){
+                //if($total+$nowOPD < $totalOPD){
+                if($total < $totalOPD){
                     $rincian    = new RincianPerubahan;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
