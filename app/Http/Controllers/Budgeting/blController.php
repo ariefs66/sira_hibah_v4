@@ -759,6 +759,7 @@ class blController extends Controller
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                 if($total+$nowOPD <= $totalOPD){
+               // if($total <= $totalOPD){
                     $rincian    = new Rincian;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -792,7 +793,8 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$nowOPD <= $totalOPD){
+                 if($total+$nowOPD <= $totalOPD){
+                //if($total <= $totalOPD){
                     $rincian    = new Rincian;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -890,7 +892,8 @@ class blController extends Controller
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
-                if($total+$now < $totalBL){
+                //if($total+$now < $totalBL){
+                if($total < $totalBL){
                     $rincian    = new RincianPerubahan;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -924,7 +927,8 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$now < $totalBL){
+                //if($total+$now < $totalBL){
+                if($total < $totalBL){
                     $rincian    = new RincianPerubahan;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -961,7 +965,8 @@ class blController extends Controller
         }elseif($tahapan->TAHAPAN_KUNCI_OPD == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
-                if($total+$nowOPD < $totalOPD){
+               // if($total+$nowOPD < $totalOPD){
+                if($total < $totalOPD){
                     $rincian    = new RincianPerubahan;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -995,7 +1000,8 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$nowOPD < $totalOPD){
+                //if($total+$nowOPD < $totalOPD){
+                if($total < $totalOPD){
                     $rincian    = new RincianPerubahan;
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
@@ -1428,7 +1434,8 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$nowOPD < $totalOPD){
+               // if($total+$nowOPD < $totalOPD){
+                if($total < $totalOPD){
                     Rincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
@@ -2211,7 +2218,9 @@ class blController extends Controller
             
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
+                <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
+                <li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>

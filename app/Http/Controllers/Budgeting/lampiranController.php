@@ -216,6 +216,12 @@ class lampiranController extends Controller
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)                        
                         ->get();
+        /*$blpagu = BL::join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL.SUB_ID') 
+                    ->where('REF_SUB_UNIT.SKPD_ID',$id)->where('BL_VALIDASI',1)
+                    ->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)
+                    ->sum('BL_PAGU');
+                    dd($blpagu);*/
+
         $prog           = $stat->whereHas('subunit',function($q) use ($id){
                                 $q->where('SKPD_ID',$id);
                         })
@@ -243,7 +249,6 @@ class lampiranController extends Controller
                                 })->whereHas('subunit',function($x) use ($id){
                                     $x->where('SKPD_ID',$id);
                                 })
-                                ->where('BL_VALIDASI',1)
                                 ->where('BL_DELETED',0)
                                 ->where('BL_PAGU','!=',0)                                
                                 ->groupBy('KEGIATAN_ID')
@@ -252,6 +257,63 @@ class lampiranController extends Controller
             $i++;
         }
         return View('budgeting.lampiran.ppas',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+    }
+
+    public function ppasRincian($tahun,$status,$id){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD')->value('TAHAPAN_ID');
+        $idSKPD         = SKPD::where('SKPD_ID',$id)->first();
+        if($status == 'murni') $stat    = Rincian::whereHas('bl',function($bl) use($tahun){
+                                                        $bl->where('BL_TAHUN',$tahun);
+                                                    });
+        else $stat  = RincianPerubahan::whereHas('bl',function($bl) use($tahun){
+                                                        $bl->where('BL_TAHUN',$tahun);
+                                                    });       
+
+        if($status == 'murni') $stats    = BL::where('BL_TAHUN',$tahun);
+        else $stats  = BLPerubahan::where('BL_TAHUN',$tahun);   
+        $pagu           = $stat->whereHas('bl',function($bl) use ($id){
+                                        $bl->whereHas('subunit',function($x) use ($id){
+                                                $x->where('SKPD_ID',$id);
+                                        })->where('BL_VALIDASI',1)
+                                        ->where('BL_DELETED',0)
+                                        ->where('BL_PAGU','!=',0);
+                                    })->sum('RINCIAN_TOTAL');
+        $prog           = $stats->whereHas('subunit',function($q) use ($id){
+                                    $q->where('SKPD_ID',$id);
+                                })
+                                ->whereHas('rincian',function($rincian){
+                                    $rincian->where('RINCIAN_TOTAL','!=',0);
+                                })
+                                ->groupBy('KEGIATAN_ID')
+                                ->select('KEGIATAN_ID')
+                                ->where('BL_DELETED',0)
+                                ->where('BL_PAGU','!=',0)                        
+                                ->get()->toArray();
+        $program        = Program::whereHas('kegiatan',function($q) use($prog){
+                                $q->whereIn('KEGIATAN_ID',$prog);
+                            })
+                            ->orderBy('URUSAN_ID')
+                            ->orderBy('PROGRAM_KODE')
+                            ->get();
+        $paguprogram    = array();
+        $i              = 0;
+        foreach($program as $pr){
+            if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
+            else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
+            $idprog            = $pr->PROGRAM_ID;
+            $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
+                                    $q->where('PROGRAM_ID',$idprog);
+                                })->whereHas('subunit',function($x) use ($id){
+                                    $x->where('SKPD_ID',$id);
+                                })
+                                ->where('BL_DELETED',0)
+                                ->where('BL_PAGU','!=',0)                                
+                                ->groupBy('KEGIATAN_ID')
+                                ->selectRaw('"KEGIATAN_ID"')
+                                ->get();
+            $i++;
+        }
+        return View('budgeting.lampiran.ppas_rincian',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx','ppp'=>0,'pppp'=>0]);
     }
 
     public function ppasDownload($tahun,$status,$id){
@@ -449,7 +511,7 @@ class lampiranController extends Controller
                             on sub."SKPD_ID" = skpd."SKPD_ID"
                             inner join "BUDGETING"."DAT_RINCIAN" rincian
                             on bl."BL_ID" = rincian."BL_ID"
-                            WHERE "BL_DELETED" = 0 and "BL_TAHUN" = '.$tahun.' and "BL_VALIDASI" = 1
+                            WHERE "BL_DELETED" = 0 and "BL_TAHUN" = '.$tahun.'
                             GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA"
                             ORDER BY SKPD, "PROGRAM_KODE"');
         else
