@@ -455,7 +455,7 @@ class lampiranController extends Controller
                             on sub."SKPD_ID" = skpd."SKPD_ID"
                             inner join "BUDGETING"."DAT_RINCIAN" rincian
                             on bl."BL_ID" = rincian."BL_ID"
-                            WHERE "BL_DELETED" = 0 and "BL_TAHUN" = '.$tahun.' and "BL_VALIDASI" = 1
+                            WHERE "BL_DELETED" = 0 and "BL_TAHUN" = '.$tahun.'
                             GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA"
                             ORDER BY SKPD, "PROGRAM_KODE"');
         else
