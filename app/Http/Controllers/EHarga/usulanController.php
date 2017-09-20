@@ -113,8 +113,14 @@ class usulanController extends Controller
                                     ->where('USULAN_STATUS',0)
                                     ->orderBy('USULAN_ID')                                
         							->get();
-        }
-        elseif(substr(Auth::user()->mod,6,1) == 1){
+        }elseif(substr(Auth::user()->mod,4,1) == 1){
+            $data   = UsulanKomponen::where('USULAN_POSISI',2)
+                                    ->where('USULAN_TAHUN',$tahun)            
+                                    ->where('USULAN_STATUS',0)
+                                    ->where('USER_POST',Auth::user()->id)                                    
+                                    ->orderBy('USULAN_ID')
+                                    ->get();
+        }elseif(substr(Auth::user()->mod,6,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',2)
                                     ->where('USULAN_TAHUN',$tahun)            
                                     ->where('USULAN_STATUS',0)
@@ -122,14 +128,7 @@ class usulanController extends Controller
                                     ->orderBy('USULAN_ID')
                                     ->get();
         }
-        elseif(substr(Auth::user()->mod,4,1) == 1){
-            $data   = UsulanKomponen::where('USULAN_POSISI',2)
-                                    ->where('USULAN_TAHUN',$tahun)            
-                                    ->where('USULAN_STATUS',0)
-                                    ->where('USER_POST',Auth::user()->id)                                    
-                                    ->orderBy('USULAN_ID')
-                                    ->get();
-        }elseif(substr(Auth::user()->mod,5,1) == 1){
+        elseif(substr(Auth::user()->mod,5,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',5)
                                     ->where('USULAN_TAHUN',$tahun)            
                                     ->where('USULAN_STATUS',0)
