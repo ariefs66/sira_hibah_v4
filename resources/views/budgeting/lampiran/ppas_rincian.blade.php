@@ -133,6 +133,8 @@
 		@endif
 		<td width="10%" class="kanan"><b>{{ number_format($pppp[$i],0,',','.') }}</b></td>
 	</tr>
+
+
 	@foreach($paguprogram[$i] as $pp)
 	<tr>
 		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,0,1) }}</td>
@@ -158,6 +160,7 @@
 	</tr>
 	<?php $j++;?>
 	@endforeach
+
 	<?php $i++;?>
 	@endforeach
 	</tbody>
