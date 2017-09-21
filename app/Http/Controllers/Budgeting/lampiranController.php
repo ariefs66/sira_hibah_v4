@@ -342,22 +342,9 @@ class lampiranController extends Controller
             }
             $i++;
         }
-<<<<<<< HEAD
 
-        $rincian = Rincian::join('BUDGETING.DAT_BL', 'DAT_BL.BL_ID', '=', 'DAT_RINCIAN.BL_ID') 
-                          ->join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL.SUB_ID') 
-                          ->select('KEGIATAN_ID')
-                    ->where('REF_SUB_UNIT.SKPD_ID',66)
-                    ->where('DAT_BL.BL_VALIDASI',1)
-                    ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
-                    ->groupBy('KEGIATAN_ID')                    
-                    ->get();
-                   
-
-        return View('budgeting.lampiran.ppas_rincian',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx','ppp'=>0,'pppp'=>0]);
-=======
         return View('budgeting.lampiran.ppas_rincian',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx','ppp'=>$ppp,'pppp'=>$pppp,'j'=>0]);
->>>>>>> 08369f35a92d16aa7818027b14cd3587743af235
+
     }
 
     public function ppasDownload($tahun,$status,$id){
