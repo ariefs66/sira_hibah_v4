@@ -131,13 +131,7 @@
 		<td width="24%"><b>-</b></td>
 		<td width="10%"><b>-</b></td>
 		@endif
-		<?php $pppp = 0;?>
-		@foreach($paguprogram[$i] as $pagprog)
-		@foreach($pagprog->kegiatan->bl as $pagkeg)
-		<?php $pppp += $pagkeg->rincian->sum('RINCIAN_TOTAL');?>
-		@endforeach
-		@endforeach
-		<td width="10%" class="kanan"><b>{{ number_format($pppp,0,',','.') }}</b></td>
+		<td width="10%" class="kanan"><b>{{ number_format($pppp[$i],0,',','.') }}</b></td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
 	<tr>
@@ -160,12 +154,9 @@
 			@endforeach
 			@endif
 		</td>
-		<?php $ppp = 0;?>
-		@foreach($pp->kegiatan->bl as $bl)
-		<?php $ppp += $bl->rincian->sum('RINCIAN_TOTAL');?>
-		@endforeach
-		<td class="kanan"><i>{{ number_format($ppp,0,',','.') }}</i></td>
+		<td class="kanan"><i>{{ number_format($ppp[$i][$j],0,',','.') }}</i></td>
 	</tr>
+	<?php $j++;?>
 	@endforeach
 	<?php $i++;?>
 	@endforeach
