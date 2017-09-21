@@ -8,6 +8,7 @@ Use App\Model\Pembiayaan;
 Use App\Model\BL;
 Use App\Model\BLPerubahan;
 Use App\Model\Rincian;
+Use App\Model\RincianPerubahan;
 Use App\Model\BTL;
 Use App\Model\Rekening;
 Use App\Model\Output;
@@ -20,6 +21,7 @@ Use App\Model\Subrincian;
 Use App\Model\UserBudget;
 Use App\Model\SKPD;
 Use App\Model\Realisasi;
+Use App\Model\Komponen;
 Use Response;
 Use DB;
 class realController extends Controller
@@ -27,6 +29,33 @@ class realController extends Controller
 	public function index($tahun){
 		return View('real',['tahun'=>$tahun]);
 	}
+
+	public function trfnamakomponen(){
+		$data 			= Rincian::where('RINCIAN_KOMPONEN',null)->get();
+		$i = 1;
+		foreach($data as $data){
+			$komponen 		= Komponen::where('KOMPONEN_ID',$data->KOMPONEN_ID)->first();
+			Rincian::where('RINCIAN_ID',$data->RINCIAN_ID)->update(['RINCIAN_KOMPONEN'=>$komponen->KOMPONEN_NAMA,'RINCIAN_HARGA'=>$komponen->KOMPONEN_HARGA]);	
+			$i++;
+		}
+		print_r(count($data));
+		print_r('<br>');
+		print_r($i);
+	}
+
+	public function trfnamakomponenperubahan(){
+		$data 			= RincianPerubahan::where('RINCIAN_KOMPONEN',null)->get();
+		$i = 1;
+		foreach($data as $data){
+			$komponen 		= Komponen::where('KOMPONEN_ID',$data->KOMPONEN_ID)->first();
+			RincianPerubahan::where('RINCIAN_ID',$data->RINCIAN_ID)->update(['RINCIAN_KOMPONEN'=>$komponen->KOMPONEN_NAMA,'RINCIAN_HARGA'=>$komponen->KOMPONEN_HARGA]);	
+			$i++;
+		}
+		print_r(count($data));
+		print_r('<br>');
+		print_r($i);
+	}
+
 
 	public function getdata($tahun){
 		$bl 				= Rincian::whereHas('bl',function($x){$x->where('BL_DELETED',0);})->sum('RINCIAN_TOTAL');
