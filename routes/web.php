@@ -395,3 +395,5 @@ Route::get('/auto/{tahun}/trfBTLFromSimda/{kodeperubahan}/{skpd}', 'realControll
 Route::get('/auto/{tahun}/trfPendapatanFromSimda/{kodeperubahan}/{skpd}', 'realController@transferPendapatanFromSimda');
 Route::get('/auto/{tahun}/trfPembiayaanFromSimda/{kodeperubahan}/{skpd}', 'realController@transferPembiayaanFromSimda');
 Route::get('/auto/transferuser/{tahunawal}/{tahunakhir}', 'realController@transferuser');
+Route::get('/trfnamakomponen', 'realController@trfnamakomponen');
+Route::get('/trfnamakomponenperubahan', 'realController@trfnamakomponenperubahan');
