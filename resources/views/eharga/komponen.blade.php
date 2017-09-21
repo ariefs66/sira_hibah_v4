@@ -331,10 +331,10 @@
         { mData: 'KOMPONEN_NAMA' },
         { mData: 'KOMPONEN_SPESIFIKASI' },
         { mData: 'KOMPONEN_SATUAN' },
+        { mData: 'KOMPONEN_HARGA',class:'text-right' },
         @if(substr(Auth::user()->mod,4,1)==1)      
         { mData: 'KUNCI' },
         @endif
-        { mData: 'KOMPONEN_HARGA',class:'text-right' },
         { mData: 'AKSI' }]
     });
   }
