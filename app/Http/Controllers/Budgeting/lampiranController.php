@@ -26,6 +26,7 @@ use App\Model\RekapBL;
 use App\Model\RekapRincian;
 use App\Model\UserBudget;
 use App\Model\Tahapan;
+use App\Model\BLPerubahan;
 class lampiranController extends Controller
 {
     // public function __construct(){
@@ -107,8 +108,10 @@ class lampiranController extends Controller
     public function rkpd($tahun,$status,$id){
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD')->value('TAHAPAN_ID');
         $idSKPD         = SKPD::where('SKPD_ID',$id)->first();
+
         if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
         else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);
+            
         $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
                         })
