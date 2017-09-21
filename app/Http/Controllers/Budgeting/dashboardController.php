@@ -18,6 +18,7 @@ use App\Model\SKPD;
 use App\Model\Usulan;
 use App\Model\Kamus;
 use App\Model\PaguRincian;
+use App\Model\BlPerubahan;
 use Response;
 class dashboardController extends Controller
 {
@@ -249,11 +250,20 @@ class dashboardController extends Controller
 
         $pengumuman = "";
         $idskpd     = $this->getSKPD($tahun,$status);
+        
         if(Auth::user()->level == 2){
             $pengumuman     = PaguRincian::where('SKPD_ID',$idskpd)->get();
             if(empty($pengumuman)) $pengumuman = "";
         }
+        
         $info = "Pilih Tahun Anggaran Terlebih Dahulu di Menu Header dengan Font yang Berwarna Hitam";
+
+        /*$bl_pagu_perubahan = BLPerubahan::join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL_PERUBAHAN.SUB_ID') 
+                            ->join('REFERENSI.REF_SKPD', 'REF_SKPD.SKPD_ID', '=', 'REF_SUB_UNIT.SKPD_ID') 
+                            ->where('DAT_BL_PERUBAHAN.BL_TAHUN',$tahun)
+                            ->where('REF_SKPD.SKPD_ID',$idskpd)->sum('BL_PAGU');
+        dd($bl_pagu_perubahan);*/
+
     	return View('budgeting.index',['tahun'=>$tahun, 'info'=>$info, 'status'=>$status,'pagu'=>$pagu,'btl'=>$btl,'pdp'=>$pdp,'blv'=>$blv,'bln'=>$bln,'rkpd'=>$rkpd,'ppas'=>$ppas,'rapbd'=>$rapbd,'apbd'=>$apbd,'staff'=>$staff,'b1'=>$b1,'b2'=>$b2,'b3'=>$b3,'jabatan'=>$jabatan,'alamat'=>$alamat,'musren'=>$musren,'musrenin'=>$musrenIn,'musrentotal'=>$musrenTotal,'musrentotalin'=>$musrenTotalIn,'musrentotal'=>$musrenTotal,'rkua'=>$rkua,'pengumuman'=>$pengumuman]);
     }
 
