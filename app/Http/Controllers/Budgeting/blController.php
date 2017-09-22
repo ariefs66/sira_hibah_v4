@@ -591,7 +591,7 @@ class blController extends Controller
                             'tag'       => $tag,
                             'satuan'    => $satuan
                          ];
-        dd($data);                 
+        //dd($data);                 
         return View('budgeting.belanja-langsung.add',$data);
 
     }
