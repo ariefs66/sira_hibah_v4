@@ -554,7 +554,7 @@ class blController extends Controller
     //ADD
     public function add($tahun,$status){
         $skpd           = $this->getSKPD($tahun);
-        dd($skpd);
+       // dd($skpd);
         $subunit        = Subunit::where('SKPD_ID',$skpd)->orderBy('SUB_ID')->get();         
         $program        = Progunit::where('SKPD_ID',$skpd)->orderBy('PROGRAM_ID')->get();
         $jenis          = JenisGiat::all();
@@ -591,7 +591,7 @@ class blController extends Controller
                             'tag'       => $tag,
                             'satuan'    => $satuan
                          ];
-        dd($data);                 
+       // dd($data);                 
         return View('budgeting.belanja-langsung.add',$data);
 
     }
