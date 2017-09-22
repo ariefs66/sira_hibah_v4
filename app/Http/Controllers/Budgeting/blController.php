@@ -144,21 +144,32 @@ class blController extends Controller
         }
 
         $id        = $this->getSKPD($tahun);
+
         if(Auth::user()->level == 1 or Auth::user()->level == 2){
             $blpagu    = BLPerubahan::whereHas('subunit',function($q) use ($id){
                                     $q->where('SKPD_ID',$id);
                             })->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
+
             $pagu      = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
+
             $rincian   = RincianPerubahan::whereHas('bl',function($r) use($id){
                             $r->whereHas('subunit',function($s) use ($id){
                                     $s->where('SKPD_ID',$id);
                             });
                         })->sum('RINCIAN_TOTAL');
+
+            /*$rincian = RincianPerubahan::JOIN('BUDGETING.DAT_BL_PERUBAHAN', 'DAT_BL_PERUBAHAN.BL_ID', '=', 'DAT_RINCIAN_PERUBAHAN.BL_ID') 
+                        ->join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL_PERUBAHAN.SUB_ID') 
+                    ->where('REF_SUB_UNIT.SKPD_ID',$id)
+                    ->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('RINCIAN_TOTAL');*/
+
         }else{
             $blpagu     = 0;
             $pagu       = 0;
             $rincian    = 0;
         }
+
+
         return View('budgeting.belanja-langsung.index_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
     }
 
@@ -564,6 +575,7 @@ class blController extends Controller
         $lokasi         = Lokasi::all();
         $tag            = Tag::all();
         $satuan         = Satuan::all();
+
         $bulan          = array('',
                          'Januari',
                          'Februari',
@@ -577,6 +589,7 @@ class blController extends Controller
                          'Oktober',
                          'November',
                          'Desember');
+        
         $data           = [
                             'subunit'   => $subunit,
                             'program'   => $program,
