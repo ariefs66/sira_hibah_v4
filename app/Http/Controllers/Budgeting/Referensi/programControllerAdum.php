@@ -25,6 +25,7 @@ class programControllerAdum extends Controller
 
 	public function index($tahun,$status){
 		$program 	= Program::whereIn('PROGRAM_KODE',['01','02','03','04','05','06','07','08','09'])
+                            ->where('PROGRAM_TAHUN',$tahun)
 							->groupBy('PROGRAM_KODE','PROGRAM_NAMA')
 							->select('PROGRAM_KODE','PROGRAM_NAMA')
 							->orderBy('PROGRAM_KODE')
