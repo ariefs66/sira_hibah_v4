@@ -90,6 +90,7 @@
           <div class="form-group">
             <label for="nama_program" class="col-md-3">Nama Program</label>          
             <div class="col-sm-9">
+              <input type="hidden" id="id_program" value=""> 
               <input type="text" class="form-control" placeholder="Masukan Nama Program" name="nama_program" id="nama_program" value=""> 
             </div> 
           </div>
@@ -373,7 +374,7 @@
       success: function(msg){
         $('select#skpd').append(msg['skpd']).trigger("chosen:updated");
         $('select#urusan').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
-        $('#id_program').val(msg['data'][0]['PROGRAM_ID']);
+        $('#id_program').val(msg['data'][0]['PROGRAM_KODE']);
         $('#nama_program').val(msg['data'][0]['PROGRAM_NAMA']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
