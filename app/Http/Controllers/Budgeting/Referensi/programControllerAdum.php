@@ -144,8 +144,8 @@ class programControllerAdum extends Controller
         foreach($skpd as $skpd){
             $urusan     = substr($skpd->SKPD_KODE, 0,4);
             $urusan     = Urusan::where('URUSAN_KODE',$urusan)->where('URUSAN_TAHUN',$tahun)->value('URUSAN_ID');
-            $program    = Program::where('PROGRAM_KODE',Input::get('kode_program'))->where('URUSAN_ID',$urusan)->value('PROGRAM_ID');
-            $progunit   = new Progunit;
+	    $program    = Program::where('PROGRAM_KODE',Input::get('kode_program'))->where('URUSAN_ID',$urusan)->value('PROGRAM_ID');
+	    $progunit   = new Progunit;
             $progunit->PROGRAM_ID   = $program;
             $progunit->SKPD_ID      = $skpd->SKPD_ID;
             $progunit->save();
