@@ -26,9 +26,9 @@
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung |</h5>
                   <h5 class="inline font-semibold text-info m-n ">
                   @if(Auth::user()->level == 2 or Auth::user()->level == 1)
-                  Pagu OPD : {{ number_format($pagu,0,'.',',') }} |
+                  Pagu OPD : {{ number_format($blpagu,0,'.',',') }} |
                   Rincian  : {{ number_format($rincian,0,'.',',') }} |
-                  Selisih  : {{ number_format($pagu - $rincian,0,'.',',') }}
+                  Selisih  : {{ number_format($blpagu - $rincian,0,'.',',') }}
                   @endif  
                   </h5>
                   @if(Auth::user()->level == 2 and $thp == 1)
