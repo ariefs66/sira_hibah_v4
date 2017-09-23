@@ -158,17 +158,11 @@ class blController extends Controller
                             });
                         })->sum('RINCIAN_TOTAL');
 
-            /*$rincian = RincianPerubahan::JOIN('BUDGETING.DAT_BL_PERUBAHAN', 'DAT_BL_PERUBAHAN.BL_ID', '=', 'DAT_RINCIAN_PERUBAHAN.BL_ID') 
-                        ->join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL_PERUBAHAN.SUB_ID') 
-                    ->where('REF_SUB_UNIT.SKPD_ID',$id)
-                    ->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('RINCIAN_TOTAL');*/
-
         }else{
             $blpagu     = 0;
             $pagu       = 0;
             $rincian    = 0;
         }
-
 
         return View('budgeting.belanja-langsung.index_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
     }
@@ -603,6 +597,7 @@ class blController extends Controller
                             'tag'       => $tag,
                             'satuan'    => $satuan
                          ];
+
         return View('budgeting.belanja-langsung.add',$data);
 
     }
@@ -624,35 +619,67 @@ class blController extends Controller
         $tag_   = '{' . implode(",", $result) . '}';
         if($status == 'murni') $s = 1;
         else $s = 2;
-        $bl         = new BL;
-        $bl->BL_TAHUN           = $tahun;
-        $bl->KEGIATAN_ID        = Input::get('kegiatan');
-        $bl->JENIS_ID           = Input::get('jenis-kegiatan');
-        $bl->SUMBER_ID          = Input::get('sumber-dana');
-        $bl->PAGU_ID            = Input::get('kategori-pagu');
-        $bl->BL_AWAL            = Input::get('waktu-awal');
-        $bl->BL_AKHIR           = Input::get('waktu-akhir');
-        $bl->SASARAN_ID         = Input::get('sasaran');
-        $bl->LOKASI_ID          = Input::get('lokasi');
-        $bl->SUB_ID             = Input::get('sub_id');
-        $bl->BL_TAG             = $tag_;
-        $bl->BL_STATUS          = $s;
-        $bl->BL_VALIDASI        = '0';
-        $bl->BL_DELETED         = '0';
-        $bl->USER_CREATED       = Auth::user()->id;
-        $bl->TIME_CREATED       = Carbon\Carbon::now();
-        $bl->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
-        $bl->save();
 
-        $id         = BL::where('BL_TAHUN',$tahun)->where('KEGIATAN_ID',Input::get('kegiatan'))->where('SUB_ID',Input::get('sub_id'))->value('BL_ID');
-        
-        
-        $kunci      = new Kunci;
-        $kunci->BL_ID                           = $id;
-        $kunci->KUNCI_GIAT                      = 0;
-        $kunci->KUNCI_RINCIAN                   = 0;
-        $kunci->KUNCI_AKB                       = 0;
-        $kunci->save();
+        if($status == 'murni'){
+            $bl                     = new BL;
+            $bl->BL_TAHUN           = $tahun;
+            $bl->KEGIATAN_ID        = Input::get('kegiatan');
+            $bl->JENIS_ID           = Input::get('jenis-kegiatan');
+            $bl->SUMBER_ID          = Input::get('sumber-dana');
+            $bl->PAGU_ID            = Input::get('kategori-pagu');
+            $bl->BL_AWAL            = Input::get('waktu-awal');
+            $bl->BL_AKHIR           = Input::get('waktu-akhir');
+            $bl->SASARAN_ID         = Input::get('sasaran');
+            $bl->LOKASI_ID          = Input::get('lokasi');
+            $bl->SUB_ID             = Input::get('sub_id');
+            $bl->BL_TAG             = $tag_;
+            $bl->BL_STATUS          = $s;
+            $bl->BL_VALIDASI        = '0';
+            $bl->BL_DELETED         = '0';
+            $bl->USER_CREATED       = Auth::user()->id;
+            $bl->TIME_CREATED       = Carbon\Carbon::now();
+            $bl->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+            $bl->save();
+
+            $id         = BL::where('BL_TAHUN',$tahun)->where('KEGIATAN_ID',Input::get('kegiatan'))->where('SUB_ID',Input::get('sub_id'))->value('BL_ID');
+
+            $kunci      = new Kunci;
+            $kunci->BL_ID                           = $id;
+            $kunci->KUNCI_GIAT                      = 0;
+            $kunci->KUNCI_RINCIAN                   = 0;
+            $kunci->KUNCI_AKB                       = 0;
+            $kunci->save();
+
+        }else{
+            $bl         = new BLPerubahan;
+            $bl->BL_TAHUN           = $tahun;
+            $bl->KEGIATAN_ID        = Input::get('kegiatan');
+            $bl->JENIS_ID           = Input::get('jenis-kegiatan');
+            $bl->SUMBER_ID          = Input::get('sumber-dana');
+            $bl->PAGU_ID            = Input::get('kategori-pagu');
+            $bl->BL_AWAL            = Input::get('waktu-awal');
+            $bl->BL_AKHIR           = Input::get('waktu-akhir');
+            $bl->SASARAN_ID         = Input::get('sasaran');
+            $bl->LOKASI_ID          = Input::get('lokasi');
+            $bl->SUB_ID             = Input::get('sub_id');
+            $bl->BL_TAG             = $tag_;
+            $bl->BL_STATUS          = $s;
+            $bl->BL_VALIDASI        = '0';
+            $bl->BL_DELETED         = '0';
+            $bl->USER_CREATED       = Auth::user()->id;
+            $bl->TIME_CREATED       = Carbon\Carbon::now();
+            $bl->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+            $bl->save();
+
+            $id         = BLPerubahan::where('BL_TAHUN',$tahun)->where('KEGIATAN_ID',Input::get('kegiatan'))->where('SUB_ID',Input::get('sub_id'))->value('BL_ID');
+
+            $kunci      = new Kunciperubahan;
+            $kunci->BL_ID                           = $id;
+            $kunci->KUNCI_GIAT                      = 0;
+            $kunci->KUNCI_RINCIAN                   = 0;
+            $kunci->KUNCI_AKB                       = 0;
+            $kunci->save();
+        }
 
         $log        = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
@@ -660,6 +687,7 @@ class blController extends Controller
         $log->LOG_ACTIVITY                      = 'Menambahkan Belanja Langsung';
         $log->LOG_DETAIL                        = 'BL#'.$id;
         $log->save();
+
         return Redirect('main/'.$tahun.'/'.$status.'/belanja-langsung');
     }
 
@@ -2264,11 +2292,13 @@ class blController extends Controller
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
                 <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
-                <li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
+                <li class="divider"></li>
+                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
-                <li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
+                <li class="divider"></li>
+                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }
             $no     .= '</ul></div>';
             if(empty($data->rincian)) $totalRincian = 0;
@@ -2413,10 +2443,13 @@ class blController extends Controller
 
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li>
+                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li><li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li>
+                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
+
             }
             if(empty($data->rincian)) $totalRincian = 0;
             else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,'.',',');
@@ -2481,6 +2514,9 @@ class blController extends Controller
     public function getLog($tahun,$status,$id){
         if($status == 'murni') $bl         = BL::where('BL_ID',$id)->first();
         else $bl         = BLPerubahan::where('BL_ID',$id)->first();
+
+            dd($id);
+
         $creator    = User::where('id',$bl->USER_CREATED)->first();
         $staff      = Staff::whereHas('user', function($q){
                         $q->where('level','1');
