@@ -90,6 +90,7 @@
           <div class="form-group">
             <label for="nama_program" class="col-md-3">Nama Program</label>          
             <div class="col-sm-9">
+              <input type="hidden" id="id_program" value=""> 
               <input type="text" class="form-control" placeholder="Masukan Nama Program" name="nama_program" id="nama_program" value=""> 
             </div> 
           </div>
@@ -226,20 +227,18 @@
     var nama_program  = $('#nama_program').val();
     var kode_program = $('#id_program').val();
     var token         = $('#token').val();
-    if(urusan == "0" || nama_program == "" ){
+    if(nama_program == "" ){
       $.alert('Form harap dilengkapi!');
     }else{
-      if(id_program == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/add/submit";
-      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/edit/submit";
+      if(kode_program == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/adum/program/add/submit";
+      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/adum/program/edit/submit";
       console.log(uri);
       $.ajax({
         url: uri,
         type: "POST",
         data: {'_token'         : token,
-              'urusan'          : urusan, 
-              'skpd'            : skpd,
               'tahun'           : '{{$tahun}}', 
-              'id_program'      : id_program, 
+              'kode_program'      : kode_program, 
               'nama_program'    : nama_program},
         success: function(msg){
             if(msg == 1){
@@ -375,7 +374,7 @@
       success: function(msg){
         $('select#skpd').append(msg['skpd']).trigger("chosen:updated");
         $('select#urusan').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
-        $('#id_program').val(msg['data'][0]['PROGRAM_ID']);
+        $('#id_program').val(msg['data'][0]['PROGRAM_KODE']);
         $('#nama_program').val(msg['data'][0]['PROGRAM_NAMA']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  

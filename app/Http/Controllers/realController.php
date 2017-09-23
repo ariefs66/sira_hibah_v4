@@ -22,6 +22,8 @@ Use App\Model\UserBudget;
 Use App\Model\SKPD;
 Use App\Model\Realisasi;
 Use App\Model\Komponen;
+Use App\Model\Progunit;
+Use App\Model\Kegunit;
 Use Response;
 Use DB;
 class realController extends Controller
@@ -41,6 +43,32 @@ class realController extends Controller
 		print_r(count($data));
 		print_r('<br>');
 		print_r($i);
+	}
+
+	public function trfprogram($tahun,$kode){
+        $idprogram  = Program::where('PROGRAM_KODE',$kode)->where('PROGRAM_TAHUN')->select('PROGRAM_ID')->get()->toArray();
+        Progunit::whereIn('PROGRAM_ID',$idprogram)->delete();
+        $skpd   = SKPD::where('SKPD_TAHUN',$tahun)->get();
+        foreach($skpd as $skpd){
+            $urusan     = substr($skpd->SKPD_KODE, 0,4);
+            $urusan     = Urusan::where('URUSAN_KODE',$urusan)->where('URUSAN_TAHUN',$tahun)->value('URUSAN_ID');
+            $program    = Program::where('PROGRAM_KODE',$kode)->where('PROGRAM_TAHUN',$tahun)->where('URUSAN_ID',$urusan)->value('PROGRAM_ID');
+            if($program){
+	            $progunit   = new Progunit;
+	            $progunit->PROGRAM_ID   = $program;
+	            $progunit->SKPD_ID      = $skpd->SKPD_ID;
+	            $progunit->save();
+				
+				Kegunit::whereIn('KEGIATAN_ID',Kegiatan::where('PROGRAM_ID',$program)->select('KEGIATAN_ID')->get()->toArray())->delete();
+	            $kegiatan 		= Kegiatan::where('PROGRAM_ID',$program)->get();
+	            foreach($kegiatan as $keg){
+	            	$kegunit 	= new Kegunit;
+	            	$kegunit->KEGIATAN_ID 		= $keg->KEGIATAN_ID;
+	            	$kegunit->SKPD_ID 			= $skpd->SKPD_ID;
+	            	$kegunit->save();
+	            }
+            }
+        }
 	}
 
 	public function trfnamakomponenperubahan(){
