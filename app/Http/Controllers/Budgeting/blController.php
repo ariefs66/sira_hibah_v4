@@ -565,7 +565,10 @@ class blController extends Controller
     //ADD
     public function add($tahun,$status){
         $skpd           = $this->getSKPD($tahun);
+<<<<<<< HEAD
         
+=======
+>>>>>>> c592c66ce152ca10fe90eed0fc860d6679b0e76a
         $subunit        = Subunit::where('SKPD_ID',$skpd)->orderBy('SUB_ID')->get();         
         $program        = Progunit::where('SKPD_ID',$skpd)->orderBy('PROGRAM_ID')->get();
         $jenis          = JenisGiat::all();

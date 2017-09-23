@@ -134,57 +134,23 @@ class programControllerAdum extends Controller
     	}
     }
 
-    public function submitEdit(){
-    	$program   = new Program;
-        $cek        = Program::where('PROGRAM_ID',Input::get('id_program'))->get();
-        $no         = Program::where('PROGRAM_TAHUN',Input::get('tahun'))
-                            ->where('URUSAN_ID',Input::get('urusan')) 
-                            ->orderBy('PROGRAM_KODE','DESC')
-                            ->value('PROGRAM_KODE');
-        $kode       = "";
-        if($cek[0]['URUSAN_ID'] == Input::get('urusan')){
-            $kode   = $no;
-        }elseif(empty($no)){
-            $kode   = '01';
-        }else{
-            $no = $no+1;
-            if($no < 10){
-                $kode   = '0'.$no;
-            }else{
-                $kode   = $no;
-            }
+    public function submitEdit($tahun,$status){
+        $kode   = Input::get('kode_program');
+        Program::where('PROGRAM_KODE',$kode)
+                        ->update(['PROGRAM_NAMA'=>Input::get('nama_program')]);
+        $idprogram  = Program::where('PROGRAM_KODE',$kode)->select('PROGRAM_ID')->get()->toArray();
+        Progunit::whereIn('PROGRAM_ID',$idprogram)->delete();
+        $skpd   = SKPD::where('SKPD_TAHUN',$tahun)->get();
+        foreach($skpd as $skpd){
+            $urusan     = substr($skpd->SKPD_KODE, 0,4);
+            $urusan     = Urusan::where('URUSAN_KODE',$urusan)->value('URUSAN_ID');
+            $program    = Program::where('PROGRAM_KODE',Input::get('kode_program'))->where('URUSAN_ID',$urusan)->value('PROGRAM_ID');
+            $progunit   = new Progunit;
+            $progunit->PROGRAM_ID   = $program;
+            $progunit->SKPD_ID      = $skpd->SKPD_ID;
+            $progunit->save();
         }
-
-        $cekKode 	= Program::where('PROGRAM_NAMA',Input::get('nama_program'))
-                            ->where('PROGRAM_TAHUN',Input::get('tahun'))
-                            ->where('URUSAN_ID',Input::get('urusan'))
-    						->value('PROGRAM_NAMA');
-        if(empty($cekKode) || $cekKode != Input::get('nama_program')){                          
-        Program::where('PROGRAM_ID',Input::get('id_program'))
-                ->update(['PROGRAM_TAHUN'       =>Input::get('tahun'),
-                          'PROGRAM_KODE'        =>$kode,
-                          'URUSAN_ID'           =>Input::get('urusan'),
-                          'PROGRAM_NAMA'        =>Input::get('nama_program')]);
-        Progunit::where('PROGRAM_ID',Input::get('id_program'))->delete();
-            $skpd       = Input::get('skpd');
-            foreach($skpd as $s){
-                $pd     = new Progunit;
-                $pd->PROGRAM_ID     = Input::get('id_program');
-                $pd->SKPD_ID        = $s;
-                $pd->save();
-            }
-    		return '1';
-    	}else{
-            $skpd       = Input::get('skpd');
-            Progunit::where('PROGRAM_ID',Input::get('id_program'))->delete();
-            foreach($skpd as $s){
-                $pd     = new Progunit;
-                $pd->PROGRAM_ID     = Input::get('id_program');
-                $pd->SKPD_ID        = $s;
-                $pd->save();
-            }
-            return '1';
-    	}
+        return 1;
     }
 
     public function delete(){
