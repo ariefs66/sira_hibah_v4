@@ -182,12 +182,12 @@ class lampiranController extends Controller
             $rek4_murni       = "";
             $rek3_murni       = "";
             $totalrek_murni   = "";
-            $totalreke_murni  = ""; 
+            $totalreke_murni  = "";
             foreach($rekening_murni as $r) {
 
                 $rek_murni[$q_murni]     = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,8))->first();
                 $reke[$s]    = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,5))->first();
-                $rek4        = $rek[$q];
+                $rek4        = $rek_murni[$q_murni];
                 $rek3        = $reke[$s];    
 
                 $totalrek[$q]= RincianPerubahan::whereHas('rekening', function($x) use ($rek4){
