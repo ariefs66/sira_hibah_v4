@@ -61,12 +61,12 @@ class mainController extends Controller
 	public function getTABudgeting($tahun,$status){
 		$data  		= TahunAnggaran::all();
 		$view 		= '';
-		$var_TAHUN  = '2017';
+		/*$var_TAHUN  = '2017';
 		$var_STATUS =  'perubahan';
 
-		$view 	.= '<option value="'.$var_TAHUN.'/'.$var_STATUS.'" id="o'.$var_TAHUN.$var_STATUS.'">'.$var_TAHUN.'-'.$var_STATUS.'</option>';
+		$view 	.= '<option value="'.$var_TAHUN.'/'.$var_STATUS.'" id="o'.$var_TAHUN.$var_STATUS.'">'.$var_TAHUN.'-'.$var_STATUS.'</option>';*/
 
-		/*foreach($data as $data){
+		foreach($data as $data){
 			 
 			 if($data->TAHUN != '2018'){
 				if($tahun == $data->TAHUN and $status == $data->STATUS){
@@ -77,7 +77,7 @@ class mainController extends Controller
 				}
 
 			 }
-		}*/
+		}
 		return $view;
 	}
 
