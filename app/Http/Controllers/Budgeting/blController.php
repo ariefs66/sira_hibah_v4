@@ -2084,7 +2084,7 @@ class blController extends Controller
         //     }); 
         // })->where('REKENING_TAHUN',$tahun)->where('REKENING_KUNCI',0)->orderBy('REKENING_KODE')->get();  
         // ->where('REKENING_TAHUN',$tahun)      
-        $data       = Rekening::where('REKENING_KODE','like','5%')->whereRaw('LENGTH("REKENING_KODE") = 11')->where('REKENING_KUNCI',0)->get();
+        $data       = Rekening::where('REKENING_KODE','like','5%')->where('REKENING_TAHUN',$tahun)->whereRaw('LENGTH("REKENING_KODE") = 11')->where('REKENING_KUNCI',0)->get();
         $view       = "";
         foreach($data as $d){
             $view .= "<option value='".$d->REKENING_ID."'>".$d->REKENING_KODE.'-'.$d->REKENING_NAMA."</option>";
