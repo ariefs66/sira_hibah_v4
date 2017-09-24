@@ -17,6 +17,9 @@ class RincianPerubahan extends Model
     public function bl(){
         return $this->belongsTo('App\Model\BLPerubahan', 'BL_ID');
     }
+    public function rincianmurni(){
+        return $this->belongsTo('App\Model\Rincian', 'RINCIAN_ID');
+    }
 	public function rekening(){
         return $this->belongsTo('App\Model\Rekening', 'REKENING_ID');
     }

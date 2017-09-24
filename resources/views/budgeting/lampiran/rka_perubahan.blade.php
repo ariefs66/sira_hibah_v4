@@ -230,7 +230,7 @@
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($totalbl,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totalbl_murni,0,',','.') }},00</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
@@ -244,13 +244,14 @@
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($totalbl,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totalbl_murni,0,',','.') }},00</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalbl,0,',','.') }},00</b></td>
-	</tr>	
+	</tr>
+	<?php $idxmurni=0;?>
 	@foreach($rekening as $r)
 	@if($s != 0)
 	@if($reke[$s-1]->REKENING_KODE != $reke[$s]->REKENING_KODE)
@@ -261,7 +262,7 @@
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totalreke_murni[$s],0,',','.') }},00</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
@@ -277,7 +278,7 @@
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totalreke_murni[$s],0,',','.') }},00</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
@@ -295,7 +296,7 @@
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totalrek_murni[$q],0,',','.') }},00</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
@@ -311,7 +312,7 @@
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totalrek_murni[$q],0,',','.') }},00</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
@@ -328,7 +329,7 @@
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($r->total,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($rekening_murni[$idxmurni]->total,0,',','.') }},00</b></td>
 		<!--END RINCIAN PERHITUNGAN PERUBAHAN -->
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
@@ -336,6 +337,7 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($r->total,0,',','.') }},00</b></td>
 	</tr>
+	<?php $idxmurni++;?>
 	<?php $l=0;?>
 	@foreach($paket[$m] as $p)
 
@@ -353,17 +355,17 @@
 	  @endif
 
 	<!-- RINCIAN PERHITUNGAN MURNI -->  
-	  <td class="border-rincian tengah">{{ $k->RINCIAN_VOLUME }}</td>
+	  <td class="border-rincian tengah">{{ $k->rincianmurni->RINCIAN_VOLUME }}</td>
 	  <td class="border-rincian tengah">{{ $k->komponen->KOMPONEN_SATUAN }}</td>
-	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">{{ number_format($k->rincianmurni->RINCIAN_HARGA,0,',','.') }},00</td>
 
 	  @if($k->RINCIAN_PAJAK == 0)
 	  <td class="border-rincian kanan">0,00</td>
 	  @else
-	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA/10,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">{{ number_format($k->rincianmurni->RINCIAN_HARGA/10,0,',','.') }},00 </td>
 	  @endif
 
-	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">{{ number_format($k->rincianmurni->RINCIAN_TOTAL,0,',','.') }},00 </td>
 	<!--END RINCIAN PERHITUNGAN MURNI -->
 
 
@@ -388,7 +390,7 @@
 	@endforeach
 	<tr class="border">
 		<td class="border kanan" colspan="6"><b>Jumlah</b></td>
-		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td class="border kanan"><b>{{ number_format($total_murni,0,',','.') }},00</b></td>
 		<td class="border kanan" colspan="4"><b>Jumlah</b></td>
 		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
 	</tr>
