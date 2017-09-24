@@ -172,7 +172,7 @@ class lampiranController extends Controller
 
             }    
 
-            $paket_murni      = array();
+            /*$paket_murni      = array();
             $i_murni          = 0;
             $q_murni          = 0;
             $s_murni          = 0;
@@ -183,20 +183,22 @@ class lampiranController extends Controller
             $rek3_murni       = "";
             $totalrek_murni   = "";
             $totalreke_murni  = ""; 
-            foreach($rekening_murni as $r) {
 
-                $rek_murni[$q_murni]     = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,8))->first();
-                $reke[$s]    = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,5))->first();
-                $rek4        = $rek[$q];
-                $rek3        = $reke[$s];    
+            foreach($rekening_murni as $rm) {
 
-                $totalrek[$q]= RincianPerubahan::whereHas('rekening', function($x) use ($rek4){
-                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                $rek_murni[$q_murni]     = Rekening::where('REKENING_KODE',substr($rm->rekening->REKENING_KODE,0,8))->first();
+                $reke_murni[$s_murni]    = Rekening::where('REKENING_KODE',substr($rm->rekening->REKENING_KODE,0,5))->first();
+                $rek4_murni        = $rek_murni[$q_murni];
+                $rek3_murni        = $reke_murni[$s_murni]; 
+  
+                $totalrek_murni[$q_murni]= RincianPerubahan::whereHas('rekening', function($x) use ($rek4){
+                    $x->where('REKENING_KODE','like',$rek4_murni->REKENING_KODE.'%');
                 })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-                $totalreke[$s]= RincianPerubahan::whereHas('rekening', function($x) use ($rek3){
-                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
+
+                $totalreke_murni[$s]= RincianPerubahan::whereHas('rekening', function($x) use ($rek3){
+                    $x->where('REKENING_KODE','like',$rek3_murni->REKENING_KODE.'%');
                 })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-                $paket[$i]   = RincianPerubahan::where('BL_ID',$id)
+                $paket_murni[$i_murni]   = RincianPerubahan::where('BL_ID',$id)
                                             ->where('REKENING_ID',$r->REKENING_ID)
                                             ->groupBy('SUBRINCIAN_ID')
                                             ->groupBy('REKENING_ID')
@@ -206,21 +208,25 @@ class lampiranController extends Controller
                                             ->get();
 
                 $k = 0;
-                foreach($paket[$i] as $p){
-                    $komponen[$i][$k++]    = RincianPerubahan::where('SUBRINCIAN_ID',$p->SUBRINCIAN_ID)
-                                                    ->where('REKENING_ID',$p->REKENING_ID)
+                foreach($paket_murni[$i_murni] as $pm){
+                    $komponen_murni[$i_murni][$k++]    = RincianPerubahan::where('SUBRINCIAN_ID',$pm->SUBRINCIAN_ID)
+                                                    ->where('REKENING_ID',$pm->REKENING_ID)
                                                     ->orderBy('KOMPONEN_ID')
                                                     ->get();
                     }
-                $i++; 
-                $q++; 
-                $s++;    
+                $i_murni++; 
+                $q_murni++; 
+                $s_murni++;    
 
-            }    
+            }    */
 
             $totalBL    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+            $totalBL_murni = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
                                          
-           return View('budgeting.lampiran.rka_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke]);
+           return View('budgeting.lampiran.rka_perubahan',[
+                    'tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke,
+                    /*'bl_murni'=>$bl_murni,'rekening_murni'=>$rekening_murni,'total_murni'=>$total_murni,'paket_murni'=>$paket_murni,'komponen_murni'=>$komponen_murni, 'totalBL_murni'=>$totalBL_murni,'rek_murni'=>$rek_murni,'reke_murni'=>$reke_murni,'totalrek_murni'=>$totalrek_murni,'totalreke_murni'=>$totalreke_murni,*/
+                ]);
         }      
             
     }
