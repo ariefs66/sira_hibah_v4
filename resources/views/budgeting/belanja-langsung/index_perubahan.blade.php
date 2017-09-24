@@ -442,7 +442,7 @@ function setStaff(){
       type  : "get",
       url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/log/"+id,
       success : function (data) {
-          $('#creator').text(data['header']['creator']);
+         // $('#creator').text(data['header']['creator']);
           $('#staff1').text(data['header']['staff1']);
           $('#staff2').text(data['header']['staff2']);
           $('#created').text(data['header']['created']);

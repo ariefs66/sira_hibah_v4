@@ -463,7 +463,7 @@
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
-      <h5>Tambah Komponen</h5>
+      <h5>Tambah / Ubah Komponen</h5>
       <div class="form-group">
         <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
         <div class="col-sm-7">
