@@ -559,7 +559,7 @@ class blController extends Controller
     //ADD
     public function add($tahun,$status){
         $skpd           = $this->getSKPD($tahun);
-        $subunit        = Subunit::where('SKPD_ID',$skpd)->orderBy('SUB_ID')->get();         
+        $subunit        = Subunit::where('SKPD_ID',$skpd)->orderBy('SUB_ID')->get();
         $program        = Progunit::where('SKPD_ID',$skpd)->orderBy('PROGRAM_ID')->get();
         $jenis          = JenisGiat::all();
         $sumber         = SumberDana::all();
@@ -2515,9 +2515,8 @@ class blController extends Controller
         if($status == 'murni') $bl         = BL::where('BL_ID',$id)->first();
         else $bl         = BLPerubahan::where('BL_ID',$id)->first();
 
-            dd($id);
-
-        $creator    = User::where('id',$bl->USER_CREATED)->first();
+        //$bl         = BL::where('BL_ID',$id)->first();    
+       // $creator    = User::where('id',$bl->USER_CREATED)->first();
         $staff      = Staff::whereHas('user', function($q){
                         $q->where('level','1');
                     })->where('BL_ID',$id)->get();
@@ -2557,8 +2556,8 @@ class blController extends Controller
                         </div>
                         <hr>';
         }
-
-        $view             = array('creator'      =>$creator->email.' - '.$creator->name,
+       // dd($creator);
+        $view             = array(//'creator'      =>$creator->email.' - '.$creator->name,
                                  'staff1'        =>$staff1,
                                  'staff2'        =>$staff2,
                                  'created'       =>$bl->TIME_CREATED,
