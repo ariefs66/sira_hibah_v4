@@ -651,11 +651,11 @@ class blController extends Controller
             $kunci->save();
 
         }else{
-            //$get_id      = BLPerubahan::where('BL_TAHUN',$tahun)->max('BL_ID');
+            $get_id      = BLPerubahan::where('BL_TAHUN',$tahun)->max('BL_ID');
 
             $bl         = new BLPerubahan;
             $bl->BL_TAHUN           = $tahun;
-            //$bl->BL_ID              = ($get_id+1);
+            $bl->BL_ID              = ($get_id+1);
             $bl->KEGIATAN_ID        = Input::get('kegiatan');
             $bl->JENIS_ID           = Input::get('jenis-kegiatan');
             $bl->SUMBER_ID          = Input::get('sumber-dana');
@@ -691,7 +691,7 @@ class blController extends Controller
         $log->LOG_DETAIL                        = 'BL#'.$id;
         $log->save();
 
-        return Redirect('main/'.$tahun.'/'.$status.'/belanja-langsung');
+        return Redirect('main/'.$tahun.'/'.$status.'/belanja-langsung')->with('message_title','Success')->with('message','Sukses menambahkan data');
     }
 
     public function submitRincian($tahun,$status){
@@ -2464,10 +2464,13 @@ class blController extends Controller
             // else $rinciansebelum = number_format($rinciansebelum,0,'.',',');
             $realisasi  = Realisasi::where('BL_ID',$data->BL_ID)->sum('REALISASI_TOTAL');
 
+            (empty($datasebelum->BL_PAGU))?$blpagu_sebelum = 0:$blpagu_sebelum=$datasebelum->BL_PAGU;
+
+
             if(empty($realisasi)) $realisasi = 0;
             array_push($view, array( 'NO'             =>$no,
                                      'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
-                                     'PAGU_SEBELUM'           =>number_format($datasebelum->BL_PAGU,0,'.',','),
+                                     'PAGU_SEBELUM'           =>number_format($blpagu_sebelum,0,'.',','),
                                      'RINCIAN_SEBELUM'        =>number_format($realisasi,0,'.',','),
                                      'PAGU_SESUDAH'           =>number_format($data->BL_PAGU,0,'.',','),
                                      'RINCIAN_SESUDAH'        =>$totalRincian,
