@@ -318,11 +318,12 @@ class blController extends Controller
         }else{
             $thp    = 0;
         }
-
-        $data       = RincianPerubahan::where('BL_ID',$id)->get();
-        $data1       = RincianPerubahan::where('BL_ID',$id)->select('RINCIAN_ID')->get()->toArray();
+        $this->tahun=$tahun;
+        $data       = RincianPerubahan::where('BL_ID',$id)->whereHas('bl',function($query){$query->where('BL_TAHUN','=',$this->tahun);})->get();
+        $data1       = RincianPerubahan::where('BL_ID',$id)->whereHas('bl',function($query){$query->where('BL_TAHUN','=',$this->tahun);})->select('RINCIAN_ID')->get()->toArray();
         $data_      = Rincian::where('BL_ID',$id)
                             ->whereNotIn('RINCIAN_ID',$data1)
+                            ->whereHas('bl',function($query){$query->where('BL_TAHUN','=',$this->tahun);})
                             ->get();
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
@@ -332,9 +333,10 @@ class blController extends Controller
         $view       = array();
         $i         = 1;
         $pajak      = '';
+        //print_r($data);exit;
         foreach ($data as $data) {
             if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
-                if($data->REKENING_ID == 0 or empty($data->subrincian)){
+                if($data->REKENING_ID == 0 or empty($data->SUBRINCIAN_ID)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -363,7 +365,7 @@ class blController extends Controller
                 $no        = $checkbox.$no;
 
             }
-            $rinciansebelum     = Rincian::where('RINCIAN_ID',$data->RINCIAN_ID)->first();
+            $rinciansebelum     = Rincian::where('RINCIAN_ID',$data->RINCIAN_ID)->whereHas('bl',function($query){$query->where('BL_TAHUN','=',$this->tahun);})->first();
             if($rinciansebelum){
                 if($rinciansebelum->RINCIAN_PAJAK == 10) $pajaskebelum = '<span class="text-success"><i class="fa fa-check"></i></span>';
                 else $pajaskebelum = '<span class="text-danger"><i class="fa fa-close"></i></span>';
@@ -403,7 +405,7 @@ class blController extends Controller
 
         foreach ($data_ as $data_) {
             if(( $data_->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
-                if($data_->REKENING_ID == 0 or empty($data_->subrincian)){
+                if($data_->REKENING_ID == 0 or empty($data_->SUBRINCIAN_ID)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -1144,20 +1146,39 @@ class blController extends Controller
     }
 
     public function setPaket($tahun,$status){
-        $subrincian     = new Subrincian;
-        $subrincian->BL_ID              = Input::get('BL_ID');
-        $subrincian->SUBRINCIAN_NAMA    = Input::get('SUBRINCIAN_NAMA');
-        $subrincian->USER_CREATED       = Auth::user()->id;
-        $subrincian->TIME_CREATED       = Carbon\Carbon::now();
-        $subrincian->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
-        $subrincian->save();
+        if($status == 'murni'){
+            $subrincian     = new Subrincian;
+            $subrincian->BL_ID              = Input::get('BL_ID');
+            $subrincian->SUBRINCIAN_NAMA    = Input::get('SUBRINCIAN_NAMA');
+            $subrincian->USER_CREATED       = Auth::user()->id;
+            $subrincian->TIME_CREATED       = Carbon\Carbon::now();
+            $subrincian->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+            $subrincian->save();
 
-        $data       = Subrincian::where('BL_ID',Input::get('BL_ID'))->orderBy('SUBRINCIAN_NAMA')->get();
-        $view       = "";
-        foreach($data as $d){
-            $view .= "<option value='".$d->SUBRINCIAN_ID."'>".$d->SUBRINCIAN_NAMA."</option>";
+            $data       = Subrincian::where('BL_ID',Input::get('BL_ID'))->orderBy('SUBRINCIAN_NAMA')->get();
+            $view       = "";
+            foreach($data as $d){
+                $view .= "<option value='".$d->SUBRINCIAN_ID."'>".$d->SUBRINCIAN_NAMA."</option>";
+            }
+            return $view;
         }
-        return $view;
+        else{
+            $subrincian     = new SubrincianPerubahan;
+            $subrincian->BL_ID              = Input::get('BL_ID');
+            $subrincian->SUBRINCIAN_ID      = SubrincianPerubahan::max('BL_ID')+1;
+            $subrincian->SUBRINCIAN_NAMA    = Input::get('SUBRINCIAN_NAMA');
+            $subrincian->USER_CREATED       = Auth::user()->id;
+            $subrincian->TIME_CREATED       = Carbon\Carbon::now();
+            $subrincian->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+            $subrincian->save();
+
+            $data       = SubrincianPerubahan::where('BL_ID',Input::get('BL_ID'))->orderBy('SUBRINCIAN_NAMA')->get();
+            $view       = "";
+            foreach($data as $d){
+                $view .= "<option value='".$d->SUBRINCIAN_ID."'>".$d->SUBRINCIAN_NAMA."</option>";
+            }
+            return $view;
+        }
     }
 
     public function kuncigiat($tahun,$status){
