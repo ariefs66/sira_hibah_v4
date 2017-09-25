@@ -651,8 +651,11 @@ class blController extends Controller
             $kunci->save();
 
         }else{
+            //$get_id      = BLPerubahan::where('BL_TAHUN',$tahun)->max('BL_ID');
+
             $bl         = new BLPerubahan;
             $bl->BL_TAHUN           = $tahun;
+            //$bl->BL_ID              = ($get_id+1);
             $bl->KEGIATAN_ID        = Input::get('kegiatan');
             $bl->JENIS_ID           = Input::get('jenis-kegiatan');
             $bl->SUMBER_ID          = Input::get('sumber-dana');
@@ -1591,6 +1594,7 @@ class blController extends Controller
         $total      = ( $harga * $vol ) + (( Input::get('RINCIAN_PAJAK')*($harga*$vol))/100);
         
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        
         $totalBL    = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
         // $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
         $skpd       = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->first();
@@ -1617,6 +1621,7 @@ class blController extends Controller
                 return 98;
             }                        
         }
+
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);

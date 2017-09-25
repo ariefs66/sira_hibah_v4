@@ -128,6 +128,18 @@
             </div> 
           </div>
 
+           <div class="form-group">
+            <label for="nama_program" class="col-md-3">SKPD </label>          
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="skpd_" >
+                  <option value="0">Silahkan Pilih Program</option>
+                  @foreach($skpd as $skpd)
+                  <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_KODE }} - {{ $skpd->SKPD_NAMA }}</option>
+                  @endforeach
+              </select>  
+            </div> 
+          </div>
+
           <hr class="m-t-xl">
          <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKegiatan()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
       </div>
@@ -268,11 +280,12 @@
   }
 
   function simpanKegiatan(){
+    var skpd       = $('#skpd_').val();
     var program       = $('#program_').val();
     var kegiatan      = $('#nama_kegiatan').val();
     var id_giat       = $('#id_giat').val();
     var token         = $('#token').val();
-    if(kegiatan == "" || program == "0" ){
+    if(kegiatan == "" || program == "0" || skpd == "0"){
       $.alert('Form harap dilengkapi!');
     }else{
       if(id_giat == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/adum/kegiatan/add/submit";
@@ -281,6 +294,7 @@
         url: uri,
         type: "POST",
         data: {'_token'         : token,
+              'skpd'            : skpd, 
               'program'         : program, 
               'tahun'           : '{{$tahun}}', 
               'id_giat'         : id_giat, 

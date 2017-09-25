@@ -14,7 +14,7 @@
 Auth::routes();
 Route::get('/', 'mainController@index');
 // Route::get('/', function(){return View('maintenence');});
-Route::get('/login', function(){return View('maintenence');});
+//Route::get('/login', function(){return View('maintenence');});
 Route::get('/keluar/{id}', 'mainController@keluar');
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('/aktif/{id}', 'mainController@aktifuser');
