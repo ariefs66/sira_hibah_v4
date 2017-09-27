@@ -277,11 +277,15 @@ Route::get('/harga/{tahun}/_/komponen/getData/{kategori}', 'EHarga\komponenContr
 Route::get('/harga/{tahun}/_/komponen/getuser/{komponen}', 'EHarga\komponenController@getuser');
 Route::get('/harga/{tahun}/_/komponen/getrekening/{komponen}', 'EHarga\komponenController@getrekening');
 Route::get('/harga/{tahun}/komponen/getkategori/{jenis}', 'EHarga\komponenController@getKategori');
+Route::get('/harga/{tahun}/komponen/detail/{id}', 'EHarga\komponenController@detail');
+Route::get('/harga/{tahun}/komponen/detail-rekom/{id}', 'EHarga\komponenController@detailrekom');
 Route::post('/harga/{tahun}/komponen/kunci/{kunci}', 'EHarga\komponenController@kunci');
 Route::post('/harga/{tahun}/komponen/hapus', 'EHarga\komponenController@delete');
 Route::post('/harga/{tahun}/komponen/submit', 'EHarga\komponenController@submit');
 Route::post('/harga/{tahun}/komponen/uploadHSPK', 'EHarga\komponenController@uploadHSPK');
 Route::post('/harga/{tahun}/komponen/uploadASB', 'EHarga\komponenController@uploadASB');
+Route::post('/harga/{tahun}/komponen-ubah/submit', 'EHarga\komponenController@submitubah');
+Route::post('/harga/{tahun}/komponen-rekening/submit', 'EHarga\komponenController@submitrekom');
 //MONITOR
 Route::get('/harga/{tahun}/monitor', 'EHarga\monitorUsulanController@index');
 Route::get('/harga/{tahun}/monitor/getData', 'EHarga\monitorUsulanController@getData');
