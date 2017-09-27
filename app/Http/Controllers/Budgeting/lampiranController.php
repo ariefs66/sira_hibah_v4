@@ -360,8 +360,10 @@ class lampiranController extends Controller
     public function ppas($tahun,$status,$id){
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD')->value('TAHAPAN_ID');
         $idSKPD         = SKPD::where('SKPD_ID',$id)->first();
-        if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
-        else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
+
+        if($status == 'murni')  $stat    = BL::where('BL_TAHUN',$tahun);   
+        else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);           
+
         $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
                         })
@@ -369,6 +371,7 @@ class lampiranController extends Controller
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)                        
                         ->get();
+
         /*$blpagu = BL::join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL.SUB_ID') 
                     ->where('REF_SUB_UNIT.SKPD_ID',$id)->where('BL_VALIDASI',1)
                     ->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)
@@ -393,6 +396,7 @@ class lampiranController extends Controller
                             ->get();
         $paguprogram    = array();
         $i              = 0;
+
         foreach($program as $pr){
             if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
             else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
@@ -409,7 +413,12 @@ class lampiranController extends Controller
                                 ->get();
             $i++;
         }
-        return View('budgeting.lampiran.ppas',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+
+        if($status=='murni'){
+            return View('budgeting.lampiran.ppas',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+        }else{
+            return View('budgeting.lampiran.ppas_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+        }
     }
 
     public function ppasRincian($tahun,$status,$id){
@@ -665,7 +674,7 @@ class lampiranController extends Controller
 
     public function ppasProgram($tahun,$status,$tipe){
         if($tipe == 'pagu')
-        $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", SUM("BL_PAGU")
+        $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE", "KEGIATAN_NAMA", SUM("BL_PAGU")
                             from "BUDGETING"."DAT_BL" bl
                             inner JOIN "REFERENSI"."REF_KEGIATAN" keg
                             on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
@@ -678,10 +687,10 @@ class lampiranController extends Controller
                             inner join "REFERENSI"."REF_SKPD" skpd
                             on sub."SKPD_ID" = skpd."SKPD_ID"
                             WHERE "BL_DELETED" = 0 and "BL_TAHUN" = '.$tahun.' and "BL_VALIDASI" = 1
-                            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA"
+                            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE", "KEGIATAN_NAMA",
                             ORDER BY SKPD, "PROGRAM_KODE"');
         elseif($tipe == 'rincian')
-        $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", SUM("RINCIAN_TOTAL")
+        $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE", "KEGIATAN_NAMA", SUM("RINCIAN_TOTAL")
                             from "BUDGETING"."DAT_BL" bl
                             inner JOIN "REFERENSI"."REF_KEGIATAN" keg
                             on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
@@ -696,8 +705,8 @@ class lampiranController extends Controller
                             inner join "BUDGETING"."DAT_RINCIAN" rincian
                             on bl."BL_ID" = rincian."BL_ID"
                             WHERE "BL_DELETED" = 0 and "BL_TAHUN" = '.$tahun.'
-                            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA"
-                            ORDER BY SKPD, "PROGRAM_KODE"');
+                            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_NAMA", "KEGIATAN_KODE"
+                            ORDER BY SKPD, "PROGRAM_KODE" ');
         else
         $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","KEGIATAN_KODE", "KEGIATAN_NAMA",SUM("BL_PAGU") AS "PAGU KEGIATAN"
                             from "BUDGETING"."DAT_BL" bl
@@ -714,6 +723,7 @@ class lampiranController extends Controller
                             WHERE "BL_TAHUN" = '.$tahun.' and "BL_VALIDASI" = 1 and "BL_DELETED" = 0
                             GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE","KEGIATAN_NAMA", bl."BL_ID"
                             ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
+       // dd($data);
         $data = array_map(function ($value) {
             return (array)$value;
         }, $data);
