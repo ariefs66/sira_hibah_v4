@@ -25,8 +25,9 @@
                       <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                         <button class="btn btn-success dropdown-toggle open-form-btl"><i class="fa fa-plus"></i> Tambah</button>
                       </div>
-                    @elseif(Auth::user()->app == 4 and Auth::user()->level == 0)
-                      <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+                    @endif
+                    @if(Auth::user()->app == 4 and Auth::user()->level == 0)
+                      <div class="dropdown dropdown-blend pull-right m-t-n-sm" style="margin-right: 5px">
                         <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Upload Komponen<i class="fa fa-chevron-down"></i>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -183,7 +184,7 @@
   <a class="close"><i class="icon-bdg_cross"></i></a>
   <form class="form-horizontal">
     <div class="input-wrapper">
-      <h5>Tambah Usulan</h5>
+      <h5>Tambah Komponen</h5>
       <div class="form-group">
         <label class="col-sm-3">Jenis Komponen</label>
         <div class="col-sm-9">
@@ -252,6 +253,123 @@
       <hr class="m-t-xl">
       <input type="hidden" id="id-usulan">      
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" id="simpanUsulan"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+    </div>
+  </form>
+</div>
+
+
+<div class="overlay"></div>
+<div class="bg-white wrapper-lg input-sidebar input-ubahkomponen">
+  <a class="close"><i class="icon-bdg_cross"></i></a>
+  <form class="form-horizontal">
+    <div class="input-wrapper">
+      <h5>Ubah Komponen</h5>
+      <div class="form-group">
+        <label class="col-sm-3">Jenis Komponen</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="jeniskomponenedit" required=""></select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Kode</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Kode Komponen" id="komponen-kode-edit" readonly>          
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Komponen</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Nama Komponen" id="komponen-nama-edit" required="">          
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Satuan</label>          
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="satuan-edit" required="">
+            <option value="">Silahkan Pilih Satuan</option>
+            @foreach($satuan as $s)
+            <option value="{{ $s->SATUAN_NAMA }}">{{ $s->SATUAN_NAMA }}</option>
+            @endforeach
+          </select>
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Spesifikasi</label>          
+        <div class="col-sm-9">
+          <textarea class="form-control" placeholder="Masukan Spesifikasi" id="spesifikasi-edit"></textarea>
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Harga</label>          
+        <div class="col-sm-9">
+          <input type="number" class="form-control" placeholder="Masukan Harga" id="harga-edit" required="">  
+        </div> 
+      </div>
+
+      <hr class="m-t-xl">
+      <input type="hidden" id="id-komponen-edit"><input type="hidden" id="tahun-komponen-edit">
+      <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanUbahKomponen()" id="simpanUbahKomponen"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+    </div>
+  </form>
+</div>
+
+<div class="overlay"></div>
+<div class="bg-white wrapper-lg input-sidebar input-rekom">
+  <a class="close"><i class="icon-bdg_cross"></i></a>
+  <form class="form-horizontal">
+    <div class="input-wrapper">
+      <h5>Tambah Rekening Komponen</h5>
+      <div class="form-group">
+        <label class="col-sm-3">Jenis Komponen</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="jeniskomponenrekom" required=""></select>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Kode</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Kode Komponen" id="komponen-kode-rekom" readonly>          
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Komponen</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Nama Komponen" id="komponen-nama-rekom" readonly="">          
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Spesifikasi</label>          
+        <div class="col-sm-9">
+          <textarea class="form-control" placeholder="Masukan Spesifikasi" id="spesifikasi-rekom" readonly=""></textarea>
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Harga</label>          
+        <div class="col-sm-9">
+          <input type="number" class="form-control" placeholder="Masukan Harga" id="harga-rekom" readonly="">  
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3">Rekening</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="rekening-rekom" required="" multiple="">
+            <option value="">Silahkan Pilih Rekening</option>
+            @foreach($rekening as $rek)
+            <option value="{{ $rek->REKENING_ID }}">{{ $rek->REKENING_KODE }} - {{ $rek->REKENING_NAMA }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+      <hr class="m-t-xl">
+      <input type="hidden" id="id-komponen-rekom"><input type="hidden" id="tahun-komponen-rekom">
+      <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanRekom()" id="simpanRekom"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
     </div>
   </form>
 </div>
@@ -392,6 +510,61 @@
     });
   }
 
+  function ubah(id){
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/harga/{{ $tahun }}/komponen/detail/"+id,
+      success : function (data) {
+        console.log(data);
+        id_komponen   = data['KOMPONEN_KODE'].substring(0,1);
+        if(id_komponen==1) jenis_komponen="SSH";
+        else if(id_komponen==2) jenis_komponen="HSPK";
+        else if(id_komponen==3) jenis_komponen="ASB";
+        //alert(jenis_komponen);
+
+        $('#jeniskomponenedit').append('<option value="'+id_komponen+'" selected>'+jenis_komponen+'</option>').trigger('chosen:updated');
+        $('#tahun-komponen-edit').val(data['KOMPONEN_TAHUN']);
+        $('#komponen-kode-edit').val(data['KOMPONEN_KODE']);
+        $('#komponen-nama-edit').val(data['KOMPONEN_NAMA']);
+        $('#satuan-edit').append('<option value="'+data['KOMPONEN_SATUAN']+'" selected>'+data['KOMPONEN_SATUAN']+'</option>').trigger('chosen:updated');
+        $('textarea[id="spesifikasi-edit"]').val(data['KOMPONEN_SPEK']);
+        $('#harga-edit').val(data['KOMPONEN_HARGA']);
+        $('#id-komponen-edit').val(id);
+      }
+    });
+    $('.overlay').fadeIn('fast',function(){
+      $('.input-ubahkomponen').animate({'right':'0'},"linear");  
+      $("html, body").animate({ scrollTop: 0 }, "slow");
+    });
+  }
+
+  function tambahrekening(id){
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/harga/{{ $tahun }}/komponen/detail-rekom/"+id,
+      success : function (data) {
+        console.log(data);
+        id_komponen   = data['KOMPONEN_KODE'].substring(0,1);
+        if(id_komponen==1) jenis_komponen="SSH";
+        else if(id_komponen==2) jenis_komponen="HSPK";
+        else if(id_komponen==3) jenis_komponen="ASB";
+        //alert(jenis_komponen);
+
+        $('#jeniskomponenrekom').append('<option value="'+id_komponen+'" selected>'+jenis_komponen+'</option>').trigger('chosen:updated');
+        $('#tahun-komponen-rekom').val(data['KOMPONEN_TAHUN']);
+        $('#komponen-kode-rekom').val(data['KOMPONEN_KODE']);
+        $('#komponen-nama-rekom').val(data['KOMPONEN_NAMA']);
+        $('textarea[id="spesifikasi-rekom"]').val(data['KOMPONEN_SPEK']);
+        $('#harga-rekom').val(data['KOMPONEN_HARGA']);
+        $('#id-komponen-rekom').val(id);
+      }
+    });
+    $('.overlay').fadeIn('fast',function(){
+      $('.input-rekom').animate({'right':'0'},"linear");  
+      $("html, body").animate({ scrollTop: 0 }, "slow");
+    });
+  }
+
   function simpanKomponen(){
     kategori    = $('#kategori').val();
     komponen    = $('#komponen-nama').val();
@@ -424,6 +597,81 @@
           $('#spesifikasi').val('');
           $('#jeniskomponen').val('');
           $('.input-btl,.input-sidebar').animate({'right':'-1050px'},function(){
+            $('.overlay').fadeOut('fast');
+          });
+        }
+      });
+    }
+  }
+
+  function simpanUbahKomponen(){
+    kodekomponen=$('#komponen-kode-edit').val();
+    komponen    = $('#komponen-nama-edit').val();
+    satuan      = $('#satuan-edit').val();
+    harga       = $('#harga-edit').val();
+    spesifikasi = $('#spesifikasi-edit').val();
+    token       = $('#token').val();
+    idkomponen  = $('#id-komponen-edit').val();
+    tahunkomponen  = $('#tahun-komponen-edit').val();
+    if(komponen == "" || satuan == "" || harga == ""){
+      $.alert('Form harap diisi!');
+    }else{
+      $.ajax({
+        url: "{{ url('/') }}/harga/{{$tahun}}/komponen-ubah/submit",
+        type: "POST",
+        data: {'_token'               : token,
+                'KOMPONEN_KODE'       : kodekomponen, 
+                'KOMPONEN_NAMA'       : komponen, 
+                'KOMPONEN_SPESIFIKASI': spesifikasi, 
+                'KOMPONEN_SATUAN'     : satuan,
+                'KOMPONEN_ID'         : idkomponen,
+                'KOMPONEN_HARGA'      : harga,
+                'KOMPONEN_TAHUN'      : tahunkomponen},
+        success: function(msg){
+          $('#table-komponen').DataTable().ajax.reload();
+          $.alert(msg);
+          $('#komponen-nama-edit').val('');
+          $('#satuan-edit').val('');
+          $('#spesifikasi-edit').val('');
+          $('#harga-edit').val('');
+          $('#jeniskomponenedit').val('');
+          $('#id-komponen-edit').val('');
+          $('#tahun-komponen-edit').val('');
+          $('.input-btl,.input-sidebar,.input-ubahkomponen').animate({'right':'-1050px'},function(){
+            $('.overlay').fadeOut('fast');
+          });
+        }
+      });
+    }
+  }
+
+  function simpanRekom(){
+    kodekomponenrekom=$('#komponen-kode-rekom').val();
+    komponenrekom    = $('#komponen-nama-rekom').val();
+    hargarekom       = $('#harga-rekom').val();
+    spesifikasirekom = $('#spesifikasi-rekom').val();
+    tokenrekom       = $('#token').val();
+    idkomponenrekom  = $('#id-komponen-rekom').val();
+    tahunkomponenrekom  = $('#tahun-komponen-rekom').val();
+    rekeningrekom    = $('#rekening-rekom').val();
+    if(rekeningrekom == "" || rekeningrekom==null){
+      $.alert('Form harap diisi!');
+    }else{
+      $.ajax({
+        url: "{{ url('/') }}/harga/{{$tahun}}/komponen-rekening/submit",
+        type: "POST",
+        data: {'_token'               : tokenrekom,
+                'REKENING_ID'         : rekeningrekom,
+                'KOMPONEN_KODE'       : kodekomponenrekom, 
+                'KOMPONEN_NAMA'       : komponenrekom, 
+                'KOMPONEN_SPESIFIKASI': spesifikasirekom, 
+                'KOMPONEN_ID'         : idkomponenrekom,
+                'KOMPONEN_HARGA'      : hargarekom,
+                'KOMPONEN_TAHUN'      : tahunkomponenrekom},
+        success: function(msg){
+          $('#table-komponen').DataTable().ajax.reload();
+          $.alert(msg);
+          $('.input-btl,.input-sidebar,.input-ubahkomponen,.input-rekom').animate({'right':'-1050px'},function(){
             $('.overlay').fadeOut('fast');
           });
         }
