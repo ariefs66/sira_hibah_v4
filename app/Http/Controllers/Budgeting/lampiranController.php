@@ -516,13 +516,21 @@ class lampiranController extends Controller
                                     });
                                 })->sum('RINCIAN_TOTAL');*/ 
 
-                $pppp[$i]           = Rincian::join('BUDGETING.DAT_BL', 'DAT_BL.BL_ID', '=', 'DAT_RINCIAN.BL_ID')
+                /*$pppp[$i]           = Rincian::join('BUDGETING.DAT_BL', 'DAT_BL.BL_ID', '=', 'DAT_RINCIAN.BL_ID')
                     ->join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL.SUB_ID')
                     ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'DAT_BL.KEGIATAN_ID')
                 ->WHERE('DAT_BL.BL_TAHUN',2018)
                 ->WHERE('REF_SUB_UNIT.SKPD_ID',11)
                 ->where('REF_KEGIATAN.PROGRAM_ID',$pr->PROGRAM_ID)
-                ->sum('RINCIAN_TOTAL');  
+                ->sum('RINCIAN_TOTAL');*/  
+                $pppp[$i] = Rincian::whereHas('bl',function($bl) use($tahun,$id,$idprog){
+                                $bl->where('BL_TAHUN',$tahun)
+                                   ->where('BL_DELETED',0)
+                                   ->where('BL_PAGU','!=',0)
+                                   ->whereHas('kegiatan',function($keg) use($idprog){ $keg->where('PROGRAM_ID',$idprog); })
+                                   ->whereHas('subunit',function($sub) use($id){ $sub->where('SKPD_ID',$id); });
+                            })
+                            ->sum('RINCIAN_TOTAL');
 
                 $j++;
             }
