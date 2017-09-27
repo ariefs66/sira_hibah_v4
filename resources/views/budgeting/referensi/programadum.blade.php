@@ -107,7 +107,7 @@
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
     <form id="form-urusan" class="form-horizontal">
       <div class="input-wrapper">
-        <h5 id="judul-form_">Tambah Kegiatan</h5>
+        <h5 id="judul-form_">Tambah Kegiatan </h5>
           <div class="form-group">
             <label for="kode_urusan" class="col-md-3">Program</label>          
             <div class="col-sm-9">
@@ -134,7 +134,7 @@
               <select ui-jq="chosen" class="w-full" id="skpd_" >
                   <option value="0">Silahkan Pilih Program</option>
                   @foreach($skpd as $skpd)
-                  <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_KODE }} - {{ $skpd->SKPD_NAMA }}</option>
+                  <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_KODE }} - {{ $skpd->SKPD_NAMA }} - {{ $skpd->SKPD_TAHUN }}</option>
                   @endforeach
               </select>  
             </div> 

@@ -451,7 +451,7 @@ class lampiranController extends Controller
                                 ->select('KEGIATAN_ID')
                                 ->where('BL_DELETED',0)
                                 ->where('BL_PAGU','!=',0)                        
-                                ->get()->toArray();
+                                ->get()->toArray();  
 
 
         $program        = Program::whereHas('kegiatan',function($q) use($prog){
@@ -460,6 +460,20 @@ class lampiranController extends Controller
                             ->orderBy('URUSAN_ID')
                             ->orderBy('PROGRAM_KODE')
                             ->get();
+       
+          /*  $pppp          = Rincian::join('BUDGETING.DAT_BL', 'DAT_BL.BL_ID', '=', 'DAT_RINCIAN.BL_ID')
+                    ->join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL.SUB_ID')
+                    ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'DAT_BL.KEGIATAN_ID')
+                    ->join('REFERENSI.REF_PROGRAM', 'REF_PROGRAM.PROGRAM_ID', '=', 'REF_KEGIATAN.PROGRAM_ID')
+                ->WHERE('DAT_BL.BL_TAHUN',2018)
+                ->WHERE('REF_SUB_UNIT.SKPD_ID',11)
+                ->groupBy('PROGRAM_NAMA')
+                ->selectRaw('SUM("BL_PAGU") AS pagu, "PROGRAM_NAMA"')
+                ->get();
+                  
+
+         dd($pppp);*/
+
 
         $paguprogram    = array();
         $i              = 0;
@@ -470,6 +484,7 @@ class lampiranController extends Controller
             if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
             else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
             $idprog            = $pr->PROGRAM_ID;
+
             $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
                                 })->whereHas('subunit',function($x) use ($id){
@@ -492,18 +507,31 @@ class lampiranController extends Controller
                                         $sub->where('SKPD_ID',$id);
                                     });
                                 })->sum('RINCIAN_TOTAL');
-                $pppp[$i]           = Rincian::whereHas('bl',function($bl) use($tahun,$id,$keg,$idprog){
+                /*$pppp[$i]           = Rincian::whereHas('bl',function($bl) use($tahun,$id,$keg,$idprog){
                                     $bl->where('BL_TAHUN',$tahun)
                                        ->whereHas('subunit',function($sub) use($id){
                                         $sub->where('SKPD_ID',$id);
                                     })->whereHas('kegiatan',function($prog) use($idprog){
                                             $prog->where('PROGRAM_ID',$idprog);
                                     });
-                                })->sum('RINCIAN_TOTAL'); 
+                                })->sum('RINCIAN_TOTAL');*/ 
+
+                $pppp[$i]           = Rincian::join('BUDGETING.DAT_BL', 'DAT_BL.BL_ID', '=', 'DAT_RINCIAN.BL_ID')
+                    ->join('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_BL.SUB_ID')
+                    ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'DAT_BL.KEGIATAN_ID')
+                ->WHERE('DAT_BL.BL_TAHUN',2018)
+                ->WHERE('REF_SUB_UNIT.SKPD_ID',11)
+                ->where('REF_KEGIATAN.PROGRAM_ID',$pr->PROGRAM_ID)
+                ->sum('RINCIAN_TOTAL');  
+
                 $j++;
             }
             $i++;
         }
+
+        //dd($idprog);
+
+       // dd($pppp);
 
         return View('budgeting.lampiran.ppas_rincian',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx','ppp'=>$ppp,'pppp'=>$pppp,'j'=>0]);
 
