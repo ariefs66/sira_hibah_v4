@@ -235,9 +235,11 @@ class komponenController extends Controller
                         $reader->limit(10000);
                         $reader->select(array('kode','uraian','koef','satuan','harga','jumlah','rekening'));                        
                     })->get();
+        $komponen = NULL;
         foreach ($data as $data) {
             $len    = strlen($data->kode);
-            if(substr($data->kode, $len-1,1)*1 != 0){
+            //if(substr($data->kode, $len-1,1)*1 != 0){
+            if(substr($data->kode, $len-1,1) != 'A'){
                 $komp       = new Komponen;
                 $komp->KOMPONEN_TAHUN       = $tahun;
                 $komp->KOMPONEN_KODE        = $data->kode;
@@ -250,7 +252,7 @@ class komponenController extends Controller
                 $komponen   = Komponen::where('KOMPONEN_TAHUN',$tahun)
                                         ->where('KOMPONEN_KODE',$data->kode)
                                         ->value('KOMPONEN_ID');
-
+                
                 $rekening   = Rekening::where('REKENING_TAHUN',$tahun)
                                         ->where('REKENING_KODE',$data->rekening)
                                         ->value('REKENING_ID');
