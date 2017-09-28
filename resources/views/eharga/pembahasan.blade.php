@@ -89,7 +89,7 @@
 
   $('#table-pembahasan').on('click','tbody > tr', function(){
       kode = $(this).children('td').eq(0).html();
-      window.open("{{ url('/') }}/harga/{{$tahun}}/usulan/pembahasan/detail/"+kode);
+      //window.open("{{ url('/') }}/harga/{{$tahun}}/usulan/pembahasan/detail/"+kode);
    })
 </script>
 @endsection
