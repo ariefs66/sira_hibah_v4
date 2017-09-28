@@ -275,6 +275,9 @@ Route::post('/harga/{tahun}/usulan/acc', 'EHarga\usulanController@acc');
 Route::post('/harga/{tahun}/usulan/grouping', 'EHarga\usulanController@grouping');
 Route::post('/harga/{tahun}/usulan/hapus', 'EHarga\usulanController@delete');
 Route::post('/harga/{tahun}/usulan/cancel', 'EHarga\usulanController@cancel');
+Route::post('/harga/{tahun}/usulan/pembahasan/accept', 'EHarga\pembahasanController@acceptpembahasan');
+Route::post('/harga/{tahun}/usulan/pembahasan/decline', 'EHarga\pembahasanController@rejectpembahasan');
+
 //KOMPONEN
 Route::get('/harga/{tahun}/komponen', 'EHarga\komponenController@index');
 Route::get('/harga/{tahun}/_/komponen/getData/{kategori}', 'EHarga\komponenController@getReferensi');
