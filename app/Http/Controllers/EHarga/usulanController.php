@@ -564,7 +564,8 @@ class usulanController extends Controller
                 $rekom->REKOM_TAHUN         = $tahun;
                 $rekom->REKENING_ID         = $getKode->REKENING_ID;
                 $rekom->KOMPONEN_ID         = $idKomponen;
-                $rekom->save();                
+                $rekom->save();
+                UsulanKomponen::where('USULAN_ID',$id)->update(['KOMPONEN_ID'=>$idKomponen,'KOMPONEN_KODE'=>$getKode->katkom->KATEGORI_KODE.".".$kode]);
             }elseif($getKode->USULAN_TYPE == 2){
                 Komponen::where('KOMPONEN_ID',$getKode->KOMPONEN_ID)->update(['KOMPONEN_HARGA'=>$getKode->USULAN_HARGA]);
             }elseif($getKode->USULAN_TYPE == 3){
@@ -723,12 +724,68 @@ class usulanController extends Controller
     }
 
     public function acc(){
-        if(substr(Auth::user()->mod,4,1)==1) $posisi = 3;
-        elseif(substr(Auth::user()->mod, 5,1)==1) $posisi = 6;
-        elseif(substr(Auth::user()->mod, 6,1)==1) $posisi = 7;
-        elseif(substr(Auth::user()->mod, 0,1)==1) $posisi = 5;
-        elseif(Auth::user()->level == 2) $posisi = 4;
-        UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_POSISI'=>$posisi]);
+        if(substr(Auth::user()->mod,4,1)==1){
+            $getKode    = UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->first();
+            if($getKode->USULAN_POSISI!=7){
+                $posisi = 3;
+                UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_POSISI'=>$posisi]);
+            }
+            elseif($getKode->USULAN_POSISI==7){
+                if($getKode->USULAN_TYPE == 1){
+                    $getkode    = Komponen::whereRaw('"KOMPONEN_KODE" LIKE \''.$getKode->katkom->KATEGORI_KODE.'%\'')
+                                            ->orderBy('KOMPONEN_KODE','DESC')
+                                            ->value('KOMPONEN_KODE');
+                    $kode_      = substr($getkode, 18,3)+1;
+                    if($kode_ < 10) $kode = "00".$kode_;
+                    elseif($kode_ <100) $kode = "0".$kode_;
+                    else $kode = $kode_;
+                    //print_r($getKode->katkom->KATEGORI_KODE.".".$kode);exit;
+                    UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_POSISI'=>8,'USULAN_STATUS'=>1]);
+                    //$posisi = 8;
+                    $komponen = new Komponen;
+                    $komponen->KOMPONEN_TAHUN       = $getKode->USULAN_TAHUN;
+                    $komponen->KOMPONEN_KODE        = $getKode->katkom->KATEGORI_KODE.".".$kode;
+                    $komponen->KOMPONEN_NAMA        = $getKode->USULAN_NAMA;
+                    $komponen->KOMPONEN_SPESIFIKASI = $getKode->USULAN_SPESIFIKASI;
+                    $komponen->KOMPONEN_HARGA       = $getKode->USULAN_HARGA;
+                    $komponen->KOMPONEN_SATUAN      = $getKode->USULAN_SATUAN;
+                    $komponen->save();
+
+                    $idKomponen     = Komponen::where('KOMPONEN_KODE',$getKode->katkom->KATEGORI_KODE.".".$kode)->value('KOMPONEN_ID');
+                    $rekom          = new Rekom;
+                    $rekom->REKOM_TAHUN         = $getKode->USULAN_TAHUN;
+                    $rekom->REKENING_ID         = $getKode->REKENING_ID;
+                    $rekom->KOMPONEN_ID         = $idKomponen;
+                    $rekom->save();
+                    UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['KOMPONEN_ID'=>$idKomponen,'KOMPONEN_KODE'=>$getKode->katkom->KATEGORI_KODE.".".$kode]);
+                }elseif($getKode->USULAN_TYPE == 2){
+                    Komponen::where('KOMPONEN_ID',$getKode->KOMPONEN_ID)->update(['KOMPONEN_HARGA'=>$getKode->USULAN_HARGA]);
+                }elseif($getKode->USULAN_TYPE == 3){
+                    $rekom  = new Rekom;
+                    $rekom->REKOM_TAHUN     = $getKode->USULAN_TAHUN;
+                    $rekom->KOMPONEN_ID     = $getKode->KOMPONEN_ID;
+                    $rekom->REKENING_ID     = $getKode->REKENING_ID;
+                    $rekom->save();
+                }
+            }
+        }
+        elseif(substr(Auth::user()->mod, 5,1)==1){
+            $posisi = 6;
+            UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_POSISI'=>$posisi]);
+        }
+        elseif(substr(Auth::user()->mod, 6,1)==1){
+            $posisi = 7;
+            UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_POSISI'=>$posisi]);
+        }
+        elseif(substr(Auth::user()->mod, 0,1)==1){
+            $posisi = 5;
+            UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_POSISI'=>$posisi]);
+        }
+        elseif(Auth::user()->level == 2){
+            $posisi = 4;
+            UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_POSISI'=>$posisi]);
+        }
+        //UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_POSISI'=>$posisi]);
         return 'Berhasil!';
     }
     public function grouping(){
