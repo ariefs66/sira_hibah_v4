@@ -128,15 +128,14 @@
             </div> 
           </div>
 
-           <div class="form-group">
-            <label for="nama_program" class="col-md-3">SKPD </label>          
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Perangkat Daerah</label>          
             <div class="col-sm-9">
-              <select ui-jq="chosen" class="w-full" id="skpd_" >
-                  <option value="0">Silahkan Pilih Program</option>
-                  @foreach($skpd as $skpd)
-                  <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_KODE }} - {{ $skpd->SKPD_NAMA }} - {{ $skpd->SKPD_TAHUN }}</option>
-                  @endforeach
-              </select>  
+              <select ui-jq="chosen" class="w-full" id="skpd_" name="skpd_" multiple="">
+                @foreach($skpd as $s)
+                  <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }} - {{ $s->SKPD_TAHUN }}</option>
+                @endforeach
+              </select>
             </div> 
           </div>
 
@@ -285,6 +284,7 @@
     var kegiatan      = $('#nama_kegiatan').val();
     var id_giat       = $('#id_giat').val();
     var token         = $('#token').val();
+    console.log(skpd);
     if(kegiatan == "" || program == "0" || skpd == "0"){
       $.alert('Form harap dilengkapi!');
     }else{

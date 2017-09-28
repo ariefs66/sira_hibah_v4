@@ -76,7 +76,11 @@ class mainController extends Controller
 					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
 				}
 
+<<<<<<< HEAD
 			 //}
+=======
+			// }
+>>>>>>> 5515d45b98e0ce8f391945b22c2880a092867b8b
 		}
 		return $view;
 	}
