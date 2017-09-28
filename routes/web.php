@@ -257,6 +257,10 @@ Route::get('/harga/{tahun}/usulan/getSuggest_/{id}', 'EHarga\usulanController@ge
 Route::get('/harga/{tahun}/usulan/getUbah/{id}', 'EHarga\usulanController@getUbah');
 Route::get('/harga/{tahun}/usulan/surat', 'EHarga\usulanController@showSurat');
 Route::get('/harga/{tahun}/usulan/getSurat', 'EHarga\usulanController@getDataSurat');
+Route::get('/harga/{tahun}/usulan/pembahasan', 'EHarga\pembahasanController@index');
+Route::get('/harga/{tahun}/usulan/pembahasan/getdata', 'EHarga\pembahasanController@getdata');
+Route::get('/harga/{tahun}/usulan/pembahasan/detail/{id}', 'EHarga\pembahasanController@detail');
+
 Route::post('/harga/{tahun}/usulan/submitUsulan', 'EHarga\usulanController@submitUsulan');
 Route::post('/harga/{tahun}/usulan/submitUsulanUbah', 'EHarga\usulanController@submitUsulanUbah');
 Route::post('/harga/{tahun}/usulan/submitTambahRekening', 'EHarga\usulanController@submitTambahRekening');

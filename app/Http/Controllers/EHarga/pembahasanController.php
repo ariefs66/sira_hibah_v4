@@ -82,8 +82,14 @@ class pembahasanController extends Controller
             elseif($data->USULAN_POSISI == 7)$posisi    = 'Posting';
             elseif($data->USULAN_POSISI == 8)$posisi    = 'Ebudgeting';
             elseif($data->USULAN_POSISI == 9)$posisi    = 'Pembahasan';
-            $pd     = UserBudget::where('USER_ID',$data->USER_CREATED)->first();            
-            array_push($view, array( 'NO'       =>$i,
+            $pd     = UserBudget::where('USER_ID',$data->USER_CREATED)->first();
+
+            if(Auth::user()->level == 0){
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="javascript:;"><i class="fa fa-check"></i> Terima</a></li><li><a href="javascript:;"><i class="fa fa-close"></i> Tolak</a></li>';
+                $no     .= '</ul></div>';
+            }
+            
+            array_push($view, array( 'NO'       =>$i."<br/>".$no,
                                      'PD'       =>$pd->skpd->SKPD_NAMA,
                                      'ID'       =>$data->USULAN_ID,
                                      'NAMA'     =>'<span class="text-success">'.$data->USULAN_NAMA." ".$dd."</span><br>".
