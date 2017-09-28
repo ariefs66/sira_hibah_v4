@@ -85,7 +85,8 @@ class kegiatanControllerAdum extends Controller
 
                 $prog_unit             = new Progunit;
                 $prog_unit->PROGRAM_ID = $p->PROGRAM_ID;
-                $prog_unit->SKPD_ID    = Input::get('skpd');
+                //$prog_unit->SKPD_ID    = Input::get('skpd');
+                $prog_unit->SKPD_ID    = $s;
                 $prog_unit->save();
             }
 
