@@ -49,6 +49,7 @@ class pembahasanController extends Controller
     public function getdata($tahun){
         $data   = UsulanKomponen::where('USULAN_TAHUN',$tahun)
                                 ->where('USULAN_POSISI',9)
+                                ->where('USULAN_STATUS',0)
                                 ->whereHas('katkom',function($q){
                                     $q->where('KATEGORI_KODE','like','2%')->orwhere('KATEGORI_KODE','like','3%');
                                 })->orderBy('USULAN_ID')->get();
@@ -85,7 +86,7 @@ class pembahasanController extends Controller
             $pd     = UserBudget::where('USER_ID',$data->USER_CREATED)->first();
 
             if(Auth::user()->level == 0){
-                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="javascript:;"><i class="fa fa-check"></i> Terima</a></li><li><a href="javascript:;"><i class="fa fa-close"></i> Tolak</a></li>';
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="javascript:;" onclick="return acceptpembahasan('.$data->USULAN_ID.')"><i class="fa fa-check"></i> Terima</a></li><li><a href="javascript:;" onclick="return rejectpembahasan('.$data->USULAN_ID.')"><i class="fa fa-close"></i> Tolak</a></li>';
                 $no     .= '</ul></div>';
             }
             
@@ -103,6 +104,16 @@ class pembahasanController extends Controller
         }
         $out = array("aaData"=>$view);      
         return Response::JSON($out);
+    }
+
+    public function acceptpembahasan($tahun){
+        UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_STATUS'=>'1']);
+        return 'Berhasil Diterima';
+    }
+
+    public function rejectpembahasan($tahun){
+        UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->update(['USULAN_STATUS'=>'2']);
+        return 'Berhasil Ditolak!';
     }
 
     public function uploadHSPK($tahun){
