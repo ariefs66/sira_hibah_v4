@@ -79,10 +79,19 @@ class monitorUsulanController extends Controller
                                     ->where('USULAN_TAHUN',$tahun)
                                     ->orderBy('USULAN_ID')->get();
         }elseif(substr(Auth::user()->mod,4,1) == 1){
-            $data   = UsulanKomponen::where('USER_POST',Auth::user()->id) 
+            /*$data   = UsulanKomponen::where('USER_POST',Auth::user()->id) 
+                                    ->where('USULAN_TAHUN',$tahun)                                               
+                                    ->orderBy('USULAN_ID')
+                                    ->get();*/
+            if(Auth::user()->level == 1){
+                $data   = UsulanKomponen::where('USER_POST',Auth::user()->id) 
                                     ->where('USULAN_TAHUN',$tahun)                                               
                                     ->orderBy('USULAN_ID')
                                     ->get();
+            }
+            elseif(Auth::user()->level == 0){
+                $data   = UsulanKomponen::where('USULAN_TAHUN',$tahun)->orderBy('USULAN_ID')->get();
+            }
         }else{
             $data   = UsulanKomponen::where('USULAN_TAHUN',$tahun)->orderBy('USULAN_ID')->get();
         }
