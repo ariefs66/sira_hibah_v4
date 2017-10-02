@@ -70,6 +70,7 @@ return [
             'driver' => 'pgsql',
             // 'host' => '128.199.82.1',
             'host' => '192.168.56.107',
+	    //'host' => 'apbd.bandung.go.id',
             'port' => '5432',
             // 'port' => '5454',
             'database' => 'db_budgeting_2018',
