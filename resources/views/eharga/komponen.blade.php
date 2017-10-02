@@ -483,6 +483,40 @@
     $('#modal').modal('show');
   }
 
+  $('a.close').click(function(){
+    /*
+      $('select#urusan').val('0').trigger("chosen:updated");
+      $('select#skpd').val('').trigger("chosen:updated");
+      $('select#skpd_').val('').trigger("chosen:updated");
+      $('#nama_program').val('');
+      $('#id_program').val('');
+      */
+      $('#kategori').val('');
+      $('#komponen-nama').val('');
+      $('#satuan').val('');
+      $('#spesifikasi').val('');
+      $('#jeniskomponen').val('').trigger('chosen:updated');
+      $('#jeniskomponenedit').val('').trigger('chosen:updated');
+      $('#tahun-komponen-edit').val('');
+      $('#komponen-kode-edit').val('');
+      $('#komponen-nama-edit').val('');
+      $('#satuan-edit').val('').trigger('chosen:updated');
+      $('textarea[id="spesifikasi-edit"]').val('');
+      $('#harga-edit').val('');
+      $('#id-komponen-edit').val('');
+      $('#jeniskomponenrekom').val('').trigger('chosen:updated');
+      $('#tahun-komponen-rekom').val('');
+      $('#komponen-kode-rekom').val('');
+      $('#komponen-nama-rekom').val('');
+      $('textarea[id="spesifikasi-rekom"]').val('');
+      $('#harga-rekom').val('');
+      $('#id-komponen-rekom').val('');
+      $('#rekening-rekom').val('').trigger('chosen:updated');
+      $('.input-btl,.input-sidebar,.input-ubahkomponen,.input-rekom').animate({'right':'-1050px'},function(){
+        $('.overlay').fadeOut('fast');
+      });
+  });
+
   function hapus(id){
     var token        = $('#token').val();    
     $.confirm({
@@ -671,6 +705,7 @@
         success: function(msg){
           $('#table-komponen').DataTable().ajax.reload();
           $.alert(msg);
+          $('#rekening-rekom').val('').trigger('chosen:updated');
           $('.input-btl,.input-sidebar,.input-ubahkomponen,.input-rekom').animate({'right':'-1050px'},function(){
             $('.overlay').fadeOut('fast');
           });
