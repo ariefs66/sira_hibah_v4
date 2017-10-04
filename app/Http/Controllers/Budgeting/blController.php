@@ -1165,7 +1165,7 @@ class blController extends Controller
         else{
             $subrincian     = new SubrincianPerubahan;
             $subrincian->BL_ID              = Input::get('BL_ID');
-            $subrincian->SUBRINCIAN_ID      = SubrincianPerubahan::max('BL_ID')+1;
+            $subrincian->SUBRINCIAN_ID      = SubrincianPerubahan::max('SUBRINCIAN_ID')+1;
             $subrincian->SUBRINCIAN_NAMA    = Input::get('SUBRINCIAN_NAMA');
             $subrincian->USER_CREATED       = Auth::user()->id;
             $subrincian->TIME_CREATED       = Carbon\Carbon::now();
