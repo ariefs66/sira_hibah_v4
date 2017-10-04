@@ -1076,6 +1076,7 @@
   function simpanPaket(){
     token  = $('#token').val();
     paket  = $('#paket-nama').val();
+    
     $.ajax({
         url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanpaket",
         type: "POST",
