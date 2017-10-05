@@ -139,18 +139,26 @@
 <table class="indikator">
 	<tbody>
 	<tr>
-		<td colspan="3"><h4>Indikator dan Tolak Ukur Kinerja Belanja Langsung</h4></td>
+		<td colspan="5"><h4>Indikator dan Tolok Ukur Kinerja Belanja Langsung</h4></td>
 	</tr>
 	<tr class="headrincian">
-		<td width="15%">Indikator</td>
-		<td width="50%">Tolak Ukur Kinerja</td>
-		<td width="35%">Target Kinerja</td>
+		<td width="15%" rowspan="2">Indikator</td>
+		<td width="50%" colspan="2">Tolok Ukur Kinerja</td>
+		<td width="35%" colspan="2">Target Kinerja</td>
 	</tr>
+	<tr>
+		<td>Sebelum Perubahan</td>
+		<td>Setelah Perubahan</td>
+		<td>Sebelum Perubahan</td>
+		<td>Setelah Perubahan</td>
+	</tr>	
 	@if($bl->kegiatan->program->outcome)
 	@foreach($bl->kegiatan->program->outcome as $oc)
 	<tr>
 		<td>Capaian Program</td>
 		<td>{{ $oc->OUTCOME_TOLAK_UKUR }}</td>
+		<td>{{ $oc->OUTCOME_TOLAK_UKUR }}</td>
+		<td>{{ $oc->OUTCOME_TARGET }} {{ $oc->satuan->SATUAN_NAMA }}</td>
 		<td>{{ $oc->OUTCOME_TARGET }} {{ $oc->satuan->SATUAN_NAMA }}</td>
 	</tr>
 	@endforeach
@@ -158,6 +166,8 @@
 	<tr>
 		<td>Masukan</td>
 		<td>Dana yang dibutuhkan</td>
+		<td>-</td>
+		<td>Rp. {{ number_format($bl->BL_PAGU,0,',','.') }},00</td>
 		<td>Rp. {{ number_format($bl->BL_PAGU,0,',','.') }},00</td>
 	</tr>
 	@if($bl->output)
@@ -165,6 +175,8 @@
 	<tr>
 		<td>Keluaran</td>
 		<td>{{ $out->OUTPUT_TOLAK_UKUR }}</td>
+		<td>{{ $out->OUTPUT_TOLAK_UKUR }}</td>
+		<td>{{ $out->OUTPUT_TARGET }} {{ $out->satuan->SATUAN_NAMA }}</td>
 		<td>{{ $out->OUTPUT_TARGET }} {{ $out->satuan->SATUAN_NAMA }}</td>
 	</tr>
 	@endforeach	
@@ -174,22 +186,31 @@
 	<tr>
 		<td>Hasil</td>
 		<td>{{ $im->IMPACT_TOLAK_UKUR }}</td>
+		<td>{{ $im->IMPACT_TOLAK_UKUR }}</td>
+		<td>{{ $im->IMPACT_TARGET }} {{ $im->satuan->SATUAN_NAMA }}</td>
 		<td>{{ $im->IMPACT_TARGET }} {{ $im->satuan->SATUAN_NAMA }}</td>
 	</tr>
 	@endforeach	
 	@endif
-	</tbody>	
+	</tbody>
+	<tr>
+		<td>Jumlah Dana</td>
+		<td>Jumlah Dana</td>
+		<td>Jumlah Dana</td>
+		<td>Rp.</td>
+		<td>Rp.</td>
+	</tr>	
 </table>
 <table>
 	<tr class="border">
-		<td width="30%">Kelompok Sasaran Kegiatan</td>
+		<td width="25%">Kelompok Sasaran Kegiatan</td>
 		<td> : {{ $bl->sasaran->SASARAN_NAMA }}</td>
 	</tr>
 </table>
 <table class="rincian">
 	<tbody>
 	<tr class="border">
-		<td colspan="10"><h4>Rincian Anggaran Belanja Langsung<br>Menurut Program dan Per Kegiatan Satuan Kerja Perangkat Daerah</h4></td>
+		<td colspan="14"><h4>Rincian Anggaran Belanja Langsung<br>Menurut Program dan Per Kegiatan Satuan Kerja Perangkat Daerah</h4></td>
 	</tr>
 	<tr class="border headrincian">
 		<td class="border" rowspan="2">Kode Rekening</td>
@@ -198,6 +219,7 @@
 		<td class="border" rowspan="2">Jumlah Murni<br>(Rp)</td>
 		<td class="border" colspan="4">Rincian Perhitungan Perubahan</td>
 		<td class="border" rowspan="2">Jumlah Perubahan<br>(Rp)</td>
+		<td class="border" colspan="2">Bertambah / (Berkurang)</td>
 	</tr>	
 	<tr class="border headrincian">
 		<td class="border">Volume</td>
@@ -208,6 +230,8 @@
 		<td class="border">Satuan</td>
 		<td class="border">Harga Satuan</td>
 		<td class="border">PPN</td>
+		<td class="border">(Rp)</td>
+		<td class="border">%</td>
 	</tr>	
 	<tr class="border headrincian">
 		<td class="border" width="8%">1</td>
@@ -222,6 +246,9 @@
 		<td class="border">10</td>
 		<td class="border">11</td>
 		<td class="border">12 = (8 x 10) + (8 x 11)</td>
+        <td class="border">13</td>
+		<td class="border">14</td>
+
 	</tr>
 	<tr>
 		<td class="border-rincian kiri"><b>5</b></td>
@@ -236,6 +263,9 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalbl,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>-,00</b></td>
+		<td>%</td>
+	</tr>
 	</tr>	
 	<tr>
 		<td class="border-rincian kiri"><b>5.2</b></td>
@@ -250,6 +280,8 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalbl,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>-,00</b></td>
+		<td>%</td>
 	</tr>
 	<?php $idxmurni=0;?>
 	@foreach($rekening as $r)
@@ -268,6 +300,8 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>-,00</b></td>
+		<td>%</td>
 	</tr>
 	@endif
 	@else
@@ -284,6 +318,8 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>-,00</b></td>
+		<td>%</td>
 	</tr>
 	@endif
 
@@ -302,6 +338,8 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>-,00</b></td>
+		<td>%</td>
 	</tr>
 	@endif
 	@else
@@ -318,6 +356,8 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>-,00</b></td>
+		<td>%</td>
 	</tr>
 	@endif
 	<?php $q++;$s++;?>
@@ -336,6 +376,8 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($r->total,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>-,00</b></td>
+		<td>%</td>
 	</tr>
 	<?php $idxmurni++;?>
 	<?php $l=0;?>
@@ -380,6 +422,8 @@
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA/10,0,',','.') }},00 </td>
 	  @endif
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">-,00 </td>
+	  <td>%</td>	
 	<!--END RINCIAN PERHITUNGAN PERUBAHAN -->
 	  
 
@@ -393,6 +437,8 @@
 		<td class="border kanan"><b>{{ number_format($total_murni,0,',','.') }},00</b></td>
 		<td class="border kanan" colspan="4"><b>Jumlah</b></td>
 		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td>Rp.</td>
+		<td>%</td>
 	</tr>
 	</tbody>	
 </table>
