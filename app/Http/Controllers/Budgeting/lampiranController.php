@@ -222,17 +222,8 @@ class lampiranController extends Controller
 
 
             }    
-
-            
             
             $totalBL    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-
-            /*$totalBL_murni = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-                                         
-           return View('budgeting.lampiran.rka_perubahan',[
-                    'tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke,
-                    'bl_murni'=>$bl_murni,'rekening_murni'=>$rekening_murni,'total_murni'=>$total_murni,'paket_murni'=>$paket_murni,'komponen_murni'=>$komponen_murni, 'totalBL_murni'=>$totalBL_murni,'rek_murni'=>$rek_murni,'reke_murni'=>$reke_murni,'totalrek_murni'=>$totalrek_murni,'totalreke_murni'=>$totalreke_murni,
-                ]);*/
 
             $totalBLMurni = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
                                          

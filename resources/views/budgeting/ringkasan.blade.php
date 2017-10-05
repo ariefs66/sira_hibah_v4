@@ -41,14 +41,14 @@
                           <tr>
                             <td><b>1</b></td>
                             <td><b>PENDAPATAN</b></td>
-                            <td class="text-right"><b>Rp. 6.503.784.682.502</b></td>
+                            <td class="text-right"><b>Rp. 6.345.835.314.502</b></td>
                             <td class="text-right"><b>Rp. {{ number_format($pd,0,',','.') }}</b></td>
                             <td class="text-right"><b>Rp. {{ number_format($pd,0,',','.') }}</b></td>
                           </tr>
                           <tr>  
                             <td><b>1.1</b></td>
                             <td><b>PENDAPATAN ASLI DAERAH</b></td>
-                            <td class="text-right"><b>Rp. 3.065.143.012.234</b></td>
+                            <td class="text-right"><b>Rp. 3.066.682.007.234</b></td>
                             <td class="text-right"><b>Rp. {{ number_format($pd1,0,',','.') }}</b></td>
                             <td class="text-right"><b>Rp. {{ number_format($pd1,0,',','.') }}</b></td>
                           </tr>
@@ -76,28 +76,28 @@
                           <tr>  
                             <td>1.1.4</td>
                             <td>Lain-lain Pendapatan Asli Daerah yang Sah </td>
-                            <td class="text-right">Rp. 382.367.849.329</td>
+                            <td class="text-right">Rp. 383.906.844.329</td>
                             <td class="text-right">Rp. {{ number_format($pd14,0,',','.') }}</td>
                             <td class="text-right">Rp. {{ number_format($pd14,0,',','.') }}</td>
                           </tr>                              
                           <tr>  
                             <td><b>1.2</b></td>
                             <td><b>DANA PERIMBANGAN</b></td>
-                            <td class="text-right"><b>Rp. 2.592.216.225.000</b></td>
+                            <td class="text-right"><b>Rp. 2.416.217.862.000</b></td>
                             <td class="text-right"><b>Rp. {{ number_format($pd2,0,',','.') }}</b></td>
                             <td class="text-right"><b>Rp. {{ number_format($pd2,0,',','.') }}</b></td>
                           </tr>
                           <tr>  
                             <td>1.2.1</td>
                             <td>Bagi Hasil Pajak/Bagi Hasil Bukan Pajak </td>
-                            <td class="text-right">Rp. 344.482.401.000</td>
+                            <td class="text-right">Rp. 349.274.758.000</td>
                             <td class="text-right">Rp. {{ number_format($pd21,0,',','.') }}</td>
                             <td class="text-right">Rp. {{ number_format($pd21,0,',','.') }}</td>
                           </tr>                              
                           <tr>  
                             <td>1.2.2</td>
                             <td>Dana Alokasi Umum</td>
-                            <td class="text-right">Rp. 1.823.867.625.000</td>
+                            <td class="text-right">Rp. 1.643.076.905.000</td>
                             <td class="text-right">Rp. {{ number_format($pd22,0,',','.') }}</td>
                             <td class="text-right">Rp. {{ number_format($pd22,0,',','.') }}</td>
                           </tr>                              
@@ -111,14 +111,14 @@
                           <tr>  
                             <td><b>1.3</b></td>
                             <td><b>LAIN-LAIN PENDAPATAN DAERAH YANG SAH</b></td>
-                            <td class="text-right"><b>Rp. 846.425.445.268</b></td>
+                            <td class="text-right"><b>Rp. 862.935.445.268</b></td>
                             <td class="text-right"><b>Rp. {{ number_format($pd3,0,',','.') }}</b></td>
                             <td class="text-right"><b>Rp. {{ number_format($pd3,0,',','.') }}</b></td>
                           </tr>
                           <tr>  
                             <td>1.3.1</td>
                             <td>Pendapatan Hibah</td>
-                            <td class="text-right">Rp. 10.000.000.000</td>
+                            <td class="text-right">Rp. 26.510.000.000</td>
                             <td class="text-right">Rp. {{ number_format($pd31,0,',','.') }}</td>
                             <td class="text-right">Rp. {{ number_format($pd31,0,',','.') }}</td>
                           </tr>                              
