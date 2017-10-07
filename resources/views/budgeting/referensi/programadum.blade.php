@@ -107,7 +107,7 @@
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
     <form id="form-urusan" class="form-horizontal">
       <div class="input-wrapper">
-        <h5 id="judul-form_">Tambah Kegiatan</h5>
+        <h5 id="judul-form_">Tambah Kegiatan </h5>
           <div class="form-group">
             <label for="kode_urusan" class="col-md-3">Program</label>          
             <div class="col-sm-9">
@@ -125,6 +125,17 @@
             <div class="col-sm-9">
               <input type="text" class="form-control" placeholder="Masukan Nama Kegiatan" name="nama_kegiatan" id="nama_kegiatan" value=""> 
               <input type="hidden" class="form-control" id="id_giat" value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Perangkat Daerah</label>          
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="skpd_" name="skpd_" multiple="">
+                @foreach($skpd as $s)
+                  <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }} - {{ $s->SKPD_TAHUN }}</option>
+                @endforeach
+              </select>
             </div> 
           </div>
 
@@ -268,11 +279,13 @@
   }
 
   function simpanKegiatan(){
+    var skpd       = $('#skpd_').val();
     var program       = $('#program_').val();
     var kegiatan      = $('#nama_kegiatan').val();
     var id_giat       = $('#id_giat').val();
     var token         = $('#token').val();
-    if(kegiatan == "" || program == "0" ){
+    console.log(skpd);
+    if(kegiatan == "" || program == "0" || skpd == "0"){
       $.alert('Form harap dilengkapi!');
     }else{
       if(id_giat == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/adum/kegiatan/add/submit";
@@ -281,6 +294,7 @@
         url: uri,
         type: "POST",
         data: {'_token'         : token,
+              'skpd'            : skpd, 
               'program'         : program, 
               'tahun'           : '{{$tahun}}', 
               'id_giat'         : id_giat, 

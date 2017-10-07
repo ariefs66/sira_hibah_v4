@@ -67,7 +67,8 @@ class staffController extends Controller
     		$adminsisdur 	= substr($data->user->mod, 8,1);
     		$adminsimda 	= substr($data->user->mod, 9,1);
             array_push($view, array( 'USER_ID'		=>$data->USER_ID,
-            						 'USER_NIP'		=>$data->user->email,
+                                     'USER_NIP'     =>$data->user->email,
+            						 'TAHUN'		=>$data->skpd->SKPD_TAHUN,
             						 'NO'			=>$i,
             						 'tapd'			=>$tapd,
             						 'ppkd'			=>$ppkd,

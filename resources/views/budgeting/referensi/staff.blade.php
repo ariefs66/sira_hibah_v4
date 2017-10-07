@@ -41,6 +41,7 @@
                                       aoColumns: [
                                       { mData: 'USER_ID',class:'hide'}, 
                                       { mData: 'NO'},
+                                      { mData: 'TAHUN'},
                                       { mData: 'skpd'},
                                       { mData: 'USER_NIP'},
                                       { mData: 'USER_NAMA'},
@@ -50,6 +51,7 @@
                                       <tr>
                                         <th class="hide"></th>
                                         <th width="1%">No</th>
+                                        <th width="1%">TAHUN</th>
                                         <th width="1%">OPD</th>
                                         <th>NIP</th>
                                         <th>Nama</th>
@@ -57,7 +59,7 @@
                                       </tr>
                                       <tr>
                                         <th class="hide"></th>
-                                        <th colspan="5" class="th_search">
+                                        <th colspan="6" class="th_search">
                                             <i class="icon-bdg_search"></i>
                                             <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Tahapan" aria-controls="DataTables_Table_0">
                                         </th>

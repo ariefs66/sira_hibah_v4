@@ -14,7 +14,7 @@
 Auth::routes();
 Route::get('/', 'mainController@index');
 // Route::get('/', function(){return View('maintenence');});
-Route::get('/login', function(){return View('maintenence');});
+//Route::get('/login', function(){return View('maintenence');});
 Route::get('/keluar/{id}', 'mainController@keluar');
 Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('/aktif/{id}', 'mainController@aktifuser');
@@ -257,6 +257,10 @@ Route::get('/harga/{tahun}/usulan/getSuggest_/{id}', 'EHarga\usulanController@ge
 Route::get('/harga/{tahun}/usulan/getUbah/{id}', 'EHarga\usulanController@getUbah');
 Route::get('/harga/{tahun}/usulan/surat', 'EHarga\usulanController@showSurat');
 Route::get('/harga/{tahun}/usulan/getSurat', 'EHarga\usulanController@getDataSurat');
+Route::get('/harga/{tahun}/usulan/pembahasan', 'EHarga\pembahasanController@index');
+Route::get('/harga/{tahun}/usulan/pembahasan/getdata', 'EHarga\pembahasanController@getdata');
+Route::get('/harga/{tahun}/usulan/pembahasan/detail/{id}', 'EHarga\pembahasanController@detail');
+
 Route::post('/harga/{tahun}/usulan/submitUsulan', 'EHarga\usulanController@submitUsulan');
 Route::post('/harga/{tahun}/usulan/submitUsulanUbah', 'EHarga\usulanController@submitUsulanUbah');
 Route::post('/harga/{tahun}/usulan/submitTambahRekening', 'EHarga\usulanController@submitTambahRekening');
@@ -271,17 +275,24 @@ Route::post('/harga/{tahun}/usulan/acc', 'EHarga\usulanController@acc');
 Route::post('/harga/{tahun}/usulan/grouping', 'EHarga\usulanController@grouping');
 Route::post('/harga/{tahun}/usulan/hapus', 'EHarga\usulanController@delete');
 Route::post('/harga/{tahun}/usulan/cancel', 'EHarga\usulanController@cancel');
+Route::post('/harga/{tahun}/usulan/pembahasan/accept', 'EHarga\pembahasanController@acceptpembahasan');
+Route::post('/harga/{tahun}/usulan/pembahasan/decline', 'EHarga\pembahasanController@rejectpembahasan');
+
 //KOMPONEN
 Route::get('/harga/{tahun}/komponen', 'EHarga\komponenController@index');
 Route::get('/harga/{tahun}/_/komponen/getData/{kategori}', 'EHarga\komponenController@getReferensi');
 Route::get('/harga/{tahun}/_/komponen/getuser/{komponen}', 'EHarga\komponenController@getuser');
 Route::get('/harga/{tahun}/_/komponen/getrekening/{komponen}', 'EHarga\komponenController@getrekening');
 Route::get('/harga/{tahun}/komponen/getkategori/{jenis}', 'EHarga\komponenController@getKategori');
+Route::get('/harga/{tahun}/komponen/detail/{id}', 'EHarga\komponenController@detail');
+Route::get('/harga/{tahun}/komponen/detail-rekom/{id}', 'EHarga\komponenController@detailrekom');
 Route::post('/harga/{tahun}/komponen/kunci/{kunci}', 'EHarga\komponenController@kunci');
 Route::post('/harga/{tahun}/komponen/hapus', 'EHarga\komponenController@delete');
 Route::post('/harga/{tahun}/komponen/submit', 'EHarga\komponenController@submit');
 Route::post('/harga/{tahun}/komponen/uploadHSPK', 'EHarga\komponenController@uploadHSPK');
 Route::post('/harga/{tahun}/komponen/uploadASB', 'EHarga\komponenController@uploadASB');
+Route::post('/harga/{tahun}/komponen-ubah/submit', 'EHarga\komponenController@submitubah');
+Route::post('/harga/{tahun}/komponen-rekening/submit', 'EHarga\komponenController@submitrekom');
 //MONITOR
 Route::get('/harga/{tahun}/monitor', 'EHarga\monitorUsulanController@index');
 Route::get('/harga/{tahun}/monitor/getData', 'EHarga\monitorUsulanController@getData');

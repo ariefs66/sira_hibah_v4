@@ -1076,6 +1076,7 @@
   function simpanPaket(){
     token  = $('#token').val();
     paket  = $('#paket-nama').val();
+    
     $.ajax({
         url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanpaket",
         type: "POST",
@@ -1147,7 +1148,7 @@
     }); 
   function getpagu(){
     $.ajax({
-        url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu",
+        url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu/{{$BL_ID}}",
         type: "GET",
         success: function(msg){
           harga     = $('#harga-komponen').val();

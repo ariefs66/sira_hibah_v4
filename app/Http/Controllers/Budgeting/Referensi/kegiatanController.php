@@ -85,10 +85,14 @@ class kegiatanController extends Controller
 	    	$kegiatan->KEGIATAN_NAMA        = Input::get('kegiatan');
             $kegiatan->save();
 
-            $idgiat  	= Kegiatan::where('KEGIATAN_TAHUN',Input::get('tahun'))
+            /*$idgiat  	= Kegiatan::where('KEGIATAN_TAHUN',Input::get('tahun'))
                                     ->where('PROGRAM_ID',Input::get('program'))
                                     ->where('KEGIATAN_KODE',$kode)
-                                    ->value('KEGIATAN_ID');
+            
+                                    ->value('KEGIATAN_ID');*/
+            $idgiat = Kegiatan::where('KEGIATAN_TAHUN',Input::get('tahun'))
+                            ->max('KEGIATAN_ID');
+
             $skpd       = Input::get('skpd');
             foreach($skpd as $s){
                 $kg     = new Kegunit;

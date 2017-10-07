@@ -73,8 +73,26 @@ class kegiatanControllerAdum extends Controller
             $kegiatan->KEGIATAN_KODE        = $kode;
 	    	$kegiatan->KEGIATAN_NAMA        = Input::get('kegiatan');
             $kegiatan->save();
+
+            $getID_keg = Kegiatan::max('KEGIATAN_ID');
+
+            $skpd       = Input::get('skpd');
+            foreach($skpd as $s){
+                $keg_unit               = new Kegunit;
+                $keg_unit->KEGIATAN_ID  = $getID_keg;
+                $keg_unit->SKPD_ID      = $s;
+                $keg_unit->save();
+
+                $prog_unit             = new Progunit;
+                $prog_unit->PROGRAM_ID = $p->PROGRAM_ID;
+                //$prog_unit->SKPD_ID    = Input::get('skpd');
+                $prog_unit->SKPD_ID    = $s;
+                $prog_unit->save();
+            }
+
     	}
-    	return '1';
+    	
+        return '1';
     }
 
     public function submitEdit(){

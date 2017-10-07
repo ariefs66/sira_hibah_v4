@@ -27,6 +27,7 @@ use App\Model\UserBudget;
 use App\Model\Rekom;
 use App\Model\DataDukung;
 use App\Model\UsulanSurat;
+use App\Model\Log;
 class komponenController extends Controller
 {
     public function __construct(){
@@ -57,11 +58,19 @@ class komponenController extends Controller
         $view = array();
         foreach ($data as $data) {
             if(substr(Auth::user()->mod,4,1) == 1){
+            /*
             $aksi         = '<div class="action visible">
                                 <a onclick="return getrekening(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Rekening"><i class="mi-eye"></i></a>
                                 <a onclick="return getuser(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Pengguna"><i class="icon-bdg_people"></i></a>
                                 <a onclick="return ubah(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Ubah"><i class="mi-edit"></i></a>
                                 <a onclick="return hapus(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Hapus"><i class="mi-trash"></i></a>
+                            </div>';
+            */
+            $aksi         = '<div class="action visible">
+                                <a onclick="return getrekening(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Rekening"><i class="mi-eye"></i></a>
+                                <a onclick="return getuser(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Pengguna"><i class="icon-bdg_people"></i></a>
+                                <a onclick="return ubah(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Ubah"><i class="mi-edit"></i></a>
+                                <a onclick="return tambahrekening(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Tambah Rekening"><i class="icon-bdg_setting2"></i></a>
                             </div>';
             if($data->KOMPONEN_KUNCI == 1) 
                     $kunci = '<label class="i-switch bg-success m-t-xs m-r"><input type="checkbox" onchange="return buka(\''.$data->KOMPONEN_ID.'\')" id="buka-'.$data->BL_ID.'"><i></i></label>';
@@ -138,6 +147,38 @@ class komponenController extends Controller
         return $view;        
     }
 
+    public function detail($tahun,$id){
+
+        $data = Komponen::where('KOMPONEN_TAHUN',$tahun)->where('KOMPONEN_ID',$id)->first();
+        
+        $out    = [ 'DATA'          => $data,
+                    'KOMPONEN_TAHUN' => $data->KOMPONEN_TAHUN,
+                    'KOMPONEN_KODE' => $data->KOMPONEN_KODE,
+                    'KOMPONEN_NAMA' => $data->KOMPONEN_NAMA,
+                    'KOMPONEN_SPEK' => $data->KOMPONEN_SPESIFIKASI,
+                    'KOMPONEN_HARGA'=> $data->KOMPONEN_HARGA,
+                    'KOMPONEN_SATUAN'=> $data->KOMPONEN_SATUAN,
+                    'KOMPONEN_JENIS'=> substr($data->KOMPONEN_KODE,0,1)
+                  ];
+        return $out;
+    }
+
+    public function detailrekom($tahun,$id){
+
+        $data = Komponen::where('KOMPONEN_TAHUN',$tahun)->where('KOMPONEN_ID',$id)->first();
+        
+        $out    = [ 'DATA'          => $data,
+                    'KOMPONEN_TAHUN' => $data->KOMPONEN_TAHUN,
+                    'KOMPONEN_KODE' => $data->KOMPONEN_KODE,
+                    'KOMPONEN_NAMA' => $data->KOMPONEN_NAMA,
+                    'KOMPONEN_SPEK' => $data->KOMPONEN_SPESIFIKASI,
+                    'KOMPONEN_HARGA'=> $data->KOMPONEN_HARGA,
+                    'KOMPONEN_SATUAN'=> $data->KOMPONEN_SATUAN,
+                    'KOMPONEN_JENIS'=> substr($data->KOMPONEN_KODE,0,1)
+                  ];
+        return $out;
+    }
+
     public function submit($tahun){
         $kode       = Komponen::where('KOMPONEN_KODE','like',Input::get('KOMPONEN_KODE').'%')
                                 ->where('KOMPONEN_KODE','not like','%999')
@@ -171,6 +212,47 @@ class komponenController extends Controller
             $rekom->REKENING_ID     = $r;
             $rekom->REKOM_TAHUN     = $tahun;
             $rekom->save();
+        }
+        return 'Simpan Berhasil!';
+    }
+
+    public function submitubah($tahun){
+
+        Komponen::where('KOMPONEN_TAHUN',Input::get('KOMPONEN_TAHUN'))->where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->where('KOMPONEN_KODE',Input::get('KOMPONEN_KODE'))->update([
+        'KOMPONEN_NAMA'       => Input::get('KOMPONEN_NAMA'),
+        'KOMPONEN_SPESIFIKASI'=> Input::get('KOMPONEN_SPESIFIKASI'),
+        'KOMPONEN_SATUAN'     => Input::get('KOMPONEN_SATUAN'),
+        'KOMPONEN_HARGA'      => Input::get('KOMPONEN_HARGA')]);
+        
+        $log        = new Log;
+        $log->LOG_TIME                          = Carbon\Carbon::now();
+        $log->USER_ID                           = Auth::user()->id;
+        $log->LOG_ACTIVITY                      = 'Mengubah Komponen';
+        $log->LOG_DETAIL                        = 'KOMPONEN#'.Input::get('KOMPONEN_ID');
+        $log->save();
+
+        return 'Simpan Berhasil!';
+    }
+
+    public function submitrekom($tahun){
+        $rekening    = Input::get('REKENING_ID');
+        foreach($rekening as $r){
+            $getrekom = Rekom::where('REKOM_TAHUN',$tahun)->where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->where('REKENING_ID',$r)->value('REKOM_ID');
+            
+            if(empty($getrekom)){
+                $rekom  = new Rekom;
+                $rekom->KOMPONEN_ID     = Input::get('KOMPONEN_ID');
+                $rekom->REKENING_ID     = $r;
+                $rekom->REKOM_TAHUN     = $tahun;
+                $rekom->save();
+
+                $log        = new Log;
+                $log->LOG_TIME                          = Carbon\Carbon::now();
+                $log->USER_ID                           = Auth::user()->id;
+                $log->LOG_ACTIVITY                      = 'Menambah Rekening Komponen';
+                $log->LOG_DETAIL                        = 'KOMPONEN#'.Input::get('KOMPONEN_ID').'#REKENING#'.$r;
+                $log->save();
+            }
         }
         return 'Simpan Berhasil!';
     }
@@ -235,9 +317,11 @@ class komponenController extends Controller
                         $reader->limit(10000);
                         $reader->select(array('kode','uraian','koef','satuan','harga','jumlah','rekening'));                        
                     })->get();
+        $komponen = NULL;
         foreach ($data as $data) {
             $len    = strlen($data->kode);
-            if(substr($data->kode, $len-1,1)*1 != 0){
+            //if(substr($data->kode, $len-1,1)*1 != 0){
+            if(substr($data->kode, $len-1,1) != 'A'){
                 $komp       = new Komponen;
                 $komp->KOMPONEN_TAHUN       = $tahun;
                 $komp->KOMPONEN_KODE        = $data->kode;
@@ -250,7 +334,7 @@ class komponenController extends Controller
                 $komponen   = Komponen::where('KOMPONEN_TAHUN',$tahun)
                                         ->where('KOMPONEN_KODE',$data->kode)
                                         ->value('KOMPONEN_ID');
-
+                
                 $rekening   = Rekening::where('REKENING_TAHUN',$tahun)
                                         ->where('REKENING_KODE',$data->rekening)
                                         ->value('REKENING_ID');

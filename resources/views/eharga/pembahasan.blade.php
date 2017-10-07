@@ -33,6 +33,7 @@
                 <!-- Main tab -->
               <!-- / main tab -->                  
               <div class="tab-content tab-content-alt-1 bg-white">
+                <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                 <div role="tabpanel" class="active tab-pane" id="tab-1">  
                   <div class="table-responsive dataTables_wrapper table-usulan">
                    <table ui-jq="dataTable" ui-options="{
@@ -82,6 +83,7 @@
 @endsection
 
 @section('plugin')
+
 <script type="text/javascript">
   $(document).ready(function(){
     $("#app").trigger('click');
@@ -89,7 +91,52 @@
 
   $('#table-pembahasan').on('click','tbody > tr', function(){
       kode = $(this).children('td').eq(0).html();
-      window.open("{{ url('/') }}/harga/{{$tahun}}/usulan/pembahasan/detail/"+kode);
-   })
+      //window.open("{{ url('/') }}/harga/{{$tahun}}/usulan/pembahasan/detail/"+kode);
+   });
+</script>
+
+<script type="text/javascript">
+  function acceptpembahasan(id){
+    //alert('Accept : '+$id);
+    token       = $('#token').val();
+    //alert(token);exit;
+    $.ajax({
+      url: "{{ url('/') }}/harga/{{$tahun}}/usulan/pembahasan/accept",
+      type: "POST",
+      data: {'_token' : token,'USULAN_ID' : id},
+      success: function(msg){
+        $('#table-pembahasan').DataTable().ajax.reload();
+        $.alert(msg);
+      }
+    });
+  }
+
+  function rejectpembahasan(id){
+    //alert('Reject : '+$id);
+    var token        = $('#token').val();    
+    $.confirm({
+      title: 'Tolak Data!',
+      content: 'Yakin usulan ditolak?',
+      buttons: {
+        Ya: {
+          btnClass: 'btn-danger',
+          action: function(){
+            $.ajax({
+              url: "{{ url('/') }}/harga/{{$tahun}}/usulan/pembahasan/decline",              
+              type: "POST",
+              data: {'_token'         : token,
+                    'USULAN_ID'       : id},
+              success: function(msg){
+                $('#table-pembahasan').DataTable().ajax.reload();
+                $.alert(msg);
+              }
+            });
+          }
+        },
+        Tidak: function () {
+        }
+      }
+    });
+  }
 </script>
 @endsection
