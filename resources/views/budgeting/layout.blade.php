@@ -502,7 +502,7 @@
                     <i class="text8 icon-bdg_arrow1 text"></i>
                     <i class="text8 icon-bdg_arrow2 text-active"></i>
                   </span>
-                  <span class="font-semibold">API DARI SIRA</span>
+                  <span class="font-semibold">API SIRA</span>
                 </a>                
                  <ul class="nav nav-sub dk">
                   <li>
@@ -516,7 +516,7 @@
                     </a>
                   </li>
                    <li>
-                    <a href="#" class="padding-l-r-lg " target="_blank">
+                    <a href="{{ url('/') }}/simda/{{ $tahun }}" class="padding-l-r-lg " target="_blank">
                        <span>SIMDA</span>
                     </a>
                   </li>

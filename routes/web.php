@@ -416,7 +416,13 @@ Route::get('/trfnamakomponen', 'realController@trfnamakomponen');
 Route::get('/trfnamakomponenperubahan', 'realController@trfnamakomponenperubahan');
 Route::get('/trfprogram/{tahun}/{kode}', 'realController@trfprogram');
 
-
 //sirup api
 Route::get('/main/{tahun}/{status}/api/sirup', 'apiController@apiSirup');
 
+//TO SIMDA. - VIEW
+Route::get('/simda/{tahun}', 'simdaController@index');
+Route::get('/simda/{tahun}/trfsubunit', 'simdaController@trfSubUnit');
+Route::get('/simda/{tahun}/trfprogram', 'simdaController@trfProgram');
+Route::get('/simda/{tahun}/trfkegiatan', 'simdaController@trfKegiatan');
+Route::get('/simda/{tahun}/trfbelanja', 'simdaController@trfBelanja');
+Route::get('/simda/{tahun}/trfbelanjasub', 'simdaController@trfBelanjaSub');

@@ -1872,7 +1872,8 @@ class blController extends Controller
                 $arcRincian->BL_ID                  = $rincian->BL_ID;
                 $arcRincian->save();
                 $komponen      = Komponen::where('KOMPONEN_ID',$rincian->KOMPONEN_ID)->first();
-                RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->delete();
+                //RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->delete();
+                RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->update(["RINCIAN_VOLUME"=>0,"RINCIAN_KOEFISIEN"=>NULL,"RINCIAN_TOTAL"=>0]);
                 //MATIKAN VALIDASI
                 // BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
                 $totalrincian   = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');        
@@ -1901,7 +1902,8 @@ class blController extends Controller
             $arcRincian->BL_ID                  = $rincian->BL_ID;
             $arcRincian->save();
             $komponen      = Komponen::where('KOMPONEN_ID',$rincian->KOMPONEN_ID)->first();
-            RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->delete();
+            //RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->delete();
+            RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->update(["RINCIAN_VOLUME"=>0,"RINCIAN_KOEFISIEN"=>NULL,"RINCIAN_TOTAL"=>0]);
             //MATIKAN VALIDASI
             // BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
             $totalrincian   = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');        
