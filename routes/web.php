@@ -154,11 +154,17 @@ Route::post('/main/{tahun}/{status}/usulan/pippk/setlpm', 'Budgeting\usulanContr
 //------------------------------------------------------------------------------------------------------------------------
 //STAFF
 Route::get('/main/{tahun}/{status}/pengaturan/staff', 'Budgeting\staffController@index');
+Route::get('/main/{tahun}/{status}/pengaturan/penyelia', 'Budgeting\staffController@penyelia');
 Route::get('/main/{tahun}/{status}/pengaturan/staff/getData', 'Budgeting\staffController@getData');
+Route::get('/main/{tahun}/{status}/pengaturan/penyelia/getData', 'Budgeting\staffController@penyeliaGetData');
+Route::get('/main/{tahun}/{status}/pengaturan/penyelia/getData/skpd/{id}', 'Budgeting\staffController@penyeliaGetDataSkpd');
 Route::get('/main/{tahun}/{status}/pengaturan/staff/getStaff', 'Budgeting\staffController@getStaff');
 Route::get('/main/{tahun}/{status}/pengaturan/staff/getStaff/{id}', 'Budgeting\staffController@getStaffDetail');
+Route::get('/main/{tahun}/{status}/pengaturan/penyelia/getPenyelia/{id}', 'Budgeting\staffController@getPenyeliaDetail');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/submitAdd', 'Budgeting\staffController@submitAdd');
+Route::post('/main/{tahun}/{status}/pengaturan/penyelia/submitAdd', 'Budgeting\staffController@submitAddPenyelia');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/submitEdit', 'Budgeting\staffController@submitEdit');
+Route::post('/main/{tahun}/{status}/pengaturan/penyelia/submitEdit', 'Budgeting\staffController@submitEditPenyelia');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/submitEharga', 'Budgeting\staffController@submitEharga');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/submitEmonev', 'Budgeting\staffController@submitEmonev');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/hapus', 'Budgeting\staffController@hapus');
@@ -409,3 +415,8 @@ Route::get('/auto/transferuser/{tahunawal}/{tahunakhir}', 'realController@transf
 Route::get('/trfnamakomponen', 'realController@trfnamakomponen');
 Route::get('/trfnamakomponenperubahan', 'realController@trfnamakomponenperubahan');
 Route::get('/trfprogram/{tahun}/{kode}', 'realController@trfprogram');
+
+
+//sirup api
+Route::get('/main/{tahun}/{status}/api/sirup', 'apiController@apiSirup');
+

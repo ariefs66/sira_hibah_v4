@@ -332,6 +332,11 @@
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/staff" class="padding-l-r-lg ">
                        <span >Akun</span>
                     </a>
+                  </li>  
+                  <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/penyelia" class="padding-l-r-lg ">
+                       <span >Penyelia</span>
+                    </a>
                   </li>                 
                   @endif
                   @if(Auth::user()->level == 2)                 
@@ -488,6 +493,40 @@
                   </li>                 
                  </ul>
               </li>              
+              @endif
+              @if(Auth::user()->level == 8)
+              <li>
+                <a href="#" class="auto padding-l-r-lg parent">                  
+                  <i class="fa fa-road"></i>
+                  <span class="pull-right text-heading">
+                    <i class="text8 icon-bdg_arrow1 text"></i>
+                    <i class="text8 icon-bdg_arrow2 text-active"></i>
+                  </span>
+                  <span class="font-semibold">API DARI SIRA</span>
+                </a>                
+                 <ul class="nav nav-sub dk">
+                  <li>
+                    <a href="#" class="padding-l-r-lg " target="_blank">
+                       <span>MUSRENBANG</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="padding-l-r-lg " target="_blank">
+                       <span>RESES</span>
+                    </a>
+                  </li>
+                   <li>
+                    <a href="#" class="padding-l-r-lg " target="_blank">
+                       <span>SIMDA</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/api/sirup" class="padding-l-r-lg " target="_blank">
+                       <span>SIRUP</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
               @endif
             </ul>
           </nav>

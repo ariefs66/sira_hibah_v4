@@ -10,6 +10,7 @@ use View;
 use Response;
 use App\Model\UserBudget;
 use App\Model\User;
+use App\Model\Skpd;
 class staffController extends Controller
 {
 	public function index($tahun,$status){
@@ -198,4 +199,124 @@ class staffController extends Controller
     public function getStaffDetail($tahun,$status,$id){
         return Response::JSON(User::where('id',$id)->first());
     }
+
+    public function penyelia($tahun,$status){
+        $skpd   = Skpd::where('SKPD_TAHUN',$tahun)->get();
+        return view('budgeting.referensi.penyelia',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd]);
+    }
+
+    public function penyeliaGetData($tahun){
+        if(Auth::user()->email=='TAPD'){
+            $data   = User::where('users.mod','01000000000')
+                              ->get();
+        }else                      
+            if(Auth::user()->email=='TAPD2'){
+            $data   = User::where('users.mod','10001000000')
+                              ->get();
+        } 
+
+        $view   = array();
+        $i      = 1;
+        foreach ($data as $data) {
+            $aksi   = '<div class="action visible pull-right">
+                            <a onclick="return ubah(\''.$data->id.'\')" class="action-edit"><i class="mi-edit"></i></a>
+                            <a onclick="return reset(\''.$data->id.'\')" class="action-edit"><i class="fa fa-retweet"></i></a>
+                            <a onclick="return hapus(\''.$data->id.'\')" class="action-delete"><i class="mi-trash"></i></a>
+                        </div>';
+
+            array_push($view, array( 'USER_ID'      =>$data->id,
+                                     'USER_NIP'     =>$data->email,
+                                     'NO'           =>$i,
+                                     'aksi'         =>$aksi,
+                                     'USER_NAMA'    =>$data->name));
+            $i++;
+        }
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+    }
+
+
+    public function penyeliaGetDataSkpd($tahun, $status, $id){
+        $data   = UserBudget::join('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','USER_BUDGET.SKPD_ID')
+                          ->where('USER_ID',$id)
+                          ->where('TAHUN',$tahun)  
+                          ->get();  
+         $view   = array();                             
+        foreach ($data as $d) {
+            
+            $tahun = '<input type="text" class="form-control col-lg-4" value="'.$d->TAHUN.'">';
+            $skpd  = '<input type="text" class="form-control col-lg-12" value="'.$d->SKPD_NAMA.'">';  
+
+            array_push($view, array( 'tahun'  =>$tahun,
+                                     'skpd'   =>$skpd,     
+                                     ));     
+        }        
+        $out = array("header"=>$view);      
+        return $out;                             
+    }
+
+
+    public function submitAddPenyelia($tahun,$status){
+        $cek    = User::where('email',Input::get('NIP'))->value('id');
+        if(empty($cek)){
+            $user   = new User;
+            $user->email        = Input::get('NIP');
+            $user->name         = Input::get('NAMA');
+            $user->password     = '$2y$10$oDOpQp8JIQkStQxRKP/uPuLOg8qYYBRWyblH95odj0.ngqlF93ysS';
+            $user->login        = 0;
+            $user->active       = 0;
+            $user->app          = 3;
+            $user->level        = 1;
+            if(Auth::user()->email=='TAPD'){
+                $user->mod          = '01000000000';
+            }else if(Auth::user()->email=='TAPD2'){
+                $user->mod          = '10001000000';
+            }
+            $user->save();
+
+            $id     = User::where('email',Input::get('NIP'))->value('id');
+
+            $skpd       = Input::get('SKPD');
+            foreach($skpd as $s){
+                $ub     = new UserBudget;
+                $ub->SKPD_ID        = $s;
+                $ub->USER_ID        = $id;
+                $ub->TAHUN          = $tahun;
+                $ub->save();
+            }
+
+            return 'Berhasil ditambahkan!';
+
+        }else{
+            return 'NIP telah terdaftar!';
+        }
+    }
+
+    public function getPenyeliaDetail($tahun,$status,$id){
+        $data = User::where('users.id',$id)->first();
+        $skpd = UserBudget::join('REFERENSI.REF_SKPD', 'REF_SKPD.SKPD_ID', '=', 'USER_BUDGET.SKPD_ID')
+                        ->where('USER_BUDGET.USER_ID',$id)
+                        ->where('USER_BUDGET.TAHUN',$tahun)
+                        ->get();
+        $view           = "";
+        foreach($skpd as $s){
+            $view .= "<option value='".$s->SKPD_ID."' selected>".$s->SKPD_NAMA."</option>";
+        }
+        return ['data'=>$data,'skpd'=>$view];
+    }
+
+    public function submitEditPenyelia(){
+        User::where('id',Input::get('ID'))->update(['email'=>Input::get('NIP'),'name'=>Input::get('NAMA')]);
+        return 'Berhasil diubah!';
+    }
+
+     public function hapusPenyelia($tahun){
+        $user_id = Input::get('id');
+        foreach ($user_id as $user_id) {
+            UserBudget::where('id',Input::get('id'))->where('TAHUN',$tahun)->delete();
+        }
+        User::where('id',Input::get('id'))->delete();
+        return 'Berhasil!';
+    }
+
 }
