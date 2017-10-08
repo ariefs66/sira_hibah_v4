@@ -222,12 +222,46 @@ class lampiranController extends Controller
 
 
             }    
-            
+
             $totalBL    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
 
             $totalBLMurni = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+
+            $selisih = $totalBL-$totalBLMurni;
+
+            $persen = ($selisih*100)/$totalBLMurni;
                                          
-           return View('budgeting.lampiran.rka_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke,'total_murni'=>$total_murni,'totalrek_murni'=>$totalrek_murni,'totalreke_murni'=>$totalreke_murni,'totalbl_murni'=>$totalBLMurni,'paket_murni'=>$paket_murni,'rek_murni'=>$rek_murni,'rekening_murni'=>$rekening_murni]);
+           return View('budgeting.lampiran.rka_perubahan',
+                [   'tahun'             =>$tahun,
+                    'status'            =>$status,
+                    'bl'                =>$bl,
+                    'indikator'         =>$indikator,
+                    'rekening'          =>$rekening,
+                    'tgl'               =>$tgl,
+                    'bln'               =>$bln,
+                    'thn'               =>$thn,
+                    'total'             =>$total,
+                    'paket'             =>$paket,
+                    'm'                 =>0,
+                    'komponen'          =>$komponen,
+                    'totalbl'           =>$totalBL,
+                    'rek'               =>$rek,
+                    'q'                 =>0,
+                    's'                 =>0,
+                    'reke'              =>$reke,
+                    'totalrek'          =>$totalrek,
+                    'totalreke'         =>$totalreke,
+                    'total_murni'       =>$total_murni,
+                    'totalrek_murni'    =>$totalrek_murni,
+                    'totalreke_murni'   =>$totalreke_murni,
+                    'totalbl_murni'     =>$totalBLMurni,
+                    'paket_murni'       =>$paket_murni,
+                    'rek_murni'         =>$rek_murni,
+                    'rekening_murni'    =>$rekening_murni,
+                    'bl_murni'          =>$bl_murni,
+                    'selisih'          =>$selisih,
+                    'persen'            =>$persen
+                ]);
         }      
             
     }
@@ -352,8 +386,19 @@ class lampiranController extends Controller
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD')->value('TAHAPAN_ID');
         $idSKPD         = SKPD::where('SKPD_ID',$id)->first();
 
-        if($status == 'murni')  $stat    = BL::where('BL_TAHUN',$tahun);   
-        else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);           
+        if($status == 'murni'){ $stat    = BL::where('BL_TAHUN',$tahun);   }
+        else {
+            $stat        = BLPerubahan::where('BL_TAHUN',$tahun); 
+
+            $pagu_murni  = BL::whereHas('subunit',function($x) use ($id){
+                                $x->where('SKPD_ID',$id);
+                        })
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_VALIDASI',1)
+                        ->where('BL_DELETED',0)
+                        ->where('BL_PAGU','!=',0)                        
+                        ->get();
+        }          
 
         $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
@@ -385,12 +430,16 @@ class lampiranController extends Controller
                             ->orderBy('URUSAN_ID')
                             ->orderBy('PROGRAM_KODE')
                             ->get();
+
         $paguprogram    = array();
         $i              = 0;
 
         foreach($program as $pr){
-            if($status == 'murni') $stat    = BL::where('BL_TAHUN',$tahun);
-            else $stat  = BLPerubahan::where('BL_TAHUN',$tahun);        
+            if($status == 'murni'){ $stat    = BL::where('BL_TAHUN',$tahun); }
+            else {
+                $stat  = BLPerubahan::where('BL_TAHUN',$tahun); 
+
+            }      
             $idprog            = $pr->PROGRAM_ID;
             $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
@@ -402,13 +451,15 @@ class lampiranController extends Controller
                                 ->groupBy('KEGIATAN_ID')
                                 ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID"')
                                 ->get();
+
+
             $i++;
         }
 
         if($status=='murni'){
             return View('budgeting.lampiran.ppas',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
         }else{
-            return View('budgeting.lampiran.ppas_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+            return View('budgeting.lampiran.ppas_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx' ]);
         }
     }
 
