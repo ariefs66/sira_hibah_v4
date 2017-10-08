@@ -135,8 +135,8 @@
 		@endforeach			
 		</td>
 		@else
-		<td width="24%"><b>--outcome-</b></td>
-		<td width="10%"><b>--target---</b></td>
+		<td width="24%"><b></b></td>
+		<td width="10%"><b></b></td>
 		<td width="10%"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%"><b>-Rp.perubahan</b></td>
 		@endif
@@ -164,7 +164,7 @@
 			@endif
 		</td>
 		<td><i> Rp.{{ number_format($pp->pagu,0,',','.') }} </i></td>
-		<td>Rp.perubahan</td>
+		<td>Rp.{{ number_format($pp->pagu,0,',','.') }}</td>
 		<td class="kanan"><i>{{ number_format($pp->pagu,0,',','.') }}</i></td>
 	</tr>
 	@endforeach

@@ -64,7 +64,7 @@ class apiController extends Controller
     				->WHERE('DAT_BL_PERUBAHAN.BL_TAHUN',$tahun)
     				->WHERE('DAT_BL_PERUBAHAN.BL_DELETED',0)
     				->WHERE('DAT_BL_PERUBAHAN.BL_VALIDASI',1)
-    				->take('1000')
+    				//->take('1000')
     				->orderBy('REF_SKPD.SKPD_ID','asc')
     				->get();
     	}			
