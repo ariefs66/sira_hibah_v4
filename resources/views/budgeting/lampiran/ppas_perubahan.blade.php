@@ -137,10 +137,16 @@
 		@else
 		<td width="24%"><b></b></td>
 		<td width="10%"><b></b></td>
+		<td width="10%"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
-		<td width="10%"><b>-Rp.perubahan</b></td>
 		@endif
-		<td width="10%" class="kanan"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
+		<td width="10%" class="kanan">
+			@if(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))<0)
+			<b>({{ number_format(abs(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))),0,',','.') }})</b>
+			@else
+			<b>{{ number_format(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
+			@endif
+		</td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
 	<tr>
@@ -163,9 +169,19 @@
 			@endforeach
 			@endif
 		</td>
+		@foreach($paguprogrammurni[$i] as $ppm)
+		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
+		<td>Rp.{{ number_format($ppm->pagu,0,',','.') }}</td>
 		<td><i> Rp.{{ number_format($pp->pagu,0,',','.') }} </i></td>
-		<td>Rp.{{ number_format($pp->pagu,0,',','.') }}</td>
-		<td class="kanan"><i>{{ number_format($pp->pagu,0,',','.') }}</i></td>
+		<td class="kanan">
+			@if(($pp->pagu - $ppm->pagu)<0)
+			<i>({{ number_format(abs($pp->pagu - $ppm->pagu),0,',','.') }})</i>
+			@else
+			<i>{{ number_format($pp->pagu - $ppm->pagu,0,',','.') }}</i>
+			@endif
+		</td>
+		@endif
+		@endforeach
 	</tr>
 	@endforeach
 	<?php $i++;?>
