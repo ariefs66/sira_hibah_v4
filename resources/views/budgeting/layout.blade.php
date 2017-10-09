@@ -506,7 +506,7 @@
                 </a>                
                  <ul class="nav nav-sub dk">
                   <li>
-                    <a href="#" class="padding-l-r-lg " target="_blank">
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/usulan/api" class="padding-l-r-lg " target="_blank">
                        <span>MUSRENBANG</span>
                     </a>
                   </li>

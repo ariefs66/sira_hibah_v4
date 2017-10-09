@@ -56,14 +56,16 @@
 	    	tfoot { display:table-footer-group; }		    
 		}
 	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>	
 </head>
-<body onload="window.print()">
-<div class="cetak">
+<body onload="return download()">
+<button id="btnExport">Export to xls</button>	
+<div class="cetak" id="table_wrapper">
 <h4>Plafon Anggaran Sementara Berdasarkan Program dan Kegiatan Tahun Anggaran {{ $tahun }}</h4>
 <table class="header">
 	<tr class="noborder">
-		<td class="noborder"><b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
-		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
+		<td class="noborder"><b>Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</b></td>
+		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }}</b></td>
 	</tr>
 </table>
 <table class="detail">
@@ -135,11 +137,11 @@
 		@endforeach			
 		</td>
 		@else
-		<td width="24%"><b></b></td>
-		<td width="10%"><b></b></td>
+		<td width="24%"><b>-</b></td>
+		<td width="10%"><b>-</b></td>
+		@endif
 		<td width="10%"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
-		@endif
 		<td width="10%" class="kanan">
 			@if(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))<0)
 			<b>({{ number_format(abs(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))),0,',','.') }})</b>
@@ -147,6 +149,7 @@
 			<b>{{ number_format(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
 			@endif
 		</td>
+
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
 	<tr>
@@ -190,4 +193,25 @@
 </table>
 </div>
 </body>
+<script type="text/javascript">
+	$(document).ready(function() {
+		  $("#btnExport").click(function(e) {
+		    e.preventDefault();
+		    console.log(e);
+		    //getting data from our table
+		    var data_type = 'data:application/vnd.ms-excel';
+		    var table_div = document.getElementById('table_wrapper');
+		    var table_html = table_div.outerHTML.replace(/ /g, '%20');
+
+		    var a = document.createElement('a');
+		    a.href = data_type + ', ' + table_html;
+		    a.download = 'PPAS {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}.xls';
+		    a.click();
+		  });
+	});
+
+	function download(){
+		$("#btnExport").trigger('click');
+	}
+</script>
 </html>
