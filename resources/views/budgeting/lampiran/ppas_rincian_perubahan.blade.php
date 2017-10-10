@@ -142,9 +142,15 @@
 		<td width="24%"><b></b></td>
 		<td width="10%"><b></b></td>
 		@endif
-		<td width="10%" class="kanan"><b>{{ number_format($pppp[$i],0,',','.') }}</b></td>
 		<td width="10%" class="kanan"><b>{{ number_format($pppp_murni[$i],0,',','.') }}</b></td>
-		<td></td>
+		<td width="10%" class="kanan"><b>{{ number_format($pppp[$i],0,',','.') }}</b></td>
+		<td width="10%" class="kanan">
+			@if(($pppp[$i]-$pppp_murni[$i])<0)
+			<b>({{ number_format(abs($pppp[$i] - $pppp_murni[$i]),0,',','.') }})</b>
+			@else
+			<b>{{ number_format(($pppp[$i] - $pppp_murni[$i]),0,',','.') }}</b>
+			@endif
+		</td>
 	</tr>
 
 
@@ -171,9 +177,15 @@
 		</td>
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
+		<td class="kanan"><i>{{ number_format($ppp_murni[$i][$j],0,',','.') }}</i></td>
 		<td class="kanan"><i>{{ number_format($ppp[$i][$j],0,',','.') }}</i></td>
-		<td class="kanan"><i>{{ number_format($ppp[$i][$j],0,',','.') }}</i></td>
-		<td></td>
+		<td class="kanan">
+			@if(($ppp[$i][$j] - $ppp_murni[$i][$j])<0)
+			<i>({{ number_format(abs($ppp[$i][$j] - $ppp_murni[$i][$j]),0,',','.') }})</i>
+			@else
+			<i>{{ number_format(($ppp[$i][$j] - $ppp_murni[$i][$j]),0,',','.') }}</i>
+			@endif
+		</td>
 		@endif
 		@endforeach
 	</tr>
