@@ -172,7 +172,7 @@
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
 		<td class="kanan"><i>{{ number_format($ppp[$i][$j],0,',','.') }}</i></td>
-		<td class="kanan"><i>{{ number_format($ppp[$i][$j],0,',','.') }}</i></td>
+		<td class="kanan"><i>{{ number_format($ppm[$i][$k],0,',','.') }}</i></td>
 		<td></td>
 		@endif
 		@endforeach
