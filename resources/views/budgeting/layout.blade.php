@@ -221,7 +221,7 @@
                   </li>
 
                   <li>
-                    @if(Auth::user()->level == 8 
+                    @if((Auth::user()->level == 8 or Auth::user()->level == 9)
                         or substr(Auth::user()->mod,10,1) == 1 
                         or Auth::user()->level == 0 
                         or substr(Auth::user()->mod,1,1) == 1 
@@ -250,7 +250,7 @@
                   </ul>
               </li>
                <li>
-                  @if(Auth::user()->level == 8 
+                  @if((Auth::user()->level == 8 or Auth::user()->level == 9)
                       or substr(Auth::user()->mod,10,1) == 1 
                       or Auth::user()->level == 0 
                       or substr(Auth::user()->mod,1,1) == 1
