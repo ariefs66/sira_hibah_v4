@@ -21,7 +21,7 @@
             <div class="col-md-12">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  @if(Auth::user()->level == 8 
+                  @if(Auth::user()->level == 9 
                       or substr(Auth::user()->mod,10,1) == 1
                       or substr(Auth::user()->mod,0,1) == 1)
                   <button class="pull-right btn m-t-n-sm btn-success open-form-pendapatan"><i class="m-r-xs fa fa-plus"></i> Tambah Pendapatan</button>
