@@ -31,38 +31,74 @@ use App\Model\Rekom;
 use App\Model\Rincian;
 use App\Model\SKPD;
 use App\Model\Pendapatan;
+use App\Model\PendapatanPerubahan;
 class pendapatanController extends Controller
 {
     public function index($tahun,$status){
-		$skpd 		= SKPD::all();
-    	$rekening 	= Rekening::where('REKENING_KODE','like','4%')->whereRaw('length("REKENING_KODE") = 11')->get();
-      $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN')->where('DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
-              ->sum('PENDAPATAN_TOTAL');
-        return View('budgeting.pendapatan.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',',')]);
+      $skpd     = SKPD::all();
+      $rekening   = Rekening::where('REKENING_KODE','like','4%')->whereRaw('length("REKENING_KODE") = 11')->get();
+
+      if($status=='murni'){
+        $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN')->where('DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
+                ->sum('PENDAPATAN_TOTAL');
+          return View('budgeting.pendapatan.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',',')]);
+      }else{
+        $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN_PERUBAHAN')->where('DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_TAHUN',$tahun)
+                ->sum('PENDAPATAN_TOTAL');
+                //dd($anggaran);
+          return View('budgeting.pendapatan.index_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',',')]);
+      }
     }
 
     public function submitAdd($tahun,$status){
-    	$pendapatan 	= new Pendapatan;
-    	$pendapatan->PENDAPATAN_TAHUN		= $tahun;
-    	$pendapatan->SUB_ID				    = Input::get('SUB_ID');
-    	$pendapatan->REKENING_ID			= Input::get('REKENING_ID');
-    	$pendapatan->PENDAPATAN_NAMA		= Input::get('PENDAPATAN_NAMA');
-    	$pendapatan->PENDAPATAN_KETERANGAN	= Input::get('PENDAPATAN_NAMA');
-    	$pendapatan->PENDAPATAN_TOTAL		= Input::get('PENDAPATAN_TOTAL');
-    	$pendapatan->save();
 
-        $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
-        $datapen    = Pendapatan::where('SUB_ID',Input::get('SUB_ID'))
-                                ->where('REKENING_ID',Input::get('REKENING_ID'))
-                                ->where('PENDAPATAN_NAMA',Input::get('PENDAPATAN_NAMA'))
-                                ->first();
-        $log        = new Log;
-        $log->LOG_TIME                          = Carbon\Carbon::now();
-        $log->USER_ID                           = Auth::user()->id;
-        $log->LOG_ACTIVITY                      = 'Menambahkan Pendapatan Rekening '.$datarek->REKENING_KODE.'-'.$datarek->REKENING_NAMA.' Jumlah '.Input::get('PENDAPATAN_TOTAL');
-        $log->LOG_DETAIL                        = 'PD#'.$datapen->PENDAPATAN_ID;
-        $log->save();
-    	return "Input Berhasil!";
+      if($status=='murni'){
+        $pendapatan   = new Pendapatan;
+        $pendapatan->PENDAPATAN_TAHUN   = $tahun;
+        $pendapatan->SUB_ID           = Input::get('SUB_ID');
+        $pendapatan->REKENING_ID      = Input::get('REKENING_ID');
+        $pendapatan->PENDAPATAN_NAMA    = Input::get('PENDAPATAN_NAMA');
+        $pendapatan->PENDAPATAN_KETERANGAN  = Input::get('PENDAPATAN_NAMA');
+        $pendapatan->PENDAPATAN_TOTAL   = Input::get('PENDAPATAN_TOTAL');
+        $pendapatan->save();
+
+          $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
+          $datapen    = Pendapatan::where('SUB_ID',Input::get('SUB_ID'))
+                                  ->where('REKENING_ID',Input::get('REKENING_ID'))
+                                  ->where('PENDAPATAN_NAMA',Input::get('PENDAPATAN_NAMA'))
+                                  ->first();
+          $log        = new Log;
+          $log->LOG_TIME                          = Carbon\Carbon::now();
+          $log->USER_ID                           = Auth::user()->id;
+          $log->LOG_ACTIVITY                      = 'Menambahkan Pendapatan Rekening '.$datarek->REKENING_KODE.'-'.$datarek->REKENING_NAMA.' Jumlah '.Input::get('PENDAPATAN_TOTAL');
+          $log->LOG_DETAIL                        = 'PD#'.$datapen->PENDAPATAN_ID;
+          $log->save();
+        return "Input Berhasil!";
+
+      }else{
+        $pendapatan   = new Pendapatan;
+        $pendapatan->PENDAPATAN_TAHUN   = $tahun;
+        $pendapatan->SUB_ID           = Input::get('SUB_ID');
+        $pendapatan->REKENING_ID      = Input::get('REKENING_ID');
+        $pendapatan->PENDAPATAN_NAMA    = Input::get('PENDAPATAN_NAMA');
+        $pendapatan->PENDAPATAN_KETERANGAN  = Input::get('PENDAPATAN_NAMA');
+        $pendapatan->PENDAPATAN_TOTAL   = Input::get('PENDAPATAN_TOTAL');
+        $pendapatan->save();
+
+          $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
+          $datapen    = Pendapatan::where('SUB_ID',Input::get('SUB_ID'))
+                                  ->where('REKENING_ID',Input::get('REKENING_ID'))
+                                  ->where('PENDAPATAN_NAMA',Input::get('PENDAPATAN_NAMA'))
+                                  ->first();
+          $log        = new Log;
+          $log->LOG_TIME                          = Carbon\Carbon::now();
+          $log->USER_ID                           = Auth::user()->id;
+          $log->LOG_ACTIVITY                      = 'Menambahkan Pendapatan Rekening '.$datarek->REKENING_KODE.'-'.$datarek->REKENING_NAMA.' Jumlah '.Input::get('PENDAPATAN_TOTAL');
+          $log->LOG_DETAIL                        = 'PD#'.$datapen->PENDAPATAN_ID;
+          $log->save();
+        return "Input Berhasil!";
+      }
+    	
     }
 
     public function submitEdit(){
