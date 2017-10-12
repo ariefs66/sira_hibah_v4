@@ -568,12 +568,14 @@ class usulanController extends Controller
                 UsulanKomponen::where('USULAN_ID',$id)->update(['KOMPONEN_ID'=>$idKomponen,'KOMPONEN_KODE'=>$getKode->katkom->KATEGORI_KODE.".".$kode]);
             }elseif($getKode->USULAN_TYPE == 2){
                 Komponen::where('KOMPONEN_ID',$getKode->KOMPONEN_ID)->update(['KOMPONEN_HARGA'=>$getKode->USULAN_HARGA]);
+                UsulanKomponen::where('USULAN_ID',$id)->update(['USULAN_POSISI'=>8,'USULAN_STATUS'=>1]);
             }elseif($getKode->USULAN_TYPE == 3){
                 $rekom  = new Rekom;
                 $rekom->REKOM_TAHUN     = $tahun;
                 $rekom->KOMPONEN_ID     = $getKode->KOMPONEN_ID;
                 $rekom->REKENING_ID     = $getKode->REKENING_ID;
                 $rekom->save();
+                UsulanKomponen::where('USULAN_ID',$id)->update(['USULAN_POSISI'=>8,'USULAN_STATUS'=>1]);
             }
         }
         return 'Berhasil!';
