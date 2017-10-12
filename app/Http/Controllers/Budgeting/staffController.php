@@ -10,7 +10,7 @@ use View;
 use Response;
 use App\Model\UserBudget;
 use App\Model\User;
-use App\Model\Skpd;
+use App\Model\SKPD;
 class staffController extends Controller
 {
 	public function index($tahun,$status){
@@ -201,7 +201,7 @@ class staffController extends Controller
     }
 
     public function penyelia($tahun,$status){
-        $skpd   = Skpd::where('SKPD_TAHUN',$tahun)->get();
+        $skpd   = SKPD::where('SKPD_TAHUN',$tahun)->get();
         return view('budgeting.referensi.penyelia',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd]);
     }
 
