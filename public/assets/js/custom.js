@@ -200,65 +200,14 @@ $(window).load(function(){
 	});
 	
 
-	$('.table-btl').on('click', '.table-btl > tbody > tr ', function () {
-		if($("tr").hasClass('btl-rincian') == false){
-			skpd = $(this).children("td").eq(0).html();
-			rek  = $(this).children("td").eq(1).html();
-		}
-		if(!$(this).hasClass('btl-rincian')){
-			if($(this).hasClass('shown')){			
-				$('.btl-rincian').slideUp('fast').remove();	
-				$(this).removeClass('shown');	
-			}else{
-				$('.btl-rincian').slideUp('fast').remove();	
-				$(this).addClass('shown');
-				btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-btl').html()+'</td></tr>';
-				$(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
-				$('.table-detail-btl-isi').DataTable({
-					sAjaxSource: "/main/2018/murni/belanja-tidak-langsung/getDetail/"+skpd+"/"+rek,
-					aoColumns: [
-					{ mData: 'NO' },
-					{ mData: 'REKENING' },
-					{ mData: 'RINCIAN' },
-					{ mData: 'TOTAL' },
-					{ mData: 'AKSI' }
-					]
-				});
-			}
-		}
-    });
+	
 
     $('.table-usulan').on('click', '.table-usulan > tbody > tr ', function () {
 		id = $(this).children("td").eq(0).html();
 		$('#button'+id).removeClass('hide');
     });
 
-    $('.table-pendapatan').on('click', '.table-pendapatan > tbody > tr ', function () {
-		if($("tr").hasClass('pendapatan-rincian') == false){
-			skpd = $(this).children("td").eq(0).html();
-		}
-		if(!$(this).hasClass('pendapatan-rincian')){
-			if($(this).hasClass('shown')){			
-				$('.pendapatan-rincian').slideUp('fast').remove();	
-				$(this).removeClass('shown');	
-			}else{
-				$('.pendapatan-rincian').slideUp('fast').remove();	
-				$(this).addClass('shown');
-				btl_detail = '<tr class="pendapatan-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-pendapatan').html()+'</td></tr>';
-				$(btl_detail).insertAfter('.table-pendapatan .table tbody tr.shown');
-				$('.table-detail-pendapatan-isi').DataTable({
-					sAjaxSource: "/main/2018/murni/pendapatan/getDetail/"+skpd,
-					aoColumns: [
-					{ mData: 'NO' },
-					{ mData: 'REKENING' },
-					{ mData: 'RINCIAN' },
-					{ mData: 'TOTAL' },
-					{ mData: 'AKSI' }
-					]
-				});
-			}
-		}
-    });
+    
 
     $('.table-pembiayaan').on('click', '.table-pembiayaan > tbody > tr ', function () {
 		if($("tr").hasClass('pembiayaan-rincian') == false){

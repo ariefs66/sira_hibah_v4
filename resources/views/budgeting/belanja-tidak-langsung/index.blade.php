@@ -342,6 +342,35 @@
 @endsection
 
 @section('plugin')
+<script>
+  $('.table-btl').on('click', '.table-btl > tbody > tr ', function () {
+    if($("tr").hasClass('btl-rincian') == false){
+      skpd = $(this).children("td").eq(0).html();
+      rek  = $(this).children("td").eq(1).html();
+    }
+    if(!$(this).hasClass('btl-rincian')){
+      if($(this).hasClass('shown')){      
+        $('.btl-rincian').slideUp('fast').remove(); 
+        $(this).removeClass('shown'); 
+      }else{
+        $('.btl-rincian').slideUp('fast').remove(); 
+        $(this).addClass('shown');
+        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-btl').html()+'</td></tr>';
+        $(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
+        $('.table-detail-btl-isi').DataTable({
+          sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/getDetail/"+skpd+"/"+rek,
+          aoColumns: [
+          { mData: 'NO' },
+          { mData: 'REKENING' },
+          { mData: 'RINCIAN' },
+          { mData: 'TOTAL' },
+          { mData: 'AKSI' }
+          ]
+        });
+      }
+    }
+  });
+</script>
 <script type="text/javascript">
   $('input.cari-pegawai').keyup( function () {
     $('.table-pegawai').DataTable().search($('.cari-pegawai').val()).draw();
