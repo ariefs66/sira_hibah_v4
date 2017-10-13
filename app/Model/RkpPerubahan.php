@@ -4,10 +4,10 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PendapatanPerubahan extends Model
+class RkpPerubahan extends Model
 {
-    protected $table		= 'BUDGETING.DAT_PENDAPATAN_PERUBAHAN';
-    protected $primaryKey 	= 'PENDAPATAN_ID';
+    protected $table		= 'BUDGETING.RKP_PERUBAHAN';
+    protected $primaryKey 	= 'RKP_PENDAPATAN_ID';
     public $timestamps 		= false;
     public $incrementing 	= false;
 
@@ -16,5 +16,8 @@ class PendapatanPerubahan extends Model
     }
     public function rekening(){
     	return $this->belongsTo('App\Model\Rekening','REKENING_ID');
+    }
+     public function pendapatan(){
+    	return $this->belongsTo('App\Model\Pendapatan','PENDAPATAN_ID');
     }
 }
