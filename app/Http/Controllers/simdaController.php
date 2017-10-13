@@ -42,14 +42,14 @@ class simdaController extends Controller{
 			$Kd_Bidang 	= substr($sub->SKPD->SKPD_KODE, 2,2)*1;
 			$Kd_Unit 	= substr($sub->SKPD->SKPD_KODE, 5,2)*1;
 			$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Sub_Unit')
-									->where('Tahun',$tahun)
+									->where('Tahun',2017)
 									->where('Kd_Urusan',$Kd_Urusan)
 									->where('Kd_Bidang',$Kd_Bidang)
 									->where('Kd_Unit',$Kd_Unit)
 									->where('Kd_Sub',$sub->SUB_KODE *1)
 									->count();
 			if($cek == 0){
-				$value 		= array('Tahun' 		=> $tahun,
+				$value 		= array('Tahun' 		=> 2017,
 									'Kd_Urusan' 	=> $Kd_Urusan,
 									'Kd_Bidang' 	=> $Kd_Bidang,
 									'Kd_Unit'		=> $Kd_Unit,
@@ -60,7 +60,7 @@ class simdaController extends Controller{
 		}
 		$count_sira 		= count($data);
 		$count_simda 		= DB::connection('sqlsrv')->table('dbo.Ta_Sub_Unit')
-									->where('Tahun',$tahun)
+									->where('Tahun',2017)
 									->count();
 		return 'SIRA : '.$count_sira.'<br>SIMDA : '.$count_simda;
 	}
@@ -83,7 +83,7 @@ class simdaController extends Controller{
 			$Kd_Sub 	= $skpd->SUB_KODE *1;
 			$Ket_Prog 	= $program->PROGRAM_NAMA;
 			$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Program')
-									->where('Tahun',$tahun)
+									->where('Tahun',2017)
 									->where('Kd_Urusan',$Kd_Urusan)
 									->where('Kd_Bidang',$Kd_Bidang)
 									->where('Kd_Unit',$Kd_Unit)
@@ -92,7 +92,7 @@ class simdaController extends Controller{
 									->where('ID_Prog',$ID_Prog)
 									->count();
 			if($cek == 0){
-				$value 	= array('Tahun' 		=> $tahun,
+				$value 	= array('Tahun' 		=> 2017,
 								'Kd_Urusan' 	=> $Kd_Urusan,
 								'Kd_Urusan1' 	=> $Kd_Urusan1,
 								'Kd_Bidang' 	=> $Kd_Bidang,
@@ -126,7 +126,7 @@ class simdaController extends Controller{
 			$Kd_Keg 	= $kegiatan->KEGIATAN_KODE * 1;
 			$Ket_Kegiatan 	= $kegiatan->KEGIATAN_NAMA;
 			$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Kegiatan')
-									->where('Tahun',$tahun)
+									->where('Tahun',2017)
 									->where('Kd_Urusan',$Kd_Urusan)
 									->where('Kd_Bidang',$Kd_Bidang)
 									->where('Kd_Unit',$Kd_Unit)
@@ -136,7 +136,7 @@ class simdaController extends Controller{
 									->where('Kd_Keg',$Kd_Keg)
 									->count();
 			if($cek == 0){
-				$value 	= array('Tahun' 			=> $tahun,
+				$value 	= array('Tahun' 			=> 2017,
 								'Kd_Urusan' 		=> $Kd_Urusan,
 								'Kd_Bidang' 		=> $Kd_Bidang,
 								'Kd_Unit'			=> $Kd_Unit,
@@ -174,7 +174,7 @@ class simdaController extends Controller{
 			$Kd_Rek_4	= substr($rekening->REKENING_KODE,6,2)*1;
 			$Kd_Rek_5	= substr($rekening->REKENING_KODE,9,2)*1;
 			$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Belanja')
-									->where('Tahun',$tahun)
+									->where('Tahun',2017)
 									->where('Kd_Urusan',$Kd_Urusan)
 									->where('Kd_Bidang',$Kd_Bidang)
 									->where('Kd_Unit',$Kd_Unit)
@@ -189,7 +189,7 @@ class simdaController extends Controller{
 									->where('Kd_Rek_5',$Kd_Rek_5)
 									->count();
 			if($cek == 0){
-				$value 	= array('Tahun' 			=> $tahun,
+				$value 	= array('Tahun' 			=> 2017,
 								'Kd_Urusan' 		=> $Kd_Urusan,
 								'Kd_Bidang' 		=> $Kd_Bidang,
 								'Kd_Unit'			=> $Kd_Unit,
@@ -210,11 +210,13 @@ class simdaController extends Controller{
 
 	public function trfBelanjaSub($tahun){
 		$data 	= Rincian::whereHas('bl',function($bl)use($tahun){
-			$bl->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1);
+			$bl->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->whereHas('subunit',function($sub){
+				$sub->where('SKPD_ID','!=',0);
+			});
 		})->where('REKENING_ID','!=',0)->orderBy('BL_ID','REKENING_ID')->groupBy('REKENING_ID','BL_ID')->select('REKENING_ID','BL_ID')->get();
 		$i 			= 1;		
 		foreach($data as $rincian){
-			if($i == 32000) $i = 1;
+			
 			$subrincian = Rincian::whereHas('bl',function($bl)use($tahun){
 							$bl->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1);
 						})->where('REKENING_ID',$rincian->REKENING_ID)
@@ -238,9 +240,279 @@ class simdaController extends Controller{
 			$Kd_Rek_4	= substr($rekening->REKENING_KODE,6,2)*1;
 			$Kd_Rek_5	= substr($rekening->REKENING_KODE,9,2)*1;
 			$j 			= 1;
-			if($j == 32000) $j = 1;
 			foreach($subrincian as $sr){
-				$value 	= array('Tahun' 			=> $tahun,
+				if($sr->subrincian){
+					$value 	= array('Tahun' 			=> 2017,
+									'Kd_Urusan' 		=> $Kd_Urusan,
+									'Kd_Bidang' 		=> $Kd_Bidang,
+									'Kd_Unit'			=> $Kd_Unit,
+									'Kd_Sub'			=> $Kd_Sub,
+									'Kd_Prog'			=> $Kd_Prog,
+									'ID_Prog'			=> $ID_Prog,
+									'Kd_Keg'			=> $Kd_Keg,
+									'Kd_Rek_1'			=> $Kd_Rek_1,
+									'Kd_Rek_2'			=> $Kd_Rek_2,
+									'Kd_Rek_3'			=> $Kd_Rek_3,
+									'Kd_Rek_4'			=> $Kd_Rek_4,
+									'Kd_Rek_5'			=> $Kd_Rek_5,
+									'No_Rinc' 			=> $i,
+									'Keterangan' 		=> "'".str_replace(';',',',$sr->subrincian->SUBRINCIAN_NAMA)."'");
+					DB::connection('sqlsrv')->table('dbo.Ta_Belanja_Rinc')->insert($value);
+					$komponen 	= Rincian::whereHas('bl',function($bl)use($tahun){
+								$bl->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1);
+							})->where('REKENING_ID',$rincian->REKENING_ID)
+							  ->where('BL_ID',$rincian->BL_ID)
+							  ->where('SUBRINCIAN_ID',$sr->SUBRINCIAN_ID)
+							  ->get();
+					foreach($komponen as $k){
+						if($k->RINCIAN_HARGA == 0) $harga = $k->komponen->KOMPONEN_HARGA;
+						else $harga = $k->RINCIAN_HARGA;
+						
+						if($k->RINCIAN_PAJAK == 10){
+							$insert 	= "INSERT INTO [dbo].[Ta_Belanja_Rinc_Sub] VALUES 
+										('2017', 
+										 '".$Kd_Urusan."', 
+										 '".$Kd_Bidang."', 
+										 '".$Kd_Unit."', 
+										 '".$Kd_Sub."', 
+										 '".$Kd_Prog."', 
+										 '".$ID_Prog."', 
+										 '".$Kd_Keg."', 
+										 '".$Kd_Rek_1."', 
+										 '".$Kd_Rek_2."', 
+										 '".$Kd_Rek_3."', 
+										 '".$Kd_Rek_4."', 
+										 '".$Kd_Rek_5."', 
+										 '".$i."', 
+										 '".$j."', 
+										 '".str_replace("'", '', $k->komponen->KOMPONEN_SATUAN)."', 
+										 CAST('".$k->RINCIAN_VOLUME."' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 '".str_replace("'", '', $k->komponen->KOMPONEN_SATUAN)."', 
+										 CAST('".$k->RINCIAN_VOLUME."' AS MONEY), 
+										 CAST('".$harga."' AS MONEY), 
+										 CAST('".$k->RINCIAN_TOTAL/1.1."' AS MONEY), 
+										 '".str_replace("'", '', str_replace(';',',',$k->RINCIAN_KOMPONEN))."');";
+							DB::connection('sqlsrv')->insert(DB::raw($insert));
+							$j++;			
+							if($j == 400) $j = 1;
+
+							$total 		= $k->RINCIAN_TOTAL/1.1/10;
+							$insert 	= "INSERT INTO [dbo].[Ta_Belanja_Rinc_Sub] VALUES 
+										('2017', 
+										 '".$Kd_Urusan."', 
+										 '".$Kd_Bidang."', 
+										 '".$Kd_Unit."', 
+										 '".$Kd_Sub."', 
+										 '".$Kd_Prog."', 
+										 '".$ID_Prog."', 
+										 '".$Kd_Keg."', 
+										 '".$Kd_Rek_1."', 
+										 '".$Kd_Rek_2."', 
+										 '".$Kd_Rek_3."', 
+										 '".$Kd_Rek_4."', 
+										 '".$Kd_Rek_5."', 
+										 '".$i."', 
+										 '".$j."', 
+										 'persen', 
+										 CAST('0.1' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 'persen', 
+										 CAST('0.1' AS MONEY), 
+										 CAST('".$k->RINCIAN_TOTAL/1.1."' AS MONEY), 
+										 CAST('".$total."' AS MONEY), 
+										 'PPN ".str_replace("'", '', str_replace(';',',',$k->RINCIAN_KOMPONEN))."');";
+							DB::connection('sqlsrv')->insert(DB::raw($insert));
+							$j++;
+							if($j == 400) $j = 1;							
+						}else{
+							$insert 	= "INSERT INTO [dbo].[Ta_Belanja_Rinc_Sub] VALUES 
+										('2017', 
+										 '".$Kd_Urusan."', 
+										 '".$Kd_Bidang."', 
+										 '".$Kd_Unit."', 
+										 '".$Kd_Sub."', 
+										 '".$Kd_Prog."', 
+										 '".$ID_Prog."', 
+										 '".$Kd_Keg."', 
+										 '".$Kd_Rek_1."', 
+										 '".$Kd_Rek_2."', 
+										 '".$Kd_Rek_3."', 
+										 '".$Kd_Rek_4."', 
+										 '".$Kd_Rek_5."', 
+										 '".$i."', 
+										 '".$j."', 
+										 '".str_replace("'", '', $k->komponen->KOMPONEN_SATUAN)."', 
+										 CAST('".$k->RINCIAN_VOLUME."' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 '".str_replace("'", '', $k->komponen->KOMPONEN_SATUAN)."', 
+										 CAST('".$k->RINCIAN_VOLUME."' AS MONEY), 
+										 CAST('".$k->RINCIAN_HARGA."' AS MONEY), 
+										 CAST('".$k->RINCIAN_TOTAL."' AS MONEY), 
+										 '".str_replace("'", '', str_replace(';',',',$k->RINCIAN_KOMPONEN))."');";
+							DB::connection('sqlsrv')->insert(DB::raw($insert));
+							$j++;			
+							if($j == 400) $j = 1;
+						}
+					}
+					$i++;
+					if($i == 400) $i = 1;
+				}
+			}
+		}
+	}
+
+	public function trfBTL($tahun){
+		$data 	 	= BTL::where('BTL_TAHUN',$tahun)
+						->groupBy('SUB_ID')
+						->groupBy('REKENING_ID')
+						->select('SUB_ID','REKENING_ID')
+						->get();
+		$i 			= 1;
+		foreach($data as $btl){
+			$skpd 		= $btl->subunit;
+			$Kd_Urusan 	= substr($skpd->SKPD->SKPD_KODE, 0,1);
+			$Kd_Bidang 	= substr($skpd->SKPD->SKPD_KODE, 2,2)*1;
+			$Kd_Unit 	= substr($skpd->SKPD->SKPD_KODE, 5,2)*1;
+			$Kd_Sub 	= $skpd->SUB_KODE *1;
+			$Kd_Prog 	= 0;
+			$ID_Prog 	= 0;
+			$Kd_Keg 	= 0;
+			$rekening 	= $btl->rekening;
+			$Kd_Rek_1	= substr($rekening->REKENING_KODE,0,1);
+			$Kd_Rek_2	= substr($rekening->REKENING_KODE,2,1);
+			$Kd_Rek_3	= substr($rekening->REKENING_KODE,4,1);
+			$Kd_Rek_4	= substr($rekening->REKENING_KODE,6,2)*1;
+			$Kd_Rek_5	= substr($rekening->REKENING_KODE,9,2)*1;
+			$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Belanja')
+									->where('Tahun',2017)
+									->where('Kd_Urusan',$Kd_Urusan)
+									->where('Kd_Bidang',$Kd_Bidang)
+									->where('Kd_Unit',$Kd_Unit)
+									->where('Kd_Sub',$Kd_Sub)
+									->where('Kd_Prog',$Kd_Prog)
+									->where('ID_Prog',$ID_Prog)
+									->where('Kd_Keg',$Kd_Keg)
+									->where('Kd_Rek_1',$Kd_Rek_1)
+									->where('Kd_Rek_2',$Kd_Rek_2)
+									->where('Kd_Rek_3',$Kd_Rek_3)
+									->where('Kd_Rek_4',$Kd_Rek_4)
+									->where('Kd_Rek_5',$Kd_Rek_5)
+									->count();
+			if($cek == 0){
+				$value 	= array('Tahun' 			=> 2017,
+								'Kd_Urusan' 		=> $Kd_Urusan,
+								'Kd_Bidang' 		=> $Kd_Bidang,
+								'Kd_Unit'			=> $Kd_Unit,
+								'Kd_Sub'			=> $Kd_Sub,
+								'Kd_Prog'			=> $Kd_Prog,
+								'ID_Prog'			=> $ID_Prog,
+								'Kd_Keg'			=> $Kd_Keg,
+								'Kd_Rek_1'			=> $Kd_Rek_1,
+								'Kd_Rek_2'			=> $Kd_Rek_2,
+								'Kd_Rek_3'			=> $Kd_Rek_3,
+								'Kd_Rek_4'			=> $Kd_Rek_4,
+								'Kd_Rek_5'			=> $Kd_Rek_5,);
+				DB::connection('sqlsrv')->table('dbo.Ta_Belanja')->insert($value);
+				
+				$value 	= array('Tahun' 			=> 2017,
+									'Kd_Urusan' 		=> $Kd_Urusan,
+									'Kd_Bidang' 		=> $Kd_Bidang,
+									'Kd_Unit'			=> $Kd_Unit,
+									'Kd_Sub'			=> $Kd_Sub,
+									'Kd_Prog'			=> $Kd_Prog,
+									'ID_Prog'			=> $ID_Prog,
+									'Kd_Keg'			=> $Kd_Keg,
+									'Kd_Rek_1'			=> $Kd_Rek_1,
+									'Kd_Rek_2'			=> $Kd_Rek_2,
+									'Kd_Rek_3'			=> $Kd_Rek_3,
+									'Kd_Rek_4'			=> $Kd_Rek_4,
+									'Kd_Rek_5'			=> $Kd_Rek_5,
+									'No_Rinc'			=> $i,
+									'Keterangan' 		=> $rekening->REKENING_NAMA);
+				DB::connection('sqlsrv')->table('dbo.Ta_Belanja_Rinc')->insert($value);
+				$subrincian 	= BTL::where('BTL_TAHUN',$tahun)
+									->where('REKENING_ID',$btl->REKENING_ID)
+									->where('SUB_ID',$btl->SUB_ID)
+									->get();
+				$j = 1;
+				foreach($subrincian as $sr){
+					$rekening 	= $sr->rekening;
+					$insert 	= "INSERT INTO [dbo].[Ta_Belanja_Rinc_Sub] VALUES 
+										('2017', 
+										 '".$Kd_Urusan."', 
+										 '".$Kd_Bidang."', 
+										 '".$Kd_Unit."', 
+										 '".$Kd_Sub."', 
+										 '".$Kd_Prog."', 
+										 '".$ID_Prog."', 
+										 '".$Kd_Keg."', 
+										 '".$Kd_Rek_1."', 
+										 '".$Kd_Rek_2."', 
+										 '".$Kd_Rek_3."', 
+										 '".$Kd_Rek_4."', 
+										 '".$Kd_Rek_5."', 
+										 '".$i."', 
+										 '".$j."', 
+										 'Tahun', 
+										 CAST('1' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 'Tahun', 
+										 CAST('1' AS MONEY), 
+										 CAST('".$sr->BTL_TOTAL."' AS MONEY), 
+										 CAST('".$sr->BTL_TOTAL."' AS MONEY), 
+										 '".$rekening->REKENING_NAMA."');";
+					DB::connection('sqlsrv')->insert(DB::raw($insert));
+					$j++;			
+				}
+			}
+		}
+	}
+
+	public function trfPendapatan($tahun){
+		$data 	 	= Pendapatan::where('PENDAPATAN_TAHUN',$tahun)
+						->groupBy('SUB_ID')
+						->groupBy('REKENING_ID')
+						->select('SUB_ID','REKENING_ID')
+						->get();
+		$i 			= 1;
+		foreach($data as $btl){
+			$skpd 		= $btl->subunit;
+			$Kd_Urusan 	= substr($skpd->SKPD->SKPD_KODE, 0,1);
+			$Kd_Bidang 	= substr($skpd->SKPD->SKPD_KODE, 2,2)*1;
+			$Kd_Unit 	= substr($skpd->SKPD->SKPD_KODE, 5,2)*1;
+			$Kd_Sub 	= $skpd->SUB_KODE *1;
+			$Kd_Prog 	= 0;
+			$ID_Prog 	= 0;
+			$Kd_Keg 	= 0;
+			$rekening 	= $btl->rekening;
+			$Kd_Rek_1	= substr($rekening->REKENING_KODE,0,1);
+			$Kd_Rek_2	= substr($rekening->REKENING_KODE,2,1);
+			$Kd_Rek_3	= substr($rekening->REKENING_KODE,4,1);
+			$Kd_Rek_4	= substr($rekening->REKENING_KODE,6,2)*1;
+			$Kd_Rek_5	= substr($rekening->REKENING_KODE,9,2)*1;
+			$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Pendapatan')
+									->where('Tahun',2017)
+									->where('Kd_Urusan',$Kd_Urusan)
+									->where('Kd_Bidang',$Kd_Bidang)
+									->where('Kd_Unit',$Kd_Unit)
+									->where('Kd_Sub',$Kd_Sub)
+									->where('Kd_Prog',$Kd_Prog)
+									->where('ID_Prog',$ID_Prog)
+									->where('Kd_Keg',$Kd_Keg)
+									->where('Kd_Rek_1',$Kd_Rek_1)
+									->where('Kd_Rek_2',$Kd_Rek_2)
+									->where('Kd_Rek_3',$Kd_Rek_3)
+									->where('Kd_Rek_4',$Kd_Rek_4)
+									->where('Kd_Rek_5',$Kd_Rek_5)
+									->where('Kd_Pendapatan',$Kd_Rek_3)
+									->count();
+			if($cek == 0){
+				$value 	= array('Tahun' 			=> 2017,
 								'Kd_Urusan' 		=> $Kd_Urusan,
 								'Kd_Bidang' 		=> $Kd_Bidang,
 								'Kd_Unit'			=> $Kd_Unit,
@@ -253,76 +525,43 @@ class simdaController extends Controller{
 								'Kd_Rek_3'			=> $Kd_Rek_3,
 								'Kd_Rek_4'			=> $Kd_Rek_4,
 								'Kd_Rek_5'			=> $Kd_Rek_5,
-								'No_Rinc' 			=> $i,
-								'Keterangan' 		=> "'".str_replace(';',',',$sr->subrincian->SUBRINCIAN_NAMA)."'");
-				DB::connection('sqlsrv')->table('dbo.Ta_Belanja_Rinc')->insert($value);
-				$komponen 	= Rincian::whereHas('bl',function($bl)use($tahun){
-							$bl->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1);
-						})->where('REKENING_ID',$rincian->REKENING_ID)
-						  ->where('BL_ID',$rincian->BL_ID)
-						  ->where('SUBRINCIAN_ID',$sr->SUBRINCIAN_ID)
-						  ->get();
-				foreach($komponen as $k){
-					$insert 	= "INSERT INTO [dbo].[Ta_Belanja_Rinc_Sub] VALUES 
-									('".$tahun."', 
-									 '".$Kd_Urusan."', 
-									 '".$Kd_Bidang."', 
-									 '".$Kd_Unit."', 
-									 '".$Kd_Sub."', 
-									 '".$Kd_Prog."', 
-									 '".$ID_Prog."', 
-									 '".$Kd_Keg."', 
-									 '".$Kd_Rek_1."', 
-									 '".$Kd_Rek_2."', 
-									 '".$Kd_Rek_3."', 
-									 '".$Kd_Rek_4."', 
-									 '".$Kd_Rek_5."', 
-									 '".$i."', 
-									 '".$j."', 
-									 '".str_replace("'", '', $k->komponen->KOMPONEN_SATUAN)."', 
-									 CAST('".$k->RINCIAN_VOLUME."' AS MONEY), 
-									 '', CAST('0' AS MONEY), 
-									 '', CAST('0' AS MONEY), 
-									 '".str_replace("'", '', $k->komponen->KOMPONEN_SATUAN)."', 
-									 CAST('".$k->RINCIAN_VOLUME."' AS MONEY), 
-									 CAST('".$k->RINCIAN_HARGA."' AS MONEY), 
-									 CAST('".$k->RINCIAN_VOLUME*$k->RINCIAN_HARGA."' AS MONEY), 
-									 '".str_replace("'", '', str_replace(';',',',$k->komponen->KOMPONEN_NAMA))."');";
+								'Kd_Pendapatan'		=> $Kd_Rek_3);
+				DB::connection('sqlsrv')->table('dbo.Ta_Pendapatan')->insert($value);
+				
+				$subrincian 	= Pendapatan::where('PENDAPATAN_TAHUN',$tahun)
+									->where('REKENING_ID',$btl->REKENING_ID)
+									->where('SUB_ID',$btl->SUB_ID)
+									->get();
+				$j = 1;
+				foreach($subrincian as $sr){
+					$rekening 	= $sr->rekening;
+					$insert 	= "INSERT INTO [dbo].[Ta_Pendapatan_Rinc] VALUES 
+										('2017', 
+										 '".$Kd_Urusan."', 
+										 '".$Kd_Bidang."', 
+										 '".$Kd_Unit."', 
+										 '".$Kd_Sub."', 
+										 '".$Kd_Prog."', 
+										 '".$ID_Prog."', 
+										 '".$Kd_Keg."', 
+										 '".$Kd_Rek_1."', 
+										 '".$Kd_Rek_2."', 
+										 '".$Kd_Rek_3."', 
+										 '".$Kd_Rek_4."', 
+										 '".$Kd_Rek_5."', 
+										 '".$j."', 
+										 'Tahun', 
+										 CAST('1' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 '', CAST('0' AS MONEY), 
+										 'Tahun', 
+										 CAST('1' AS MONEY), 
+										 CAST('".$sr->PENDAPATAN_TOTAL."' AS MONEY), 
+										 CAST('".$sr->PENDAPATAN_TOTAL."' AS MONEY), 
+										 '".$rekening->REKENING_NAMA."');";
 					DB::connection('sqlsrv')->insert(DB::raw($insert));
-					$j++;								
-					if($k->RINCIAN_PAJAK == 10){
-						$vol 	= $k->RINCIAN_VOLUME/10;
-						$total 	= $vol*$k->RINCIAN_HARGA;
-						$insert 	= "INSERT INTO [dbo].[Ta_Belanja_Rinc_Sub] VALUES 
-									('".$tahun."', 
-									 '".$Kd_Urusan."', 
-									 '".$Kd_Bidang."', 
-									 '".$Kd_Unit."', 
-									 '".$Kd_Sub."', 
-									 '".$Kd_Prog."', 
-									 '".$ID_Prog."', 
-									 '".$Kd_Keg."', 
-									 '".$Kd_Rek_1."', 
-									 '".$Kd_Rek_2."', 
-									 '".$Kd_Rek_3."', 
-									 '".$Kd_Rek_4."', 
-									 '".$Kd_Rek_5."', 
-									 '".$i."', 
-									 '".$j."', 
-									 '".str_replace("'", '', $k->komponen->KOMPONEN_SATUAN)."', 
-									 CAST('".$vol."' AS MONEY), 
-									 '', CAST('0' AS MONEY), 
-									 '', CAST('0' AS MONEY), 
-									 '".str_replace("'", '', $k->komponen->KOMPONEN_SATUAN)."', 
-									 CAST('".$vol."' AS MONEY), 
-									 CAST('".$k->RINCIAN_HARGA."' AS MONEY), 
-									 CAST('".$total."' AS MONEY), 
-									 'PPN ".str_replace("'", '', str_replace(';',',',$k->komponen->KOMPONEN_NAMA))."');";
-						DB::connection('sqlsrv')->insert(DB::raw($insert));
-						$j++;
-					}
+					$j++;			
 				}
-				$i++;
 			}
 		}
 	}

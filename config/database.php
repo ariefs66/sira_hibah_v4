@@ -83,7 +83,7 @@ return [
             // 'host' => '202.154.25.35',
             'host' => '192.168.4.198',
             'port' => '1433',
-            'database' => 'apbd_2017',
+            'database' => 'apbd_2017_ebudget',
             'username' => 'sa',
             'password' => '',
         ],

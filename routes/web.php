@@ -417,3 +417,5 @@ Route::get('/simda/{tahun}/trfprogram', 'simdaController@trfProgram');
 Route::get('/simda/{tahun}/trfkegiatan', 'simdaController@trfKegiatan');
 Route::get('/simda/{tahun}/trfbelanja', 'simdaController@trfBelanja');
 Route::get('/simda/{tahun}/trfbelanjasub', 'simdaController@trfBelanjaSub');
+Route::get('/simda/{tahun}/trfbtl', 'simdaController@trfBTL');
+Route::get('/simda/{tahun}/trfpendapatan', 'simdaController@trfPendapatan');
