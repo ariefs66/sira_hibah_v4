@@ -283,7 +283,7 @@
 		<td class="border-rincian kanan border"><b>{{ number_format(($totalbl - $totalbl_murni),0,',','.') }},00</b></td>
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalbl - $totalbl_murni) * 100)/$totalbl_murni, 2, ',', ' '),"-") }}% </b></td>
 	</tr>
-	<?php $idxmurni=0;?>
+	
 	@foreach($rekening as $r)
 	@if($s != 0)
 	@if($reke[$s-1]->REKENING_KODE != $reke[$s]->REKENING_KODE)
@@ -301,7 +301,11 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format(($totalreke[$s] - $totalreke_murni[$s]),0,',','.') }},00</b></td>
+		@if(empty($totalreke_murni[$s]) or $totalreke_murni[$s]==0)
+		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalreke[$s]) * 100)/$totalreke[$s], 2, ',', ' '),"-") }}% </b></td>
+		@else
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalreke[$s] - $totalreke_murni[$s]) * 100)/$totalreke_murni[$s], 2, ',', ' '),"-") }}% </b></td>
+		@endif
 	</tr>
 	@endif
 	@else
@@ -319,7 +323,11 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format(($totalreke[$s] - $totalreke_murni[$s]),0,',','.') }},00</b></td>
+		@if(empty($totalreke_murni[$s]) or $totalreke_murni[$s]==0)
+		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalreke[$s]) * 100)/$totalreke[$s], 2, ',', ' '),"-") }}% </b></td>
+		@else
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalreke[$s] - $totalreke_murni[$s]) * 100)/$totalreke_murni[$s], 2, ',', ' '),"-") }}% </b></td>
+		@endif
 	</tr>
 	@endif
 
@@ -339,7 +347,11 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format(($totalrek[$q] - $totalrek_murni[$q]),0,',','.') }},00</b></td>
+		@if(empty($totalrek_murni[$q]) or $totalrek_murni[$q]==0)
+		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalrek[$q]) * 100)/$totalrek[$q], 2, ',', ' '),"-") }}% </b></td>
+		@else
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalrek[$q] - $totalrek_murni[$q] ) * 100)/$totalrek_murni[$q], 2, ',', ' '),"-") }}% </b></td>
+		@endif
 	</tr>
 	@endif
 	@else
@@ -357,7 +369,11 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format( ($totalrek[$q] - $totalrek_murni[$q]),0,',','.') }},00</b></td>
+		@if(empty($totalrek_murni[$q]) or $totalrek_murni[$q]==0)
+		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalrek[$q]) * 100)/$totalrek[$q], 2, ',', ' '),"-") }}% </b></td>
+		@else
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalrek[$q] - $totalrek_murni[$q] ) * 100)/$totalrek_murni[$q], 2, ',', ' '),"-") }}% </b></td>
+		@endif
 	</tr>
 	@endif
 	<?php $q++;$s++;?>
@@ -369,17 +385,21 @@
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($rekening_murni[$idxmurni]->total,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($r->TOTAL_MURNI,0,',','.') }},00</b></td>
 		<!--END RINCIAN PERHITUNGAN PERUBAHAN -->
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($r->total,0,',','.') }},00</b></td>
-		<td class="border-rincian kanan border"><b> {{ number_format(( $r->total - $rekening_murni[$idxmurni]->total) ,0,',','.') }},00</b></td>
-		<td class="border-rincian tengah">{{ trim(number_format( ( ( $r->total - $rekening_murni[$idxmurni]->total) * 100)/$rekening_murni[$idxmurni]->total , 2, ',', ' '),"-") }}%</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($r->TOTAL,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b> {{ number_format(( $r->TOTAL - $r->TOTAL_MURNI) ,0,',','.') }},00</b></td>
+		@if(empty($r->TOTAL_MURNI) or $r->TOTAL_MURNI==0)
+		<td class="border-rincian tengah">{{ trim(number_format( ( ( $r->TOTAL) * 100)/$r->TOTAL , 2, ',', ' '),"-") }}%</td>
+		@else
+		<td class="border-rincian tengah">{{ trim(number_format( ( ( $r->TOTAL - $r->TOTAL_MURNI) * 100)/$r->TOTAL_MURNI , 2, ',', ' '),"-") }}%</td>
+		@endif
 	</tr>
-	<?php $idxmurni++;?>
+	
 	<?php $l=0;?>
 	@foreach($paket[$m] as $p)
 
@@ -396,18 +416,26 @@
 	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i></td>
 	  @endif
 
-	<!-- RINCIAN PERHITUNGAN MURNI -->  
-	  <td class="border-rincian tengah">{{ $k->rincianmurni->RINCIAN_VOLUME }}</td>
+	<!-- RINCIAN PERHITUNGAN MURNI -->
+	  @if(empty($k->RINCIAN_VOLUME_MURNI))
+	  <td class="border-rincian tengah">-</td>
+	  <td class="border-rincian tengah">-</td>
+	  <td class="border-rincian kanan">0,00</td>
+	  <td class="border-rincian kanan">0,00</td>
+	  <td class="border-rincian kanan">0,00</td>
+	  @else  
+	  <td class="border-rincian tengah">{{ $k->RINCIAN_VOLUME_MURNI }}</td>
 	  <td class="border-rincian tengah">{{ $k->komponen->KOMPONEN_SATUAN }}</td>
-	  <td class="border-rincian kanan">{{ number_format($k->rincianmurni->RINCIAN_HARGA,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA_MURNI,0,',','.') }},00</td>
 
 	  @if($k->RINCIAN_PAJAK == 0)
 	  <td class="border-rincian kanan">0,00</td>
 	  @else
-	  <td class="border-rincian kanan">{{ number_format($k->rincianmurni->RINCIAN_HARGA/10,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA_MURNI/10,0,',','.') }},00 </td>
 	  @endif
 
-	  <td class="border-rincian kanan">{{ number_format($k->rincianmurni->RINCIAN_TOTAL,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL_MURNI,0,',','.') }},00 </td>
+	  @endif
 	<!--END RINCIAN PERHITUNGAN MURNI -->
 
 
@@ -423,8 +451,13 @@
 	  @endif
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td>
 
-	  <td class="border-rincian kanan">{{ number_format(( $k->RINCIAN_TOTAL - $k->rincianmurni->RINCIAN_TOTAL),0,',','.') }},00 </td>
-	  <td class="border tengah">{{ trim(number_format( ( ( $k->RINCIAN_TOTAL - $k->rincianmurni->RINCIAN_TOTAL) * 100)/$k->rincianmurni->RINCIAN_TOTAL , 2, ',', ' '),"-") }}%</td>	
+	  @if(empty($k->RINCIAN_VOLUME_MURNI))
+	  <td class="border-rincian kanan">{{ number_format(( $k->RINCIAN_TOTAL),0,',','.') }},00 </td>
+	  <td class="border tengah">{{ trim(number_format( ( ( $k->RINCIAN_TOTAL) * 100)/$k->RINCIAN_TOTAL , 2, ',', ' '),"-") }}%</td>
+	  @else
+	  <td class="border-rincian kanan">{{ number_format(( $k->RINCIAN_TOTAL - $k->RINCIAN_TOTAL_MURNI),0,',','.') }},00 </td>
+	  <td class="border tengah">{{ trim(number_format( ( ( $k->RINCIAN_TOTAL - $k->RINCIAN_TOTAL_MURNI) * 100)/$k->RINCIAN_TOTAL_MURNI , 2, ',', ' '),"-") }}%</td>	
+	  @endif
 	<!--END RINCIAN PERHITUNGAN PERUBAHAN -->
 	  
 

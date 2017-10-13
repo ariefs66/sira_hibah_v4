@@ -112,18 +112,21 @@ class lampiranController extends Controller
         }else{
             $bl    = BLPerubahan::where('BL_ID',$id)->first();
             $total = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-            $rekening       = RincianPerubahan::where('BL_ID',$id)->orderBy('REKENING_ID')
-                              ->groupBy('REKENING_ID')
-                              ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "REKENING_ID"')
+            $rekening       = RincianPerubahan::leftJoin('BUDGETING.DAT_RINCIAN',function($join){
+                                $join->on('BUDGETING.DAT_RINCIAN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID');
+                              })
+                              ->whereHas('rekening', function($x) use ($tahun){
+                                $x->where('REKENING_TAHUN','=',$tahun);
+                              })
+                              ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$id)
+                              ->orderBy('DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                              ->groupBy('DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                              //->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "REKENING_ID"')
+                              ->select(['DAT_RINCIAN_PERUBAHAN.REKENING_ID',DB::raw('sum("DAT_RINCIAN_PERUBAHAN"."RINCIAN_TOTAL") as "TOTAL"'),DB::raw('sum("BUDGETING"."DAT_RINCIAN"."RINCIAN_TOTAL") as "TOTAL_MURNI"')])
                               ->get();
 
             $bl_murni       = BL::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
             $total_murni    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-            $rekening_murni = Rincian::where('BL_ID',$id)
-                              ->orderBy('REKENING_ID')
-                              ->groupBy('REKENING_ID')
-                              ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "REKENING_ID"')
-                              ->get(); 
 
             $paket      = array();
             $i          = 0;
@@ -135,93 +138,86 @@ class lampiranController extends Controller
             $rek4       = "";
             $rek3       = "";
             $totalrek   = "";
-            $totalreke  = "";                  
+            $totalreke  = "";
+            $totalrek_murni   = "";
+            $totalreke_murni  = "";                  
 
             foreach($rekening as $r) {
-
                 $rek[$q]     = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,8))->first();
                 $reke[$s]    = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,5))->first();
                 $rek4        = $rek[$q];
                 $rek3        = $reke[$s];    
-
+                
                 $totalrek[$q]= RincianPerubahan::whereHas('rekening', function($x) use ($rek4){
-                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
-                })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-                $totalreke[$s]= RincianPerubahan::whereHas('rekening', function($x) use ($rek3){
-                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
-                })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+                                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                                })
+                               ->where('BL_ID',$id)
+                               ->sum('RINCIAN_TOTAL');
+                $totalrek_murni[$q]= Rincian::whereHas('rekening', function($x) use ($rek4){
+                                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                                })
+                               ->where('BL_ID',$id)
+                               ->sum('RINCIAN_TOTAL');
+
+                $totalreke[$s]= RincianPerubahan::whereHas('rekening', function($x) use ($rek3,$tahun){
+                                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
+                                })
+                                ->where('BL_ID',$id)
+                                ->sum('RINCIAN_TOTAL');
+                $totalreke_murni[$s]= Rincian::whereHas('rekening', function($x) use ($rek3,$tahun){
+                                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
+                                })
+                                ->where('BL_ID',$id)
+                                ->sum('RINCIAN_TOTAL');
+                
+                $paket[$i]   = RincianPerubahan::leftJoin('BUDGETING.DAT_RINCIAN',function($join){
+                                    $join->on('BUDGETING.DAT_RINCIAN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID');
+                                })
+                                ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$id)
+                                ->where('DAT_RINCIAN_PERUBAHAN.REKENING_ID',$r->REKENING_ID)
+                                ->groupBy('DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID')
+                                ->groupBy('DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                                ->groupBy('DAT_RINCIAN_PERUBAHAN.RINCIAN_PAJAK')
+                                ->orderBy('DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID')
+                                //->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK"')
+                                ->select(['DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID','DAT_RINCIAN_PERUBAHAN.REKENING_ID','DAT_RINCIAN_PERUBAHAN.RINCIAN_PAJAK',DB::raw('sum("DAT_RINCIAN_PERUBAHAN"."RINCIAN_TOTAL") as "TOTAL"'),DB::raw('sum("BUDGETING"."DAT_RINCIAN"."RINCIAN_TOTAL") as "TOTAL_MURNI"')])
+                                ->get();
+                
+                /*
                 $paket[$i]   = RincianPerubahan::where('BL_ID',$id)
-                                            ->where('REKENING_ID',$r->REKENING_ID)
-                                            ->groupBy('SUBRINCIAN_ID')
-                                            ->groupBy('REKENING_ID')
-                                            ->groupBy('RINCIAN_PAJAK')
-                                            ->orderBy('SUBRINCIAN_ID')
-                                            ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK"')
-                                            ->get();
+                                ->where('REKENING_ID',$r->REKENING_ID)
+                                ->groupBy('SUBRINCIAN_ID')
+                                ->groupBy('REKENING_ID')
+                                ->groupBy('RINCIAN_PAJAK')
+                                ->orderBy('SUBRINCIAN_ID')
+                                ->selectRaw('SUM("RINCIAN_TOTAL") AS "TOTAL", "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK", SUM("RINCIAN_TOTAL") AS "TOTAL_MURNI"')
+                                ->get();
+                */
 
                 $k = 0;
                 foreach($paket[$i] as $p){
+                    /*
                     $komponen[$i][$k++]    = RincianPerubahan::where('SUBRINCIAN_ID',$p->SUBRINCIAN_ID)
                                                     ->where('REKENING_ID',$p->REKENING_ID)
+                                                    ->groupBy('RINCIAN_ID','SUBRINCIAN_ID','REKENING_ID','KOMPONEN_ID','RINCIAN_PAJAK','RINCIAN_VOLUME','RINCIAN_KOEFISIEN','RINCIAN_TOTAL','RINCIAN_KETERANGAN','PEKERJAAN_ID','BL_ID','RINCIAN_KOMPONEN','RINCIAN_HARGA')
                                                     ->orderBy('KOMPONEN_ID')
                                                     ->get();
+                    */
+                    $komponen[$i][$k++] = RincianPerubahan::leftJoin('BUDGETING.DAT_RINCIAN',function($join){
+                                            $join->on('BUDGETING.DAT_RINCIAN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID');
+                                        })
+                                        ->where('DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID',$p->SUBRINCIAN_ID)
+                                        ->where('DAT_RINCIAN_PERUBAHAN.REKENING_ID',$p->REKENING_ID)
+                                        ->orderBy('DAT_RINCIAN_PERUBAHAN.KOMPONEN_ID')
+                                        ->select('DAT_RINCIAN_PERUBAHAN.*','BUDGETING.DAT_RINCIAN.RINCIAN_KETERANGAN AS RINCIAN_KETERANGAN_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_KOEFISIEN AS RINCIAN_KOEFISIEN_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_KOMPONEN AS RINCIAN_KOMPONEN_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_VOLUME AS RINCIAN_VOLUME_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_HARGA AS RINCIAN_HARGA_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_TOTAL AS RINCIAN_TOTAL_MURNI')
+                                        ->get();
                     }
+
                 $i++; 
                 $q++; 
                 $s++;    
 
-            }    
-
-            $paket_murni      = array();
-            $i_murni          = 0;
-            $q_murni          = 0;
-            $s_murni          = 0;
-            $komponen_murni   = "";
-            $rek_murni        = "";
-            $reke_murni       = "";
-            $rek4_murni       = "";
-            $rek3_murni       = "";
-            $totalrek_murni   = "";
-
-            $totalreke_murni  = "";
-            foreach($rekening_murni as $r) {
-
-                $rek_murni[$q_murni]     = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,8))->first();
-                $reke[$s]    = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,5))->first();
-                $rek4        = $rek_murni[$q_murni];
-                $rek3        = $reke[$s];    
-
-                $totalrek_murni[$q_murni]= Rincian::whereHas('rekening', function($x) use ($rek4){
-                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
-                })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-                $totalreke_murni[$s_murni]= Rincian::whereHas('rekening', function($x) use ($rek3){
-                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
-                })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-                $paket_murni[$i_murni]   = Rincian::where('BL_ID',$id)
-
-                                            ->where('REKENING_ID',$r->REKENING_ID)
-                                            ->groupBy('SUBRINCIAN_ID')
-                                            ->groupBy('REKENING_ID')
-                                            ->groupBy('RINCIAN_PAJAK')
-                                            ->orderBy('SUBRINCIAN_ID')
-                                            ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK"')
-                                            ->get();
-
-                $k = 0;
-
-                foreach($paket_murni[$i_murni] as $p){
-                    $komponen_murni[$i_murni][$k++]    = Rincian::where('SUBRINCIAN_ID',$p->SUBRINCIAN_ID)
-                                                    ->where('REKENING_ID',$p->REKENING_ID)
-
-                                                    ->orderBy('KOMPONEN_ID')
-                                                    ->get();
-                    }
-                $i_murni++; 
-                $q_murni++; 
-                $s_murni++; 
-
-
-            }    
+            }
 
             $totalBL    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
 
@@ -251,13 +247,10 @@ class lampiranController extends Controller
                     'reke'              =>$reke,
                     'totalrek'          =>$totalrek,
                     'totalreke'         =>$totalreke,
-                    'total_murni'       =>$total_murni,
                     'totalrek_murni'    =>$totalrek_murni,
                     'totalreke_murni'   =>$totalreke_murni,
+                    'total_murni'       =>$total_murni,
                     'totalbl_murni'     =>$totalBLMurni,
-                    'paket_murni'       =>$paket_murni,
-                    'rek_murni'         =>$rek_murni,
-                    'rekening_murni'    =>$rekening_murni,
                     'bl_murni'          =>$bl_murni,
                     'selisih'          =>$selisih,
                     'persen'            =>$persen
