@@ -456,7 +456,7 @@
 	  <td class="border tengah">{{ trim(number_format( ( ( $k->RINCIAN_TOTAL) * 100)/$k->RINCIAN_TOTAL , 2, ',', ' '),"-") }}%</td>
 	  @else
 	  <td class="border-rincian kanan">{{ number_format(( $k->RINCIAN_TOTAL - $k->RINCIAN_TOTAL_MURNI),0,',','.') }},00 </td>
-	  <td class="border tengah">{{ trim(number_format( ( ( $k->RINCIAN_TOTAL - $k->RINCIAN_TOTAL_MURNI) * 100)/$k->RINCIAN_TOTAL_MURNI , 2, ',', ' '),"-") }}%</td>	
+	  <td class="border tengah">-</td>	
 	  @endif
 	<!--END RINCIAN PERHITUNGAN PERUBAHAN -->
 	  
