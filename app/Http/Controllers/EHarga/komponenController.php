@@ -57,7 +57,7 @@ class komponenController extends Controller
     	$i = 1;
         $view = array();
         foreach ($data as $data) {
-            if(substr(Auth::user()->mod,4,1) == 1){
+            if(substr(Auth::user()->mod,4,1) == 1 or substr(Auth::user()->mod,6,1) == 1){
             /*
             $aksi         = '<div class="action visible">
                                 <a onclick="return getrekening(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Rekening"><i class="mi-eye"></i></a>
