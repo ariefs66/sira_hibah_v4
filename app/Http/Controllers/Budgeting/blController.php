@@ -1984,38 +1984,74 @@ class blController extends Controller
 
     //VALIDASI
     public function validasi($tahun,$status){
-        $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
-        BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
-        $skpd           = $this->getSKPD($tahun);
-        $totalPagu      = BL::whereHas('subunit',function($q) use($skpd){
-                                $q->where('SKPD_ID',$skpd);
-                            })->where('BL_VALIDASI',1)->sum('BL_PAGU');
-        // SKPD::where('SKPD_ID',$skpd)->update(['SKPD_PAGU'=>$totalPagu]);
-        $log        = new Log;
-        $log->LOG_TIME                          = Carbon\Carbon::now();
-        $log->USER_ID                           = Auth::user()->id;
-        $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
-        $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
-        $log->save();
-        return number_format($totalrincian,0,'.',',');
-    }
-
-    public function validasiAll($tahun,$status){
-        // $data   = BL::all();
-        $data   = BL::where('BL_VALIDASI',1)->get();
-        $i      = 1;
-        foreach ($data as $data) {
-            $totalrincian   = Rincian::where('BL_ID',$data->BL_ID)->sum('RINCIAN_TOTAL');
-            BL::where('BL_ID',$data->BL_ID)->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
+        if($status=='murni'){
+            $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
+            BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
+            $skpd           = $this->getSKPD($tahun);
+            $totalPagu      = BL::whereHas('subunit',function($q) use($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                                })->where('BL_VALIDASI',1)->sum('BL_PAGU');
+            // SKPD::where('SKPD_ID',$skpd)->update(['SKPD_PAGU'=>$totalPagu]);
             $log        = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
             $log->USER_ID                           = Auth::user()->id;
             $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
             $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
             $log->save();
-            $i++;      
+            return number_format($totalrincian,0,'.',',');
+        }else{
+            $totalrincian   = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
+            BLPerubahan::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
+            $skpd           = $this->getSKPD($tahun);
+            $totalPagu      = BLPerubahan::whereHas('subunit',function($q) use($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                                })->where('BL_VALIDASI',1)->sum('BL_PAGU');
+            // SKPD::where('SKPD_ID',$skpd)->update(['SKPD_PAGU'=>$totalPagu]);
+            $log        = new Log;
+            $log->LOG_TIME                          = Carbon\Carbon::now();
+            $log->USER_ID                           = Auth::user()->id;
+            $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
+            $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
+            $log->save();
+            return number_format($totalrincian,0,'.',',');
         }
-        return $i;
+        
+    }
+
+    public function validasiAll($tahun,$status){
+        // $data   = BL::all();
+        if($status=='murni'){
+            $data   = BL::where('BL_VALIDASI',1)->get();
+            $i      = 1;
+            foreach ($data as $data) {
+                $totalrincian   = Rincian::where('BL_ID',$data->BL_ID)->sum('RINCIAN_TOTAL');
+                BL::where('BL_ID',$data->BL_ID)->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
+                $log        = new Log;
+                $log->LOG_TIME                          = Carbon\Carbon::now();
+                $log->USER_ID                           = Auth::user()->id;
+                $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
+                $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
+                $log->save();
+                $i++;      
+            }
+            return $i;
+        }else{
+             $data   = BLPerubahan::where('BL_VALIDASI',1)->get();
+            $i      = 1;
+            foreach ($data as $data) {
+                $totalrincian   = RincianPerubahan::where('BL_ID',$data->BL_ID)->sum('RINCIAN_TOTAL');
+                BLPerubahan::where('BL_ID',$data->BL_ID)->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
+                $log        = new Log;
+                $log->LOG_TIME                          = Carbon\Carbon::now();
+                $log->USER_ID                           = Auth::user()->id;
+                $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
+                $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
+                $log->save();
+                $i++;      
+            }
+            return $i;
+        }
+        
     }    
 
     //API
@@ -2420,7 +2456,7 @@ class blController extends Controller
             $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return seturgensi(\''.$data->BL_ID.'\')"><i class="fa fa-search"></i> Detail</a></li>';
             else
             $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
-    
+
             if($data->Kunci->KUNCI_GIAT == 0 and $thp == 1){
                 if(Auth::user()->level == 8){
                     $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
