@@ -679,6 +679,8 @@ class blController extends Controller
             $id         = BLPerubahan::where('BL_TAHUN',$tahun)->where('KEGIATAN_ID',Input::get('kegiatan'))->where('SUB_ID',Input::get('sub_id'))->value('BL_ID');
 
             $kunci      = new Kunciperubahan;
+            $get_id      = Kunciperubahan::max('KUNCI_ID');
+            $kunci->KUNCI_ID                        = ($get_id+1);
             $kunci->BL_ID                           = $id;
             $kunci->KUNCI_GIAT                      = 0;
             $kunci->KUNCI_RINCIAN                   = 0;
@@ -1182,17 +1184,32 @@ class blController extends Controller
     }
 
     public function kuncigiat($tahun,$status){
-        Kunci::where('BL_ID',Input::get('BL_ID'))->update(['KUNCI_GIAT'=>Input::get('STATUS')]);
-        return 'Berhasil!';
+        if($status=='murni'){
+            Kunci::where('BL_ID',Input::get('BL_ID'))->update(['KUNCI_GIAT'=>Input::get('STATUS')]);
+            return 'Berhasil!';
+        }else{
+            Kunciperubahan::where('BL_ID',Input::get('BL_ID'))->update(['KUNCI_GIAT'=>Input::get('STATUS')]);
+            return 'Berhasil!';
+        }
+        
     }
 
     public function kuncigiatskpd($tahun,$status){
         $skpd   = Input::get('SKPD_ID');
-        $bl     = BL::whereHas('subunit',function($q) use ($skpd){
+        if($status=='murni'){
+            $bl     = BL::whereHas('subunit',function($q) use ($skpd){
                         $q->where('SKPD_ID',$skpd);
                     })->where('BL_TAHUN',$tahun)->select('BL_ID')->get()->toArray();
-        Kunci::whereIn('BL_ID',$bl)->update(['KUNCI_GIAT'=>Input::get('STATUS')]);
-        return 'Berhasil!';
+            Kunci::whereIn('BL_ID',$bl)->update(['KUNCI_GIAT'=>Input::get('STATUS')]);
+            return 'Berhasil!';
+        }else{
+            $bl     = BLPERUBAHAN::whereHas('subunit',function($q) use ($skpd){
+                        $q->where('SKPD_ID',$skpd);
+                    })->where('BL_TAHUN',$tahun)->select('BL_ID')->get()->toArray();
+            Kunciperubahan::whereIn('BL_ID',$bl)->update(['KUNCI_GIAT'=>Input::get('STATUS')]);
+            return 'Berhasil!';
+        }
+        
     }
     public function kuncirincian($tahun,$status){
         if($status == 'murni'){
