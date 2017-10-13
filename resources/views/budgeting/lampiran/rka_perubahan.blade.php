@@ -394,7 +394,7 @@
 		<td class="border-rincian kanan border"><b>{{ number_format($r->TOTAL,0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b> {{ number_format(( $r->TOTAL - $r->TOTAL_MURNI) ,0,',','.') }},00</b></td>
 		@if(empty($r->TOTAL_MURNI) or $r->TOTAL_MURNI==0)
-		<td class="border-rincian tengah">{{ trim(number_format( ( ( $r->TOTAL) * 100)/$r->TOTAL , 2, ',', ' '),"-") }}%</td>
+		<td class="border-rincian tengah">-</td>
 		@else
 		<td class="border-rincian tengah">{{ trim(number_format( ( ( $r->TOTAL - $r->TOTAL_MURNI) * 100)/$r->TOTAL_MURNI , 2, ',', ' '),"-") }}%</td>
 		@endif
@@ -453,7 +453,7 @@
 
 	  @if(empty($k->RINCIAN_VOLUME_MURNI))
 	  <td class="border-rincian kanan">{{ number_format(( $k->RINCIAN_TOTAL),0,',','.') }},00 </td>
-	  <td class="border tengah">{{ trim(number_format( ( ( $k->RINCIAN_TOTAL) * 100)/$k->RINCIAN_TOTAL , 2, ',', ' '),"-") }}%</td>
+	  <td class="border tengah">-</td>
 	  @else
 	  <td class="border-rincian kanan">{{ number_format(( $k->RINCIAN_TOTAL - $k->RINCIAN_TOTAL_MURNI),0,',','.') }},00 </td>
 	  <td class="border tengah">-</td>	
