@@ -177,10 +177,10 @@ class lampiranController extends Controller
                                 ->where('DAT_RINCIAN_PERUBAHAN.REKENING_ID',$r->REKENING_ID)
                                 ->groupBy('DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID')
                                 ->groupBy('DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                                ->groupBy('DAT_RINCIAN_PERUBAHAN.RINCIAN_PAJAK')
+                                //->groupBy('DAT_RINCIAN_PERUBAHAN.RINCIAN_PAJAK')
                                 ->orderBy('DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID')
                                 //->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK"')
-                                ->select(['DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID','DAT_RINCIAN_PERUBAHAN.REKENING_ID','DAT_RINCIAN_PERUBAHAN.RINCIAN_PAJAK',DB::raw('sum("DAT_RINCIAN_PERUBAHAN"."RINCIAN_TOTAL") as "TOTAL"'),DB::raw('sum("BUDGETING"."DAT_RINCIAN"."RINCIAN_TOTAL") as "TOTAL_MURNI"')])
+                                ->select(['DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID','DAT_RINCIAN_PERUBAHAN.REKENING_ID',DB::raw('sum("DAT_RINCIAN_PERUBAHAN"."RINCIAN_TOTAL") as "TOTAL"'),DB::raw('sum("BUDGETING"."DAT_RINCIAN"."RINCIAN_TOTAL") as "TOTAL_MURNI"')])
                                 ->get();
                 
                 /*
@@ -208,6 +208,7 @@ class lampiranController extends Controller
                                         })
                                         ->where('DAT_RINCIAN_PERUBAHAN.SUBRINCIAN_ID',$p->SUBRINCIAN_ID)
                                         ->where('DAT_RINCIAN_PERUBAHAN.REKENING_ID',$p->REKENING_ID)
+                                        ->orderBy('DAT_RINCIAN_PERUBAHAN.RINCIAN_ID')
                                         ->orderBy('DAT_RINCIAN_PERUBAHAN.KOMPONEN_ID')
                                         ->select('DAT_RINCIAN_PERUBAHAN.*','BUDGETING.DAT_RINCIAN.RINCIAN_KETERANGAN AS RINCIAN_KETERANGAN_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_KOEFISIEN AS RINCIAN_KOEFISIEN_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_KOMPONEN AS RINCIAN_KOMPONEN_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_VOLUME AS RINCIAN_VOLUME_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_HARGA AS RINCIAN_HARGA_MURNI','BUDGETING.DAT_RINCIAN.RINCIAN_TOTAL AS RINCIAN_TOTAL_MURNI')
                                         ->get();
@@ -218,7 +219,7 @@ class lampiranController extends Controller
                 $s++;    
 
             }
-
+            //print_r($komponen);exit;
             $totalBL    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
 
             $totalBLMurni = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
