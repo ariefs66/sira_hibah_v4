@@ -25,7 +25,7 @@
 			margin-top: 5px;
 		}
 		.detail > tbody > tr > td{
-			padding: 3px;			
+			padding: 3px;
 			border : 1px solid;
 		}
 		.header{
@@ -56,67 +56,40 @@
 	    	tfoot { display:table-footer-group; }		    
 		}
 	</style>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>	
 </head>
-<body onload="window.print()">
+<body onload="return download()">
+<button id="btnExport">Export to xls</button>	
 <div class="cetak" id="table_wrapper">
-<h4> 
-	Program dan Kegiatan Pada Perubahan Rencana Kerja Perangkat Daerah Tahun {{ $tahun }}<br>Kota Bandung</h4>
+<h4>Plafon Anggaran Sementara Berdasarkan Program dan Kegiatan Tahun Anggaran {{ $tahun }}</h4>
 <table class="header">
 	<tr class="noborder">
-		<td class="noborder"> <b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
-		<td class="kanan noborder"> <b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
+		<td class="noborder"><b>Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</b></td>
+		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }}</b></td>
 	</tr>
 </table>
 <table class="detail">
 	<tbody>
-	<tr class="tengah header">
-		<td rowspan="3" colspan="4">Kode</td>
-		<td rowspan="3">Urusan/Bidang Urusan Pemerintahan Daerah dan Program/Kegiatan</td>
-		<td colspan="2">Indikator Kinerja Program / Kegiatan</td>
-		<td colspan="11">Rencana Tahun {{ $tahun }}</td>
-		<td colspan="2">Jenis Kegiatan</td>
-	</tr>
-	<tr class="tengah header">
-		<td rowspan="2">Sebelum Perubahan </td>
-		<td rowspan="2">Sesudah Perubahan </td>
-		<td colspan="2">Kelompok Sasaran </td>
-		<td colspan="2">Lokasi </td>
-		<td colspan="2">Target Capaian Kinerja</td>
-		<td colspan="3">Pagu Indikatif</td>
-		<td colspan="2">Sumber Dana</td>
-		<td rowspan="2">Pagu Lama / Baru / Lanjutan</td>
+	<tr class="tengah">
+		<td colspan="4" rowspan="2">Nomor</td>
+		<td rowspan="2">Program/Kegiatan</td>
+		<td rowspan="2">Sasaran</td>
+		<td rowspan="2">Target</td>
+		<td colspan="3">Plafon Anggaran Sementara ﴾Rp.﴿</td>
 	</tr>
 	<tr>
-		<td>Sebelum Perubahan</td>
-		<td>Sesudah Perubahan</td>
-		<td>Sebelum Perubahan</td>
-		<td>Sesudah Perubahan</td>
-		<td>Sebelum Perubahan</td>
-		<td>Sesudah Perubahan</td>
-		<td>Sebelum Perubahan</td>
-		<td>Sesudah Perubahan</td>
-		<td>Jumlah Perubahan (+/-)</td>
-		<td>Sebelum Perubahan</td>
-		<td>Sesudah Perubahan</td>
+		<td class="tengah">Sebelum Perubahan</td>	
+		<td class="tengah">Setelah Perubahan</td>	
+		<td class="tengah">Bertambah / Berkurang</td>	
 	</tr>
-	<tr class="tengah header">
+	<tr class="tengah">
 		<td class="tengah" colspan="4">(1)</td>
-		<td class="tengah">2</td>
-		<td class="tengah">3</td>
-		<td class="tengah">4</td>
-		<td class="tengah">5</td>
-		<td class="tengah">6</td>
-		<td class="tengah">7</td>
-		<td class="tengah">8</td>
-		<td class="tengah">9</td>
-		<td class="tengah">10</td>
-		<td class="tengah">11</td>
-		<td class="tengah">12</td>
-		<td class="tengah">13</td>
-		<td class="tengah">14</td>
-		<td class="tengah">15</td>
-		<td class="tengah">16</td>
+		<td class="tengah">(2)</td>
+		<td class="tengah">(3)</td>
+		<td class="tengah">(4)</td>
+		<td class="tengah">(5)</td>
+		<td class="tengah">(6)</td>
+		<td class="tengah">(7)</td>
 	</tr>
 	<tr>
 	@foreach($program as $p)
@@ -127,7 +100,7 @@
 		<td width="1%"><b></b></td>
 		<td width="1%"><b></b></td>
 		<td width="1%"><b></b></td>
-		<td colspan="15"><b>
+		<td colspan="6"><b>
 			@if(substr($p->urusan->URUSAN_KODE,0,1) == 1)Urusan Wajib Pelayanan Dasar
 			@elseif(substr($p->urusan->URUSAN_KODE,0,1) == 2)Urusan Wajib Bukan Pelayanan Dasar
 			@elseif(substr($p->urusan->URUSAN_KODE,0,1) == 3)Urusan Pilihan
@@ -143,7 +116,7 @@
 		<td width="1%"><b>{{ substr($p->urusan->URUSAN_KODE,2,3) }}</b></td>
 		<td width="1%"><b></b></td>
 		<td width="1%"><b></b></td>
-		<td colspan="15">&nbsp;<b>{{ $p->urusan->URUSAN_NAMA }}</b></td>
+		<td colspan="6">&nbsp;<b>{{ $p->urusan->URUSAN_NAMA }}</b></td>
 	</tr>
 	@endif
 	<tr>
@@ -153,54 +126,30 @@
 		<td width="1%"><b></b></td>
 		<td width="29%">&nbsp;&nbsp;<b>{{ $p->PROGRAM_NAMA }}</b></td>
 		@if(count($p->impact) != '0')
-		<td width="24%" style="padding: 0">
-			<table>
-				<?php $index = 0?>
+		<td width="24%">
 		@foreach($p->impact as $o)
-				@if($index != count($p->impact)-1)
-				<tr style="border-bottom: 1px solid">
-				@else
-				<tr>
-				@endif
-					<td>{{ $o->IMPACT_TOLAK_UKUR }}</td>
-					<td>{{ $o->IMPACT_TARGET }} {{ $o->satuan->SATUAN_NAMA }}</td>
-				</tr>
-				<?php $index++ ?>
-			{{-- <b>- {{ $o->IMPACT_TOLAK_UKUR }}<br></b> --}}
+			<b>- {{ $o->IMPACT_TOLAK_UKUR }}<br></b>
 		@endforeach
-			</table>
 		</td>
-		{{-- <td width="10%">
+		<td width="10%">
 		@foreach($p->impact as $o)
-			<b><br></b>
+			<b>- {{ $o->IMPACT_TARGET }} {{ $o->satuan->SATUAN_NAMA }}<br></b>
 		@endforeach			
-		</td> --}}
+		</td>
 		@else
 		<td width="24%"><b>-</b></td>
 		<td width="10%"><b>-</b></td>
 		@endif
-		<td width="10%" class="kanan"> </td>
-		@if(count($p->impact) != '0')
-		<td width="10%">
-				@foreach($p->impact as $o)
-					<b>{{ $o->IMPACT_TARGET }} {{ $o->satuan->SATUAN_NAMA }}<br></b>
-				@endforeach
-		</td>
-		@else
-		<td width="10%"><b>-</b></td>
-		@endif
-		<td width="10%" class="kanan"> </td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
-		<td><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
+		<td width="10%"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
+		<td width="10%"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan">
+			@if(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))<0)
+			<b>({{ number_format(abs(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))),0,',','.') }})</b>
+			@else
 			<b>{{ number_format(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
+			@endif
 		</td>
-		<td></td>
-		<td></td>
-		<td></td>
+
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
 	<tr>
@@ -223,22 +172,10 @@
 			@endforeach
 			@endif
 		</td>
-		<td class="kanan"> </td>
-		<td>
-			@if(count($pp->kegiatan->bl[0]->output) != '0')
-			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i>{{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
-			@endforeach
-			@endif
-		</td>
-		<td class="kanan"></td>
-		<td></td>
-		<td></td>
-		<td></td>
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
-		<td><i>{{ number_format($ppm->pagu,0,',','.') }}</i></td>
-		<td><i>{{ number_format($pp->pagu,0,',','.') }} </i></td>
+		<td>Rp.{{ number_format($ppm->pagu,0,',','.') }}</td>
+		<td><i> Rp.{{ number_format($pp->pagu,0,',','.') }} </i></td>
 		<td class="kanan">
 			@if(($pp->pagu - $ppm->pagu)<0)
 			<i>({{ number_format(abs($pp->pagu - $ppm->pagu),0,',','.') }})</i>
@@ -248,9 +185,6 @@
 		</td>
 		@endif
 		@endforeach
-		<td></td>
-		<td></td>
-		<td></td>
 	</tr>
 	@endforeach
 	<?php $i++;?>
@@ -260,5 +194,24 @@
 </div>
 </body>
 <script type="text/javascript">
+	$(document).ready(function() {
+		  $("#btnExport").click(function(e) {
+		    e.preventDefault();
+		    console.log(e);
+		    //getting data from our table
+		    var data_type = 'data:application/vnd.ms-excel';
+		    var table_div = document.getElementById('table_wrapper');
+		    var table_html = table_div.outerHTML.replace(/ /g, '%20');
+
+		    var a = document.createElement('a');
+		    a.href = data_type + ', ' + table_html;
+		    a.download = 'PPAS {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}.xls';
+		    a.click();
+		  });
+	});
+
+	function download(){
+		$("#btnExport").trigger('click');
+	}
 </script>
 </html>

@@ -2420,8 +2420,8 @@ class blController extends Controller
             $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return seturgensi(\''.$data->BL_ID.'\')"><i class="fa fa-search"></i> Detail</a></li>';
             else
             $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
-
-            if($data->kunci->KUNCI_GIAT == 0 and $thp == 1){
+    
+            if($data->Kunci->KUNCI_GIAT == 0 and $thp == 1){
                 if(Auth::user()->level == 8){
                     $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
                 }else{

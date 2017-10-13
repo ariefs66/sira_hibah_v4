@@ -62,8 +62,8 @@
 <h4>Plafon Anggaran Sementara Berdasarkan Program dan Kegiatan Tahun Anggaran {{ $tahun }}</h4>
 <table class="header">
 	<tr class="noborder">
-		<td class="noborder"><b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
-		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
+		<td class="noborder"><b>Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</b></td>
+		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu,0,',','.') }}</b></td>
 	</tr>
 </table>
 <table class="detail">
@@ -98,13 +98,15 @@
 		<td width="1%"><b></b></td>
 		<td width="1%"><b></b></td>
 		<td width="1%"><b></b></td>
-		<td colspan="6"><b>
+		<td colspan="4"><b>
 			@if(substr($p->urusan->URUSAN_KODE,0,1) == 1)Urusan Wajib Pelayanan Dasar
 			@elseif(substr($p->urusan->URUSAN_KODE,0,1) == 2)Urusan Wajib Bukan Pelayanan Dasar
 			@elseif(substr($p->urusan->URUSAN_KODE,0,1) == 3)Urusan Pilihan
 			@elseif(substr($p->urusan->URUSAN_KODE,0,1) == 4)Urusan Penunjang
 			@endif</b>
 		</td>
+		<td></td>
+		<td></td>
 	</tr>
 	@endif
 	@if($bidangkode != $p->urusan->URUSAN_KODE )
@@ -114,7 +116,9 @@
 		<td width="1%"><b>{{ substr($p->urusan->URUSAN_KODE,2,3) }}</b></td>
 		<td width="1%"><b></b></td>
 		<td width="1%"><b></b></td>
-		<td colspan="6">&nbsp;<b>{{ $p->urusan->URUSAN_NAMA }}</b></td>
+		<td colspan="4">&nbsp;<b>{{ $p->urusan->URUSAN_NAMA }}</b></td>
+		<td></td>
+		<td></td>
 	</tr>
 	@endif
 	<tr>
@@ -137,17 +141,19 @@
 		@else
 		<td width="24%"><b></b></td>
 		<td width="10%"><b></b></td>
-		<td width="10%"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
-		<td width="10%"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
 		@endif
+		<td width="10%" class="kanan"><b>{{ number_format($pppp_murni[$i],0,',','.') }}</b></td>
+		<td width="10%" class="kanan"><b>{{ number_format($pppp[$i],0,',','.') }}</b></td>
 		<td width="10%" class="kanan">
-			@if(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))<0)
-			<b>({{ number_format(abs(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))),0,',','.') }})</b>
+			@if(($pppp[$i]-$pppp_murni[$i])<0)
+			<b>({{ number_format(abs($pppp[$i] - $pppp_murni[$i]),0,',','.') }})</b>
 			@else
-			<b>{{ number_format(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
+			<b>{{ number_format(($pppp[$i] - $pppp_murni[$i]),0,',','.') }}</b>
 			@endif
 		</td>
 	</tr>
+
+
 	@foreach($paguprogram[$i] as $pp)
 	<tr>
 		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,0,1) }}</td>
@@ -171,19 +177,21 @@
 		</td>
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
-		<td>Rp.{{ number_format($ppm->pagu,0,',','.') }}</td>
-		<td><i> Rp.{{ number_format($pp->pagu,0,',','.') }} </i></td>
+		<td class="kanan"><i>{{ number_format($ppp_murni[$i][$j],0,',','.') }}</i></td>
+		<td class="kanan"><i>{{ number_format($ppp[$i][$j],0,',','.') }}</i></td>
 		<td class="kanan">
-			@if(($pp->pagu - $ppm->pagu)<0)
-			<i>({{ number_format(abs($pp->pagu - $ppm->pagu),0,',','.') }})</i>
+			@if(($ppp[$i][$j] - $ppp_murni[$i][$j])<0)
+			<i>({{ number_format(abs($ppp[$i][$j] - $ppp_murni[$i][$j]),0,',','.') }})</i>
 			@else
-			<i>{{ number_format($pp->pagu - $ppm->pagu,0,',','.') }}</i>
+			<i>{{ number_format(($ppp[$i][$j] - $ppp_murni[$i][$j]),0,',','.') }}</i>
 			@endif
 		</td>
 		@endif
 		@endforeach
 	</tr>
+	<?php $j++;?>
 	@endforeach
+
 	<?php $i++;?>
 	@endforeach
 	</tbody>

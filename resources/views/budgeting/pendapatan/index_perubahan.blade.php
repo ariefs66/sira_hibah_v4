@@ -21,7 +21,7 @@
             <div class="col-md-12">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  @if(Auth::user()->level == 9 
+                  @if(Auth::user()->level == 8 
                       or substr(Auth::user()->mod,10,1) == 1
                       or substr(Auth::user()->mod,0,1) == 1)
                   <button class="pull-right btn m-t-n-sm btn-success open-form-pendapatan"><i class="m-r-xs fa fa-plus"></i> Tambah Pendapatan</button>
@@ -47,18 +47,23 @@
                    { mData: 'ID',class:'hide'},
                    { mData: 'KODE'},
                    { mData: 'NAMA'},
+                   { mData: 'TOTAL'},
                    { mData: 'TOTAL'}
                    ]}" class="table table-pendapatan table-striped b-t b-b table-pendapatan" id="table-pendapatan">
                    <thead>
                     <tr>
-                      <th class="hide">ID</th>
-                      <th>Kode Perangkat Daerah</th>
-                      <th>Nama Perangkat Daerah</th>
-                      <th>Anggaran</th>
+                      <th class="hide" rowspan="2">ID</th>
+                      <th rowspan="2" style="text-align: center;">Kode Perangkat Daerah</th>
+                      <th rowspan="2" style="text-align: center;">Nama Perangkat Daerah</th>
+                      <th colspan="2" style="text-align: center;">Anggaran</th>
                     </tr>
                     <tr>
+                      <th style="text-align: center;">Sebelum</th>
+                      <th style="text-align: center;">Sesudah</th>
+                    </tr>  
+                    <tr>
                       <th class="hide"></th>
-                      <th colspan="3" class="th_search">
+                      <th colspan="4" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>

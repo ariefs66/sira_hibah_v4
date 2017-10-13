@@ -31,38 +31,49 @@ use App\Model\Rekom;
 use App\Model\Rincian;
 use App\Model\SKPD;
 use App\Model\Pendapatan;
+use App\Model\RkpPendapatan;
 class pendapatanController extends Controller
 {
     public function index($tahun,$status){
-		$skpd 		= SKPD::all();
-    	$rekening 	= Rekening::where('REKENING_KODE','like','4%')->whereRaw('length("REKENING_KODE") = 11')->get();
-      $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN')->where('DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
-              ->sum('PENDAPATAN_TOTAL');
-        return View('budgeting.pendapatan.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',',')]);
+      $skpd     = SKPD::all();
+      $rekening   = Rekening::where('REKENING_KODE','like','4%')->whereRaw('length("REKENING_KODE") = 11')->get();
+
+      if($status=='murni'){
+        $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN')->where('DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
+                ->sum('PENDAPATAN_TOTAL');
+          return View('budgeting.pendapatan.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',',')]);
+      }else{
+        $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN')->where('DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
+                ->sum('PENDAPATAN_TOTAL');
+                //dd($anggaran);
+          return View('budgeting.pendapatan.index_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',',')]);
+      }
     }
 
     public function submitAdd($tahun,$status){
-    	$pendapatan 	= new Pendapatan;
-    	$pendapatan->PENDAPATAN_TAHUN		= $tahun;
-    	$pendapatan->SUB_ID				    = Input::get('SUB_ID');
-    	$pendapatan->REKENING_ID			= Input::get('REKENING_ID');
-    	$pendapatan->PENDAPATAN_NAMA		= Input::get('PENDAPATAN_NAMA');
-    	$pendapatan->PENDAPATAN_KETERANGAN	= Input::get('PENDAPATAN_NAMA');
-    	$pendapatan->PENDAPATAN_TOTAL		= Input::get('PENDAPATAN_TOTAL');
-    	$pendapatan->save();
 
-        $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
-        $datapen    = Pendapatan::where('SUB_ID',Input::get('SUB_ID'))
-                                ->where('REKENING_ID',Input::get('REKENING_ID'))
-                                ->where('PENDAPATAN_NAMA',Input::get('PENDAPATAN_NAMA'))
-                                ->first();
-        $log        = new Log;
-        $log->LOG_TIME                          = Carbon\Carbon::now();
-        $log->USER_ID                           = Auth::user()->id;
-        $log->LOG_ACTIVITY                      = 'Menambahkan Pendapatan Rekening '.$datarek->REKENING_KODE.'-'.$datarek->REKENING_NAMA.' Jumlah '.Input::get('PENDAPATAN_TOTAL');
-        $log->LOG_DETAIL                        = 'PD#'.$datapen->PENDAPATAN_ID;
-        $log->save();
-    	return "Input Berhasil!";
+        $pendapatan   = new Pendapatan;
+        $pendapatan->PENDAPATAN_TAHUN   = $tahun;
+        $pendapatan->SUB_ID           = Input::get('SUB_ID');
+        $pendapatan->REKENING_ID      = Input::get('REKENING_ID');
+        $pendapatan->PENDAPATAN_NAMA    = Input::get('PENDAPATAN_NAMA');
+        $pendapatan->PENDAPATAN_KETERANGAN  = Input::get('PENDAPATAN_NAMA');
+        $pendapatan->PENDAPATAN_TOTAL   = Input::get('PENDAPATAN_TOTAL');
+        $pendapatan->save();
+
+          $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
+          $datapen    = Pendapatan::where('SUB_ID',Input::get('SUB_ID'))
+                                  ->where('REKENING_ID',Input::get('REKENING_ID'))
+                                  ->where('PENDAPATAN_NAMA',Input::get('PENDAPATAN_NAMA'))
+                                  ->first();
+          $log        = new Log;
+          $log->LOG_TIME                          = Carbon\Carbon::now();
+          $log->USER_ID                           = Auth::user()->id;
+          $log->LOG_ACTIVITY                      = 'Menambahkan Pendapatan Rekening '.$datarek->REKENING_KODE.'-'.$datarek->REKENING_NAMA.' Jumlah '.Input::get('PENDAPATAN_TOTAL');
+          $log->LOG_DETAIL                        = 'PD#'.$datapen->PENDAPATAN_ID;
+          $log->save();
+        return "Input Berhasil!";
+    	
     }
 
     public function submitEdit(){
@@ -110,22 +121,43 @@ class pendapatanController extends Controller
         return $view;
     }
     public function getPendapatan($tahun,$status){
-   		$data       = DB::table('BUDGETING.DAT_PENDAPATAN')
-   						->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_PENDAPATAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-   						->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_PENDAPATAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
+      if($status=='murni'){
+        $data       = DB::table('BUDGETING.DAT_PENDAPATAN')
+              ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_PENDAPATAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
+              ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_PENDAPATAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
                         ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-   						->groupBy('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA')
-   						->select('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA',DB::raw('SUM("PENDAPATAN_TOTAL") AS TOTAL'))
-   						->get();
-    	$view 			= array();
-    	foreach ($data as $data) {
-    		array_push($view, array( 'ID'			=>$data->SKPD_ID,
-    								 'KODE'			=>$data->SKPD_KODE,
-    								 'NAMA'			=>$data->SKPD_NAMA,
-                                     'TOTAL'		=>number_format($data->total,0,'.',',')));
-    	}
-		$out = array("aaData"=>$view);    	
-    	return Response::JSON($out);
+              ->groupBy('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA')
+              ->select('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA',DB::raw('SUM("PENDAPATAN_TOTAL") AS TOTAL'))
+              ->get();
+        $view       = array();
+        foreach ($data as $data) {
+          array_push($view, array( 'ID'     =>$data->SKPD_ID,
+                       'KODE'     =>$data->SKPD_KODE,
+                       'NAMA'     =>$data->SKPD_NAMA,
+                                       'TOTAL'    =>number_format($data->total,0,'.',',')));
+        }
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+      }else{
+        $data       = DB::table('BUDGETING.DAT_PENDAPATAN')
+              ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_PENDAPATAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
+              ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_PENDAPATAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
+                        ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
+              ->groupBy('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA')
+              ->select('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA',DB::raw('SUM("PENDAPATAN_TOTAL") AS TOTAL'))
+              ->get();
+        $view       = array();
+        foreach ($data as $data) {
+          array_push($view, array( 'ID'     =>$data->SKPD_ID,
+                       'KODE'     =>$data->SKPD_KODE,
+                       'NAMA'     =>$data->SKPD_NAMA,
+                       'TOTAL'    =>number_format($data->total,0,'.',',')));
+                       'TOTAL'    =>number_format($data->total,0,'.',',')));
+        }
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+      }
+   		
    	}
 
    	public function getDetail($tahun,$status,$skpd){
@@ -136,7 +168,7 @@ class pendapatanController extends Controller
     	$no 			= 1;
     	$opsi 			= '';
     	foreach ($data as $data) {
-            if(Auth::user()->level == 8 or substr(Auth::user()->mod,10,1) == 1){
+            if(Auth::user()->level == 9 or substr(Auth::user()->mod,10,1) == 1){
     		$opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             }else{
             $opsi = '-';
