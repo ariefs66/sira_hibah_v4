@@ -169,6 +169,34 @@
 @endsection
 
 @section('plugin')
+<script>
+  $('.table-pendapatan').on('click', '.table-pendapatan > tbody > tr ', function () {
+    if($("tr").hasClass('pendapatan-rincian') == false){
+      skpd = $(this).children("td").eq(0).html();
+    }
+    if(!$(this).hasClass('pendapatan-rincian')){
+      if($(this).hasClass('shown')){      
+        $('.pendapatan-rincian').slideUp('fast').remove();  
+        $(this).removeClass('shown'); 
+      }else{
+        $('.pendapatan-rincian').slideUp('fast').remove();  
+        $(this).addClass('shown');
+        btl_detail = '<tr class="pendapatan-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-pendapatan').html()+'</td></tr>';
+        $(btl_detail).insertAfter('.table-pendapatan .table tbody tr.shown');
+        $('.table-detail-pendapatan-isi').DataTable({
+          sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/pendapatan/getDetail/"+skpd,
+          aoColumns: [
+          { mData: 'NO' },
+          { mData: 'REKENING' },
+          { mData: 'RINCIAN' },
+          { mData: 'TOTAL' },
+          { mData: 'AKSI' }
+          ]
+        });
+      }
+    }
+  });
+</script>
 <script type="text/javascript">
   $("#skpd-pendapatan").change(function(e, params){
     var id  = $('#skpd-pendapatan').val();
