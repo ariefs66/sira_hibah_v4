@@ -909,29 +909,29 @@ class realController extends Controller
 
 
 			$bl 		= BLPerubahan::where('KEGIATAN_ID',$keg)->where('SUB_ID',$sub)->value('BL_ID');
-			// $penyesuaiand		= DB::connection('sqlsrv')
-			// 							->table('dbo.Ta_Penyesuaian_Rinc')
-			// 							->where('Tahun',$p->Tahun)
-			// 							->where('Kd_Urusan',$p->Kd_Urusan)
-			// 							->where('Kd_Bidang',$p->Kd_Bidang)
-			// 							->where('Kd_Unit',$p->Kd_Unit)
-			// 							->where('Kd_Prog',$p->Kd_Prog)
-			// 							->where('ID_Prog',$p->ID_Prog)
-			// 							->where('Kd_Keg',$p->Kd_Keg)
-			// 							->where('D_K','D')
-			// 							->sum('Nilai');
+			$penyesuaiand		= DB::connection('sqlsrv')
+										->table('dbo.Ta_Penyesuaian_Rinc')
+										->where('Tahun',$p->Tahun)
+										->where('Kd_Urusan',$p->Kd_Urusan)
+										->where('Kd_Bidang',$p->Kd_Bidang)
+										->where('Kd_Unit',$p->Kd_Unit)
+										->where('Kd_Prog',$p->Kd_Prog)
+										->where('ID_Prog',$p->ID_Prog)
+										->where('Kd_Keg',$p->Kd_Keg)
+										->where('D_K','D')
+										->sum('Nilai');
 			$penyesuaiand 		= 0;
-			// $penyesuaiank 		= DB::connection('sqlsrv')
-			// 							->table('dbo.Ta_Penyesuaian_Rinc')
-			// 							->where('Tahun',$p->Tahun)
-			// 							->where('Kd_Urusan',$p->Kd_Urusan)
-			// 							->where('Kd_Bidang',$p->Kd_Bidang)
-			// 							->where('Kd_Unit',$p->Kd_Unit)
-			// 							->where('Kd_Prog',$p->Kd_Prog)
-			// 							->where('ID_Prog',$p->ID_Prog)
-			// 							->where('Kd_Keg',$p->Kd_Keg)
-			// 							->where('D_K','K')
-			// 							->sum('Nilai');
+			$penyesuaiank 		= DB::connection('sqlsrv')
+										->table('dbo.Ta_Penyesuaian_Rinc')
+										->where('Tahun',$p->Tahun)
+										->where('Kd_Urusan',$p->Kd_Urusan)
+										->where('Kd_Bidang',$p->Kd_Bidang)
+										->where('Kd_Unit',$p->Kd_Unit)
+										->where('Kd_Prog',$p->Kd_Prog)
+										->where('ID_Prog',$p->ID_Prog)
+										->where('Kd_Keg',$p->Kd_Keg)
+										->where('D_K','K')
+										->sum('Nilai');
 			$penyesuaiank 		= 0;
 			$realisasi 			= $p->TOTAL+$penyesuaiank-$penyesuaiand;
 			

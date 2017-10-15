@@ -1136,6 +1136,24 @@
   $('.open-rincian').on('click',function(){
     $(document).ready(function(){
         interval = setInterval(function(){getpagu();}, 1000);
+        //clearInterval(interval);              
+        $('#id-rincian').val('');
+        $('#jenis-pekerjaan').val('').trigger('chosen:updated');
+        $('#kategori-belanja').val('').trigger('chosen:updated');
+        $('#rekening-belanja').val('').trigger('chosen:updated');
+        $('#paket-pekerjaan').val('').trigger('chosen:updated');
+        $('#nama-komponen').val('');
+        $('#sub-belanja').val('');
+        $('#ket-belanja').val('');
+        $('#vol1').val('');
+        $('#satuan-1').val('').trigger('chosen:updated');
+        $('#vol2').val('');
+        $('#satuan-2').val('').trigger('chosen:updated');
+        $('#vol3').val('');
+        $('#satuan-3').val('').trigger('chosen:updated');
+        $('#vol4').val('');
+        $('#satuan-4').val('').trigger('chosen:updated');
+        $('#pilih-komponen').attr('disabled',true);
     });
   });
     $('.overlay').on('click',function(){      
