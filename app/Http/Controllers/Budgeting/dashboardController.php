@@ -251,7 +251,7 @@ class dashboardController extends Controller
         $pengumuman = "";
         $idskpd     = $this->getSKPD($tahun,$status);
         
-        if(Auth::user()->level == 2){
+        if(Auth::user()->level == 2 && Auth::user()->active == 1){
             $pengumuman     = PaguRincian::where('SKPD_ID',$idskpd)->get();
             if(empty($pengumuman)) $pengumuman = "";
         }

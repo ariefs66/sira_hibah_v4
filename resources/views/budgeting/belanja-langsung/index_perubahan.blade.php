@@ -31,11 +31,17 @@
                   Selisih  : {{ number_format($blpagu - $rincian,0,'.',',') }}
                   @endif  
                   </h5>
-                  @if(Auth::user()->level == 2 and $thp == 1)
+                  @if(Auth::user()->level == 2 and $thp == 1 and Auth::user()->active == 1)
+                  
                   <a class="pull-right btn m-t-n-sm btn-success" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Langsung</a>
+
                   @elseif($thp == 0)
                   <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
+
+                  @elseif(Auth::user()->active == 0)
+                  <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> User Tidak Aktif!</h5>
                   @endif
+
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
                   <div class="col-sm-4 pull-right m-t-n-sm">
                    <select ui-jq="chosen" class="form-control" id="filter-skpd">
