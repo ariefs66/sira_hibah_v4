@@ -55,7 +55,12 @@
                                         <th width="1%">OPD</th>
                                         <th>NIP</th>
                                         <th>Nama</th>
-                                        <th width="20%">Aksi</th>
+                                        <th width="20%">
+                                          Aksi<br>
+                                          @if(Auth::user()->level == 8)
+                                            <label class="i-switch bg-success m-t-xs m-r"><input type="checkbox" onchange="return aktivasiUserAll()" id="aktivasiuserall"><i></i></label>
+                                          @endif
+                                        </th>
                                       </tr>
                                       <tr>
                                         <th class="hide"></th>
@@ -397,6 +402,61 @@
             }
         }
     });
+  }
+
+  function aktivasiUserAll(){
+    //var id           = $('#filter-skpd').val();
+    var token        = $('#token').val(); 
+    if($('#aktivasiuserall').is(':checked')){   
+      $.confirm({
+        title: 'Aktifvasi User!',
+        content: 'Aktifkan Semua User?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/staff/aktivasiUserAll",
+                      type: "POST",
+                      data: {'_token'         : token,
+                            'id'              : 0 },
+                      success: function(msg){
+                          $('.table').DataTable().ajax.reload();
+                          $.alert(msg);
+                        }
+                  });
+                }
+            },
+            Tidak: function () {
+            }
+        }
+      });
+    }else{
+       $.confirm({
+        title: 'Non Aktivasi User!',
+        content: 'Non Aktifkan Semua User?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/staff/nonAktivasiUserAll",
+                      type: "POST",
+                      data: {'_token'         : token,
+                            'id'              : 1 },
+                      success: function(msg){
+                          $('.table').DataTable().ajax.reload();
+                          $.alert(msg);
+                        }
+                  });
+                }
+            },
+            Tidak: function () {
+            }
+        }
+    });
+    }
+    
   }
 </script>
 @endsection

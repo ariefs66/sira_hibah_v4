@@ -171,6 +171,10 @@ Route::post('/main/{tahun}/{status}/pengaturan/staff/hapus', 'Budgeting\staffCon
 Route::post('/main/{tahun}/{status}/pengaturan/staff/reset', 'Budgeting\staffController@reset');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/aktivasiUser', 'Budgeting\staffController@aktivasiUser');
 Route::post('/main/{tahun}/{status}/pengaturan/staff/nonAktivasiUser', 'Budgeting\staffController@nonAktivasiUser');
+Route::post('/main/{tahun}/{status}/pengaturan/staff/aktivasiUserAll', 'Budgeting\staffController@aktivasiUserAll');
+Route::post('/main/{tahun}/{status}/pengaturan/staff/nonAktivasiUserAll', 'Budgeting\staffController@nonAktivasiUserAll');
+
+
 //TAHAPAN
 Route::get('/main/{tahun}/{status}/pengaturan/tahapan', 'Budgeting\tahapanController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/tahapan/getData', 'Budgeting\tahapanController@getData');

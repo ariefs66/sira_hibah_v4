@@ -231,7 +231,17 @@ class staffController extends Controller
                             <a onclick="return ubah(\''.$data->id.'\')" class="action-edit"><i class="mi-edit"></i></a>
                             <a onclick="return reset(\''.$data->id.'\')" class="action-edit"><i class="fa fa-retweet"></i></a>
                             <a onclick="return hapus(\''.$data->id.'\')" class="action-delete"><i class="mi-trash"></i></a>
+
                         </div>';
+
+            if(Auth::user()->level == 8){
+                if($data->active==1){
+                    $aksi    .= '<br><label title="Status user aktif" class="i-switch bg-success m-l-n-xxl m-r-xl m-t-sm pull-right"><input type="checkbox" checked onchange="return nonAktivasiUser(\''.$data->id.'\')"><i></i></label>';
+                }else{
+                    $aksi    .= '<br><label title="Status user non aktif" class="i-switch bg-danger m-l-n-xxl m-r-xl m-t-sm pull-right"><input type="checkbox" onchange="return aktivasiUser(\''.$data->id.'\')"><i></i></label>';
+                }
+            }             
+
 
             array_push($view, array( 'USER_ID'      =>$data->id,
                                      'USER_NIP'     =>$data->email,
@@ -338,4 +348,12 @@ class staffController extends Controller
         return 'User di non aktifkan';
     }
 
+    public function aktivasiUserAll($tahun,$status){
+        User::where('active','!=',null)->update(['active'=>1]);
+        return 'Semua user telah di aktifkan!';
+    }
+    public function nonAktivasiUserAll($tahun,$status){
+        User::where('active','!=',null)->update(['active'=>0]);
+        return 'Semua user di non aktifkan!';
+    }
 }
