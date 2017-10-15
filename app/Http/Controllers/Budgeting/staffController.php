@@ -56,6 +56,15 @@ class staffController extends Controller
     						<a onclick="return reset(\''.$data->USER_ID.'\')" class="action-edit"><i class="fa fa-retweet"></i></a>
     						<a onclick="return hapus(\''.$data->USER_ID.'\')" class="action-delete"><i class="mi-trash"></i></a>
     					</div>';
+
+            if(Auth::user()->level == 2 || Auth::user()->level == 8){
+                if($data->user->active==1){
+                    $aksi    .= '<br><label title="Status user aktif" class="i-switch bg-success m-l-n-xxl m-r-xl m-t-sm pull-right"><input type="checkbox" checked onchange="return nonAktivasiUser(\''.$data->USER_ID.'\')"><i></i></label>';
+                }else{
+                    $aksi    .= '<br><label title="Status user non aktif" class="i-switch bg-danger m-l-n-xxl m-r-xl m-t-sm pull-right"><input type="checkbox" onchange="return aktivasiUser(\''.$data->USER_ID.'\')"><i></i></label>';
+                }
+            } 
+
         //<a onclick="return mod(\''.$data->USER_ID.'\')" class="action-edit"><i class="icon-bdg_setting3"></i></a>                      
     		$tapd 	= substr($data->user->mod, 0,1);
     		$ppkd 	= substr($data->user->mod, 1,1);
@@ -317,6 +326,16 @@ class staffController extends Controller
         }
         User::where('id',Input::get('id'))->delete();
         return 'Berhasil!';
+    }
+
+    public function aktivasiUser(){
+        User::where('id',Input::get('id'))->update(['active'=>1]);
+        return 'User telah di aktifkan';
+    }
+
+    public function nonAktivasiUser(){
+        User::where('id',Input::get('id'))->update(['active'=>0]);
+        return 'User di non aktifkan';
     }
 
 }

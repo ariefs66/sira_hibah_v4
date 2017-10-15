@@ -344,6 +344,60 @@
         $("html, body").animate({ scrollTop: 0 }, "slow");
     });    
   }
+
+   function aktivasiUser(id,status){
+    var token        = $('#token').val();    
+    $.confirm({
+        title: 'Aktivasi User!',
+        content: 'Non Aktifkan User?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/staff/aktivasiUser",
+                      type: "POST",
+                      data: {'_token'         : token,
+                            'id'              : id },
+                      success: function(msg){
+                          $('.table').DataTable().ajax.reload();
+                          $.alert(msg);
+                        }
+                  });
+                }
+            },
+            Tidak: function () {
+            }
+        }
+    });
+  }
+
+  function nonAktivasiUser(id,status){
+    var token        = $('#token').val();    
+    $.confirm({
+        title: 'Non Aktif User!',
+        content: 'Non Aktifkan User?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/staff/nonAktivasiUser",
+                      type: "POST",
+                      data: {'_token'         : token,
+                            'id'              : id },
+                      success: function(msg){
+                          $('.table').DataTable().ajax.reload();
+                          $.alert(msg);
+                        }
+                  });
+                }
+            },
+            Tidak: function () {
+            }
+        }
+    });
+  }
 </script>
 @endsection
 

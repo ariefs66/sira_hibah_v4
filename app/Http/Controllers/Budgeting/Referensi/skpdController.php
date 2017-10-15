@@ -8,6 +8,7 @@ use App\Model\SKPD;
 use App\Model\Tahapan;
 use App\Model\BL;
 use App\Model\Kunci;
+use App\Model\Kunciperubahan;
 use Auth;
 use View;
 use Carbon;
@@ -19,7 +20,7 @@ class skpdController extends Controller
     	return View('budgeting.referensi.skpd',['tahun'=>$tahun,'status'=>$status]);
     }
 
-    public function getData($tahun){
+    public function getData($tahun,$status){
     	$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
@@ -36,19 +37,30 @@ class skpdController extends Controller
 
         foreach ($data as $data) {
             $id         = $data->SKPD_ID;
-            $BL         = Kunci::whereHas('bl',function($q) use($id){
+
+            if($status=='murni'){
+                $BL         = Kunci::whereHas('bl',function($q) use($id){
                 $q->whereHas('subunit',function($r) use($id){
                     $r->where('SKPD_ID',$id);
                 });
-            })->selectRaw('DISTINCT("KUNCI_RINCIAN")')->groupBy('KUNCI_RINCIAN')->get();
+                })->selectRaw('DISTINCT("KUNCI_RINCIAN")')->groupBy('KUNCI_RINCIAN')->get();
+            }else{
+                $BL         = Kunciperubahan::whereHas('bl',function($q) use($id){
+                $q->whereHas('subunit',function($r) use($id){
+                    $r->where('SKPD_ID',$id);
+                });
+                })->selectRaw('DISTINCT("KUNCI_RINCIAN")')->groupBy('KUNCI_RINCIAN')->get();
+            }
+            
             // print_r(count($BL));exit();
             if(count($BL) == 1) $kunci = $BL[0]['KUNCI_RINCIAN'];
             else $kunci = 0;
 
     		$aksi 		= '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            
             if($thp == 1 and $kunci == 0){
                 if(Auth::user()->level == 8){
-                    $aksi    .= '<br><label class="i-switch bg-danger m-l-n-xxl m-r-xl m-t-sm pull-right"><input type="checkbox" onchange="return kunciRincianSKPD(\''.$data->SKPD_ID.'\')" id="kuncirincian-'.$data->SKPD_ID.'"><i></i></label>';
+                    $aksi    .= '<br><label class="i-switch bg-success m-l-n-xxl m-r-xl m-t-sm pull-right"><input type="checkbox" onchange="return kunciRincianSKPD(\''.$data->SKPD_ID.'\')" id="kuncirincian-'.$data->SKPD_ID.'"><i></i></label>';
                 }                
             }else{
                 if(Auth::user()->level == 8){

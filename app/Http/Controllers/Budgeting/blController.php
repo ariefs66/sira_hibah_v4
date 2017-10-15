@@ -164,6 +164,8 @@ class blController extends Controller
             $rincian    = 0;
         }
 
+       // $kunci = Kunciperubahan::
+
         return View('budgeting.belanja-langsung.index_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
     }
 
@@ -335,7 +337,7 @@ class blController extends Controller
         $pajak      = '';
         //print_r($data);exit;
         foreach ($data as $data) {
-            if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
+            if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 and Auth::user()->active == 1) or Auth::user()->level == 8 ){
                 if($data->REKENING_ID == 0 or empty($data->SUBRINCIAN_ID)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -404,7 +406,7 @@ class blController extends Controller
         }
 
         foreach ($data_ as $data_) {
-            if(( $data_->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
+            if(( $data_->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 and Auth::user()->active == 1) or Auth::user()->level == 8){
                 if($data_->REKENING_ID == 0 or empty($data_->SUBRINCIAN_ID)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -1239,15 +1241,28 @@ class blController extends Controller
 
     public function kuncirincianskpd($tahun,$status){
         $skpd   = Input::get('SKPD_ID');
-        $bl     = BL::whereHas('subunit',function($q) use ($skpd){
+        if($status=='murni'){
+            $bl     = BL::whereHas('subunit',function($q) use ($skpd){
                         $q->where('SKPD_ID',$skpd);
                     })->where('BL_TAHUN',$tahun)->select('BL_ID')->get()->toArray();
-        Kunci::whereIn('BL_ID',$bl)->update(['KUNCI_RINCIAN'=>Input::get('STATUS')]);
+            Kunci::whereIn('BL_ID',$bl)->update(['KUNCI_RINCIAN'=>Input::get('STATUS')]);
+        }else{
+            $bl     = BLPERUBAHAN::whereHas('subunit',function($q) use ($skpd){
+                        $q->where('SKPD_ID',$skpd);
+                    })->where('BL_TAHUN',$tahun)->select('BL_ID')->get()->toArray();
+            Kunciperubahan::whereIn('BL_ID',$bl)->update(['KUNCI_RINCIAN'=>Input::get('STATUS')]);
+        }
+        
         return 'Berhasil!';
     }
 
     public function kunciall($tahun,$status){
-        Kunci::where('KUNCI_RINCIAN','!=',Input::get('STATUS'))->update(['KUNCI_RINCIAN'=>Input::get('STATUS')]);
+        if($status=='murni'){
+            Kunci::where('KUNCI_RINCIAN','!=',Input::get('STATUS'))->update(['KUNCI_RINCIAN'=>Input::get('STATUS')]);
+        }else{
+            Kunciperubahan::where('KUNCI_RINCIAN','!=',Input::get('STATUS'))->update(['KUNCI_RINCIAN'=>Input::get('STATUS')]);
+        }
+        
         return 'Berhasil!';
     }
 
@@ -2523,13 +2538,14 @@ class blController extends Controller
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
-            if($data->BL_VALIDASI == 0){
+            if(($data->BL_VALIDASI == 0 && Auth::user()->active==1 ) || Auth::user()->level==8){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li>
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
+                <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
 
             }
