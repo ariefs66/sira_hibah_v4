@@ -29,6 +29,8 @@ Use DB;
 class simdaController extends Controller{
 
 	public function index($tahun){
+		$total 	= DB::connection('sqlsrv')->select('SELECT SUM(Total) FROM Ta_Belanja_Rinc_Sub WHERE Kd_Prog != 0');
+		print_r($total);exit();
 		$data  	= array('tahun'=>$tahun);
 		return view('tosimda',$data);
 	}
@@ -209,14 +211,18 @@ class simdaController extends Controller{
 	}
 
 	public function trfBelanjaSub($tahun){
-		$data 	= Rincian::whereHas('bl',function($bl)use($tahun){
-			$bl->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->whereHas('subunit',function($sub){
-				$sub->where('SKPD_ID','!=',0);
+		$pd 	= array();
+		$ii 	= 1;
+		for($ii=61;$ii<=70;$ii++){
+			array_push($pd, $ii);
+		}
+		$data 	= Rincian::whereHas('bl',function($bl)use($tahun,$pd){
+			$bl->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->whereHas('subunit',function($sub)use($pd){
+				$sub->whereIn('SKPD_ID',$pd);
 			});
 		})->where('REKENING_ID','!=',0)->orderBy('BL_ID','REKENING_ID')->groupBy('REKENING_ID','BL_ID')->select('REKENING_ID','BL_ID')->get();
 		$i 			= 1;		
 		foreach($data as $rincian){
-			
 			$subrincian = Rincian::whereHas('bl',function($bl)use($tahun){
 							$bl->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1);
 						})->where('REKENING_ID',$rincian->REKENING_ID)
