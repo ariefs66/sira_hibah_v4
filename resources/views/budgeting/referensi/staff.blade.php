@@ -354,7 +354,7 @@
     var token        = $('#token').val();    
     $.confirm({
         title: 'Aktivasi User!',
-        content: 'Non Aktifkan User?',
+        content: 'Aktifkan User?',
         buttons: {
             Ya: {
                 btnClass: 'btn-danger',
