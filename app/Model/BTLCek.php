@@ -4,7 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BTL_Cek extends Model
+class BTLCek extends Model
 {
     protected $table		= 'BUDGETING.DAT_BTL_CEK';
     protected $primaryKey 	= 'BTL_ID';
