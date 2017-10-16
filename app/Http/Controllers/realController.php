@@ -707,7 +707,7 @@ class realController extends Controller
 			if($p->Kd_Rek_5 < 10) $rekening = $rekening.'.0'.$p->Kd_Rek_5;
 			else $rekening = $rekening.'.'.$p->Kd_Rek_5;
 			$idrek 	= Rekening::where('REKENING_TAHUN',$tahun)->where('REKENING_KODE',$rekening)->value('REKENING_ID');
-			/*$rincian 		= new BTL;
+			$rincian 		= new BTL;
 			$rincian->BTL_TAHUN 			= $tahun;
 			$rincian->SUB_ID 				= $subunit;
 			$rincian->REKENING_ID 			= $idrek;
@@ -717,9 +717,10 @@ class realController extends Controller
 			$rincian->BTL_VOLUME			= 1;
 			$rincian->BTL_KOEFISIEN			= '1 Tahun';
 			$rincian->BTL_PAJAK				= 0;
-			$rincian->save();*/
+			$rincian->save();
 
 			/*============================================= CEK DATA BTL =========================================*/
+			/*
 			$rincian 		= new BTLCek;
 			$rincian->BTL_TAHUN 			= $tahun;
 			$rincian->SUB_ID 				= $subunit;
@@ -731,6 +732,8 @@ class realController extends Controller
 			$rincian->BTL_KOEFISIEN			= '1 Tahun';
 			$rincian->BTL_PAJAK				= 0;
 			$rincian->save();
+			*/
+			/*=========================================== CEK DATA BTL (OK) ========================================*/
 		}
 		$count_lama = DB::connection('sqlsrv')
 							->table('dbo.Ta_RASK_Arsip')
@@ -739,8 +742,8 @@ class realController extends Controller
 							->where('Kd_Rek_2',1)
 							->where('Tahun',$tahun)
 							->sum('Total');
-		//$count_baru = BTL::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-		$count_baru = BTLCek::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+		$count_baru = BTL::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+		//$count_baru = BTLCek::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 		return number_format($count_baru/$count_lama*100,2,'.',',');				
 	}
 
