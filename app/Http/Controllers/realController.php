@@ -10,6 +10,7 @@ Use App\Model\BLPerubahan;
 Use App\Model\Rincian;
 Use App\Model\RincianPerubahan;
 Use App\Model\BTL;
+Use App\Model\BTL_Cek;
 Use App\Model\Rekening;
 Use App\Model\Output;
 Use App\Model\Urusan;
@@ -738,7 +739,8 @@ class realController extends Controller
 							->where('Kd_Rek_2',1)
 							->where('Tahun',$tahun)
 							->sum('Total');
-		$count_baru = BTL::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+		//$count_baru = BTL::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+		$count_baru = BTL_Cek::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 		return number_format($count_baru/$count_lama*100,2,'.',',');				
 	}
 
