@@ -706,7 +706,20 @@ class realController extends Controller
 			if($p->Kd_Rek_5 < 10) $rekening = $rekening.'.0'.$p->Kd_Rek_5;
 			else $rekening = $rekening.'.'.$p->Kd_Rek_5;
 			$idrek 	= Rekening::where('REKENING_TAHUN',$tahun)->where('REKENING_KODE',$rekening)->value('REKENING_ID');
-			$rincian 		= new BTL;
+			/*$rincian 		= new BTL;
+			$rincian->BTL_TAHUN 			= $tahun;
+			$rincian->SUB_ID 				= $subunit;
+			$rincian->REKENING_ID 			= $idrek;
+			$rincian->BTL_NAMA 				= $p->Keterangan;
+			$rincian->BTL_KETERANGAN		= $p->Keterangan;
+			$rincian->BTL_TOTAL				= $p->Total;
+			$rincian->BTL_VOLUME			= 1;
+			$rincian->BTL_KOEFISIEN			= '1 Tahun';
+			$rincian->BTL_PAJAK				= 0;
+			$rincian->save();*/
+
+			/*============================================= CEK DATA BTL =========================================*/
+			$rincian 		= new BTL_Cek;
 			$rincian->BTL_TAHUN 			= $tahun;
 			$rincian->SUB_ID 				= $subunit;
 			$rincian->REKENING_ID 			= $idrek;
