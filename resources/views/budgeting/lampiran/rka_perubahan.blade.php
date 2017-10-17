@@ -302,7 +302,7 @@
 		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format(($totalreke[$s] - $totalreke_murni[$s]),0,',','.') }},00</b></td>
 		@if(empty($totalreke_murni[$s]) or $totalreke_murni[$s]==0)
-		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalreke[$s]) * 100)/$totalreke[$s], 2, ',', ' '),"-") }}% </b></td>
+		<td class="border-rincian tengah"><b> - </b></td>
 		@else
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalreke[$s] - $totalreke_murni[$s]) * 100)/$totalreke_murni[$s], 2, ',', ' '),"-") }}% </b></td>
 		@endif
