@@ -10,6 +10,7 @@ Use App\Model\BLPerubahan;
 Use App\Model\Rincian;
 Use App\Model\RincianPerubahan;
 Use App\Model\BTL;
+Use App\Model\BTLCek;
 Use App\Model\Rekening;
 Use App\Model\Output;
 Use App\Model\Urusan;
@@ -717,6 +718,22 @@ class realController extends Controller
 			$rincian->BTL_KOEFISIEN			= '1 Tahun';
 			$rincian->BTL_PAJAK				= 0;
 			$rincian->save();
+
+			/*============================================= CEK DATA BTL =========================================*/
+			/*
+			$rincian 		= new BTLCek;
+			$rincian->BTL_TAHUN 			= $tahun;
+			$rincian->SUB_ID 				= $subunit;
+			$rincian->REKENING_ID 			= $idrek;
+			$rincian->BTL_NAMA 				= $p->Keterangan;
+			$rincian->BTL_KETERANGAN		= $p->Keterangan;
+			$rincian->BTL_TOTAL				= $p->Total;
+			$rincian->BTL_VOLUME			= 1;
+			$rincian->BTL_KOEFISIEN			= '1 Tahun';
+			$rincian->BTL_PAJAK				= 0;
+			$rincian->save();
+			*/
+			/*=========================================== CEK DATA BTL (OK) ========================================*/
 		}
 		$count_lama = DB::connection('sqlsrv')
 							->table('dbo.Ta_RASK_Arsip')
@@ -726,6 +743,7 @@ class realController extends Controller
 							->where('Tahun',$tahun)
 							->sum('Total');
 		$count_baru = BTL::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+		//$count_baru = BTLCek::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 		return number_format($count_baru/$count_lama*100,2,'.',',');				
 	}
 
