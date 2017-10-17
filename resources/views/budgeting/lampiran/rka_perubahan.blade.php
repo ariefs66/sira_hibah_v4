@@ -348,7 +348,7 @@
 		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format(($totalrek[$q] - $totalrek_murni[$q]),0,',','.') }},00</b></td>
 		@if(empty($totalrek_murni[$q]) or $totalrek_murni[$q]==0)
-		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalrek[$q]) * 100)/$totalrek[$q], 2, ',', ' '),"-") }}% </b></td>
+		<td class="border-rincian tengah"><b> - </b></td>
 		@else
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalrek[$q] - $totalrek_murni[$q] ) * 100)/$totalrek_murni[$q], 2, ',', ' '),"-") }}% </b></td>
 		@endif
