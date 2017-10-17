@@ -414,10 +414,16 @@
 	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- @foreach(explode('#', $k->RINCIAN_KETERANGAN) as $info) 
     	{{$info}}@break
   	  @endforeach
-  	  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i></td>
+  	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->subrincian->SUBRINCIAN_NAMA }})</i><br>
+  	  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
+  	  </td>
 	  @else
-	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{ $k->RINCIAN_KOMPONEN }}
-	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i></td>
+	  <td class="border-rincian">
+	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->subrincian->SUBRINCIAN_NAMA }})</i><br>
+	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{ $k->RINCIAN_KOMPONEN }}
+	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
+	  	  	  </td>
+
 	  @endif
 
 	<!-- RINCIAN PERHITUNGAN MURNI -->
@@ -429,7 +435,7 @@
 	  <td class="border-rincian kanan">0,00</td>
 	  @else  
 	  <td class="border-rincian tengah">{{ $k->RINCIAN_VOLUME_MURNI }}</td>
-	  <td class="border-rincian tengah">{{ $k->komponen->KOMPONEN_SATUAN }}</td>
+	  <td class="border-rincian tengah">{{ preg_replace("/[^A-Za-z]/"," ",$k->RINCIAN_KOEFISIEN) }}</td>
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA_MURNI,0,',','.') }},00</td>
 
 	  @if($k->RINCIAN_PAJAK == 0)
@@ -445,7 +451,7 @@
 
 	<!--RINCIAN PERHITUNGAN PERUBAHAN-->
 	  <td class="border-rincian tengah">{{ $k->RINCIAN_VOLUME }}</td>
-	  <td class="border-rincian tengah">{{ $k->komponen->KOMPONEN_SATUAN }}</td>
+	  <td class="border-rincian tengah">{{ preg_replace("/[^A-Za-z]/"," ",$k->RINCIAN_KOEFISIEN) }}</td>
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA,0,',','.') }},00</td>
 
 	  @if($k->RINCIAN_PAJAK == 0)

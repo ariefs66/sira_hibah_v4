@@ -156,14 +156,20 @@
                 </a>
               </li>
               <li>
-                <!-- <a href="{{ url('/') }}/harga/{{$tahun}}"> -->
                 <a onclick="$.alert('Ditutup!')">
                   <i class="icon-bdg_uikit"></i>
                   <span>EHarga</span>
                 </a>
               </li>
               @endif              
-             
+             @if(Auth::user()->level == 8)
+              <li>
+                <a href="{{ url('/') }}/asosiasi/{{$tahun}}" onclick="$.alert('Ditutup!')">
+                  <i class="icon-bdg_uikit"></i>
+                  <span>Asosiasi</span>
+                </a>
+              </li>
+              @endif
               <li class="divider"></li>
               <li>
                 <a href="/keluar/{{ Auth::user()->id }}">

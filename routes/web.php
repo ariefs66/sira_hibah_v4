@@ -434,3 +434,7 @@ Route::get('/simda/{tahun}/trfbelanja', 'simdaController@trfBelanja');
 Route::get('/simda/{tahun}/trfbelanjasub', 'simdaController@trfBelanjaSub');
 Route::get('/simda/{tahun}/trfbtl', 'simdaController@trfBTL');
 Route::get('/simda/{tahun}/trfpendapatan', 'simdaController@trfPendapatan');
+
+
+//ASOSIASI
+Route::get('/asosiasi/{tahun}', 'Asosiasi\asosiasiController@index');
