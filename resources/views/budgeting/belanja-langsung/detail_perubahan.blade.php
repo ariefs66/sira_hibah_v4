@@ -459,17 +459,17 @@
 </div>
 </div>
 
-
+<!--SIMPAN RINCIAN-->
 <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-rincian">
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
-      <h5>Tambah / Ubah Komponen</h5>
+      <h5>Tambah Komponen</h5>
       <div class="form-group">
         <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
         <div class="col-sm-7">
-          <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="">
+          <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="" >
             <option value="">Silahkan Pilih</option>
             @foreach($subrincian as $sr)
             <option value="{{ $sr->SUBRINCIAN_ID }}">{{ $sr->SUBRINCIAN_NAMA }}</option>
@@ -539,7 +539,7 @@
     <div class="form-group hide" id="harga-free">
       <label for="no_spp" class="col-md-3">Harga</label>          
       <div class="col-sm-9">
-        <input type="number" id="harga-free-input" class="form-control" placeholder="Masukan Harga" >          
+        <input type="number" id="harga-free-input" class="form-control" placeholder="Masukan Harga" >
       </div> 
     </div>
 
@@ -628,7 +628,180 @@
 </form>
 </div>
 </div>
+<!--SIMPAN RINCIAN-->
 
+<!--EDIT RINCIAN-->
+<div class="overlay"></div>
+<div class="bg-white wrapper-lg input-sidebar input-rincian-ubah">
+  <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
+  <form id="simpan-komponen" class="form-horizontal">
+    <div class="input-wrapper">
+      <h5>Ubah Komponen</h5>
+      <div class="form-group">
+        <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
+        <div class="col-sm-7">
+          <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="" disabled="true">
+            <option value="">Silahkan Pilih</option>
+            @foreach($subrincian as $sr)
+            <option value="{{ $sr->SUBRINCIAN_ID }}">{{ $sr->SUBRINCIAN_NAMA }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <button class="btn btn-warning col-md-1 w-full" data-toggle="modal" type="button" disabled="true" data-target="#pilih-paket-modal" id="pilih-paket"><i class="fa fa-plus"></i> Tambah</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3">Jenis</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="jenis-pekerjaan" required="" disabled="true">
+            <option value="">Silahkan Pilih Jenis</option>
+            @foreach($pekerjaan as $pkj)
+            <option value="{{ $pkj->PEKERJAAN_ID }}">{{ $pkj->PEKERJAAN_NAMA }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3">Kategori</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="kategori-belanja" required="" disabled="true">
+            <option value="">Silahkan Pilih Kategori</option>
+            <option value="1">SSH</option>
+            <option value="2">HSPK</option>
+            <option value="3">ASB</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3">Rekening</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="rekening-belanja" required="" disabled="true">
+            <option value="">Silahkan Pilih Rekening</option>
+          </select>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Komponen</label>          
+        <div class="col-md-6">
+          <input type="text" class="form-control" placeholder="Komponen" id="nama-komponen" readonly="">          
+          <input type="hidden" class="form-control" readonly="" id="id-komponen">          
+          <input type="hidden" class="form-control" readonly="" id="id-rincian">          
+          <input type="hidden" class="form-control" readonly="" id="harga-komponen">          
+        </div>
+        <div class="col-md-1 m-l-n-md">
+        <a class="btn btn-warning" data-toggle="modal" data-target="#kode-komponen" id="pilih-komponen" disabled="true" style="display: none;">Pilih</a>
+        </div>
+        <div class="col-md-2">
+          <label for="no_spp" class="m-l-xl">Pajak</label>          
+          <div class="checkbox-remember pull-right m-t-n-xs">
+           <div class="checkbox">
+            <label class="checkbox-inline i-checks">
+              <input type="checkbox" id="pajak" disabled="true">
+              <i></i>  
+            </label>
+           </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="form-group hide" id="harga-free">
+      <label for="no_spp" class="col-md-3">Harga</label>          
+      <div class="col-sm-9">
+        <input type="number" id="harga-free-input" class="form-control" placeholder="Masukan Harga" >
+      </div> 
+    </div>
+
+    <div class="form-group">
+      <label for="no_spp" class="col-md-3">Keterangan</label>          
+      <div class="col-sm-9">
+        <input type="text" id="ket-belanja" class="form-control" placeholder="Masukan Keterangan" >          
+      </div> 
+    </div>
+
+    <div class="form-group" id="koef1">
+      <label for="no_spp" class="col-md-3">Koefisien</label>          
+      <div class="col-sm-5">
+        <input type="number" id="vol1-u" class="form-control" placeholder="Masukan Jumlah" required="">      
+      </div> 
+      <div class="col-sm-4">
+        <select ui-jq="chosen" class="w-full" id="satuan-1">
+          @foreach($satuan as $sat)
+          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
+          @endforeach        
+        </select>    
+      </div>
+    </div>
+    <div class="form-group" id="koef2">
+      <label for="no_spp" class="col-md-3"></label>          
+      <div class="col-sm-5">
+        <input type="number" id="vol2" class="form-control" placeholder="Masukan Jumlah" >      
+      </div> 
+      <div class="col-sm-4">
+        <select ui-jq="chosen" class="w-full" id="satuan-2">
+          <option>Pilih Satuan</option>
+          @foreach($satuan as $sat)
+          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
+          @endforeach
+        </select>    
+      </div>
+    </div>          
+    <div class="form-group" id="koef3">
+      <label for="no_spp" class="col-md-3"></label>          
+      <div class="col-sm-5">
+        <input type="number" id="vol3" class="form-control" placeholder="Masukan Jumlah" >      
+      </div> 
+      <div class="col-sm-4">
+        <select ui-jq="chosen" class="w-full" id="satuan-3">
+          <option>Pilih Satuan</option>
+          @foreach($satuan as $sat)
+          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
+          @endforeach
+        </select>    
+      </div>
+    </div>
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3"></label>          
+      <div class="col-sm-5">
+        <input type="number" id="vol4" class="form-control" placeholder="Masukan Jumlah" >      
+      </div> 
+      <div class="col-sm-4">
+        <select ui-jq="chosen" class="w-full" id="satuan-4">
+          <option>Pilih Satuan</option>
+          @foreach($satuan as $sat)
+          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
+          @endforeach
+        </select>    
+      </div>
+    </div>          
+    <hr class="m-t-xl">
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian SKPD</label>          
+      <div class="col-sm-3">
+        <input type="text" id="rincian-skpd" class="form-control" readonly="">      
+        <input type="hidden" id="rincian-skpd_" class="form-control" readonly="">      
+      </div> 
+      <label for="no_spp" class="col-md-1">Pagu SKPD</label>          
+      <div class="col-sm-3">
+        <input type="text" id="pagu-skpd" class="form-control" readonly="">      
+        <input type="hidden" id="pagu-skpd_" class="form-control" readonly="">      
+      </div>
+      <label for="no_spp" class="col-md-1">Sisa Anggaran</label>          
+      <div class="col-sm-3">
+        <input type="text" id="sisa-skpd" class="form-control" readonly="">      
+        <input type="hidden" id="sisa-skpd_" class="form-control" readonly="">      
+      </div> 
+    </div>
+    <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Update Komponen</a>
+  </div>
+</form>
+</div>
+</div>
+<!--END EDIT RINCIAN-->
+
+<!--PILIH KOMPONEN-->
 <div class="plih-komponen modal fade " id="kode-komponen" tabindex="-1" role="dialog">
   <div class="modal-dialog bg-white modal-lg">
     <div class="panel panel-default">
@@ -665,7 +838,9 @@
     </div>
   </div>
 </div>
+<!--END PILIH KOMPONEN-->
 
+<!--PAKET PEKERJAAN-->
 <div class="pilih-paket modal fade " id="pilih-paket-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog bg-white">
     <div class="panel panel-default">
@@ -682,7 +857,10 @@
     </div>
   </div>
 </div>
+<!--END PAKET PEKERJAAN-->
 
+
+<!--EDIT MUSRENBANG-->
 <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-musrenbang">
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
@@ -728,6 +906,8 @@
     </div>
   </form>
 </div>
+<!--END EDIT MUSRENBANG-->
+
 </div>
 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 @endsection
@@ -864,7 +1044,14 @@
     var REKENING_ID     = $('#rekening-belanja').val();
     var KOMPONEN_ID     = $('#id-komponen').val();
     var KOMPONEN_NAMA   = $('#nama-komponen').val();
-    var VOL1            = $('#vol1').val();
+    
+    if($('#id-rincian').val() == ""){
+      var VOL1            = $('#vol1').val();
+    }else {
+      var VOL1            = $('#vol1-u').val();
+    }
+    
+
     var SAT1            = $('#satuan-1').val();
     var VOL2            = $('#vol2').val();
     var SAT2            = $('#satuan-2').val();
@@ -958,6 +1145,8 @@
     }
   }
 
+  
+
   function ubah(id){
     $.ajax({
       type  : "get",
@@ -976,7 +1165,7 @@
         if(data['DATA']['RINCIAN_PAJAK'] == 10){
           $('#pajak').prop('checked',true);
         }
-        $('#vol1').val(data['VOL1']);
+        $('#vol1-u').val(data['VOL1']);
         $('#satuan-1').find('option').remove().end().append('<option value="'+data['SATUAN1']+'">'+data['SATUAN1']+'</option>').trigger('chosen:updated');
         $('#vol2').val(data['VOL2']);
         $('#satuan-2').append('<option value="'+data['SATUAN2']+'" selected>'+data['SATUAN2']+'</option>').trigger('chosen:updated');
@@ -987,9 +1176,10 @@
       }
     });
     $('.overlay').fadeIn('fast',function(){
-      $('.input-rincian').animate({'right':'0'},"linear");  
+      $('.input-rincian-ubah').animate({'right':'0'},"linear");  
       $("html, body").animate({ scrollTop: 0 }, "slow");
     });
+
   }
 
   function hapus(id){
@@ -1156,6 +1346,9 @@
         $('#pilih-komponen').attr('disabled',true);
     });
   });
+
+
+
     $('.overlay').on('click',function(){      
         clearInterval(interval);
     }); 
