@@ -1673,11 +1673,12 @@ class blController extends Controller
                                     ->sum('RINCIAN_TOTAL');
                                     // print_r($cekrealisasi->REALISASI_TOTAL);exit();
         $totalrekening  = $rekeningnow + $total;
-        if($cekrealisasi){
+        
+        /*if($cekrealisasi){
             if($totalrekening < $cekrealisasi->REALISASI_TOTAL){
                 return 98;
             }                        
-        }
+        }*/
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
