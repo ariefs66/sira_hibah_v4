@@ -219,12 +219,20 @@
                   <span class="font-semibold">Belanja</span>
                 </a>                
 
-                 <ul class="nav nav-sub dk">                  
+                 <ul class="nav nav-sub dk">  
+                  @if( $tahun =='2017' &&  $status == 'perubahan')               
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung" class="padding-l-r-lg ">                      
                        <span >Belanja Langsung</span>
                     </a>
                   </li>
+                  @else
+                  <li>
+                    <a onclick="$.alert('Masih Ditutup untuk tahun : {{ $tahun }} dan status : {{ $status }}')" class="padding-l-r-lg ">                    
+                       <span >Belanja Langsung</span>
+                    </a>
+                  </li>
+                  @endif
 
                   <li>
                     @if((Auth::user()->level == 8 or Auth::user()->level == 9)
