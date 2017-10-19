@@ -226,7 +226,11 @@ class lampiranController extends Controller
 
             $selisih = $totalBL-$totalBLMurni;
 
-            $persen = ($selisih*100)/$totalBLMurni;
+            if($totalBLMurni != 0){
+                $persen = ($selisih*100)/$totalBLMurni;
+            }else {
+                $persen = 0;
+            }
                                          
            return View('budgeting.lampiran.rka_perubahan',
                 [   'tahun'             =>$tahun,
