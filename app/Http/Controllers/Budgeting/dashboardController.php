@@ -9,16 +9,20 @@ use Auth;
 use DB;
 use App\Model\UserBudget;
 use App\Model\BL;
+use App\Model\BLPerubahan;
 use App\Model\BTL;
+use App\Model\BTLPerubahan;
 use App\Model\Pendapatan;
+use App\Model\PendapatanPerubahan;
 use App\Model\Tahapan;
 use App\Model\Staff;
 use App\Model\Rincian;
+use App\Model\RincianPerubahan;
 use App\Model\SKPD;
 use App\Model\Usulan;
 use App\Model\Kamus;
 use App\Model\PaguRincian;
-use App\Model\BlPerubahan;
+//use App\Model\BlPerubahan;
 use Response;
 class dashboardController extends Controller
 {
@@ -41,54 +45,109 @@ class dashboardController extends Controller
 
         if($level == 1 or $level == 2){
             $skpd   = $this->getSKPD($tahun);
-    		$bl  	= BL::whereHas('subunit',function($q) use ($skpd){
-                				$q->where('SKPD_ID',$skpd);
-                		})->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
-    		$btl 	= BTL::whereHas('subunit',function($q) use ($skpd){
+            
+            if($status=="murni"){
+                $bl     = BL::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
-                        })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-    		$pdp 	= Pendapatan::whereHas('subunit',function($q) use ($skpd){
+                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
+                $btl    = BTL::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+                $pdp    = Pendapatan::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+                $blv    = BL::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->count();
+                $bln    = BL::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->count();
+                $b1     = Rincian::whereHas('rekening',function($q){
+                            $q->where('REKENING_KODE','like','5.2.1%');
+                        })->whereHas('bl',function($r) use($skpd,$tahun){
+                            $r->where('BL_VALIDASI',1)
+                              ->where('BL_DELETED',0)
+                              ->where('BL_TAHUN',$tahun)
+                              ->whereHas('subunit',function($s) use ($skpd){
+                                    $s->where('SKPD_ID',$skpd);
+                            });
+                        })->sum('RINCIAN_TOTAL');
+                $b2     = Rincian::whereHas('rekening',function($q){
+                            $q->where('REKENING_KODE','like','5.2.2%');
+                        })->whereHas('bl',function($r) use($skpd,$tahun){
+                            $r->where('BL_VALIDASI',1)
+                              ->where('BL_DELETED',0)
+                              ->where('BL_TAHUN',$tahun)                          
+                              ->whereHas('subunit',function($s) use ($skpd){
+                                    $s->where('SKPD_ID',$skpd);
+                            });
+                        })->sum('RINCIAN_TOTAL');
+                $b3     = Rincian::whereHas('rekening',function($q){
+                            $q->where('REKENING_KODE','like','5.2.3%');
+                        })->whereHas('bl',function($r) use($skpd,$tahun){
+                            $r->where('BL_VALIDASI',1)    
+                              ->where('BL_DELETED',0)    
+                              ->where('BL_TAHUN',$tahun)                                          
+                              ->whereHas('subunit',function($s) use ($skpd){
+                                    $s->where('SKPD_ID',$skpd);
+                            });
+                        })->sum('RINCIAN_TOTAL');  
+                $pagu   = BL::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
+            }
+            elseif($status=="perubahan"){
+                $bl     = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
-                        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-            $blv    = BL::whereHas('subunit',function($q) use ($skpd){
-                                $q->where('SKPD_ID',$skpd);
-                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->count();
-            $bln    = BL::whereHas('subunit',function($q) use ($skpd){
-                                $q->where('SKPD_ID',$skpd);
-                        })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->count();
-            $b1     = Rincian::whereHas('rekening',function($q){
-                        $q->where('REKENING_KODE','like','5.2.1%');
-                    })->whereHas('bl',function($r) use($skpd,$tahun){
-                        $r->where('BL_VALIDASI',1)
-                          ->where('BL_DELETED',0)
-                          ->where('BL_TAHUN',$tahun)
-                          ->whereHas('subunit',function($s) use ($skpd){
-                                $s->where('SKPD_ID',$skpd);
-                        });
-                    })->sum('RINCIAN_TOTAL');
-            $b2     = Rincian::whereHas('rekening',function($q){
-                        $q->where('REKENING_KODE','like','5.2.2%');
-                    })->whereHas('bl',function($r) use($skpd,$tahun){
-                        $r->where('BL_VALIDASI',1)
-                          ->where('BL_DELETED',0)
-                          ->where('BL_TAHUN',$tahun)                          
-                          ->whereHas('subunit',function($s) use ($skpd){
-                                $s->where('SKPD_ID',$skpd);
-                        });
-                    })->sum('RINCIAN_TOTAL');
-            $b3     = Rincian::whereHas('rekening',function($q){
-                        $q->where('REKENING_KODE','like','5.2.3%');
-                    })->whereHas('bl',function($r) use($skpd,$tahun){
-                        $r->where('BL_VALIDASI',1)    
-                          ->where('BL_DELETED',0)    
-                          ->where('BL_TAHUN',$tahun)                                          
-                          ->whereHas('subunit',function($s) use ($skpd){
-                                $s->where('SKPD_ID',$skpd);
-                        });
-                    })->sum('RINCIAN_TOTAL');  
-            $pagu   = BL::whereHas('subunit',function($q) use ($skpd){
-                                $q->where('SKPD_ID',$skpd);
-                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
+                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
+                $btl    = BTLPerubahan::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+                $pdp    = PendapatanPerubahan::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+                $blv    = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->count();
+                $bln    = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->count();
+                $b1     = RincianPerubahan::whereHas('rekening',function($q){
+                                $q->where('REKENING_KODE','like','5.2.1%');
+                            })
+                            ->whereHas('bl',function($r) use($skpd,$tahun){
+                                $r->where('BL_VALIDASI',1)
+                                  ->where('BL_DELETED',0)
+                                  ->where('BL_TAHUN',$tahun)
+                                  ->whereHas('subunit',function($s) use ($skpd){
+                                        $s->where('SKPD_ID',$skpd);
+                                    });
+                            })->sum('RINCIAN_TOTAL');
+                $b2     = RincianPerubahan::whereHas('rekening',function($q){
+                            $q->where('REKENING_KODE','like','5.2.2%');
+                            })->whereHas('bl',function($r) use($skpd,$tahun){
+                                $r->where('BL_VALIDASI',1)
+                                  ->where('BL_DELETED',0)
+                                  ->where('BL_TAHUN',$tahun)                          
+                                  ->whereHas('subunit',function($s) use ($skpd){
+                                        $s->where('SKPD_ID',$skpd);
+                                    });
+                            })->sum('RINCIAN_TOTAL');
+                $b3     = RincianPerubahan::whereHas('rekening',function($q){
+                            $q->where('REKENING_KODE','like','5.2.3%');
+                            })->whereHas('bl',function($r) use($skpd,$tahun){
+                                $r->where('BL_VALIDASI',1)    
+                                  ->where('BL_DELETED',0)    
+                                  ->where('BL_TAHUN',$tahun)                                          
+                                  ->whereHas('subunit',function($s) use ($skpd){
+                                        $s->where('SKPD_ID',$skpd);
+                                    });
+                            })->sum('RINCIAN_TOTAL');
+                $pagu   = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
+            }
+
             $skpdjenis  = SKPD::where('SKPD_ID',$skpd)->value('SKPD_JENIS');
             if($skpdjenis == 4){
                 $musren           = Usulan::whereHas('rw',function($q) use($skpd){
@@ -170,27 +229,53 @@ class dashboardController extends Controller
                 $musrenTotalIn  = $musrenTotalIn[0]->total;
             }                     
     	}else{
-            $bl     = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
-            $pagu   = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
-            $blv    = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->count();
-    		$bln 	= BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->count();
-    		$btl 	= BTL::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-    		$pdp 	= Pendapatan::where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-            $b1     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
-                        ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
-                        })
-                        ->sum('RINCIAN_TOTAL');
-            $b2     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
-                        ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
-                        })
-                        ->sum('RINCIAN_TOTAL');
-            $b3     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
-                        ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
-                        })
-                        ->sum('RINCIAN_TOTAL');
+            if($status=="murni"){
+                $bl     = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
+                $pagu   = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
+                $blv    = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->count();
+                $bln    = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->count();
+                $btl    = BTL::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+                $pdp    = Pendapatan::where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+                $b1     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+                            ->whereHas('bl',function($r){
+                                $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            })
+                            ->sum('RINCIAN_TOTAL');
+                $b2     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
+                            ->whereHas('bl',function($r){
+                                $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            })
+                            ->sum('RINCIAN_TOTAL');
+                $b3     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
+                            ->whereHas('bl',function($r){
+                                $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            })
+                            ->sum('RINCIAN_TOTAL');
+            }
+            elseif($status=="perubahan"){
+                $bl     = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
+                $pagu   = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
+                $blv    = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->count();
+                $bln    = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->count();
+                $btl    = BTLPerubahan::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+                $pdp    = PendapatanPerubahan::where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+                $b1     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+                            ->whereHas('bl',function($r){
+                                $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            })
+                            ->sum('RINCIAN_TOTAL');
+                $b2     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
+                            ->whereHas('bl',function($r){
+                                $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            })
+                            ->sum('RINCIAN_TOTAL');
+                $b3     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
+                            ->whereHas('bl',function($r){
+                                $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            })
+                            ->sum('RINCIAN_TOTAL');
+            }
+            
             $musren      = Usulan::count();
             $musrenIn    = Usulan::where('USULAN_STATUS',1)->count();
             $datamusren  = Usulan::all();
@@ -233,9 +318,16 @@ class dashboardController extends Controller
                                 $q->where('BL_TAHUN',$tahun);
                             })->get();
     	}elseif($level == 2){
-    		$staff 	= BL::whereHas('subunit',function($q) use ($skpd){
+            if($status=="murni"){
+                $staff  = BL::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI','0')->get();
+            }
+            elseif($status=="perubahan"){
+                $staff  = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
+                                $q->where('SKPD_ID',$skpd);
+                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI','0')->get();
+            }
     	}
         // dd($staff);exit();
         if(Auth::user()->level == 2){
