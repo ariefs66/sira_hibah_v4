@@ -167,11 +167,7 @@
 		<td>Masukan</td>
 		<td>Dana yang dibutuhkan</td>
 		<td>-</td>
-		@if(!empty($bl_murni) and $bl_murni!=0)
 			<td>Rp. {{ number_format($bl_murni->BL_PAGU,0,',','.') }},00</td>
-		@else
-			<td>Rp. 0,00</td>
-		@endif
 		<td>Rp. {{ number_format($bl->BL_PAGU,0,',','.') }},00</td>
 	</tr>
 	@if($bl->output)
