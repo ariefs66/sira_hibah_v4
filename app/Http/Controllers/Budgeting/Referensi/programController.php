@@ -38,7 +38,14 @@ class programController extends Controller
         $aksi           = '';
     	$view 			= array();
     	foreach ($data as $data) {
-    		$aksi 		= '<div class="action visible pull-right"><a onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a><a onclick="return ubahProgram(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusProgram(\''.$data->PROGRAM_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            if(Auth::user()->level==8){
+                $aksi       = '<div class="action visible pull-right"><a onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a><a onclick="return ubahProgram(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusProgram(\''.$data->PROGRAM_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            }else{
+                $aksi       = '<div class="action visible pull-right">
+                <a onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a>
+                </div>';
+            }
+    		
     		array_push($view, array( 'id_porgram'		=>$data->PROGRAM_ID,
                                      'OPSI'				=>$aksi,
                                      'URUSAN'  			=>$data->urusan->URUSAN_KODE." - ".$data->urusan->URUSAN_NAMA,
