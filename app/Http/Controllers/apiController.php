@@ -64,29 +64,33 @@ class apiController extends Controller
     				->WHERE('DAT_BL_PERUBAHAN.BL_TAHUN',$tahun)
     				->WHERE('DAT_BL_PERUBAHAN.BL_DELETED',0)
     				->WHERE('DAT_BL_PERUBAHAN.BL_VALIDASI',1)
-    				//->take('1000')
+    				->take('1000')
     				->orderBy('REF_SKPD.SKPD_ID','asc')
     				->get();
     	}			
 
     	$view 			= array();
     	foreach ($data as $data) {
-    		array_push($view, array( 'SKPD_NAMA'	 		=>$data->SKPD_NAMA,
+    		array_push($view, array( 'SKPD_KODE'    	    =>$data->SKPD_KODE,
+                                     'SKPD_NAMA'            =>$data->SKPD_NAMA,
     								 'BL_PAGU' 				=>$data->BL_PAGU,
     								 'BL_TAHUN' 			=>$data->BL_TAHUN,
+                                     'PROGRAM_KODE'         =>$data->PROGRAM_KODE,
     								 'PROGRAM_NAMA' 		=>$data->PROGRAM_NAMA,
+                                     'KEGIATAN_KODE'        =>$data->KEGIATAN_KODE,
     								 'KEGIATAN_NAMA' 		=>$data->KEGIATAN_NAMA,
-    								 'RINCIAN_ID'           =>$data->RINCIAN_ID,
+    								 'SUBRINCIAN_NAMA'      =>$data->SUBRINCIAN_NAMA,
+                                     'PEKERJAAN_NAMA'       =>$data->PEKERJAAN_NAMA,
+                                     'REKENING_KODE'        =>$data->REKENING_KODE,
+                                     'REKENING_NAMA'        =>$data->REKENING_NAMA,
     								 'RINCIAN_VOLUME'       =>$data->RINCIAN_VOLUME,
     								 'RINCIAN_KOEFISIEN'    =>$data->RINCIAN_KOEFISIEN,
     								 'RINCIAN_TOTAL'   	    =>$data->RINCIAN_TOTAL,
     								 'RINCIAN_KETERANGAN'   =>$data->RINCIAN_KETERANGAN,
-    								 'SUBRINCIAN_NAMA'      =>$data->SUBRINCIAN_NAMA,
-    								 'REKENING_NAMA'        =>$data->REKENING_NAMA,
     								 'KOMPONEN_NAMA'        =>$data->KOMPONEN_NAMA,
     								 'KOMPONEN_HARGA' 		=>$data->KOMPONEN_HARGA,
-    								 'KOMPONEN_SATUAN' 		=>$data->KOMPONEN_SATUAN,
-    								 'PEKERJAAN_NAMA' 		=>$data->PEKERJAAN_NAMA,
+                                     'BL_AWAL'              =>$data->BL_AWAL,
+    								 'BL_AKHIR' 		    =>$data->BL_AKHIR,
     								 
     		));
     	}

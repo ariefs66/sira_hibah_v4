@@ -15,6 +15,7 @@ use App\Model\Impact;
 use View;
 use Carbon;
 use Response;
+use Auth;
 use DB;
 use Illuminate\Support\Facades\Input;
 class programController extends Controller
@@ -62,7 +63,10 @@ class programController extends Controller
     	$view 			= array();
     	foreach ($data as $data) {
             // <a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-eye"></i></a>
-    		$aksi 		= '<div class="action visible pull-right"><a onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            if(Auth::user()->level==8){
+    		  $aksi 		= '<div class="action visible pull-right"><a onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            }
+            else       $aksi = '';
     		array_push($view, array( 'KEGIATAN_ID' 		=>$data->KEGIATAN_ID,
     								 'KEGIATAN_KODE'  	=>$data->KEGIATAN_KODE,
                                      'KEGIATAN_NAMA'	=>$data->KEGIATAN_NAMA,

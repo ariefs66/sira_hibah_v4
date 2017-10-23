@@ -22,6 +22,7 @@
               <div class="col-md-12">
                 <div class="panel bg-white">
                   <div class="wrapper-lg">
+                  @if(Auth::user()->level == 8) 
                     <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                       <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Tambah <i class="fa fa-chevron-down"></i>
                       </button>
@@ -30,6 +31,7 @@
                         <li><a class="open-form-giat">Tambah Kegiatan</a></li>
                       </ul>
                     </div>
+                    @endif
                     <h5 class="inline font-semibold text-orange m-n ">Program Non  urusan Tahun {{ $tahun }}</h5>
           					<div class="col-sm-1 pull-right m-t-n-sm">
                     	<select class="form-control dtSelect" id="dtSelect">
