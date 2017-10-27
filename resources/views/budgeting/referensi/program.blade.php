@@ -32,7 +32,7 @@
                       </ul>
                     </div>
                     @endif
-			<h5 class="inline font-semibold text-orange m-n ">Program Urusan Tahun {{ $tahun }}</h5>
+                    <h5 class="inline font-semibold text-orange m-n ">Program Urusan Tahun {{ $tahun }}</h5>
           					<div class="col-sm-1 pull-right m-t-n-sm">
                     	<select class="form-control dtSelect" id="dtSelect">
                             <option value="10">10</option>

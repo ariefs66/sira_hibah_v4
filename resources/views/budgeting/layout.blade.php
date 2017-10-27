@@ -359,7 +359,7 @@
                        <span >Staff</span>
                     </a>
                   </li>
- 		   <li>
+                  <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program" class="padding-l-r-lg ">              
                        <span >Program & Kegiatan Urusan</span>
                     </a>
