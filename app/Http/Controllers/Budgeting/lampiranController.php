@@ -1044,4 +1044,114 @@ class lampiranController extends Controller
 
         
     }
+
+	public function rekapAll($tahun,$status){
+
+        if($status == 'murni'){
+            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","KEGIATAN_KODE", "KEGIATAN_NAMA", bl."BL_PAGU" AS "PAGU KEGIATAN",
+            sum(rincian."RINCIAN_TOTAL") as "RINCIAN TOTAL KEGIATAN"
+                                    from "BUDGETING"."DAT_BL" bl
+                                    inner JOIN "BUDGETING"."DAT_RINCIAN" rincian
+                                    on bl."BL_ID" = rincian."BL_ID"
+                                    inner JOIN "REFERENSI"."REF_KEGIATAN" keg
+                                    on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
+                                    inner join "REFERENSI"."REF_PROGRAM" prog
+                                    on keg."PROGRAM_ID" = prog."PROGRAM_ID"
+                                    inner join "REFERENSI"."REF_URUSAN" ur 
+                                    on prog."URUSAN_ID" = ur."URUSAN_ID"
+                                    inner join "REFERENSI"."REF_SUB_UNIT" sub
+                                    on bl."SUB_ID" = sub."SUB_ID"
+                                    inner join "REFERENSI"."REF_SKPD" skpd
+                                    on sub."SKPD_ID" = skpd."SKPD_ID"
+                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
+                                    GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE","KEGIATAN_NAMA", bl."BL_PAGU"
+                                    ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
+        }else {
+            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","KEGIATAN_KODE", "KEGIATAN_NAMA", bl."BL_PAGU" AS "PAGU KEGIATAN",
+            sum(rincian."RINCIAN_TOTAL") as "RINCIAN TOTAL KEGIATAN"
+                                    from "BUDGETING"."DAT_BL_PERUBAHAN" bl
+                                    inner JOIN "BUDGETING"."DAT_RINCIAN_PERUBAHAN" rincian
+                                    on bl."BL_ID" = rincian."BL_ID"
+                                    inner JOIN "REFERENSI"."REF_KEGIATAN" keg
+                                    on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
+                                    inner join "REFERENSI"."REF_PROGRAM" prog
+                                    on keg."PROGRAM_ID" = prog."PROGRAM_ID"
+                                    inner join "REFERENSI"."REF_URUSAN" ur 
+                                    on prog."URUSAN_ID" = ur."URUSAN_ID"
+                                    inner join "REFERENSI"."REF_SUB_UNIT" sub
+                                    on bl."SUB_ID" = sub."SUB_ID"
+                                    inner join "REFERENSI"."REF_SKPD" skpd
+                                    on sub."SKPD_ID" = skpd."SKPD_ID"
+                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
+                                    GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE","KEGIATAN_NAMA", bl."BL_PAGU"
+                                    ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
+        }
+               //dd($data);
+            $data = array_map(function ($value) {
+                    return (array)$value;
+                }, $data);
+            Excel::create('PAGU PROGRAM '.Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+                    $excel->sheet('PAGU PROGRAM', function($sheet) use ($data) {
+                        $sheet->fromArray($data);
+                    });
+            })->download('xls');
+        
+    }
+
+
+    public function berbedaPaguRIncian($tahun,$status){
+
+        if($status == 'murni'){
+            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","KEGIATAN_KODE", "KEGIATAN_NAMA", bl."BL_PAGU" AS "PAGU KEGIATAN",
+            sum(rincian."RINCIAN_TOTAL") as "RINCIAN TOTAL KEGIATAN"
+                                    from "BUDGETING"."DAT_BL" bl
+                                    inner JOIN "BUDGETING"."DAT_RINCIAN" rincian
+                                    on bl."BL_ID" = rincian."BL_ID"
+                                    inner JOIN "REFERENSI"."REF_KEGIATAN" keg
+                                    on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
+                                    inner join "REFERENSI"."REF_PROGRAM" prog
+                                    on keg."PROGRAM_ID" = prog."PROGRAM_ID"
+                                    inner join "REFERENSI"."REF_URUSAN" ur 
+                                    on prog."URUSAN_ID" = ur."URUSAN_ID"
+                                    inner join "REFERENSI"."REF_SUB_UNIT" sub
+                                    on bl."SUB_ID" = sub."SUB_ID"
+                                    inner join "REFERENSI"."REF_SKPD" skpd
+                                    on sub."SKPD_ID" = skpd."SKPD_ID"
+                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
+                                    GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE","KEGIATAN_NAMA", bl."BL_PAGU"
+                                    having sum(rincian."RINCIAN_TOTAL") <> bl."BL_PAGU"
+                                    ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
+        }else {
+            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","KEGIATAN_KODE", "KEGIATAN_NAMA", bl."BL_PAGU" AS "PAGU KEGIATAN",
+            sum(rincian."RINCIAN_TOTAL") as "RINCIAN TOTAL KEGIATAN"
+                                    from "BUDGETING"."DAT_BL_PERUBAHAN" bl
+                                    inner JOIN "BUDGETING"."DAT_RINCIAN_PERUBAHAN" rincian
+                                    on bl."BL_ID" = rincian."BL_ID"
+                                    inner JOIN "REFERENSI"."REF_KEGIATAN" keg
+                                    on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
+                                    inner join "REFERENSI"."REF_PROGRAM" prog
+                                    on keg."PROGRAM_ID" = prog."PROGRAM_ID"
+                                    inner join "REFERENSI"."REF_URUSAN" ur 
+                                    on prog."URUSAN_ID" = ur."URUSAN_ID"
+                                    inner join "REFERENSI"."REF_SUB_UNIT" sub
+                                    on bl."SUB_ID" = sub."SUB_ID"
+                                    inner join "REFERENSI"."REF_SKPD" skpd
+                                    on sub."SKPD_ID" = skpd."SKPD_ID"
+                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
+                                    GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE","KEGIATAN_NAMA", bl."BL_PAGU"
+                                    having sum(rincian."RINCIAN_TOTAL") <> bl."BL_PAGU"
+                                    ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
+        }
+               //dd($data);
+            $data = array_map(function ($value) {
+                    return (array)$value;
+                }, $data);
+            Excel::create('PAGU PROGRAM '.Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+                    $excel->sheet('PAGU PROGRAM', function($sheet) use ($data) {
+                        $sheet->fromArray($data);
+                    });
+            })->download('xls');
+        
+    }
+
 }

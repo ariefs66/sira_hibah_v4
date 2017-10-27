@@ -220,7 +220,7 @@
                 </a>                
 
                  <ul class="nav nav-sub dk">  
-                  @if( $tahun =='2017' &&  $status == 'perubahan')               
+                  @if( $tahun !='' &&  $status != '')               
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung" class="padding-l-r-lg ">                      
                        <span >Belanja Langsung</span>
@@ -357,6 +357,16 @@
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/staff" class="padding-l-r-lg ">
                        <span >Staff</span>
+                    </a>
+                  </li>
+ 		   <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program" class="padding-l-r-lg ">              
+                       <span >Program & Kegiatan Urusan</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/adum/program" class="padding-l-r-lg ">              
+                       <span >Program & Kegiatan Non Urusan</span>
                     </a>
                   </li>
                   @endif
@@ -537,6 +547,28 @@
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/api/sirup" class="padding-l-r-lg " target="_blank">
                        <span>SIRUP</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+		<li>
+                <a href="#" class="auto padding-l-r-lg parent">                  
+                  <i class="fa fa-file"></i>
+                  <span class="pull-right text-heading">
+                    <i class="text8 icon-bdg_arrow1 text"></i>
+                    <i class="text8 icon-bdg_arrow2 text-active"></i>
+                  </span>
+                  <span class="font-semibold">Rekap Pivot</span>
+                </a>                
+                 <ul class="nav nav-sub dk">
+                  <li>
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/rekapAll" class="padding-l-r-lg " target="_blank">
+                       <span>Rekap Semua</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/rekapBerbeda/paguRincian" class="padding-l-r-lg " target="_blank">
+                       <span>Berbeda Pagu & Rincian</span>
                     </a>
                   </li>
                 </ul>

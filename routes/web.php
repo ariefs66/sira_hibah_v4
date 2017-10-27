@@ -438,3 +438,7 @@ Route::get('/simda/{tahun}/trfpendapatan', 'simdaController@trfPendapatan');
 
 //ASOSIASI
 Route::get('/asosiasi/{tahun}', 'Asosiasi\asosiasiController@index');
+
+//rekap buat pivot
+Route::get('/main/{tahun}/{status}/rekapAll', 'Budgeting\lampiranController@rekapAll');
+Route::get('/main/{tahun}/{status}/rekapBerbeda/paguRincian', 'Budgeting\lampiranController@berbedaPaguRincian');
