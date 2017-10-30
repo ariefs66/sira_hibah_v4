@@ -44,7 +44,7 @@
 
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
                   <div class="col-sm-4 pull-right m-t-n-sm">
-                   <select ui-jq="chosen" class="form-control" id="filter-skpd">
+                   <select ui-jq="chosen" class="form-control" id="filter-skpd" style="color: black">
                      <option value="">- Pilih OPD -</option>
                      @foreach($skpd as $pd)
                      <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
@@ -195,7 +195,7 @@
         <h5 class="inline font-semibold text-orange m-n text16 ">Set Pagu</h5>
         <hr>
         <p>- Pagu Kegiatan</p>
-        <input type="number" id="pagu" class="form-control">
+        <input type="text" id="nominal1" class="form-control pagu" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
         <p>- Usulan Pagu Kegiatan</p>
         <input type="number" id="pagu_usulan" class="form-control">
         <p class="m-t-sm">- Nomor Surat Usulan Perubahan</p>
@@ -529,15 +529,15 @@ function setStaff(){
         type  : "get",
         url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/getpagu/"+id,
         success : function (data) {
-          $('#pagu').val(data['BL_PAGU']);
+          $('.pagu').val(data['BL_PAGU']);
           $('#pagu_usulan').val(data['BL_PAGU_USULAN']);
           $('#pagu_catatan').val(data['BL_PAGU_CATATAN']);
           $('#pagu_surat').val(data['BL_PAGU_SURAT']);
           @if(Auth::user()->level == 2)
-            $('#pagu').attr('readonly',true); 
+            $('.pagu').attr('readonly',true); 
             $('#pagu_usulan').attr('readonly',false); 
           @else
-            $('#pagu').attr('readonly',false); 
+            $('.pagu').attr('readonly',false); 
             $('#pagu_usulan').attr('readonly',true);            
           @endif
         }
@@ -547,7 +547,7 @@ function setStaff(){
   function simpanpagu(){
     var token        = $('#token').val();    
     var id           = $('#id-bl').val();    
-    var pagu         = $('#pagu').val();    
+    var pagu         = $('.pagu').val();    
     var usulan       = $('#pagu_usulan').val();    
     var catatan      = $('#pagu_catatan').val();    
     var surat        = $('#pagu_surat').val();    

@@ -177,7 +177,7 @@
       <div class="wrapper-lg">
         <h5 class="inline font-semibold text-orange m-n text16 ">Set Pagu</h5>
         <hr>
-        <input type="number" id="pagu" class="form-control">
+        <input type="text" id="nominal1" class="form-control pagu" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
         <textarea class="form-control m-t-sm" placeholder="Catatan" id="pagu_catatan"></textarea>
         <input type="hidden" id="id-bl" class="form-control">
         <button class="btn btn-warning m-t-md" onclick="return simpanpagu()">Simpan</button>
@@ -506,7 +506,7 @@ function setStaff(){
         type  : "get",
         url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/getpagu/"+id,
         success : function (data) {
-          $('#pagu').val(data['BL_PAGU']);
+          $('.pagu').val(data['BL_PAGU']);
           $('#pagu_catatan').val(data['BL_PAGU_CATATAN']);
         }
     });
@@ -515,7 +515,7 @@ function setStaff(){
   function simpanpagu(){
     var token        = $('#token').val();    
     var id           = $('#id-bl').val();    
-    var pagu         = $('#pagu').val();    
+    var pagu         = $('.pagu').val();    
     var catatan       = $('#pagu_catatan').val();    
     $.ajax({
       url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/setpagu",

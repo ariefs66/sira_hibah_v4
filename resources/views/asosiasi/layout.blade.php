@@ -37,8 +37,8 @@
         </button>
         <!-- brand -->
         <a href="#" class="navbar-brand text-lt">          
-          <img src="{{ url('/') }}/assets/img/logo-harga@2x.png" srcset="{{ url('/') }}/assets/img/logo-harga@2x.png 2x" alt="." class="small-logo hide">
-          <img src="{{ url('/') }}/assets/img/logo-harga@2x.png" srcset="{{ url('/') }}/assets/img/logo-harga@2x.png 2x" alt="." class="large-logo">
+          <img src="{{ url('/') }}/assets/img/logo-harga@2x-.png" srcset="{{ url('/') }}/assets/img/logo-harga@2x-.png 2x" alt="." class="small-logo hide">
+          <img src="{{ url('/') }}/assets/img/logo-harga@2x-.png" srcset="{{ url('/') }}/assets/img/logo-harga@2x-.png 2x" alt="." class="large-logo">
         </a>
         <!-- / brand -->
       </div>
@@ -103,8 +103,6 @@
                     {{-- <option value="{{$tahun-1}}">{{$tahun-1}}</option> --}}
                     {{-- <option value="{{$tahun}}" selected="">{{$tahun}}</option> --}}
                     {{-- <option value="{{$tahun+1}}">{{$tahun+1}}</option> --}}
-                    <option value="2017" id="o2017">2017 Perubahan</option>
-                    <option value="2018" id="o2018">2018</option>
                   </select>
               </div>
            </li>
@@ -198,7 +196,7 @@
                 </a>                
               </li>
               <li>
-                <a href="{{ url('/') }}/harga/{{ $tahun }}/monitor" class="auto padding-l-r-lg">                  
+                <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/visimisi" class="auto padding-l-r-lg">                  
                   <i class="fa fa-bookmark-o"></i>
                   <span class="font-semibold">Visi & Misi </span>
                 </a>                
@@ -216,30 +214,30 @@
 
                  <ul class="nav nav-sub dk">                  
                   <li>
-                    <a href="{{ url('/') }}/main/{{$tahun}}/referensi/kegiatan" class="padding-l-r-lg ">
+                    <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/tujuan" class="padding-l-r-lg ">
                        <span>Tujuan</span>
                     </a>
                   </li>                 
                   <li>
-                    <a href="{{ url('/') }}/main/{{$tahun}}/referensi/komponen" class="padding-l-r-lg ">
+                    <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/tujuan" class="padding-l-r-lg ">
                        <span>Indikator Tujuan</span>
                     </a>
                   </li>  
                   <li>
-                    <a href="{{ url('/') }}/main/{{$tahun}}/referensi/komponen" class="padding-l-r-lg ">
+                    <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/tujuan" class="padding-l-r-lg ">
                        <span>Target Tujuan</span>
                     </a>
                   </li>                 
                   </ul>
               </li> 
              <li>
-                <a href="{{ url('/') }}/harga/{{ $tahun }}/monitor" class="auto padding-l-r-lg">                  
+                <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/strategi" class="auto padding-l-r-lg">                  
                   <i class="fa fa-bookmark-o"></i>
                   <span class="font-semibold">Strategi</span>
                 </a>                
               </li>
               <li>
-                <a href="{{ url('/') }}/harga/{{ $tahun }}/monitor" class="auto padding-l-r-lg">                  
+                <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/arahkebijakan" class="auto padding-l-r-lg">                  
                   <i class="fa fa-bookmark-o"></i>
                   <span class="font-semibold">Arah Kebijakan</span>
                 </a>                
@@ -256,12 +254,12 @@
 
                  <ul class="nav nav-sub dk">                  
                   <li>
-                    <a href="{{ url('/') }}/main/{{$tahun}}/referensi/kegiatan" class="padding-l-r-lg ">
+                    <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/program" class="padding-l-r-lg ">
                        <span>Program</span>
                     </a>
                   </li> 
                   <li>
-                    <a href="{{ url('/') }}/main/{{$tahun}}/referensi/komponen" class="padding-l-r-lg ">
+                    <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/program" class="padding-l-r-lg ">
                        <span >Target Outcome</span>
                     </a>
                   </li>                 
@@ -279,12 +277,12 @@
 
                  <ul class="nav nav-sub dk">                  
                   <li>
-                    <a href="{{ url('/') }}/main/{{$tahun}}/referensi/kegiatan" class="padding-l-r-lg ">
+                    <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/kegiatan" class="padding-l-r-lg ">
                        <span>Kegiatan</span>
                     </a>
                   </li>  
                   <li>
-                    <a href="{{ url('/') }}/main/referensi/komponen" class="padding-l-r-lg ">
+                    <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/kegiatan" class="padding-l-r-lg ">
                        <span >Target Output</span>
                     </a>
                   </li>                 

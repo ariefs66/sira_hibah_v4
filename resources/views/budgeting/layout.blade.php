@@ -220,7 +220,7 @@
                 </a>                
 
                  <ul class="nav nav-sub dk">  
-                  @if( $tahun =='2017' &&  $status == 'perubahan')               
+                  @if( $tahun !='' &&  $status != '')               
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung" class="padding-l-r-lg ">                      
                        <span >Belanja Langsung</span>
@@ -545,8 +545,56 @@
                     </a>
                   </li>
                   <li>
-                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/api/sirup" class="padding-l-r-lg " target="_blank">
-                       <span>SIRUP</span>
+                    <a href="#" class="padding-l-r-lg">                  
+                    <span class="pull-right">
+                      <i class="text8 icon-bdg_arrow1 text"></i>
+                      <i class="text8 icon-bdg_arrow2 text-active"></i>
+                    </span>
+                    <span>SIRUP</span>
+                  </a>                
+                   <ul class="nav nav-sub dk">
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/sirupKegiatan" class="padding-l-r-lg " target="_blank">
+                         <span>Kegiatan</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/sirupProgram" class="padding-l-r-lg " target="_blank">
+                         <span>Program</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/sirupPenyedia" class="padding-l-r-lg " target="_blank">
+                         <span>Belanja Penyedia </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/sirupSwakelola" class="padding-l-r-lg " target="_blank">
+                         <span>Belanja Swakelola</span>
+                      </a>
+                    </li>
+                </ul>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#" class="auto padding-l-r-lg parent">                  
+                  <i class="fa fa-file"></i>
+                  <span class="pull-right text-heading">
+                    <i class="text8 icon-bdg_arrow1 text"></i>
+                    <i class="text8 icon-bdg_arrow2 text-active"></i>
+                  </span>
+                  <span class="font-semibold">Rekap Pivot</span>
+                </a>                
+                 <ul class="nav nav-sub dk">
+                  <li>
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/rekapAll" class="padding-l-r-lg " target="_blank">
+                       <span>Rekap Semua</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/rekapBerbeda/paguRincian" class="padding-l-r-lg " target="_blank">
+                       <span>Berbeda Pagu & Rincian</span>
                     </a>
                   </li>
                 </ul>

@@ -14,7 +14,7 @@
               </a>   
             </li>
             <li>
-              <a href= "{{ url('/') }}/harga/{{$tahun}}">Dashboard</a>
+              <a href= "{{ url('/') }}/asosiasi/{{$tahun}}">Dashboard</a>
             </li>
           </ul>
         </div>
@@ -26,7 +26,7 @@
                   <div class="panel panel-default">
                     <div class="panel-body wrapper-sm">
                       <h2 class="m-t-xs text-orange font-semibold m-b-sm">-</h2>
-                      <p>Belanja Langsung Tervalidasi</p>
+                      <p>Rekap Program & Kegiatan </p>
                     </div>
                   </div>
                 </div>
