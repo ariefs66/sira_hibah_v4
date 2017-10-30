@@ -1,6 +1,7 @@
 /* Your Custom JS for BDG Webkit = Script here */
 
 /* Function Keyup */
+
 function SetNumber(id){
 
 	var numbers = $("#"+id).val();
@@ -16,7 +17,15 @@ function SetNumber(id){
 	}
 
 }
-
+/*
+function SetNumber(str_num){
+    if(str_num != ''){
+        var number = str_num.replace(/\./g,"");     
+        console.log(number + "=" + str_num);                    
+        return number.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");           
+    }
+}
+*/
 
 $(window).load(function(){
 

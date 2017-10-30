@@ -539,7 +539,7 @@
     <div class="form-group hide" id="harga-free">
       <label for="no_spp" class="col-md-3">Harga</label>          
       <div class="col-sm-9">
-        <input type="number" id="harga-free-input" class="form-control" placeholder="Masukan Harga" >
+        <input type="text" id="nominal1" class="form-control harga-free-input" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
       </div> 
     </div>
 
@@ -553,7 +553,7 @@
     <div class="form-group" id="koef1">
       <label for="no_spp" class="col-md-3">Koefisien</label>          
       <div class="col-sm-5">
-        <input type="number" id="vol1" class="form-control" placeholder="Masukan Jumlah" required="">      
+        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="vol1" class="form-control" placeholder="Masukan Jumlah" required="">      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-1">
@@ -710,7 +710,7 @@
     <div class="form-group hide" id="harga-free">
       <label for="no_spp" class="col-md-3">Harga</label>          
       <div class="col-sm-9">
-        <input type="number" id="harga-free-input" class="form-control" placeholder="Masukan Harga" >
+        <input type="text" id="nominal1" class="form-control harga-free-input" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">  
       </div> 
     </div>
 
@@ -1064,7 +1064,7 @@
     var RINCIAN_KET     = $('#ket-belanja').val();
     var PEKERJAAN_ID    = $('#jenis-pekerjaan').val();
     var SUBRINCIAN_ID   = $('#paket-pekerjaan').val();
-    var HARGA           = $('#harga-free-input').val();
+    var HARGA           = $('.harga-free-input').val();
     if($('#pajak').is(':checked')) RINCIAN_PAJAK = 10;
     else RINCIAN_PAJAK = 0;
     if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5'){

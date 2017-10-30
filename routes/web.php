@@ -423,7 +423,10 @@ Route::get('/trfnamakomponenperubahan', 'realController@trfnamakomponenperubahan
 Route::get('/trfprogram/{tahun}/{kode}', 'realController@trfprogram');
 
 //sirup api
-Route::get('/main/{tahun}/{status}/api/sirup', 'apiController@apiSirup');
+Route::get('/main/{tahun}/{status}/api/sirupKegiatan', 'apiController@apiSirupKegiatan');
+Route::get('/main/{tahun}/{status}/api/sirupProgram', 'apiController@apiSirupProgram');
+Route::get('/main/{tahun}/{status}/api/sirupPenyedia', 'apiController@apiSirupPenyedia');
+Route::get('/main/{tahun}/{status}/api/sirupSwakelola', 'apiController@apiSirupSwakelola');
 
 //TO SIMDA. - VIEW
 Route::get('/simda/{tahun}', 'simdaController@index');
@@ -438,6 +441,12 @@ Route::get('/simda/{tahun}/trfpendapatan', 'simdaController@trfPendapatan');
 
 //ASOSIASI
 Route::get('/asosiasi/{tahun}', 'Asosiasi\asosiasiController@index');
+Route::get('/asosiasi/{tahun}/visimisi', 'Asosiasi\asosiasiController@visiMisi');
+Route::get('/asosiasi/{tahun}/tujuan', 'Asosiasi\asosiasiController@tujuan');
+Route::get('/asosiasi/{tahun}/strategi', 'Asosiasi\asosiasiController@strategi');
+Route::get('/asosiasi/{tahun}/arahkebijakan', 'Asosiasi\asosiasiController@arahKebijakan');
+Route::get('/asosiasi/{tahun}/program', 'Asosiasi\asosiasiController@program');
+Route::get('/asosiasi/{tahun}/kegiatan', 'Asosiasi\asosiasiController@kegiatan');
 
 //rekap buat pivot
 Route::get('/main/{tahun}/{status}/rekapAll', 'Budgeting\lampiranController@rekapAll');

@@ -1045,7 +1045,8 @@ class lampiranController extends Controller
         
     }
 
-	public function rekapAll($tahun,$status){
+
+    public function rekapAll($tahun,$status){
 
         if($status == 'murni'){
             $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","KEGIATAN_KODE", "KEGIATAN_NAMA", bl."BL_PAGU" AS "PAGU KEGIATAN",

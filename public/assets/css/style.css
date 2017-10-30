@@ -5925,19 +5925,19 @@ table.dataTable thead > tr > .th_search input{
   font-size: 14px;
   font-weight: normal;
   /*color: #b8bcce;*/
-  color: #000000;
+  color: black;
   border-radius: 0;
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
 
 }
 table.dataTable thead > tr > .th_search input::-webkit-input-placeholder{
- /*color: #b8bcce;*/
- color: #000000; 
+ /*color: #b8bcce; */
+ color: black; 
 }
 table.dataTable thead > tr > .th_search i{
   /*color: #bcc1c8;*/
-  color: #000000;
+  color: black;
   font-size: 16px;
   position: absolute;
   top: 15px;
