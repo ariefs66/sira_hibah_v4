@@ -26,6 +26,9 @@
             <div class="panel bg-white">
               <div class="panel-heading wrapper-lg">
                 <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung : {{ $bl->kegiatan->KEGIATAN_NAMA }}</h5>
+                @if($log_r == 1)
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/sebelum/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> RKA Sebelumnya</a> &nbsp;
+                @endif
                 <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a>
               </div>
               <div class="tab-content tab-content-alt-1 bg-white">
@@ -201,7 +204,8 @@
                  { mData: 'SUB' },
                  { mData: 'HARGA' },
                  { mData: 'PAJAK' },
-                 { mData: 'TOTAL' }]
+                 { mData: 'TOTAL' },
+                 { mData: 'STATUS' }]
                }" class="table table-striped b-t b-b tabel-detail">
                <thead>
                 <tr>
@@ -212,9 +216,10 @@
                   <th style="width: 10%">Harga / Koefisien</th>
                   <th style="width: 5%">Pajak</th>
                   <th style="width: 5%">Total</th>
+                  <th style="width: 5%">Status</th>
                 </tr>
                 <tr>
-                  <th colspan="7" class="th_search">
+                  <th colspan="8" class="th_search">
                     <i class="icon-bdg_search"></i>
                     <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                   </th>
@@ -224,8 +229,8 @@
               </tbody>                        
             </table>
           </div>
-          @if(Auth::user()->level == 8)
-          <a class="btn input-xl m-t-md btn-danger pull-right m-r-md" onclick="return hapuscb()"><i class="fa fa-trash m-r-xs"></i>Hapus</a>
+          @if(Auth::user()->email == 8)
+          <!-- <a class="btn input-xl m-t-md btn-danger pull-right m-r-md" onclick="return hapuscb()"><i class="fa fa-trash m-r-xs"></i>Hapus</a> -->
           @endif
           <div class="tab-content" style="min-height: 75px;">                    
             <div class="form-group">
