@@ -78,7 +78,7 @@ return [
             // 'username' => 'postgres',
             'username' => 'postgres',
             // 'password' => '6b0d2bda6bd883599202836b41a86d21',
-            'password' => 'untuk_Sid14!',
+            'password' => '*kunci_Ju4r4!_Sid14!*',
             // 'password' => 'm4um4k4n?',
             'charset' => 'utf8',
             'prefix' => '',
