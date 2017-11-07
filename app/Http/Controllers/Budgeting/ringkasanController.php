@@ -15,99 +15,100 @@ Use App\Model\Rekening;
 class ringkasanController extends Controller
 {
     public function index($tahun,$status){
-    	$pendapatan 		= Pendapatan::sum('PENDAPATAN_TOTAL');
+    	$pendapatan 		= Pendapatan::where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+        //dd($pendapatan);
     	$pendapatan1       = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan11       = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1.1%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan12       = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1.2%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan13       = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1.3%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan14       = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1.4%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan2        = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.2%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan21        = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.2.1%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan22        = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.2.2%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan23        = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.2.3%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan3        = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan31        = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3.1%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan32        = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3.3%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan33        = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3.4%');
-        })->sum('PENDAPATAN_TOTAL');
+        })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         $pendapatan34 		= Pendapatan::wherehas('rekening',function($q){
     		$q->where('REKENING_KODE','like','4.3.5%');
-    	})->sum('PENDAPATAN_TOTAL');
+    	})->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
 
         $btl1      = BTL::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','5.1.1%');
-        })->sum('BTL_TOTAL');
+        })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
         $btl3      = BTL::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','5.1.3%');
-        })->sum('BTL_TOTAL');
+        })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
         $btl4      = BTL::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','5.1.4%');
-        })->sum('BTL_TOTAL');
+        })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
         $btl7      = BTL::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','5.1.7%');
-        })->sum('BTL_TOTAL');
+        })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
         $btl8      = BTL::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','5.1.8%');
-        })->sum('BTL_TOTAL');
+        })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
         $penerimaan     = 0;
         $pengeluaran    = 0;
-    	    $blv     = BL::where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
+    	    $blv     = BL::where('BL_DELETED',0)->where('BL_VALIDASI',1)->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
 			$b1v     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
                         ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })
                         ->sum('RINCIAN_TOTAL');
             $b2v     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
                         ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })
                         ->sum('RINCIAN_TOTAL');
             $b3v     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
                         ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0);
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })
                         ->sum('RINCIAN_TOTAL');
 
             $bl      = Rincian::whereHas('bl',function($x){
-                            $x->where('BL_DELETED',0);
+                            $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })->sum('RINCIAN_TOTAL');
             $b1     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
                         ->whereHas('bl',function($x){
-                            $x->where('BL_DELETED',0);
+                            $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })->sum('RINCIAN_TOTAL');
             $b2     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
                         ->whereHas('bl',function($x){
-                            $x->where('BL_DELETED',0);
+                            $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })->sum('RINCIAN_TOTAL');
             $b3     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
                         ->whereHas('bl',function($x){
-                            $x->where('BL_DELETED',0);
+                            $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })->sum('RINCIAN_TOTAL');
     	$data 	= [ 'tahun'		=>$tahun,
     				'status'	=>$status,

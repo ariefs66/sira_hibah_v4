@@ -27,7 +27,7 @@
                   <div class="panel panel-default">
                     <div class="panel-body wrapper-sm">
                       <h2 class="m-t-xs text-orange font-semibold m-b-sm">Visi</h2>
-                      <p>... </p>
+                      <p>TERWUJUDNYA KOTA BANDUNG YANG UNGGUL, NYAMAN, DAN SEJAHTERA </p>
                     </div>
                   </div>
                 </div>
@@ -42,7 +42,10 @@
                   <div class="panel panel-default">
                     <div class="panel-body wrapper-sm">
                       <h2 class="m-t-xs text-orange font-semibold m-b-sm">Misi</h2>
-                      <p>... </p>
+                      <p>1.Mewujudkan Bandung nyaman melalui perencanaan tataruang, pembangunan infrastruktur serta pengendalian &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;pemanfaatan ruang yang berkualitas dan berwawasan lingkungan.<br>
+                      2.Menghadirkan tata kelola pemerintahan yang akuntabel, bersih dan melayani.<br>
+                      3.Membangun masyarakat yang mandiri, berkualitas dan berdaya saing.<br>
+                      4.Membangun perekonomian yang kokoh, maju, dan berkeadilan. </p>
                     </div>
                   </div>
                 </div>
