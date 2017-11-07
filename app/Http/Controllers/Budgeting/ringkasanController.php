@@ -78,8 +78,11 @@ class ringkasanController extends Controller
 
         $penerimaan     = 0;
         $pengeluaran    = 0;
-    	    $blv     = BL::where('BL_DELETED',0)->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
-            
+    	    $blv     = Rincian::whereHas('bl',function($r){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        })
+                        ->sum('RINCIAN_TOTAL');
+
 			$b1v     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
                         ->whereHas('bl',function($r){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
