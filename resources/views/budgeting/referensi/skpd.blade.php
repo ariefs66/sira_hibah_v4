@@ -146,12 +146,7 @@
             </div> 
           </div>
 
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Pagu SKPD</label>
-            <div class="col-sm-9">
-              <input type="number" class="form-control" placeholder="Masukan Pagu SKPD" name="pagu" id="pagu" value="">          
-            </div> 
-          </div>
+         
 
           <hr class="m-t-xl">
          <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanSKPD()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
