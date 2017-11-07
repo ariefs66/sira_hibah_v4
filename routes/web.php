@@ -78,6 +78,7 @@ Route::get('/main/{tahun}/{status}/belanja-langsung/rekening-musrenbang/{id}', '
 Route::get('/main/{tahun}/{status}/belanja-langsung/getpagu/{id}', 'Budgeting\blController@getPagu');
 //BL-LAMPIRAN
 Route::get('/main/{tahun}/{status}/belanja-langsung/rka/{id}', 'Budgeting\lampiranController@rka');
+Route::get('/main/{tahun}/{status}/belanja-langsung/rka/sebelum/{id}', 'Budgeting\lampiranController@rkaSebelum');
 Route::get('/main/{tahun}/{status}/lampiran/{tipe}', 'Budgeting\lampiranController@showLampiran');
 Route::get('/main/{tahun}/{status}/lampiran/rkpd/{id}', 'Budgeting\lampiranController@rkpd');
 Route::get('/main/{tahun}/{status}/lampiran/rkpddownload/{id}', 'Budgeting\lampiranController@rkpdDownload');
@@ -451,3 +452,5 @@ Route::get('/asosiasi/{tahun}/kegiatan', 'Asosiasi\asosiasiController@kegiatan')
 //rekap buat pivot
 Route::get('/main/{tahun}/{status}/rekapAll', 'Budgeting\lampiranController@rekapAll');
 Route::get('/main/{tahun}/{status}/rekapBerbeda/paguRincian', 'Budgeting\lampiranController@berbedaPaguRincian');
+
+
