@@ -128,6 +128,11 @@ Route::get('/main/{tahun}/{status}/pembiayaan/', 'Budgeting\pembiayaanController
 Route::get('/main/{tahun}/{status}/pembiayaan/hapus/{id}', 'Budgeting\pembiayaanController@delete');
 Route::post('/main/{tahun}/{status}/pembiayaan/simpan', 'Budgeting\pembiayaanController@submitAdd');
 Route::get('/main/{tahun}/{status}/pembiayaan/', 'Budgeting\pembiayaanController@index');
+Route::get('/main/{tahun}/{status}/pembiayaan/edit/{id}', 'Budgeting\pembiayaanController@edit');
+
+Route::post('/main/{tahun}/{status}/pembiayaan/update', 'Budgeting\pembiayaanController@update');
+Route::post('/main/{tahun}/{status}/pembiayaan/hapus', 'Budgeting\pembiayaanController@hapus');
+
 //PEMBIAYAAN-API
 Route::get('/main/{tahun}/{status}/pembiayaan/getData', 'Budgeting\pembiayaanController@getPembiayaan');
 Route::get('/main/{tahun}/{status}/pembiayaan/getDetail/{skpd}', 'Budgeting\pembiayaanController@getDetail');
