@@ -278,8 +278,8 @@
                 </a>                
               </li>
                <li >
-                <!-- <a href="{{ url('/') }}/main/{{ $tahun }}/murni/pembiayaan" class="auto padding-l-r-lg">                   -->
-                  <a onclick="$.alert('Masih Ditutup')" class="padding-l-r-lg ">                  
+                <a href="{{ url('/') }}/main/{{ $tahun }}/murni/pembiayaan" class="auto padding-l-r-lg">                  
+                 <!--  <a<!--  class="padding-l-r-lg" href="">   -->                
                   <i class="icon-bdg_form"></i>
                   <span class="font-semibold">Pembiayaan</span>
                 </a>                

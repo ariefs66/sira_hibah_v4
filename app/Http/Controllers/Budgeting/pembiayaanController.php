@@ -58,41 +58,92 @@ public function index($tahun,$status){
 
     //API
     public function getPembiayaan($tahun,$status){
-   		$data       = DB::table('BUDGETING.DAT_PEMBIAYAAN')
-   						->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_PEMBIAYAAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-   						->leftJoin('REFERENSI.REF_SKPD','BUDGETING.DAT_PEMBIAYAAN.SKPD_ID','=','REFERENSI.REF_SKPD.SKPD_ID')
-   						->groupBy('DAT_PEMBIAYAAN.SKPD_ID','SKPD_KODE','SKPD_NAMA')
-   						->select('DAT_PEMBIAYAAN.SKPD_ID','SKPD_KODE','SKPD_NAMA',DB::raw('SUM("PEMBIAYAAN_TOTAL") AS TOTAL'))
-   						->get();
+      $data = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)->orderBy('REKENING_KODE')->get();        
+
+      $p1 = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.1%')
+              ->sum('PEMBIAYAAN_TOTAL'); 
+
+      $p2 = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.2%')
+              ->sum('PEMBIAYAAN_TOTAL'); 
+
+
     	$view 			= array();
     	foreach ($data as $data) {
-    		array_push($view, array( 'ID'			=>$data->SKPD_ID,
-    								 'KODE'			=>$data->SKPD_KODE,
-    								 'NAMA'			=>$data->SKPD_NAMA,
-                                     'TOTAL'		=>number_format($data->total,0,'.',',')));
+          if($data->REKENING_KODE == '6' || $data->REKENING_KODE == '6.1' || $data->REKENING_KODE == '6.2'){
+              $opsi = '';
+              $id       = '<b>'.$data->PEMBIAYAAN_ID.'<b>';
+              $rek_kode = '<b>'.$data->REKENING_KODE.'<b>';
+              $rek_nama = '<b>'.$data->REKENING_NAMA.'<b>';
+              if($data->REKENING_KODE == '6.1'){
+                $total    = '<b>'.number_format($p1,0,'.',',').'<b>';
+              }elseif($data->REKENING_KODE == '6.2'){
+                $total    = '<b>'.number_format($p2,0,'.',',').'<b>';
+              }else{
+               $total    = '<b>0<b>'; 
+              }
+              
+
+          }else{
+              $opsi = '<a onclick="return ubah(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a> <a onclick="return hapus(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a>';
+              $id       = $data->PEMBIAYAAN_ID;
+              $rek_kode = $data->REKENING_KODE;
+              $rek_nama = $data->REKENING_NAMA;
+              $total    = number_format($data->PEMBIAYAAN_TOTAL,0,'.',',');
+          }
+          
+          
+    		array_push($view, array( 
+                                 'ID'			               =>$id,
+                								 'REKENING_KODE'	       =>$rek_kode,
+                                 'REKENING_NAMA'         =>$rek_nama,
+                                 'PEMBIAYAAN_DASHUK'     =>$data->PEMBIAYAAN_DASHUK,
+                								 'PEMBIAYAAN_TOTAL'      =>$total,
+                                 'PEMBIAYAAN_KETERANGAN' =>$data->PEMBIAYAAN_KETERANGAN,
+                                 'OPSI'                  =>$opsi,
+                                 
+                               ));
     	}
 		$out = array("aaData"=>$view);    	
     	return Response::JSON($out);
    	}
 
-   	public function getDetail($tahun,$status,$skpd){
-   		$data 	= Pembiayaan::where('SKPD_ID',$skpd)->where('PEMBIAYAAN_TAHUN',$tahun)->get();
-    	$view 			= array();
-    	$no 			= 1;
-    	$opsi 			= '';
-    	foreach ($data as $data) {
-            if(Auth::user()->level == 7){
-    		  $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->PEMBIAYAAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->PEMBIAYAAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';  
-            }else{
-              $opsi   = '-';
-            }
-    		array_push($view, array( 'NO'  			=> $no++,
-    								 'AKSI'			=> $opsi,
-    								 'REKENING'		=> $data->rekening->REKENING_KODE,
-    								 'RINCIAN'		=> $data->PEMBIAYAAN_NAMA,
-                                     'TOTAL'		=> number_format($data->PEMBIAYAAN_TOTAL,0,'.',',')));
-    	}
-		$out = array("aaData"=>$view);    	
-    	return Response::JSON($out);
-   	}
+    public function edit($tahun,$status,$id){
+        $data   = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')->where('PEMBIAYAAN_TAHUN',$tahun)->where('PEMBIAYAAN_ID',$id)->first();
+
+        $data->REKENING_KODE   = $data->REKENING_KODE;
+        $data->REKENING_NAMA   = $data->REKENING_NAMA;
+        $data->PEMBIAYAAN_KETERANGAN        = $data->PEMBIAYAAN_KETERANGAN;
+        $data->PEMBIAYAAN_DASHUK        = $data->PEMBIAYAAN_DASHUK;
+        $data->PEMBIAYAAN_TOTAL        = $data->PEMBIAYAAN_TOTAL;
+      
+      return Response::JSON($data);
+    }
+
+
+    public function update($tahun,$status){ 
+
+        Pembiayaan::where('PEMBIAYAAN_ID',Input::get('PEMBIAYAAN_ID'))
+                        ->update([
+                            'PEMBIAYAAN_DASHUK'         => Input::get('PEMBIAYAAN_DASHUK'),
+                            'PEMBIAYAAN_KETERANGAN'     => Input::get('PEMBIAYAAN_KETERANGAN'),
+                            'PEMBIAYAAN_TOTAL'          => Input::get('PEMBIAYAAN_TOTAL')
+                            /*'USER_UPDATED'              => Auth::user()->id,
+                            'TIME_UPDATED'              => Carbon\Carbon::now()*/
+                            ]); 
+
+        return ("sukses mengubah pembiayaan");                              
+
+    }
+
+    public function hapus(){
+        pembiayaan::where('PEMBIAYAAN_ID',Input::get('PEMBIAYAAN_ID'))->update(['PEMBIAYAAN_TOTAL'=>0]);
+        return "Hapus Berhasil!";
+    }
+
+   	
 }

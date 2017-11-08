@@ -76,8 +76,16 @@ class ringkasanController extends Controller
             $q->where('REKENING_KODE','like','5.1.8%');
         })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
-        $penerimaan     = 0;
-        $pengeluaran    = 0;
+        $penerimaan     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.1%')
+              ->sum('PEMBIAYAAN_TOTAL');
+
+        $pengeluaran    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.2%')
+              ->sum('PEMBIAYAAN_TOTAL');
+
     	    $blv     = Rincian::whereHas('bl',function($r){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })
@@ -114,10 +122,25 @@ class ringkasanController extends Controller
                         ->whereHas('bl',function($x){
                             $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })->sum('RINCIAN_TOTAL');
+
+            $penerimaan_data     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.1%')
+              ->get();
+              
+
+            $pengeluaran_data    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.2%')
+              ->get();            
+
+
     	$data 	= [ 'tahun'		=>$tahun,
     				'status'	=>$status,
-                    'penerimaan'        =>$penerimaan,
+                    'penerimaan'         =>$penerimaan,
+                    'penerimaan_data'    =>$penerimaan_data,
                     'pengeluaran'        =>$pengeluaran,
+                    'pengeluaran_data'   =>$pengeluaran_data,
                     'pd'        =>$pendapatan,
                     'pd1'        =>$pendapatan1,
                     'pd11'       =>$pendapatan11,
@@ -146,6 +169,7 @@ class ringkasanController extends Controller
     				'b1'		=>$b1,
     				'b2'		=>$b2,
     				'b3'		=>$b3];
+                    
     	return View('budgeting.ringkasan',$data);
     }
 }
