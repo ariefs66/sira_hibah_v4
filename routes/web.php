@@ -335,6 +335,7 @@ Route::post('/harga/{tahun}/rekening/{kunci}', 'Budgeting\Referensi\rekeningCont
 //------------------------------------------------------------------------------------------------------------------------
 //RINGKASAN
 Route::get('/main/{tahun}/{status}/ringkasan', 'Budgeting\ringkasanController@index');
+Route::get('/main/{tahun}/{status}/ringkasan/sebelum', 'Budgeting\ringkasanController@ringkasanSebelum');
 //DOWNLOAD
 Route::get('/main/{tahun}/{status}/download', 'Budgeting\downloadController@index');
 Route::get('/main/{tahun}/{status}/download/rekaprincian', 'Budgeting\downloadController@rekapAll');

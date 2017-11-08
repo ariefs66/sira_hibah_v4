@@ -22,7 +22,7 @@
             <div class="col-md-12">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  <h5 class="inline font-semibold text-orange m-n ">Ringkasan</h5>
+                  <h5 class="inline font-semibold text-orange m-n ">Ringkasan {{$info}}</h5>
                 </div>               
                 <div class="tab-content tab-content-alt-1 bg-white">
                   <div role="tabpanel" class="active tab-pane" id="tab-1">
