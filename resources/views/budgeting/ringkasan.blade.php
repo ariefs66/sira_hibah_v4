@@ -233,7 +233,7 @@
                             <td class="text-right"><b>Rp. {{ number_format($penerimaan-$pengeluaran,0,',','.') }}</b></td>
                           </tr>                                                                                  
                           <tr>
-                            <td colspan="5"></td>
+                            <td colspan="4"></td>
                           </tr>
                           <tr>
                             <td colspan="2" class="text-right"><b>SISA LEBIH PEMBIAYAAN ANGGARAN TAHUN BERKENAAN</b></td>
@@ -244,10 +244,7 @@
                             ($blv+$btl1+$btl3+$btl4+$btl7+$btl8+$pengeluaran)-$pd-$penerimaan
                             ,0,',','.') }}) </b></td>
                             @endif
-                            @if(($bl+$btl1+$btl3+$btl4+$btl7+$btl8+$pengeluaran)-$pd-$penerimaan < 0)
-                            <td class="text-right"><b>Rp. ({{ number_format($pd+$penerimaan-($bl+$btl1+$btl3+$btl4+$btl7+$btl8+$pengeluaran),0,',','.') }})</b></td>
-                            @else
-                            @endif
+                            
                           </tr>  
                         </tbody>
                       </table>
