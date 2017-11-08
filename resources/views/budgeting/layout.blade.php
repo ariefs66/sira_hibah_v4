@@ -202,11 +202,33 @@
                 </a>                
               </li>
               @if(Auth::user()->level == 8 or Auth::user()->level == 0 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
-              <li>
+             <!--  <li>
                 <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/ringkasan" class="auto padding-l-r-lg">                  
                   <i class="fa fa-quote-right"></i>
                   <span class="font-semibold">Ringkasan</span>
                 </a>                
+              </li> -->
+              <li>
+                <a href="#" class="auto padding-l-r-lg parent">                  
+                  <i class="fa fa-quote-right"></i>
+                  <span class="pull-right text-heading">
+                    <i class="text8 icon-bdg_arrow1 text"></i>
+                    <i class="text8 icon-bdg_arrow2 text-active"></i>
+                  </span>
+                  <span class="font-semibold">Ringkasan</span>
+                </a>                
+                 <ul class="nav nav-sub dk">
+                  <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/ringkasan/sebelum" class="padding-l-r-lg " target="_blank">
+                       <span> Sebelum</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/ringkasan" class="padding-l-r-lg " target="_blank">
+                       <span> Sesudah</span>
+                    </a>
+                  </li>
+                </ul>
               </li>
               @endif
               <li >
