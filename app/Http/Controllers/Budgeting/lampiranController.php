@@ -572,6 +572,41 @@ class lampiranController extends Controller
             
     }
 
+     
+     public function rkaLogAll($tahun, $status){
+
+        if($status == 'murni'){
+            $data   = DB::select('select skpd."SKPD_NAMA", keg."KEGIATAN_NAMA", sub."SUBRINCIAN_NAMA", rek."REKENING_KODE", rek."REKENING_NAMA", kom."KOMPONEN_KODE", kom."KOMPONEN_NAMA", "RINCIAN_PAJAK" AS PAJAK, "RINCIAN_VOLUME" as VOLUME, "RINCIAN_KOEFISIEN" AS KOEF, "RINCIAN_TOTAL" AS TOTAL,"RINCIAN_KETERANGAN" AS KET,"RINCIAN_TAHAPAN" AS TAHAPAN ,"RINCIAN_TANGGAL" AS TANGGAL, "RINCIAN_HARGA" AS HARGA, "RINCIAN_STATUS"
+                                    from "BUDGETING"."DAT_RINCIAN_LOG" RIN
+                                    inner JOIN "BUDGETING"."DAT_BL" BL
+                                    on BL."BL_ID" = RIN."BL_ID"
+                                    inner JOIN "REFERENSI"."REF_KEGIATAN" keg
+                                    on BL."KEGIATAN_ID" = keg."KEGIATAN_ID"
+                                    inner JOIN "REFERENSI"."REF_SUB_UNIT" unit
+                                    on unit."SUB_ID" = BL."SUB_ID"
+                                    inner JOIN "REFERENSI"."REF_SKPD" skpd
+                                    on skpd."SKPD_ID" = unit."SKPD_ID"
+                                    inner join "BUDGETING"."DAT_SUBRINCIAN" sub
+                                    on sub."SUBRINCIAN_ID" = RIN."SUBRINCIAN_ID"
+                                    inner join "REFERENSI"."REF_REKENING" rek
+                                    on RIN."REKENING_ID" = rek."REKENING_ID"
+                                    inner join "EHARGA"."DAT_KOMPONEN" kom
+                                    on RIN."KOMPONEN_ID" = kom."KOMPONEN_ID"'
+                                    );
+        
+        }
+               //dd($data);
+            $data = array_map(function ($value) {
+                    return (array)$value;
+                }, $data);
+            Excel::create('RKA SEBELUMNYA '.Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+                    $excel->sheet('RKA SEBELUMNYA', function($sheet) use ($data) {
+                        $sheet->fromArray($data);
+                    });
+            })->download('xls');
+            
+    } 
+
 
     public function dpa(){
 

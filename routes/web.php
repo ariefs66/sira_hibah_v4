@@ -80,6 +80,7 @@ Route::get('/main/{tahun}/{status}/belanja-langsung/getpagu/{id}', 'Budgeting\bl
 Route::get('/main/{tahun}/{status}/belanja-langsung/rka/{id}', 'Budgeting\lampiranController@rka');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rka/sebelum/{id}', 'Budgeting\lampiranController@rkaSebelum');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rka/log/{id}', 'Budgeting\lampiranController@rkaLog');
+Route::get('/main/{tahun}/{status}/belanja-langsung/rkaLogAll', 'Budgeting\lampiranController@rkaLogAll');
 Route::get('/main/{tahun}/{status}/lampiran/{tipe}', 'Budgeting\lampiranController@showLampiran');
 Route::get('/main/{tahun}/{status}/lampiran/rkpd/{id}', 'Budgeting\lampiranController@rkpd');
 Route::get('/main/{tahun}/{status}/lampiran/rkpddownload/{id}', 'Budgeting\lampiranController@rkpdDownload');
