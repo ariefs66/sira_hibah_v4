@@ -184,19 +184,33 @@
                             <td class="text-right"><b>Rp. {{ number_format($penerimaan,0,',','.') }}</b></td>
                           </tr>   
                            
-                          <!-- pembiayaan --> 
-                          <?php 
-                          $no = 1;
-                          foreach ($penerimaan_data as $pen){ ?>
+                          <!-- penerimaan --> 
                           <tr>
-                            <td>3.1.<?php echo $no;?></td>
-                            <td><?php echo $pen->REKENING_NAMA ?> </td>
-                            <td class="text-right">Rp. <?php echo number_format($pen->PEMBIAYAAN_TOTAL,0,',','.') ?></td>
+                            <td>3.1.1</td>
+                            <td>Sisa Lebih Perhitungan Anggaran Tahun Anggaran Sebelumnya</td>
+                            <td class="text-right">Rp. <?php echo number_format($pen611,0,',','.') ?></td>
                           </tr>
-                          <?php
-                          $no++; 
-                         }
-                          ?>
+                          <tr>
+                            <td>3.1.2</td>
+                            <td>Pencairan Dana Cadangan </td>
+                            <td class="text-right">Rp. <?php echo number_format($pen612,0,',','.') ?></td>
+                          </tr>
+                          <tr>
+                            <td>3.1.3</td>
+                            <td> Hasil Penjualan Kekayaan Daerah yang dipisahkan </td>
+                            <td class="text-right">Rp. <?php echo number_format($pen613,0,',','.') ?></td>
+                          </tr>
+                          <tr>
+                            <td>3.1.4</td>
+                            <td> Penerimaan kembali Pemberian Pinjaman </td>
+                            <td class="text-right">Rp. <?php echo number_format($pen615,0,',','.') ?></td>
+                          </tr>
+                           <tr>
+                            <td>3.1.5</td>
+                            <td> Penerimaan Pinjaman Daerah </td>
+                            <td class="text-right">Rp. <?php echo number_format($pen614,0,',','.') ?></td>
+                          </tr>
+                          
 
                           <tr>
                             <td colspan="2" class="text-right"><b>JUMLAH PENERIMAAN PEMBIAYAAN </b></td>
@@ -210,19 +224,23 @@
                           </tr>   
                           
                           <!-- pengeluaran -->
-                          <?php 
-                          $no = 1;
-                          foreach ($pengeluaran_data as $peng){ ?>
-
-                          <tr>
-                            <td>3.2.<?php echo $no;?></td>
-                            <td><?php echo $peng->REKENING_NAMA ?> </td>
-                            <td class="text-right">Rp. <?php echo number_format($peng->PEMBIAYAAN_TOTAL,0,',','.') ?></td>
+                           <tr>
+                            <td>3.2.1</td>
+                            <td> Pembentukan Dana Cadangan </td>
+                            <td class="text-right">Rp. <?php echo number_format($peng621,0,',','.') ?></td>
                           </tr>
-                          <?php
-                          $no++; 
-                         }
-                          ?>
+                           <tr>
+                            <td>3.2.2</td>
+                            <td> Penyertaan Modal (Investasi) Pemerintah Daerah </td>
+                            <td class="text-right">Rp. <?php echo number_format($peng622,0,',','.') ?></td>
+                          </tr>
+                           <tr>
+                            <td>3.2.3</td>
+                            <td> Pembayaran Pokok Utang </td>
+                            <td class="text-right">Rp. <?php echo number_format($peng623,0,',','.') ?></td>
+                          </tr>
+
+
 
                           <tr>
                             <td colspan="2" class="text-right"><b>JUMLAH PENGELUARAN PEMBIAYAAN </b></td>
