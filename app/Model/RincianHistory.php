@@ -4,10 +4,10 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RincianLog extends Model
+class RincianHistory extends Model
 {
-    protected $table		= 'BUDGETING.DAT_RINCIAN_LOG';
-    protected $primaryKey 	= 'RINCIAN_ID_LOG';
+    protected $table		= 'BUDGETING.DAT_RINCIAN_HISTORY';
+    protected $primaryKey 	= 'RINCIAN_ID';
     public $timestamps 		= false;
     public $incrementing 	= false;
 
@@ -15,5 +15,4 @@ class RincianLog extends Model
     {
         return $this->hasMany('App\Model\User', 'USER_ID');
     }
-
 }
