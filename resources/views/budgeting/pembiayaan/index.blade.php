@@ -120,7 +120,7 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">TOTAL PEMBIAYAAN</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="TOTAL PEMBIAYAAN" id="totalpembiayaan" name="total-pembiayaan" required="">          
+          <input type="text" id="nominal1" class="form-control totalpembiayaan" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="TOTAL PEMBIAYAAN">         
         </div> 
       </div>
 
@@ -200,7 +200,7 @@
     var id              = $('#idpembiayaan').val();
     var dashuk          = $('#dashuk').val();
     var keterangan      = $('#keterangan').val();
-    var total           = $('#totalpembiayaan').val();
+    var total           = $('.totalpembiayaan').val();
 
     if(id == "" || total == "" ){
       $.alert('Form harap diisi!');
@@ -283,7 +283,7 @@
         $('#rek_nama').val(data['REKENING_NAMA']);
         $('#dashuk').val(data['PEMBIAYAAN_DASHUK']);
         $('#keterangan').val(data['PEMBIAYAAN_KETERANGAN']);
-        $('#totalpembiayaan').val(data['PEMBIAYAAN_TOTAL']);
+        $('.totalpembiayaan').val(data['PEMBIAYAAN_TOTAL']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-pembiayaan').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");

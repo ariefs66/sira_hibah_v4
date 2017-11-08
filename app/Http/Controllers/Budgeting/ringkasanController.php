@@ -123,24 +123,60 @@ class ringkasanController extends Controller
                             $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })->sum('RINCIAN_TOTAL');
 
-            $penerimaan_data     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $pen611     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
-              ->where('REKENING_KODE','LIKE', '6.1%')
-              ->get();
-              
+              ->where('REKENING_KODE','LIKE', '6.1.1')
+              ->sum('PEMBIAYAAN_TOTAL');
 
-            $pengeluaran_data    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $pen612     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
-              ->where('REKENING_KODE','LIKE', '6.2%')
-              ->get();            
+              ->where('REKENING_KODE','LIKE', '6.1.2')
+              ->sum('PEMBIAYAAN_TOTAL');
+
+            $pen613     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.1.3')
+              ->sum('PEMBIAYAAN_TOTAL');
+              
+            $pen614     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.1.4')
+              ->sum('PEMBIAYAAN_TOTAL');
+              
+            $pen615     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.1.5')
+              ->sum('PEMBIAYAAN_TOTAL');
+                      
+
+            $peng621    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.2.1')
+              ->sum('PEMBIAYAAN_TOTAL'); 
+
+            $peng622    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.2.2')
+              ->sum('PEMBIAYAAN_TOTAL'); 
+              
+            $peng623    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)
+              ->where('REKENING_KODE','LIKE', '6.2.3')
+              ->sum('PEMBIAYAAN_TOTAL');               
 
 
     	$data 	= [ 'tahun'		=>$tahun,
     				'status'	=>$status,
                     'penerimaan'         =>$penerimaan,
-                    'penerimaan_data'    =>$penerimaan_data,
                     'pengeluaran'        =>$pengeluaran,
-                    'pengeluaran_data'   =>$pengeluaran_data,
+                    'pen611'        =>$pen611,
+                    'pen612'        =>$pen612,
+                    'pen613'        =>$pen613,
+                    'pen614'        =>$pen614,
+                    'pen615'        =>$pen615,
+                    'peng621'        =>$peng621,
+                    'peng622'        =>$peng622,
+                    'peng623'        =>$peng623,
                     'pd'        =>$pendapatan,
                     'pd1'        =>$pendapatan1,
                     'pd11'       =>$pendapatan11,
