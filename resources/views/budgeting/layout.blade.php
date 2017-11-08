@@ -621,6 +621,13 @@
                   </li>
                 </ul>
               </li>
+
+             <li>
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rkaLogAll" class="auto padding-l-r-lg" target="_blank">
+                  <i class="fa fa-step-forward"></i>
+                  <span class="font-semibold">Log RAPBD </span>
+                </a>                
+              </li>
               
               @endif
             </ul>
