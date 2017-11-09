@@ -619,6 +619,11 @@
                        <span>Berbeda Pagu & Rincian</span>
                     </a>
                   </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/rekapBelanja" class="padding-l-r-lg " target="_blank">
+                       <span>Belanja</span>
+                    </a>
+                  </li>
                 </ul>
               </li>
 

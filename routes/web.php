@@ -460,5 +460,6 @@ Route::get('/asosiasi/{tahun}/kegiatan', 'Asosiasi\asosiasiController@kegiatan')
 //rekap buat pivot
 Route::get('/main/{tahun}/{status}/rekapAll', 'Budgeting\lampiranController@rekapAll');
 Route::get('/main/{tahun}/{status}/rekapBerbeda/paguRincian', 'Budgeting\lampiranController@berbedaPaguRincian');
+Route::get('/main/{tahun}/{status}/rekapBelanja', 'Budgeting\lampiranController@rekapBelanja');
 
 

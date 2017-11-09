@@ -1473,4 +1473,27 @@ class lampiranController extends Controller
         
     }
 
+
+    public function rekapBelanja($tahun,$status){
+
+        if($status == 'murni'){
+            $data   = DB::select('select "REKENING_KODE" as KODE, "REKENING_NAMA" AS REKENING, sum("RINCIAN_TOTAL") AS TOTAL
+                                    from "BUDGETING"."DAT_RINCIAN"
+                                    join "REFERENSI"."REF_REKENING" on "REF_REKENING"."REKENING_ID"="DAT_RINCIAN"."REKENING_ID"
+                                    join "BUDGETING"."DAT_BL" on "DAT_BL"."BL_ID" = "DAT_RINCIAN"."BL_ID"
+                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
+                                    GROUP BY "REKENING_KODE", "REKENING_NAMA"');
+        }
+               //dd($data);
+            $data = array_map(function ($value) {
+                    return (array)$value;
+                }, $data);
+            Excel::create('REKAP BELANJA '.$status.' Tahun '.$tahun.' - '.Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+                    $excel->sheet('REKAP BELANJA ', function($sheet) use ($data) {
+                        $sheet->fromArray($data);
+                    });
+            })->download('xls');
+        
+    }
+
 }
