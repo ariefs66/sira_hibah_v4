@@ -47,7 +47,8 @@
                    { mData: 'ID',class:'hide'},
                    { mData: 'KODE'},
                    { mData: 'NAMA'},
-                   { mData: 'TOTAL'}
+                   { mData: 'TOTAL'},
+                   { mData: 'OPSI'}
                    ]}" class="table table-pendapatan table-striped b-t b-b table-pendapatan" id="table-pendapatan">
                    <thead>
                     <tr>
@@ -55,10 +56,11 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
+                      <th>OPSI</th>
                     </tr>
                     <tr>
                       <th class="hide"></th>
-                      <th colspan="3" class="th_search">
+                      <th colspan="5" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
