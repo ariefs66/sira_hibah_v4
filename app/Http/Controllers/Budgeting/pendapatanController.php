@@ -169,13 +169,12 @@ class pendapatanController extends Controller
               ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_PENDAPATAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
               ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_PENDAPATAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
               ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-              ->groupBy('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA','PENDAPATAN_ID')
-              ->select('PENDAPATAN_ID','REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA',DB::raw('SUM("PENDAPATAN_TOTAL") AS TOTAL'))
+              ->groupBy('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA')
+              ->select('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA',DB::raw('SUM("PENDAPATAN_TOTAL") AS TOTAL'))
               ->get();
-       // dd($data);      
+        //dd($data);      
         $view       = array();
         foreach ($data as $data) {
-          $opsi = '<a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a><br> <a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a>';
 
           array_push($view, array( 'ID'     =>$data->SKPD_ID,
                        'KODE'     =>$data->SKPD_KODE,
