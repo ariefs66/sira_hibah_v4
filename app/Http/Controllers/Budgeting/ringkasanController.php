@@ -7,11 +7,13 @@ use App\Http\Controllers\Controller;
 use View;
 use Excel;
 Use App\Model\Pendapatan;
+Use App\Model\PendapatanHistory;
 Use App\Model\BL;
 Use App\Model\Rincian;
 Use App\Model\RincianHistory;
 Use App\Model\BTL;
 Use App\Model\Pembiayaan;
+Use App\Model\PembiayaanHistory;
 Use App\Model\Rekening;
 class ringkasanController extends Controller
 {
@@ -213,48 +215,48 @@ class ringkasanController extends Controller
     }
 
     public function ringkasanSebelum($tahun,$status){
-        $pendapatan         = Pendapatan::where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+        $pendapatan         = PendapatanHistory::where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
         //dd($pendapatan);
-        $pendapatan1       = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan1       = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan11       = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan11       = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1.1%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan12       = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan12       = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1.2%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan13       = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan13       = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1.3%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan14       = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan14       = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1.4%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan2        = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan2        = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.2%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan21        = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan21        = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.2.1%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan22        = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan22        = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.2.2%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan23        = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan23        = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.2.3%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan3        = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan3        = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan31        = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan31        = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3.1%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan32        = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan32        = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3.3%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan33        = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan33        = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3.4%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        $pendapatan34       = Pendapatan::wherehas('rekening',function($q){
+        $pendapatan34       = PendapatanHistory::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.3.5%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
 
@@ -274,12 +276,12 @@ class ringkasanController extends Controller
             $q->where('REKENING_KODE','like','5.1.8%');
         })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
-        $penerimaan     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+        $penerimaan     = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.1%')
               ->sum('PEMBIAYAAN_TOTAL');
 
-        $pengeluaran    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+        $pengeluaran    = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.2%')
               ->sum('PEMBIAYAAN_TOTAL');
@@ -321,43 +323,43 @@ class ringkasanController extends Controller
                             $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
                         })->sum('RINCIAN_TOTAL');
 
-            $pen611     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $pen611     = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.1.1')
               ->sum('PEMBIAYAAN_TOTAL');
 
-            $pen612     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $pen612     = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.1.2')
               ->sum('PEMBIAYAAN_TOTAL');
 
-            $pen613     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $pen613     = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.1.3')
               ->sum('PEMBIAYAAN_TOTAL');
               
-            $pen614     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $pen614     = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.1.4')
               ->sum('PEMBIAYAAN_TOTAL');
               
-            $pen615     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $pen615     = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.1.5')
               ->sum('PEMBIAYAAN_TOTAL');
                       
 
-            $peng621    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $peng621    = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.2.1')
               ->sum('PEMBIAYAAN_TOTAL'); 
 
-            $peng622    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $peng622    = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.2.2')
               ->sum('PEMBIAYAAN_TOTAL'); 
               
-            $peng623    = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+            $peng623    = PembiayaanHistory::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_HISTORY.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.2.3')
               ->sum('PEMBIAYAAN_TOTAL');               
