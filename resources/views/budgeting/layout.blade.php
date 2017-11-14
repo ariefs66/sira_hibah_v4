@@ -313,7 +313,7 @@
                   <span class="font-semibold">Musrenbang & Reses</span>
                 </a>                
               </li>
-              @if(Auth::user()->level == 2 or substr(Auth::user()->mod,3,1) == 1 or Auth::user()->level == 8 || Auth::user()->email != 'SKPKD')
+              @if(Auth::user()->level == 2 or substr(Auth::user()->mod,3,1) == 1 or Auth::user()->level == 8 && Auth::user()->email != 'SKPKD')
               <li>
                 <a href="{{ url('/') }}/harga/{{ $tahun }}/usulan" class="auto padding-l-r-lg" id="usulan-komponen">                  
                   <!-- <a onclick="$.alert('Masih Ditutup')" class="padding-l-r-lg ">                   -->
