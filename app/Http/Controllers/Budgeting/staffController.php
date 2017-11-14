@@ -11,6 +11,7 @@ use Response;
 use App\Model\UserBudget;
 use App\Model\User;
 use App\Model\SKPD;
+use App\Model\Kunci;
 class staffController extends Controller
 {
 	public function index($tahun,$status){
@@ -349,11 +350,14 @@ class staffController extends Controller
     }
 
     public function aktivasiUserAll($tahun,$status){
-        User::where('active','!=',null)->update(['active'=>1]);
+        User::where('active','!=',null)->whereNotIn('email', ['TAPD','pansus9dprd'])->update(['active'=>1]);
+        Kunci::where('BL_ID','!=',null)->update(['KUNCI_GIAT'=>1]);
         return 'Semua user telah di aktifkan!';
     }
     public function nonAktivasiUserAll($tahun,$status){
-        User::where('active','!=',null)->update(['active'=>0]);
+        User::where('active','!=',null)->whereNotIn('email', ['TAPD','pansus9dprd'])->update(['active'=>0]);
+        Kunci::where('BL_ID','!=',null)->update(['KUNCI_GIAT'=>0]);
+
         return 'Semua user di non aktifkan!';
     }
 }
