@@ -74,7 +74,7 @@ public function index($tahun,$status){
 
     	$view 			= array();
     	foreach ($data as $data) {
-          if($data->REKENING_KODE == '6' || $data->REKENING_KODE == '6.1' || $data->REKENING_KODE == '6.2'){
+          if($data->REKENING_KODE == '6' || $data->REKENING_KODE == '6.1' || $data->REKENING_KODE == '6.2') {
               $opsi = '';
               $id       = '<b>'.$data->PEMBIAYAAN_ID.'<b>';
               $rek_kode = '<b>'.$data->REKENING_KODE.'<b>';
@@ -89,7 +89,10 @@ public function index($tahun,$status){
               
 
           }else{
+            if(Auth::user()->level == 8){
               $opsi = '<a onclick="return ubah(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a> <a onclick="return hapus(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a>';
+            }else $opsi ='-';
+              
               $id       = $data->PEMBIAYAAN_ID;
               $rek_kode = $data->REKENING_KODE;
               $rek_nama = $data->REKENING_NAMA;
