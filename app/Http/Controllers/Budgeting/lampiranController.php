@@ -46,6 +46,7 @@ class lampiranController extends Controller
     public function rka($tahun, $status, $id){
 
         $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
@@ -54,11 +55,13 @@ class lampiranController extends Controller
         if($status=='murni'){
 
             $bl         = BL::where('BL_ID',$id)->first();
+
             $total      = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
             $rekening   = Rincian::where('BL_ID',$id)->orderBy('REKENING_ID')
                           ->groupBy('REKENING_ID')
                           ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "REKENING_ID"')
                           ->get();
+
 
             $paket      = array();
             $i          = 0;
@@ -100,6 +103,7 @@ class lampiranController extends Controller
                                             ->where('REKENING_ID',$p->REKENING_ID)
                                             ->orderBy('KOMPONEN_ID')
                                             ->get();
+                                            
                 } 
                                                            
                 $i++; 
@@ -108,6 +112,7 @@ class lampiranController extends Controller
             }
            
             $totalBL    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+
 
             return View('budgeting.lampiran.rka',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke]);
 
