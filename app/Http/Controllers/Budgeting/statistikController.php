@@ -10,6 +10,7 @@ use Response;
 use Auth;
 use Carbon;
 use DB;
+use Excel;
 use App\Model\SKPD;
 use App\Model\Urusan;
 use App\Model\Program;
@@ -1625,6 +1626,30 @@ class statistikController extends Controller{
       }
       $out = array("aaData"=>$view);      
       return Response::JSON($out);
+    }
+
+
+    public function kategoriPagu($tahun,$status,$id){
+
+        if($status == 'murni'){
+            $data   = DB::select('select "KEGIATAN_NAMA" as KEGIATAN, sum("RINCIAN_TOTAL") AS RINCIAN, "SKPD_NAMA" AS OPD from "BUDGETING"."DAT_RINCIAN"
+                                    join "BUDGETING"."DAT_BL" on "DAT_BL"."BL_ID"="DAT_RINCIAN"."BL_ID"
+                                    join "REFERENSI"."REF_KEGIATAN" on "REF_KEGIATAN"."KEGIATAN_ID" = "DAT_BL"."KEGIATAN_ID"
+                                    JOIN "REFERENSI"."REF_SUB_UNIT" on "REF_SUB_UNIT"."SUB_ID" = "DAT_BL"."SUB_ID"
+                                    JOIN "REFERENSI"."REF_SKPD" on "REF_SKPD"."SKPD_ID" = "REF_SUB_UNIT"."SKPD_ID"
+                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0 and "PAGU_ID" ='.$id.'
+                                    GROUP BY "KEGIATAN_NAMA", "SKPD_NAMA"');
+        }
+               //dd($data);
+            $data = array_map(function ($value) {
+                    return (array)$value;
+                }, $data);
+            Excel::create('Daftar Kegiatan Kategori Pagu '.$status.' Tahun '.$tahun.' - '.Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+                    $excel->sheet('Daftar Kegiatan ', function($sheet) use ($data) {
+                        $sheet->fromArray($data);
+                    });
+            })->download('xls');
+        
     }
 
 }
