@@ -24,6 +24,12 @@
               <div class="panel bg-white">
                 <div class="wrapper-lg">
                   <h5 class="inline font-semibold text-orange m-n ">Daftar Kegiatan Kategori Pagu {{$pagu->PAGU_NAMA}}</h5>
+                  <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/ketegoripagu/{{$pagu->PAGU_ID}}">
+                      <button class="btn btn-success" type="button"><i class="fa fa-download"></i> Download File
+                      </button>
+                    </a>  
+                  </div>
                   <div class="col-sm-1 pull-right m-t-n-sm">
                     <select class="form-control dtSelect" id="dtSelect">
                      <option value="">Baris</option>

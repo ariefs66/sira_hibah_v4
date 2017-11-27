@@ -368,6 +368,10 @@ Route::get('/main/{tahun}/{status}/statistik/pagu/detail/{id}', 'Budgeting\stati
 Route::get('/main/{tahun}/{status}/statistik/komponen', 'Budgeting\statistikController@komponen');
 Route::get('/main/{tahun}/{status}/statistik/komponen/detail/{id}', 'Budgeting\statistikController@komponenDetail');
 Route::get('/main/{tahun}/{status}/statistik/porsi-apbd', 'Budgeting\statistikController@porsiAPBD');
+//download statistik kategori pagu 
+Route::get('/main/{tahun}/{status}/statistik/ketegoripagu/{id}', 'Budgeting\statistikController@kategoriPagu');
+
+
 //API
 Route::get('/main/{tahun}/{status}/statistik/perangkat-daerah/api', 'Budgeting\statistikController@pdApi');
 Route::get('/main/{tahun}/{status}/statistik/perangkat-daerah-input/api', 'Budgeting\statistikController@pdApiInput');
