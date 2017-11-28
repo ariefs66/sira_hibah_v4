@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="{{ url('/') }}/assets/fonts/simdaicon/simdaicon.css" type="text/css" />
   <link rel="stylesheet" href="{{ url('/') }}/assets/css/style.css" type="text/css" />
   <link rel="stylesheet" href="{{ url('/') }}/assets/css/homepage.css" type="text/css" />
+  <link rel="stylesheet" href="{{ url('/') }}/libs_dashboard/jquery/jquery.confirm/css/jquery-confirm.css" type="text/css" />   
+
 </head>
 
 <body>
@@ -131,6 +133,8 @@
 <script src="{{ url('/') }}/assets/js/ui-toggle.js"></script>
 <script src="{{ url('/') }}/assets/js/ui-client.js"></script>
 <script src="{{ url('/') }}/assets/js/custom.js"></script>
+<script src="{{ url('/') }}/libs_dashboard/jquery/jquery.confirm/js/jquery-confirm.js"></script>
+
 
 </body>
 <script type="text/javascript">
@@ -141,8 +145,8 @@
 @if(count($errors) > 0)
     <script type="text/javascript">
       $.alert({
-        title: 'Username atau Password yang anda Masukkan salah.',
-        content: 'Silahkan cek kembali username dan password yang anda masukkan ! Atau Silahkan Hubungi Admin TAPD untuk mereset password ',
+        title: 'username atau password yang anda masukkan salah.',
+        content: 'Silahkan cek kembali username dan password yang anda masukkan ! atau hubungi ADMIN TAPD untuk mereset password ',
       });
     </script>
 @endif
