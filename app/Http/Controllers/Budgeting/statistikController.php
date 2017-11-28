@@ -1606,6 +1606,7 @@ class statistikController extends Controller{
                   ->join('REFERENSI.REF_KAMUS', 'REF_KAMUS.KAMUS_ID', '=', 'DAT_USULAN.KAMUS_ID')
                   ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'REF_KAMUS.KAMUS_KEGIATAN')
                   ->join('REFERENSI.REF_PROGRAM', 'REF_PROGRAM.PROGRAM_ID', '=', 'REF_KEGIATAN.PROGRAM_ID')
+                  ->join('REFERENSI.REF_SKPD', 'REF_SKPD.SKPD_ID', '=', 'REF_KAMUS.KAMUS_SKPD')
                   ->WHERE('REF_KAMUS.KAMUS_SKPD',$pd)->get();
       //dd($data);            
       $no     = 1;
@@ -1621,6 +1622,7 @@ class statistikController extends Controller{
                                 'KEGIATAN'  => '<b>'.$data->KEGIATAN_NAMA.'</b><BR>'.$data->PROGRAM_NAMA,
                                 'ANGGARAN'  => 'Rp.'.number_format($anggaran,0,'.',','),
                                 'STATUS'    => $status,
+                                'SKPD'    => $data->SKPD_NAMA,
                               ));
         $no++;
       }
