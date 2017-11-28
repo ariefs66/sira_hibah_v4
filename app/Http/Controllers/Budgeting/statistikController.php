@@ -1576,33 +1576,9 @@ class statistikController extends Controller{
 
     public function renjaDetailGetData($tahun,$status,$pd){
       $data = DB::table('MUSRENBANG.DAT_USULAN')
-                  ->join('REFERENSI.REF_KAMUS', 'REF_KAMUS.KAMUS_ID', '=', 'DAT_USULAN.KAMUS_ID')
-                  ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'REF_KAMUS.KAMUS_KEGIATAN')
-                  ->join('REFERENSI.REF_PROGRAM', 'REF_PROGRAM.PROGRAM_ID', '=', 'REF_KEGIATAN.PROGRAM_ID')
-                  ->WHERE('REF_KAMUS.KAMUS_SKPD',$pd)->get();
-      //dd($data);            
-      $no     = 1;
-      $view   = array();
-      foreach($data as $data){
-        $anggaran = $data->USULAN_VOLUME * $data->KAMUS_HARGA;
-
-        if($data->USULAN_STATUS == 0 )  $status = '<i class="fa fa-refresh text-info"></i> Proses';
-        else if ($data->USULAN_STATUS == 1 ) $status = '<i class="fa fa-check text-success"></i> Terima';
-        else   $status = '<i class="fa fa-close text-danger"></i> Tolak';
-
-        array_push($view, array('ID'        => $no,
-                                'KEGIATAN'  => '<b>'.$data->KEGIATAN_NAMA.'</b><BR>'.$data->PROGRAM_NAMA,
-                                'ANGGARAN'  => 'Rp.'.number_format($anggaran,0,'.',','),
-                                'STATUS'    => $status,
-                              ));
-        $no++;
-      }
-      $out = array("aaData"=>$view);      
-      return Response::JSON($out);
-    }
-
-    public function resesDetailGetData($tahun,$status,$pd){
-      $data = DB::table('RESES.DAT_USULAN')
+                  ->join('REFERENSI.REF_RW', 'REF_RW.RW_ID', '=', 'DAT_USULAN.RW_ID')
+                  ->join('REFERENSI.REF_KELURAHAN', 'REF_KELURAHAN.KEL_ID', '=', 'REF_RW.KEL_ID')
+                  ->join('REFERENSI.REF_KECAMATAN', 'REF_KECAMATAN.KEC_ID', '=', 'REF_KELURAHAN.KEC_ID')
                   ->join('REFERENSI.REF_KAMUS', 'REF_KAMUS.KAMUS_ID', '=', 'DAT_USULAN.KAMUS_ID')
                   ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'REF_KAMUS.KAMUS_KEGIATAN')
                   ->join('REFERENSI.REF_PROGRAM', 'REF_PROGRAM.PROGRAM_ID', '=', 'REF_KEGIATAN.PROGRAM_ID')
@@ -1619,6 +1595,39 @@ class statistikController extends Controller{
         else   $status = '<i class="fa fa-close text-danger"></i> Tolak';
 
         array_push($view, array('ID'        => $no,
+                                'PENGUSUL'  => 'Rw.'.$data->RW_NAMA.' Kel.'.$data->KEL_NAMA.' Kec.'.$data->KEC_NAMA,
+                                'KEGIATAN'  => '<b>'.$data->KEGIATAN_NAMA.'</b><BR>'.$data->PROGRAM_NAMA,
+                                'ANGGARAN'  => 'Rp.'.number_format($anggaran,0,'.',','),
+                                'STATUS'    => $status,
+                                'SKPD'    => $data->SKPD_NAMA,
+                              ));
+        $no++;
+      }
+      $out = array("aaData"=>$view);      
+      return Response::JSON($out);
+    }
+
+    public function resesDetailGetData($tahun,$status,$pd){
+      $data = DB::table('RESES.DAT_USULAN')
+                  ->join('RESES.DAT_DEWAN', 'DAT_DEWAN.DEWAN_ID', '=', 'DAT_USULAN.DEWAN_ID')
+                  ->join('RESES.DAT_FRAKSI', 'DAT_FRAKSI.FRAKSI_ID', '=', 'DAT_DEWAN.FRAKSI_ID')
+                  ->join('REFERENSI.REF_KAMUS', 'REF_KAMUS.KAMUS_ID', '=', 'DAT_USULAN.KAMUS_ID')
+                  ->join('REFERENSI.REF_KEGIATAN', 'REF_KEGIATAN.KEGIATAN_ID', '=', 'REF_KAMUS.KAMUS_KEGIATAN')
+                  ->join('REFERENSI.REF_PROGRAM', 'REF_PROGRAM.PROGRAM_ID', '=', 'REF_KEGIATAN.PROGRAM_ID')
+                  ->join('REFERENSI.REF_SKPD', 'REF_SKPD.SKPD_ID', '=', 'REF_KAMUS.KAMUS_SKPD')
+                  ->WHERE('REF_KAMUS.KAMUS_SKPD',$pd)->get();
+      //dd($data);            
+      $no     = 1;
+      $view   = array();
+      foreach($data as $data){
+        $anggaran = $data->USULAN_VOLUME * $data->KAMUS_HARGA;
+
+        if($data->USULAN_STATUS == 0 )  $status = '<i class="fa fa-refresh text-info"></i> Proses';
+        else if ($data->USULAN_STATUS == 1 ) $status = '<i class="fa fa-check text-success"></i> Terima';
+        else   $status = '<i class="fa fa-close text-danger"></i> Tolak';
+
+        array_push($view, array('ID'        => $no,
+                                'DEWAN'  => '<b>'.$data->DEWAN_NAMA.'</b><BR>'.$data->FRAKSI_NAMA,
                                 'KEGIATAN'  => '<b>'.$data->KEGIATAN_NAMA.'</b><BR>'.$data->PROGRAM_NAMA,
                                 'ANGGARAN'  => 'Rp.'.number_format($anggaran,0,'.',','),
                                 'STATUS'    => $status,
