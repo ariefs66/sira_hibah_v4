@@ -42,7 +42,8 @@
                                     { mData: 'ID' },
                                     { mData: 'KEGIATAN' },
                                     { mData: 'ANGGARAN' },
-                                    { mData: 'STATUS' }
+                                    { mData: 'STATUS' },
+                                    { mData: 'SKPD' }
                                     ]}" class="table table-program-head table-striped b-t b-b">
                                     <thead>
                                       <tr>
@@ -50,9 +51,10 @@
                                         <th>Kegiatan / Program</th>
                                         <th>Anggaran</th>
                                         <th>Status</th>
+                                        <th>SKPD</th>
                                       </tr>
                                       <tr>
-                                        <th colspan="4" class="th_search">
+                                        <th colspan="5" class="th_search">
                                             <i class="icon-bdg_search"></i>
                                             <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Program" aria-controls="DataTables_Table_0">
                                         </th>

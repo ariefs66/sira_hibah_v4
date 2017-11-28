@@ -24,6 +24,7 @@
                 <div class="wrapper-lg">
                   <h5 class="inline font-semibold text-orange m-n ">Statistik Kategori Pagu</h5>
                   <div class="col-sm-1 pull-right m-t-n-sm">
+                    
                     <select class="form-control dtSelect" id="dtSelect">
                      <option value="">Baris</option>
                      <option value="10">10</option>
