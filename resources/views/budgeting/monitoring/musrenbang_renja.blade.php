@@ -24,6 +24,7 @@
                 <div class="panel bg-white">
                   <div class="wrapper-lg">
                     <h5 class="inline font-semibold text-orange m-n ">Musrenbang Renja - {{ $skpd->SKPD_NAMA }}</h5>
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang" class="pull-right"><li class="fa fa-reply"></li> Kembali</a>
           					<div class="col-sm-1 pull-right m-t-n-sm">
                     	<select class="form-control dtSelect" id="dtSelect">
                             <option value="10">10</option>
@@ -40,19 +41,23 @@
                                     sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/renja/getData/{{$skpd->SKPD_ID}}',
                                     aoColumns: [
                                     { mData: 'ID' },
+                                    { mData: 'PENGUSUL' },
                                     { mData: 'KEGIATAN' },
                                     { mData: 'ANGGARAN' },
-                                    { mData: 'STATUS' }
+                                    { mData: 'STATUS' },
+                                    { mData: 'SKPD' }
                                     ]}" class="table table-program-head table-striped b-t b-b">
                                     <thead>
                                       <tr>
                                         <th>ID</th>
+                                        <th>Pengusul</th>
                                         <th>Kegiatan / Program</th>
                                         <th>Anggaran</th>
                                         <th>Status</th>
+                                        <th>SKPD</th>
                                       </tr>
                                       <tr>
-                                        <th colspan="4" class="th_search">
+                                        <th colspan="6" class="th_search">
                                             <i class="icon-bdg_search"></i>
                                             <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Program" aria-controls="DataTables_Table_0">
                                         </th>

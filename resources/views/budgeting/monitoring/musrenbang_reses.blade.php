@@ -24,6 +24,7 @@
                 <div class="panel bg-white">
                   <div class="wrapper-lg">
                     <h5 class="inline font-semibold text-orange m-n ">Reses - {{ $skpd->SKPD_NAMA }}</h5>
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang" class="pull-right"><li class="fa fa-reply"></li> Kembali</a>
           					<div class="col-sm-1 pull-right m-t-n-sm">
                     	<select class="form-control dtSelect" id="dtSelect">
                             <option value="10">10</option>
@@ -40,6 +41,7 @@
                                     sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/statistik/musrenbang/reses/getData/{{$skpd->SKPD_ID}}',
                                     aoColumns: [
                                     { mData: 'ID' },
+                                    { mData: 'DEWAN' },
                                     { mData: 'KEGIATAN' },
                                     { mData: 'ANGGARAN' },
                                     { mData: 'STATUS' },
@@ -48,13 +50,14 @@
                                     <thead>
                                       <tr>
                                         <th>ID</th>
+                                        <th>Pengusul Dewan </th>
                                         <th>Kegiatan / Program</th>
                                         <th>Anggaran</th>
                                         <th>Status</th>
                                         <th>SKPD</th>
                                       </tr>
                                       <tr>
-                                        <th colspan="5" class="th_search">
+                                        <th colspan="6" class="th_search">
                                             <i class="icon-bdg_search"></i>
                                             <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Program" aria-controls="DataTables_Table_0">
                                         </th>
