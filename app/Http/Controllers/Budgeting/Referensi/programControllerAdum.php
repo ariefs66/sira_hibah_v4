@@ -49,6 +49,7 @@ class programControllerAdum extends Controller
     	foreach ($data as $data) {
             if(Auth::user()->level==8){
     		$aksi 		= '<div class="action visible pull-right"><a onclick="return showCapaian(\''.$data->PROGRAM_KODE.'\')" class="action-edit"><i class="mi-eye"></i></a><a onclick="return ubahProgram(\''.$data->PROGRAM_KODE.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusProgram(\''.$data->PROGRAM_KODE.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            }
             else{
                 $aksi       = '<div class="action visible pull-right"><a onclick="return showCapaian(\''.$data->PROGRAM_KODE.'\')" class="action-edit"><i class="mi-eye"></i></a></div>';
             }
