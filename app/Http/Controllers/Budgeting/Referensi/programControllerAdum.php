@@ -17,7 +17,6 @@ use Carbon;
 use Response;
 use Auth;
 use DB;
-use Auth;
 use Illuminate\Support\Facades\Input;
 class programControllerAdum extends Controller
 {   
