@@ -448,11 +448,81 @@
                     </a>
                   </li>                 
                   <li>
-                    <a onclick="$.alert('Ditutup!')" class="padding-l-r-lg ">                       
-                    <!-- <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/apbd" class="padding-l-r-lg ">                        -->
-                       <span >APBD</span>
-                    </a>
-                  </li>                 
+                    <a href="#" class="padding-l-r-lg">                  
+                    <span class="pull-right">
+                      <i class="text8 icon-bdg_arrow1 text"></i>
+                      <i class="text8 icon-bdg_arrow2 text-active"></i>
+                    </span>
+                    <span>APBD</span>
+                  </a>                
+                   <ul class="nav nav-sub dk">
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 1</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/2" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 2</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/3" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 3 </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/4" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 4</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/5" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 5</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/6" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 6</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/7" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 7</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/8" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 8</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/9" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 9</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/10" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 10</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/11" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 11</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/12" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 12</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/13" class="padding-l-r-lg " target="_blank">
+                         <span>Lampiran 13</span>
+                      </a>
+                    </li>
+                </ul>
+                  </li>                  
                   </ul>
               </li>
               @endif

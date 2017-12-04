@@ -30,6 +30,7 @@ use App\Model\BLPerubahan;
 use App\Model\RincianPerubahan;
 use App\Model\RincianLog;
 use App\Model\RincianHistory;
+use App\Model\Urusan;
 class lampiranController extends Controller
 {
     // public function __construct(){
@@ -1205,20 +1206,245 @@ class lampiranController extends Controller
 
     }
 
-    public function lampiran2(){
+    public function lampiran2($tahun,$status){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $urusan     = Urusan::where('URUSAN_TAHUN',$tahun)->orderBy('URUSAN_KODE')->get();
+        $bl         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", SUM("BL_PAGU") AS pagu')
+                        ->get();
+
+        $btl       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", SUM("BTL_TOTAL") AS pagu')
+                        ->get();
+
+        $pendapatan = Pendapatan::JOIN('REFERENSI.REF_SUB_UNIT','DAT_PENDAPATAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", SUM("PENDAPATAN_TOTAL") AS pagu')
+                        ->get();                                        
+        //dd($skpd);
+        
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,        
+                            'urusan'        =>$urusan,        
+                            'bl'            =>$bl,        
+                            'btl'           =>$btl,        
+                            'pendapatan'    =>$pendapatan,        
+                            );
+        return View('budgeting.lampiran.apbd2',$data);
 
     }
 
-    public function lampiran3(){
+    public function lampiran3($tahun,$status,$id){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
 
+        $bl         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+                        ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+                        /*->JOIN('REFERENSI.DAT_RINCIAN','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')*/
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE", 'KEGIATAN_NAMA')
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "KEGIATAN_NAMA", SUM("BL_PAGU") AS pagu')
+                        ->get();
+        dd($bl);                
+
+        $btl       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", SUM("BTL_TOTAL") AS pagu')
+                        ->get();
+
+        $pendapatan = Pendapatan::JOIN('REFERENSI.REF_SUB_UNIT','DAT_PENDAPATAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", SUM("PENDAPATAN_TOTAL") AS pagu')
+                        ->get();                                        
+        //dd($skpd);
+        
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,        
+                            'urusan'        =>$urusan,        
+                            'bl'            =>$bl,        
+                            'btl'           =>$btl,        
+                            'pendapatan'    =>$pendapatan,        
+                            );
+        return View('budgeting.lampiran.apbd3',$data);
     }
 
-    public function lampiran4(){
-
+    public function lampiran4($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd4',$data);
     }
 
-    public function lampiran5(){
-    	
+    public function lampiran5($tahun,$status){
+    	$tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd5',$data);
+    }
+
+    public function lampiran6($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd6',$data);
+    }
+
+    public function lampiran7($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd7',$data);
+    }
+
+
+     public function lampiran8($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd8',$data);
+    }
+
+     public function lampiran9($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd9',$data);
+    }
+
+    public function lampiran10($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd10',$data);
+    }
+
+    public function lampiran11($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd11',$data);
+    }
+
+    public function lampiran12($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd12',$data);
+    }
+
+    public function lampiran13($tahun,$status){
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            );
+        return View('budgeting.lampiran.apbd13',$data);
     }
 
     public function bulan($i){
@@ -1500,4 +1726,7 @@ class lampiranController extends Controller
             })->download('xls');
         
     }
+
+
+    
 }

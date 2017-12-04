@@ -18,6 +18,7 @@ use Response;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Input;
+
 class programControllerAdum extends Controller
 {   
     public function __construct(){
