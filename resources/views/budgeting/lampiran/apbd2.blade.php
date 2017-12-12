@@ -76,12 +76,20 @@
 <body onload="window.print()">
 <div class="cetak">
 <table class="header">
-	<tr class="border">
-		<td class="border">
-			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>RINGKASAN RANCANGAN APBD MENURUT URUSAN PEMERINTAHAN DAERAH DAN ORGANISASI</h3>
+	<tr class="">
+		<td class="" colspan="2"></td>
+	</tr>
+	<tr>	
+		<td class="">
+			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
+		</td>	
+		<td>
+		<h4>PEMERINTAH KOTA BANDUNG</h4> 
+			<h3>RINGKASAN RANCANGAN APBD MENURUT URUSAN PEMERINTAHAN DAERAH DAN ORGANISASI</h3> 
 			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
+	</tr>
+	<tr> <td colspan="2"></td> </tr>	
 </table>
 <table class="rincian">
 	<tbody>
@@ -112,57 +120,73 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
+	@foreach($kat1 as $k1)
 	<tr>
-		<td class="border-rincian">1</td>
-		<td class="border-rincian"><b>Urusan Wajib Pelayanan Dasar</b></td>
+		<td class="border-rincian">{{$k1->URUSAN_KAT1_KODE}}</td>
+		<td class="border-rincian"><b>{{$k1->URUSAN_KAT1_NAMA}}</b></td>
 		<td class="border-rincian kanan total">-</td>
 		<td class="border-rincian kanan total">-</td>
 		<td class="border-rincian kanan total">-</td>
 		<td class="border-rincian kanan total">-</td>
 	</tr>
-	@foreach($urusan as $urusan)
-	<tr>
-		<td class="border-rincian">{{$urusan->URUSAN_KODE}}</td>
-		<td class="border-rincian">&nbsp;<b>{{$urusan->URUSAN_NAMA}}</b></td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">-</td>
-	</tr>
-	@endforeach
+		@foreach($urusan as $u)
+			@if($k1->URUSAN_KAT1_ID == $u->URUSAN_KAT1_ID)
+			<tr>
+				<td class="border-rincian">{{$u->URUSAN_KODE}}</td>
+				<td class="border-rincian">&nbsp; &nbsp; <b>{{$u->URUSAN_NAMA}}</b></td>
+				<td class="border-rincian kanan rekening">-</td>
+				<td class="border-rincian kanan rekening">-</td>
+				<td class="border-rincian kanan rekening">-</td>
+				<td class="border-rincian kanan rekening">-</td>
+			</tr>
 
-	@foreach($bl as $bl)
-	<tr>
-		<td class="border-rincian">{{$bl->SKPD_KODE}}</td>
-		<td class="border-rincian">&nbsp; &nbsp; {{$bl->SKPD_NAMA}}</td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">{{ number_format($bl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan rekening">-</td>
-	</tr>
-	@endforeach
+				@foreach($bl as $b)
+					@if($u->URUSAN_KODE == $b->URUSAN_KODE)
+					<tr>
+						<td class="border-rincian">{{$u->URUSAN_KODE}} . {{$b->SKPD_KODE}}</td>
+						<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$b->SKPD_NAMA}}</td>
+						<!-- pendapatan -->
+						@php
+							$pendapatanFound = false;
+						@endphp
+						@foreach($pendapatan as $key=>$p)
+							@if($b->SKPD_KODE == $p->SKPD_KODE)
+								@php
+									$pendapatanFound = true;
+								@endphp
+								<td class="border-rincian kanan rekening">{{ number_format($p->pagu,0,',','.') }}</td>
+							@elseif ($key == count($pendapatan)-1 && !$pendapatanFound)
+								<td class="border-rincian kanan rekening">-</td>
+							@endif
+						@endforeach
+						<!-- BTL -->
+						@php
+							$btlFound = false;
+							$jumlah = $b->pagu;
+						@endphp
+						@foreach($btl as $key=>$bt)
+							@if($b->SKPD_KODE == $bt->SKPD_KODE)
+								@php
+									$btlFound = true;
+									$jumlah += $bt->pagu;
+								@endphp
+								<td class="border-rincian kanan rekening">{{ number_format($bt->pagu,0,',','.') }}</td>
+							@elseif ($key == count($btl)-1 && !$btlFound)
+								<td class="border-rincian kanan rekening">-</td>
+							@endif
+						@endforeach
+						<!-- BL -->
+						<td class="border-rincian kanan rekening">{{ number_format($b->pagu,0,',','.') }}</td>
+						<td class="border-rincian kanan rekening">{{ number_format($jumlah,0,',','.') }}</td>
+					</tr>
+					@endif
+				@endforeach
 
-	@foreach($btl as $btl)
-	<tr>
-		<td class="border-rincian">{{$btl->SKPD_KODE}}</td>
-		<td class="border-rincian">&nbsp; &nbsp; {{$btl->SKPD_NAMA}}</td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">-</td>
-	</tr>
+			@endif
+				
+		@endforeach	
 	@endforeach
-
-	@foreach($pendapatan as $pendapatan)
-	<tr>
-		<td class="border-rincian">{{$pendapatan->SKPD_KODE}}</td>
-		<td class="border-rincian">&nbsp; &nbsp; {{$pendapatan->SKPD_NAMA}}</td>
-		<td class="border-rincian kanan rekening">{{ number_format($pendapatan->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">-</td>
-		<td class="border-rincian kanan rekening">-</td>
-	</tr>
-	@endforeach
+	
 
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>

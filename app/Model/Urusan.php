@@ -11,6 +11,10 @@ class Urusan extends Model
     public $timestamps 		= false;
     public $incrementing 	= false;
 
+    public function urusanKategori1(){
+    	return $this->belongsTo('App\Model\UrusanKategori1','URUSAN_KAT1_ID');
+    }
+
     public function program(){
     	return $this->hasMany('App\Model\Program','URUSAN_ID');
     }

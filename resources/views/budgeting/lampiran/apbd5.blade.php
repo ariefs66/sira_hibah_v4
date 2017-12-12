@@ -81,15 +81,22 @@
 	<h5>TANGGAL :</h5>
 	</div>
 	<br>
-<table class="header">
-	<tr class="border">
-		<td class="border">
+<table class="header">	
+	<tr class="">
+		<td class="" colspan="2"></td>
+	</tr>
+	<tr>	
+		<td class="">
+			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
+		</td>	
+		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
 			<h3>REKAPITULASI RANCANGAN BELANJA DAERAH UNTUK KESELARASAN DAN KETERPADUAN</h3>
 			<h3>URUSAN PEMERINTAHAN DAERAH DAN FUNGSI DALAM KERANGKA PENGELOLAAN KEUANGAN NEGARA</h3>
 			<h4>TAHUN ANGGARAN {{ $tahun }}</h4>
 		</td>
-	</tr>	
+	</tr>
+	<tr> <td colspan="2"></td> </tr>
 </table>
 <br>
 <table class="rincian">
@@ -118,47 +125,54 @@
 		<td class="border tengah">7</td>
 		<td class="border tengah">8 = 3+4+5+6+7</td>
 	</tr>
+	@foreach($kat2 as $k2)
 	<tr>
-		<td class="border-rincian kanan total">&nbsp;</td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
+		<td class="border-rincian">{{$k2->URUSAN_KAT2_KODE}}</td>
+		<td class="border-rincian"><b>{{$k2->URUSAN_KAT2_NAMA}}</b></td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"></td>
 	</tr>
-	<tr>
-		<td class="border-rincian kanan total">&nbsp;</td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-	</tr>
+		@foreach($urusan as $u)
+		@if($k2->URUSAN_KAT2_ID == $u->URUSAN_KAT2_ID)
+		<tr>
+			<td class="border-rincian">{{$k2->URUSAN_KAT2_KODE}}.{{$u->URUSAN_KODE}}</td>
+			<td class="border-rincian">&nbsp; {{$u->URUSAN_NAMA}}</td>
+			@foreach($btl_p as $btp)
+				@if($u->URUSAN_KODE == $btp->URUSAN_KODE)
+				<td class="border-rincian">{{ number_format($btp->total,0,',','.') }}</td>
+				@endif
+			@endforeach
+			@foreach($btl_l as $btl)
+				@if($u->URUSAN_KODE == $btl->URUSAN_KODE)
+				<td class="border-rincian">{{ number_format($btl->total,0,',','.') }}</td>
+				@endif
+			@endforeach
+			@foreach($pegawai as $peg)
+				@if($u->URUSAN_KODE == $peg->URUSAN_KODE)
+				<td class="border-rincian">{{ number_format($peg->total,0,',','.') }}</td>
+				@endif
+			@endforeach
+			@foreach($barangJasa as $bj)
+				@if($u->URUSAN_KODE == $bj->URUSAN_KODE)
+				<td class="border-rincian">{{ number_format($bj->total,0,',','.') }}</td>
+				@endif
+			@endforeach
+			@foreach($modal as $mod)
+				@if($u->URUSAN_KODE == $mod->URUSAN_KODE)
+				<td class="border-rincian">{{ number_format($mod->total,0,',','.') }}</td>
+				@endif
+			@endforeach
+			<td class="border-rincian"></td>
+		</tr>
+		@endif
+		@endforeach
+	@endforeach
 	
-	<tr>
-		<td class="border-rincian kanan total">&nbsp;</td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-	</tr>
-	<tr>
-		<td class="border-rincian kanan total">&nbsp;</td>
-		<td class="border-rincian kanan total">Jumlah</td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-	</tr>
+	
 	</tbody>	
 </table>
 <br><br>

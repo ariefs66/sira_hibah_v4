@@ -76,12 +76,20 @@
 <body onload="window.print()">
 <div class="cetak">
 <table class="header">
-	<tr class="border">
-		<td class="border">
+	<tr class="">
+		<td class="" colspan="2"></td>
+	</tr>
+	<tr>	
+		<td class="">
+			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
+		</td>	
+		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
 			<h3>RINGKASAN RANCANGAN APBD</h3>
 			<h4>TAHUN ANGGARAN {{ $tahun }}</h4>
 		</td>
+	</tr>
+	<tr> <td colspan="2"></td> </tr>		
 </table>
 <table class="rincian">
 	<tbody>
@@ -133,37 +141,37 @@
 	<tr>
 		<td class="border-rincian">1.2</td>
 		<td class="border-rincian">&nbsp;<b>DANA PERIMBANGAN</b></td>
-		<td class="border-rincian kanan rekening">{{ number_format(10000000,0,',','.') }},00</td>
+		<td class="border-rincian kanan rekening">{{ number_format($ibg,0,',','.') }},00</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">1.2.1</td>
 		<td class="border-rincian">&nbsp;&nbsp;Bagi Hasil Pajak/Bagi Hasil Bukan Pajak</td>
-		<td class="border-rincian kanan">{{ number_format(10000000,0,',','.') }},00</td>
+		<td class="border-rincian kanan">{{ number_format($ibg1,0,',','.') }},00</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">1.2.2</td>
 		<td class="border-rincian">&nbsp;&nbsp;Dana Alokasi Umum</td>
-		<td class="border-rincian kanan">{{ number_format(10000000,0,',','.') }},00</td>
+		<td class="border-rincian kanan">{{ number_format($ibg2,0,',','.') }},00</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">1.2.3</td>
 		<td class="border-rincian">&nbsp;&nbsp;Dana Alokasi Khusus</td>
-		<td class="border-rincian kanan">{{ number_format(10000000,0,',','.') }},00</td>
+		<td class="border-rincian kanan">{{ number_format($ibg3,0,',','.') }},00</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">1.3</td>
 		<td class="border-rincian">&nbsp;<b>LAIN-LAIN PENDAPATAN DAERAH YANG SAH</b></td>
-		<td class="border-rincian kanan rekening">{{ number_format(10000000,0,',','.') }},00</td>
+		<td class="border-rincian kanan rekening">{{ number_format($pdl,0,',','.') }},00</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">1.3.1</td>
 		<td class="border-rincian">&nbsp;&nbsp;Pendapatan Hibah</td>
-		<td class="border-rincian kanan">{{ number_format(10000000,0,',','.') }},00</td>
+		<td class="border-rincian kanan">{{ number_format($pdl1,0,',','.') }},00</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">1.3.2</td>
 		<td class="border-rincian">&nbsp;&nbsp;Dana Bagi Hasil Pajak dari Provinsi dan Pemerintah Daerah Lainnya</td>
-		<td class="border-rincian kanan">{{ number_format(10000000,0,',','.') }},00</td>
+		<td class="border-rincian kanan">{{ number_format($pdl2,0,',','.') }},00</td>
 	</tr>
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>
@@ -228,7 +236,7 @@
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"><b>SURPLUS/(DEFISIT)</b></td>
-		<td class="border kanan total"><b>{{ number_format($pendapatan-($btl+$bl),0,',','.') }},00</b></td>
+		<td class="border kanan total"><b>{{ number_format(($bl+$btl1+$btl2+$btl3+$btl4+$btl5)-$pad,0,',','.') }},00</b></td>
 	</tr>
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>
