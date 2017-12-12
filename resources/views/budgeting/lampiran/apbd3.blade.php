@@ -99,8 +99,9 @@
 </table>
 <table class="rincian">
 	<tbody>
-	<tr class="border headrincian"> 
-		<td colspan="4" >Urusan Pemerintah : <br> Organisasi : {{$skpd->SKPD_KODE}} &nbsp; &nbsp; {{$skpd->SKPD_NAMA}}</td> 
+	<tr class="border "> 
+		<td colspan="4"><b>Urusan Pemerintah : </b> {{$urusan->URUSAN_KODE}} &nbsp; &nbsp; &nbsp; {{$urusan->URUSAN_KAT1_NAMA}}<br> 
+		<b>Organisasi &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;: </b>{{$skpd->SKPD_KODE}} &nbsp; {{$skpd->SKPD_NAMA}} </td> 
 	</tr>	
 	<tr class="border headrincian">
 		<td class="border tengah" >KODE <br> REKENING </td>
@@ -122,35 +123,35 @@
 	</tr>	
 
 	<tr>
-		<td class="border-rincian">1</td>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5</td>
 		<td class="border-rincian"><b>BELANJA</b></td>
 		<td class="border-rincian kanan total">-</td>
 		<td class="border-rincian kanan total">-</td>
 	</tr>
 	<tr>
-		<td class="border-rincian"></td>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.1</td>
 		<td class="border-rincian"><b>&nbsp; BELANJA TIDAK LANGSUNG</b></td>
 		<td class="border-rincian kanan total">-</td>
 		<td class="border-rincian kanan total">-</td>
 	</tr>
 	@foreach($btl as $bt)
 	<tr>
-		<td class="border-rincian">{{$bt->REKENING_KODE}}</td>
-		<td class="border-rincian"> &nbsp; &nbsp;{{$bt->REKENING_NAMA}}</td>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.1.1</td>
+		<td class="border-rincian"> &nbsp; &nbsp; Belanja Pegawai</td>
 		<td class="border-rincian kanan total">{{ number_format($bt->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan total">-</td>
 	</tr>
 	@endforeach
 	<tr>
-		<td class="border-rincian"></td>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.2</td>
 		<td class="border-rincian"><b>&nbsp; BELANJA LANGSUNG</b></td>
 		<td class="border-rincian kanan total">-</td>
 		<td class="border-rincian kanan total">-</td>
 	</tr>
 	@foreach($bl as $b)
 	<tr>
-		<td class="border-rincian">{{$b->SKPD_KODE}}</td>
-		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$b->PROGRAM_NAMA}}</b> <br>  &nbsp; &nbsp; &nbsp; {{$b->KEGIATAN_NAMA}} </td>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}</td>
+		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$b->PROGRAM_NAMA}}</b> <br>  &nbsp; &nbsp; &nbsp; {{$b->KEGIATAN_NAMA}} <br> &nbsp; &nbsp; &nbsp; &nbsp; {{$b->REKENING_NAMA}} </td>
 		<td class="border-rincian kanan total">{{ number_format($b->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan total">-</td>
 	</tr>
