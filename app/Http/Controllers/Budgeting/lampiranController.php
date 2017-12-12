@@ -31,6 +31,7 @@ use App\Model\RincianPerubahan;
 use App\Model\RincianLog;
 use App\Model\RincianHistory;
 use App\Model\Urusan;
+use App\Model\UrusanSKPD;
 use App\Model\UrusanKategori1;
 use App\Model\UrusanKategori2;
 class lampiranController extends Controller
@@ -1239,7 +1240,7 @@ class lampiranController extends Controller
                         ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                         ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
                         ->JOIN('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
-                        ->where('BL_TAHUN','2018')
+                        ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('URUSAN_TAHUN',$tahun)
                         ->groupBy('SKPD_NAMA',"SKPD_KODE","URUSAN_KODE")
@@ -1298,7 +1299,11 @@ class lampiranController extends Controller
 
         $skpd       = SKPD::where('SKPD_ID',$id)->first();
 
-        $urusan     = Urusan::where('URUSAN_TAHUN',$tahun)->orderBy('URUSAN_KODE')->get();
+        $urusan     = Urusan::JOIN('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+                            ->JOIN('REFERENSI.REF_URUSAN_KATEGORI1','REF_URUSAN_KATEGORI1.URUSAN_KAT1_ID','=','REF_URUSAN.URUSAN_KAT1_ID')
+                            ->where('REF_URUSAN_SKPD.SKPD_ID',$id)
+                            ->first();
+                            //dd($urusan);
 
        $bl         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
@@ -1309,9 +1314,9 @@ class lampiranController extends Controller
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('REF_SKPD.SKPD_ID',$id)
-                        ->groupBy('SKPD_NAMA',"SKPD_KODE", 'KEGIATAN_NAMA', "PROGRAM_NAMA")
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE", 'KEGIATAN_NAMA', "PROGRAM_NAMA", "REKENING_NAMA")
                         ->orderBy('SKPD_KODE')
-                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "KEGIATAN_NAMA", "PROGRAM_NAMA", SUM("BL_PAGU") AS pagu')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "PROGRAM_NAMA", "KEGIATAN_NAMA", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
                         ->get();              
 
 
@@ -1321,11 +1326,8 @@ class lampiranController extends Controller
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REF_SKPD.SKPD_ID',$id)
                         ->where('REKENING_KODE','like','5.1.1%')
-                        ->groupBy('REKENING_KODE', "REKENING_NAMA")
-                        ->orderBy('REKENING_KODE')
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get();  
-
+                        ->selectRaw('sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
                         
         
         $data       = array('tahun'         =>$tahun,
@@ -1363,17 +1365,19 @@ class lampiranController extends Controller
                         ->selectRaw('"URUSAN_KODE","SKPD_KODE", "SKPD_NAMA",  SUM("BL_PAGU") AS pagu')
                         ->get(); 
 
-
-         $program         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+        //foreach ($skpd as $s) {
+            $program         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
                         ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                         ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
                         ->JOIN('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
+                        //->where('REF_SKPD.SKPD_ID',)
                         ->groupBy("URUSAN_KODE","PROGRAM_KODE","PROGRAM_NAMA")
                         ->selectRaw('"URUSAN_KODE","PROGRAM_KODE","PROGRAM_NAMA", SUM("BL_PAGU") AS pagu')
-                        ->get();  
+                        ->get();
+                        
 
         $kegiatan         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
