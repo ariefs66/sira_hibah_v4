@@ -82,14 +82,21 @@
 	</div>
 	<br>
 <table class="header">
-	<tr class="border">
-		<td class="border">
+	<tr class="">
+		<td class="" colspan="2"></td>
+	</tr>
+	<tr>	
+		<td class="">
+			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
+		</td>	
+		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
 			<h3>REKAPITULASI RANCANGAN BELANJA MENURUT URUSAN PEMERINTAH DAERAH</h3>
 			<h3>ORGANISASI, PROGRAM DAN KEGIATAN</h3>
 			<h4>TAHUN ANGGARAN {{ $tahun }}</h4>
 		</td>
-	</tr>	
+	</tr>
+	<tr> <td colspan="2"></td> </tr>	
 </table>
 <br>
 <table class="rincian">
@@ -113,31 +120,67 @@
 		<td class="border tengah">5</td>
 		<td class="border tengah">6 = 3+4+5</td>
 	</tr>
+	@foreach($kat1 as $k1)
 	<tr>
-		<td class="border-rincian kanan total">&nbsp;</td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
+		<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}</td>
+		<td class="border-rincian kiri total"><b>{{$k1->URUSAN_KAT1_NAMA}}</b></td>
+		<td class="border-rincian kiri total"></td>
+		<td class="border-rincian kiri total"></td>
+		<td class="border-rincian kiri total"></td>
+		<td class="border-rincian kiri total"></td>
 	</tr>
-	<tr>
-		<td class="border-rincian kanan total">&nbsp;</td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-	</tr>
+		@foreach($urusan as $u)
+		@if($k1->URUSAN_KAT1_ID == $u->URUSAN_KAT1_ID)
+		<tr>
+			<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}</td>
+			<td class="border-rincian kiri total">&nbsp;<b>{{$u->URUSAN_NAMA}}</b></td>
+			<td class="border-rincian kiri total"></td>
+			<td class="border-rincian kiri total"></td>
+			<td class="border-rincian kiri total"></td>
+			<td class="border-rincian kiri total"></td>
+		</tr>
+			@foreach($skpd as $s)
+			@if($s->URUSAN_KODE == $u->URUSAN_KODE)
+			<tr>
+				<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}</td>
+				<td class="border-rincian kiri total">&nbsp; &nbsp; <b>{{$s->SKPD_NAMA}}</b></td>
+				<td class="border-rincian kiri total"></td>
+				<td class="border-rincian kiri total"></td>
+				<td class="border-rincian kiri total"></td>
+				<td class="border-rincian kiri total"></td>
+			</tr>
+				@foreach($program as $p)
+					@if($p->URUSAN_KODE == $s->URUSAN_KODE)
+					<tr>
+						<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}.{{$p->PROGRAM_KODE}}</td>
+						<td class="border-rincian kiri total">&nbsp; &nbsp; &nbsp; <b>{{$p->PROGRAM_NAMA}}</b></td>
+						<td class="border-rincian kiri total"></td>
+						<td class="border-rincian kiri total"></td>
+						<td class="border-rincian kiri total"></td>
+						<td class="border-rincian kiri total"></td>
+					</tr>
+						@foreach($kegiatan as $k)
+							@if($p->PROGRAM_KODE == $k->PROGRAM_KODE)
+							<tr>
+								<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}.{{$p->PROGRAM_KODE}}.{{$k->KEGIATAN_KODE}}</td>
+								<td class="border-rincian kiri total">&nbsp; &nbsp; &nbsp; &nbsp; {{$k->KEGIATAN_NAMA}}</td>
+								<td class="border-rincian kiri total"></td>
+								<td class="border-rincian kiri total"></td>
+								<td class="border-rincian kiri total"></td>
+								<td class="border-rincian kiri total"></td>
+							</tr>
+							@endif
+					@endforeach
+					@endif
+				@endforeach
+			@endif
+			@endforeach
+		@endif
+		@endforeach
+	@endforeach
 	
-	<tr>
-		<td class="border-rincian kanan total">&nbsp;</td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-	</tr>
+	
+	
 	<tr>
 		<td class="border-rincian kanan total">&nbsp;</td>
 		<td class="border-rincian kanan total">Jumlah</td>

@@ -75,16 +75,33 @@
 </head>
 <body onload="window.print()">
 <div class="cetak">
+	<div style="margin-left: 330px;">
+	<h5>LAMPIRAN III &nbsp; &nbsp; &nbsp; Rancangan Peraturan Daerah</h5>
+	<h5>NOMOR : </h5>
+	<h5>TANGGAL :</h5>
+	</div>
+	<br>
 <table class="header">
-	<tr class="border">
-		<td class="border">
+	<tr class="">
+		<td class="" colspan="2"></td>
+	</tr>
+	<tr>	
+		<td class="">
+			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
+		</td>	
+		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
 			<h3>RINCIAN RANCANGAN APBD MENURUT URUSAN PEMERINTAHAN DAERAH, ORGANISASI, PENDAPATAN, BELANJA DAN PEMBIAYAAN</h3>
 			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
+	</tr>
+	<tr> <td colspan="2"></td> </tr>
 </table>
 <table class="rincian">
 	<tbody>
+	<tr class="border headrincian"> 
+		<td colspan="4" >Urusan Pemerintah : <br> Organisasi : {{$skpd->SKPD_KODE}} &nbsp; &nbsp; {{$skpd->SKPD_NAMA}}</td> 
+	</tr>	
 	<tr class="border headrincian">
 		<td class="border tengah" >KODE <br> REKENING </td>
 		<td class="border tengah" >URAIAN</td>
@@ -103,12 +120,41 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
+
 	<tr>
 		<td class="border-rincian">1</td>
-		<td class="border-rincian"><b>Urusan Wajib Pelayanan Dasar</b></td>
+		<td class="border-rincian"><b>BELANJA</b></td>
 		<td class="border-rincian kanan total">-</td>
 		<td class="border-rincian kanan total">-</td>
 	</tr>
+	<tr>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"><b>&nbsp; BELANJA TIDAK LANGSUNG</b></td>
+		<td class="border-rincian kanan total">-</td>
+		<td class="border-rincian kanan total">-</td>
+	</tr>
+	@foreach($btl as $bt)
+	<tr>
+		<td class="border-rincian">{{$bt->REKENING_KODE}}</td>
+		<td class="border-rincian"> &nbsp; &nbsp;{{$bt->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan total">{{ number_format($bt->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan total">-</td>
+	</tr>
+	@endforeach
+	<tr>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"><b>&nbsp; BELANJA LANGSUNG</b></td>
+		<td class="border-rincian kanan total">-</td>
+		<td class="border-rincian kanan total">-</td>
+	</tr>
+	@foreach($bl as $b)
+	<tr>
+		<td class="border-rincian">{{$b->SKPD_KODE}}</td>
+		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$b->PROGRAM_NAMA}}</b> <br>  &nbsp; &nbsp; &nbsp; {{$b->KEGIATAN_NAMA}} </td>
+		<td class="border-rincian kanan total">{{ number_format($b->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan total">-</td>
+	</tr>
+	@endforeach
 
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>

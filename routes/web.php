@@ -90,8 +90,8 @@ Route::get('/main/{tahun}/{status}/lampiran/ppasdownload/{id}', 'Budgeting\lampi
 Route::get('/main/{tahun}/{status}/lampiran-download/ppas/{tipe}', 'Budgeting\lampiranController@ppasProgram');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/1', 'Budgeting\lampiranController@lampiran1');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/2', 'Budgeting\lampiranController@lampiran2');
-Route::get('/main/{tahun}/{status}/lampiran/apbd/3', 'Budgeting\lampiranController@lampiran2');
-Route::get('/main/{tahun}/{status}/lampiran/apbd/3/{id}', 'Budgeting\lampiranController@lampiran3');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/3', 'Budgeting\lampiranController@lampiran3');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/3/{id}', 'Budgeting\lampiranController@lampiran3Detail');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/4', 'Budgeting\lampiranController@lampiran4');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/5', 'Budgeting\lampiranController@lampiran5');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/6', 'Budgeting\lampiranController@lampiran6');
