@@ -89,6 +89,19 @@ Route::get('/main/{tahun}/{status}/lampiran/ppasrincian/{id}', 'Budgeting\lampir
 Route::get('/main/{tahun}/{status}/lampiran/ppasdownload/{id}', 'Budgeting\lampiranController@ppasDownload');
 Route::get('/main/{tahun}/{status}/lampiran-download/ppas/{tipe}', 'Budgeting\lampiranController@ppasProgram');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/1', 'Budgeting\lampiranController@lampiran1');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/2', 'Budgeting\lampiranController@lampiran2');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/3', 'Budgeting\lampiranController@lampiran2');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/3/{id}', 'Budgeting\lampiranController@lampiran3');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/4', 'Budgeting\lampiranController@lampiran4');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/5', 'Budgeting\lampiranController@lampiran5');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/6', 'Budgeting\lampiranController@lampiran6');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/7', 'Budgeting\lampiranController@lampiran7');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/8', 'Budgeting\lampiranController@lampiran8');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/9', 'Budgeting\lampiranController@lampiran9');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/10', 'Budgeting\lampiranController@lampiran10');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/11', 'Budgeting\lampiranController@lampiran11');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/12', 'Budgeting\lampiranController@lampiran12');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/13', 'Budgeting\lampiranController@lampiran13');
 //------------------------------------------------------------------------------------------------------------------------
 //BTL
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/', 'Budgeting\btlController@index');
@@ -427,7 +440,7 @@ Route::get('/auto/{tahun}/trfKegiatanFromSimda', 'realController@transferKegiata
 Route::get('/auto/{tahun}/trfBelanjaFromSimda/{kodeperubahan}/{skpd}', 'realController@transferBelanjaFromSimda');
 Route::get('/auto/{tahun}/trfSubrincianFromSimda/{kodeperubahan}/{skpd}', 'realController@transferSubrincianFromSimda');
 Route::get('/auto/{tahun}/trfRincianFromSimda/{kodeperubahan}/{skpd}', 'realController@transferRincianFromSimda');
-Route::get('/auto/{tahun}/trfBTLFromSimda/{kodeperubahan}/{skpd}', 'realController@transferBTLFromSimda');
+Route::get('/auto/{tahun}/trfBTLFromSimda/{	zip_close(zzz)}/{skpd}', 'realController@transferBTLFromSimda');
 Route::get('/auto/{tahun}/trfPendapatanFromSimda/{kodeperubahan}/{skpd}', 'realController@transferPendapatanFromSimda');
 Route::get('/auto/{tahun}/trfPembiayaanFromSimda/{kodeperubahan}/{skpd}', 'realController@transferPembiayaanFromSimda');
 Route::get('/auto/transferuser/{tahunawal}/{tahunakhir}', 'realController@transferuser');
@@ -465,5 +478,3 @@ Route::get('/asosiasi/{tahun}/kegiatan', 'Asosiasi\asosiasiController@kegiatan')
 Route::get('/main/{tahun}/{status}/rekapAll', 'Budgeting\lampiranController@rekapAll');
 Route::get('/main/{tahun}/{status}/rekapBerbeda/paguRincian', 'Budgeting\lampiranController@berbedaPaguRincian');
 Route::get('/main/{tahun}/{status}/rekapBelanja', 'Budgeting\lampiranController@rekapBelanja');
-
-
