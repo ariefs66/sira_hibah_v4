@@ -26,6 +26,7 @@ use App\Model\Pekerjaan;
 use App\Model\Subunit;
 use App\Model\Skpd;
 use Illuminate\Support\Facades\Input;
+
 class apiController extends Controller
 {
     public function api($tahun,$status){
@@ -271,6 +272,41 @@ class apiController extends Controller
                                      'TIME_CREATED'         =>$data->TIME_CREATED,
                                      'TIME_UPDATED'         =>$data->TIME_UPDATED,
                                      'AKTIF'                =>'TRUE',
+                                     
+            ));
+        }
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+    }
+
+
+    public function apiMonevProgram($tahun){
+      //if($status == 'murni'){
+        $data   = BL::JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                    ->JOIN('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID','LEFT')
+                    ->JOIN('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID','LEFT')
+                    ->JOIN('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                    ->JOIN('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                    ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                    ->WHERE('DAT_BL.BL_TAHUN',$tahun)
+                    ->WHERE('DAT_BL.BL_DELETED',0)
+                    ->WHERE('DAT_BL.BL_VALIDASI',1)
+                    
+                    ->get();        
+       // }         
+
+        $view           = array();
+        foreach ($data as $data) {
+            array_push($view, array( 
+                                     'SKPD_KODE'              =>$data->SKPD_KODE,
+                                     'SKPD_NAMA'              =>$data->SKPD_NAMA,
+                                     'PROGRAM_KODE'           =>$data->PROGRAM_KODE,
+                                     'PROGRAM_NAMA'           =>$data->PROGRAM_NAMA,
+                                     'KEGIATAN_KODE'          =>$data->KEGIATAN_KODE,
+                                     'KEGIATAN_NAMA'          =>$data->KEGIATAN_NAMA,
+                                     'OUTPUT_TOLAK_UKUR'      =>$data->OUTPUT_TOLAK_UKUR,
+                                     'OUTPUT_TARGET'      =>$data->OUTPUT_TARGET,
+                                     'SATUAN_NAMA'      =>$data->SATUAN_NAMA,
                                      
             ));
         }
