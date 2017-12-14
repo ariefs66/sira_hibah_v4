@@ -453,6 +453,7 @@ Route::get('/main/{tahun}/{status}/api/sirupKegiatan', 'apiController@apiSirupKe
 Route::get('/main/{tahun}/{status}/api/sirupProgram', 'apiController@apiSirupProgram');
 Route::get('/main/{tahun}/{status}/api/sirupPenyedia', 'apiController@apiSirupPenyedia');
 Route::get('/main/{tahun}/{status}/api/sirupSwakelola', 'apiController@apiSirupSwakelola');
+Route::get('/main/{tahun}/api/monev', 'apiController@apiMonevProgram');
 
 //TO SIMDA. - VIEW
 Route::get('/simda/{tahun}', 'simdaController@index');
