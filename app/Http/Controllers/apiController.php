@@ -280,7 +280,7 @@ class apiController extends Controller
     }
 
 
-    public function apiMonevProgram($tahun){
+    public function apiMonevProgram($tahun,$id){
       //if($status == 'murni'){
         $data   = BL::JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                     ->JOIN('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID','LEFT')
@@ -288,10 +288,10 @@ class apiController extends Controller
                     ->JOIN('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                     ->JOIN('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                     ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                    ->where('REF_SKPD.SKPD_ID',$id)
                     ->WHERE('DAT_BL.BL_TAHUN',$tahun)
                     ->WHERE('DAT_BL.BL_DELETED',0)
                     ->WHERE('DAT_BL.BL_VALIDASI',1)
-                    
                     ->get();        
        // }         
 
