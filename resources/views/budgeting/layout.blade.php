@@ -637,7 +637,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="{{ url('/') }}/main/{{$tahun}}/api/monev/{id}" class="padding-l-r-lg " target="_blank">
+                    <a href="{{ url('/') }}/main/{{$tahun}}/api/monev/{kode}" class="padding-l-r-lg " target="_blank">
                        <span>MONEV</span>
                     </a>
                   </li>
