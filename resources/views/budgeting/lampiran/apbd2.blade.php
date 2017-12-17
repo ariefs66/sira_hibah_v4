@@ -121,23 +121,109 @@
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@foreach($kat1 as $k1)
+		@php
+			$kattotpendapatan = 0;
+			$kattotbtl = 0;
+			$kattotbl = 0;
+		@endphp
+
+		@foreach($urusan as $u)
+
+			@if($k1->URUSAN_KAT1_ID == $u->URUSAN_KAT1_ID)
+
+				@php
+				$totpendapatan = 0;
+				$totbtl = 0;
+				$totbl = 0;
+				@endphp
+
+				@foreach($bl as $b)
+					@if($u->URUSAN_KODE == $b->URUSAN_KODE)
+
+						@foreach($pendapatan as $key=>$p)
+							@if($b->SKPD_KODE == $p->SKPD_KODE)
+								@php
+									$totpendapatan +=  $p->pagu;
+								@endphp
+							@endif
+						@endforeach
+
+						@foreach($btl as $key=>$bt)
+								@if($b->SKPD_KODE == $bt->SKPD_KODE)
+									@php
+									$totbtl +=  $bt->pagu;
+									@endphp
+								@endif
+							@endforeach
+
+						@php
+							$totbl +=  $b->pagu;
+						@endphp
+
+					@endif	
+				@endforeach	
+
+				@php
+				$kattotpendapatan += $totpendapatan; 
+				$kattotbtl += $totbtl; 
+				$kattotbl += $totbl; 
+				@endphp
+
+			@endif	
+		@endforeach		
+
+
 	<tr>
 		<td class="border-rincian">{{$k1->URUSAN_KAT1_KODE}}</td>
 		<td class="border-rincian"><b>{{$k1->URUSAN_KAT1_NAMA}}</b></td>
-		<td class="border-rincian kanan total">-</td>
-		<td class="border-rincian kanan total">-</td>
-		<td class="border-rincian kanan total">-</td>
-		<td class="border-rincian kanan total">-</td>
+		<td class="border-rincian kanan total"><b>{{ number_format($kattotpendapatan,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($kattotbtl,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($kattotbl,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($kattotbtl+$kattotbl,0,',','.') }}</b></td>
 	</tr>
 		@foreach($urusan as $u)
+
 			@if($k1->URUSAN_KAT1_ID == $u->URUSAN_KAT1_ID)
+
+			@php
+			$totpendapatan = 0;
+			$totbtl = 0;
+			$totbl = 0;
+			@endphp
+
+			@foreach($bl as $b)
+				@if($u->URUSAN_KODE == $b->URUSAN_KODE)
+
+					@foreach($pendapatan as $key=>$p)
+						@if($b->SKPD_KODE == $p->SKPD_KODE)
+							@php
+								$totpendapatan +=  $p->pagu;
+							@endphp
+						@endif
+					@endforeach
+
+					@foreach($btl as $key=>$bt)
+							@if($b->SKPD_KODE == $bt->SKPD_KODE)
+								@php
+								$totbtl +=  $bt->pagu;
+								@endphp
+							@endif
+						@endforeach
+
+					@php
+						$totbl +=  $b->pagu;
+					@endphp
+
+				@endif	
+			@endforeach		
+
 			<tr>
 				<td class="border-rincian">{{$u->URUSAN_KODE}}</td>
 				<td class="border-rincian">&nbsp; &nbsp; <b>{{$u->URUSAN_NAMA}}</b></td>
-				<td class="border-rincian kanan rekening">-</td>
-				<td class="border-rincian kanan rekening">-</td>
-				<td class="border-rincian kanan rekening">-</td>
-				<td class="border-rincian kanan rekening">-</td>
+				<td class="border-rincian kanan rekening"><b>{{ number_format($totpendapatan,0,',','.') }}</b></td>
+				<td class="border-rincian kanan rekening"><b>{{ number_format($totbtl,0,',','.') }}</b></td>
+				<td class="border-rincian kanan rekening"><b>{{ number_format($totbl,0,',','.') }}</b></td>
+				<td class="border-rincian kanan rekening"><b>{{ number_format($totbtl+$totbl,0,',','.') }}</b></td>
 			</tr>
 
 				@foreach($bl as $b)
