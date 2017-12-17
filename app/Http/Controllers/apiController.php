@@ -288,7 +288,7 @@ class apiController extends Controller
                     ->JOIN('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                     ->JOIN('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                     ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
-                    ->where('REF_SKPD.SKPD_KODE',$kode)
+                    ->where('REF_SKPD.SKPD_KODE',$SKPD_KODE)
                     ->where('REF_SKPD.SKPD_TAHUN',$tahun)
                     ->WHERE('DAT_BL.BL_TAHUN',$tahun)
                     ->WHERE('DAT_BL.BL_DELETED',0)

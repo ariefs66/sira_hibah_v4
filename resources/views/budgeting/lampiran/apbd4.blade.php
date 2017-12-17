@@ -150,7 +150,11 @@
 				<td class="border-rincian kiri total"></td>
 			</tr>
 				@foreach($program as $p)
-					@if($p->URUSAN_KODE == $s->URUSAN_KODE)
+
+					@if($p->URUSAN_ID == $s->URUSAN_ID)
+
+
+
 					<tr>
 						<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}.{{$p->PROGRAM_KODE}}</td>
 						<td class="border-rincian kiri total">&nbsp; &nbsp; &nbsp; <b>{{$p->PROGRAM_NAMA}}</b></td>
@@ -160,14 +164,62 @@
 						<td class="border-rincian kiri total"></td>
 					</tr>
 						@foreach($kegiatan as $k)
-							@if($p->PROGRAM_KODE == $k->PROGRAM_KODE)
+							@if($p->PROGRAM_ID == $k->PROGRAM_ID)
 							<tr>
 								<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}.{{$p->PROGRAM_KODE}}.{{$k->KEGIATAN_KODE}}</td>
 								<td class="border-rincian kiri total">&nbsp; &nbsp; &nbsp; &nbsp; {{$k->KEGIATAN_NAMA}}</td>
-								<td class="border-rincian kiri total"></td>
-								<td class="border-rincian kiri total"></td>
-								<td class="border-rincian kiri total"></td>
-								<td class="border-rincian kiri total"></td>
+
+								@php 
+									$total =0;
+								@endphp
+
+								@php
+									$found = false;
+									@endphp
+								@foreach($pegawai as $peg)
+									
+
+									@if($k->KEGIATAN_ID == $peg->KEGIATAN_ID)
+									<td class="border-rincian">{{ number_format($peg->total,0,',','.') }}</td>
+									@php 
+									$total += $peg->total; 
+									$found = true;
+									@endphp
+									@endif
+
+									
+								@endforeach
+								@if(!$found)
+									<td class="border-rincian"></td>
+									@endif
+
+
+									@php
+										$found = false;
+									@endphp
+								@foreach($barangJasa as $br)
+									@if($k->KEGIATAN_ID == $br->KEGIATAN_ID)
+									<td class="border-rincian">{{ number_format($br->total,0,',','.') }}</td>
+									@php $total += $br->total;$found = true; @endphp
+									@endif
+								@endforeach
+								@if(!$found)
+									<td class="border-rincian"></td>
+									@endif
+
+									@php
+										$found = false;
+									@endphp
+								@foreach($modal as $mod)
+									@if($k->KEGIATAN_ID == $mod->KEGIATAN_ID)
+									<td class="border-rincian">{{ number_format($mod->total,0,',','.') }}</td>
+									@php $total += $mod->total;$found = true; @endphp
+									@endif
+								@endforeach
+								@if(!$found)
+									<td class="border-rincian"></td>
+									@endif
+								<td class="border-rincian kiri total"> {{$total}}</td>
 							</tr>
 							@endif
 					@endforeach
@@ -177,6 +229,11 @@
 			@endforeach
 		@endif
 		@endforeach
+		<!-- limit untuk lokal -->
+		@php
+		break;
+		@endphp
+		<!-- end limit untuk lokal -->		
 	@endforeach
 	
 	
