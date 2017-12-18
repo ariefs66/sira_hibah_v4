@@ -299,8 +299,36 @@ class apiController extends Controller
         $view           = array();
         foreach ($data as $data) {
             array_push($view, array( 
-                                     'SKPD_KODE'              =>$data->SKPD_KODE,
-                                     'SKPD_NAMA'              =>$data->SKPD_NAMA,
+                                     'PROGRAM_KODE'           =>$data->PROGRAM_KODE,
+                                     'PROGRAM_NAMA'           =>$data->PROGRAM_NAMA,
+                                     
+            ));
+        }
+        //$view = array("aaData"=>$view);      
+        return Response::JSON($view);
+    }
+
+
+    public function apiMonevKegiatan($tahun,$kode, $kode_p){
+      //if($status == 'murni'){
+        $data   = BL::JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                    ->JOIN('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID','LEFT')
+                    ->JOIN('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID','LEFT')
+                    ->JOIN('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                    ->JOIN('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                    ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                    ->where('REF_SKPD.SKPD_KODE',$kode)
+                    ->where('REF_PROGRAM.PROGRAM_KODE',$kode_p)
+                    ->where('REF_SKPD.SKPD_TAHUN',$tahun)
+                    ->WHERE('DAT_BL.BL_TAHUN',$tahun)
+                    ->WHERE('DAT_BL.BL_DELETED',0)
+                    ->WHERE('DAT_BL.BL_VALIDASI',1)
+                    ->get();        
+       // }         
+
+        $view           = array();
+        foreach ($data as $data) {
+            array_push($view, array( 
                                      'PROGRAM_KODE'           =>$data->PROGRAM_KODE,
                                      'PROGRAM_NAMA'           =>$data->PROGRAM_NAMA,
                                      'KEGIATAN_KODE'          =>$data->KEGIATAN_KODE,
@@ -311,8 +339,10 @@ class apiController extends Controller
                                      
             ));
         }
-        $view = array("aaData"=>$view);      
+       // $view = array("aaData"=>$view);      
         return Response::JSON($view);
     }
+
+
 
 }
