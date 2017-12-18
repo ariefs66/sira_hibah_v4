@@ -26,6 +26,7 @@ use App\Model\Pekerjaan;
 use App\Model\Subunit;
 use App\Model\Skpd;
 use Illuminate\Support\Facades\Input;
+use DB;
 
 class apiController extends Controller
 {
@@ -293,7 +294,9 @@ class apiController extends Controller
                     ->WHERE('DAT_BL.BL_TAHUN',$tahun)
                     ->WHERE('DAT_BL.BL_DELETED',0)
                     ->WHERE('DAT_BL.BL_VALIDASI',1)
-                    ->get();        
+                    ->groupBy('PROGRAM_KODE', "PROGRAM_NAMA")
+                    ->select('PROGRAM_KODE', "PROGRAM_NAMA")
+                    ->get();              
        // }         
 
         $view           = array();
