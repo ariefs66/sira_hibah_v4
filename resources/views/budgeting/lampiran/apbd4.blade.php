@@ -149,19 +149,76 @@
 				<td class="border-rincian kiri total"></td>
 				<td class="border-rincian kiri total"></td>
 			</tr>
+
 				@foreach($program as $p)
 
+
 					@if($p->URUSAN_ID == $s->URUSAN_ID)
+
+					@php
+						$totalpegawai = 0; 
+						$totalbarangJasa = 0; 
+						$totalmodal = 0; 
+						$totalsemua = 0; 
+					@endphp
+
+					@foreach($kegiatan as $k)
+							@if($p->PROGRAM_ID == $k->PROGRAM_ID)
+							
+								@php 
+									$total =0;
+								@endphp
+
+
+								@foreach($pegawai as $peg)
+									
+
+									@if($k->KEGIATAN_ID == $peg->KEGIATAN_ID)
+									  
+									@php
+									$totalpegawai += $peg->total; 
+									$total += $peg->total; 
+									@endphp
+									@endif
+
+									
+								@endforeach
+
+								@foreach($barangJasa as $br)
+									@if($k->KEGIATAN_ID == $br->KEGIATAN_ID)
+									
+									@php 
+									$totalbarangJasa += $br->total;
+									$total += $br->total;
+									@endphp
+									@endif
+								@endforeach
+
+								@foreach($modal as $mod)
+									@if($k->KEGIATAN_ID == $mod->KEGIATAN_ID)
+									
+									@php 
+									$totalmodal += $mod->total;
+									$total += $mod->total;
+									@endphp
+
+									@endif
+								@endforeach
+								
+								@php $totalsemua += $total;  break; @endphp
+
+							@endif
+					@endforeach
 
 
 
 					<tr>
 						<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}.{{$p->PROGRAM_KODE}}</td>
 						<td class="border-rincian kiri total">&nbsp; &nbsp; &nbsp; <b>{{$p->PROGRAM_NAMA}}</b></td>
-						<td class="border-rincian kiri total"></td>
-						<td class="border-rincian kiri total"></td>
-						<td class="border-rincian kiri total"></td>
-						<td class="border-rincian kiri total"></td>
+						<td class="border-rincian kiri total">{{$totalpegawai}}</td>
+						<td class="border-rincian kiri total">{{$totalbarangJasa}}</td>
+						<td class="border-rincian kiri total">{{$totalmodal}}</td>
+						<td class="border-rincian kiri total">{{$totalsemua}}</td>
 					</tr>
 						@foreach($kegiatan as $k)
 							@if($p->PROGRAM_ID == $k->PROGRAM_ID)
