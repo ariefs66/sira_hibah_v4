@@ -88,6 +88,7 @@ Route::get('/main/{tahun}/{status}/lampiran/ppas/{id}', 'Budgeting\lampiranContr
 Route::get('/main/{tahun}/{status}/lampiran/ppasrincian/{id}', 'Budgeting\lampiranController@ppasRincian');
 Route::get('/main/{tahun}/{status}/lampiran/ppasdownload/{id}', 'Budgeting\lampiranController@ppasDownload');
 Route::get('/main/{tahun}/{status}/lampiran-download/ppas/{tipe}', 'Budgeting\lampiranController@ppasProgram');
+//LAMPIRAN RAPERDA 1 S/D 13
 Route::get('/main/{tahun}/{status}/lampiran/apbd/1', 'Budgeting\lampiranController@lampiran1');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/2', 'Budgeting\lampiranController@lampiran2');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/3', 'Budgeting\lampiranController@lampiran3');
@@ -102,7 +103,34 @@ Route::get('/main/{tahun}/{status}/lampiran/apbd/10', 'Budgeting\lampiranControl
 Route::get('/main/{tahun}/{status}/lampiran/apbd/11', 'Budgeting\lampiranController@lampiran11');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/12', 'Budgeting\lampiranController@lampiran12');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/13', 'Budgeting\lampiranController@lampiran13');
-Route::get('/main/{tahun}/{status}/lampiran/rkaSKPD/{id}', 'Budgeting\lampiranController@rkaSkpd');
+//RKA SKPD
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd', 'Budgeting\lampiranController@rkaSKPD');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd1', 'Budgeting\lampiranController@rkaSKPD1');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd21', 'Budgeting\lampiranController@rkaSKPD21');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd22', 'Budgeting\lampiranController@rkaSKPD22');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd31', 'Budgeting\lampiranController@rkaSKPD31');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd32', 'Budgeting\lampiranController@rkaSKPD32');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd/{s}', 'Budgeting\lampiranController@rkaSKPDDetail');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd1/{s}', 'Budgeting\lampiranController@rkaSKPD1Detail');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd21/{s}', 'Budgeting\lampiranController@rkaSKPD21Detail');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd22/{s}', 'Budgeting\lampiranController@rkaSKPD22Detail');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd31/{s}', 'Budgeting\lampiranController@rkaSKPD31Detail');
+Route::get('/main/{tahun}/{status}/lampiran/rka/skpd32/{s}', 'Budgeting\lampiranController@rkaSKPD32Detail');
+//DPA SKPD
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd', 'Budgeting\lampiranController@dpaSKPD');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd1', 'Budgeting\lampiranController@dpaSKPD1');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd21', 'Budgeting\lampiranController@dpaSKPD21');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd22', 'Budgeting\lampiranController@dpaSKPD22');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd221', 'Budgeting\lampiranController@dpaSKPD221');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd31', 'Budgeting\lampiranController@dpaSKPD31');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd32', 'Budgeting\lampiranController@dpaSKPD32');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd/{s}', 'Budgeting\lampiranController@dpaSKPDDetail');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd1/{s}', 'Budgeting\lampiranController@dpaSKPD1Detail');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd21/{s}', 'Budgeting\lampiranController@dpaSKPD21Detail');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd22/{s}', 'Budgeting\lampiranController@dpaSKPD22Detail');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd221/{s}', 'Budgeting\lampiranController@dpaSKPD221Detail');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd31/{s}', 'Budgeting\lampiranController@dpaSKPD31Detail');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd32/{s}', 'Budgeting\lampiranController@dpaSKPD32Detail');
 //------------------------------------------------------------------------------------------------------------------------
 //BTL
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/', 'Budgeting\btlController@index');

@@ -141,32 +141,42 @@
 		<tr>
 			<td class="border-rincian">{{$k2->URUSAN_KAT2_KODE}}.{{$u->URUSAN_KODE}}</td>
 			<td class="border-rincian">&nbsp; {{$u->URUSAN_NAMA}}</td>
+			
+			@php 
+				$total =0;
+			@endphp
+
 			@foreach($btl_p as $btp)
 				@if($u->URUSAN_KODE == $btp->URUSAN_KODE)
 				<td class="border-rincian">{{ number_format($btp->total,0,',','.') }}</td>
+				@php $total += $btp->total; @endphp 
 				@endif
 			@endforeach
 			@foreach($btl_l as $btl)
 				@if($u->URUSAN_KODE == $btl->URUSAN_KODE)
 				<td class="border-rincian">{{ number_format($btl->total,0,',','.') }}</td>
+				@php $total += $btl->total; @endphp 
 				@endif
 			@endforeach
 			@foreach($pegawai as $peg)
 				@if($u->URUSAN_KODE == $peg->URUSAN_KODE)
 				<td class="border-rincian">{{ number_format($peg->total,0,',','.') }}</td>
+				@php $total += $peg->total; @endphp 
 				@endif
 			@endforeach
 			@foreach($barangJasa as $bj)
 				@if($u->URUSAN_KODE == $bj->URUSAN_KODE)
 				<td class="border-rincian">{{ number_format($bj->total,0,',','.') }}</td>
+				@php $total += $bj->total; @endphp 
 				@endif
 			@endforeach
 			@foreach($modal as $mod)
 				@if($u->URUSAN_KODE == $mod->URUSAN_KODE)
 				<td class="border-rincian">{{ number_format($mod->total,0,',','.') }}</td>
+				@php $total += $mod->total; @endphp 
 				@endif
 			@endforeach
-			<td class="border-rincian"></td>
+			<td class="border-rincian">{{ number_format($total,0,',','.') }}</td>
 		</tr>
 		@endif
 		@endforeach
