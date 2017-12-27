@@ -143,31 +143,23 @@
 		<td class="border">9=6+7+8</td>
 		<td class="border">10</td>
 	</tr>
+	@php $total=0; @endphp
+	@foreach($bl as $bel)
 	<tr>
-		<td class="border-rincian kiri"><b>5</b></td>
-		<td class="border-rincian"><b></b></td>
-		<td class="border-rincian tengah"></td>
-		<td class="border-rincian tengah"></td>
-		<td class="border-rincian tengah"></td>
-		<td class="border-rincian tengah"></td>
-		<td class="border-rincian tengah"></td>
-		<td class="border-rincian tengah"></td>
-		<td class="border-rincian tengah"></td>
-		<td class="border-rincian tengah"></td>
+		<td class="border-rincian kiri border"> {{$bel->kegiatan->program->PROGRAM_KODE}} </td>
+		<td class="border-rincian kiri border"> {{$bel->kegiatan->KEGIATAN_KODE}} </td>
+		<td class="border-rincian border"> &nbsp; {{$bel->kegiatan->KEGIATAN_NAMA}} </td>
+		<td class="border-rincian border"> &nbsp; {{$bel->lokasi->LOKASI_NAMA}} </td>
+		<td class="border-rincian border"> &nbsp; {{$bel->INDIKATOR_ID}} </td>
+		<td class="border-rincian border"> &nbsp; - </td>
+		<td class="border-rincian border"> &nbsp; - </td>
+		<td class="border-rincian border"> &nbsp; - </td>
+		<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
+		<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
+		@php $total += $bel->BL_PAGU; @endphp
 	</tr>	
-	<tr>
-		<td class="border-rincian kiri"><b>5.2</b></td>
-		<td class="border-rincian"><b>&nbsp;</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-	</tr>	
-	
+	@endforeach		
+
 	
 	<tr class="border">
 		<td class="border kanan" colspan="5"><b>Jumlah</b></td>
@@ -175,7 +167,7 @@
 		<td class="border kanan"><b>,00</b></td>
 		<td class="border kanan"><b>,00</b></td>
 		<td class="border kanan"><b>,00</b></td>
-		<td class="border kanan"><b>,00</b></td>
+		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
 	</tr>
 	</tbody>	
 </table>

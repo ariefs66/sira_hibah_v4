@@ -121,21 +121,21 @@
 		<td class="border">2</td>
 		<td class="border">3</td>
 	</tr>
+	@php $total=0; @endphp
+
+	@foreach($pembiayaan as $pem)
 	<tr>
-		<td class="border-rincian kiri"><b>5</b></td>
-		<td class="border-rincian"><b></b></td>
-		<td class="border-rincian tengah"></td>
+		<td class="border-rincian kiri border"> {{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.3.{{$pem->rekening->REKENING_KODE}} </td>
+		<td class="border-rincian border"> &nbsp; {{$pem->rekening->REKENING_NAMA}} </td>
+		<td class="border-rincian kanan border">{{ number_format($pem->PEMBIAYAAN_TOTAL,0,',','.') }},00</td>
+		@php $total += $pem->PEMBIAYAAN_TOTAL; @endphp
 	</tr>	
-	<tr>
-		<td class="border-rincian kiri"><b>5.2</b></td>
-		<td class="border-rincian"><b>&nbsp;</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
-	</tr>	
+	@endforeach	
 	
 	
 	<tr class="border">
 		<td class="border kanan" colspan="2"><b>Jumlah</b></td>
-		<td class="border kanan"><b>,00</b></td>
+		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
 	</tr>
 	</tbody>	
 </table>

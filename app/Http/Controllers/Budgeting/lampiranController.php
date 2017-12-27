@@ -87,11 +87,12 @@ class lampiranController extends Controller
                 $rek3        = $reke[$s];
 
                 $totalrek[$q]= Rincian::whereHas('rekening', function($x) use ($rek4){
-                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                   $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
                 })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
                 $totalreke[$s]= Rincian::whereHas('rekening', function($x) use ($rek3){
                     $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
                 })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+
                 $paket[$i]   = Rincian::where('BL_ID',$id)
                                 ->where('REKENING_ID',$r->REKENING_ID)
                                 ->groupBy('SUBRINCIAN_ID')
@@ -1954,20 +1955,26 @@ class lampiranController extends Controller
 
 
     public function rkaSKPDDetail($tahun, $status, $s){
-        $id=2241;
+        
         $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
                         ->where('SKPD_ID',$s)->first();
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $pendapatan = Pendapatan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                        ->where('SKPD_ID',$s)->get();
+                        
+        $bl = BL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                        ->where('SKPD_ID',$s)->get();                  
+
+        $pembiayaan = Pembiayaan::All();  
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.rka-skpd-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.rka-skpd-detail',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'pendapatan'=>$pendapatan, 'bl'=>$bl, 'pembiayaan'=>$pembiayaan ]);
     }
 
 
@@ -1981,20 +1988,21 @@ class lampiranController extends Controller
 
 
     public function rkaSKPD1Detail($tahun, $status, $s){
-        $id=2241;
+        
         $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
                         ->where('SKPD_ID',$s)->first();
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $pendapatan = Pendapatan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                        ->where('SKPD_ID',$s)->get();
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.rka-skpd1-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.rka-skpd1-detail',['tahun'=>$tahun,'status'=>$status, 'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'pendapatan'=>$pendapatan ]);
     }
 
     public function rkaSKPD21($tahun,$status){
@@ -2007,20 +2015,21 @@ class lampiranController extends Controller
 
 
     public function rkaSKPD21Detail($tahun, $status, $s){
-        $id=2241;
+
         $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
                         ->where('SKPD_ID',$s)->first();
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $btl = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
+                        ->where('SKPD_ID',$s)->get();
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.rka-skpd21-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.rka-skpd21-detail',['tahun'=>$tahun,'status'=>$status, 'btl'=>$btl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2040,14 +2049,16 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $bl = BL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                        ->where('SKPD_ID',$s)
+                        ->get();                  
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.rka-skpd22-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.rka-skpd22-detail',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2067,14 +2078,14 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $pembiayaan = Pembiayaan::All();  
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.rka-skpd31-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.rka-skpd31-detail',['tahun'=>$tahun,'status'=>$status, 'pembiayaan'=>$pembiayaan,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2094,14 +2105,14 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $pembiayaan = Pembiayaan::All();  
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.rka-skpd32-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.rka-skpd32-detail',['tahun'=>$tahun,'status'=>$status, 'pembiayaan'=>$pembiayaan,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2121,14 +2132,20 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $pendapatan = Pendapatan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                        ->where('SKPD_ID',$s)->get();
+                        
+        $bl = BL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                        ->where('SKPD_ID',$s)->get();                  
+
+        $pembiayaan = Pembiayaan::All();  
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.dpa-skpd-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.dpa-skpd-detail',['tahun'=>$tahun,'status'=>$status, 'pendapatan'=>$pendapatan, 'bl'=>$bl, 'pembiayaan'=>$pembiayaan, 'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2149,14 +2166,15 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $pendapatan = Pendapatan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                        ->where('SKPD_ID',$s)->get();
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.dpa-skpd1-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.dpa-skpd1-detail',['tahun'=>$tahun,'status'=>$status, 'pendapatan'=>$pendapatan,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2176,14 +2194,15 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $btl = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
+                        ->where('SKPD_ID',$s)->get();
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.dpa-skpd21-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.dpa-skpd21-detail',['tahun'=>$tahun,'status'=>$status, 'btl'=>$btl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2203,14 +2222,16 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $bl = BL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                        ->where('SKPD_ID',$s)
+                        ->get();                  
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.dpa-skpd22-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.dpa-skpd22-detail',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2257,14 +2278,14 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $pembiayaan = Pembiayaan::All();  
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.dpa-skpd31-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.dpa-skpd31-detail',['tahun'=>$tahun,'status'=>$status, 'pembiayaan'=>$pembiayaan,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
@@ -2284,14 +2305,14 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        $pembiayaan = Pembiayaan::All();  
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.dpa-skpd32-detail',['tahun'=>$tahun,'status'=>$status, 'indikator'=>$indikator,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
+            return View('budgeting.lampiran.dpa-skpd32-detail',['tahun'=>$tahun,'status'=>$status, 'pembiayaan'=>$pembiayaan,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan ]);
     }
 
 
