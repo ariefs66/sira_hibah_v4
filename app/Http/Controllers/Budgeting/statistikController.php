@@ -568,6 +568,10 @@ class statistikController extends Controller{
                                   and rincian.Kd_Rek_1 = 5
                                   and rincian.Kd_Rek_2 = 2
                                   and rincian.Tahun = ".$tahunmin);
+                        
+                        dd($t2017);
+
+
         $total2017  = $t2017[0]->Total;
 
         if($pagu < $total2017*1){
