@@ -57,7 +57,7 @@
                                       <td>{{ $s->SKPD_KODE }}</td>
                                       <td>
                                         {{ $s->SKPD_NAMA }}
-                                        <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd/{{ $s->SKPD_ID }}" class="btn btn-success pull-right m-t-n-sm m-r-xs" target="_blank"><i class="fa fa-print"></i> RKA-SKPD </a>
+                                        <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd32/{{ $s->SKPD_ID }}" class="btn btn-success pull-right m-t-n-sm m-r-xs" target="_blank"><i class="fa fa-print"></i> RKA-SKPD 3.2 </a>
                                       </td>
                                     </tr>
                                     @endforeach

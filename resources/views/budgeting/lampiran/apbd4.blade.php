@@ -215,10 +215,10 @@
 					<tr>
 						<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}.{{$p->PROGRAM_KODE}}</td>
 						<td class="border-rincian kiri total">&nbsp; &nbsp; &nbsp; <b>{{$p->PROGRAM_NAMA}}</b></td>
-						<td class="border-rincian kiri total">{{$totalpegawai}}</td>
-						<td class="border-rincian kiri total">{{$totalbarangJasa}}</td>
-						<td class="border-rincian kiri total">{{$totalmodal}}</td>
-						<td class="border-rincian kiri total">{{$totalsemua}}</td>
+						<td class="border-rincian kiri total">{{ number_format($totalpegawai,0,',','.') }}</td></td>
+						<td class="border-rincian kiri total">{{ number_format($totalbarangJasa,0,',','.') }}</td></td>
+						<td class="border-rincian kiri total">{{ number_format($totalmodal,0,',','.') }}</td></td>
+						<td class="border-rincian kiri total">{{ number_format($totalsemua,0,',','.') }}</td></td>
 					</tr>
 						@foreach($kegiatan as $k)
 							@if($p->PROGRAM_ID == $k->PROGRAM_ID)
@@ -276,7 +276,7 @@
 								@if(!$found)
 									<td class="border-rincian"></td>
 									@endif
-								<td class="border-rincian kiri total"> {{$total}}</td>
+								<td class="border-rincian kiri total"> {{ number_format($total,0,',','.') }} </td>
 							</tr>
 							@endif
 					@endforeach

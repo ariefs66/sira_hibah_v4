@@ -278,7 +278,7 @@ class blController extends Controller
         $i         = 1;
         $pajak      = '';
         foreach ($data as $data) {
-            if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
+            if((( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8 )and Auth::user()->active == 1){
                 if($data->REKENING_ID == 0 or empty($data->subrincian)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -2412,7 +2412,9 @@ class blController extends Controller
         $data       = Rekening::where('REKENING_KODE','like','5%')->where('REKENING_TAHUN',$tahun)->whereRaw('LENGTH("REKENING_KODE") = 11')->where('REKENING_KUNCI',0)->get();
         $view       = "";
         foreach($data as $d){
+            //if($d->REKENING_KUNCI == 0){
             $view .= "<option value='".$d->REKENING_ID."'>".$d->REKENING_KODE.'-'.$d->REKENING_NAMA."</option>";
+            //}
         }
         return $view;
     }    
