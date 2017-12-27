@@ -26,6 +26,7 @@ use App\Model\Pekerjaan;
 use App\Model\Subunit;
 use App\Model\Skpd;
 use Illuminate\Support\Facades\Input;
+use DB;
 
 class apiController extends Controller
 {

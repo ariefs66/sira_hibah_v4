@@ -522,7 +522,99 @@
                       </a>
                     </li>
                 </ul>
-                  </li>                  
+                  </li>  
+                  <li>
+                    <a href="#" class="padding-l-r-lg">                  
+                    <span class="pull-right">
+                      <i class="text8 icon-bdg_arrow1 text"></i>
+                      <i class="text8 icon-bdg_arrow2 text-active"></i>
+                    </span>
+                    <span>RKA</span>
+                  </a>                
+                   <ul class="nav nav-sub dk">
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/rkaSKPD" class="padding-l-r-lg " target="_blank">
+                         <span>RKA-SKPD</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>RKA-SKPD 1</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>RKA-SKPD 2.1</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>RKA-SKPD 2.2</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>RKA-SKPD 2.2.1</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>RKA-SKPD 3.1</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>RKA-SKPD 3.2</span>
+                      </a>
+                    </li> 
+                    </ul>
+                    </li>   
+                    <li>
+                    <a href="#" class="padding-l-r-lg">                  
+                    <span class="pull-right">
+                      <i class="text8 icon-bdg_arrow1 text"></i>
+                      <i class="text8 icon-bdg_arrow2 text-active"></i>
+                    </span>
+                    <span>DPA</span>
+                  </a>                
+                   <ul class="nav nav-sub dk">
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>DPA-SKPD</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>DPA-SKPD 1</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>DPA-SKPD 2.1</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>DPA-SKPD 2.2</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>DPA-SKPD 2.2.1</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>DPA-SKPD 3.1</span>
+                      </a>
+                    </li> 
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                         <span>DPA-SKPD 3.2</span>
+                      </a>
+                    </li> 
+                    </ul>
+                    </li>               
                   </ul>
               </li>
               @endif

@@ -102,6 +102,7 @@ Route::get('/main/{tahun}/{status}/lampiran/apbd/10', 'Budgeting\lampiranControl
 Route::get('/main/{tahun}/{status}/lampiran/apbd/11', 'Budgeting\lampiranController@lampiran11');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/12', 'Budgeting\lampiranController@lampiran12');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/13', 'Budgeting\lampiranController@lampiran13');
+Route::get('/main/{tahun}/{status}/lampiran/rkaSKPD/{id}', 'Budgeting\lampiranController@rkaSkpd');
 //------------------------------------------------------------------------------------------------------------------------
 //BTL
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/', 'Budgeting\btlController@index');

@@ -1942,4 +1942,82 @@ class lampiranController extends Controller
         
     }
 
+
+    public function rkaSkpd($tahun, $status, $id){
+
+        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+
+            $bl         = BL::where('BL_ID',$id)->first();
+
+            $total      = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+            $rekening   = Rincian::where('BL_ID',$id)->orderBy('REKENING_ID')
+                          ->groupBy('REKENING_ID')
+                          ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "REKENING_ID"')
+                          ->get();                   
+
+            $paket      = array();
+            $i          = 0;
+            $q          = 0;
+            $s          = 0;
+            $komponen   = "";
+            $rek        = "";
+            $reke       = "";
+            $rek4       = "";
+            $rek3       = "";
+            $totalrek   = "";
+            $totalreke  = "";
+
+            foreach($rekening as $r) {
+
+                $rek[$q]     = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,8))->first();
+                $reke[$s]    = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,5))->first();
+
+                $rek4        = $rek[$q];
+                $rek3        = $reke[$s];
+
+
+                $totalrek[$q]= Rincian::whereHas('rekening', function($x) use ($rek4){
+                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+
+                $totalreke[$s]= Rincian::whereHas('rekening', function($x) use ($rek3){
+                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
+                })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+                $paket[$i]   = Rincian::where('BL_ID',$id)
+                                ->where('REKENING_ID',$r->REKENING_ID)
+                                ->groupBy('SUBRINCIAN_ID')
+                                ->groupBy('REKENING_ID')
+                                ->groupBy('RINCIAN_PAJAK')
+                                ->orderBy('SUBRINCIAN_ID')
+                                ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK"')
+                                ->get();
+
+                $k = 0;
+                foreach($paket[$i] as $p){
+                    $komponen[$i][$k++]    = Rincian::where('SUBRINCIAN_ID',$p->SUBRINCIAN_ID)
+                                            ->where('REKENING_ID',$p->REKENING_ID)
+                                            ->orderBy('KOMPONEN_ID')
+                                            ->get();
+                                            
+                } 
+                                                           
+                $i++; 
+                $q++; 
+                $s++; 
+            }
+           
+            $totalBL    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+
+
+            return View('budgeting.lampiran.rka-skpd',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke]);
+    }
+
+
+    
 }
