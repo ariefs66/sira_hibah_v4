@@ -40,19 +40,23 @@
                                     sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/skpd/getData',
                                     aoColumns: [
                                     { mData: 'no',class:'text-center' },
+                                    { mData: 'SKPD_TAHUN' },
                                     { mData: 'SKPD_KODE' },
                                     { mData: 'SKPD_NAMA' },
                                     { mData: 'SKPD_KEPALA' },
                                     { mData: 'SKPD_BENDAHARA' },
+                                    { mData: 'SKPD_PAGU' },
                                     { mData: 'aksi' }
                                     ]}" class="table table-striped b-t b-b">
                                     <thead>
                                       <tr>
                                         <th>No</th>
+                                        <th>Tahun</th>
                                         <th>Kode</th>
                                         <th>Nama</th>
                                         <th>Kepala</th>
                                         <th>Bendahara</th>
+                                        <th>Pagu</th>
                                         <th width="15%">Aksi<br>
                                         @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)                        
                                           <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciAll()" id="kunciall"><i></i></label>
@@ -60,7 +64,7 @@
                                       </th>
                                       </tr>
                                       <tr>
-                                        <th colspan="6" class="th_search">
+                                        <th colspan="8" class="th_search">
                                             <i class="icon-bdg_search"></i>
                                             <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Urusan" aria-controls="DataTables_Table_0">
                                         </th>
@@ -146,6 +150,14 @@
             </div> 
           </div>
 
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">PAGU SKPD</label>
+            <div class="col-sm-9">
+             <!--  <input type="text" id="nominal10" class="form-control pagu" onkeyup="SetNumber('nominal10')" onmouseout="SetNumber('nominal10')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Pagu" name="pagu"> -->
+             <input type="text" class="form-control" placeholder="Masukan Pagu SKPD" name="pagu" id="pagu" value="">
+            </div> 
+          </div>
+
          
 
           <hr class="m-t-xl">
@@ -169,8 +181,10 @@
     var alamat          = $('#alamat').val();
     var pagu            = $('#pagu').val();
     var id_skpd         = $('#id_skpd').val();
+    //var pagu            = $('.pagu').val();
     var token           = $('#token').val();
-    if(kode_skpd == "" || nama_skpd == "" || kepala_nip == "" || pangkat == "" || kepala_skpd == "" || bendahara_nip == "" || bendahara_skpd == ""){
+    //alert(pagu);
+    if(kode_skpd == "" || nama_skpd == "" || kepala_nip == "" || pangkat == "" || kepala_skpd == "" || bendahara_nip == "" || pagu == ""){
       $.alert('Form harap diisi!');
     }else{
       if(id_skpd == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/skpd/add/submit";

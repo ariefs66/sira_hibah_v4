@@ -68,6 +68,7 @@ class skpdController extends Controller
                 }             
             }
     		array_push($view, array( 'no'				=>$no,
+                                     'SKPD_TAHUN'       =>$data->SKPD_TAHUN,
                                      'SKPD_KODE'  		=>$data->SKPD_KODE,
                                      'SKPD_NAMA'		=>$data->SKPD_NAMA,
                                      'SKPD_KEPALA'		=>$data->SKPD_KEPALA_NIP."<br><p class='text-orange'>".$data->SKPD_KEPALA."</p>",

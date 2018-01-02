@@ -1818,7 +1818,30 @@ class blController extends Controller
     }
 
     public function submitAKBEdit($tahun,$status){
-        if($status == 'murni') return $this->submitAKBEditMurni($tahun,$status);
+        if($status == 'murni') {
+            //return $this->submitAKBEditMurni($tahun,$status);
+            if(Input::get('AKB_ID') == null){
+            AKB_BL::where('AKB_ID',Input::get('AKB_ID'))
+                        ->update([
+                            'AKB_JAN'        => Input::get('JANUARI'),
+                            'AKB_FEB'        => Input::get('FEBRUARI'),
+                            'AKB_MAR'        => Input::get('MARET'),
+                            'AKB_APR'        => Input::get('APRIL'),
+                            'AKB_MEI'        => Input::get('MEI'),
+                            'AKB_JUN'        => Input::get('JUNI'),
+                            'AKB_JUL'        => Input::get('JULI'),
+                            'AKB_AUG'        => Input::get('AGUSTUS'),
+                            'AKB_SEP'        => Input::get('SEPTEMBER'),
+                            'AKB_OKT'        => Input::get('OKTOBER'),
+                            'AKB_NOV'        => Input::get('NOVEMBER'),
+                            'AKB_DES'        => Input::get('DESEMBER')
+                            ]); 
+
+                return number_format(Input::get('JANUARI'),0,'.',',');
+            }else{
+                return 0; 
+            }    
+        }
         else return $this->submitAKBEditPerubahan($tahun,$status);
     }
 
@@ -2252,7 +2275,7 @@ class blController extends Controller
                          ->where('REKENING_ID',Input::get('REKENING_ID'))
                          ->first();
 
-        if($get_akb == null){
+        /*if($get_akb == null){
             $akb = new AKB_BL;
             $akb->BL_ID       = Input::get('BL_ID');
             $akb->REKENING_ID = Input::get('REKENING_ID');
@@ -2271,7 +2294,8 @@ class blController extends Controller
 
             return 1;
         }     
-        else{
+        else{*/
+        if(Input::get('AKB_ID') == null){
             AKB_BL::where('AKB_ID',Input::get('AKB_ID'))
                         ->update([
                             'AKB_JAN'        => Input::get('JANUARI'),
@@ -2285,11 +2309,15 @@ class blController extends Controller
                             'AKB_SEP'        => Input::get('SEPTEMBER'),
                             'AKB_OKT'        => Input::get('OKTOBER'),
                             'AKB_NOV'        => Input::get('NOVEMBER'),
-                            'AKB_DES'        => Input::get('DESEMBER'),
-                            ]);   
-                             
-             return 2;                
-        }               
+                            'AKB_DES'        => Input::get('DESEMBER')
+                            ]); 
+
+            return number_format($totalrincian,0,'.',',');
+        }else{
+            return 0; 
+        }    
+                              
+        //}               
 
     }
 

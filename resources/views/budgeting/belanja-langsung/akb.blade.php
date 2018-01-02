@@ -823,6 +823,11 @@
     var NOVEMBER        = $('.november').val();
     var DESEMBER        = $('.desember').val();
 
+    alert(JANUARI);
+    alert(FEBRUARI);
+    alert(MARET);
+    alert(APRIL);
+
 
     if(REKENING_ID == "" || AKB_ID == "" ){
       $.alert('Form harap diisi!');
@@ -849,8 +854,14 @@
           'NOVEMBER'        : NOVEMBER, 
           'DESEMBER'        : DESEMBER },
           success: function(msg){
-            if(msg == 1){
-              $.alert('Sukses');
+            if(msg == 0){
+              $.alert('Iput AKB Gagal');
+            }else if(msg != 0){
+              $('.input-rincian,.input-sidebar').animate({'right':'-1050px'},function(){
+                $('.overlay').fadeOut('fast');
+              });
+              clearInterval(interval);
+              $('.tabel-detail').DataTable().ajax.reload();
             }
             /*if(msg == 0){
               $.alert('Lebih Dari Pagu');
@@ -888,9 +899,7 @@
               $('.tabel-detail').DataTable().ajax.reload();
               $('#btn-validasi').removeClass('disabled');
             }*/
-            $('.input-rincian,.input-sidebar').animate({'right':'-1050px'},function(){
-                $('.overlay').fadeOut('fast');
-              });
+            
           }
         });
     /*  }
