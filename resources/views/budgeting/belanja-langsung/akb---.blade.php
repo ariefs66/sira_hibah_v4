@@ -30,19 +30,7 @@
                 <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/log/{{ $bl->BL_ID }}" class="btn btn-danger pull-right m-t-n-sm" target="_blank"><i class="fa fa-download"></i> Log RKA</a> &nbsp;
                 <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/sebelum/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> RKA Sebelum</a>
                 @endif
-                <div class="dropdown dropdown-blend pull-right m-t-n-sm">
-                  <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <li><a class="open-form-btl">RKA-SKPD </a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 2.1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 2.2</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 2.2.1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 3.1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 3.2</a></li>
-                  </ul>
-                </div>
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a>
               </div>
               <div class="tab-content tab-content-alt-1 bg-white">
                 <div class="bg-white wrapper-lg">
@@ -211,30 +199,52 @@
               <div role="tabpanel" class="active tab-pane" id="tab-1">  
                 <div class="table-responsive dataTables_wrapper">
                  <table ui-jq="dataTable" ui-options="{
-                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/{{ $BL_ID }}',
+                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/data/akb/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
                  { mData: 'REKENING' },
-                 { mData: 'KOMPONEN' },
-                 { mData: 'SUB' },
-                 { mData: 'HARGA' },
-                 { mData: 'PAJAK' },
                  { mData: 'TOTAL' },
-                 { mData: 'STATUS' }]
+                 { mData: 'JANUARI' },
+                 { mData: 'FEBRUARI' },
+                 { mData: 'MARET' },
+                 { mData: 'TRIWULAN1' },
+                 { mData: 'APRIL' },
+                 { mData: 'MEI' },
+                 { mData: 'JUNI' },                
+                 { mData: 'TRIWULAN2' },
+                 { mData: 'JULI' },
+                 { mData: 'AGUSTUS' },
+                 { mData: 'SEPTEMBER' },
+                 { mData: 'TRIWULAN3' },
+                 { mData: 'OKTOBER' },
+                 { mData: 'NOVEMBER' },
+                 { mData: 'DESEMBER' },
+                 { mData: 'TRIWULAN4' }]
                }" class="table table-striped b-t b-b tabel-detail">
                <thead>
                 <tr>
                   <th style="width: 1%">#</th>
                   <th>Rekening</th>
-                  <th>Komponen</th>
-                  <th>Paket Pekerjaan<br>Keterangan</th>
-                  <th style="width: 10%">Harga / Koefisien</th>
-                  <th style="width: 5%">Pajak</th>
-                  <th style="width: 5%">Total</th>
-                  <th style="width: 5%">Status</th>
+                  <th>Jumlah</th>
+                  <th style="width: 5%">Januari</th>
+                  <th style="width: 5%">Februari</th>
+                  <th style="width: 5%">Maret</th>
+                  <th style="width: 5%">Triwulan 1</th>
+                  <th style="width: 5%">April</th>
+                  <th style="width: 5%">Mei</th>
+                  <th style="width: 5%">Juni</th>
+                  <th style="width: 5%">Triwulan 2</th>
+                  <th style="width: 5%">Juli</th>
+                  <th style="width: 5%">Agustus</th>
+                  <th style="width: 5%">September</th>
+                  <th style="width: 5%">Triwulan 3</th>
+                  <th style="width: 5%">Oktober</th>
+                  <th style="width: 5%">November</th>
+                  <th style="width: 5%">Desember</th>
+                  <th style="width: 5%">Triwulan 4</th>
                 </tr>
                 <tr>
-                  <th colspan="8" class="th_search">
+                  <th colspan="19" class="th_search">
                     <i class="icon-bdg_search"></i>
                     <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                   </th>
@@ -428,6 +438,21 @@
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
       <h5>Tambah Komponen</h5>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Rekening</label>          
+        <div class="col-md-6">
+          <input type="text" class="form-control" placeholder="Rekening" id="rekening" readonly="">        
+        </div>
+    </div>
+
+    <div class="form-group" id="">
+      <label for="no_spp" class="col-md-3">Januari</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal1" class="form-control januari" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+      </div> 
+    </div>
+
       <div class="form-group">
         <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
         <div class="col-sm-7">
@@ -923,11 +948,12 @@
   function ubah(id){
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/detail/"+id,
+      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/detail/"+id,
       success : function (data) {
         console.log(data);
-        $('#nama-komponen').val(data['KOMPONEN_NAMA']);
-        $('#paket-pekerjaan').val(data['DATA']['SUBRINCIAN_ID']).trigger('chosen:updated');
+        $('#rekening').val(data['REKENING_NAMA']);
+        //$('#rekening').val(data['DATA']['REKENING_NAMA']);
+        /*$('#paket-pekerjaan').val(data['DATA']['SUBRINCIAN_ID']).trigger('chosen:updated');
         $('#ket-belanja').val(data['DATA']['RINCIAN_KETERANGAN']);
         $('#jenis-pekerjaan').val(data['DATA']['PEKERJAAN_ID']).trigger('chosen:updated');
         id_komponen   = data['KOMPONEN_KODE'].substring(0,1);
@@ -945,7 +971,7 @@
         $('#vol3').val(data['VOL3']);
         $('#satuan-3').append('<option value="'+data['SATUAN3']+'" selected>'+data['SATUAN3']+'</option>').trigger('chosen:updated');
         $('#vol4').val(data['VOL4']);
-        $('#satuan-4').append('<option value="'+data['SATUAN4']+'" selected>'+data['SATUAN4']+'</option>').trigger('chosen:updated');
+        $('#satuan-4').append('<option value="'+data['SATUAN4']+'" selected>'+data['SATUAN4']+'</option>').trigger('chosen:updated');*/
       }
     });
     $('.overlay').fadeIn('fast',function(){

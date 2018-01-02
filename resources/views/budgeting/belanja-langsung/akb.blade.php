@@ -16,6 +16,7 @@
           <li><a href= "{{ url('/') }}/main">Dashboard</a></li>
           <li><i class="fa fa-angle-right"></i>Belanja</li>                               
           <li><i class="fa fa-angle-right"></i>Belanja Langsung</li>                                
+          <li><i class="fa fa-angle-right"></i>Anggaran Kas Bulanan </li>                                
           <li class="active"><i class="fa fa-angle-right"></i>{{ $bl->kegiatan->KEGIATAN_NAMA }}</li>                                
         </ul>
       </div>
@@ -31,16 +32,16 @@
                 <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/sebelum/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> RKA Sebelum</a>
                 @endif
                 <div class="dropdown dropdown-blend pull-right m-t-n-sm">
-                  <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
+                  <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak DPA <i class="fa fa-chevron-down"></i>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <li><a class="open-form-btl">RKA-SKPD </a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 2.1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 2.2</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 2.2.1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 3.1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 3.2</a></li>
+                    <li><a class="open-form-btl">DPA-SKPD </a></li>
+                    <li><a class="open-form-btl">DPA-SKPD 1</a></li>
+                    <li><a class="open-form-btl">DPA-SKPD 2.1</a></li>
+                    <li><a class="open-form-btl">DPA-SKPD 2.2</a></li>
+                    <li><a class="open-form-btl">DPA-SKPD 2.2.1</a></li>
+                    <li><a class="open-form-btl">DPA-SKPD 3.1</a></li>
+                    <li><a class="open-form-btl">DPA-SKPD 3.2</a></li>
                   </ul>
                 </div>
               </div>
@@ -189,10 +190,10 @@
                 </div>  
               </div>
 
-              <div class="nav-tabs-alt tabs-alt-1 b-t four-row" id="tab-jurnal" >
+             <!--  <div class="nav-tabs-alt tabs-alt-1 b-t four-row" id="tab-jurnal" >
                 <ul class="nav nav-tabs" role="tablist">
                  <li class="active">
-                  <a data-target="#tab-1" role="tab" data-toggle="tab">RKPD/RKUA<br><span class="text-success" id="rincian-total-1">Rincian : {{ number_format($rinciantotal,0,'.',',') }}</span></a>
+                  <a data-target="#tab-1" role="tab" data-toggle="tab">TRIWULANAN<br><span class="text-success" id="rincian-total-1">Rincian : {{ number_format($rinciantotal,0,'.',',') }}</span></a>
                 </li>
                 <li>
                   <a data-target="#tab-3" role="tab" data-toggle="tab">KUA/PPAS<br><span class="text-success">Rincian : {{ number_format($ppas,0,'.',',') }}</span></a>
@@ -204,37 +205,59 @@
                   <a data-target="#tab-4" role="tab" data-toggle="tab">APBD<br><span class="text-success">Rincian : {{ number_format($apbd,0,'.',',') }}</span></a> 
                 </li>
               </ul>
-            </div>
+            </div> -->
 
             <div class="tab-content tab-content-alt-1 bg-white" id="tab-detail">
             <!-- Tab1 -->
               <div role="tabpanel" class="active tab-pane" id="tab-1">  
                 <div class="table-responsive dataTables_wrapper">
                  <table ui-jq="dataTable" ui-options="{
-                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/{{ $BL_ID }}',
+                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/data/akb/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
                  { mData: 'REKENING' },
-                 { mData: 'KOMPONEN' },
-                 { mData: 'SUB' },
-                 { mData: 'HARGA' },
-                 { mData: 'PAJAK' },
                  { mData: 'TOTAL' },
-                 { mData: 'STATUS' }]
+                 { mData: 'JANUARI' },
+                 { mData: 'FEBRUARI' },
+                 { mData: 'MARET' },
+                 { mData: 'TRIWULAN1' },
+                 { mData: 'APRIL' },
+                 { mData: 'MEI' },
+                 { mData: 'JUNI' },                
+                 { mData: 'TRIWULAN2' },
+                 { mData: 'JULI' },
+                 { mData: 'AGUSTUS' },
+                 { mData: 'SEPTEMBER' },
+                 { mData: 'TRIWULAN3' },
+                 { mData: 'OKTOBER' },
+                 { mData: 'NOVEMBER' },
+                 { mData: 'DESEMBER' },
+                 { mData: 'TRIWULAN4' }]
                }" class="table table-striped b-t b-b tabel-detail">
                <thead>
                 <tr>
                   <th style="width: 1%">#</th>
                   <th>Rekening</th>
-                  <th>Komponen</th>
-                  <th>Paket Pekerjaan<br>Keterangan</th>
-                  <th style="width: 10%">Harga / Koefisien</th>
-                  <th style="width: 5%">Pajak</th>
-                  <th style="width: 5%">Total</th>
-                  <th style="width: 5%">Status</th>
+                  <th>Jumlah</th>
+                  <th style="width: 5%">Januari</th>
+                  <th style="width: 5%">Februari</th>
+                  <th style="width: 5%">Maret</th>
+                  <th style="width: 5%">Triwulan 1</th>
+                  <th style="width: 5%">April</th>
+                  <th style="width: 5%">Mei</th>
+                  <th style="width: 5%">Juni</th>
+                  <th style="width: 5%">Triwulan 2</th>
+                  <th style="width: 5%">Juli</th>
+                  <th style="width: 5%">Agustus</th>
+                  <th style="width: 5%">September</th>
+                  <th style="width: 5%">Triwulan 3</th>
+                  <th style="width: 5%">Oktober</th>
+                  <th style="width: 5%">November</th>
+                  <th style="width: 5%">Desember</th>
+                  <th style="width: 5%">Triwulan 4</th>
                 </tr>
                 <tr>
-                  <th colspan="8" class="th_search">
+                  <th colspan="19" class="th_search">
                     <i class="icon-bdg_search"></i>
                     <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                   </th>
@@ -427,170 +450,129 @@
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
-      <h5>Tambah Komponen</h5>
-      <div class="form-group">
-        <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
-        <div class="col-sm-7">
-          <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="">
-            <option value="">Silahkan Pilih</option>
-            @foreach($subrincian as $sr)
-            <option value="{{ $sr->SUBRINCIAN_ID }}">{{ $sr->SUBRINCIAN_NAMA }}</option>
-            @endforeach
-          </select>
-        </div>
-        <div class="col-sm-2">
-          <button class="btn btn-warning col-md-1 w-full" data-toggle="modal" type="button" data-target="#pilih-paket-modal" id="pilih-paket"><i class="fa fa-plus"></i> Tambah</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3">Jenis</label>
-        <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="jenis-pekerjaan" required="">
-            <option value="">Silahkan Pilih Jenis</option>
-            @foreach($pekerjaan as $pkj)
-            <option value="{{ $pkj->PEKERJAAN_ID }}">{{ $pkj->PEKERJAAN_NAMA }}</option>
-            @endforeach
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3">Kategori</label>
-        <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="kategori-belanja" required="">
-            <option value="">Silahkan Pilih Kategori</option>
-            <option value="1">SSH</option>
-            <option value="2">HSPK</option>
-            <option value="3">ASB</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3">Rekening</label>
-        <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="rekening-belanja" required="">
-            <option value="">Silahkan Pilih Rekening</option>
-          </select>
-        </div>
-      </div>
-
+      <h5>Tambah Anggaran Kas Bulanan</h5>
+  
+      <input type="hidden" class="form-control" id="akb-id">    
+      <input type="hidden" class="form-control" id="rekening-id">    
 
       <div class="form-group">
-        <label for="no_spp" class="col-md-3">Komponen</label>          
+        <label for="no_spp" class="col-md-3">Rekening</label>          
         <div class="col-md-6">
-          <input type="text" class="form-control" placeholder="Komponen" id="nama-komponen" readonly="">          
-          <input type="hidden" class="form-control" readonly="" id="id-komponen">          
-          <input type="hidden" class="form-control" readonly="" id="id-rincian">          
-          <input type="hidden" class="form-control" readonly="" id="harga-komponen">          
+          <input type="text" class="form-control" placeholder="Rekening" id="nama-rekening" readonly="">        
         </div>
-        <div class="col-md-1 m-l-n-md">
-        <a class="btn btn-warning" data-toggle="modal" data-target="#kode-komponen" id="pilih-komponen" disabled="true">Pilih</a>
-        </div>
-        <div class="col-md-2">
-          <label for="no_spp" class="m-l-xl">Pajak</label>          
-          <div class="checkbox-remember pull-right m-t-n-xs">
-           <div class="checkbox">
-            <label class="checkbox-inline i-checks">
-              <input type="checkbox" id="pajak">
-              <i></i>  
-            </label>
-           </div>
-          </div>
-        </div>
-    </div>
-
-    <div class="form-group hide" id="harga-free">
-      <label for="no_spp" class="col-md-3">Harga</label>          
-      <div class="col-sm-9">
-        <input type="number" id="harga-free-input" class="form-control" placeholder="Masukan Harga" >          
-      </div> 
     </div>
 
     <div class="form-group">
-      <label for="no_spp" class="col-md-3">Keterangan</label>          
-      <div class="col-sm-9">
-        <input type="text" id="ket-belanja" class="form-control" placeholder="Masukan Keterangan" >          
-      </div> 
+        <label for="no_spp" class="col-md-3">Total Nominal</label>          
+        <div class="col-md-6">
+          <input type="text" class="form-control" placeholder="Total" id="total" readonly="">        
+        </div>
     </div>
 
     <div class="form-group" id="koef1">
-      <label for="no_spp" class="col-md-3">Koefisien</label>          
+      <label for="no_spp" class="col-md-3">Januari</label>          
       <div class="col-sm-5">
-        <input type="number" id="vol1" class="form-control" placeholder="Masukan Jumlah" required="">      
+        <input type="text" id="nominal1" class="form-control januari" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
       </div> 
-      <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan-1">
-          @foreach($satuan as $sat)
-          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-          @endforeach        
-        </select>    
-      </div>
+      
     </div>
+
     <div class="form-group" id="koef2">
-      <label for="no_spp" class="col-md-3"></label>          
+      <label for="no_spp" class="col-md-3">Februari</label>          
       <div class="col-sm-5">
-        <input type="number" id="vol2" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" id="nominal2" class="form-control februari" onkeyup="SetNumber('nominal2')" onmouseout="SetNumber('nominal2')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
       </div> 
-      <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan-2">
-          <option>Pilih Satuan</option>
-          @foreach($satuan as $sat)
-          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-          @endforeach
-        </select>    
-      </div>
-    </div>          
+      
+    </div>     
+
     <div class="form-group" id="koef3">
-      <label for="no_spp" class="col-md-3"></label>          
+      <label for="no_spp" class="col-md-3">Maret</label>          
       <div class="col-sm-5">
-        <input type="number" id="vol3" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" id="nominal3" class="form-control maret" onkeyup="SetNumber('nominal3')" onmouseout="SetNumber('nominal3')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
       </div> 
-      <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan-3">
-          <option>Pilih Satuan</option>
-          @foreach($satuan as $sat)
-          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-          @endforeach
-        </select>    
-      </div>
+      
     </div>
+
     <div class="form-group" id="koef4">
-      <label for="no_spp" class="col-md-3"></label>          
+      <label for="no_spp" class="col-md-3">April</label>          
       <div class="col-sm-5">
-        <input type="number" id="vol4" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" id="nominal4" class="form-control april" onkeyup="SetNumber('nominal4')" onmouseout="SetNumber('nominal4')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
       </div> 
-      <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan-4">
-          <option>Pilih Satuan</option>
-          @foreach($satuan as $sat)
-          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-          @endforeach
-        </select>    
-      </div>
-    </div>          
+      
+    </div>     
+
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3">Mei</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal5" class="form-control mei" onkeyup="SetNumber('nominal5')" onmouseout="SetNumber('nominal5')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+      </div> 
+     
+    </div>     
+
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3">Juni</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal6" class="form-control juni" onkeyup="SetNumber('nominal6')" onmouseout="SetNumber('nominal6')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+      </div> 
+      
+    </div>     
+
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3">Juli</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal7" class="form-control juli" onkeyup="SetNumber('nominal7')" onmouseout="SetNumber('nominal7')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+      </div> 
+      
+    </div>     
+
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3">Agustus</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal8" class="form-control agustus" onkeyup="SetNumber('nominal8')" onmouseout="SetNumber('nominal8')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+      </div> 
+     
+    </div>     
+
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3">September</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal9" class="form-control september" onkeyup="SetNumber('nominal9')" onmouseout="SetNumber('nominal9')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+      </div> 
+      
+    </div>    
+
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3">Oktober</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal10" class="form-control oktober" onkeyup="SetNumber('nominal10')" onmouseout="SetNumber('nominal10')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">      
+      </div> 
+      
+    </div>      
+
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3">November</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal11" class="form-control november" onkeyup="SetNumber('nominal11')" onmouseout="SetNumber('nominal11')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+      </div> 
+     
+    </div>     
+
+    <div class="form-group" id="koef4">
+      <label for="no_spp" class="col-md-3">Desember</label>          
+      <div class="col-sm-5">
+        <input type="text" id="nominal12" class="form-control desember" onkeyup="SetNumber('nominal12')" onmouseout="SetNumber('nominal12')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">     
+      </div> 
+     
+    </div>     
+
     <hr class="m-t-xl">
-    <div class="form-group" id="koef4">
-      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian Kegiatan</label>          
-      <div class="col-sm-3">
-        <input type="text" id="rincian-skpd" class="form-control" readonly="">      
-        <input type="hidden" id="rincian-skpd_" class="form-control" readonly="">      
-      </div> 
-      <label for="no_spp" class="col-md-1">Pagu Kegiatan</label>          
-      <div class="col-sm-3">
-        <input type="text" id="pagu-skpd" class="form-control" readonly="">      
-        <input type="hidden" id="pagu-skpd_" class="form-control" readonly="">      
-      </div>
-      <label for="no_spp" class="col-md-1">Sisa Anggaran Kegiatan</label>          
-      <div class="col-sm-3">
-        <input type="text" id="sisa-skpd" class="form-control" readonly="">      
-        <input type="hidden" id="sisa-skpd_" class="form-control" readonly="">      
-      </div> 
-    </div>
-    <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Tambah Komponen</a>
+   
+    <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Tambah Anggaran Kas Bulanan</a>
   </div>
 </form>
 </div>
 </div>
-
+<!-- 
 <div class="plih-komponen modal fade " id="kode-komponen" tabindex="-1" role="dialog">
   <div class="modal-dialog bg-white modal-lg">
     <div class="panel panel-default">
@@ -646,6 +628,7 @@
 </div>
 
 <div class="overlay"></div>
+
 <div class="bg-white wrapper-lg input-sidebar input-musrenbang">
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
   <form id="simpan-musrenbang" class="form-horizontal">
@@ -689,7 +672,8 @@
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanMusrenbang()" ><i class="fa fa-plus m-r-xs "></i>Simpan Komponen</a>
     </div>
   </form>
-</div>
+</div> -->
+
 </div>
 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 @endsection
@@ -727,7 +711,7 @@
     $('.tabel-detail-apbd').DataTable().search($('.cari-detail-apbd').val()).draw();
   });
 
-  $("#kategori-belanja").change(function(e, params){
+  /*$("#kategori-belanja").change(function(e, params){
     var id  = $('#kategori-belanja').val();
     $('#rekening-belanja').find('option').remove().end().append('<option>Pilih Rekening</option>');
     $.ajax({
@@ -737,9 +721,9 @@
         $('#rekening-belanja').append(data).trigger('chosen:updated');
       }
     });
-  });
+  });*/
 
-  $("#rekening-belanja").change(function(e, params){
+ /* $("#rekening-belanja").change(function(e, params){
     var id  = $('#rekening-belanja').val();
     $('#pilih-komponen').attr('disabled',false);
     $('.table-komponen').DataTable().destroy();
@@ -754,9 +738,9 @@
       { mData: 'KOMPONEN_NAMA' },
       { mData: 'KOMPONEN_HARGA' }]
     });
-  });
+  });*/
 
-  $("#jenis-pekerjaan").change(function(e, params){
+  /*$("#jenis-pekerjaan").change(function(e, params){
     var id  = $('#jenis-pekerjaan').val();
     if(id == '4' || id == '5'){
       $('#nama-komponen').attr('readonly',false);
@@ -764,9 +748,9 @@
       $('#harga-free').removeClass('hide');
       $('#pilih-komponen').addClass('hide');
     };
-  });
+  });*/
 
-  $('.table-komponen').on('click','tbody > tr', function(){
+ /* $('.table-komponen').on('click','tbody > tr', function(){
     id    = $(this).children('td').eq(0).html();
     nama  = $(this).children('td').eq(1).html();
     sat   = $(this).children('td').eq(2).html();
@@ -776,9 +760,9 @@
     $('#nama-komponen').val(nama);
     $('#satuan-1').find('option').remove().end().append('<option value="'+sat+'">'+sat+'</option>').trigger('chosen:updated');      
     $('#kode-komponen').modal('hide');
-  });
+  });*/
 
-  $('#btn-tambah-komponen').on('click', function(){
+  /*$('#btn-tambah-komponen').on('click', function(){
     if(!$('#koef3').hasClass('hide')){
       $('#koef4').removeClass('hide');
     }
@@ -788,10 +772,10 @@
     if($('#koef2').hasClass('hide')){
       $('#koef2').removeClass('hide');
     }
-  })
+  })*/
 
 
-  $('#btn-validasi').on('click',function(){
+ /* $('#btn-validasi').on('click',function(){
     id    = '{{ $BL_ID }}';
     token = $('#token').val();
     $.confirm({
@@ -819,66 +803,56 @@
       }
     });
     
-  })
+  })*/
 
   function simpanKomponen(){
     var token           = $('#token').val();    
-    var RINCIAN_ID      = $('#id-rincian').val();
-    var REKENING_ID     = $('#rekening-belanja').val();
-    var KOMPONEN_ID     = $('#id-komponen').val();
-    var KOMPONEN_NAMA   = $('#nama-komponen').val();
-    var VOL1            = $('#vol1').val();
-    var SAT1            = $('#satuan-1').val();
-    var VOL2            = $('#vol2').val();
-    var SAT2            = $('#satuan-2').val();
-    var VOL3            = $('#vol3').val();
-    var SAT3            = $('#satuan-3').val();
-    var VOL4            = $('#vol4').val();
-    var SAT4            = $('#satuan-4').val();
-    var RINCIAN_SUB     = $('#sub-belanja').val();
-    var RINCIAN_SUB     = $('#sub-belanja').val();
-    var RINCIAN_KET     = $('#ket-belanja').val();
-    var PEKERJAAN_ID    = $('#jenis-pekerjaan').val();
-    var SUBRINCIAN_ID   = $('#paket-pekerjaan').val();
-    var HARGA           = $('#harga-free-input').val();
-    if($('#pajak').is(':checked')) RINCIAN_PAJAK = 10;
-    else RINCIAN_PAJAK = 0;
-    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5'){
-      KOMPONEN_ID   = '0';
-    }
-    console.log(KOMPONEN_ID);
-    if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SAT1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
+    var AKB_ID          = $('#akb-id').val();
+    var REKENING_ID     = $('#rekening-id').val();
+    var TOTAL           = $('#total').val();
+    var JANUARI         = $('.januari').val();
+    var FEBRUARI        = $('.februari').val();
+    var MARET           = $('.maret').val();
+    var APRIL           = $('.april').val();
+    var MEI             = $('.mei').val();
+    var JUNI            = $('.juni').val();
+    var JULI            = $('.juli').val();
+    var AGUSTUS         = $('.agustus').val();
+    var SEPTEMBER       = $('.september').val();
+    var OKTOBER         = $('.oktober').val();
+    var NOVEMBER        = $('.november').val();
+    var DESEMBER        = $('.desember').val();
+
+
+    if(REKENING_ID == "" || AKB_ID == "" ){
       $.alert('Form harap diisi!');
     }else{
-      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5') && (HARGA == "" || KOMPONEN_NAMA == "")){
-        $.alert('Form harap diisi!');
-      }else{
-        if($('#id-rincian').val() == "") url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/simpan";
-        else url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/ubah";
+
+          url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
         $.ajax({
           url: url,
           type: "POST",
           data: {'_token'         : token,
           'BL_ID'           : '{{ $BL_ID }}', 
-          'RINCIAN_ID'      : RINCIAN_ID, 
+          'AKB_ID'          : AKB_ID, 
           'REKENING_ID'     : REKENING_ID, 
-          'KOMPONEN_ID'     : KOMPONEN_ID,
-          'RINCIAN_PAJAK'   : RINCIAN_PAJAK, 
-          'VOL1'            : VOL1, 
-          'SAT1'            : SAT1, 
-          'VOL2'            : VOL2, 
-          'SAT2'            : SAT2, 
-          'VOL3'            : VOL3, 
-          'SAT3'            : SAT3, 
-          'VOL4'            : VOL4, 
-          'SAT4'            : SAT4, 
-          'HARGA'           : HARGA, 
-          'KOMPONEN_NAMA'   : KOMPONEN_NAMA, 
-          'SUBRINCIAN_ID'   : SUBRINCIAN_ID, 
-          'RINCIAN_KET'     : RINCIAN_KET, 
-          'PEKERJAAN_ID'    : PEKERJAAN_ID},
+          'JANUARI'         : JANUARI, 
+          'FEBRUARI'        : FEBRUARI, 
+          'MARET'           : MARET, 
+          'APRIL'           : APRIL, 
+          'MEI'             : MEI, 
+          'JUNI'            : JUNI, 
+          'JULI'            : JULI, 
+          'AGUSTUS'         : AGUSTUS, 
+          'SEPTEMBER'       : SEPTEMBER, 
+          'OKTOBER'         : OKTOBER, 
+          'NOVEMBER'        : NOVEMBER, 
+          'DESEMBER'        : DESEMBER },
           success: function(msg){
-            if(msg == 0){
+            if(msg == 1){
+              $.alert('Sukses');
+            }
+            /*if(msg == 0){
               $.alert('Lebih Dari Pagu');
             }else if(msg == 99){
               $.alert('Volume Tidak Bisa Ditambahkan');
@@ -913,39 +887,56 @@
               $('#masukan').text(msg);
               $('.tabel-detail').DataTable().ajax.reload();
               $('#btn-validasi').removeClass('disabled');
-            }
+            }*/
+            $('.input-rincian,.input-sidebar').animate({'right':'-1050px'},function(){
+                $('.overlay').fadeOut('fast');
+              });
           }
         });
-      }
+    /*  }
+    }*/
     }
   }
 
-  function ubah(id){
+  function ubah(BL_ID, REKENING_ID){
+        $('#nama-rekening').val('');
+        $('#akb-id').val('');
+        $('#rekening-id').val('');
+        $('#total').val('');
+        $('.januari').val('');
+        $('.februari').val('');
+        $('.maret').val('');
+        $('.april').val('');
+        $('.mei').val('');
+        $('.juni').val('');
+        $('.juli').val('');
+        $('.agustus').val('');
+        $('.september').val('');
+        $('.oktober').val('');
+        $('.november').val('');
+        $('.desember').val('');
+
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/detail/"+id,
+      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/detail/"+BL_ID+"/"+REKENING_ID,
       success : function (data) {
         console.log(data);
-        $('#nama-komponen').val(data['KOMPONEN_NAMA']);
-        $('#paket-pekerjaan').val(data['DATA']['SUBRINCIAN_ID']).trigger('chosen:updated');
-        $('#ket-belanja').val(data['DATA']['RINCIAN_KETERANGAN']);
-        $('#jenis-pekerjaan').val(data['DATA']['PEKERJAAN_ID']).trigger('chosen:updated');
-        id_komponen   = data['KOMPONEN_KODE'].substring(0,1);
-        $('#id-komponen').val(data['DATA']['KOMPONEN_ID']);
-        $('#id-rincian').val(data['DATA']['RINCIAN_ID']);
-        $('#kategori-belanja').val(id_komponen).trigger('chosen:updated');
-        $('#rekening-belanja').find('option').remove().end().append('<option value="'+data['DATA']['REKENING_ID']+'">'+data['REKENING_NAMA']+'</option>').trigger('chosen:updated');
-        if(data['DATA']['RINCIAN_PAJAK'] == 10){
-          $('#pajak').prop('checked',true);
-        }
-        $('#vol1').val(data['VOL1']);
-        $('#satuan-1').find('option').remove().end().append('<option value="'+data['SATUAN1']+'">'+data['SATUAN1']+'</option>').trigger('chosen:updated');
-        $('#vol2').val(data['VOL2']);
-        $('#satuan-2').append('<option value="'+data['SATUAN2']+'" selected>'+data['SATUAN2']+'</option>').trigger('chosen:updated');
-        $('#vol3').val(data['VOL3']);
-        $('#satuan-3').append('<option value="'+data['SATUAN3']+'" selected>'+data['SATUAN3']+'</option>').trigger('chosen:updated');
-        $('#vol4').val(data['VOL4']);
-        $('#satuan-4').append('<option value="'+data['SATUAN4']+'" selected>'+data['SATUAN4']+'</option>').trigger('chosen:updated');
+        $('#nama-rekening').val(data['REKENING_NAMA']);
+        $('#akb-id').val(data['AKB_ID']);
+        $('#rekening-id').val(data['REKENING_ID']);
+        $('#total').val(data['TOTAL']);
+        $('.januari').val(data['AKB_JAN']);
+        $('.februari').val(data['AKB_FEB']);
+        $('.maret').val(data['AKB_MAR']);
+        $('.april').val(data['AKB_APR']);
+        $('.mei').val(data['AKB_MEI']);
+        $('.juni').val(data['AKB_JUN']);
+        $('.juli').val(data['AKB_JUL']);
+        $('.agustus').val(data['AKB_AUG']);
+        $('.september').val(data['AKB_SEP']);
+        $('.oktober').val(data['AKB_OKT']);
+        $('.november').val(data['AKB_NOV']);
+        $('.desember').val(data['AKB_DES']);
       }
     });
     $('.overlay').fadeIn('fast',function(){
@@ -953,7 +944,7 @@
       $("html, body").animate({ scrollTop: 0 }, "slow");
     });
   }
-
+/*
   function hapus(id){
     var token        = $('#token').val();    
     $.confirm({
@@ -1090,7 +1081,7 @@
         }
       }
     }); 
-  }
+  }*/
 
   $('.open-rincian').on('click',function(){
     $(document).ready(function(){
@@ -1124,7 +1115,8 @@
           $('.overlay').fadeOut('fast');
         });
     }); 
-  function getpagu(){
+
+  /*function getpagu(){
     $.ajax({
         url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu/{{$bl->BL_ID}}",
         type: "GET",
@@ -1198,6 +1190,6 @@
     $('#sisa-skpd_').val(sisa);
     $('#rincian-skpd').val(anggaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     $('#sisa-skpd').val(sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")); 
-  }
+  }*/
 </script>
 @endsection
