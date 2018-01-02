@@ -48,6 +48,7 @@ use App\Model\RincianArsipPerubahan;
 use App\Model\Urgensi;
 use App\Model\Realisasi;
 use App\Model\RincianLog;
+use App\Model\AKB_BL;
 
 class blController extends Controller
 {
@@ -249,12 +250,95 @@ class blController extends Controller
         return View('budgeting.belanja-langsung.detail_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact]);
     }
 
+    public function showAKB($tahun,$status,$id){
+        //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
+        $now = date('Y-m-d H:m:s');
+        if($status == 'murni')
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
+        else
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
+            $thp    = 1;
+        }else{
+            $thp    = 0;
+        }
+        if($status == 'murni') $bl         = BL::where('BL_TAHUN',$tahun)->where('BL_ID',$id)->first();
+        else $bl         = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_ID',$id)->first();
+
+        $pekerjaan  = Pekerjaan::all();
+        $satuan     = Satuan::all();
+        if($status == 'murni')
+        $rincian    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+        else
+        $rincian    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+        $staff      = Staff::where('BL_ID',$id)->get();
+        $mod        = 0;
+        foreach($staff as $s){
+            if($s->USER_ID == Auth::user()->id) $mod = 1;
+        }
+
+        if($status == 'murni') $tag         = BL::where('BL_TAHUN',$tahun)->where('BL_ID',$id)->value('BL_TAG');
+        else $tag         = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_ID',$id)->value('BL_TAG');
+        $tag         = str_replace('{', '', $tag);
+        $tag         = str_replace('}', '', $tag);
+        $tag         = explode(',', $tag);            
+        $tagView     = array();
+        $i           = 0;
+        if($status == 'murni') $subrincian  = Subrincian::where('BL_ID',$id)->orderBy('SUBRINCIAN_NAMA')->get();
+        else $subrincian  = SubrincianPerubahan::where('BL_ID',$id)->orderBy('SUBRINCIAN_NAMA')->get();
+        if($tag){
+            foreach($tag as $t){
+                $tagView[$i]    = Tag::where('TAG_ID',$t)->value('TAG_NAMA');
+                $i++;
+            }
+        }
+
+
+        $logRincian = RincianLog::where('BL_ID',$id)->first();
+        if($logRincian != ''){
+            $log_r = 1; 
+        }else{
+            $log_r = 0; 
+        }
+
+        // $totalRKPD  = RekapRincian::where('BL_ID',$id)->whereHas('tahapan',function($q) use ($tahun){
+        //                     $q->where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RKPD');
+        //                 })->sum('RINCIAN_TOTAL');
+        $totalRKPD  = 0;
+        // $totalPPAS  = RekapRincian::where('BL_ID',$id)->whereHas('tahapan',function($q) use ($tahun){
+        //                     $q->where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','KUA/PPAS');
+        //                 })->sum('RINCIAN_TOTAL');
+        $totalPPAS  = 0;
+        // $totalRAPBD = RekapRincian::where('BL_ID',$id)->whereHas('tahapan',function($q) use ($tahun){
+        //                     $q->where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD');
+        //                 })->sum('RINCIAN_TOTAL');
+        $totalRAPBD = 0;
+        // $totalAPBD = RekapRincian::where('BL_ID',$id)->whereHas('tahapan',function($q) use ($tahun){
+        //                     $q->where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','APBD');
+        //                 })->sum('RINCIAN_TOTAL');
+        $totalAPBD  = 0;
+        $program    = Kegiatan::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->value('PROGRAM_ID');
+        $outcome    = Outcome::where('PROGRAM_ID',$program)->get();
+        $impact     = Impact::where('PROGRAM_ID',$program)->get();
+        $output     = Output::where('BL_ID',$id)->get();
+
+        if($status == 'murni')
+        return View('budgeting.belanja-langsung.akb',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r]);
+        else
+        return View('budgeting.belanja-langsung.detail_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact]);
+    }
+
     public function showDetailArsip($tahun,$status,$id){
         return View('budgeting.belanja-langsung.detailarsip',['tahun'=>$tahun,'status'=>$status,'bl'=>$id]);
     }
 
     public function showRincian($tahun,$status,$id){
         if($status == 'murni') return $this->showRincianMurni($tahun,$status,$id);
+        else return $this->showRincianPerubahan($tahun,$status,$id);
+    }
+
+    public function showDataAKB($tahun,$status,$id){
+        if($status == 'murni') return $this->showDataAKBMurni($tahun,$status,$id);
         else return $this->showRincianPerubahan($tahun,$status,$id);
     }
 
@@ -552,6 +636,88 @@ class blController extends Controller
         return $view;
     }
 
+    public function showDataAKBMurni($tahun,$status,$id){
+        //$now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        $now = date('Y-m-d H:m:s');
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
+        if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
+            $thp    = 1;
+        }else{
+            $thp    = 0;
+        }
+
+        $data       = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_AKB_BL','DAT_RINCIAN.BL_ID','=','DAT_AKB_BL.BL_ID')
+                    ->where('DAT_RINCIAN.BL_ID',$id)
+                    ->groupBy('DAT_RINCIAN.BL_ID', 'DAT_RINCIAN.REKENING_ID', 'REKENING_KODE','REKENING_NAMA', "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES", "AKB_ID" )
+                    ->orderBy('REKENING_KODE')
+                    ->selectRaw(' "AKB_ID", "DAT_RINCIAN"."BL_ID", "DAT_RINCIAN"."REKENING_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS TOTAL, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->get();
+
+
+        $staff      = Staff::where('BL_ID',$id)->get();
+        $mod        = 0;
+        foreach($staff as $s){
+            if($s->USER_ID == Auth::user()->id) $mod = 1;
+        }
+        $view       = array();
+        $i         = 1;
+        $pajak      = '';
+        foreach ($data as $data) {
+            if((( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8 )and Auth::user()->active == 1){
+                if($data->REKENING_ID == 0 ){
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->AKB_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                    <li class="divider"></li><li><a onclick="return info(\''.$data->AKB_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                }else{
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                <li class="divider"></li><li><a onclick="return info(\''.$data->AKB_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                }
+            }else{
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->AKB_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
+            }
+
+            if(Auth::user()->level == 8){
+                 $checkbox = '<div class="m-t-n-lg">
+                                  <label class="i-checks">
+                                    <input type="checkbox" value="'.$data->AKB_ID.'" class="cb" id="cb-'.$data->AKB_ID.'"/><i></i>
+                                  </label>
+                            </div>';
+                $no        = $checkbox.$no;
+
+            }
+
+            $tri1 = $data->AKB_JAN + $data->AKB_FEB + $data->AKB_MAR;
+            $tri2 = $data->AKB_APR + $data->AKB_MEI + $data->AKB_JUN;
+            $tri3 = $data->AKB_JUL + $data->AKB_AUG + $data->AKB_SEP;
+            $tri4 = $data->AKB_OKT + $data->AKB_NOV + $data->AKB_DES;
+
+            array_push($view, array( 'NO'             =>$no,
+                                     'REKENING'       =>$data->REKENING_KODE.'<br><p class="text-orange">'.$data->REKENING_NAMA.'</p>',
+                                     'TOTAL'          =>number_format($data->TOTAL,0,'.',','),
+                                     'JANUARI'        =>number_format($data->AKB_JAN,0,'.',','),
+                                     'FEBRUARI'       =>number_format($data->AKB_FEB,0,'.',','),
+                                     'MARET'          =>number_format($data->AKB_MAR,0,'.',','),
+                                     'APRIL'          =>number_format($data->AKB_APR,0,'.',','),
+                                     'MEI'            =>number_format($data->AKB_MEI,0,'.',','),
+                                     'JUNI'           =>number_format($data->AKB_JUN,0,'.',','),
+                                     'JULI'           =>number_format($data->AKB_JUL,0,'.',','),
+                                     'AGUSTUS'        =>number_format($data->AKB_AUG,0,'.',','),
+                                     'SEPTEMBER'      =>number_format($data->AKB_SEP,0,'.',','),
+                                     'OKTOBER'        =>number_format($data->AKB_OKT,0,'.',','),
+                                     'NOVEMBER'       =>number_format($data->AKB_NOV,0,'.',','),
+                                     'DESEMBER'       =>number_format($data->AKB_DES,0,'.',','),
+                                     'TRIWULAN1'      =>number_format($tri1,0,'.',','),
+                                     'TRIWULAN2'      =>number_format($tri2,0,'.',','),
+                                     'TRIWULAN3'      =>number_format($tri3,0,'.',','),
+                                     'TRIWULAN4'      =>number_format($tri4,0,'.',','),
+                                 ));
+        }
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+        return $view;
+    }
+
+
     public function detailRincian($tahun,$status,$id){
         if($status == 'murni')
         $data   = Rincian::where('RINCIAN_ID',$id)->first();
@@ -595,6 +761,47 @@ class blController extends Controller
                     'PEKERJAAN_NAMA'=> $data->pekerjaan->PEKERJAAN_NAMA];
         return $out;
     }
+
+    public function detailAKB($tahun,$status,$bl_id,$rek_id){
+        if($status == 'murni'){
+        $data   = AKB_BL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BL.REKENING_ID')
+                        ->join('BUDGETING.DAT_RINCIAN','DAT_RINCIAN.BL_ID','=','DAT_AKB_BL.BL_ID')
+                        ->where('DAT_AKB_BL.BL_ID',$bl_id)
+                        ->where('DAT_AKB_BL.REKENING_ID',$rek_id)->first();
+
+            $rincian = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                                ->where('BL_ID', $bl_id)
+                                ->where('REF_REKENING.REKENING_ID', $rek_id)
+                                ->groupBy("REKENING_KODE","REKENING_NAMA")
+                                ->selectRaw('"REKENING_KODE","REKENING_NAMA", SUM("RINCIAN_TOTAL") as total')
+                                ->first();
+        }
+        else
+        $data   = AKB_BL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BL.REKENING_ID')
+                        ->where('AKB_ID',$id)->first();
+
+        $out    = [ 'DATA'          => $data,
+                    'REKENING_KODE' => $rincian->REKENING_KODE,
+                    'REKENING_NAMA' => $rincian->REKENING_NAMA,
+                    'TOTAL'         => number_format($rincian->total,0,'.',','),
+                    'AKB_JAN'       => $data->AKB_JAN,
+                    'AKB_FEB'       => $data->AKB_FEB,
+                    'AKB_MAR'       => $data->AKB_MAR,
+                    'AKB_APR'       => $data->AKB_APR,
+                    'AKB_MEI'       => $data->AKB_MEI,
+                    'AKB_JUN'       => $data->AKB_JUN,
+                    'AKB_JUL'       => $data->AKB_JUL,
+                    'AKB_AUG'       => $data->AKB_AUG,
+                    'AKB_SEP'       => $data->AKB_SEP,
+                    'AKB_OKT'       => $data->AKB_OKT,
+                    'AKB_NOV'       => $data->AKB_NOV,
+                    'AKB_DES'       => $data->AKB_DES,
+                    'REKENING_ID'   => $data->REKENING_ID,
+                    'AKB_ID'        => $data->AKB_ID,
+                    ];
+        return $out;
+    }
+
     //ADD
     public function add($tahun,$status){
         $skpd           = $this->getSKPD($tahun);
@@ -1610,6 +1817,11 @@ class blController extends Controller
         else return $this->submitRincianEditPerubahan($tahun,$status);
     }
 
+    public function submitAKBEdit($tahun,$status){
+        if($status == 'murni') return $this->submitAKBEditMurni($tahun,$status);
+        else return $this->submitAKBEditPerubahan($tahun,$status);
+    }
+
     public function submitRincianEditMurni($tahun,$status){
 
         $tahapan = Tahapan::where('TAHAPAN_SELESAI',0)->first();
@@ -2029,6 +2241,56 @@ class blController extends Controller
             return number_format($totalrincian,0,'.',',');
             // return $this->setpaguBL(Input::get('BL_ID'));
         }
+    }
+
+
+    public function submitAKBEditMurni($tahun,$status){
+
+        $tahapan = Tahapan::where('TAHAPAN_SELESAI',0)->first();
+
+        $get_akb     = AKB_BL::where('BL_ID',Input::get('BL_ID'))
+                         ->where('REKENING_ID',Input::get('REKENING_ID'))
+                         ->first();
+
+        if($get_akb == null){
+            $akb = new AKB_BL;
+            $akb->BL_ID       = Input::get('BL_ID');
+            $akb->REKENING_ID = Input::get('REKENING_ID');
+            $akb->AKB_JAN     = Input::get('JANUARI');
+            $akb->AKB_FEB     = Input::get('FEBRUARI');
+            $akb->AKB_MAR     = Input::get('MARET');
+            $akb->AKB_APR     = Input::get('APRIL');
+            $akb->AKB_MEI     = Input::get('MEI');
+            $akb->AKB_JUN     = Input::get('JUNI');
+            $akb->AKB_JUL     = Input::get('JULI');
+            $akb->AKB_AUG     = Input::get('AGUSTUS');
+            $akb->AKB_SEP     = Input::get('SEPTEMBER');
+            $akb->AKB_OKT     = Input::get('OKTOBER');
+            $akb->AKB_NOV     = Input::get('NOVEMBER');
+            $akb->AKB_DES     = Input::get('DESEMBER');
+
+            return 1;
+        }     
+        else{
+            AKB_BL::where('AKB_ID',Input::get('AKB_ID'))
+                        ->update([
+                            'AKB_JAN'        => Input::get('JANUARI'),
+                            'AKB_FEB'        => Input::get('FEBRUARI'),
+                            'AKB_MAR'        => Input::get('MARET'),
+                            'AKB_APR'        => Input::get('APRIL'),
+                            'AKB_MEI'        => Input::get('MEI'),
+                            'AKB_JUN'        => Input::get('JUNI'),
+                            'AKB_JUL'        => Input::get('JULI'),
+                            'AKB_AUG'        => Input::get('AGUSTUS'),
+                            'AKB_SEP'        => Input::get('SEPTEMBER'),
+                            'AKB_OKT'        => Input::get('OKTOBER'),
+                            'AKB_NOV'        => Input::get('NOVEMBER'),
+                            'AKB_DES'        => Input::get('DESEMBER'),
+                            ]);   
+                             
+             return 2;                
+        }               
+
     }
 
     //DELETE
@@ -2624,12 +2886,14 @@ class blController extends Controller
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
+                <li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>
                 <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
+                <li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>
                 <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
