@@ -153,8 +153,7 @@
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">PAGU SKPD</label>
             <div class="col-sm-9">
-             <!--  <input type="text" id="nominal10" class="form-control pagu" onkeyup="SetNumber('nominal10')" onmouseout="SetNumber('nominal10')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Pagu" name="pagu"> -->
-             <input type="text" class="form-control" placeholder="Masukan Pagu SKPD" name="pagu" id="pagu" value="">
+             <input type="text" class="form-control" placeholder="Masukan Pagu SKPD" name="pagu" id="pagu" value="" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div> 
           </div>
 

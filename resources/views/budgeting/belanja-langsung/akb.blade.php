@@ -170,6 +170,7 @@
                 @endif
                 @if(Auth::user()->level == 8)
                 <a class="pull-right btn m-t-n-sm btn-warning" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/detail/arsip/{{$BL_ID}}" target="_blank"><i class="fa fa-archive"></i></a>
+                 <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah AKB</button>
                 @endif
                 <!-- @if(($BL_ID == 5718 ) 
                     and $mod == 1 
@@ -446,7 +447,7 @@
 
 
 <div class="overlay"></div>
-<div class="bg-white wrapper-lg input-sidebar input-rincian">
+<!-- <div class="bg-white wrapper-lg input-sidebar input-rincian">
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
@@ -472,7 +473,8 @@
     <div class="form-group" id="koef1">
       <label for="no_spp" class="col-md-3">Januari</label>          
       <div class="col-sm-5">
-        <input type="text" id="nominal1" class="form-control januari" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+        
+        <input type="text" class="form-control" placeholder="Nominal Anggaran" id="januari" onkeypress="return event.charCode >= 48 && event.charCode <= 57" >        
       </div> 
       
     </div>
@@ -570,7 +572,262 @@
     <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Tambah Anggaran Kas Bulanan</a>
   </div>
 </form>
-</div>
+</div> -->
+
+
+<div class="bg-white wrapper-lg input-sidebar input-btl">
+<a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
+    <form id="form-urusan" class="form-horizontal">
+      <div class="input-wrapper">
+        <h5 id="judul-form">Tambah Anggaran Kas Bulanan</h5>
+          <div class="form-group">
+            <label for="kode_urusan" class="col-md-3">Kode Rekening</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Masukan Kode Rekening" name="kode_rek" id="kode_rek" value="" readonly="">          
+              <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
+              <input type="hidden" class="form-control" name="id_rek" id="id_rek">          
+              <input type="hidden" class="form-control" name="id_akb" id="id_akb">          
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Nama Rekening</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Masukan Nama Rekening" name="nama_rek" id="nama_rek" value="" readonly="">          
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Total Nominal</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Total Nominal" name="total" id="total" value="" readonly="">
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Januari</label>
+            <div class="col-sm-9">
+               <input type="text" class="form-control" placeholder="Nominal" name="jan" id="jan" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Februari</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="feb" id="feb" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Maret</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="mar" id="mar" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">            
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">April</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="apr" id="apr" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">        
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Mei</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="mei" id="mei" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">         
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Juni </label>
+            <div class="col-sm-9">
+             <input type="text" class="form-control" placeholder="Nominal" name="jun" id="jun" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Juli </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="jul" id="jul" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Agustus </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="agu" id="agu" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">September </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="sep" id="sep" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Oktober </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="okt" id="okt" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">November </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="nov" id="nov" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Desember </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="des" id="des" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+         
+
+          <hr class="m-t-xl">
+         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanAKB()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+      </div>
+    </form>
+  </div>
+
+
+<div class="bg-white wrapper-lg input-sidebar input-btl">
+<a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
+    <form id="form-urusan" class="form-horizontal">
+      <div class="input-wrapper">
+        <h5 id="judul-form">Tambah Anggaran Kas Bulanan</h5>
+          <div class="form-group">
+            <label for="kode_urusan" class="col-md-3">Kode Rekening</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Masukan Kode Rekening" name="kode_rek" id="kode_rek" value="" readonly="">          
+              <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
+              <input type="hidden" class="form-control" name="id_rek" id="id_rek">          
+              <input type="hidden" class="form-control" name="id_akb" id="id_akb">          
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-3">Rekening</label>
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="jenis-pekerjaan" required="">
+                <option value="">Silahkan Pilih Rek</option>
+                @foreach($rincian_rek as $rrek)
+                <option value="{{ $rrek->REKENING_ID }}">{{ $rrek->REKENING_KODE }}-{{ $rrek->REKENING_NAMA }}</option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Nama Rekening</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Masukan Nama Rekening" name="nama_rek" id="nama_rek" value="" readonly="">          
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Total Nominal</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Total Nominal" name="total" id="total" value="" readonly="">
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Januari</label>
+            <div class="col-sm-9">
+               <input type="text" class="form-control" placeholder="Nominal" name="jan" id="jan" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Februari</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="feb" id="feb" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Maret</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="mar" id="mar" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">            
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">April</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="apr" id="apr" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">        
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Mei</label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="mei" id="mei" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">         
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Juni </label>
+            <div class="col-sm-9">
+             <input type="text" class="form-control" placeholder="Nominal" name="jun" id="jun" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Juli </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="jul" id="jul" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Agustus </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="agu" id="agu" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">September </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="sep" id="sep" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Oktober </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="okt" id="okt" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">November </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="nov" id="nov" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_urusan" class="col-md-3">Desember </label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Nominal" name="des" id="des" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+            </div> 
+          </div>
+         
+
+          <hr class="m-t-xl">
+         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanAKB()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+      </div>
+    </form>
+  </div>
+
 </div>
 <!-- 
 <div class="plih-komponen modal fade " id="kode-komponen" tabindex="-1" role="dialog">
@@ -675,11 +932,147 @@
 </div> -->
 
 </div>
-<input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+
 @endsection
 
 @section('plugin')
+
+
 <script type="text/javascript">
+  function simpanAKB(){
+    var akb_id    = $('#id_akb').val();
+    var rek_id    = $('#id_rek').val();
+    var jan       = $('#jan').val();
+    var feb       = $('#feb').val();
+    var mar       = $('#mar').val();
+    var apr       = $('#apr').val();
+    var mei       = $('#mei').val();
+    var jun       = $('#jun').val();
+    var jul       = $('#jul').val();
+    var agu       = $('#agu').val();
+    var sep       = $('#sep').val();
+    var okt       = $('#okt').val();
+    var nov       = $('#nov').val();
+    var des       = $('#des').val();
+    var bl_id     = {{$bl->BL_PAGU}};
+    var token     = $('#token').val();
+    //alert(pagu);
+    if(rek_id == "" ){
+      $.alert('Form harap diisi!');
+    }else{
+      if(akb_id == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/simpan";
+      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
+      $.ajax({
+        url: uri,
+        type: "POST",
+        data: {'_token' : token,
+              'akb_id'  : akb_id, 
+              'bl_id'   : bl_id, 
+              'rek_id'  : rek_id, 
+              'jan'     : jan, 
+              'feb'     : feb, 
+              'mar'     : mar, 
+              'mei'     : mei, 
+              'apr'     : apr, 
+              'jun'     : jun, 
+              'jul'     : jul, 
+              'agu'     : agu, 
+              'sep'     : sep, 
+              'okt'     : okt, 
+              'nov'     : nov, 
+              'des'     : des, 
+              'tahun'   : '{{$tahun}}' 
+            },
+        success: function(msg){
+            if(msg == 1){
+              $('#judul-form').text('Tambah AKB');        
+              $('#jan').val('');
+              $('#feb').val('');
+              $('#mar').val('');
+              $('#apr').val('');
+              $('#mei').val('');
+              $('#jun').val('');
+              $('#jul').val('');
+              $('#agu').val('');
+              $('#sep').val('');
+              $('#okt').val('');
+              $('#nov').val('');
+              $('#des').val('');
+              $('.table').DataTable().ajax.reload();              
+              $.alert({
+                title:'Info',
+                content: 'Data berhasil disimpan',
+                autoClose: 'ok|1000',
+                buttons: {
+                    ok: function () {
+                      $('.input-spp,.input-spp-langsung,.input-sidebar').animate({'right':'-1050px'},function(){
+                        $('.overlay').fadeOut('fast');
+                        $('.tabel-detail').DataTable().ajax.reload();
+                      });                      
+                    }
+                }
+              });
+            }else{
+              $.alert('Data gagal di input !');
+            }
+          }
+        });
+    }
+  }
+
+  function ubah(BL_ID, REKENING_ID){
+    $('#judul-form').text('Ubah Anggaran Kas Bulanan');
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/detail/"+BL_ID+"/"+REKENING_ID,
+      success : function (data) {
+        console.log(data);
+        $('#id_akb').val(data['AKB_ID']);
+        $('#nama_rek').val(data['REKENING_NAMA']);
+        $('#id_rek').val(data['REKENING_ID']);
+        $('#kode_rek').val(data['REKENING_KODE']);
+        $('#total').val(data['TOTAL']);
+        $('#jan').val(data['AKB_JAN']);
+        $('#feb').val(data['AKB_FEB']);
+        $('#mar').val(data['AKB_MAR']);
+        $('#apr').val(data['AKB_APR']);
+        $('#mei').val(data['AKB_MEI']);
+        $('#jun').val(data['AKB_JUN']);
+        $('#jul').val(data['AKB_JUL']);
+        $('#agu').val(data['AKB_AUG']);
+        $('#sep').val(data['AKB_SEP']);
+        $('#okt').val(data['AKB_OKT']);
+        $('#nov').val(data['AKB_NOV']);
+        $('#des').val(data['AKB_DES']);
+      }
+    });
+    $('.overlay').fadeIn('fast',function(){
+      $('.input-btl').animate({'right':'0'},"linear");  
+      $("html, body").animate({ scrollTop: 0 }, "slow");
+    });
+  }
+
+  $('a.tutup-form').click(function(){
+        $('#judul-form').text('Tambah AKB');        
+        $('#jan').val('');
+        $('#feb').val('');
+        $('#mar').val('');
+        $('#apr').val('');
+        $('#mei').val('');
+        $('#jun').val('');
+        $('#jul').val('');
+        $('#agu').val('');
+        $('#sep').val('');
+        $('#okt').val('');
+        $('#nov').val('');
+        $('#des').val('');
+  }); 
+
+
+</script>
+
+
+<!-- <script type="text/javascript">
   $(document).ready(function(){
     $("#app").trigger('click');
     interval = null;
@@ -804,13 +1197,80 @@
     });
     
   })*/
+   function simpanSKPD(){
+    var kode_skpd       = $('#kode_skpd').val();
+    var nama_skpd       = $('#nama_skpd').val();
+    var kepala_nip      = $('#kepala_nip').val();
+    var kepala_skpd     = $('#kepala_skpd').val();
+    var pangkat         = $('#pangkat').val();
+    var bendahara_nip   = $('#bendahara_nip').val();
+    var bendahara_skpd  = $('#bendahara_skpd').val();
+    var alamat          = $('#alamat').val();
+    var pagu            = $('#pagu').val();
+    var id_skpd         = $('#id_skpd').val();
+    //var pagu            = $('.pagu').val();
+    var token           = $('#token').val();
+    //alert(pagu);
+    if(kode_skpd == "" || nama_skpd == "" || kepala_nip == "" || pangkat == "" || kepala_skpd == "" || bendahara_nip == "" || pagu == ""){
+      $.alert('Form harap diisi!');
+    }else{
+      if(id_skpd == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/skpd/add/submit";
+      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/skpd/edit/submit";
+      $.ajax({
+        url: uri,
+        type: "POST",
+        data: {'_token'         : token,
+              'kode_skpd'       : kode_skpd, 
+              'nama_skpd'       : nama_skpd, 
+              'kepala_nip'      : kepala_nip, 
+              'kepala_skpd'     : kepala_skpd, 
+              'pangkat'         : pangkat, 
+              'alamat'          : alamat, 
+              'bendahara_nip'   : bendahara_nip, 
+              'bendahara_skpd'  : bendahara_skpd, 
+              'pagu'            : pagu,
+              'tahun'           : '{{$tahun}}', 
+              'id_skpd'         : id_skpd},
+        success: function(msg){
+            if(msg == 1){
+              $('#judul-form').text('Tambah SKPD');        
+              $('#kode_skpd').val('');
+              $('#nama_skpd').val('');
+              $('#kepala_nip').val('');
+              $('#kepala_skpd').val('');
+              $('#pangkat').val('');
+              $('#alamat').val('');
+              $('#bendahara_nip').val('');
+              $('#bendahara_skpd').val('');
+              $('#pagu').val('');
+              $('.table').DataTable().ajax.reload();              
+              $.alert({
+                title:'Info',
+                content: 'Data berhasil disimpan',
+                autoClose: 'ok|1000',
+                buttons: {
+                    ok: function () {
+                      $('.input-spp,.input-spp-langsung,.input-sidebar').animate({'right':'-1050px'},function(){
+                        $('.overlay').fadeOut('fast');
+                      });                      
+                    }
+                }
+              });
+            }else{
+              $.alert('Data telah tersedia!');
+            }
+          }
+        });
+    }
+  }
+
 
   function simpanKomponen(){
     var token           = $('#token').val();    
     var AKB_ID          = $('#akb-id').val();
     var REKENING_ID     = $('#rekening-id').val();
     var TOTAL           = $('#total').val();
-    var JANUARI         = $('.januari').val();
+    var JANUARI         = $('#januari').val();
     var FEBRUARI        = $('.februari').val();
     var MARET           = $('.maret').val();
     var APRIL           = $('.april').val();
@@ -833,7 +1293,7 @@
       $.alert('Form harap diisi!');
     }else{
 
-          url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
+          url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsungz/akb/ubah";
         $.ajax({
           url: url,
           type: "POST",
@@ -853,6 +1313,7 @@
           'OKTOBER'         : OKTOBER, 
           'NOVEMBER'        : NOVEMBER, 
           'DESEMBER'        : DESEMBER },
+          
           success: function(msg){
             if(msg == 0){
               $.alert('Iput AKB Gagal');
@@ -912,7 +1373,7 @@
         $('#akb-id').val('');
         $('#rekening-id').val('');
         $('#total').val('');
-        $('.januari').val('');
+        $('#januari').val('');
         $('.februari').val('');
         $('.maret').val('');
         $('.april').val('');
@@ -934,7 +1395,7 @@
         $('#akb-id').val(data['AKB_ID']);
         $('#rekening-id').val(data['REKENING_ID']);
         $('#total').val(data['TOTAL']);
-        $('.januari').val(data['AKB_JAN']);
+        $('#januari').val(data['AKB_JAN']);
         $('.februari').val(data['AKB_FEB']);
         $('.maret').val(data['AKB_MAR']);
         $('.april').val(data['AKB_APR']);
@@ -953,7 +1414,7 @@
       $("html, body").animate({ scrollTop: 0 }, "slow");
     });
   }
-/*
+
   function hapus(id){
     var token        = $('#token').val();    
     $.confirm({
@@ -1090,7 +1551,7 @@
         }
       }
     }); 
-  }*/
+  }
 
   $('.open-rincian').on('click',function(){
     $(document).ready(function(){
@@ -1125,7 +1586,7 @@
         });
     }); 
 
-  /*function getpagu(){
+  function getpagu(){
     $.ajax({
         url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu/{{$bl->BL_ID}}",
         type: "GET",
@@ -1199,6 +1660,7 @@
     $('#sisa-skpd_').val(sisa);
     $('#rincian-skpd').val(anggaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     $('#sisa-skpd').val(sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")); 
-  }*/
-</script>
+  }
+</script> -->
+
 @endsection
