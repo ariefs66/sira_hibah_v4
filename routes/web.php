@@ -63,7 +63,10 @@ Route::post('/main/{tahun}/{status}/belanja-langsung/kuncirincian', 'Budgeting\b
 Route::post('/main/{tahun}/{status}/belanja-langsung/kuncirincianskpd', 'Budgeting\blController@kuncirincianskpd');
 Route::post('/main/{tahun}/{status}/belanja-langsung/setStaff', 'Budgeting\blController@setStaff');
 Route::post('/main/{tahun}/{status}/belanja-langsung/rincian-musrenbang/simpan', 'Budgeting\blController@setMusren');
-Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@submitAKBEdit');
+//Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@submitAKBEdit');
+
+Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@updateAKB');
+
 
 
 Route::post('/main/{tahun}/{status}/belanja-langsung/simpanpaket', 'Budgeting\blController@setPaket');
