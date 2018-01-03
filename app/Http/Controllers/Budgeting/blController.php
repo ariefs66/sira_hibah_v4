@@ -79,6 +79,7 @@ class blController extends Controller
         }
         $bl         = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
         $skpd_      = $this->getSKPD($tahun);
+
         $user       = User::whereHas('userbudget', function($q) use ($skpd_){
                             $q->where('SKPD_ID',$skpd_);
                         })->where('app',3)->where('level',1)->get();
@@ -100,18 +101,20 @@ class blController extends Controller
         if(Auth::user()->level == 1 or Auth::user()->level == 2){
             $blpagu    = BL::whereHas('subunit',function($q) use ($id){
                                     $q->where('SKPD_ID',$id);
-                            })->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
+                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
             $pagu      = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
-            $rincian   = Rincian::whereHas('bl',function($r) use($id){
+            $rincian   = Rincian::whereHas('bl',function($r) use($id, $tahun){
                             $r->whereHas('subunit',function($s) use ($id){
                                     $s->where('SKPD_ID',$id);
-                            });
+                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0);
                         })->sum('RINCIAN_TOTAL');
         }else{
             $blpagu     = 0;
             $pagu       = 0;
             $rincian    = 0;
         }
+
+
 
         return View('budgeting.belanja-langsung.index',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
     }
