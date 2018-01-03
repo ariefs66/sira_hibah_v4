@@ -2847,22 +2847,23 @@ class blController extends Controller
                 //}
             }
 
+            //kunci rincian
             if($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1){
                 //if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
                 if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
-                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
-                    <i></i></label>';
-                    /*'<label class="i-switch bg-danger m-t-xs m-r">
-                    <input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'"><i></i></label>';*/
+                    /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
+                    <i></i></label>';*/
+                    $rincian    ='<label class="i-switch bg-danger m-t-xs m-r">
+                    <input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'"><i></i></label>';
                 }else{
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
                 }                
             }else{
                 if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
+                    /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
+                    <i></i></label>';*/
                     $rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
-                    <i></i></label>';
-                    /*'<label class="i-switch bg-danger m-t-xs m-r">
-                    <input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked="checked"><i></i></label>';*/
+                    <input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked="checked"><i></i></label>';
                 }else{
                     $rincian    = '<span class="text-danger"><i class="fa fa-lock kunci-rincian"></i></span>';
                 }             
