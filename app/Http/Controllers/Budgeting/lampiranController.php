@@ -86,6 +86,7 @@ class lampiranController extends Controller
                 $rek4        = $rek[$q];
                 $rek3        = $reke[$s];
 
+
                 $totalrek[$q]= Rincian::whereHas('rekening', function($x) use ($rek4){
                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
                 })->where('BL_ID',$id)->sum('RINCIAN_TOTAL');
@@ -101,6 +102,8 @@ class lampiranController extends Controller
                                 ->orderBy('SUBRINCIAN_ID')
                                 ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK"')
                                 ->get();
+
+
 
                 $k = 0;
                 foreach($paket[$i] as $p){
