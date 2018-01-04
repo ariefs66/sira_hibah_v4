@@ -46,16 +46,16 @@ class staffController extends Controller
         }elseif(Auth::user()->level == 8){
             $data   = UserBudget::whereHas('user',function($q){
                                 $q->where('level',2);
-                        })->orderBy('USER_ID')->get();
+                        })->where('TAHUN',$tahun)->orderBy('USER_ID')->get();
         }
 
     	$view 	= array();
     	$i 		= 1;
     	foreach ($data as $data) {
     		$aksi 	= '<div class="action visible pull-right">
-    						<a onclick="return ubah(\''.$data->USER_ID.'\')" class="action-edit"><i class="mi-edit"></i></a>
-    						<a onclick="return reset(\''.$data->USER_ID.'\')" class="action-edit"><i class="fa fa-retweet"></i></a>
-    						<a onclick="return hapus(\''.$data->USER_ID.'\')" class="action-delete"><i class="mi-trash"></i></a>
+    						<a onclick="return ubah(\''.$data->USER_ID.'\')" class="action-edit" title="edit skpd"><i class="mi-edit"></i></a>
+    						<a onclick="return reset(\''.$data->USER_ID.'\')" class="action-edit" title="riset password"><i class="fa fa-retweet"></i></a>
+    						<a onclick="return hapus(\''.$data->USER_ID.'\')" class="action-delete" title="delete skpd"><i class="mi-trash"></i></a>
     					</div>';
 
             if(Auth::user()->level == 2 || Auth::user()->level == 8){

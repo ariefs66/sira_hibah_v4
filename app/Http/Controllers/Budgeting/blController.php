@@ -1546,8 +1546,10 @@ class blController extends Controller
 
     public function setPaket($tahun,$status){
         if($status == 'murni'){
+
             $subrincian     = new Subrincian;
             $subrincian->BL_ID              = Input::get('BL_ID');
+            $subrincian->SUBRINCIAN_ID      = Subrincian::max('SUBRINCIAN_ID')+1;
             $subrincian->SUBRINCIAN_NAMA    = Input::get('SUBRINCIAN_NAMA');
             $subrincian->USER_CREATED       = Auth::user()->id;
             $subrincian->TIME_CREATED       = Carbon\Carbon::now();

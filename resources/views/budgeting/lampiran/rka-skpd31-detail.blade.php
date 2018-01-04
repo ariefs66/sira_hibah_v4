@@ -121,6 +121,18 @@
 		<td class="border">2</td>
 		<td class="border">3</td>
 	</tr>
+
+	<tr>
+		<td class="border-rincian kiri border"> 6</td>
+		<td class="border-rincian border"> <b>Pembiayaan Daerah</b>  </td>
+		<td class="border-rincian kanan border">,00</td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian kiri border"> 6.1</td>
+		<td class="border-rincian border"> <b> &nbsp; Penerimaan Pembiayaan Daerah</b>  </td>
+		<td class="border-rincian kanan border">,00</td>
+	</tr>
 	
 	@php $total=0; @endphp
 

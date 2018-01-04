@@ -135,13 +135,45 @@
 	@php $total=0; @endphp
 
 	@foreach($pendapatan as $pen)
+		@php $total += $pen->PENDAPATAN_TOTAL; @endphp
+	@endforeach
 	<tr>
-		<td class="border-rincian kiri border"><b>{{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.1.{{$pen->rekening->REKENING_KODE}}</b></td>
-		<td class="border-rincian border"> {{$pen->rekening->REKENING_NAMA}} </td>
+		<td class="border-rincian kiri border"><b>4</b></td>
+		<td class="border-rincian border"> <b> Pendapatan </b></td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian kanan"><b>{{ number_format($total,0,',','.') }},00 </b></td>
+	</tr>	
+
+	<tr>
+		<td class="border-rincian kiri border"><b>4.1</b></td>
+		<td class="border-rincian border"> <b> &nbsp; Pendapatan Asli Daerah </b></td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian kanan"><b>{{ number_format($total,0,',','.') }},00 </b></td>
+	</tr>	
+
+	<tr>
+		<td class="border-rincian kiri border"><b>4.1.1</b></td>
+		<td class="border-rincian border"> <b> &nbsp; &nbsp; Pajak Daerah </b></td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian border"> </td>
+		<td class="border-rincian kanan"><b>{{ number_format($total,0,',','.') }},00 </b></td>
+	</tr>	
+
+	@php $total=0; @endphp
+
+	@foreach($pendapatan as $pen)
+	<tr>
+		<td class="border-rincian kiri border">{{$pen->rekening->REKENING_KODE}}</td>
+		<td class="border-rincian border"> &nbsp; &nbsp; &nbsp; {{$pen->rekening->REKENING_NAMA}} </td>
 		<td class="border-rincian border"> - </td>
 		<td class="border-rincian border"> - </td>
-		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }},00 </td>
-		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }},00 </td>
+		<td class="border-rincian kanan border">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }},00 </td>
+		<td class="border-rincian kanan border">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }},00 </td>
 		@php $total += $pen->PENDAPATAN_TOTAL; @endphp
 	</tr>	
 	@endforeach
