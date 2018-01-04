@@ -113,15 +113,13 @@
 		Berdasarkan Program dan Kegiatan</h4></td>
 	</tr>
 	<tr class="border headrincian">
-		<td class="border" colspan="2">Kode</td>
+		<td class="border" rowspan="3" colspan="2">Kode</td>
 		<td class="border" rowspan="3">Uraian</td>
 		<td class="border" rowspan="3">Lokasi Kegiatan</td>
 		<td class="border" rowspan="3">Target Kinerja (Kuantitatif)</td>
 		<td class="border" colspan="5">Jumlah</td>
 	</tr>	
 	<tr class="border headrincian">
-		<td class="border" rowspan="2">Program</td>
-		<td class="border" rowspan="2">Kegiatan</td>
 		<td class="border" colspan="4">Tahun n</td>
 		<td class="border" rowspan="2">Tahun<br> n+1</td>
 	</tr>
@@ -132,7 +130,7 @@
 		<td class="border">Jumlah</td>
 	</tr>	
 	<tr class="border headrincian">
-		<td class="border">1</td>
+		<td class="border" colspan="2">1</td>
 		<td class="border">2</td>
 		<td class="border">3</td>
 		<td class="border">4</td>
@@ -143,22 +141,86 @@
 		<td class="border">9=6+7+8</td>
 		<td class="border">10</td>
 	</tr>
-	@php $total=0; @endphp
-	@foreach($bl as $bel)
+
+	@php $total_p=0; @endphp
+	@foreach($bl_p as $belp)
 	<tr>
-		<td class="border-rincian kiri border"> {{$bel->kegiatan->program->PROGRAM_KODE}} </td>
-		<td class="border-rincian kiri border"> {{$bel->kegiatan->KEGIATAN_KODE}} </td>
-		<td class="border-rincian border"> &nbsp; {{$bel->kegiatan->KEGIATAN_NAMA}} </td>
-		<td class="border-rincian border"> &nbsp; {{$bel->lokasi->LOKASI_NAMA}} </td>
-		<td class="border-rincian border"> &nbsp; {{$bel->INDIKATOR_ID}} </td>
+		<td class="border-rincian kiri border"> {{$belp->PROGRAM_KODE}} </td>
+		<td class="border-rincian kiri border">  </td>
+		<td class="border-rincian border"> &nbsp; <b> {{$belp->PROGRAM_NAMA}} </b></td>
+		<td class="border-rincian border"> &nbsp;  </td>
+		<td class="border-rincian border"> &nbsp;  </td>
 		<td class="border-rincian border"> &nbsp; - </td>
 		<td class="border-rincian border"> &nbsp; - </td>
 		<td class="border-rincian border"> &nbsp; - </td>
-		<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
-		<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
-		@php $total += $bel->BL_PAGU; @endphp
+		<td class="border-rincian kanan border"> <b> {{ number_format($belp->pagu,0,',','.') }},00 </b></td>
+		<td class="border-rincian kanan border"> <b> {{ number_format($belp->pagu,0,',','.') }},00 </b></td>
+		@php $total_p += $belp->pagu; @endphp
 	</tr>	
-	@endforeach		
+
+		@php $total=0; @endphp
+		@foreach($bl as $bel)
+
+			@if($belp->PROGRAM_ID == $bel->PROGRAM_ID)
+			<tr>
+				<td class="border-rincian kiri border"> {{$bel->PROGRAM_KODE}} </td>
+				<td class="border-rincian kiri border"> {{$bel->KEGIATAN_KODE}} </td>
+				<td class="border-rincian border"> &nbsp; &nbsp; {{$bel->KEGIATAN_NAMA}} </td>
+				<td class="border-rincian border"> &nbsp; {{$bel->LOKASI_NAMA}} </td>
+				<td class="border-rincian border"> 
+				@foreach($bl_idk as $belidk)
+				@if($belp->KEGIATAN_ID == $belidk->KEGIATAN_ID)
+				&nbsp; {{$belidk->OUTPUT_TARGET}} {{$belidk->SATUAN_NAMA}} 
+				@endif
+				@endforeach
+				</td>
+				<td class="border-rincian border"> 
+				@php
+					$found = false;
+				@endphp	
+				@foreach($bl1 as $bel1)
+				@if($bel->KEGIATAN_ID == $bel1->KEGIATAN_ID )
+					&nbsp; {{$total}}
+					@php $found = true; @endphp
+				@endif 
+				@endforeach
+				</td>
+
+				<td class="border-rincian border"> 
+				@php
+					$found = false;
+				@endphp	
+				@foreach($bl2 as $bel2)
+				@if($bel->KEGIATAN_ID == $bel2->KEGIATAN_ID )
+					&nbsp; {{$total}}
+					@php $found = true; @endphp
+				@endif 
+				@endforeach
+				</td>
+				<td class="border-rincian border"> 
+				@php
+					$found = false;
+				@endphp	
+				@foreach($bl3 as $bel3)
+				@if($bel->KEGIATAN_ID == $bel3->KEGIATAN_ID )
+					&nbsp; {{$total}}
+					@php $found = true; @endphp
+				@endif 
+				@endforeach
+				</td>
+				<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
+				<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
+				@php $total += $bel->BL_PAGU; @endphp
+			</tr>
+			@endif
+
+		@endforeach	
+
+		
+
+	@endforeach	
+
+		
 
 	
 	<tr class="border">

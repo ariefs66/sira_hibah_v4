@@ -34,10 +34,11 @@
                   <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <li><a class="open-form-btl">RKA-SKPD </a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 2.1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 2.2</a></li>
+
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD </a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd1/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd21/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 2.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd22/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 2.2</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 2.2.1</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 3.1</a></li>
                     <li><a class="open-form-btl">RKA-SKPD 3.2</a></li>
@@ -170,6 +171,8 @@
                 @if(Auth::user()->level == 8)
                 <a class="pull-right btn m-t-n-sm btn-warning" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/detail/arsip/{{$BL_ID}}" target="_blank"><i class="fa fa-archive"></i></a>
                 @endif
+
+                <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
                 <!-- @if(($BL_ID == 5718 ) 
                     and $mod == 1 
                     and $thp == 1 
@@ -1038,12 +1041,15 @@
   function simpanPaket(){
     token  = $('#token').val();
     paket  = $('#paket-nama').val();
+    bl_id  = {{ $BL_ID }};
+    alert(bl_id);
     $.ajax({
         url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanpaket",
         type: "POST",
         data: {'_token'         : token,
               'SUBRINCIAN_NAMA' : paket, 
-              'BL_ID'           : '{{ $BL_ID }}'},
+              'BL_ID'           : bl_id
+            },
         success: function(msg){
           $('#paket-nama').val('');
           $.alert('Input Berhasil!');

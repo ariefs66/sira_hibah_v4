@@ -109,7 +109,7 @@
 <table class="rincian">
 	<tbody>
 	<tr class="border">
-		<td colspan="10"><h4>Rincian Anggaran Pendapatan, Belanja dan Pembiayaan <br>
+		<td colspan="10"><h4>Ringkasan Anggaran Pendapatan, Belanja dan Pembiayaan <br>
 		Satuan Kerja Perangkat Daerah</h4></td>
 	</tr>
 	<tr class="border headrincian">
@@ -126,52 +126,84 @@
 	@php $total=0; @endphp
 
 	<!-- pendapatan -->
+	@if( empty($pendapatan) )
 	<tr>
-		<td class="border-rincian kiri border"><b>{{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.1</b></td>
+		<td class="border-rincian kiri border"><b>1</b></td>
 		<td class="border-rincian border"><b> Pendapatan</b></td>
 		<td class="border-rincian tengah"></td>
-	</tr>	
-	@foreach($pendapatan as $pen)
-	<tr>
-		<td class="border-rincian kiri border"><b>{{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.1.{{$pen->rekening->REKENING_KODE}}</b></td>
-		<td class="border-rincian border"> {{$pen->PENDAPATAN_NAMA}} </td>
-		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }},00 </td>
-		@php $total += $pen->PENDAPATAN_TOTAL; @endphp
-	</tr>	
-	@endforeach
+	</tr>
+		
+		@foreach($pendapatan as $pen)
+		<tr>
+			<td class="border-rincian kiri border"><b>{{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.1.{{$pen->rekening->REKENING_KODE}}</b></td>
+			<td class="border-rincian border"> {{$pen->PENDAPATAN_NAMA}} </td>
+			<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }},00 </td>
+			@php $total += $pen->PENDAPATAN_TOTAL; @endphp
+		</tr>	
+		@endforeach
+
+	@endif
 
 	<!-- belanja -->
 	<tr>
-		<td class="border-rincian kiri border"><b>{{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.2</b></td>
+		<td class="border-rincian kiri border"><b>5</b></td>
 		<td class="border-rincian border"><b> Belanja</b></td>
-		<td class="border-rincian kanan border"><b>,00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($btl+$bl,0,',','.') }},00</b></td>
 	</tr>
-	@foreach($bl as $bel)
+	<!-- belanja tidak langsung -->
 	<tr>
-		<td class="border-rincian kiri border"> {{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.2.{{$bel->kegiatan->KEGIATAN_KODE}} </td>
-		<td class="border-rincian border"> &nbsp; {{$bel->kegiatan->KEGIATAN_NAMA}} </td>
-		<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
-		@php $total += $bel->BL_PAGU; @endphp
-	</tr>	
-	@endforeach	
+		<td class="border-rincian kiri border"><b>5.1</b></td>
+		<td class="border-rincian border"><b> &nbsp; Belanja Tidak Langsung</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($btl,0,',','.') }},00</b></td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian kiri border">5.1.1</td>
+		<td class="border-rincian border">&nbsp; &nbsp; Belanja Pegawai</td>
+		<td class="border-rincian kanan border">{{ number_format($btl1,0,',','.') }},00</td>
+	</tr>
+
+
+	<!-- belanja langsung-->
+	<tr>
+		<td class="border-rincian kiri border"><b>5.2</b></td>
+		<td class="border-rincian border"><b> &nbsp; Belanja Langsung</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($bl,0,',','.') }},00</b></td>
+	</tr>
+		<tr>
+			<td class="border-rincian kiri border">5.2.1</td>
+			<td class="border-rincian border">&nbsp; &nbsp; Belanja Pegawai</td>
+			<td class="border-rincian kanan border">{{ number_format($bl1,0,',','.') }},00</td>
+		</tr>
+		<tr>
+			<td class="border-rincian kiri border">5.2.2</td>
+			<td class="border-rincian border">&nbsp; &nbsp; Belanja Barang dan Jasa</td>
+			<td class="border-rincian kanan border">{{ number_format($bl2,0,',','.') }},00</td>
+		</tr>
+		<tr>
+			<td class="border-rincian kiri border">5.2.3</td>
+			<td class="border-rincian border">&nbsp; &nbsp; Belanja Modal</td>
+			<td class="border-rincian kanan border">{{ number_format($bl3,0,',','.') }},00</td>
+		</tr>
+
 
 	<!-- pembiayaan -->
-	<tr>
+	<!-- <tr>
 		<td class="border-rincian kiri border"><b>{{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.3</b></td>
 		<td class="border-rincian border"><b> Pembiayaan</b></td>
 		<td class="border-rincian kanan border"><b>,00</b></td>
-	</tr>	
-	@foreach($pembiayaan as $pem)
-	<tr>
-		<td class="border-rincian kiri border"> {{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.3.{{$pem->rekening->REKENING_KODE}} </td>
-		<td class="border-rincian border"> &nbsp; {{$pem->rekening->REKENING_NAMA}} </td>
-		<td class="border-rincian kanan border">{{ number_format($pem->PEMBIAYAAN_TOTAL,0,',','.') }},00</td>
-		@php $total += $pem->PEMBIAYAAN_TOTAL; @endphp
-	</tr>	
-	@endforeach	
+	</tr> -->	
+
 	<tr class="border">
-		<td class="border kanan" colspan="2"><b>Jumlah</b></td>
-		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td class="border kanan" colspan="2"><b>Surplus / (Defisit)</b></td>
+		<td class="border kanan"><b>
+			@php $tot = $total - $btl + $bl; @endphp
+			@if($tot < 0)
+			 ({{ number_format(trim($tot,"-"),0,',','.') }})
+			@else
+			 {{ number_format($tot,0,',','.') }}
+			@endif  
+		,00</b></td>
 	</tr>
 	</tbody>	
 </table>

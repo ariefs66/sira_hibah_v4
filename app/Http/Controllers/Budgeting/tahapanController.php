@@ -98,7 +98,7 @@ class tahapanController extends Controller
                 $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->TAHAPAN_ID.'\')" id="kuncigiat-'.$data->TAHAPAN_ID.'" checked><i></i></label>';
             }
     		array_push($view, array( 'no'				=>$no,
-                                     'TAHAPAN_NAMA'  	=>$data->TAHAPAN_NAMA.' - '.$data->TAHAPAN_STATUS,
+                                     'TAHAPAN_NAMA'  	=>$data->TAHAPAN_NAMA.' - '.$data->TAHAPAN_STATUS.' - '.$data->TAHAPAN_TAHUN,
                                      'TAHAPAN_ID'       =>$data->TAHAPAN_ID,
                                      'STATUS'		    =>$data->TAHAPAN_SELESAI,
                                      'TAHAPAN_AWAL'		=>'<span class="text-orange">'.date('H:i',strtotime($data->TAHAPAN_AWAL)).'</span><br>'.date('d/M/Y',strtotime($data->TAHAPAN_AWAL)),
