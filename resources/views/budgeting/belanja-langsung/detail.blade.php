@@ -27,8 +27,8 @@
               <div class="panel-heading wrapper-lg">
                 <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung : {{ $bl->kegiatan->KEGIATAN_NAMA }}</h5>
                 @if($log_r == 1)
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/log/{{ $bl->BL_ID }}" class="btn btn-danger pull-right m-t-n-sm" target="_blank"><i class="fa fa-download"></i> Log RKA</a> &nbsp;
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/sebelum/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> RKA Sebelum</a>
+                <!-- <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/log/{{ $bl->BL_ID }}" class="btn btn-danger pull-right m-t-n-sm" target="_blank"><i class="fa fa-download"></i> Log RKA</a> &nbsp;
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/sebelum/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> RKA  -->Sebelum</a>
                 @endif
                 <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                   <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
@@ -220,8 +220,7 @@
                  { mData: 'SUB' },
                  { mData: 'HARGA' },
                  { mData: 'PAJAK' },
-                 { mData: 'TOTAL' },
-                 { mData: 'STATUS' }]
+                 { mData: 'TOTAL' } ]
                }" class="table table-striped b-t b-b tabel-detail">
                <thead>
                 <tr>
@@ -232,10 +231,10 @@
                   <th style="width: 10%">Harga / Koefisien</th>
                   <th style="width: 5%">Pajak</th>
                   <th style="width: 5%">Total</th>
-                  <th style="width: 5%">Status</th>
+                  <!-- <th style="width: 5%">Status</th> -->
                 </tr>
                 <tr>
-                  <th colspan="8" class="th_search">
+                  <th colspan="7" class="th_search">
                     <i class="icon-bdg_search"></i>
                     <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                   </th>
