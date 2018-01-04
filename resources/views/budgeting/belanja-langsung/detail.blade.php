@@ -847,7 +847,8 @@
       KOMPONEN_ID   = '0';
     }
     console.log(KOMPONEN_ID);
-    if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SAT1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
+    /*if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SAT1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){*/
+      if(REKENING_ID == "" || SUBRINCIAN_ID == ""){
       $.alert('Form harap diisi!');
     }else{
       if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5') && (HARGA == "" || KOMPONEN_NAMA == "")){
