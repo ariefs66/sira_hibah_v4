@@ -40,8 +40,11 @@
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd21/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 2.1</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd22/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 2.2</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 2.2.1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd32/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 3.1</a></li>
-                    <li><a class="open-form-btl">RKA-SKPD 3.2</a></li>
+                   
+                   @if(Auth::user()->level == 8 || Auth::user()->level == 9)
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd31/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 3.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 3.2</a></li>
+                    @endif
                   </ul>
                 </div>
               </div>
