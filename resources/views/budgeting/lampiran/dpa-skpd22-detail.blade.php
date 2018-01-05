@@ -143,27 +143,58 @@
 		<td class="border">11=7+8+9+10</td>
 	</tr>
 
-	@php $total=0; @endphp
-	@foreach($bl as $bel)
+	@php $total_p=0; @endphp
+	@foreach($bl_p as $belp)
 	<tr>
-		<td class="border-rincian kiri border"> {{$bel->kegiatan->program->PROGRAM_KODE}} </td>
-		<td class="border-rincian kiri border"> {{$bel->kegiatan->KEGIATAN_KODE}} </td>
-		<td class="border-rincian border"> &nbsp; {{$bel->kegiatan->KEGIATAN_NAMA}} </td>
-		<td class="border-rincian border"> &nbsp; {{$bel->lokasi->LOKASI_NAMA}} </td>
-		<td class="border-rincian border"> &nbsp; {{$bel->INDIKATOR_ID}} </td>
+		<td class="border-rincian kiri border"> {{$belp->PROGRAM_KODE}} </td>
+		<td class="border-rincian kiri border">  </td>
+		<td class="border-rincian border"> &nbsp; <b> {{$belp->PROGRAM_NAMA}} </b></td>
+		<td class="border-rincian border"> &nbsp;  </td>
+		<td class="border-rincian border"> &nbsp;  </td>
 		<td class="border-rincian border"> &nbsp; - </td>
 		<td class="border-rincian border"> &nbsp; - </td>
 		<td class="border-rincian border"> &nbsp; - </td>
-		<td class="border-rincian border"> &nbsp; - </td>
-		<td class="border-rincian border"> &nbsp; - </td>
-		<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
-		@php $total += $bel->BL_PAGU; @endphp
+		<td class="border-rincian kanan border"> </td>
+		<td class="border-rincian kanan border"> </td>
+		<td class="border-rincian kanan border"> <b> {{ number_format($belp->pagu,0,',','.') }},00 </b></td>
+		@php $total_p += $belp->pagu; @endphp
 	</tr>	
-	@endforeach		
+
+		@php $total=0; @endphp
+		@foreach($bl as $bel)
+
+			@if($belp->PROGRAM_ID == $bel->PROGRAM_ID)
+			<tr>
+				<td class="border-rincian kiri border"> {{$bel->PROGRAM_KODE}} </td>
+				<td class="border-rincian kiri border"> {{$bel->KEGIATAN_KODE}} </td>
+				<td class="border-rincian border"> &nbsp; &nbsp; {{$bel->KEGIATAN_NAMA}} </td>
+				<td class="border-rincian border"> &nbsp; {{$bel->LOKASI_NAMA}} </td>
+				<td class="border-rincian border"> 
+				</td>
+				<td class="border-rincian border"> 
+				</td>
+				<td class="border-rincian border"> 
+				</td>
+				<td class="border-rincian border"> 
+				</td>
+				<td class="border-rincian kanan border"> </td>
+				<td class="border-rincian kanan border"> </td>
+				<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
+				@php $total += $bel->BL_PAGU; @endphp
+			</tr>
+			@endif
+
+		@endforeach	
+
+	@endforeach	
+
+		
 
 	
 	<tr class="border">
-		<td class="border kanan" colspan="6"><b>Jumlah</b></td>
+		<td class="border kanan" colspan="4"><b>Jumlah</b></td>
+		<td class="border kanan"></td>
+		<td class="border kanan"><b>,00</b></td>
 		<td class="border kanan"><b>,00</b></td>
 		<td class="border kanan"><b>,00</b></td>
 		<td class="border kanan"><b>,00</b></td>

@@ -91,10 +91,10 @@
 		</td>
 	</tr>
 	<tr class="border">
-		<td class="border"> <h4>x.xx</h4> </td>
-		<td class="border"> <h4>xx</h4> </td>
-		<td class="border"> <h4>00</h4> </td>
-		<td class="border"> <h4>00</h4> </td>
+		<td class="border"> <h4>{{ $urusan->URUSAN_KODE }}</h4> </td>
+		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,0,1) }}</h4> </td>
+		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,2,2) }}</h4> </td>
+		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,5,2) }}</h4> </td>
 		<td class="border"> <h4>6</h4> </td>
 		<td class="border"> <h4>2</h4> </td>
 	</tr>
@@ -136,19 +136,36 @@
 	@php $total=0; @endphp
 
 	@foreach($pembiayaan as $pem)
+		@php $total += $pem->PEMBIAYAAN_TOTAL; @endphp
+	@endforeach
 	<tr>
-		<td class="border-rincian kiri border"> {{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.3.{{$pem->rekening->REKENING_KODE}} </td>
-		<td class="border-rincian border"> &nbsp; {{$pem->rekening->REKENING_NAMA}} </td>
+		<td class="border-rincian kiri border"> 6</td>
+		<td class="border-rincian border"> <b>Pembiayaan Daerah</b>  </td>
+		<td class="border-rincian kanan border"><b>{{ number_format($total,0,',','.') }},00</b></td>
+	</tr>
+
+	@php $total=0; @endphp
+
+	@foreach($pembiayaan as $pem)
+		@php $total += $pem->PEMBIAYAAN_TOTAL; @endphp
+	@endforeach
+
+	<tr>
+		<td class="border-rincian kiri border"> 6.2</td>
+		<td class="border-rincian border"> <b> &nbsp; Pengeluaran Pembiayaan Daerah</b>  </td>
+		<td class="border-rincian kanan border"><b>{{ number_format($total,0,',','.') }},00</b></td>
+	</tr>
+
+	@php $total=0; @endphp
+
+	@foreach($pembiayaan as $pem)
+	<tr>
+		<td class="border-rincian kiri border"> {{$pem->rekening->REKENING_KODE}} </td>
+		<td class="border-rincian border"> &nbsp; &nbsp; {{$pem->rekening->REKENING_NAMA}} </td>
 		<td class="border-rincian kanan border">{{ number_format($pem->PEMBIAYAAN_TOTAL,0,',','.') }},00</td>
 		@php $total += $pem->PEMBIAYAAN_TOTAL; @endphp
 	</tr>	
-	@endforeach		
-	
-	
-	<tr class="border">
-		<td class="border kanan" colspan="2"><b>Jumlah Pengeluaran</b></td>
-		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
-	</tr>
+	@endforeach	
 	
 
 	<tr class="border">

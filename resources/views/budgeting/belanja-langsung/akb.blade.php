@@ -35,13 +35,13 @@
                   <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak DPA <i class="fa fa-chevron-down"></i>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <li><a class="open-form-btl">DPA-SKPD </a></li>
-                    <li><a class="open-form-btl">DPA-SKPD 1</a></li>
-                    <li><a class="open-form-btl">DPA-SKPD 2.1</a></li>
-                    <li><a class="open-form-btl">DPA-SKPD 2.2</a></li>
-                    <li><a class="open-form-btl">DPA-SKPD 2.2.1</a></li>
-                    <li><a class="open-form-btl">DPA-SKPD 3.1</a></li>
-                    <li><a class="open-form-btl">DPA-SKPD 3.2</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD </a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd1/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd21/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 2.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd22/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 2.2</a></li>
+                    <li><a>DPA-SKPD 2.2.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd31/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.2</a></li>
                   </ul>
                 </div>
               </div>
@@ -740,84 +740,84 @@
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Januari</label>
             <div class="col-sm-9">
-               <input type="text" class="form-control" placeholder="Nominal" name="jan" id="jan" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">
+               <input type="text" class="form-control" placeholder="Nominal" name="jan" id="jan" value="">
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Februari</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="feb" id="feb" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">
+              <input type="text" class="form-control" placeholder="Nominal" name="feb" id="feb" value="">
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Maret</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="mar" id="mar" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">            
+              <input type="text" class="form-control" placeholder="Nominal" name="mar" id="mar" value="">            
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">April</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="apr" id="apr" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">        
+              <input type="text" class="form-control" placeholder="Nominal" name="apr" id="apr"   value="">        
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Mei</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="mei" id="mei" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">         
+              <input type="text" class="form-control" placeholder="Nominal" name="mei" id="mei"  value="">         
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Juni </label>
             <div class="col-sm-9">
-             <input type="text" class="form-control" placeholder="Nominal" name="jun" id="jun" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+             <input type="text" class="form-control" placeholder="Nominal" name="jun" id="jun"   value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Juli </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="jul" id="jul" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="jul" id="jul"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Agustus </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="agu" id="agu" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="agu" id="agu"   value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">September </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="sep" id="sep" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="sep" id="sep"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Oktober </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="okt" id="okt" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="okt" id="okt"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">November </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="nov" id="nov" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="nov" id="nov"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Desember </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="des" id="des" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="des" id="des"   value=""> 
             </div> 
           </div>
          
