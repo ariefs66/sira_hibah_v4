@@ -37,7 +37,8 @@ class pendapatanController extends Controller
 {
     public function index($tahun,$status){
       $skpd     = SKPD::where('SKPD_TAHUN',$tahun)->get();
-      $rekening   = Rekening::where('REKENING_KODE','like','4%')->whereRaw('length("REKENING_KODE") = 11')->get();
+      $rekening   = Rekening::where('REKENING_KODE','like','4%')->whereRaw('length("REKENING_KODE") = 11')
+                            ->where('REKENING_TAHUN',$tahun)->get();
 
       if($status=='murni'){
         $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN')->where('DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
