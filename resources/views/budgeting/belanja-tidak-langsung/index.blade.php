@@ -325,6 +325,7 @@
         <th>Rekening</th>                          
         <th>Rincian</th>                       
         <th>Anggaran</th>                                       
+        <th>AKB</th>                                       
         <th>#</th>                                       
       </tr> 
       <!-- <tr>
@@ -364,6 +365,7 @@
           { mData: 'REKENING' },
           { mData: 'RINCIAN' },
           { mData: 'TOTAL' },
+          { mData: 'AKB' },
           { mData: 'AKSI' }
           ]
         });

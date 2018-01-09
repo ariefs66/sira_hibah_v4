@@ -168,10 +168,12 @@
                 @elseif(Auth::user()->active == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> User Tidak Aktif!</h5>
                 @endif
+
                 @if(Auth::user()->level == 8)
-                <a class="pull-right btn m-t-n-sm btn-warning" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/detail/arsip/{{$BL_ID}}" target="_blank"><i class="fa fa-archive"></i></a>
-                 <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah AKB</button>
+                <!-- <a class="pull-right btn m-t-n-sm btn-success" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/akb/add/{{$BL_ID}}">Tambah AKB</a> -->
                 @endif
+
+                <a class="pull-right btn m-t-n-sm btn-success" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/lampiran/akb/bl/{{$BL_ID}}" target="_blank">Print AKB</a>
                 <!-- @if(($BL_ID == 5718 ) 
                     and $mod == 1 
                     and $thp == 1 
@@ -179,7 +181,7 @@
                 @else
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Rincian Hanya Bisa dirubah / dihapus!</h5>
                 @endif -->
-                <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekaprincian/{{$bl->BL_ID}}"><i class="m-r-xs fa fa-download"></i> Download</a>
+                
                 <div class="col-sm-1 pull-right m-t-n-sm">
                   <select class="form-control selectrincian" id="selectrincian">
                     <option value="10">10</option>
@@ -234,7 +236,7 @@
                  { mData: 'NOVEMBER' },
                  { mData: 'DESEMBER' },
                  { mData: 'TRIWULAN4' }]
-               }" class="table table-striped b-t b-b tabel-detail">
+               }" class="table table-striped b-t b-b tabel-detail ">
                <thead>
                 <tr>
                   <th style="width: 1%">#</th>
@@ -586,7 +588,6 @@
               <input type="text" class="form-control" placeholder="Masukan Kode Rekening" name="kode_rek" id="kode_rek" value="" readonly="">          
               <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
               <input type="hidden" class="form-control" name="id_rek" id="id_rek">          
-              <input type="hidden" class="form-control" name="id_akb" id="id_akb">          
             </div> 
           </div>
 
@@ -695,138 +696,6 @@
     </form>
   </div>
 
-
-<div class="bg-white wrapper-lg input-sidebar input-btl">
-<a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
-    <form id="form-urusan" class="form-horizontal">
-      <div class="input-wrapper">
-        <h5 id="judul-form">Tambah Anggaran Kas Bulanan</h5>
-          <div class="form-group">
-            <label for="kode_urusan" class="col-md-3">Kode Rekening</label>          
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Masukan Kode Rekening" name="kode_rek" id="kode_rek" value="" readonly="">          
-              <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
-              <input type="hidden" class="form-control" name="id_rek" id="id_rek">          
-              <input type="hidden" class="form-control" name="id_akb" id="id_akb">          
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3">Rekening</label>
-            <div class="col-sm-9">
-              <select ui-jq="chosen" class="w-full" id="jenis-pekerjaan" required="">
-                <option value="">Silahkan Pilih Rek</option>
-                @foreach($rincian_rek as $rrek)
-                <option value="{{ $rrek->REKENING_ID }}">{{ $rrek->REKENING_KODE }}-{{ $rrek->REKENING_NAMA }}</option>
-                @endforeach
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Nama Rekening</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Masukan Nama Rekening" name="nama_rek" id="nama_rek" value="" readonly="">          
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Total Nominal</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Total Nominal" name="total" id="total" value="" readonly="">
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Januari</label>
-            <div class="col-sm-9">
-               <input type="text" class="form-control" placeholder="Nominal" name="jan" id="jan" value="">
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Februari</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="feb" id="feb" value="">
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Maret</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="mar" id="mar" value="">            
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">April</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="apr" id="apr"   value="">        
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Mei</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="mei" id="mei"  value="">         
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Juni </label>
-            <div class="col-sm-9">
-             <input type="text" class="form-control" placeholder="Nominal" name="jun" id="jun"   value=""> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Juli </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="jul" id="jul"  value=""> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Agustus </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="agu" id="agu"   value=""> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">September </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="sep" id="sep"  value=""> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Oktober </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="okt" id="okt"  value=""> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">November </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="nov" id="nov"  value=""> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">Desember </label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="des" id="des"   value=""> 
-            </div> 
-          </div>
-         
-
-          <hr class="m-t-xl">
-         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanAKB()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
-      </div>
-    </form>
-  </div>
 
 </div>
 <!-- 
@@ -939,8 +808,9 @@
 
 
 <script type="text/javascript">
+
   function simpanAKB(){
-    var akb_id    = $('#id_akb').val();
+    //var akb_id    = '';
     var rek_id    = $('#id_rek').val();
     var jan       = $('#jan').val();
     var feb       = $('#feb').val();
@@ -954,26 +824,27 @@
     var okt       = $('#okt').val();
     var nov       = $('#nov').val();
     var des       = $('#des').val();
-    var bl_id     = {{$bl->BL_PAGU}};
+    var bl_id     = {{$bl->BL_ID}};
     var token     = $('#token').val();
-    //alert(pagu);
+
     if(rek_id == "" ){
       $.alert('Form harap diisi!');
     }else{
-      if(akb_id == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/simpan";
+      if(rek_id == '') uri = "";
       else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
+     // uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
       $.ajax({
         url: uri,
         type: "POST",
         data: {'_token' : token,
-              'akb_id'  : akb_id, 
+              //'akb_id'  : akb_id, 
               'bl_id'   : bl_id, 
               'rek_id'  : rek_id, 
               'jan'     : jan, 
               'feb'     : feb, 
               'mar'     : mar, 
-              'mei'     : mei, 
               'apr'     : apr, 
+              'mei'     : mei, 
               'jun'     : jun, 
               'jul'     : jul, 
               'agu'     : agu, 
@@ -981,7 +852,7 @@
               'okt'     : okt, 
               'nov'     : nov, 
               'des'     : des, 
-              'tahun'   : '{{$tahun}}' 
+              'tahun'   : '{{$tahun}}', 
             },
         success: function(msg){
             if(msg == 1){
@@ -997,8 +868,7 @@
               $('#sep').val('');
               $('#okt').val('');
               $('#nov').val('');
-              $('#des').val('');
-              $('.table').DataTable().ajax.reload();              
+              $('#des').val('');           
               $.alert({
                 title:'Info',
                 content: 'Data berhasil disimpan',
@@ -1027,7 +897,7 @@
       url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/detail/"+BL_ID+"/"+REKENING_ID,
       success : function (data) {
         console.log(data);
-        $('#id_akb').val(data['AKB_ID']);
+       // $('#id_akb').val(data['AKB_ID']);
         $('#nama_rek').val(data['REKENING_NAMA']);
         $('#id_rek').val(data['REKENING_ID']);
         $('#kode_rek').val(data['REKENING_KODE']);
