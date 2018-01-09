@@ -656,15 +656,16 @@ class blController extends Controller
         }
 
         $data       = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
-                    ->join('BUDGETING.DAT_AKB_BL','DAT_RINCIAN.BL_ID','=','DAT_AKB_BL.BL_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_BL',function($join){
+                        $join->on('DAT_AKB_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->on('DAT_AKB_BL.REKENING_ID','=','DAT_RINCIAN.REKENING_ID');
+                    })
                     ->where('DAT_RINCIAN.BL_ID',$id)
-                    ->groupBy('DAT_RINCIAN.BL_ID', 'DAT_RINCIAN.REKENING_ID', 'REKENING_KODE','REKENING_NAMA', "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES", "AKB_ID" )
-                    ->orderBy('REKENING_KODE')
-                    ->selectRaw(' "AKB_ID", "DAT_RINCIAN"."BL_ID", "DAT_RINCIAN"."REKENING_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS TOTAL, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->groupBy('DAT_RINCIAN.BL_ID', 'DAT_RINCIAN.REKENING_ID','REKENING_NAMA', "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" )
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_RINCIAN"."BL_ID", "DAT_RINCIAN"."REKENING_ID", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
                     ->get();
 
-                    
-
+                 //   dd($data);
 
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
@@ -675,8 +676,11 @@ class blController extends Controller
         $i         = 1;
         $pajak      = '';
         foreach ($data as $data) {
+
+            $getAkb = AKB_BL::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
+
             if((( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8 )and Auth::user()->active == 1){
-                if($data->AKB_ID == 0 ){
+                if(empty($getAkb) ){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -704,7 +708,7 @@ class blController extends Controller
 
             array_push($view, array( 'NO'             =>$no,
                                      'REKENING'       =>$data->REKENING_KODE.'<br><p class="text-orange">'.$data->REKENING_NAMA.'</p>',
-                                     'TOTAL'          =>number_format($data->TOTAL,0,'.',','),
+                                     'TOTAL'          =>number_format($data->total,0,'.',','),
                                      'JANUARI'        =>number_format($data->AKB_JAN,0,'.',','),
                                      'FEBRUARI'       =>number_format($data->AKB_FEB,0,'.',','),
                                      'MARET'          =>number_format($data->AKB_MAR,0,'.',','),
@@ -775,40 +779,47 @@ class blController extends Controller
 
     public function detailAKB($tahun,$status,$bl_id,$rek_id){
         if($status == 'murni'){
-        $data   = AKB_BL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BL.REKENING_ID')
-                        ->join('BUDGETING.DAT_RINCIAN','DAT_RINCIAN.BL_ID','=','DAT_AKB_BL.BL_ID')
-                        ->where('DAT_AKB_BL.BL_ID',$bl_id)
-                        ->where('DAT_AKB_BL.REKENING_ID',$rek_id)->first();
-
-            $rincian = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
-                                ->where('BL_ID', $bl_id)
-                                ->where('REF_REKENING.REKENING_ID', $rek_id)
-                                ->groupBy("REKENING_KODE","REKENING_NAMA")
-                                ->selectRaw('"REKENING_KODE","REKENING_NAMA", SUM("RINCIAN_TOTAL") as total')
-                                ->first();
+             $data       = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_BL',function($join){
+                        $join->on('DAT_AKB_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->on('DAT_AKB_BL.REKENING_ID','=','DAT_RINCIAN.REKENING_ID');
+                    })
+                    ->where('DAT_RINCIAN.BL_ID',$bl_id)
+                    ->where('DAT_RINCIAN.REKENING_ID',$rek_id)
+                    ->groupBy('DAT_RINCIAN.BL_ID', 'DAT_RINCIAN.REKENING_ID','REKENING_KODE', "REKENING_NAMA", "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" )
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_RINCIAN"."BL_ID", "DAT_RINCIAN"."REKENING_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS TOTAL, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->first();
         }
-        else
-        $data   = AKB_BL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BL.REKENING_ID')
-                        ->where('AKB_ID',$id)->first();
 
-        $out    = [ 'DATA'          => $data,
-                    'REKENING_KODE' => $rincian->REKENING_KODE,
-                    'REKENING_NAMA' => $rincian->REKENING_NAMA,
-                    'TOTAL'         => number_format($rincian->total,0,'.',','),
-                    'AKB_JAN'       => $data->AKB_JAN,
-                    'AKB_FEB'       => $data->AKB_FEB,
-                    'AKB_MAR'       => $data->AKB_MAR,
-                    'AKB_APR'       => $data->AKB_APR,
-                    'AKB_MEI'       => $data->AKB_MEI,
-                    'AKB_JUN'       => $data->AKB_JUN,
-                    'AKB_JUL'       => $data->AKB_JUL,
-                    'AKB_AUG'       => $data->AKB_AUG,
-                    'AKB_SEP'       => $data->AKB_SEP,
-                    'AKB_OKT'       => $data->AKB_OKT,
-                    'AKB_NOV'       => $data->AKB_NOV,
-                    'AKB_DES'       => $data->AKB_DES,
+        $out    = [ //'DATA'          => $data,
+                    'REKENING_KODE' => $data->REKENING_KODE,
+                    'REKENING_NAMA' => $data->REKENING_NAMA,
+                    'TOTAL'         => number_format($data->total,0,'.',','),
+                    (empty($data->AKB_JAN))?$jan=0:$jan=$data->AKB_JAN,
+                    (empty($data->AKB_FEB))?$feb=0:$feb=$data->AKB_FEB,
+                    (empty($data->AKB_MAR))?$mar=0:$mar=$data->AKB_MAR,
+                    (empty($data->AKB_APR))?$apr=0:$apr=$data->AKB_APR,
+                    (empty($data->AKB_MEI))?$mei=0:$mei=$data->AKB_MEI,
+                    (empty($data->AKB_JUN))?$jun=0:$jun=$data->AKB_JUN,
+                    (empty($data->AKB_JUL))?$jul=0:$jul=$data->AKB_JUL,
+                    (empty($data->AKB_AUG))?$agu=0:$agu=$data->AKB_AUG,
+                    (empty($data->AKB_SEP))?$sep=0:$sep=$data->AKB_SEP,
+                    (empty($data->AKB_OKT))?$okt=0:$okt=$data->AKB_OKT,
+                    (empty($data->AKB_NOV))?$nov=0:$nov=$data->AKB_NOV,
+                    (empty($data->AKB_DES))?$des=0:$des=$data->AKB_DES,
+                    'AKB_JAN'       => $jan,
+                    'AKB_FEB'       => $feb,
+                    'AKB_MAR'       => $mar,
+                    'AKB_APR'       => $apr,
+                    'AKB_MEI'       => $mei,
+                    'AKB_JUN'       => $jun,
+                    'AKB_JUL'       => $jul,
+                    'AKB_AUG'       => $agu,
+                    'AKB_SEP'       => $sep,
+                    'AKB_OKT'       => $okt,
+                    'AKB_NOV'       => $nov,
+                    'AKB_DES'       => $des,
                     'REKENING_ID'   => $data->REKENING_ID,
-                    'AKB_ID'        => $data->AKB_ID,
                     ];
         return $out;
     }
@@ -1833,29 +1844,82 @@ class blController extends Controller
     public function submitAKBEdit($tahun,$status){
         if($status == 'murni') {
             //return $this->submitAKBEditMurni($tahun,$status);
-            if(Input::get('AKB_ID') == null){
-            AKB_BL::where('AKB_ID',Input::get('AKB_ID'))
-                        ->update([
-                            'AKB_JAN'        => Input::get('JANUARI'),
-                            'AKB_FEB'        => Input::get('FEBRUARI'),
-                            'AKB_MAR'        => Input::get('MARET'),
-                            'AKB_APR'        => Input::get('APRIL'),
-                            'AKB_MEI'        => Input::get('MEI'),
-                            'AKB_JUN'        => Input::get('JUNI'),
-                            'AKB_JUL'        => Input::get('JULI'),
-                            'AKB_AUG'        => Input::get('AGUSTUS'),
-                            'AKB_SEP'        => Input::get('SEPTEMBER'),
-                            'AKB_OKT'        => Input::get('OKTOBER'),
-                            'AKB_NOV'        => Input::get('NOVEMBER'),
-                            'AKB_DES'        => Input::get('DESEMBER')
-                            ]); 
+            $akb_bl = AKB_BL::where('BL_ID',Input::get('bl_id'))
+                         ->where('REKENING_ID',Input::get('rek_id'))->value('AKB_ID');
 
-                return number_format(Input::get('JANUARI'),0,'.',',');
+                  // dd($akb_bl);      
+
+            if(empty($akb_bl)){
+                $akb = new AKB_BL;
+                $akb->BL_ID              = Input::get('bl_id');
+                $akb->REKENING_ID        = Input::get('rek_id');
+                $akb->AKB_JAN            = Input::get('jan');
+                $akb->AKB_FEB            = Input::get('feb');
+                $akb->AKB_MAR            = Input::get('mar');
+                $akb->AKB_APR            = Input::get('apr');
+                $akb->AKB_MEI            = Input::get('mei');
+                $akb->AKB_JUN            = Input::get('jun');
+                $akb->AKB_JUL            = Input::get('jul');
+                $akb->AKB_AUG            = Input::get('agu');
+                $akb->AKB_SEP            = Input::get('sep');
+                $akb->AKB_OKT            = Input::get('okt');
+                $akb->AKB_NOV            = Input::get('nov');
+                $akb->AKB_DES            = Input::get('des');
+                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->TIME_CREATED       = Carbon\Carbon::now();
+                $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+                $akb->save(); 
+
+                return 1; 
+
             }else{
-                return 0; 
-            }    
+                AKB_BL::where('BL_ID',Input::get('bl_id'))
+                         ->where('REKENING_ID',Input::get('rek_id'))
+                 ->update([
+                        'AKB_JAN'        => Input::get('jan'),
+                        'AKB_FEB'        => Input::get('feb'),
+                        'AKB_MAR'        => Input::get('mar'),
+                        'AKB_APR'        => Input::get('apr'),
+                        'AKB_MEI'        => Input::get('mei'),
+                        'AKB_JUN'        => Input::get('jun'),
+                        'AKB_JUL'        => Input::get('jul'),
+                        'AKB_AUG'        => Input::get('agu'),
+                        'AKB_SEP'        => Input::get('sep'),
+                        'AKB_OKT'        => Input::get('okt'),
+                        'AKB_NOV'        => Input::get('nov'),
+                        'AKB_DES'        => Input::get('des')
+                        ]); 
+
+                 return 1; 
+            }                
+
+             return 0; 
+               
         }
         else return $this->submitAKBEditPerubahan($tahun,$status);
+    }
+
+    public function submitAKBadd($tahun,$status,$id){
+
+        $rincian = Rincian::where('BL_ID',$id)
+                        ->groupBy('REKENING_ID')
+                        ->select("REKENING_ID")
+                        ->get();
+
+        foreach ($rincian as $r) {
+            $akb = new AKB_BL;
+            $akb->BL_ID              = $id;
+            $akb->REKENING_ID        = $r->REKENING_ID;
+            $akb->USER_CREATED       = Auth::user()->id;
+            $akb->USER_CREATED       = Auth::user()->id;
+            $akb->TIME_CREATED       = Carbon\Carbon::now();
+            $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+            $akb->save(); 
+        }  
+
+        return 'Berhasil!';             
+        
+
     }
 
     public function submitRincianEditMurni($tahun,$status){

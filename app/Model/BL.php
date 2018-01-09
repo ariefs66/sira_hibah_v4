@@ -11,6 +11,9 @@ class BL extends Model
     public $timestamps 		= false;
     public $incrementing 	= false;
 
+    public function skpd(){
+        return $this->belongsTo('App\Model\SKPD', 'SKPD_ID');
+    }
     public function subunit(){
         return $this->belongsTo('App\Model\Subunit', 'SUB_ID');
     }

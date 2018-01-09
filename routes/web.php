@@ -45,6 +45,9 @@ Route::get('/main/{tahun}/{status}/belanja-langsung/akb/{id}', 'Budgeting\blCont
 Route::get('/main/{tahun}/{status}/belanja-langsung/data/akb/{id}', 'Budgeting\blController@showDataAKB');
 Route::get('/main/{tahun}/{status}/belanja-langsung/akb/detail/{bl_id}/{rek_id}', 'Budgeting\blController@detailAKB');
 
+Route::get('/main/{tahun}/{status}/belanja-langsung/akb/add/{id}/', 'Budgeting\blController@submitAKBadd');
+
+
 //BL-POST
 Route::post('/main/{tahun}/{status}/belanja-langsung/hapus', 'Budgeting\blController@deleteBL');
 Route::post('/main/{tahun}/{status}/belanja-langsung/detail/simpan', 'Budgeting\blController@submitDetail');
@@ -63,9 +66,9 @@ Route::post('/main/{tahun}/{status}/belanja-langsung/kuncirincian', 'Budgeting\b
 Route::post('/main/{tahun}/{status}/belanja-langsung/kuncirincianskpd', 'Budgeting\blController@kuncirincianskpd');
 Route::post('/main/{tahun}/{status}/belanja-langsung/setStaff', 'Budgeting\blController@setStaff');
 Route::post('/main/{tahun}/{status}/belanja-langsung/rincian-musrenbang/simpan', 'Budgeting\blController@setMusren');
-//Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@submitAKBEdit');
+Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@submitAKBEdit');
 
-Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@updateAKB');
+//Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@updateAKB');
 
 
 
@@ -141,6 +144,15 @@ Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd22/{s}', 'Budgeting\lampiran
 Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd221/{s}', 'Budgeting\lampiranController@dpaSKPD221Detail');
 Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd31/{s}', 'Budgeting\lampiranController@dpaSKPD31Detail');
 Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd32/{s}', 'Budgeting\lampiranController@dpaSKPD32Detail');
+//AKB BL
+Route::get('/main/{tahun}/{status}/lampiran/akb/bl/{id}', 'Budgeting\lampiranController@akbBL');
+//AKB BTL
+Route::get('/main/{tahun}/{status}/lampiran/akb/btl/{id}', 'Budgeting\lampiranController@akbBTL');
+//perwal lampiran 1-4
+Route::get('/main/{tahun}/{status}/lampiran/perwal/1', 'Budgeting\lampiranController@perwal1');
+Route::get('/main/{tahun}/{status}/lampiran/perwal/2', 'Budgeting\lampiranController@perwal2');
+Route::get('/main/{tahun}/{status}/lampiran/perwal/3', 'Budgeting\lampiranController@perwal3');
+Route::get('/main/{tahun}/{status}/lampiran/perwal/4', 'Budgeting\lampiranController@perwal4');
 //------------------------------------------------------------------------------------------------------------------------
 //BTL
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/', 'Budgeting\btlController@index');
@@ -157,6 +169,12 @@ Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/bantuan', 'Budgeting\b
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/btt', 'Budgeting\btlController@getBTT');
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/getRekening/{id}', 'Budgeting\btlController@getRekening');					
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/getDetail/{skpd}/{id}', 'Budgeting\btlController@getDetail');
+Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/akb/{id}', 'Budgeting\btlController@showAKB');
+Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/data/akb/{id}', 'Budgeting\btlController@showDataAKB');
+Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/akb/detail/{btl_id}/{rek_id}', 'Budgeting\btlController@detailAKB');
+
+//simpan BTL 
+Route::post('/main/{tahun}/{status}/belanja-tidak-langsung/akb/ubah', 'Budgeting\btlController@submitAKBEdit');
 //------------------------------------------------------------------------------------------------------------------------
 //BL-ARSIP
 Route::get('/main/{tahun}/{status}/arsip/belanja-langsung', 'Budgeting\arsipBLController@index');
