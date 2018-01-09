@@ -65,7 +65,8 @@ public function index($tahun,$status){
     public function getPembiayaan($tahun,$status){
       $data = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
               ->JOIN('DATA.users','users.id','=','DAT_PEMBIAYAAN.USER_UPDATED')
-              ->where('PEMBIAYAAN_TAHUN',$tahun)->orderBy('REKENING_KODE')->get();  
+              ->where('PEMBIAYAAN_TAHUN',$tahun)->orderBy('REKENING_KODE')->get();
+              //dd($data);  
 
     	$view 			= array();
       $no=1;
