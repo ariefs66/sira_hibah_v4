@@ -9,6 +9,7 @@ use View;
 use Response;
 use DB;
 use Auth;
+use Carbon;
 use App\Model\Program;
 use App\Model\Kegiatan;
 use App\Model\JenisGiat;
@@ -39,12 +40,15 @@ public function index($tahun,$status){
     public function submitAdd($tahun,$status){
     	$pembiayaan 	= new Pembiayaan;
     	$pembiayaan->PEMBIAYAAN_TAHUN		= $tahun;
-    	$pembiayaan->SKPD_ID				= Input::get('SKPD_ID');
     	$pembiayaan->REKENING_ID			= Input::get('REKENING_ID');
-    	$pembiayaan->PEMBIAYAAN_NAMA		= Input::get('PEMBIAYAAN_NAMA');
-    	$pembiayaan->PEMBIAYAAN_KETERANGAN	= Input::get('PEMBIAYAAN_NAMA');
-    	$pembiayaan->PEMBIAYAAN_TOTAL		= Input::get('PEMBIAYAAN_TOTAL');
+      $pembiayaan->PEMBIAYAAN_TOTAL   = Input::get('PEMBIAYAAN_TOTAL');
+      $pembiayaan->PEMBIAYAAN_KETERANGAN  = Input::get('PEMBIAYAAN_KETERANGAN');
+      $pembiayaan->PEMBIAYAAN_DASHUK  = Input::get('PEMBIAYAAN_DASHUK');
+      $pembiayaan->TIME_UPDATED  = Carbon\Carbon::now();
+      $pembiayaan->USER_UPDATED   = Auth::user()->id;
+      $pembiayaan->IP_UPDATED   = $_SERVER['REMOTE_ADDR'];
     	$pembiayaan->save();
+
     	return "Input Berhasil!";
     }
 
