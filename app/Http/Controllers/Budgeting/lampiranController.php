@@ -1167,6 +1167,7 @@ class lampiranController extends Controller
 
 
         $btl            = BTL::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1%');})->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+        //dd($btl);
         $btl1           = BTL::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.1%');})->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
         $btl2           = BTL::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.3%');})->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
         $btl3           = BTL::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.4%');})->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
