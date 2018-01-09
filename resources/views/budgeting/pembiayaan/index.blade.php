@@ -21,6 +21,12 @@
               <div class="panel bg-white">
 
                 <div class="wrapper-lg">
+
+                  @if(Auth::user()->level == 9 
+                      or substr(Auth::user()->mod,10,1) == 1
+                      or substr(Auth::user()->mod,0,1) == 1)
+                  <button class="pull-right btn m-t-n-sm btn-success open-form-pembiayaan"><i class="m-r-xs fa fa-plus"></i> Tambah Pembiayaan</button>
+                  @endif
                   
                   <h5 class="inline font-semibold text-orange m-n ">Pembiayaan</h5>
                   <div class="col-sm-1 pull-right m-t-n-sm">
@@ -33,8 +39,6 @@
                  </div>                    
                </div>
                
-
-
 
             <!-- / main tab -->                  
             <div class="tab-content tab-content-alt-1 bg-white">
@@ -85,7 +89,7 @@
 </div>
 </div>
 <div class="overlay"></div>
-<div class="bg-white wrapper-lg input-sidebar input-pembiayaan">
+<!-- <div class="bg-white wrapper-lg input-sidebar input-pembiayaan">
   <a class="close"><i class="icon-bdg_cross"></i></a>
   <form class="form-horizontal">
     <div class="input-wrapper">
@@ -120,7 +124,7 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">TOTAL PEMBIAYAAN</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Total Pembiayaan" id="totalpembiayaan" name="totalpembiayaan">         
+          <input type="text" class="form-control" placeholder="Total Pembiayaan" id="totalpembiayaan-" name="totalpembiayaan">         
         </div> 
       </div>
 
@@ -130,7 +134,55 @@
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPembiayaan()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
     </div>
   </form>
+</div> -->
+
+
+<div class="bg-white wrapper-lg input-sidebar input-pembiayaan">
+  <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
+  <form class="form-horizontal">
+    <div class="input-wrapper">
+      <h5>Tambah Pembiayaan</h5>
+      <input type="hidden" name="idpembiayaan" id="idpembiayaan">      
+      <div class="form-group">
+        <label class="col-sm-3">Rekening</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="rek-id" required="">
+            <option value="">Silahkan Pilih Rekening</option>
+            @foreach($rekening as $rek)
+            <option value="{{ $rek->REKENING_ID }}">{{ $rek->REKENING_KODE }} - {{ $rek->REKENING_NAMA }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Dasar Hukum</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Masukan Dasar Hukum" id="dashuk" required="">          
+        </div> 
+      </div>
+
+       <div class="form-group">
+        <label for="no_spp" class="col-md-3">Keterangan</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Masukan Keterangan" id="keterangan" required="">          
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Total Pembiayaan</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Masukan Total Pembiayaan" id="totalpembiayaan" onkeypress="return event.charCode >= 48 && event.charCode <= 57" required="">          
+        </div> 
+      </div>
+
+      <hr class="m-t-xl">
+      <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
+      <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPembiayaan()"><i class="fa fa-save m-r-xs "></i>Simpan Pembiayaan</a>
+    </div>
+  </form>
 </div>
+
 </div>
 
 
@@ -197,22 +249,26 @@
 
   function simpanPembiayaan(){
     var token           = $('#token').val();  
-    var id              = $('#idpembiayaan').val();
+    //var id              = $('#idpembiayaan').val();
+    var rek_id          = $('#rek-id').val();
     var dashuk          = $('#dashuk').val();
     var keterangan      = $('#keterangan').val();
     var total           = $('#totalpembiayaan').val();
 
-    if(id == "" || total == "" ){
+    if(total == "" ){
       $.alert('Form harap diisi!');
     }else{
-      if(id != ""){
+      /*if(id != ""){
         uri   = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pembiayaan/update";
-      }
+      }else*/
+        uri   = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pembiayaan/simpan";
+
       $.ajax({
         url: uri,
         type: "POST",
         data: {'_token'                 : token,
-              'PEMBIAYAAN_ID'           : id, 
+             // 'PEMBIAYAAN_ID'           : id, 
+              'REKENING_ID'             : rek_id, 
               'PEMBIAYAAN_DASHUK'       : dashuk, 
               'PEMBIAYAAN_KETERANGAN'   : keterangan,
               'PEMBIAYAAN_TOTAL'        : total },
@@ -220,11 +276,12 @@
           $('.table-pembiayaan').DataTable().ajax.reload();
           $(".shown").trigger('click');
           $.alert(msg);
-          $('.input-btl,.input-sidebar').animate({'right':'-1050px'},function(){
+          $('.input-pembiayaan,.input-sidebar').animate({'right':'-1050px'},function(){
               $('.overlay').fadeOut('fast');
           });
-          $('#rek_kode').val("");
-          $('#rek_nama').val("");
+          //$('#rek_kode').val("");
+          $('#rek-id').val("");
+         // $('#rek_nama').val("");
           $('#dashuk').val("");
           $('#keterangan').val("");
           $('#totalpembiayaan').val("");
