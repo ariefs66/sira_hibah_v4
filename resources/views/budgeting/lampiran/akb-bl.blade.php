@@ -188,23 +188,23 @@
 </table>
 <table class="ttd">
 	<tr>
-		<td width="75%"><span style="margin-left:-400px">Mengetahui / Menyetujui:</span></td>
+		<td width="75%"><span style="margin-left:-400px"></span></td>
 		<td>Bandung, {{$tgl}} {{$bln}} {{$tahun}}</td>
 	</tr>
 	<tr>
-		<td><span style="margin-left:-400px">Kuasa Pengguna Anggaran</span></td>
-		<td>Pejabat Pelaksana Teknis Kegiatan</td>
+		<td><span style="margin-left:-400px"></span></td>
+		<td>Kepala {{ $bl->skpd->SKPD_NAMA }}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td><br><br><br><br><br></td>
 	</tr>
 	<tr>
-		<td><span style="margin-left:-400px;border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $bl->skpd->SKPD_KEPALA }}</span></td>
+		<td><span style="margin-left:-400px;border-bottom: 1px solid #000;padding-bottom: 1px;"></span></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $bl->skpd->SKPD_KEPALA }}</span></td>
 	</tr>
 	<tr>
-		<td><span style="margin-left:-400px">NIP. {{$bl->skpd->SKPD_KEPALA_NIP}}</span></td>
+		<td><span style="margin-left:-400px"></span></td>
 		<td>NIP. {{$bl->skpd->SKPD_KEPALA_NIP}}</td>
 	</tr>
 </table>

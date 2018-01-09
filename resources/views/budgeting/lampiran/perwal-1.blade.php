@@ -117,11 +117,16 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
+	
+	@php $tot=0; @endphp	
+	@foreach($pendapatan as $pen)
+		@php $tot += $pen->PENDAPATAN_TOTAL @endphp
+	@endforeach
 
 	<tr>
 		<td class="border-rincian">4</td>
 		<td class="border-rincian"><b>PENDAPATAN</b></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($tot,0,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
 

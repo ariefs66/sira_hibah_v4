@@ -185,8 +185,8 @@
 	</tr>
 	<tr>
 		<td class="border-rincian">2.1</td>
-		<td class="border-rincian">&nbsp;<b>BELANJA TIDAK LANGSUNG</b></td>
-		<td class="border-rincian kanan rekening">{{ number_format($btl,0,',','.') }},00</td>
+		<td class="border-rincian">&nbsp;<b>BELANJA TIDAK LANGSUNG </b></td>
+		<td class="border-rincian kanan rekening">{{ number_format((float)$btl, 2, ',', '.') }}</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">2.1.1</td>
