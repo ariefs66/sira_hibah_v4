@@ -26,7 +26,7 @@
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung</h5> 
                   
                   @if(Auth::user()->level == 2)
-                    @if($thp == 1 and Auth::user()->active == 3)
+                    @if($thp == 1 and Auth::user()->active == 1)
                   
                       <a class="pull-right btn m-t-n-sm btn-success" href="{{ url('/') }}/main/{{$tahun}}/murni/belanja-langsung/tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Langsung</a>
                     @else 
