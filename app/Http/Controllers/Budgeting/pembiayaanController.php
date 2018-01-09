@@ -67,45 +67,10 @@ public function index($tahun,$status){
               ->JOIN('DATA.users','users.id','=','DAT_PEMBIAYAAN.USER_UPDATED')
               ->where('PEMBIAYAAN_TAHUN',$tahun)->orderBy('REKENING_KODE')->get();  
 
-     /* $p1 = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
-              ->where('PEMBIAYAAN_TAHUN',$tahun)
-              ->where('REKENING_KODE','LIKE', '6.1%')
-              ->sum('PEMBIAYAAN_TOTAL'); 
-
-      $p2 = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
-              ->where('PEMBIAYAAN_TAHUN',$tahun)
-              ->where('REKENING_KODE','LIKE', '6.2%')
-              ->sum('PEMBIAYAAN_TOTAL'); */
-
-
     	$view 			= array();
       $no=1;
     	foreach ($data as $data) {
-          /*if($data->REKENING_KODE == '6' || $data->REKENING_KODE == '6.1' || $data->REKENING_KODE == '6.2') {
-              $opsi = '';
-              $id       = '<b>'.$data->PEMBIAYAAN_ID.'<b>';
-              $rek_kode = '<b>'.$data->REKENING_KODE.'<b>';
-              $rek_nama = '<b>'.$data->REKENING_NAMA.'<b>';
-              if($data->REKENING_KODE == '6.1'){
-                $total    = '<b>'.number_format($p1,0,'.',',').'<b>';
-              }elseif($data->REKENING_KODE == '6.2'){
-                $total    = '<b>'.number_format($p2,0,'.',',').'<b>';
-              }else{
-               $total    = '<b>0<b>'; 
-              }
-              
-
-          }
-          else{
-            if(Auth::user()->level == 8){
-              $opsi = '<a onclick="return ubah(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a> <a onclick="return hapus(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a>';
-            }else $opsi ='-';
-              
-              $id       = $data->PEMBIAYAAN_ID;
-              $rek_kode = $data->REKENING_KODE;
-              $rek_nama = $data->REKENING_NAMA;
-              $total    = number_format($data->PEMBIAYAAN_TOTAL,0,'.',',');
-          }*/
+          
           if(Auth::user()->level == 8){
               $opsi = '<a onclick="return ubah(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a> <a onclick="return hapus(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a>';
             }else $opsi ='-';
@@ -158,7 +123,7 @@ public function index($tahun,$status){
     }
 
     public function hapus(){
-        pembiayaan::where('PEMBIAYAAN_ID',Input::get('PEMBIAYAAN_ID'))->update(['PEMBIAYAAN_TOTAL'=>0]);
+        pembiayaan::where('PEMBIAYAAN_ID',Input::get('PEMBIAYAAN_ID'))->delete();
         return "Hapus Berhasil!";
     }
 
