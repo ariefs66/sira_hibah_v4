@@ -33,7 +33,8 @@ class pembiayaanController extends Controller
 {
 public function index($tahun,$status){
 		$skpd 		= SKPD::all();
-    	$rekening 	= Rekening::where('REKENING_KODE','like','6%')->whereRaw('length("REKENING_KODE") = 11')->get();
+    	$rekening 	= Rekening::where('REKENING_KODE','like','6%')->whereRaw('length("REKENING_KODE") = 11')
+                    ->where('REKENING_TAHUN',$tahun)->get();
         return View('budgeting.pembiayaan.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening]);
     }
 
@@ -63,9 +64,10 @@ public function index($tahun,$status){
     //API
     public function getPembiayaan($tahun,$status){
       $data = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
-              ->where('PEMBIAYAAN_TAHUN',$tahun)->orderBy('REKENING_KODE')->get();        
+              ->JOIN('DATA.users','users.id','=','DAT_PEMBIAYAAN.USER_UPDATED')
+              ->where('PEMBIAYAAN_TAHUN',$tahun)->orderBy('REKENING_KODE')->get();  
 
-      $p1 = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
+     /* $p1 = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.1%')
               ->sum('PEMBIAYAAN_TOTAL'); 
@@ -73,12 +75,13 @@ public function index($tahun,$status){
       $p2 = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
               ->where('PEMBIAYAAN_TAHUN',$tahun)
               ->where('REKENING_KODE','LIKE', '6.2%')
-              ->sum('PEMBIAYAAN_TOTAL'); 
+              ->sum('PEMBIAYAAN_TOTAL'); */
 
 
     	$view 			= array();
+      $no=1;
     	foreach ($data as $data) {
-          if($data->REKENING_KODE == '6' || $data->REKENING_KODE == '6.1' || $data->REKENING_KODE == '6.2') {
+          /*if($data->REKENING_KODE == '6' || $data->REKENING_KODE == '6.1' || $data->REKENING_KODE == '6.2') {
               $opsi = '';
               $id       = '<b>'.$data->PEMBIAYAAN_ID.'<b>';
               $rek_kode = '<b>'.$data->REKENING_KODE.'<b>';
@@ -92,7 +95,8 @@ public function index($tahun,$status){
               }
               
 
-          }else{
+          }
+          else{
             if(Auth::user()->level == 8){
               $opsi = '<a onclick="return ubah(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a> <a onclick="return hapus(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a>';
             }else $opsi ='-';
@@ -101,19 +105,25 @@ public function index($tahun,$status){
               $rek_kode = $data->REKENING_KODE;
               $rek_nama = $data->REKENING_NAMA;
               $total    = number_format($data->PEMBIAYAAN_TOTAL,0,'.',',');
-          }
+          }*/
+          if(Auth::user()->level == 8){
+              $opsi = '<a onclick="return ubah(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a> <a onclick="return hapus(\''.$data->PEMBIAYAAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a>';
+            }else $opsi ='-';
           
           
     		array_push($view, array( 
-                                 'ID'			               =>$id,
-                								 'REKENING_KODE'	       =>$rek_kode,
-                                 'REKENING_NAMA'         =>$rek_nama,
+                                 'ID'			               =>$data->PEMBIAYAAN_ID,
+                                 'NO'                   =>$no,
+                                 'SKPD'                =>$data->name,
+                								 'REKENING_KODE'	       =>$data->REKENING_KODE,
+                                 'REKENING_NAMA'         =>$data->REKENING_NAMA,
                                  'PEMBIAYAAN_DASHUK'     =>$data->PEMBIAYAAN_DASHUK,
-                								 'PEMBIAYAAN_TOTAL'      =>$total,
+                								 'PEMBIAYAAN_TOTAL'      =>number_format($data->PEMBIAYAAN_TOTAL,0,'.',','),
                                  'PEMBIAYAAN_KETERANGAN' =>$data->PEMBIAYAAN_KETERANGAN,
                                  'OPSI'                  =>$opsi,
                                  
                                ));
+        $no++;
     	}
 		$out = array("aaData"=>$view);    	
     	return Response::JSON($out);

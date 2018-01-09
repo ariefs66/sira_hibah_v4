@@ -48,6 +48,8 @@
                     sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pembiayaan/getData',
                     aoColumns: [
                     { mData: 'ID',class:'hide'},
+                    { mData: 'NO'},
+                    { mData: 'SKPD'},
                     { mData: 'REKENING_KODE'},
                     { mData: 'REKENING_NAMA'},
                     { mData: 'PEMBIAYAAN_DASHUK'},
@@ -58,6 +60,8 @@
                   <thead>
                     <tr>
                       <th class="hide">ID</th>                    
+                      <th>NO</th>                    
+                      <th>SKPD</th>                    
                       <th>REKENING</th>                    
                       <th>URAIAN</th>
                       <th>DASAR HUKUM</th>
@@ -67,7 +71,7 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>
-                      <th colspan="7" class="th_search">
+                      <th colspan="8" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -186,26 +190,49 @@
 </div>
 
 
+<div id="table-detail-pendapatan" class="hide bg-white">
+  <table ui-jq="dataTable" class="table table-detail-pendapatan-isi table-striped b-t b-b">
+    <thead>
+      <tr>
+        <th>No</th>                                    
+        <th>Rekening</th>                          
+        <th>Rincian</th>                       
+        <th>Anggaran</th>                                       
+        <th>#</th>                                       
+      </tr> 
+      <tr>
+        <th class="hide"></th>                    
+        <th colspan="5" class="th_search">
+          <i class="icon-bdg_search"></i>
+          <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
+        </th>
+      </tr>                                       
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+
+
 @endsection
 
 @section('plugin')
 <script>
-  $('.table-btl').on('click', '.table-btl > tbody > tr ', function () {
-    if($("tr").hasClass('btl-rincian') == false){
+  $('.table-pembiayaan').on('click', '.table-pembiayaan > tbody > tr ', function () {
+    if($("tr").hasClass('pendapatan-rincian') == false){
       skpd = $(this).children("td").eq(0).html();
-      rek  = $(this).children("td").eq(1).html();
     }
-    if(!$(this).hasClass('btl-rincian')){
+    if(!$(this).hasClass('pendapatan-rincian')){
       if($(this).hasClass('shown')){      
-        $('.btl-rincian').slideUp('fast').remove(); 
+        $('.pendapatan-rincian').slideUp('fast').remove();  
         $(this).removeClass('shown'); 
       }else{
-        $('.btl-rincian').slideUp('fast').remove(); 
+        $('.pendapatan-rincian').slideUp('fast').remove();  
         $(this).addClass('shown');
-        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-btl').html()+'</td></tr>';
-        $(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
-        $('.table-detail-btl-isi').DataTable({
-          sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/getDetail/"+skpd+"/"+rek,
+        btl_detail = '<tr class="pendapatan-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-pendapatan').html()+'</td></tr>';
+        $(btl_detail).insertAfter('.table-pembiayaan .table tbody tr.shown');
+        $('.table-detail-pendapatan-isi').DataTable({
+          sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/pendapatan/getDetail/"+skpd,
           aoColumns: [
           { mData: 'NO' },
           { mData: 'REKENING' },
@@ -218,6 +245,7 @@
     }
   });
 </script>
+
 <script type="text/javascript">
   $('input.cari-pegawai').keyup( function () {
     $('.table-pegawai').DataTable().search($('.cari-pegawai').val()).draw();
