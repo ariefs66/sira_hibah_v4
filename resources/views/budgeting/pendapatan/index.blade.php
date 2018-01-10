@@ -131,10 +131,18 @@
         </div> 
       </div>
 
+       <div class="form-group">
+        <label for="no_spp" class="col-md-3">Dasar Hukum</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Masukan Dasar Hukum" id="dashuk-pendapatan" required="">          
+        </div> 
+      </div>
+
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Anggaran</label>          
         <div class="col-sm-9">
-          <input type="number" class="form-control" placeholder="Masukan Anggaran" id="total-pendapatan" required="">          
+          <input type="text" class="form-control" placeholder="Masukan Anggaran" id="total-pendapatan" onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+          required="">          
         </div> 
       </div>
 
@@ -153,6 +161,7 @@
         <th>No</th>                                    
         <th>Rekening</th>                          
         <th>Rincian</th>                       
+        <th>Dashuk</th>                                       
         <th>Anggaran</th>                                       
         <th>#</th>                                       
       </tr> 
@@ -191,6 +200,7 @@
           { mData: 'NO' },
           { mData: 'REKENING' },
           { mData: 'RINCIAN' },
+          { mData: 'DASHUK' },
           { mData: 'TOTAL' },
           { mData: 'AKSI' }
           ]
@@ -217,6 +227,7 @@
     var SUB_ID          = $('#subunit-pendapatan').val();
     var REKENING_ID     = $('#rekening-pendapatan').val();
     var PENDAPATAN_NAMA = $('#nama-pendapatan').val();
+    var PENDAPATAN_DASHUK = $('#dashuk-pendapatan').val();
     var PENDAPATAN_TOTAL= $('#total-pendapatan').val();
     var PENDAPATAN_ID   = $('#id-pendapatan').val();    
     if(SUB_ID == "" || REKENING_ID == "" || PENDAPATAN_NAMA == "" || PENDAPATAN_TOTAL == ""){
@@ -235,6 +246,7 @@
               'REKENING_ID'     : REKENING_ID,
               'PENDAPATAN_ID'   : PENDAPATAN_ID, 
               'PENDAPATAN_NAMA' : PENDAPATAN_NAMA, 
+              'PENDAPATAN_DASHUK' : PENDAPATAN_DASHUK, 
               'PENDAPATAN_TOTAL': PENDAPATAN_TOTAL},
         success: function(msg){
           $('#table-pendapatan').DataTable().ajax.reload();
@@ -244,6 +256,7 @@
           $('#subunit-pendapatan').val('').trigger('chosen:updated');
           $('#rekening-pendapatan').val('').trigger('chosen:updated');
           $('#nama-pendapatan').val('').trigger('chosen:updated');
+          $('#dashuk-pendapatan').val('').trigger('chosen:updated');
           $('#total-pendapatan').val('').trigger('chosen:updated');
           $('.input-pendapatan,.input-sidebar').animate({'right':'-1050px'},function(){
               $('.overlay').fadeOut('fast');
@@ -290,6 +303,7 @@
         $('#subunit-pendapatan').append('<option value="'+data['SUB_ID']+'" selected>'+data['SUB_NAMA']+'</option>').trigger("chosen:updated");
         $('#rekening-pendapatan').append('<option value="'+data['REKENING_ID']+'" selected>'+data['REKENING_KODE']+'-'+data['REKENING_NAMA']+'</option>').trigger("chosen:updated");
         $('#nama-pendapatan').val(data['PENDAPATAN_NAMA']);
+        $('#dashuk-pendapatan').val(data['PENDAPATAN_DASHUK']);
         $('#total-pendapatan').val(data['PENDAPATAN_TOTAL']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-pendapatan').animate({'right':'0'},"linear");  

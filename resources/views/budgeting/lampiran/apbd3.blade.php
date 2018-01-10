@@ -64,6 +64,9 @@
 		.tengah{
 			text-align: center;
 		}
+		.text_blok{
+            font-weight: bold;
+        }
     	@media print {
 		    footer {page-break-after: always;}
 			table { page-break-inside:auto; }
@@ -76,7 +79,7 @@
 <body onload="window.print()">
 <div class="cetak">
 	<div style="margin-left: 330px;">
-	<h5>LAMPIRAN III &nbsp; &nbsp; &nbsp; Rancangan Peraturan Daerah</h5>
+	<h5>LAMPIRAN III &nbsp; &nbsp; &nbsp; Peraturan Daerah</h5>
 	<h5>NOMOR : </h5>
 	<h5>TANGGAL :</h5>
 	</div>
@@ -91,7 +94,7 @@
 		</td>	
 		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>RINCIAN RANCANGAN APBD MENURUT URUSAN PEMERINTAHAN DAERAH, ORGANISASI, PENDAPATAN, BELANJA DAN PEMBIAYAAN</h3>
+			<h3>RINCIAN APBD MENURUT URUSAN PEMERINTAHAN DAERAH, ORGANISASI, PENDAPATAN, BELANJA DAN PEMBIAYAAN</h3>
 			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
 	</tr>
@@ -100,106 +103,118 @@
 <table class="rincian">
 	<tbody>
 	<tr class="border "> 
-		<td colspan="4"><b>Urusan Pemerintah : </b> {{$urusan->URUSAN_KODE}} &nbsp; &nbsp; &nbsp; {{$urusan->URUSAN_KAT1_NAMA}}<br> 
+		<td colspan="14"><b>Urusan Pemerintah : </b> {{$urusan->URUSAN_KODE}} &nbsp; &nbsp; &nbsp; {{$urusan->URUSAN_KAT1_NAMA}}<br> 
 		<b>Organisasi &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;: </b>{{$skpd->SKPD_KODE}} &nbsp; {{$skpd->SKPD_NAMA}} </td> 
 	</tr>	
 	<tr class="border headrincian">
-		<td class="border tengah" >KODE <br> REKENING </td>
+		<td class="border tengah" colspan="10" >KODE <br> REKENING </td>
 		<td class="border tengah" >URAIAN</td>
 		<td class="border tengah" >JUMLAH</td>
 		<td class="border tengah" >DASAR HUKUM</td>
 	</tr>		
 	<tr class="border headrincian">
-		<td class="border" width="8%">1</td>
+		<td class="border" colspan="10" width="8%">1</td>
 		<td class="border">2</td>
 		<td class="border">3</td>
 		<td class="border">4</td>
 	</tr>
 	<tr style="font-size: 5px;">
-		<td class="border-rincian">&nbsp;</td>
+		<td class="border-rincian" colspan="10">&nbsp;</td>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-	</tr>	
-
-	<tr>
-		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5</td>
-		<td class="border-rincian"><b>BELANJA</b></td>
-		<td class="border-rincian kanan total">-</td>
-		<td class="border-rincian kanan total">-</td>
 	</tr>
-	<tr>
-		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.1</td>
-		<td class="border-rincian"><b>&nbsp; BELANJA TIDAK LANGSUNG</b></td>
-		<td class="border-rincian kanan total">-</td>
-		<td class="border-rincian kanan total">-</td>
-	</tr>
-	@foreach($btl as $bt)
-	<tr>
-		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.1.1</td>
-		<td class="border-rincian"> &nbsp; &nbsp; Belanja Pegawai</td>
-		<td class="border-rincian kanan total">{{ number_format($bt->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan total">-</td>
-	</tr>
-	@endforeach
 
-
-	<tr>
-		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.2</td>
-		<td class="border-rincian"><b>&nbsp; BELANJA LANGSUNG</b></td>
-		<td class="border-rincian kanan total">-</td>
-		<td class="border-rincian kanan total">-</td>
-	</tr>
-	@foreach($bl_prog as $bp)
-		@php
-			$pagu_prog = 0;
-		@endphp
-		@foreach($bl_keg as $bk)
-			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
-			@php
-				$pagu_prog += $bk->BL_PAGU ;
-			@endphp
-			@endif
-		@endforeach	
-	
-					
-	<tr>
-			<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}</td>
-			<td class="border-rincian"> &nbsp; &nbsp; <b>{{$bp->PROGRAM_NAMA}}</b></td>
-			<td class="border-rincian kanan total">{{ number_format($pagu_prog,0,',','.') }}</td>
-			<td class="border-rincian kanan total">-</td>
-		</tr>
-		
-		@foreach($bl_keg as $bk)
-			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
-			<!-- kegiatan  -->
-			<tr>
-				<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}</td>
-				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$bk->KEGIATAN_NAMA}} </td>
-				<td class="border-rincian kanan total">{{ number_format($bk->BL_PAGU,0,',','.') }}</td>
-				<td class="border-rincian kanan total">-</td>
-			</tr>
-
-				@foreach($bl_rek as $br)
-					@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID)
-					<!-- rekening  -->
-					<tr>
-						<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.{{$br->REKENING_KODE}}</td>
-						<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$br->REKENING_NAMA}} </td>
-						<td class="border-rincian kanan total">{{ number_format($br->pagu,0,',','.') }}</td>
-						<td class="border-rincian kanan total">-</td>
-					</tr>
-					@endif
-				@endforeach
-
-			@endif	
-		@endforeach
-	@endforeach
+	@foreach($rincian as $rs)
+        @if ($rs['tingkat']==1)
+        <tr>
+            <td class="text_blok" width="5">{{ $rs['kodeurusan'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['kodeskpd'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['kodeprogram'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['nogiat'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun1'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun2'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun3'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun4'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun5'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun6'] }}</td>
+            <td class="border-rincian text_blok">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            <td class="border-rincian kanan text_blok">&nbsp;</td>
+            <td class="border-rincian"></td>
+        </tr>
+        @endif
+        @if ($rs['tingkat']==2)
+        <tr>
+            <td class="text_blok" width="5">{{ $rs['kodeurusan'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['kodeskpd'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['kodeprogram'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['nogiat'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun1'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun2'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun3'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun4'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun5'] }}</td>
+            <td class="text_blok" width="5">{{ $rs['akun6'] }}</td>
+            <td class="border-rincian text_blok">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            <td class="border-rincian kanan text_blok">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+            <td class="border-rincian"></td>
+        </tr>
+        @endif
+        @if ($rs['tingkat']==3)
+        <tr>
+            <td class="" width="5">{{ $rs['kodeurusan'] }}</td>
+            <td class="" width="5">{{ $rs['kodeskpd'] }}</td>
+            <td class="" width="5">{{ $rs['kodeprogram'] }}</td>
+            <td class="" width="5">{{ $rs['nogiat'] }}</td>
+            <td class="" width="5">{{ $rs['akun1'] }}</td>
+            <td class="" width="5">{{ $rs['akun2'] }}</td>
+            <td class="" width="5">{{ $rs['akun3'] }}</td>
+            <td class="" width="5">{{ $rs['akun4'] }}</td>
+            <td class="" width="5">{{ $rs['akun5'] }}</td>
+            <td class="" width="5">{{ $rs['akun6'] }}</td>
+            <td class="border-rincian">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+            <td class="border-rincian"></td>
+        </tr>
+        @endif
+        @if ($rs['tingkat']==4)
+        <tr>
+            <td class="" width="5">{{ $rs['kodeurusan'] }}</td>
+            <td class="" width="5">{{ $rs['kodeskpd'] }}</td>
+            <td class="" width="5">{{ $rs['kodeprogram'] }}</td>
+            <td class="" width="5">{{ $rs['nogiat'] }}</td>
+            <td class="" width="5">{{ $rs['akun1'] }}</td>
+            <td class="" width="5">{{ $rs['akun2'] }}</td>
+            <td class="" width="5">{{ $rs['akun3'] }}</td>
+            <td class="" width="5">{{ $rs['akun4'] }}</td>
+            <td class="" width="5">{{ $rs['akun5'] }}</td>
+            <td class="" width="5">{{ $rs['akun6'] }}</td>
+            <td class="border-rincian">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+            <td class="border-rincian"></td>
+        </tr>
+        @endif
+        @if ($rs['tingkat']==5)
+        <tr>
+        	<td class="border-rincian text_blok" colspan="10"></td>
+            <td class="border-rincian text_blok">{{ $rs['namajumlah'] }}</td>
+            <td class="border-rincian kanan text_blok">
+                @if($rs['totaljumlah']<0)
+                ({{ number_format(abs($rs['totaljumlah']),0,'.',',') }})
+                @else
+                {{ number_format($rs['totaljumlah'],0,'.',',') }}
+                @endif
+            </td>
+            <td class="border-rincian"></td>
+        </tr>
+        @endif
+    @endforeach
 
 	<tr style="font-size: 5px;">
-		<td class="border-rincian">&nbsp;</td>
+		<td class="" colspan="10">&nbsp;</td>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"></td>
+		<td class="border-rincian"></td>
 	</tr>		
 	</tbody>	
 </table>

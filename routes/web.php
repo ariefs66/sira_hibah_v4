@@ -101,13 +101,13 @@ Route::get('/main/{tahun}/{status}/lampiran/ppas/{id}', 'Budgeting\lampiranContr
 Route::get('/main/{tahun}/{status}/lampiran/ppasrincian/{id}', 'Budgeting\lampiranController@ppasRincian');
 Route::get('/main/{tahun}/{status}/lampiran/ppasdownload/{id}', 'Budgeting\lampiranController@ppasDownload');
 Route::get('/main/{tahun}/{status}/lampiran-download/ppas/{tipe}', 'Budgeting\lampiranController@ppasProgram');
-//LAMPIRAN RAPERDA 1 S/D 13
-Route::get('/main/{tahun}/{status}/lampiran/apbd/1', 'Budgeting\lampiranController@lampiran1');
-Route::get('/main/{tahun}/{status}/lampiran/apbd/2', 'Budgeting\lampiranController@lampiran2');
-Route::get('/main/{tahun}/{status}/lampiran/apbd/3', 'Budgeting\lampiranController@lampiran3');
-Route::get('/main/{tahun}/{status}/lampiran/apbd/3/{id}', 'Budgeting\lampiranController@lampiran3Detail');
-Route::get('/main/{tahun}/{status}/lampiran/apbd/4', 'Budgeting\lampiranController@lampiran4');
-Route::get('/main/{tahun}/{status}/lampiran/apbd/5', 'Budgeting\lampiranController@lampiran5');
+//LAMPIRAN PERDA 1 S/D 13
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/1', 'Budgeting\lampiranController@lampiran1');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/2', 'Budgeting\lampiranController@lampiran2');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/3', 'Budgeting\lampiranController@lampiran3Skpd');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/3/{skpd}', 'Budgeting\lampiranController@lampiran3Detail');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/4', 'Budgeting\lampiranController@lampiran4');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/5', 'Budgeting\lampiranController@lampiran5');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/6', 'Budgeting\lampiranController@lampiran6');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/7', 'Budgeting\lampiranController@lampiran7');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/8', 'Budgeting\lampiranController@lampiran8');
@@ -116,6 +116,12 @@ Route::get('/main/{tahun}/{status}/lampiran/apbd/10', 'Budgeting\lampiranControl
 Route::get('/main/{tahun}/{status}/lampiran/apbd/11', 'Budgeting\lampiranController@lampiran11');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/12', 'Budgeting\lampiranController@lampiran12');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/13', 'Budgeting\lampiranController@lampiran13');
+//LAMPIRAN PERWAL
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/1', 'Budgeting\lampiranController@perwal1');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/2', 'Budgeting\lampiranController@perwal2');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/3', 'Budgeting\lampiranController@perwal3');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/4', 'Budgeting\lampiranController@perwal4');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/5', 'Budgeting\lampiranController@perwal5');
 //RKA SKPD
 Route::get('/main/{tahun}/{status}/lampiran/rka/skpd', 'Budgeting\lampiranController@rkaSKPD');
 Route::get('/main/{tahun}/{status}/lampiran/rka/skpd1', 'Budgeting\lampiranController@rkaSKPD1');
@@ -148,11 +154,6 @@ Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd32/{s}', 'Budgeting\lampiran
 Route::get('/main/{tahun}/{status}/lampiran/akb/bl/{id}', 'Budgeting\lampiranController@akbBL');
 //AKB BTL
 Route::get('/main/{tahun}/{status}/lampiran/akb/btl/{id}', 'Budgeting\lampiranController@akbBTL');
-//perwal lampiran 1-4
-Route::get('/main/{tahun}/{status}/lampiran/perwal/1', 'Budgeting\lampiranController@perwal1');
-Route::get('/main/{tahun}/{status}/lampiran/perwal/2', 'Budgeting\lampiranController@perwal2');
-Route::get('/main/{tahun}/{status}/lampiran/perwal/3', 'Budgeting\lampiranController@perwal3');
-Route::get('/main/{tahun}/{status}/lampiran/perwal/4', 'Budgeting\lampiranController@perwal4');
 //------------------------------------------------------------------------------------------------------------------------
 //BTL
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/', 'Budgeting\btlController@index');
