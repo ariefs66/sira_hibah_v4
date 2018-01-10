@@ -680,6 +680,28 @@
 		<td class="border-rincian kanan total">-</td>
 		<td class="border-rincian kanan total">-</td>
 	</tr>
+
+	<tr>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"> &nbsp; &nbsp; Belanja Pegawai</td>
+		<td class="border-rincian kanan total">{{ number_format(1,0,',','.') }}</td>
+		<td class="border-rincian kanan total">-</td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"> &nbsp; &nbsp; Belanja Barang & Jasa</td>
+		<td class="border-rincian kanan total">{{ number_format(1,0,',','.') }}</td>
+		<td class="border-rincian kanan total">-</td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian"></td>
+		<td class="border-rincian"> &nbsp; &nbsp; Belanja Modal</td>
+		<td class="border-rincian kanan total">{{ number_format(1,0,',','.') }}</td>
+		<td class="border-rincian kanan total">-</td>
+	</tr>
+
 	@foreach($bl_prog as $bp)
 		@php
 			$pagu_prog = 0;
