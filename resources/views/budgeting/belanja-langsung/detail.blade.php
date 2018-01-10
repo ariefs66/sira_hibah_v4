@@ -181,7 +181,7 @@
                 @else
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Rincian Hanya Bisa dirubah / dihapus!</h5>
                 @endif -->
-                @if(Auth::user()->active == 0)
+                @if(Auth::user()->active == 1)
                 <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
                 @endif
                 <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekaprincian/{{$bl->BL_ID}}"><i class="m-r-xs fa fa-download"></i> Download</a>
