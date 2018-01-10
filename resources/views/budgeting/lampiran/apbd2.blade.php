@@ -64,6 +64,9 @@
 		.tengah{
 			text-align: center;
 		}
+		.text_blok{
+            font-weight: bold;
+        }
     	@media print {
 		    footer {page-break-after: always;}
 			table { page-break-inside:auto; }
@@ -75,9 +78,15 @@
 </head>
 <body onload="window.print()">
 <div class="cetak">
+	<div style="margin-left: 330px;">
+	<h5>LAMPIRAN II &nbsp; &nbsp; &nbsp; Peraturan Daerah</h5>
+	<h5>NOMOR : </h5>
+	<h5>TANGGAL :</h5>
+	</div>
+	<br>
 <table class="header">
 	<tr class="">
-		<td class="" colspan="2"></td>
+		<td class="" colspan="5"></td>
 	</tr>
 	<tr>	
 		<td class="">
@@ -89,12 +98,12 @@
 			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
 	</tr>
-	<tr> <td colspan="2"></td> </tr>	
+	<tr> <td colspan="5"></td> </tr>	
 </table>
 <table class="rincian">
 	<tbody>
 	<tr class="border headrincian">
-		<td class="border tengah" rowspan="2">KODE</td>
+		<td class="border tengah" rowspan="2" colspan="3">KODE</td>
 		<td class="border tengah" rowspan="2">URUSAN PEMERINTAHAN DAERAH</td>
 		<td class="border tengah" rowspan="2">PENDAPATAN</td>
 		<td class="border tengah" colspan="3">BELANJA</td>
@@ -105,7 +114,7 @@
 		<td class="border tengah">JUMLAH BELANJA</td>
 	</tr>	
 	<tr class="border headrincian">
-		<td class="border" width="8%">1</td>
+		<td class="border" width="8%" colspan="3">1</td>
 		<td class="border">2</td>
 		<td class="border">3</td>
 		<td class="border">4</td>
@@ -113,169 +122,63 @@
 		<td class="border">6</td>
 	</tr>
 	<tr style="font-size: 5px;">
-		<td class="border-rincian">&nbsp;</td>
+		<td class="border-rincian" colspan="3">&nbsp;</td>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
-	@foreach($kat1 as $k1)
-		@php
-			$kattotpendapatan = 0;
-			$kattotbtl = 0;
-			$kattotbl = 0;
-		@endphp
-
-		@foreach($urusan as $u)
-
-			@if($k1->URUSAN_KAT1_ID == $u->URUSAN_KAT1_ID)
-
-				@php
-				$totpendapatan = 0;
-				$totbtl = 0;
-				$totbl = 0;
-				@endphp
-
-				@foreach($bl as $b)
-					@if($u->URUSAN_KODE == $b->URUSAN_KODE)
-
-						@foreach($pendapatan as $key=>$p)
-							@if($b->SKPD_KODE == $p->SKPD_KODE)
-								@php
-									$totpendapatan +=  $p->pagu;
-								@endphp
-							@endif
-						@endforeach
-
-						@foreach($btl as $key=>$bt)
-								@if($b->SKPD_KODE == $bt->SKPD_KODE)
-									@php
-									$totbtl +=  $bt->pagu;
-									@endphp
-								@endif
-							@endforeach
-
-						@php
-							$totbl +=  $b->pagu;
-						@endphp
-
-					@endif	
-				@endforeach	
-
-				@php
-				$kattotpendapatan += $totpendapatan; 
-				$kattotbtl += $totbtl; 
-				$kattotbl += $totbl; 
-				@endphp
-
-			@endif	
-		@endforeach		
-
-
-	<tr>
-		<td class="border-rincian">{{$k1->URUSAN_KAT1_KODE}}</td>
-		<td class="border-rincian"><b>{{$k1->URUSAN_KAT1_NAMA}}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($kattotpendapatan,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($kattotbtl,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($kattotbl,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($kattotbtl+$kattotbl,0,',','.') }}</b></td>
-	</tr>
-		@foreach($urusan as $u)
-
-			@if($k1->URUSAN_KAT1_ID == $u->URUSAN_KAT1_ID)
-
-			@php
-			$totpendapatan = 0;
-			$totbtl = 0;
-			$totbl = 0;
-			@endphp
-
-			@foreach($bl as $b)
-				@if($u->URUSAN_KODE == $b->URUSAN_KODE)
-
-					@foreach($pendapatan as $key=>$p)
-						@if($b->SKPD_KODE == $p->SKPD_KODE)
-							@php
-								$totpendapatan +=  $p->pagu;
-							@endphp
-						@endif
-					@endforeach
-
-					@foreach($btl as $key=>$bt)
-							@if($b->SKPD_KODE == $bt->SKPD_KODE)
-								@php
-								$totbtl +=  $bt->pagu;
-								@endphp
-							@endif
-						@endforeach
-
-					@php
-						$totbl +=  $b->pagu;
-					@endphp
-
-				@endif	
-			@endforeach		
-
-			<tr>
-				<td class="border-rincian">{{$u->URUSAN_KODE}}</td>
-				<td class="border-rincian">&nbsp; &nbsp; <b>{{$u->URUSAN_NAMA}}</b></td>
-				<td class="border-rincian kanan rekening"><b>{{ number_format($totpendapatan,0,',','.') }}</b></td>
-				<td class="border-rincian kanan rekening"><b>{{ number_format($totbtl,0,',','.') }}</b></td>
-				<td class="border-rincian kanan rekening"><b>{{ number_format($totbl,0,',','.') }}</b></td>
-				<td class="border-rincian kanan rekening"><b>{{ number_format($totbtl+$totbl,0,',','.') }}</b></td>
-			</tr>
-
-				@foreach($bl as $b)
-					@if($u->URUSAN_KODE == $b->URUSAN_KODE)
-					<tr>
-						<td class="border-rincian">{{$u->URUSAN_KODE}} . {{$b->SKPD_KODE}}</td>
-						<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$b->SKPD_NAMA}}</td>
-						<!-- pendapatan -->
-						@php
-							$pendapatanFound = false;
-						@endphp
-						@foreach($pendapatan as $key=>$p)
-							@if($b->SKPD_KODE == $p->SKPD_KODE)
-								@php
-									$pendapatanFound = true;
-								@endphp
-								<td class="border-rincian kanan rekening">{{ number_format($p->pagu,0,',','.') }}</td>
-							@elseif ($key == count($pendapatan)-1 && !$pendapatanFound)
-								<td class="border-rincian kanan rekening">-</td>
-							@endif
-						@endforeach
-						<!-- BTL -->
-						@php
-							$btlFound = false;
-							$jumlah = $b->pagu;
-						@endphp
-						@foreach($btl as $key=>$bt)
-							@if($b->SKPD_KODE == $bt->SKPD_KODE)
-								@php
-									$btlFound = true;
-									$jumlah += $bt->pagu;
-								@endphp
-								<td class="border-rincian kanan rekening">{{ number_format($bt->pagu,0,',','.') }}</td>
-							@elseif ($key == count($btl)-1 && !$btlFound)
-								<td class="border-rincian kanan rekening">-</td>
-							@endif
-						@endforeach
-						<!-- BL -->
-						<td class="border-rincian kanan rekening">{{ number_format($b->pagu,0,',','.') }}</td>
-						<td class="border-rincian kanan rekening">{{ number_format($jumlah,0,',','.') }}</td>
-					</tr>
-					@endif
-				@endforeach
-
-			@endif
-				
-		@endforeach	
-	@endforeach
+	@foreach($detil as $rs)
+        @if($rs->urusan_ok=='t')
+        <tr>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="border-rincian text_blok">{{ $rs->URUSAN_KAT1_NAMA }}</td>
+            <td class="border-rincian kanan text_blok">&nbsp;</td>
+            <td class="border-rincian kanan text_blok">&nbsp;</td>
+            <td class="border-rincian kanan text_blok">&nbsp;</td>
+            <td class="border-rincian kanan text_blok">&nbsp;</td>
+        </tr>
+        @endif
+        @if($rs->kode_urusan_ok=='t')
+        <tr>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="border-rincian text_blok">{{ $rs->URUSAN_NAMA }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_pendapatan_murni,0,'.',',') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_btl_murni,0,'.',',') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_bl_murni,0,'.',',') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format(($rs->subtotal_btl_murni+$rs->subtotal_bl_murni),0,'.',',') }}</td>
+        </tr>
+        @endif
+        @if($rs->kode_unit_ok=='t')
+        <tr>
+            <td class="" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
+            <td class="" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
+            <td class="" width="5">{{ $rs->SKPD_KODE }}</td>
+            <td class="border-rincian">{{ $rs->SKPD_NAMA }}</td>
+            <td class="border-rincian kanan">{{ number_format($rs->PENDAPATAN_MURNI,0,'.',',') }}</td>
+            <td class="border-rincian kanan">{{ number_format($rs->BTL_MURNI,0,'.',',') }}</td>
+            <td class="border-rincian kanan">{{ number_format($rs->BL_MURNI,0,'.',',') }}</td>
+            <td class="border-rincian kanan">{{ number_format(($rs->BTL_MURNI+$rs->BL_MURNI),0,'.',',') }}</td>
+        </tr>
+        @endif
+    @endforeach
+    <tr>
+        <td class="text_blok kanan" colspan="4">TOTAL</td>
+        <td class="border-rincian text_blok kanan">{{ number_format($totalpendapatanmurni,0,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format($totalbtlmurni,0,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format($totalblmurni,0,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format(($totalbtlmurni+$totalblmurni),0,'.',',') }}</td>
+    </tr>
 	
 
 	<tr style="font-size: 5px;">
-		<td class="border-rincian">&nbsp;</td>
+		<td class="" colspan="5">&nbsp;</td>
+		<td class="border-rincian"></td>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>		

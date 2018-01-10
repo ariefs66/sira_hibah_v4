@@ -462,22 +462,22 @@
                       </a>
                     </li>
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/2" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perda/2" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 2</span>
                       </a>
                     </li>
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/3" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perda/3" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 3 </span>
                       </a>
                     </li>
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/4" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perda/4" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 4</span>
                       </a>
                     </li>
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/5" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perda/5" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 5</span>
                       </a>
                     </li>
@@ -533,22 +533,22 @@
                   </a>                
                    <ul class="nav nav-sub dk">
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/perwal/1" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perwal/1" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 1</span>
                       </a>
                     </li> 
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/perwal/2" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perwal/2" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 2</span>
                       </a>
                     </li> 
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/perwal/3" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perwal/3" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 3</span>
                       </a>
                     </li> 
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/perwal/4" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perwal/4" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 4</span>
                       </a>
                     </li> 

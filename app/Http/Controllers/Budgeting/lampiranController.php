@@ -1235,7 +1235,7 @@ class lampiranController extends Controller
 
     }
 
-    public function lampiran2($tahun,$status){
+   /* public function lampiran2($tahun,$status){
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
@@ -1290,18 +1290,156 @@ class lampiranController extends Controller
                             );
         return View('budgeting.lampiran.apbd2',$data);
 
+    }*/
+
+    public function lampiran2($tahun,$status){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tahapan=0;
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $tabel=array();
+        $idx=0;
+
+        $total_pendapatan_murni=0;
+        $total_btl_murni=0;
+        $total_bl_murni=0;
+
+        $detil = DB::table('BUDGETING.RKP_LAMP_2 as lampiran')
+                 ->where('lampiran.TAHUN',$tahun)
+                 ->where('lampiran.TAHAPAN_ID',$tahapan)
+                 ->select('lampiran.TAHUN',
+                          'lampiran.URUSAN_KAT1_KODE',
+                          'lampiran.URUSAN_KAT1_NAMA',
+                          'lampiran.URUSAN_KODE',
+                          'lampiran.URUSAN_NAMA',
+                          'lampiran.SKPD_KODE',
+                          'lampiran.SKPD_NAMA',
+                          'lampiran.PENDAPATAN_MURNI',
+                          'lampiran.BTL_MURNI',
+                          'lampiran.BL_MURNI',
+                          DB::raw("'f' as urusan_ok"),
+                          DB::raw("'f' as kode_urusan_ok"),
+                          DB::raw("'f' as kode_unit_ok"),
+                          DB::raw("0 as subtotal_pendapatan_murni"),
+                          DB::raw("0 as subtotal_btl_murni"),
+                          DB::raw("0 as subtotal_bl_murni"))
+                 ->orderBy('lampiran.URUSAN_KODE','asc')
+                 ->orderBy('lampiran.SKPD_ID','asc')
+                 ->orderBy('lampiran.SKPD_KODE','asc')
+                 ->get();
+        //print_r($detil);exit;
+        $old_urusan="";
+        $old_kode_urusan="";
+        $old_kode_unit="";
+        for($i=0;$i<count($detil);$i++){
+            $rs=$detil[$i];
+            if($rs->SKPD_KODE!=$old_kode_unit){
+                $rs->kode_unit_ok='t';
+                $old_kode_unit=$rs->SKPD_KODE;
+                $total_pendapatan_murni+=$rs->PENDAPATAN_MURNI;
+                $total_btl_murni+=$rs->BTL_MURNI;
+                $total_bl_murni+=$rs->BL_MURNI;
+            }
+            if(substr($rs->URUSAN_KODE,1,1)!=$old_urusan){
+                $rs->urusan_ok='t';
+                $old_urusan=substr($rs->URUSAN_KODE,1,1);
+            }
+            if($rs->URUSAN_KODE!=$old_kode_urusan){
+                $rs->kode_urusan_ok='t';
+                $old_kode_urusan=$rs->URUSAN_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_2 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KODE',$rs->URUSAN_KODE)
+                         ->select(DB::raw('sum("PENDAPATAN_MURNI") as pendapatanmurni'),
+                                  DB::raw('sum("BTL_MURNI") as btlmurni'),
+                                  DB::raw('sum("BL_MURNI") as blmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->subtotal_pendapatan_murni=$rekap[0]->pendapatanmurni;
+                $rs->subtotal_btl_murni=$rekap[0]->btlmurni;
+                $rs->subtotal_bl_murni=$rekap[0]->blmurni;
+            }
+            array_push($tabel,$rs);
+        }
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,
+                            'detil'         =>$tabel,
+                            'totalpendapatanmurni'=>$total_pendapatan_murni,
+                            'totalbtlmurni'=>$total_btl_murni,
+                            'totalblmurni'=>$total_bl_murni
+                            );
+        return View('budgeting.lampiran.apbd2',$data);
+
+        /*
+        *========================== KODING LAMA
+        $kat1       = UrusanKategori1::where('URUSAN_KAT1_TAHUN',$tahun)->orderBy('URUSAN_KAT1_KODE')->get();
+
+        $urusan     = Urusan::where('URUSAN_TAHUN',$tahun)->orderBy('URUSAN_KODE')->get();
+
+        $bl         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                        ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+                        ->JOIN('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('URUSAN_TAHUN',$tahun)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE","URUSAN_KODE")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"URUSAN_KODE","SKPD_KODE", "SKPD_NAMA", SUM("BL_PAGU") AS pagu')
+                        ->get();    
+
+        $btl       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", SUM("BTL_TOTAL") AS pagu ')
+                        ->get();
+
+        $pendapatan = Pendapatan::JOIN('REFERENSI.REF_SUB_UNIT','DAT_PENDAPATAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->groupBy('SKPD_NAMA',"SKPD_KODE")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", SUM("PENDAPATAN_TOTAL") AS pagu')
+                        ->get(); 
+
+        //dd($pendapatan);
+        
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,        
+                            'kat1'          =>$kat1,        
+                            'urusan'        =>$urusan,        
+                            'bl'            =>$bl,        
+                            'btl'           =>$btl,        
+                            'pendapatan'    =>$pendapatan,        
+                            );
+        return View('budgeting.lampiran.apbd2',$data);
+        */
+
     }
 
-    public function lampiran3($tahun,$status){
+   /* public function lampiran3($tahun,$status){
         $tipe = 'Lampiran'; 
         if(Auth::user()->level == 2) $skpd = SKPD::where('SKPD_ID',UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID'))->get();
         else  $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
         $data       = ['tahun'=>$tahun,'status'=>$status,'tipe'=>$tipe,'skpd'=>$skpd,'i'=>1];
         if($tipe == 'apbd') return View('budgeting.lampiran.indexAPBD',$data);
         else return View('budgeting.lampiran.apbd3_index',$data);
-    }
+    }*/
 
-    public function lampiran3Detail($tahun,$status,$id){
+    /*public function lampiran3Detail($tahun,$status,$id){
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
@@ -1378,9 +1516,845 @@ class lampiranController extends Controller
                             );
 
         return View('budgeting.lampiran.apbd3',$data);
+    }*/
+
+    public function lampiran3Skpd($tahun,$status){
+        $tipe = 'Lampiran'; 
+        if(Auth::user()->level == 2) $skpd = SKPD::where('SKPD_ID',UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID'))->get();
+        else  $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
+        $data       = ['tahun'=>$tahun,'status'=>$status,'tipe'=>$tipe,'skpd'=>$skpd,'i'=>1];
+        if($tipe == 'apbd') return View('budgeting.lampiran.indexAPBD',$data);
+        else return View('budgeting.lampiran.apbd3_index',$data);
     }
 
-    public function lampiran4($tahun,$status){
+     public function lampiran3Detail($tahun,$status,$id){
+        
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tahapan=0;
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $skpd       = SKPD::where('SKPD_ID',$id)->first();
+        $urusan     = Urusan::JOIN('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+                        ->JOIN('REFERENSI.REF_URUSAN_KATEGORI1','REF_URUSAN_KATEGORI1.URUSAN_KAT1_ID','=','REF_URUSAN.URUSAN_KAT1_ID')
+                        ->where('REF_URUSAN_SKPD.SKPD_ID',$id)
+                        ->first();
+                        //dd($urusan);
+        $tabel=array();
+        $idx=0;
+
+        $total_pendapatan=0;
+        $total_belanja=0;
+        $total_penerimaan=0;
+        $total_pengeluaran=0;
+        $surplus=0;
+        $netto=0;
+
+        $detil = DB::table('REFERENSI.REF_SKPD as skpd')
+                 ->leftJoin('REFERENSI.REF_URUSAN_SKPD as us',function($join){
+                    $join->on('us.SKPD_ID','=','skpd.SKPD_ID');
+                 })
+                 ->leftJoin('REFERENSI.REF_URUSAN as urusan',function($join){
+                    $join->on('urusan.URUSAN_ID','=','us.URUSAN_ID')
+                         ->on('urusan.URUSAN_TAHUN','=','skpd.SKPD_TAHUN');
+                 })
+                 ->where('skpd.SKPD_TAHUN',$tahun)
+                 ->where('skpd.SKPD_ID',$id)
+                 ->select('skpd.SKPD_KODE','skpd.SKPD_NAMA','urusan.URUSAN_KODE','urusan.URUSAN_NAMA')
+                 ->get();
+
+        if($status=="murni"){
+            //return $this->ringkasmurni($tahun,$app,$id);
+            $pendapatan=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','LIKE','4%');
+            $pendapatan = $pendapatan->where(DB::raw('length(rk."REKENING_KODE")'),'<=',5);
+            $pendapatan=$pendapatan->leftJoin('BUDGETING.DAT_PENDAPATAN as dp',function($join) use ($tahun,$id){
+                            $join->on('dp.PENDAPATAN_TAHUN','=','rk.REKENING_TAHUN')
+                                 ->where('dp.SKPD_ID',$id)
+                                 ->whereIn('dp.REKENING_ID',function($join) use ($tahun){
+                                    $join->select(DB::raw(' "REKENING_ID" FROM "REFERENSI"."REF_REKENING" WHERE "REKENING_TAHUN"='.$tahun.' AND "REKENING_KODE" LIKE rk."REKENING_KODE" '."||'%'"));
+                                 });
+                        })
+                        ->select(DB::raw('1||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                                 'rk.REKENING_KODE as koderek',
+                                 'rk.REKENING_NAMA as namarek',
+                                 DB::raw('SUM(dp."PENDAPATAN_TOTAL") as nilai')
+                                 )
+                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                        ->having(DB::raw('SUM(dp."PENDAPATAN_TOTAL")'),'<>','0')
+                        ->orderBy('rk.REKENING_KODE')
+                        ->get();
+            //print_r($pendapatan);exit;
+            foreach($pendapatan as $pd){
+                if(strlen($pd->koderek)==1){
+                    $total_pendapatan+=$pd->nilai;
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    //$getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$pd->koderek;
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($pd->koderek)==3){
+                    $tabel[$idx]['tingkat']=2;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($pd->koderek)>3 and strlen($pd->koderek)<=8){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    (strlen($pd->koderek)>3 and strlen($pd->koderek)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                    (strlen($pd->koderek)>5 and strlen($pd->koderek)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                else{
+                    $tabel[$idx]['tingkat']=4;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']=$getakun[2];
+                    $tabel[$idx]['akun4']=$getakun[3];
+                    (!empty($getakun[4]))?$tabel[$idx]['akun5']=$getakun[4]:$tabel[$idx]['akun5']="";
+                    (strlen($pd->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekeningmurni']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Jumlah Pendapatan";
+            $tabel[$idx]['totaljumlah']=$total_pendapatan;
+            $idx+=1;
+            //print_r($tabel);exit;//CEK PENDAPATAN
+            
+            $btl=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','LIKE','5%');
+            $btl = $btl->where(DB::raw('length(rk."REKENING_KODE")'),'<=',5);
+            $btl=$btl->whereNotIn('rk.REKENING_KODE',['5.2','5.2.1','5.2.2','5.2.3'])
+                  ->leftJoin('BUDGETING.DAT_BTL as dp',function($join) use ($tahun,$id){
+                      $join->on('dp.BTL_TAHUN','=','rk.REKENING_TAHUN')
+                            ->where('dp.SKPD_ID',$id)
+                                 ->whereIn('dp.REKENING_ID',function($join) use ($tahun){
+                                    $join->select(DB::raw(' "REKENING_ID" FROM "REFERENSI"."REF_REKENING" WHERE "REKENING_TAHUN"='.$tahun.' AND "REKENING_KODE" LIKE rk."REKENING_KODE" '."||'%'"));
+                                 });
+                  })
+                  ->select(DB::raw('2||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                           'rk.REKENING_KODE as koderek',
+                           'rk.REKENING_NAMA as namarek',
+                           'rk.REKENING_ID as idrek',
+                           DB::raw('SUM(dp."BTL_TOTAL") as nilai'))
+                  ->groupBy('rk.REKENING_ID','rk.REKENING_KODE','rk.REKENING_NAMA')
+                  ->having(DB::raw('SUM(dp."BTL_TOTAL")'),'<>','0')
+                  ->orderBy('rk.REKENING_KODE')
+                  ->get();
+            //print_r($btl);exit;
+            foreach($btl as $bt){
+                if(strlen($bt->koderek)==1){
+                    $tabel[$idx]['tingkat']=1;
+                    $total_belanja+=$bt->nilai;
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    //$getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$bt->koderek;
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)==3){
+                    $tabel[$idx]['tingkat']=2;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)>3 and strlen($bt->koderek)<=8){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    (strlen($bt->koderek)>3 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                    (strlen($bt->koderek)>5 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                else{
+                    $tabel[$idx]['tingkat']=4;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']=$getakun[2];
+                    $tabel[$idx]['akun4']=$getakun[3];
+                    $tabel[$idx]['akun5']=$getakun[4];
+                    (strlen($bt->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                    /**
+                    *============ INI UNTUK MENAMPILKAN NILAI BTL PPKD
+                    if($id=''){
+                        if(substr($bt->koderek,0,5)=="5.1.3" or substr($bt->koderek,0,5)=="5.1.4" or substr($bt->koderek,0,5)=="5.1.5" or substr($bt->koderek,0,5)=="5.1.7"){
+                            $detil2 = DB::table('BUDGETING.DAT_BTL as dp')
+                                    ->where('dp.BTL_TAHUN',$tahun)
+                                    ->where('dp.SKPD_ID',$id)
+                                    ->where('dp.REKENING_ID',$bt->idrek)
+                                    ->select('dp.namakomponen','dp.subkomponen','dp.keterangankomponen','dp.hargakomponen as nilai')
+                                    ->get();
+                            foreach($detil2 as $res2){
+                                $tabel[$idx]['tingkat']=4;
+                                $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                                $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                                $tabel[$idx]['kodeprogram']="00";
+                                $tabel[$idx]['nogiat']="000";
+                                $getakun=explode(".",$bt->koderek);
+                                $tabel[$idx]['akun1']=$getakun[0];
+                                $tabel[$idx]['akun2']=$getakun[1];
+                                $tabel[$idx]['akun3']=$getakun[2];
+                                $tabel[$idx]['akun4']=$getakun[3];
+                                $tabel[$idx]['akun5']=$getakun[4];
+                                (strlen($bt->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                                $tabel[$idx]['koderekening']=$bt->koderek;
+                                //$tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                                $tabel[$idx]['namarekening']=$res2->namakomponen. " ( ".$res2->keterangankomponen." )";
+                                $tabel[$idx]['totalrekening']=$res2->nilai;
+                                $tabel[$idx]['namajumlah']=NULL;
+                                $tabel[$idx]['totaljumlah']=NULL;
+                                $idx+=1;
+                            }
+                        }
+                    }
+                    */
+                }
+                //print_r($getakun);exit;
+            }
+
+            $bl=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','=','5.2');
+            $bl = $bl->select(DB::raw('2||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                            'rk.REKENING_KODE as koderek',
+                            'rk.REKENING_NAMA as namarek',
+                            DB::raw('(select sum(rd."RINCIAN_TOTAL") from "BUDGETING"."DAT_RINCIAN" as rd where rd."BL_ID" IN (select bl."BL_ID" from "BUDGETING"."DAT_BL" as bl where bl."BL_TAHUN"=rk."REKENING_TAHUN" and bl."BL_DELETED"=0 and bl."SKPD_ID"='.$id.') and rd."REKENING_ID" in (select r."REKENING_ID" from "REFERENSI"."REF_REKENING" as r where r."REKENING_TAHUN"=rk."REKENING_TAHUN" and r."REKENING_KODE" like rk."REKENING_KODE"'."||'%'".')) as nilai')
+                        )
+                    ->groupBy('rk.REKENING_TAHUN','rk.REKENING_KODE','rk.REKENING_NAMA')
+                    ->orderBy('rk.REKENING_KODE')
+                    ->get();
+            //print_r($bl);exit;
+            $tabel[$idx]['tingkat']=2;
+            $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+            $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+            $tabel[$idx]['kodeprogram']="00";
+            $tabel[$idx]['nogiat']="000";
+            $tabel[$idx]['akun1']="5";
+            $tabel[$idx]['akun2']="2";
+            $tabel[$idx]['akun3']="";
+            $tabel[$idx]['akun4']="";
+            $tabel[$idx]['akun5']="";
+            $tabel[$idx]['akun6']="";
+            $tabel[$idx]['koderekening']="5.2";
+            $tabel[$idx]['namarekening']="Belanja Langsung";
+            $tabel[$idx]['totalrekening']=$bl[0]->nilai;
+            $tabel[$idx]['namajumlah']=NULL;
+            $tabel[$idx]['totaljumlah']=NULL;
+            $idx+=1;
+            
+            $rincian = DB::table('BUDGETING.RKP_LAMP_3_REKBL as rincian')
+                       ->where('rincian.TAHUN',$tahun)
+                       ->where('rincian.SKPD_ID',$id)
+                       ->where('rincian.TAHAPAN_ID',$tahapan);
+            $rincian = $rincian->where(DB::raw('length(rincian."REKENING_KODE")'),'<=',5);
+            $rincian = $rincian->leftJoin('BUDGETING.RKP_LAMP_3_REK as rekap',function($join){
+                            $join->on('rekap.SKPD_ID','=','rincian.SKPD_ID')
+                                 ->on('rekap.BL_ID','=','rincian.BL_ID')
+                                 ->on('rekap.TAHAPAN_ID','=','rincian.TAHAPAN_ID')
+                                 ->on('rekap.TAHUN','=','rincian.TAHUN');
+                       })
+                       ->select('rincian.SKPD_KODE',
+                                'rincian.KEGIATAN_KODE',
+                                'rincian.BL_ID',
+                                'rincian.KEGIATAN_NAMA',
+                                'rekap.PROGRAM_KODE',
+                                'rekap.PROGRAM_NAMA',
+                                'rincian.REKENING_KODE',
+                                'rincian.REKENING_NAMA',
+                                'rincian.BL_MURNI as nilai',
+                                DB::raw("'f' as kode_program_ok"),
+                                DB::raw("'f' as kode_giat_ok"))
+                       ->groupBy('rincian.SKPD_KODE',
+                                'rincian.KEGIATAN_KODE',
+                                'rincian.BL_ID',
+                                'rincian.KEGIATAN_NAMA',
+                                'rekap.PROGRAM_KODE',
+                                'rekap.PROGRAM_NAMA',
+                                'rincian.REKENING_KODE',
+                                'rincian.REKENING_NAMA',
+                                'rincian.BL_MURNI')
+                       ->orderBy('rincian.SKPD_KODE')
+                       ->orderBy('rekap.PROGRAM_KODE')
+                       ->orderBy('rincian.KEGIATAN_KODE')
+                       ->orderBy('rincian.REKENING_KODE')
+                       ->get();
+            //print_r($rincian);exit;
+            $old_kode_program="";
+            $old_kode_giat="";
+            foreach($rincian as $bt){
+                if($bt->PROGRAM_KODE!=$old_kode_program){
+                    $bt->kode_program_ok="t";
+                    $old_kode_program=$bt->PROGRAM_KODE;
+                }
+                if($bt->BL_ID!=$old_kode_giat){
+                    $bt->kode_giat_ok="t";
+                    $old_kode_giat=$bt->BL_ID;
+                }
+
+                if($bt->kode_program_ok=="t"){
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                    $tabel[$idx]['nogiat']="000";
+                    $tabel[$idx]['akun1']="";
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->PROGRAM_KODE;
+                    $tabel[$idx]['namarekening']=$bt->PROGRAM_NAMA;
+                    $tabel[$idx]['totalrekening']=NULL;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+
+                if(($bt->kode_giat_ok=="t") or ($bt->BL_ID==$old_kode_giat)){
+                    if($bt->kode_giat_ok=="t"){
+                        $tabel[$idx]['tingkat']=1;
+                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                        $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                        $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
+                        $tabel[$idx]['akun1']="";
+                        $tabel[$idx]['akun2']="";
+                        $tabel[$idx]['akun3']="";
+                        $tabel[$idx]['akun4']="";
+                        $tabel[$idx]['akun5']="";
+                        $tabel[$idx]['akun6']="";
+                        $tabel[$idx]['koderekening']=$bt->KEGIATAN_KODE;
+                        $tabel[$idx]['namarekening']=$bt->KEGIATAN_NAMA;
+                        $tabel[$idx]['totalrekening']=NULL;
+                        $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['totaljumlah']=NULL;
+                        $idx+=1;
+                    }
+
+                    if(strlen($bt->REKENING_KODE)==3){
+                        $total_belanja+=$bt->nilai;
+
+                        $tabel[$idx]['tingkat']=3;
+                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                        $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                        $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
+                        $getakun=explode(".",$bt->REKENING_KODE);
+                        $tabel[$idx]['akun1']=$getakun[0];
+                        $tabel[$idx]['akun2']=$getakun[1];
+                        $tabel[$idx]['akun3']="";
+                        $tabel[$idx]['akun4']="";
+                        $tabel[$idx]['akun5']="";
+                        $tabel[$idx]['akun6']="";
+                        $tabel[$idx]['koderekening']=$bt->REKENING_KODE;
+                        $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
+                        $tabel[$idx]['totalrekening']=$bt->nilai;
+                        $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['totaljumlah']=NULL;
+                        $idx+=1;
+                    }
+                    elseif(strlen($bt->REKENING_KODE)>3 and strlen($bt->REKENING_KODE)<=8){
+                        $tabel[$idx]['tingkat']=3;
+                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                        $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                        $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
+                        $getakun=explode(".",$bt->REKENING_KODE);
+                        $tabel[$idx]['akun1']=$getakun[0];
+                        $tabel[$idx]['akun2']=$getakun[1];
+                        (strlen($bt->REKENING_KODE)>3 and strlen($bt->REKENING_KODE)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                        (strlen($bt->REKENING_KODE)>5 and strlen($bt->REKENING_KODE)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                        $tabel[$idx]['akun5']="";
+                        $tabel[$idx]['akun6']="";
+                        $tabel[$idx]['koderekening']=$bt->REKENING_KODE;
+                        $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
+                        $tabel[$idx]['totalrekening']=$bt->nilai;
+                        $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['totaljumlah']=NULL;
+                        $idx+=1;
+                    }
+                    else{
+                        $tabel[$idx]['tingkat']=4;
+                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                        $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                        $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
+                        $getakun=explode(".",$bt->REKENING_KODE);
+                        $tabel[$idx]['akun1']=$getakun[0];
+                        $tabel[$idx]['akun2']=$getakun[1];
+                        $tabel[$idx]['akun3']=$getakun[2];
+                        $tabel[$idx]['akun4']=$getakun[3];
+                        $tabel[$idx]['akun5']=$getakun[4];
+                        (strlen($bt->REKENING_KODE)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                        $tabel[$idx]['koderekening']=$bt->REKENING_KODE;
+                        $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
+                        $tabel[$idx]['totalrekening']=$bt->nilai;
+                        $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['totaljumlah']=NULL;
+                        $idx+=1;
+                    }
+                }
+
+            }
+            
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Jumlah Belanja";
+            $tabel[$idx]['totaljumlah']=$total_belanja;
+            $idx+=1;
+
+            $surplus=$total_pendapatan-$total_belanja;
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Total Surplus/(Defisit)";
+            $tabel[$idx]['totaljumlah']=$surplus;
+            $idx+=1;
+            
+            $penerimaan=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','LIKE','6%')
+                        ->whereIn(DB::raw('substr(rk."REKENING_KODE",1,3)'),['6.1']);
+            $penerimaan = $penerimaan->where(DB::raw('length(rk."REKENING_KODE")'),'<=',5);
+            $penerimaan=$penerimaan->leftJoin('BUDGETING.DAT_PEMBIAYAAN as dp',function($join) use ($tahun,$id){
+                            $join->on('dp.PEMBIAYAAN_TAHUN','=','rk.REKENING_TAHUN')
+                                 ->where('dp.SKPD_ID',$id)
+                                 ->whereIn('dp.REKENING_ID',function($join) use ($tahun){
+                                    $join->select(DB::raw(' "REKENING_ID" FROM "REFERENSI"."REF_REKENING" WHERE "REKENING_TAHUN"='.$tahun.' AND "REKENING_KODE" LIKE rk."REKENING_KODE" '."||'%'"));
+                                 });
+                        })
+                        ->select(DB::raw('3||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                               'rk.REKENING_KODE as koderek',
+                               'rk.REKENING_NAMA as namarek',
+                               DB::raw('SUM(dp."PEMBIAYAAN_TOTAL") as nilai'))
+                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                        ->having(DB::raw('SUM(dp."PEMBIAYAAN_TOTAL")'),'<>','0')
+                        ->orderBy('rk.REKENING_KODE')
+                        ->get();
+            //print_r($penerimaan);exit;
+            foreach($penerimaan as $bt){
+                if(strlen($bt->koderek)==1){
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    //$getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$bt->koderek;
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)==3){
+                    $total_penerimaan+=$bt->nilai;
+                    $tabel[$idx]['tingkat']=2;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)>3 and strlen($bt->koderek)<=8){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    (strlen($bt->koderek)>3 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                    (strlen($bt->koderek)>5 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                else{
+                    $tabel[$idx]['tingkat']=4;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']=$getakun[2];
+                    $tabel[$idx]['akun4']=$getakun[3];
+                    $tabel[$idx]['akun5']=$getakun[4];
+                    (strlen($bt->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+            
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Jumlah Penerimaan Pembiayaan";
+            $tabel[$idx]['totaljumlah']=$total_penerimaan;
+            $idx+=1;
+            
+            $pengeluaran=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','LIKE','6.2%');
+            $pengeluaran = $pengeluaran->where(DB::raw('length(rk."REKENING_KODE")'),'<=',5);
+            $pengeluaran=$pengeluaran->leftJoin('BUDGETING.DAT_PEMBIAYAAN as dp',function($join) use ($tahun,$id){
+                            $join->on('dp.PEMBIAYAAN_TAHUN','=','rk.REKENING_TAHUN')
+                                 ->where('dp.SKPD_ID',$id)
+                                 ->whereIn('dp.REKENING_ID',function($join) use ($tahun){
+                                    $join->select(DB::raw(' "REKENING_ID" FROM "REFERENSI"."REF_REKENING" WHERE "REKENING_TAHUN"='.$tahun.' AND "REKENING_KODE" LIKE rk."REKENING_KODE" '."||'%'"));
+                                 });
+                        })
+                        ->select(DB::raw('3||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                               'rk.REKENING_KODE as koderek',
+                               'rk.REKENING_NAMA as namarek',
+                               DB::raw('SUM(dp."PEMBIAYAAN_TOTAL") as nilai'))
+                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                        ->having(DB::raw('SUM(dp."PEMBIAYAAN_TOTAL")'),'<>','0')
+                        ->orderBy('rk.REKENING_KODE')
+                        ->get();
+            //print_r($pendapatan);exit;
+            foreach($pengeluaran as $bt){
+                if(strlen($bt->koderek)==1){
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    //$getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$bt->koderek;
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)==3){
+                    $total_pengeluaran+=$bt->nilai;
+                    
+                    $tabel[$idx]['tingkat']=2;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)>3 and strlen($bt->koderek)<=8){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    (strlen($bt->koderek)>3 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                    (strlen($bt->koderek)>5 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                else{
+                    $tabel[$idx]['tingkat']=4;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']=$getakun[2];
+                    $tabel[$idx]['akun4']=$getakun[3];
+                    $tabel[$idx]['akun5']=$getakun[4];
+                    (strlen($bt->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+            
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekeningmurni']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Jumlah Pengeluaran Pembiayaan";
+            $tabel[$idx]['totaljumlah']=$total_pengeluaran;
+            $idx+=1;
+            
+            $netto=$total_penerimaan-$total_pengeluaran;
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekeningmurni']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Pembiayaan Netto";
+            $tabel[$idx]['totaljumlah']=$netto;
+            
+            //print_r($tabel);exit;
+            $urut=0;
+        }
+        elseif($status=="perubahan"){
+            //return $this->ringkasperubahan($tahun,$app,$id);
+        }
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,        
+                            'skpd'          =>$skpd,        
+                            'urusan'        =>$urusan,
+                            'rincian'       =>$tabel,    
+                            );
+
+        return View('budgeting.lampiran.apbd3',$data);
+
+        /*
+        *===================== KODING LAMA ============================
+        *
+
+       $bl_prog         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+                        ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->groupBy("SKPD_KODE", "SKPD_NAMA", "REF_PROGRAM.PROGRAM_ID", "PROGRAM_KODE", "PROGRAM_NAMA")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "REF_PROGRAM"."PROGRAM_ID", "PROGRAM_KODE", "PROGRAM_NAMA" ')
+                        ->get(); 
+
+
+        $bl_keg         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN"."KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU" ')
+                        ->get(); 
+                                        
+
+        $bl_rek         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('BUDGETING.DAT_RINCIAN','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->groupBy("SKPD_KODE", "SKPD_NAMA", "DAT_BL.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "DAT_BL"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
+                        ->get();                 
+
+
+
+        $btl       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->where('REKENING_KODE','like','5.1.1%')
+                        ->selectRaw('sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+                        
+        
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,        
+                            'skpd'          =>$skpd,        
+                            'urusan'        =>$urusan,        
+                            'bl_prog'       =>$bl_prog,        
+                            'bl_keg'       =>$bl_keg,        
+                            'bl_rek'       =>$bl_rek,        
+                            'btl'           =>$btl,        
+                            );
+
+        return View('budgeting.lampiran.apbd3',$data);
+        */
+    }
+
+   /* public function lampiran4($tahun,$status){
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
@@ -1558,6 +2532,437 @@ class lampiranController extends Controller
                             'btl_l'         =>$btl_l, 
                             );
         return View('budgeting.lampiran.apbd5',$data);
+    }*/
+
+    public function lampiran4($tahun,$status){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tahapan=0;
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $tabel=array();
+        $idx=0;
+
+        $total_pegawai_murni=0;
+        $total_jasa_murni=0;
+        $total_modal_murni=0;
+        $total_pegawai=0;
+        $total_jasa=0;
+        $total_modal=0;
+
+        $detil = DB::table('BUDGETING.RKP_LAMP_4 as lampiran')
+                 ->where('lampiran.TAHUN',$tahun)
+                 ->where('lampiran.TAHAPAN_ID',$tahapan)
+                 ->select('lampiran.TAHUN',
+                          'lampiran.URUSAN_KAT1_KODE',
+                          'lampiran.URUSAN_KAT1_NAMA',
+                          'lampiran.URUSAN_KODE',
+                          'lampiran.URUSAN_NAMA',
+                          'lampiran.PROGRAM_KODE',
+                          'lampiran.PROGRAM_NAMA',
+                          'lampiran.SKPD_KODE',
+                          'lampiran.SKPD_NAMA',
+                          'lampiran.BL_ID',
+                          'lampiran.KEGIATAN_KODE',
+                          'lampiran.KEGIATAN_NAMA',
+                          'lampiran.BL_PEGAWAI_MURNI',
+                          'lampiran.BL_JASA_MURNI',
+                          'lampiran.BL_MODAL_MURNI',
+                          DB::raw("'f' as urusan_ok"),
+                          DB::raw("'f' as kode_urusan_ok"),
+                          DB::raw("'f' as kode_program_ok"),
+                          DB::raw("'f' as kode_unit_ok"),
+                          DB::raw("'f' as kode_giat_ok"),
+                          DB::raw("0 as suburusan_pegawai_murni"),
+                          DB::raw("0 as suburusan_jasa_murni"),
+                          DB::raw("0 as suburusan_modal_murni"),
+                          DB::raw("0 as subunit_pegawai_murni"),
+                          DB::raw("0 as subunit_jasa_murni"),
+                          DB::raw("0 as subunit_modal_murni"),
+                          DB::raw("0 as subprogram_pegawai_murni"),
+                          DB::raw("0 as subprogram_jasa_murni"),
+                          DB::raw("0 as subprogram_modal_murni"))
+                 ->orderBy('lampiran.URUSAN_KODE','asc')
+                 ->orderBy('lampiran.SKPD_KODE','asc')
+                 ->orderBy('lampiran.PROGRAM_KODE','asc')
+                 ->orderBy('lampiran.BL_ID','asc')
+                 ->get();
+        //print_r($detil);exit;
+        $old_urusan="";
+        $old_kode_urusan="";
+        $old_kode_program="";
+        $old_kode_unit="";
+        $old_kode_giat="";
+        for($i=0;$i<count($detil);$i++){
+            $rs=$detil[$i];
+            
+            if(substr($rs->URUSAN_KODE,1,1)!=$old_urusan){
+                $rs->urusan_ok='t';
+                $old_urusan=substr($rs->URUSAN_KODE,1,1);
+            }
+            if($rs->URUSAN_KODE!=$old_kode_urusan){
+                $rs->kode_urusan_ok='t';
+                $old_kode_urusan=$rs->URUSAN_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_4 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KODE',$rs->URUSAN_KODE)
+                         ->select(DB::raw('sum("BL_PEGAWAI_MURNI") as pegawaimurni'),
+                                  DB::raw('sum("BL_JASA_MURNI") as jasamurni'),
+                                  DB::raw('sum("BL_MODAL_MURNI") as modalmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->suburusan_pegawai_murni=$rekap[0]->pegawaimurni;
+                $rs->suburusan_jasa_murni=$rekap[0]->jasamurni;
+                $rs->suburusan_modal_murni=$rekap[0]->modalmurni;
+            }
+            if($rs->SKPD_KODE!=$old_kode_unit){
+                $rs->kode_unit_ok='t';
+                $old_kode_unit=$rs->SKPD_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_4 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KODE',$rs->URUSAN_KODE)
+                         ->where('rekap.SKPD_KODE',$rs->SKPD_KODE)
+                         ->select(DB::raw('sum("BL_PEGAWAI_MURNI") as pegawaimurni'),
+                                  DB::raw('sum("BL_JASA_MURNI") as jasamurni'),
+                                  DB::raw('sum("BL_MODAL_MURNI") as modalmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->subunit_pegawai_murni=$rekap[0]->pegawaimurni;
+                $rs->subunit_jasa_murni=$rekap[0]->jasamurni;
+                $rs->subunit_modal_murni=$rekap[0]->modalmurni;
+            }
+            if($rs->PROGRAM_KODE!=$old_kode_program){
+                $rs->kode_program_ok='t';
+                $old_kode_program=$rs->PROGRAM_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_4 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KODE',$rs->URUSAN_KODE)
+                         ->where('rekap.SKPD_KODE',$rs->SKPD_KODE)
+                         ->where('rekap.PROGRAM_KODE',$rs->PROGRAM_KODE)
+                         ->select(DB::raw('sum("BL_PEGAWAI_MURNI") as pegawaimurni'),
+                                  DB::raw('sum("BL_JASA_MURNI") as jasamurni'),
+                                  DB::raw('sum("BL_MODAL_MURNI") as modalmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->subprogram_pegawai_murni=$rekap[0]->pegawaimurni;
+                $rs->subprogram_jasa_murni=$rekap[0]->jasamurni;
+                $rs->subprogram_modal_murni=$rekap[0]->modalmurni;
+            }
+            if($rs->BL_ID!=$old_kode_giat){
+                $rs->kode_giat_ok='t';
+                $old_kode_giat=$rs->BL_ID;
+                $total_pegawai_murni+=$rs->BL_PEGAWAI_MURNI;
+                $total_jasa_murni+=$rs->BL_JASA_MURNI;
+                $total_modal_murni+=$rs->BL_MODAL_MURNI;
+            }
+            array_push($tabel,$rs);
+        }
+
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            'detil'=>$tabel,
+                            'totalpegawaimurni'=>$total_pegawai_murni,
+                            'totaljasamurni'=>$total_jasa_murni,
+                            'totalmodalmurni'=>$total_modal_murni
+                            );
+        return View('budgeting.lampiran.apbd4',$data);
+        /*
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $kat1       = UrusanKategori1::where('URUSAN_KAT1_TAHUN',$tahun)->orderBy('URUSAN_KAT1_KODE')->get();
+        $urusan     = Urusan::where('URUSAN_TAHUN',$tahun)->orderBy('URUSAN_KODE')->get();
+
+        $skpd         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                        ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+                        ->JOIN('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->groupBy("REF_URUSAN.URUSAN_ID","URUSAN_KODE","SKPD_KODE", "SKPD_NAMA")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"REF_URUSAN"."URUSAN_ID","URUSAN_KODE","SKPD_KODE", "SKPD_NAMA", SUM("BL_PAGU") AS pagu')
+                        ->get(); 
+
+
+        //foreach ($skpd as $s) {
+        $program         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                    ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                    ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                    ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+                    ->where('BL_TAHUN',$tahun)
+                    ->where('BL_DELETED',0)
+                    //->where('REF_SKPD.SKPD_ID',)
+                    ->groupBy("URUSAN_ID","REF_PROGRAM.PROGRAM_ID","PROGRAM_KODE","PROGRAM_NAMA")
+                    ->orderBy('PROGRAM_KODE')
+                    ->selectRaw('"URUSAN_ID","REF_PROGRAM"."PROGRAM_ID", "PROGRAM_KODE","PROGRAM_NAMA", SUM("BL_PAGU") AS pagu')
+                    ->get();
+                        
+
+        $kegiatan         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->groupBy("PROGRAM_ID","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
+                        ->orderBy('KEGIATAN_KODE')
+                        ->selectRaw('"PROGRAM_ID","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA", SUM("BL_PAGU") AS pagu')
+                        ->get();    
+
+
+        $pegawai    = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                      ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                      ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                      ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                      ->join('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
+                      ->where('BL_TAHUN',$tahun)  
+                      ->where('BL_DELETED',0)  
+                      ->where('REKENING_KODE','like','5.2.1%')
+                      ->groupBy("REF_KEGIATAN.KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA")
+                      ->selectRaw('"REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA", SUM("RINCIAN_TOTAL") AS total')
+                      ->get(); 
+
+        $barangJasa    = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                      ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                      ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                      ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                      ->join('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
+                      ->where('BL_TAHUN',$tahun)  
+                      ->where('BL_DELETED',0)  
+                      ->where('REKENING_KODE','like','5.2.2%')
+                      ->groupBy("REF_KEGIATAN.KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA")
+                      ->selectRaw('"REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA", SUM("RINCIAN_TOTAL") AS total')
+                      ->get(); 
+
+        $modal    = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                      ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                      ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                      ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                      ->join('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
+                      ->where('BL_TAHUN',$tahun)  
+                      ->where('BL_DELETED',0)  
+                      ->where('REKENING_KODE','like','5.2.3%')
+                      ->groupBy("REF_KEGIATAN.KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA")
+                      ->selectRaw('"REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA", SUM("RINCIAN_TOTAL") AS total')
+                      ->get(); 
+
+
+
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            'kat1'          =>$kat1, 
+                            'urusan'        =>$urusan, 
+                            'skpd'          =>$skpd, 
+                            'program'       =>$program, 
+                            'kegiatan'      =>$kegiatan, 
+                            'pegawai'       =>$pegawai, 
+                            'barangJasa'    =>$barangJasa, 
+                            'modal'         =>$modal, 
+                            );
+        return View('budgeting.lampiran.apbd4',$data);
+        */
+    }
+
+    public function lampiran5($tahun,$status){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tahapan=0;
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $tabel=array();
+        $idx=0;
+
+        $total_gaji_murni=0;
+        $total_nongaji_murni=0;
+        $total_pegawai_murni=0;
+        $total_jasa_murni=0;
+        $total_modal_murni=0;
+        $total_gaji=0;
+        $total_nongaji=0;
+        $total_pegawai=0;
+        $total_jasa=0;
+        $total_modal=0;
+
+        $detil = DB::table('BUDGETING.RKP_LAMP_5 as lampiran')
+                 ->where('lampiran.TAHUN',$tahun)
+                 ->where('lampiran.TAHAPAN_ID',$tahapan)
+                 ->select('lampiran.TAHUN',
+                          'lampiran.URUSAN_KAT1_KODE',
+                          'lampiran.URUSAN_KAT1_NAMA',
+                          'lampiran.URUSAN_KODE',
+                          'lampiran.URUSAN_NAMA',
+                          'lampiran.FUNGSI_KODE',
+                          'lampiran.FUNGSI_NAMA',
+                          DB::raw('sum(lampiran."BTL_LAIN_MURNI") as btlnongajimurni'),
+                          DB::raw('sum(lampiran."BTL_PEGAWAI_MURNI") as btlgajimurni'),
+                          DB::raw('sum(lampiran."BL_PEGAWAI_MURNI") as pegawaimurni'),
+                          DB::raw('sum(lampiran."BL_JASA_MURNI") as jasamurni'),
+                          DB::raw('sum(lampiran."BL_MODAL_MURNI") as modalmurni'),
+                          DB::raw("'f' as kode_urusan_ok"),
+                          DB::raw("'f' as kode_fungsi_ok"),
+                          DB::raw("0 as subfungsi_gaji_murni"),
+                          DB::raw("0 as subfungsi_nongaji_murni"),
+                          DB::raw("0 as subfungsi_pegawai_murni"),
+                          DB::raw("0 as subfungsi_jasa_murni"),
+                          DB::raw("0 as subufungsi_modal_murni"))
+                 ->groupBy('lampiran.TAHUN',
+                          'lampiran.URUSAN_KAT1_KODE',
+                          'lampiran.URUSAN_KAT1_NAMA',
+                          'lampiran.URUSAN_KODE',
+                          'lampiran.URUSAN_NAMA',
+                          'lampiran.FUNGSI_KODE',
+                          'lampiran.FUNGSI_NAMA')
+                 ->orderBy('lampiran.FUNGSI_KODE','asc')
+                 ->orderBy('lampiran.URUSAN_KODE','asc')
+                 ->get();
+        //print_r($detil);exit;
+        $old_urusan="";
+        $old_kode_urusan="";
+        $old_kode_fungsi="";
+        for($i=0;$i<count($detil);$i++){
+            $rs=$detil[$i];
+            if($rs->URUSAN_KAT1_KODE!=$old_kode_fungsi){
+                $rs->kode_fungsi_ok='t';
+                $old_kode_fungsi=$rs->URUSAN_KAT1_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_5 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KAT1_KODE',$rs->URUSAN_KAT1_KODE)
+                         ->select(DB::raw('sum("BTL_LAIN_MURNI") as btlnongajimurni'),
+                                  DB::raw('sum("BTL_PEGAWAI_MURNI") as btlgajimurni'),
+                                  DB::raw('sum("BL_PEGAWAI_MURNI") as pegawaimurni'),
+                                  DB::raw('sum("BL_JASA_MURNI") as jasamurni'),
+                                  DB::raw('sum("BL_MODAL_MURNI") as modalmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->subfungsi_nongaji_murni=$rekap[0]->btlnongajimurni;
+                $rs->subfungsi_gaji_murni=$rekap[0]->btlgajimurni;
+                $rs->subfungsi_pegawai_murni=$rekap[0]->pegawaimurni;
+                $rs->subfungsi_jasa_murni=$rekap[0]->jasamurni;
+                $rs->subfungsi_modal_murni=$rekap[0]->modalmurni;
+            }
+            
+            if($rs->URUSAN_KODE!=$old_kode_urusan){
+                $rs->kode_urusan_ok='t';
+                $old_kode_urusan=$rs->URUSAN_KODE;
+                $total_nongaji_murni+=$rs->btlnongajimurni;
+                $total_gaji_murni+=$rs->btlgajimurni;
+                $total_pegawai_murni+=$rs->pegawaimurni;
+                $total_jasa_murni+=$rs->jasamurni;
+                $total_modal_murni+=$rs->modalmurni;
+            }
+            
+            array_push($tabel,$rs);
+        }
+
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            'detil'=>$tabel,
+                            'totalnongajimurni'=>$total_nongaji_murni,
+                            'totalgajimurni'=>$total_gaji_murni,
+                            'totalpegawaimurni'=>$total_pegawai_murni,
+                            'totaljasamurni'=>$total_jasa_murni,
+                            'totalmodalmurni'=>$total_modal_murni 
+                            );
+        return View('budgeting.lampiran.apbd5',$data);
+
+        /*
+        *=================== KODING LAMA
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        $kat2       = UrusanKategori2::where('URUSAN_KAT2_TAHUN',$tahun)->where('URUSAN_KAT2_NAMA','!=','-')->get();
+        $urusan     = Urusan::where('URUSAN_TAHUN',$tahun)->orderby('URUSAN_KODE')->get();
+
+        $btl_p      = BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                      ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
+                      ->join('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')  
+                      ->join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')  
+                      ->join('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_URUSAN_SKPD.URUSAN_ID')  
+                      ->where('REKENING_KODE','like','5.1.1%')
+                      ->groupBy("URUSAN_KODE","URUSAN_NAMA")
+                      ->selectRaw('"URUSAN_KODE","URUSAN_NAMA", SUM("BTL_TOTAL") AS total')
+                      ->get(); 
+
+        $btl_l      = BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                      ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
+                      ->join('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')  
+                      ->join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')  
+                      ->join('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_URUSAN_SKPD.URUSAN_ID')  
+                      ->whereNotIn('REKENING_KODE',['5.1.3%','5.1.4%','5.1.7%','5.1.8%'])
+                      ->groupBy("URUSAN_KODE","URUSAN_NAMA")
+                      ->selectRaw('"URUSAN_KODE","URUSAN_NAMA", SUM("BTL_TOTAL") AS total')
+                      ->get();               
+
+        $pegawai    = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                      ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                      ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                      ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                      ->join('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
+                      ->where('BL_TAHUN',$tahun)  
+                      ->where('BL_DELETED',0)  
+                      ->where('REKENING_KODE','like','5.2.1%')
+                      ->groupBy("URUSAN_KODE","URUSAN_NAMA")
+                      ->selectRaw('"URUSAN_KODE","URUSAN_NAMA", SUM("RINCIAN_TOTAL") AS total')
+                      ->get();  
+       $barangJasa    = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                      ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                      ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                      ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                      ->join('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
+                      ->where('BL_TAHUN',$tahun)  
+                      ->where('BL_DELETED',0)  
+                      ->where('REKENING_KODE','like','5.2.2%')
+                      ->groupBy("URUSAN_KODE","URUSAN_NAMA")
+                      ->selectRaw('"URUSAN_KODE","URUSAN_NAMA", SUM("RINCIAN_TOTAL") AS total')
+                      ->get();  
+        $modal    = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                      ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                      ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                      ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                      ->join('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_PROGRAM.URUSAN_ID')
+                      ->where('BL_TAHUN',$tahun)  
+                      ->where('BL_DELETED',0)  
+                      ->where('REKENING_KODE','like','5.2.3%')
+                      ->groupBy("URUSAN_KODE","URUSAN_NAMA")
+                      ->selectRaw('"URUSAN_KODE","URUSAN_NAMA", SUM("RINCIAN_TOTAL") AS total')
+                      ->get();                
+        
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            'kat2'          =>$kat2, 
+                            'urusan'        =>$urusan, 
+                            'pegawai'       =>$pegawai, 
+                            'barangJasa'    =>$barangJasa, 
+                            'modal'         =>$modal, 
+                            'btl_p'         =>$btl_p, 
+                            'btl_l'         =>$btl_l, 
+                            );
+        return View('budgeting.lampiran.apbd5',$data);
+        */
     }
 
     public function lampiran6($tahun,$status){
@@ -2982,8 +4387,7 @@ class lampiranController extends Controller
         return View('budgeting.lampiran.perwal-2',$data);
     }
 
-
-     public function perwal3($tahun,$status){
+    public function perwal3($tahun,$status){
         $id = 1;
         //dd($id);
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
@@ -3097,7 +4501,1030 @@ class lampiranController extends Controller
         return View('budgeting.lampiran.perwal-3',$data);
     }
 
+
+    public function perwal3Skpd($tahun,$status){
+        $tipe = 'Lampiran'; 
+        if(Auth::user()->level == 2) $skpd = SKPD::where('SKPD_ID',UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID'))->get();
+        else  $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
+        $data       = ['tahun'=>$tahun,'status'=>$status,'tipe'=>$tipe,'skpd'=>$skpd,'i'=>1];
+        if($tipe == 'apbd') return View('budgeting.lampiran.indexAPBD',$data);
+        else return View('budgeting.lampiran.perwal3_index',$data);
+    }
+
+     public function perwal3Detail($tahun,$status,$id){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tahapan=0;
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $skpd       = SKPD::where('SKPD_ID',$id)->first();
+        $urusan     = Urusan::JOIN('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+                        ->JOIN('REFERENSI.REF_URUSAN_KATEGORI1','REF_URUSAN_KATEGORI1.URUSAN_KAT1_ID','=','REF_URUSAN.URUSAN_KAT1_ID')
+                        ->where('REF_URUSAN_SKPD.SKPD_ID',$id)
+                        ->first();
+                        //dd($urusan);
+        $tabel=array();
+        $idx=0;
+
+        $total_pendapatan=0;
+        $total_belanja=0;
+        $total_penerimaan=0;
+        $total_pengeluaran=0;
+        $surplus=0;
+        $netto=0;
+
+        $detil = DB::table('REFERENSI.REF_SKPD as skpd')
+                 ->leftJoin('REFERENSI.REF_URUSAN_SKPD as us',function($join){
+                    $join->on('us.SKPD_ID','=','skpd.SKPD_ID');
+                 })
+                 ->leftJoin('REFERENSI.REF_URUSAN as urusan',function($join){
+                    $join->on('urusan.URUSAN_ID','=','us.URUSAN_ID')
+                         ->on('urusan.URUSAN_TAHUN','=','skpd.SKPD_TAHUN');
+                 })
+                 ->where('skpd.SKPD_TAHUN',$tahun)
+                 ->where('skpd.SKPD_ID',$id)
+                 ->select('skpd.SKPD_KODE','skpd.SKPD_NAMA','urusan.URUSAN_KODE','urusan.URUSAN_NAMA')
+                 ->get();
+
+        if($status=="murni"){
+            //return $this->ringkasmurni($tahun,$app,$id);
+            $pendapatan=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','LIKE','4%');
+            $pendapatan = $pendapatan->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+            $pendapatan=$pendapatan->leftJoin('BUDGETING.DAT_PENDAPATAN as dp',function($join) use ($tahun,$id){
+                            $join->on('dp.PENDAPATAN_TAHUN','=','rk.REKENING_TAHUN')
+                                 ->where('dp.SKPD_ID',$id)
+                                 ->whereIn('dp.REKENING_ID',function($join) use ($tahun){
+                                    $join->select(DB::raw(' "REKENING_ID" FROM "REFERENSI"."REF_REKENING" WHERE "REKENING_TAHUN"='.$tahun.' AND "REKENING_KODE" LIKE rk."REKENING_KODE" '."||'%'"));
+                                 });
+                        })
+                        ->select(DB::raw('1||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                                 'rk.REKENING_KODE as koderek',
+                                 'rk.REKENING_NAMA as namarek',
+                                 DB::raw('SUM(dp."PENDAPATAN_TOTAL") as nilai')
+                                 )
+                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                        ->having(DB::raw('SUM(dp."PENDAPATAN_TOTAL")'),'<>','0')
+                        ->orderBy('rk.REKENING_KODE')
+                        ->get();
+            //print_r($pendapatan);exit;
+            foreach($pendapatan as $pd){
+                if(strlen($pd->koderek)==1){
+                    $total_pendapatan+=$pd->nilai;
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    //$getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$pd->koderek;
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($pd->koderek)==3){
+                    $tabel[$idx]['tingkat']=2;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($pd->koderek)>3 and strlen($pd->koderek)<=8){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    (strlen($pd->koderek)>3 and strlen($pd->koderek)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                    (strlen($pd->koderek)>5 and strlen($pd->koderek)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                else{
+                    $tabel[$idx]['tingkat']=4;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']=$getakun[2];
+                    $tabel[$idx]['akun4']=$getakun[3];
+                    (!empty($getakun[4]))?$tabel[$idx]['akun5']=$getakun[4]:$tabel[$idx]['akun5']="";
+                    (strlen($pd->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekeningmurni']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Jumlah Pendapatan";
+            $tabel[$idx]['totaljumlah']=$total_pendapatan;
+            $idx+=1;
+            //print_r($tabel);exit;//CEK PENDAPATAN
+            
+            $btl=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','LIKE','5%');
+            $btl = $btl->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+            $btl=$btl->whereNotIn('rk.REKENING_KODE',['5.2','5.2.1','5.2.2','5.2.3'])
+                  ->leftJoin('BUDGETING.DAT_BTL as dp',function($join) use ($tahun,$id){
+                      $join->on('dp.BTL_TAHUN','=','rk.REKENING_TAHUN')
+                            ->where('dp.SKPD_ID',$id)
+                                 ->whereIn('dp.REKENING_ID',function($join) use ($tahun){
+                                    $join->select(DB::raw(' "REKENING_ID" FROM "REFERENSI"."REF_REKENING" WHERE "REKENING_TAHUN"='.$tahun.' AND "REKENING_KODE" LIKE rk."REKENING_KODE" '."||'%'"));
+                                 });
+                  })
+                  ->select(DB::raw('2||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                           'rk.REKENING_KODE as koderek',
+                           'rk.REKENING_NAMA as namarek',
+                           'rk.REKENING_ID as idrek',
+                           DB::raw('SUM(dp."BTL_TOTAL") as nilai'))
+                  ->groupBy('rk.REKENING_ID','rk.REKENING_KODE','rk.REKENING_NAMA')
+                  ->having(DB::raw('SUM(dp."BTL_TOTAL")'),'<>','0')
+                  ->orderBy('rk.REKENING_KODE')
+                  ->get();
+            //print_r($btl);exit;
+            foreach($btl as $bt){
+                if(strlen($bt->koderek)==1){
+                    $tabel[$idx]['tingkat']=1;
+                    $total_belanja+=$bt->nilai;
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    //$getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$bt->koderek;
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)==3){
+                    $tabel[$idx]['tingkat']=2;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)>3 and strlen($bt->koderek)<=8){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    (strlen($bt->koderek)>3 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                    (strlen($bt->koderek)>5 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                else{
+                    $tabel[$idx]['tingkat']=4;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']=$getakun[2];
+                    $tabel[$idx]['akun4']=$getakun[3];
+                    $tabel[$idx]['akun5']=$getakun[4];
+                    (strlen($bt->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                    /**
+                    *============ INI UNTUK MENAMPILKAN NILAI BTL PPKD
+                    if($id=''){
+                        if(substr($bt->koderek,0,5)=="5.1.3" or substr($bt->koderek,0,5)=="5.1.4" or substr($bt->koderek,0,5)=="5.1.5" or substr($bt->koderek,0,5)=="5.1.7"){
+                            $detil2 = DB::table('BUDGETING.DAT_BTL as dp')
+                                    ->where('dp.BTL_TAHUN',$tahun)
+                                    ->where('dp.SKPD_ID',$id)
+                                    ->where('dp.REKENING_ID',$bt->idrek)
+                                    ->select('dp.namakomponen','dp.subkomponen','dp.keterangankomponen','dp.hargakomponen as nilai')
+                                    ->get();
+                            foreach($detil2 as $res2){
+                                $tabel[$idx]['tingkat']=4;
+                                $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                                $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                                $tabel[$idx]['kodeprogram']="00";
+                                $tabel[$idx]['nogiat']="000";
+                                $getakun=explode(".",$bt->koderek);
+                                $tabel[$idx]['akun1']=$getakun[0];
+                                $tabel[$idx]['akun2']=$getakun[1];
+                                $tabel[$idx]['akun3']=$getakun[2];
+                                $tabel[$idx]['akun4']=$getakun[3];
+                                $tabel[$idx]['akun5']=$getakun[4];
+                                (strlen($bt->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                                $tabel[$idx]['koderekening']=$bt->koderek;
+                                //$tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                                $tabel[$idx]['namarekening']=$res2->namakomponen. " ( ".$res2->keterangankomponen." )";
+                                $tabel[$idx]['totalrekening']=$res2->nilai;
+                                $tabel[$idx]['namajumlah']=NULL;
+                                $tabel[$idx]['totaljumlah']=NULL;
+                                $idx+=1;
+                            }
+                        }
+                    }
+                    */
+                }
+                //print_r($getakun);exit;
+            }
+
+            $bl=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','=','5.2');
+            $bl = $bl->select(DB::raw('2||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                            'rk.REKENING_KODE as koderek',
+                            'rk.REKENING_NAMA as namarek',
+                            DB::raw('(select sum(rd."RINCIAN_TOTAL") from "BUDGETING"."DAT_RINCIAN" as rd where rd."BL_ID" IN (select bl."BL_ID" from "BUDGETING"."DAT_BL" as bl where bl."BL_TAHUN"=rk."REKENING_TAHUN" and bl."BL_DELETED"=0 and bl."SKPD_ID"='.$id.') and rd."REKENING_ID" in (select r."REKENING_ID" from "REFERENSI"."REF_REKENING" as r where r."REKENING_TAHUN"=rk."REKENING_TAHUN" and r."REKENING_KODE" like rk."REKENING_KODE"'."||'%'".')) as nilai')
+                        )
+                    ->groupBy('rk.REKENING_TAHUN','rk.REKENING_KODE','rk.REKENING_NAMA')
+                    ->orderBy('rk.REKENING_KODE')
+                    ->get();
+            //print_r($bl);exit;
+            $tabel[$idx]['tingkat']=2;
+            $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+            $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+            $tabel[$idx]['kodeprogram']="00";
+            $tabel[$idx]['nogiat']="000";
+            $tabel[$idx]['akun1']="5";
+            $tabel[$idx]['akun2']="2";
+            $tabel[$idx]['akun3']="";
+            $tabel[$idx]['akun4']="";
+            $tabel[$idx]['akun5']="";
+            $tabel[$idx]['akun6']="";
+            $tabel[$idx]['koderekening']="5.2";
+            $tabel[$idx]['namarekening']="Belanja Langsung";
+            $tabel[$idx]['totalrekening']=$bl[0]->nilai;
+            $tabel[$idx]['namajumlah']=NULL;
+            $tabel[$idx]['totaljumlah']=NULL;
+            $idx+=1;
+            
+            $rincian = DB::table('BUDGETING.RKP_LAMP_3_REKBL as rincian')
+                       ->where('rincian.TAHUN',$tahun)
+                       ->where('rincian.SKPD_ID',$id)
+                       ->where('rincian.TAHAPAN_ID',$tahapan);
+            $rincian = $rincian->where(DB::raw('length(rincian."REKENING_KODE")'),'<=',15);
+            $rincian = $rincian->leftJoin('BUDGETING.RKP_LAMP_3_REK as rekap',function($join){
+                            $join->on('rekap.SKPD_ID','=','rincian.SKPD_ID')
+                                 ->on('rekap.BL_ID','=','rincian.BL_ID')
+                                 ->on('rekap.TAHAPAN_ID','=','rincian.TAHAPAN_ID')
+                                 ->on('rekap.TAHUN','=','rincian.TAHUN');
+                       })
+                       ->select('rincian.SKPD_KODE',
+                                'rincian.KEGIATAN_KODE',
+                                'rincian.BL_ID',
+                                'rincian.KEGIATAN_NAMA',
+                                'rekap.PROGRAM_KODE',
+                                'rekap.PROGRAM_NAMA',
+                                'rincian.REKENING_KODE',
+                                'rincian.REKENING_NAMA',
+                                'rincian.BL_MURNI as nilai',
+                                DB::raw("'f' as kode_program_ok"),
+                                DB::raw("'f' as kode_giat_ok"))
+                       ->groupBy('rincian.SKPD_KODE',
+                                'rincian.KEGIATAN_KODE',
+                                'rincian.BL_ID',
+                                'rincian.KEGIATAN_NAMA',
+                                'rekap.PROGRAM_KODE',
+                                'rekap.PROGRAM_NAMA',
+                                'rincian.REKENING_KODE',
+                                'rincian.REKENING_NAMA',
+                                'rincian.BL_MURNI')
+                       ->orderBy('rincian.SKPD_KODE')
+                       ->orderBy('rekap.PROGRAM_KODE')
+                       ->orderBy('rincian.KEGIATAN_KODE')
+                       ->orderBy('rincian.REKENING_KODE')
+                       ->get();
+            //print_r($rincian);exit;
+            $old_kode_program="";
+            $old_kode_giat="";
+            foreach($rincian as $bt){
+                if($bt->PROGRAM_KODE!=$old_kode_program){
+                    $bt->kode_program_ok="t";
+                    $old_kode_program=$bt->PROGRAM_KODE;
+                }
+                if($bt->BL_ID!=$old_kode_giat){
+                    $bt->kode_giat_ok="t";
+                    $old_kode_giat=$bt->BL_ID;
+                }
+
+                if($bt->kode_program_ok=="t"){
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                    $tabel[$idx]['nogiat']="000";
+                    $tabel[$idx]['akun1']="";
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->PROGRAM_KODE;
+                    $tabel[$idx]['namarekening']=$bt->PROGRAM_NAMA;
+                    $tabel[$idx]['totalrekening']=NULL;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+
+                if(($bt->kode_giat_ok=="t") or ($bt->BL_ID==$old_kode_giat)){
+                    if($bt->kode_giat_ok=="t"){
+                        $tabel[$idx]['tingkat']=1;
+                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                        $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                        $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
+                        $tabel[$idx]['akun1']="";
+                        $tabel[$idx]['akun2']="";
+                        $tabel[$idx]['akun3']="";
+                        $tabel[$idx]['akun4']="";
+                        $tabel[$idx]['akun5']="";
+                        $tabel[$idx]['akun6']="";
+                        $tabel[$idx]['koderekening']=$bt->KEGIATAN_KODE;
+                        $tabel[$idx]['namarekening']=$bt->KEGIATAN_NAMA;
+                        $tabel[$idx]['totalrekening']=NULL;
+                        $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['totaljumlah']=NULL;
+                        $idx+=1;
+                    }
+
+                    if(strlen($bt->REKENING_KODE)==3){
+                        $total_belanja+=$bt->nilai;
+
+                        $tabel[$idx]['tingkat']=3;
+                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                        $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                        $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
+                        $getakun=explode(".",$bt->REKENING_KODE);
+                        $tabel[$idx]['akun1']=$getakun[0];
+                        $tabel[$idx]['akun2']=$getakun[1];
+                        $tabel[$idx]['akun3']="";
+                        $tabel[$idx]['akun4']="";
+                        $tabel[$idx]['akun5']="";
+                        $tabel[$idx]['akun6']="";
+                        $tabel[$idx]['koderekening']=$bt->REKENING_KODE;
+                        $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
+                        $tabel[$idx]['totalrekening']=$bt->nilai;
+                        $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['totaljumlah']=NULL;
+                        $idx+=1;
+                    }
+                    elseif(strlen($bt->REKENING_KODE)>3 and strlen($bt->REKENING_KODE)<=8){
+                        $tabel[$idx]['tingkat']=3;
+                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                        $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                        $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
+                        $getakun=explode(".",$bt->REKENING_KODE);
+                        $tabel[$idx]['akun1']=$getakun[0];
+                        $tabel[$idx]['akun2']=$getakun[1];
+                        (strlen($bt->REKENING_KODE)>3 and strlen($bt->REKENING_KODE)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                        (strlen($bt->REKENING_KODE)>5 and strlen($bt->REKENING_KODE)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                        $tabel[$idx]['akun5']="";
+                        $tabel[$idx]['akun6']="";
+                        $tabel[$idx]['koderekening']=$bt->REKENING_KODE;
+                        $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
+                        $tabel[$idx]['totalrekening']=$bt->nilai;
+                        $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['totaljumlah']=NULL;
+                        $idx+=1;
+                    }
+                    else{
+                        $tabel[$idx]['tingkat']=4;
+                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                        $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
+                        $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
+                        $getakun=explode(".",$bt->REKENING_KODE);
+                        $tabel[$idx]['akun1']=$getakun[0];
+                        $tabel[$idx]['akun2']=$getakun[1];
+                        $tabel[$idx]['akun3']=$getakun[2];
+                        $tabel[$idx]['akun4']=$getakun[3];
+                        $tabel[$idx]['akun5']=$getakun[4];
+                        (strlen($bt->REKENING_KODE)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                        $tabel[$idx]['koderekening']=$bt->REKENING_KODE;
+                        $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
+                        $tabel[$idx]['totalrekening']=$bt->nilai;
+                        $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['totaljumlah']=NULL;
+                        $idx+=1;
+                    }
+                }
+
+            }
+            
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Jumlah Belanja";
+            $tabel[$idx]['totaljumlah']=$total_belanja;
+            $idx+=1;
+
+            $surplus=$total_pendapatan-$total_belanja;
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Total Surplus/(Defisit)";
+            $tabel[$idx]['totaljumlah']=$surplus;
+            $idx+=1;
+            
+            $penerimaan=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','LIKE','6%')
+                        ->whereIn(DB::raw('substr(rk."REKENING_KODE",1,3)'),['6.1']);
+            $penerimaan = $penerimaan->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+            $penerimaan=$penerimaan->leftJoin('BUDGETING.DAT_PEMBIAYAAN as dp',function($join) use ($tahun,$id){
+                            $join->on('dp.PEMBIAYAAN_TAHUN','=','rk.REKENING_TAHUN')
+                                 ->where('dp.SKPD_ID',$id)
+                                 ->whereIn('dp.REKENING_ID',function($join) use ($tahun){
+                                    $join->select(DB::raw(' "REKENING_ID" FROM "REFERENSI"."REF_REKENING" WHERE "REKENING_TAHUN"='.$tahun.' AND "REKENING_KODE" LIKE rk."REKENING_KODE" '."||'%'"));
+                                 });
+                        })
+                        ->select(DB::raw('3||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                               'rk.REKENING_KODE as koderek',
+                               'rk.REKENING_NAMA as namarek',
+                               DB::raw('SUM(dp."PEMBIAYAAN_TOTAL") as nilai'))
+                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                        ->having(DB::raw('SUM(dp."PEMBIAYAAN_TOTAL")'),'<>','0')
+                        ->orderBy('rk.REKENING_KODE')
+                        ->get();
+            //print_r($penerimaan);exit;
+            foreach($penerimaan as $bt){
+                if(strlen($bt->koderek)==1){
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    //$getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$bt->koderek;
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)==3){
+                    $total_penerimaan+=$bt->nilai;
+                    $tabel[$idx]['tingkat']=2;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)>3 and strlen($bt->koderek)<=8){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    (strlen($bt->koderek)>3 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                    (strlen($bt->koderek)>5 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                else{
+                    $tabel[$idx]['tingkat']=4;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']=$getakun[2];
+                    $tabel[$idx]['akun4']=$getakun[3];
+                    $tabel[$idx]['akun5']=$getakun[4];
+                    (strlen($bt->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+            
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Jumlah Penerimaan Pembiayaan";
+            $tabel[$idx]['totaljumlah']=$total_penerimaan;
+            $idx+=1;
+            
+            $pengeluaran=DB::table('REFERENSI.REF_REKENING as rk')
+                        ->where('rk.REKENING_TAHUN',$tahun)
+                        ->where('rk.REKENING_KUNCI','0')
+                        ->where('rk.REKENING_KODE','LIKE','6.2%');
+            $pengeluaran = $pengeluaran->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+            $pengeluaran=$pengeluaran->leftJoin('BUDGETING.DAT_PEMBIAYAAN as dp',function($join) use ($tahun,$id){
+                            $join->on('dp.PEMBIAYAAN_TAHUN','=','rk.REKENING_TAHUN')
+                                 ->where('dp.SKPD_ID',$id)
+                                 ->whereIn('dp.REKENING_ID',function($join) use ($tahun){
+                                    $join->select(DB::raw(' "REKENING_ID" FROM "REFERENSI"."REF_REKENING" WHERE "REKENING_TAHUN"='.$tahun.' AND "REKENING_KODE" LIKE rk."REKENING_KODE" '."||'%'"));
+                                 });
+                        })
+                        ->select(DB::raw('3||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                               'rk.REKENING_KODE as koderek',
+                               'rk.REKENING_NAMA as namarek',
+                               DB::raw('SUM(dp."PEMBIAYAAN_TOTAL") as nilai'))
+                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                        ->having(DB::raw('SUM(dp."PEMBIAYAAN_TOTAL")'),'<>','0')
+                        ->orderBy('rk.REKENING_KODE')
+                        ->get();
+            //print_r($pendapatan);exit;
+            foreach($pengeluaran as $bt){
+                if(strlen($bt->koderek)==1){
+                    $tabel[$idx]['tingkat']=1;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    //$getakun=explode(".",$pd->koderek);
+                    $tabel[$idx]['akun1']=$bt->koderek;
+                    $tabel[$idx]['akun2']="";
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)==3){
+                    $total_pengeluaran+=$bt->nilai;
+                    
+                    $tabel[$idx]['tingkat']=2;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']="";
+                    $tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                elseif(strlen($bt->koderek)>3 and strlen($bt->koderek)<=8){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    (strlen($bt->koderek)>3 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun3']=$getakun[2]:$tabel[$idx]['akun3']="";
+                    (strlen($bt->koderek)>5 and strlen($bt->koderek)<=8)?$tabel[$idx]['akun4']=$getakun[3]:$tabel[$idx]['akun4']="";
+                    $tabel[$idx]['akun5']="";
+                    $tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+                else{
+                    $tabel[$idx]['tingkat']=4;
+                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
+                    $tabel[$idx]['kodeprogram']="00";
+                    $tabel[$idx]['nogiat']="000";
+                    $getakun=explode(".",$bt->koderek);
+                    $tabel[$idx]['akun1']=$getakun[0];
+                    $tabel[$idx]['akun2']=$getakun[1];
+                    $tabel[$idx]['akun3']=$getakun[2];
+                    $tabel[$idx]['akun4']=$getakun[3];
+                    $tabel[$idx]['akun5']=$getakun[4];
+                    (strlen($bt->koderek)>11)?$tabel[$idx]['akun6']=$getakun[5]:$tabel[$idx]['akun6']="";
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+            
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekeningmurni']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Jumlah Pengeluaran Pembiayaan";
+            $tabel[$idx]['totaljumlah']=$total_pengeluaran;
+            $idx+=1;
+            
+            $netto=$total_penerimaan-$total_pengeluaran;
+            $tabel[$idx]['tingkat']=5;
+            $tabel[$idx]['koderekening']=NULL;
+            $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['totalrekeningmurni']=NULL;
+            $tabel[$idx]['totalrekening']=NULL;
+            $tabel[$idx]['namajumlah']="Pembiayaan Netto";
+            $tabel[$idx]['totaljumlah']=$netto;
+            
+            //print_r($tabel);exit;
+            $urut=0;
+        }
+        elseif($status=="perubahan"){
+            //return $this->ringkasperubahan($tahun,$app,$id);
+        }
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,        
+                            'skpd'          =>$skpd,        
+                            'urusan'        =>$urusan,
+                            'rincian'       =>$tabel,    
+                            );
+
+        return View('budgeting.lampiran.perwal-3',$data);
+        /*
+        *===================== KODING LAMA
+        $id = 1;
+        //dd($id);
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $skpd       = SKPD::where('SKPD_ID',$id)->first();
+
+        $urusan     = Urusan::JOIN('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+                            ->JOIN('REFERENSI.REF_URUSAN_KATEGORI1','REF_URUSAN_KATEGORI1.URUSAN_KAT1_ID','=','REF_URUSAN.URUSAN_KAT1_ID')
+                            ->where('REF_URUSAN_SKPD.SKPD_ID',$id)
+                            ->first();
+                            //dd($urusan);
+
+       $bl_prog         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+                        ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->groupBy("SKPD_KODE", "SKPD_NAMA", "REF_PROGRAM.PROGRAM_ID", "PROGRAM_KODE", "PROGRAM_NAMA")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "REF_PROGRAM"."PROGRAM_ID", "PROGRAM_KODE", "PROGRAM_NAMA" ')
+                        ->get(); 
+
+
+        $bl_keg         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN"."KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU" ')
+                        ->get(); 
+                                        
+
+        $bl_rek         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('BUDGETING.DAT_RINCIAN','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->groupBy("SKPD_KODE", "SKPD_NAMA", "DAT_BL.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "DAT_BL"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
+                        ->get();                 
+
+
+
+        $btl       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->where('REKENING_KODE','like','5.1.1%')
+                        ->selectRaw('sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+
+        $pendapatan = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->orderby('REKENING_KODE')
+                        ->get();
+
+        $pendapatan1 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.01%')
+                        ->get(); 
+
+        $pendapatan2 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.02%')
+                        ->get(); 
+
+        $pendapatan3 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.03%')
+                        ->get();
+
+        $pendapatan4 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.04%')
+                        ->get();                                                        
+
+
+        //dd($pendapatan1);
+
+                        
+        
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,        
+                            'skpd'          =>$skpd,        
+                            'urusan'        =>$urusan,        
+                            'bl_prog'       =>$bl_prog,        
+                            'bl_keg'        =>$bl_keg,        
+                            'bl_rek'        =>$bl_rek,        
+                            'btl'           =>$btl,        
+                            'pendapatan'    =>$pendapatan,        
+                            'pendapatan1'    =>$pendapatan1,        
+                            'pendapatan2'    =>$pendapatan2,        
+                            'pendapatan3'    =>$pendapatan3,        
+                            'pendapatan4'    =>$pendapatan4,        
+                            );
+
+        return View('budgeting.lampiran.perwal-3',$data);
+        */
+    }
+
      public function perwal4($tahun,$status){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tahapan=0;
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $tabel=array();
+        $idx=0;
+
+        $total_pegawai_murni=0;
+        $total_jasa_murni=0;
+        $total_modal_murni=0;
+        $total_pegawai=0;
+        $total_jasa=0;
+        $total_modal=0;
+
+        $detil = DB::table('BUDGETING.RKP_LAMP_4 as lampiran')
+                 ->where('lampiran.TAHUN',$tahun)
+                 ->where('lampiran.TAHAPAN_ID',$tahapan)
+                 ->select('lampiran.TAHUN',
+                          'lampiran.URUSAN_KAT1_KODE',
+                          'lampiran.URUSAN_KAT1_NAMA',
+                          'lampiran.URUSAN_KODE',
+                          'lampiran.URUSAN_NAMA',
+                          'lampiran.PROGRAM_KODE',
+                          'lampiran.PROGRAM_NAMA',
+                          'lampiran.SKPD_KODE',
+                          'lampiran.SKPD_NAMA',
+                          'lampiran.BL_ID',
+                          'lampiran.KEGIATAN_KODE',
+                          'lampiran.KEGIATAN_NAMA',
+                          'lampiran.BL_PEGAWAI_MURNI',
+                          'lampiran.BL_JASA_MURNI',
+                          'lampiran.BL_MODAL_MURNI',
+                          DB::raw("'f' as urusan_ok"),
+                          DB::raw("'f' as kode_urusan_ok"),
+                          DB::raw("'f' as kode_program_ok"),
+                          DB::raw("'f' as kode_unit_ok"),
+                          DB::raw("'f' as kode_giat_ok"),
+                          DB::raw("0 as suburusan_pegawai_murni"),
+                          DB::raw("0 as suburusan_jasa_murni"),
+                          DB::raw("0 as suburusan_modal_murni"),
+                          DB::raw("0 as subunit_pegawai_murni"),
+                          DB::raw("0 as subunit_jasa_murni"),
+                          DB::raw("0 as subunit_modal_murni"),
+                          DB::raw("0 as subprogram_pegawai_murni"),
+                          DB::raw("0 as subprogram_jasa_murni"),
+                          DB::raw("0 as subprogram_modal_murni"))
+                 ->orderBy('lampiran.URUSAN_KODE','asc')
+                 ->orderBy('lampiran.SKPD_KODE','asc')
+                 ->orderBy('lampiran.PROGRAM_KODE','asc')
+                 ->orderBy('lampiran.BL_ID','asc')
+                 ->get();
+        //print_r($detil);exit;
+        $old_urusan="";
+        $old_kode_urusan="";
+        $old_kode_program="";
+        $old_kode_unit="";
+        $old_kode_giat="";
+        for($i=0;$i<count($detil);$i++){
+            $rs=$detil[$i];
+            
+            if(substr($rs->URUSAN_KODE,1,1)!=$old_urusan){
+                $rs->urusan_ok='t';
+                $old_urusan=substr($rs->URUSAN_KODE,1,1);
+            }
+            if($rs->URUSAN_KODE!=$old_kode_urusan){
+                $rs->kode_urusan_ok='t';
+                $old_kode_urusan=$rs->URUSAN_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_4 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KODE',$rs->URUSAN_KODE)
+                         ->select(DB::raw('sum("BL_PEGAWAI_MURNI") as pegawaimurni'),
+                                  DB::raw('sum("BL_JASA_MURNI") as jasamurni'),
+                                  DB::raw('sum("BL_MODAL_MURNI") as modalmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->suburusan_pegawai_murni=$rekap[0]->pegawaimurni;
+                $rs->suburusan_jasa_murni=$rekap[0]->jasamurni;
+                $rs->suburusan_modal_murni=$rekap[0]->modalmurni;
+            }
+            if($rs->SKPD_KODE!=$old_kode_unit){
+                $rs->kode_unit_ok='t';
+                $old_kode_unit=$rs->SKPD_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_4 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KODE',$rs->URUSAN_KODE)
+                         ->where('rekap.SKPD_KODE',$rs->SKPD_KODE)
+                         ->select(DB::raw('sum("BL_PEGAWAI_MURNI") as pegawaimurni'),
+                                  DB::raw('sum("BL_JASA_MURNI") as jasamurni'),
+                                  DB::raw('sum("BL_MODAL_MURNI") as modalmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->subunit_pegawai_murni=$rekap[0]->pegawaimurni;
+                $rs->subunit_jasa_murni=$rekap[0]->jasamurni;
+                $rs->subunit_modal_murni=$rekap[0]->modalmurni;
+            }
+            if($rs->PROGRAM_KODE!=$old_kode_program){
+                $rs->kode_program_ok='t';
+                $old_kode_program=$rs->PROGRAM_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_4 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KODE',$rs->URUSAN_KODE)
+                         ->where('rekap.SKPD_KODE',$rs->SKPD_KODE)
+                         ->where('rekap.PROGRAM_KODE',$rs->PROGRAM_KODE)
+                         ->select(DB::raw('sum("BL_PEGAWAI_MURNI") as pegawaimurni'),
+                                  DB::raw('sum("BL_JASA_MURNI") as jasamurni'),
+                                  DB::raw('sum("BL_MODAL_MURNI") as modalmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->subprogram_pegawai_murni=$rekap[0]->pegawaimurni;
+                $rs->subprogram_jasa_murni=$rekap[0]->jasamurni;
+                $rs->subprogram_modal_murni=$rekap[0]->modalmurni;
+            }
+            if($rs->BL_ID!=$old_kode_giat){
+                $rs->kode_giat_ok='t';
+                $old_kode_giat=$rs->BL_ID;
+                $total_pegawai_murni+=$rs->BL_PEGAWAI_MURNI;
+                $total_jasa_murni+=$rs->BL_JASA_MURNI;
+                $total_modal_murni+=$rs->BL_MODAL_MURNI;
+            }
+            array_push($tabel,$rs);
+        }
+        
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            'detil'=>$tabel,
+                            'totalpegawaimurni'=>$total_pegawai_murni,
+                            'totaljasamurni'=>$total_jasa_murni,
+                            'totalmodalmurni'=>$total_modal_murni
+                            );
+        return View('budgeting.lampiran.perwal-4',$data);
+        /*
+        *==================== KODING LAMA
         $id = 1;
         //dd($id);
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
@@ -3209,6 +5636,116 @@ class lampiranController extends Controller
                             );
 
         return View('budgeting.lampiran.perwal-4',$data);
+        */
+    }
+
+    public function perwal5($tahun,$status){
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tahapan=0;
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $tabel=array();
+        $idx=0;
+
+        $total_gaji_murni=0;
+        $total_nongaji_murni=0;
+        $total_pegawai_murni=0;
+        $total_jasa_murni=0;
+        $total_modal_murni=0;
+        $total_gaji=0;
+        $total_nongaji=0;
+        $total_pegawai=0;
+        $total_jasa=0;
+        $total_modal=0;
+
+        $detil = DB::table('BUDGETING.RKP_LAMP_5 as lampiran')
+                 ->where('lampiran.TAHUN',$tahun)
+                 ->where('lampiran.TAHAPAN_ID',$tahapan)
+                 ->select('lampiran.TAHUN',
+                          'lampiran.URUSAN_KAT1_KODE',
+                          'lampiran.URUSAN_KAT1_NAMA',
+                          'lampiran.URUSAN_KODE',
+                          'lampiran.URUSAN_NAMA',
+                          'lampiran.FUNGSI_KODE',
+                          'lampiran.FUNGSI_NAMA',
+                          DB::raw('sum(lampiran."BTL_LAIN_MURNI") as btlnongajimurni'),
+                          DB::raw('sum(lampiran."BTL_PEGAWAI_MURNI") as btlgajimurni'),
+                          DB::raw('sum(lampiran."BL_PEGAWAI_MURNI") as pegawaimurni'),
+                          DB::raw('sum(lampiran."BL_JASA_MURNI") as jasamurni'),
+                          DB::raw('sum(lampiran."BL_MODAL_MURNI") as modalmurni'),
+                          DB::raw("'f' as kode_urusan_ok"),
+                          DB::raw("'f' as kode_fungsi_ok"),
+                          DB::raw("0 as subfungsi_gaji_murni"),
+                          DB::raw("0 as subfungsi_nongaji_murni"),
+                          DB::raw("0 as subfungsi_pegawai_murni"),
+                          DB::raw("0 as subfungsi_jasa_murni"),
+                          DB::raw("0 as subufungsi_modal_murni"))
+                 ->groupBy('lampiran.TAHUN',
+                          'lampiran.URUSAN_KAT1_KODE',
+                          'lampiran.URUSAN_KAT1_NAMA',
+                          'lampiran.URUSAN_KODE',
+                          'lampiran.URUSAN_NAMA',
+                          'lampiran.FUNGSI_KODE',
+                          'lampiran.FUNGSI_NAMA')
+                 ->orderBy('lampiran.FUNGSI_KODE','asc')
+                 ->orderBy('lampiran.URUSAN_KODE','asc')
+                 ->get();
+        //print_r($detil);exit;
+        $old_urusan="";
+        $old_kode_urusan="";
+        $old_kode_fungsi="";
+        for($i=0;$i<count($detil);$i++){
+            $rs=$detil[$i];
+            if($rs->URUSAN_KAT1_KODE!=$old_kode_fungsi){
+                $rs->kode_fungsi_ok='t';
+                $old_kode_fungsi=$rs->URUSAN_KAT1_KODE;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_5 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KAT1_KODE',$rs->URUSAN_KAT1_KODE)
+                         ->select(DB::raw('sum("BTL_LAIN_MURNI") as btlnongajimurni'),
+                                  DB::raw('sum("BTL_PEGAWAI_MURNI") as btlgajimurni'),
+                                  DB::raw('sum("BL_PEGAWAI_MURNI") as pegawaimurni'),
+                                  DB::raw('sum("BL_JASA_MURNI") as jasamurni'),
+                                  DB::raw('sum("BL_MODAL_MURNI") as modalmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->subfungsi_nongaji_murni=$rekap[0]->btlnongajimurni;
+                $rs->subfungsi_gaji_murni=$rekap[0]->btlgajimurni;
+                $rs->subfungsi_pegawai_murni=$rekap[0]->pegawaimurni;
+                $rs->subfungsi_jasa_murni=$rekap[0]->jasamurni;
+                $rs->subfungsi_modal_murni=$rekap[0]->modalmurni;
+            }
+            
+            if($rs->URUSAN_KODE!=$old_kode_urusan){
+                $rs->kode_urusan_ok='t';
+                $old_kode_urusan=$rs->URUSAN_KODE;
+                $total_nongaji_murni+=$rs->btlnongajimurni;
+                $total_gaji_murni+=$rs->btlgajimurni;
+                $total_pegawai_murni+=$rs->pegawaimurni;
+                $total_jasa_murni+=$rs->jasamurni;
+                $total_modal_murni+=$rs->modalmurni;
+            }
+            
+            array_push($tabel,$rs);
+        }
+
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn, 
+                            'detil'=>$tabel,
+                            'totalnongajimurni'=>$total_nongaji_murni,
+                            'totalgajimurni'=>$total_gaji_murni,
+                            'totalpegawaimurni'=>$total_pegawai_murni,
+                            'totaljasamurni'=>$total_jasa_murni,
+                            'totalmodalmurni'=>$total_modal_murni 
+                            );
+        return View('budgeting.lampiran.perwal-5',$data);
     }
     
 }

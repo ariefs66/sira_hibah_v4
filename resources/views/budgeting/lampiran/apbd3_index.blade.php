@@ -57,7 +57,7 @@
                                       <td>{{ $s->SKPD_KODE }}</td>
                                       <td>
                                         {{ $s->SKPD_NAMA }}
-                                        <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/apbd/3/{{ $s->SKPD_ID }}" class="btn btn-success pull-right m-t-n-sm m-r-xs" target="_blank"><i class="fa fa-print"></i> Cetak Lampiran 3 </a>
+                                        <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/apbd/perda/3/{{ $s->SKPD_ID }}" class="btn btn-success pull-right m-t-n-sm m-r-xs" target="_blank"><i class="fa fa-print"></i> Cetak Lampiran 3 </a>
                                       </td>
                                     </tr>
                                     @endforeach

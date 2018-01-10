@@ -64,6 +64,9 @@
 		.tengah{
 			text-align: center;
 		}
+		.text_blok{
+            font-weight: bold;
+        }
     	@media print {
 		    footer {page-break-after: always;}
 			table { page-break-inside:auto; }
@@ -76,14 +79,14 @@
 <body onload="window.print()">
 <div class="cetak">
 	<div style="margin-left: 330px;">
-	<h5>LAMPIRAN IV &nbsp; &nbsp; &nbsp; Rancangan Peraturan Daerah</h5>
+	<h5>LAMPIRAN IV &nbsp; &nbsp; &nbsp; Peraturan Daerah</h5>
 	<h5>NOMOR : </h5>
 	<h5>TANGGAL :</h5>
 	</div>
 	<br>
 <table class="header">
 	<tr class="">
-		<td class="" colspan="2"></td>
+		<td class="" colspan="8"></td>
 	</tr>
 	<tr>	
 		<td class="">
@@ -91,18 +94,18 @@
 		</td>	
 		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>REKAPITULASI RANCANGAN BELANJA MENURUT URUSAN PEMERINTAH DAERAH</h3>
+			<h3>REKAPITULASI BELANJA MENURUT URUSAN PEMERINTAH DAERAH</h3>
 			<h3>ORGANISASI, PROGRAM DAN KEGIATAN</h3>
 			<h4>TAHUN ANGGARAN {{ $tahun }}</h4>
 		</td>
 	</tr>
-	<tr> <td colspan="2"></td> </tr>	
+	<tr> <td colspan="8"></td> </tr>	
 </table>
 <br>
 <table class="rincian">
 	<tbody>
 	<tr class="border headrincian">
-		<td class="border tengah" rowspan="2">KODE </td>
+		<td class="border tengah" rowspan="2" colspan="5">KODE </td>
 		<td class="border tengah" rowspan="2">URAIAN URUSAN, ORGANISASI PROGRAM DAN KEGIATAN </td>
 		<td class="border tengah" colspan="3">JENIS BELANJA </td>
 		<td class="border tengah" rowspan="2"> JUMLAH </td>
@@ -113,195 +116,91 @@
 		<td class="border tengah">MODAL</td>
 	</tr>	
 	<tr class="border">
-		<td class="border tengah">1</td>
+		<td class="border tengah" colspan="5">1</td>
 		<td class="border tengah">2</td>
 		<td class="border tengah">3</td>
 		<td class="border tengah">4</td>
 		<td class="border tengah">5</td>
 		<td class="border tengah">6 = 3+4+5</td>
 	</tr>
-	@foreach($kat1 as $k1)
-	<tr>
-		<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}</td>
-		<td class="border-rincian kiri total"><b>{{$k1->URUSAN_KAT1_NAMA}}</b></td>
-		<td class="border-rincian kiri total"></td>
-		<td class="border-rincian kiri total"></td>
-		<td class="border-rincian kiri total"></td>
-		<td class="border-rincian kiri total"></td>
-	</tr>
-		@foreach($urusan as $u)
-		@if($k1->URUSAN_KAT1_ID == $u->URUSAN_KAT1_ID)
-		<tr>
-			<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}</td>
-			<td class="border-rincian kiri total">&nbsp;<b>{{$u->URUSAN_NAMA}}</b></td>
-			<td class="border-rincian kiri total"></td>
-			<td class="border-rincian kiri total"></td>
-			<td class="border-rincian kiri total"></td>
-			<td class="border-rincian kiri total"></td>
-		</tr>
-			@foreach($skpd as $s)
-			@if($s->URUSAN_KODE == $u->URUSAN_KODE)
-			<tr>
-				<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}</td>
-				<td class="border-rincian kiri total">&nbsp; &nbsp; <b>{{$s->SKPD_NAMA}}</b></td>
-				<td class="border-rincian kiri total"></td>
-				<td class="border-rincian kiri total"></td>
-				<td class="border-rincian kiri total"></td>
-				<td class="border-rincian kiri total"></td>
-			</tr>
-
-				@foreach($program as $p)
-
-
-					@if($p->URUSAN_ID == $s->URUSAN_ID)
-
-					@php
-						$totalpegawai = 0; 
-						$totalbarangJasa = 0; 
-						$totalmodal = 0; 
-						$totalsemua = 0; 
-					@endphp
-
-					@foreach($kegiatan as $k)
-							@if($p->PROGRAM_ID == $k->PROGRAM_ID)
-							
-								@php 
-									$total =0;
-								@endphp
-
-
-								@foreach($pegawai as $peg)
-									
-
-									@if($k->KEGIATAN_ID == $peg->KEGIATAN_ID)
-									  
-									@php
-									$totalpegawai += $peg->total; 
-									$total += $peg->total; 
-									@endphp
-									@endif
-
-									
-								@endforeach
-
-								@foreach($barangJasa as $br)
-									@if($k->KEGIATAN_ID == $br->KEGIATAN_ID)
-									
-									@php 
-									$totalbarangJasa += $br->total;
-									$total += $br->total;
-									@endphp
-									@endif
-								@endforeach
-
-								@foreach($modal as $mod)
-									@if($k->KEGIATAN_ID == $mod->KEGIATAN_ID)
-									
-									@php 
-									$totalmodal += $mod->total;
-									$total += $mod->total;
-									@endphp
-
-									@endif
-								@endforeach
-								
-								@php $totalsemua += $total;  break; @endphp
-
-							@endif
-					@endforeach
-
-
-
-					<tr>
-						<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}.{{$p->PROGRAM_KODE}}</td>
-						<td class="border-rincian kiri total">&nbsp; &nbsp; &nbsp; <b>{{$p->PROGRAM_NAMA}}</b></td>
-						<td class="border-rincian kiri total">{{ number_format($totalpegawai,0,',','.') }}</td></td>
-						<td class="border-rincian kiri total">{{ number_format($totalbarangJasa,0,',','.') }}</td></td>
-						<td class="border-rincian kiri total">{{ number_format($totalmodal,0,',','.') }}</td></td>
-						<td class="border-rincian kiri total">{{ number_format($totalsemua,0,',','.') }}</td></td>
-					</tr>
-						@foreach($kegiatan as $k)
-							@if($p->PROGRAM_ID == $k->PROGRAM_ID)
-							<tr>
-								<td class="border-rincian kiri total">{{$k1->URUSAN_KAT1_KODE}}.{{$u->URUSAN_KODE}}.{{$s->SKPD_KODE}}.{{$p->PROGRAM_KODE}}.{{$k->KEGIATAN_KODE}}</td>
-								<td class="border-rincian kiri total">&nbsp; &nbsp; &nbsp; &nbsp; {{$k->KEGIATAN_NAMA}}</td>
-
-								@php 
-									$total =0;
-								@endphp
-
-								@php
-									$found = false;
-									@endphp
-								@foreach($pegawai as $peg)
-									
-
-									@if($k->KEGIATAN_ID == $peg->KEGIATAN_ID)
-									<td class="border-rincian">{{ number_format($peg->total,0,',','.') }}</td>
-									@php 
-									$total += $peg->total; 
-									$found = true;
-									@endphp
-									@endif
-
-									
-								@endforeach
-								@if(!$found)
-									<td class="border-rincian"></td>
-									@endif
-
-
-									@php
-										$found = false;
-									@endphp
-								@foreach($barangJasa as $br)
-									@if($k->KEGIATAN_ID == $br->KEGIATAN_ID)
-									<td class="border-rincian">{{ number_format($br->total,0,',','.') }}</td>
-									@php $total += $br->total;$found = true; @endphp
-									@endif
-								@endforeach
-								@if(!$found)
-									<td class="border-rincian"></td>
-									@endif
-
-									@php
-										$found = false;
-									@endphp
-								@foreach($modal as $mod)
-									@if($k->KEGIATAN_ID == $mod->KEGIATAN_ID)
-									<td class="border-rincian">{{ number_format($mod->total,0,',','.') }}</td>
-									@php $total += $mod->total;$found = true; @endphp
-									@endif
-								@endforeach
-								@if(!$found)
-									<td class="border-rincian"></td>
-									@endif
-								<td class="border-rincian kiri total"> {{ number_format($total,0,',','.') }} </td>
-							</tr>
-							@endif
-					@endforeach
-					@endif
-				@endforeach
-			@endif
-			@endforeach
-		@endif
-		@endforeach
-		<!-- limit untuk lokal -->
-		@php
-		break;
-		@endphp
-		<!-- end limit untuk lokal -->		
-	@endforeach
-	
-	
-	
-	<tr>
-		<td class="border-rincian kanan total">&nbsp;</td>
-		<td class="border-rincian kanan total">Jumlah</td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
-		<td class="border-rincian kanan total"></td>
+	@foreach($detil as $rs)
+        @if($rs->urusan_ok=='t')
+        <tr>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="border text_blok">{{ $rs->URUSAN_KAT1_NAMA }}</td>
+            <td class="border text_blok">&nbsp;</td>
+            <td class="border text_blok">&nbsp;</td>
+            <td class="border text_blok">&nbsp;</td>
+            <td class="border text_blok">&nbsp;</td>
+        </tr>
+        @endif
+        @if($rs->kode_urusan_ok=='t')
+        <tr>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
+            <td class="text_blok" width="5">{{ $rs->URUSAN_KODE }}</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="border text_blok">{{ $rs->URUSAN_NAMA }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->suburusan_pegawai_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->suburusan_jasa_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->suburusan_modal_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format(($rs->suburusan_pegawai_murni+$rs->suburusan_jasa_murni+$rs->suburusan_modal_murni),0,'.',',') }}</td>
+        </tr>
+        @endif
+        @if($rs->kode_unit_ok=='t')
+        <tr>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
+            <td class="text_blok" width="5">{{ $rs->URUSAN_KODE }}</td>
+            <td class="text_blok" width="5">{{ $rs->SKPD_KODE }}</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="border text_blok">{{ $rs->SKPD_NAMA }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subunit_pegawai_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subunit_jasa_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subunit_modal_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format(($rs->subunit_pegawai_murni+$rs->subunit_jasa_murni+$rs->subunit_modal_murni),0,'.',',') }}</td>
+        </tr>
+        @endif
+        @if($rs->kode_program_ok=='t')
+        <tr>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
+            <td class="text_blok" width="5">{{ $rs->URUSAN_KODE }}</td>
+            <td class="text_blok" width="5">{{ $rs->SKPD_KODE }}</td>
+            <td class="text_blok" width="5">{{ $rs->PROGRAM_KODE }}</td>
+            <td class="text_blok" width="5">&nbsp;</td>
+            <td class="border text_blok">{{ $rs->PROGRAM_NAMA }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subprogram_pegawai_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subprogram_jasa_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subprogram_modal_murni,0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format(($rs->subprogram_pegawai_murni+$rs->subprogram_jasa_murni+$rs->subprogram_modal_murni),0,'.',',') }}</td>
+        </tr>
+        @endif
+        @if($rs->kode_giat_ok=='t')
+        <tr>
+            <td class="" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
+            <td class="" width="5">{{ $rs->URUSAN_KODE }}</td>
+            <td class="" width="5">{{ $rs->SKPD_KODE }}</td>
+            <td class="" width="5">{{ $rs->PROGRAM_KODE }}</td>
+            <td class="" width="5">{{ $rs->KEGIATAN_KODE }}</td>
+            <td class="border">{{ $rs->KEGIATAN_NAMA }}</td>
+            <td class="border kanan">{{ number_format($rs->BL_PEGAWAI_MURNI,0,'.',',') }}</td>
+            <td class="border kanan">{{ number_format($rs->BL_JASA_MURNI,0,'.',',') }}</td>
+            <td class="border kanan">{{ number_format($rs->BL_MODAL_MURNI,0,'.',',') }}</td>
+            <td class="border kanan">{{ number_format(($rs->BL_PEGAWAI_MURNI+$rs->BL_JASA_MURNI+$rs->BL_MODAL_MURNI),0,'.',',') }}</td>
+        </tr>
+        @endif
+    @endforeach
+    <tr>
+	    <td class="border text_blok kanan" colspan="6">TOTAL</td>
+	    <td class="border text_blok kanan">{{ number_format($totalpegawaimurni,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($totaljasamurni,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($totalmodalmurni,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format(($totalpegawaimurni+$totaljasamurni+$totalmodalmurni),0,'.',',') }}</td>
 	</tr>
 	</tbody>	
 </table>

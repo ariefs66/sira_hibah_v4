@@ -59,6 +59,7 @@ class pendapatanController extends Controller
           $pendapatan->SUB_ID           = Input::get('SUB_ID');
           $pendapatan->REKENING_ID      = Input::get('REKENING_ID');
           $pendapatan->PENDAPATAN_NAMA    = Input::get('PENDAPATAN_NAMA');
+          $pendapatan->PENDAPATAN_DASHUK    = Input::get('PENDAPATAN_DASHUK');
           $pendapatan->PENDAPATAN_KETERANGAN  = Input::get('PENDAPATAN_NAMA');
           $pendapatan->PENDAPATAN_TOTAL   = Input::get('PENDAPATAN_TOTAL');
           $pendapatan->save();
@@ -102,6 +103,7 @@ class pendapatanController extends Controller
             'PENDAPATAN_NAMA'         => Input::get('PENDAPATAN_NAMA'),
             'PENDAPATAN_KETERANGAN'   => Input::get('PENDAPATAN_NAMA'),
             'REKENING_ID'             => Input::get('REKENING_ID'),
+            'PENDAPATAN_DASHUK'        => Input::get('PENDAPATAN_DASHUK'),
             'PENDAPATAN_TOTAL'        => Input::get('PENDAPATAN_TOTAL'),
             'TIME_UPDATED'            => Carbon\Carbon::now(),
             'USER_UPDATED'            => Auth::user()->id
@@ -116,6 +118,7 @@ class pendapatanController extends Controller
             'PENDAPATAN_NAMA'         => Input::get('PENDAPATAN_NAMA'),
             'PENDAPATAN_KETERANGAN'   => Input::get('PENDAPATAN_NAMA'),
             'REKENING_ID'             => Input::get('REKENING_ID'),
+            'PENDAPATAN_DASHUK'        => Input::get('PENDAPATAN_DASHUK'),
             'PENDAPATAN_TOTAL'        => Input::get('PENDAPATAN_TOTAL'),
             'TIME_UPDATED'            => Carbon\Carbon::now(),
             'USER_UPDATED'            => Auth::user()->id
@@ -231,6 +234,7 @@ class pendapatanController extends Controller
                        'AKSI'     => $opsi,
                        'REKENING'   => $data->rekening->REKENING_KODE.' - '.$data->rekening->REKENING_NAMA,
                        'RINCIAN'    => $data->PENDAPATAN_NAMA,
+                       'DASHUK'    => $data->PENDAPATAN_DASHUK,
                                        'TOTAL'    => number_format($data->PENDAPATAN_TOTAL,0,'.',',')));
         }
       }
@@ -251,6 +255,7 @@ class pendapatanController extends Controller
                        'AKSI'     => $opsi,
                        'REKENING'   => $data->rekening->REKENING_KODE.' - '.$data->rekening->REKENING_NAMA,
                        'RINCIAN'    => $data->PENDAPATAN_NAMA,
+                       'DASHUK'    => $data->DASHUK,
                                        'TOTAL'    => number_format($data->PENDAPATAN_TOTAL,0,'.',',')));
         }
       }
