@@ -4192,7 +4192,7 @@ class lampiranController extends Controller
                         ->get(); 
            $pendapatan17 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like', '4.1.   .14%')
+                        ->where('REKENING_KODE','like', '4.1.4.14%')
                         ->get();  
            $pendapatan18 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
@@ -4228,7 +4228,36 @@ class lampiranController extends Controller
                         ->where('REKENING_KODE','like', '4.3.5.01%')
                         ->get();     
 
-                        
+            $totpad = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+
+            $totpad1 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+
+            $totpad2 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.2%')
+                        ->sum('PENDAPATAN_TOTAL');  
+
+              $totpad3 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.3%')
+                        ->sum('PENDAPATAN_TOTAL');     
+
+              $totpad4 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.4%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+
+               $totpad5 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2%')
+                        ->sum('PENDAPATAN_TOTAL');                                                     
+
         
         $data       = array('tahun'         =>$tahun,
                             'status'        =>$status,
@@ -4267,6 +4296,8 @@ class lampiranController extends Controller
                             'pendapatan23'    =>$pendapatan23,        
                             'pendapatan24'    =>$pendapatan24,        
                             'pendapatan25'    =>$pendapatan25,        
+                            'totpad'          =>$totpad,        
+                            'totpad1'          =>$totpad1,        
                             );
 
         return View('budgeting.lampiran.perwal-1',$data);
