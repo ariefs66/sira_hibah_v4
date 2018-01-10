@@ -164,7 +164,7 @@
               <div class="wrapper-lg">
                 <!-- <h5 class="inline font-semibold text-orange m-n ">Rincian</h5> -->
                 <h5 class="inline font-semibold text-orange m-n">Pagu &nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>Rincian : <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}</span></h5>
-                @if($bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 and Auth::user()->active == 1) 
+                @if($bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 and Auth::user()->active == 3) 
                 <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
                 @elseif($thp == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
