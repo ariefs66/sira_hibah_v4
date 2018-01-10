@@ -133,14 +133,14 @@
 	<tr>
 		<td class="border-rincian">4.1</td>
 		<td class="border-rincian"><b>&nbsp;PENDAPATAN ASLI DAERAH</b></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan border">{{ number_format($totpad,0,',','.') }}</td>
+		<td class="border-rincian kanan"><b></b></td>
 	</tr>	
 
 	<tr>
 		<td class="border-rincian">4.1.1</td>
 		<td class="border-rincian"><b>&nbsp; &nbsp;Pajak Daerah</b></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan border">{{ number_format($totpad1,0,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>
 	@php $totP1=0; @endphp	
