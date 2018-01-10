@@ -376,10 +376,8 @@ class blController extends Controller
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
-                <li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
-                /*$no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
                 <li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li>
-                <li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';*/
+                <li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }
             }else{/*
                 
@@ -770,6 +768,13 @@ class blController extends Controller
             $v3     = "";
             $k3     = "";
         }
+
+        if(empty($data->pekerjaan->PEKERJAAN_NAMA)){
+            $pekerjaan='';
+        }else{
+            $pekerjaan=$data->pekerjaan->PEKERJAAN_NAMA;
+        }
+
         $out    = [ 'DATA'          => $data,
                     'REKENING_KODE' => $data->rekening->REKENING_KODE,
                     'REKENING_NAMA' => $data->rekening->REKENING_NAMA,
@@ -783,7 +788,8 @@ class blController extends Controller
                     'SATUAN3'       => $k2,
                     'VOL4'          => $v3,
                     'SATUAN4'       => $k3,
-                    'PEKERJAAN_NAMA'=> $data->pekerjaan->PEKERJAAN_NAMA];
+                    'PEKERJAAN_ID'  => $pekerjaan
+                    ];
         return $out;
     }
 
