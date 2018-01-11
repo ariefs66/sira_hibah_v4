@@ -4109,15 +4109,73 @@ class lampiranController extends Controller
                         ->get();                 
 
 
+        $rek1 = Rekening::where('REKENING_KODE','LIKE','5.1.1')->first();                
+        $rek2 = Rekening::where('REKENING_KODE','LIKE','5.1.2')->first();                
+        $rek3 = Rekening::where('REKENING_KODE','LIKE','5.1.3')->first();                
+        $rek4 = Rekening::where('REKENING_KODE','LIKE','5.1.4')->first();                
+        $rek5 = Rekening::where('REKENING_KODE','LIKE','5.1.5')->first();                
+        $rek6 = Rekening::where('REKENING_KODE','LIKE','5.1.6')->first();                
+        $rek7 = Rekening::where('REKENING_KODE','LIKE','5.1.7')->first();                
+        $rek8 = Rekening::where('REKENING_KODE','LIKE','5.1.8')->first(); 
 
-        $btl       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
-                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
-                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+        $rek11 = Rekening::where('REKENING_KODE','LIKE','5.1.1.01')->first();   
+        $rek12 = Rekening::where('REKENING_KODE','LIKE','5.1.2.01')->first();   
+        $rek13 = Rekening::where('REKENING_KODE','LIKE','5.1.3.01')->first();   
+        $rek14 = Rekening::where('REKENING_KODE','LIKE','5.1.4.01')->first();   
+        $rek15 = Rekening::where('REKENING_KODE','LIKE','5.1.5.01')->first();   
+        $rek16 = Rekening::where('REKENING_KODE','LIKE','5.1.6.01')->first();   
+        $rek17 = Rekening::where('REKENING_KODE','LIKE','5.1.7.01')->first();   
+        $rek18 = Rekening::where('REKENING_KODE','LIKE','5.1.8.01')->first();   
+
+        $btl1       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
-                        ->where('REF_SKPD.SKPD_ID',$id)
-                        ->where('REKENING_KODE','like','5.1.1%')
-                        ->selectRaw('sum("BTL_TOTAL") as pagu ')
+                        ->where('REKENING_KODE','like',$rek1->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get(); 
+         $btl2       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek2->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+         $btl3       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get();                               
+         $btl4       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+          $btl5       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek5->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+          $btl6       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek6->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+          $btl7       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek7->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+          $btl8       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek8->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+
 
         $pendapatan = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->orderby('REKENING_KODE')
@@ -4292,7 +4350,14 @@ class lampiranController extends Controller
                             'skpd'          =>$skpd,        
                             'urusan'        =>$urusan,        
                             'bl_rek'        =>$bl_rek,        
-                            'btl'           =>$btl,        
+                            'btl1'           =>$btl1,        
+                            'btl2'           =>$btl2,        
+                            'btl3'           =>$btl3,        
+                            'btl4'           =>$btl4,        
+                            'btl5'           =>$btl5,        
+                            'btl6'           =>$btl6,        
+                            'btl7'           =>$btl7,        
+                            'btl8'           =>$btl8,        
                             'pendapatan'    =>$pendapatan,        
                             'pendapatan1'    =>$pendapatan1,        
                             'pendapatan2'    =>$pendapatan2,        
@@ -4334,6 +4399,22 @@ class lampiranController extends Controller
                             'bl1'          =>$bl1,        
                             'bl2'          =>$bl2,        
                             'bl3'          =>$bl3,        
+                            'rek1'          =>$rek1,        
+                            'rek2'          =>$rek2,        
+                            'rek3'          =>$rek3,        
+                            'rek4'          =>$rek4,        
+                            'rek5'          =>$rek5,        
+                            'rek6'          =>$rek6,        
+                            'rek7'          =>$rek7,        
+                            'rek8'          =>$rek8, 
+                            'rek11'          =>$rek11,               
+                            'rek12'          =>$rek12,               
+                            'rek13'          =>$rek13,               
+                            'rek14'          =>$rek14,               
+                            'rek15'          =>$rek15,               
+                            'rek16'          =>$rek16,               
+                            'rek17'          =>$rek17,               
+                            'rek18'          =>$rek18,               
                             );
 
         return View('budgeting.lampiran.perwal-1',$data);
