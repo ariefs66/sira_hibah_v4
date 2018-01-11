@@ -102,9 +102,9 @@ class lampiranController extends Controller
                                 ->where('REKENING_ID',$r->REKENING_ID)
                                 ->groupBy('SUBRINCIAN_ID')
                                 ->groupBy('REKENING_ID')
-                                ->groupBy('RINCIAN_PAJAK')
+                                //->groupBy('RINCIAN_PAJAK')
                                 ->orderBy('SUBRINCIAN_ID')
-                                ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID", "RINCIAN_PAJAK"')
+                                ->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "SUBRINCIAN_ID","REKENING_ID" ')
                                 ->get();
 
 
