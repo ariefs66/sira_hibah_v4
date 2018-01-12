@@ -237,11 +237,15 @@
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"><b>SURPLUS/(DEFISIT)</b></td>
 		<td class="border kanan total"><b>
+<<<<<<< HEAD
 		@if((float)$pendapatan-($bl+$btl1+$btl2+$btl3+$btl4+$btl5))<0)
 		({{ number_format(abs((float)$pendapatan-($bl+$btl1+$btl2+$btl3+$btl4+$btl5)), 2, ',', '.') }})
 		@else
 		{{ number_format((float)$pendapatan-($bl+$btl1+$btl2+$btl3+$btl4+$btl5), 2, ',', '.') }}
 		@endif
+=======
+		{{ number_format((float)$pendapatan-($bl+$btl1+$btl2+$btl3+$btl4+$btl5), 2, ',', '.') }}
+>>>>>>> a550ca29b9b800b55705cb83efc52c12859a7592
 		</b></td>
 	</tr>
 	<tr style="font-size: 5px;">
