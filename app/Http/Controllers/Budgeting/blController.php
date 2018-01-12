@@ -885,7 +885,7 @@ class blController extends Controller
                             'tag'       => $tag,
                             'satuan'    => $satuan
                          ];
-       // dd($status);                 
+
         return View('budgeting.belanja-langsung.add',$data);
 
     }
@@ -965,8 +965,8 @@ class blController extends Controller
             $id         = BLPerubahan::where('BL_TAHUN',$tahun)->where('KEGIATAN_ID',Input::get('kegiatan'))->where('SUB_ID',Input::get('sub_id'))->value('BL_ID');
 
             $kunci      = new Kunciperubahan;
-            //$get_id      = Kunciperubahan::max('KUNCI_ID')->first();
-            //$kunci->KUNCI_ID                        = ($get_id+1);
+           // $get_id      = Kunciperubahan::max('KUNCI_ID')->first();
+           // $kunci->KUNCI_ID                        = ($get_id+
             $kunci->BL_ID                           = $id;
             $kunci->KUNCI_GIAT                      = 0;
             $kunci->KUNCI_RINCIAN                   = 0;

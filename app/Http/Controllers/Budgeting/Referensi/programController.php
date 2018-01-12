@@ -46,7 +46,6 @@ class programController extends Controller
                 <a onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a>
                 </div>';
             }
-    		
     		array_push($view, array( 'id_porgram'		=>$data->PROGRAM_ID,
                                      'OPSI'				=>$aksi,
                                      'URUSAN'  			=>$data->urusan->URUSAN_KODE." - ".$data->urusan->URUSAN_NAMA,

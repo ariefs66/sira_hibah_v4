@@ -294,9 +294,9 @@ class apiController extends Controller
                     ->WHERE('DAT_BL.BL_TAHUN',$tahun)
                     ->WHERE('DAT_BL.BL_DELETED',0)
                     ->WHERE('DAT_BL.BL_VALIDASI',1)
-                    ->groupBy('PROGRAM_KODE', "PROGRAM_NAMA")
+                     ->groupBy('PROGRAM_KODE', "PROGRAM_NAMA")
                     ->select('PROGRAM_KODE', "PROGRAM_NAMA")
-                    ->get();              
+                    ->get();        
        // }         
 
         $view           = array();

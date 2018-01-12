@@ -47,8 +47,6 @@
               <li><a href="{{ url('/') }}/doc/manualAPBDPerubahan.pdf" target="_blank">Manual Book APBD Perubahan</a></li>
               <li><a href="{{ url('/') }}/doc/manualkomponen.pdf" target="_blank">Manual Book Usulan Komponen Online</a></li>
               <li><a href="{{ url('/') }}/doc/manual.pdf" target="_blank">Manual Guide</a></li>
-              
-              
               <!-- <li><a href="#">Video Tutorial</a></li> -->
             </ul>
           </li>

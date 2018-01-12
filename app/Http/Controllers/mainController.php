@@ -72,8 +72,7 @@ class mainController extends Controller
 				else{
 					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
 				}
-
-			// }
+                        //}
 		}
 		return $view;
 	}
