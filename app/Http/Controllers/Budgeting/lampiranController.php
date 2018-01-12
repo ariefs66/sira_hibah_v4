@@ -4071,30 +4071,40 @@ class lampiranController extends Controller
                             ->where('REF_URUSAN_SKPD.SKPD_ID',$id)
                             ->first();
                             //dd($urusan);
+       $rb1 = Rekening::where('REKENING_KODE','LIKE','5.2.1')->first();                                     
+       $rb2 = Rekening::where('REKENING_KODE','LIKE','5.2.2')->first();                                     
+       $rb3 = Rekening::where('REKENING_KODE','LIKE','5.2.3')->first();                                     
 
-       $bl1     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+       $bl1     = Rincian::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                        ->where('REKENING_KODE','like',$rb1->REKENING_KODE.'%')
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
-                        ->sum('RINCIAN_TOTAL');
+                        ->orderBy("REKENING_KODE")
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
+                        ->get();
 
-            $bl2     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
+        $bl2     = Rincian::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                        ->where('REKENING_KODE','like',$rb2->REKENING_KODE.'%')
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
-                        ->sum('RINCIAN_TOTAL');
+                        ->orderBy("REKENING_KODE")
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
+                        ->get();                
 
-            $bl3     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
+        $bl3     = Rincian::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                        ->where('REKENING_KODE','like',$rb3->REKENING_KODE.'%')
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
-                        ->sum('RINCIAN_TOTAL');      
+                        ->orderBy("REKENING_KODE")
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
+                        ->get();                  
+     
 
         $bl_rek         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
@@ -4338,7 +4348,10 @@ class lampiranController extends Controller
                 $totpad11 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.3.3%')
-                        ->sum('PENDAPATAN_TOTAL');                                 
+                        ->sum('PENDAPATAN_TOTAL'); 
+
+
+                        $pembiayaan = Pembiayaan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')->get();                                  
 
 
         
@@ -4415,6 +4428,10 @@ class lampiranController extends Controller
                             'rek16'          =>$rek16,               
                             'rek17'          =>$rek17,               
                             'rek18'          =>$rek18,               
+                            'rb1'          =>$rb1,               
+                            'rb2'          =>$rb2,               
+                            'rb3'          =>$rb3,               
+                            'pembiayaan'          =>$pembiayaan,               
                             );
 
         return View('budgeting.lampiran.perwal-1',$data);
