@@ -457,7 +457,7 @@
                   </a>                
                    <ul class="nav nav-sub dk">
                     <li>
-                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/1" class="padding-l-r-lg " target="_blank">
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/perda/1" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 1</span>
                       </a>
                     </li>
