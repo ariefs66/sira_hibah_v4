@@ -118,12 +118,14 @@
 		<td class="border-rincian kanan"></td>
 	</tr>
 
+	@if(empty($rincian))
 	<tr>
 		<td class="border-rincian">4</td>
 		<td class="border-rincian"><b>BELANJA BANTUAN SOSIAL</b></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
+	@endif
 	
 
 	<tr style="font-size: 5px;">

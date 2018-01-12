@@ -117,10 +117,10 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
-	
+
 	@php $tot=0; @endphp	
 	@foreach($pendapatan as $pen)
-		@php $tot += $pen->PENDAPATAN_TOTAL @endphp
+		@php $tot += $pen->PENDAPATAN_TOTAL; @endphp
 	@endforeach
 
 	<tr>
@@ -143,7 +143,7 @@
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad1,0,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
-	@php $totP1=0; @endphp	
+	@php $totP1=0 @endphp	
 	@foreach($pendapatan1 as $pen)
 		@php $totP1 += $pen->PENDAPATAN_TOTAL @endphp
 	@endforeach
@@ -158,11 +158,11 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
-	@php $totP2=0; @endphp	
+	@php $totP2=0 @endphp	
 	@foreach($pendapatan2 as $pen)
 		@php $totP2 += $pen->PENDAPATAN_TOTAL @endphp
 	@endforeach
@@ -177,11 +177,11 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
-	@php $totP3=0; @endphp	
+	@php $totP3=0 @endphp	
 	@foreach($pendapatan3 as $pen)
 		@php $totP3 += $pen->PENDAPATAN_TOTAL @endphp
 	@endforeach
@@ -196,11 +196,11 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
-	@php $totP4=0; @endphp	
+	@php $totP4=0 @endphp	
 	@foreach($pendapatan4 as $pen)
 		@php $totP4 += $pen->PENDAPATAN_TOTAL @endphp
 	@endforeach
@@ -215,11 +215,11 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
-	@php $totP5=0; @endphp	
+	@php $totP5=0 @endphp	
 	@foreach($pendapatan5 as $pen)
 		@php $totP5 += $pen->PENDAPATAN_TOTAL @endphp
 	@endforeach
@@ -234,7 +234,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
@@ -253,7 +253,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
@@ -272,7 +272,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
@@ -291,7 +291,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
@@ -310,9 +310,10 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
+
 	<!-- pajak retribusi -->
 	<tr>
 		<td class="border-rincian">4.1.2</td>
@@ -326,7 +327,7 @@
 	@endforeach
 	<tr>
 		<td class="border-rincian">4.1.2.01</td>
-		<td class="border-rincian">&nbsp; &nbsp; Retribusi 1</td>
+		<td class="border-rincian">&nbsp; &nbsp; Retribusi Jasa Umum</td>
 		<td class="border-rincian kanan border">{{ number_format($totP10,0,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
@@ -335,7 +336,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
@@ -345,7 +346,7 @@
 	@endforeach
 	<tr>
 		<td class="border-rincian">4.1.2.02</td>
-		<td class="border-rincian">&nbsp; &nbsp; Retribusi 2</td>
+		<td class="border-rincian">&nbsp; &nbsp; Retribusi Jasa Usaha</td>
 		<td class="border-rincian kanan border">{{ number_format($totP11,0,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
@@ -354,9 +355,11 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
+
+
 
 	@php $totP12=0; @endphp	
 	@foreach($pendapatan12 as $pen)
@@ -364,7 +367,7 @@
 	@endforeach
 	<tr>
 		<td class="border-rincian">4.1.2.02</td>
-		<td class="border-rincian">&nbsp; &nbsp; Retribusi 3</td>
+		<td class="border-rincian">&nbsp; &nbsp; Retribusi Perizinan Tertentu</td>
 		<td class="border-rincian kanan border">{{ number_format($totP12,0,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
@@ -373,7 +376,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 	<!--  Hasil Pengelolaan Kekayaan Daerah yang Dipisahkan -->
@@ -398,7 +401,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
@@ -424,7 +427,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 	@php $totP15=0; @endphp	
@@ -442,7 +445,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 	@php $totP16=0; @endphp	
@@ -460,7 +463,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 	@php $totP17=0; @endphp	
@@ -478,7 +481,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 	@php $totP18=0; @endphp	
@@ -496,7 +499,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
 
@@ -527,7 +530,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach	
 	@php $totP20=0; @endphp	
@@ -545,7 +548,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach	
 	<tr>
@@ -568,7 +571,7 @@
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach		
 
@@ -583,7 +586,7 @@
 		@endforeach
 		<tr>
 			<td class="border-rincian">4.2.3.01</td>
-			<td class="border-rincian">&nbsp; &nbsp; DAK </td>
+			<td class="border-rincian">&nbsp; &nbsp; Dana Alokasi Khusus </td>
 			<td class="border-rincian kanan border">{{ number_format($totP22,0,',','.') }}</td>
 			<td class="border-rincian kanan"></td>
 		</tr>	
@@ -592,7 +595,7 @@
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 			<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-			<td class="border-rincian kanan"></td>
+			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
 		@endforeach	
 
@@ -608,26 +611,28 @@
 		<td class="border-rincian"><b>&nbsp; &nbsp; Pendapatan Hibah</b></td>
 		<td class="border-rincian kanan"><b>{{number_format($totpad10,0,',','.') }}</b></td>
 	<tr>
-		@php $totP22=0; @endphp	
-		@foreach($pendapatan22 as $pen)
-			@php $totP22 += $pen->PENDAPATAN_TOTAL @endphp
+
+		@php $totP23=0; @endphp	
+		@foreach($pendapatan23 as $pen)
+			@php $totP23 += $pen->PENDAPATAN_TOTAL @endphp
 		@endforeach
 		<tr>
-			<td class="border-rincian">4.2.3.01</td>
-			<td class="border-rincian">&nbsp; &nbsp; DAK </td>
-			<td class="border-rincian kanan border">{{ number_format($totP22,0,',','.') }}</td>
+			<td class="border-rincian">4.3.1.01</td>
+			<td class="border-rincian">&nbsp; &nbsp; &nbsp; Pendapatan Hibah Pemerintah</td>
+			<td class="border-rincian kanan border">{{ number_format($totP23,0,',','.') }}</td>
 			<td class="border-rincian kanan"></td>
 		</tr>	
-		@foreach($pendapatan22 as $pen)
+		@foreach($pendapatan23 as $pen)
 		<tr>
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 			<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-			<td class="border-rincian kanan"></td>
+			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
 		@endforeach
 
-	<tr>
+
+		<tr>
 		<td class="border-rincian">4.3.3</td>
 		<td class="border-rincian"><b>&nbsp; &nbsp; Dana Bagi Hasil Pajak dari Provinsi dan Pemerintah Daerah Lainnya</b></td>
 		<td class="border-rincian kanan"><b>{{number_format($totpad11,0,',','.') }}</b></td>
@@ -638,7 +643,7 @@
 		@endforeach
 		<tr>
 			<td class="border-rincian">4.3.3.01</td>
-			<td class="border-rincian">&nbsp; &nbsp; DAK </td>
+			<td class="border-rincian">&nbsp; &nbsp; Dana Bagi Hasil Pajak Dari Provinsi </td>
 			<td class="border-rincian kanan border">{{ number_format($totP24,0,',','.') }}</td>
 			<td class="border-rincian kanan"></td>
 		</tr>	
@@ -647,12 +652,11 @@
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 			<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-			<td class="border-rincian kanan"></td>
+			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
 		@endforeach
 
-
-	<tr>
+		<tr>
 		<td class="border-rincian">5</td>
 		<td class="border-rincian"><b>BELANJA</b></td>
 		<td class="border-rincian kanan total"><b>-</b></td>
@@ -667,7 +671,7 @@
 
 	@php $totbt1=0 @endphp
 	@foreach($btl1 as $bt1)
-		@php $totbt1+=$bt1->pagu @endphp;
+		@php $totbt1+=$bt1->pagu @endphp
 	@endforeach
 	@if($totbt1!=0)
 	<tr>
@@ -695,7 +699,7 @@
 
 	@php $totbt2=0 @endphp
 	@foreach($btl2 as $bt2)
-		@php $totbt2+=$bt2->pagu @endphp;
+		@php $totbt2+=$bt2->pagu @endphp
 	@endforeach
 	@if($totbt2!=0)
 	<tr>
@@ -722,37 +726,9 @@
 	@endif
 
 
-	@php $totbt3=0 @endphp
-	@foreach($btl3 as $bt3)
-		@php $totbt3 += $bt3->pagu @endphp;
-	@endforeach
-	@if($totbt3!=0)
-	<tr>
-		<td class="border-rincian">{{$rek3->REKENING_KODE}}</td>
-		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$rek3->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($totbt3,0,',','.') }}</b></td>
-		<td class="border-rincian kanan "></td>
-	</tr>
-	<tr>
-		<td class="border-rincian">{{$rek13->REKENING_KODE}}</td>
-		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$rek13->REKENING_NAMA}} </td>
-		<td class="border-rincian kanan total">{{ number_format($totbt3,0,',','.') }}</td>
-		<td class="border-rincian kanan "></td>
-	</tr>
-	@foreach($btl3 as $bt3)
-		<tr>
-			<td class="border-rincian">{{$bt3->REKENING_KODE}}</td>
-			<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$bt3->REKENING_NAMA}}</td>
-			<td class="border-rincian kanan">{{ number_format($bt3->pagu,0,',','.') }}</td>
-			<td class="border-rincian kanan "></td>
-		</tr>
-			
-	@endforeach
-	@endif
-
 	@php $totbt4=0 @endphp
 	@foreach($btl4 as $bt4)
-		@php $totbt4 += $bt4->pagu @endphp;
+		@php $totbt4 += $bt4->pagu @endphp
 	@endforeach
 	@if($totbt4!=0)
 	<tr>
@@ -778,9 +754,11 @@
 	@endforeach
 	@endif
 
+
+
 	@php $totbt5=0 @endphp
 	@foreach($btl5 as $bt5)
-		@php $totbt5 += $bt5->pagu @endphp;
+		@php $totbt5 += $bt5->pagu @endphp
 	@endforeach
 	@if($totbt5!=0)
 	<tr>
@@ -806,9 +784,10 @@
 	@endforeach
 	@endif
 
+
 	@php $totbt6=0 @endphp
 	@foreach($btl6 as $bt6)
-		@php $totbt6 += $bt6->pagu @endphp;
+		@php $totbt6 += $bt6->pagu @endphp
 	@endforeach
 	@if($totbt6!=0)
 	<tr>
@@ -837,7 +816,7 @@
 
 	@php $totbt7=0 @endphp
 	@foreach($btl7 as $bt7)
-		@php $totbt7 += $bt7->pagu @endphp;
+		@php $totbt7 += $bt7->pagu @endphp
 	@endforeach
 	@if($totbt7!=0)
 	<tr>
@@ -865,7 +844,7 @@
 
 	@php $totbt8=0 @endphp
 	@foreach($btl8 as $bt8)
-		@php $totbt8 += $bt8->pagu @endphp;
+		@php $totbt8 += $bt8->pagu @endphp
 	@endforeach
 	@if($totbt8!=0)
 	<tr>
@@ -892,6 +871,7 @@
 	@endif
 
 
+
 	<tr>
 		<td class="border-rincian">5.2</td>
 		<td class="border-rincian"><b>&nbsp; BELANJA LANGSUNG</b></td>
@@ -903,8 +883,8 @@
 		@php $totbl1+=$b1->pagu @endphp
 	@endforeach
 	<tr>
-		<td class="border-rincian">{{$rb1->REKENING_KODE}}</td>
-		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$rb3->REKENING_NAMA}}</b></td>
+		<td class="border-rincian">5.2.1</td>
+		<td class="border-rincian"> &nbsp; &nbsp; <b>Belanja Pegawai</b></td>
 		<td class="border-rincian kanan total">{{ number_format($totbl1,0,',','.') }}</td>
 		<td class="border-rincian kanan "></td>
 	</tr>
@@ -916,6 +896,7 @@
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@endforeach
+
 
 	@php $totbl2=0 @endphp
 	@foreach($bl2 as $b2)
@@ -955,32 +936,72 @@
 	</tr>
 	@endforeach
 
-
-
 	<tr>
 		<td class="border-rincian"></td>
-		<td class="border-rincian"> &nbsp; &nbsp; <b>Pembiayaan</b></td>
+		<td class="border-rincian kanan"> <b>Surpluss / (Defisit)</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(1,0,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
-	@foreach($pembiayaan as $pem)
+
+
 	<tr>
-		<td class="border-rincian">{{$pem->REKENING_KODE}}</td>
-		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$pem->REKENING_NAMA}}</td>
-		<td class="border-rincian kanan ">{{ number_format($pem->PEMBIAYAAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian">6</td>
+		<td class="border-rincian"> <b>PEMBIAYAAN DAERAH</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan "></td>
+	</tr>
+	<tr>
+		<td class="border-rincian">6.1</td>
+		<td class="border-rincian"> <b>&nbsp;PENERIMAAN PEMBIAYAAN DAERAH</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan "></td>
+	</tr>
+	@foreach($pmb1 as $pm1)
+	<tr>
+		<td class="border-rincian">{{$pm1->rekening->REKENING_KODE}}</td>
+		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$pm1->rekening->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan total"><b>{{ number_format($pm1->PEMBIAYAAN_TOTAL,0,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@endforeach
 
-	
+	<tr>
+		<td class="border-rincian">6.2</td>
+		<td class="border-rincian"> <b>&nbsp;PENGELUARAN PEMBIAYAAN DAERAH</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan "></td>
+	</tr>
+	@foreach($pmb2 as $pm2)
+	<tr>
+		<td class="border-rincian">{{$pm2->rekening->REKENING_KODE}}</td>
+		<td class="border-rincian"> &nbsp; &nbsp; &nbsp;{{$pm2->rekening->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan total"><b>{{ number_format($pm2->PEMBIAYAAN_TOTAL,0,',','.') }}</b></td>
+		<td class="border-rincian kanan "></td>
+	</tr>
+	@endforeach
 
-	<tr style="font-size: 5px;">
-		<td class="border-rincian">&nbsp;</td>
+	<tr>
 		<td class="border-rincian"></td>
-		<td class="border-rincian kanan"></td>
-	</tr>		
-	</tbody>	
-</table>
+		<td class="border-rincian kanan"> <b>PEMBIAYAAN NETTO</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan "></td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"> </td>
+		<td class="border-rincian kanan total"></td>
+		<td class="border-rincian kanan "></td>
+	</tr>
+	<tr>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"> <b>SISA LEBIH PEMBIAYAAN ANGGARAN TAHUN BERKENAAN</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan "></td>
+	</tr>
+
+
+</tbody>	
 <table class="ttd">
 	<tr>
 		<td></td>
