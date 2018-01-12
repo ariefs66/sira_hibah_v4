@@ -237,7 +237,7 @@
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"><b>SURPLUS/(DEFISIT)</b></td>
 		<td class="border kanan total"><b>
-		{{ number_format((float)($bl+$btl1+$btl2+$btl3+$btl4+$btl5)-$pad, 2, ',', '.') }}	
+		{{ number_format((float)$pendapatan-($bl+$btl1+$btl2+$btl3+$btl4+$btl5), 2, ',', '.') }}
 		</b></td>
 	</tr>
 	<tr style="font-size: 5px;">
