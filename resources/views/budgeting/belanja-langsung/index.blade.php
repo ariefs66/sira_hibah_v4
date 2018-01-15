@@ -27,7 +27,9 @@
                   
                   @if(Auth::user()->level == 2)
                     @if($thp == 1 and Auth::user()->active == 1)
-                      <a class="pull-right btn m-t-n-sm btn-success" href="{{ url('/') }}/main/{{$tahun}}/murni/belanja-langsung/tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Langsung</a>
+                      <!-- <a class="pull-right btn m-t-n-sm btn-success" href="{{ url('/') }}/main/{{$tahun}}/murni/belanja-langsung/tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Langsung</a> -->
+                      <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
+
                     @else 
                       <p class="text-orange"> Pagu OPD : {{number_format($pagu,0,'.',',')}} | Pagu BL  : {{number_format($blpagu,0,'.',',')}} | RIncian  : {{number_format($rincian,0,'.',',')}}</p>
                     @endif
@@ -44,11 +46,20 @@
                      <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
                      @endforeach
                    </select>
+                   
                  </div>
                  @endif
-               </div>               
-               <div class="tab-content tab-content-alt-1 bg-white">
+               </div>   
+
+
+
+               
+
                 <div role="tabpanel" class="active tab-pane" id="tab-1">
+                 
+                  <div class="tab-content tab-content-alt-1 bg-white">
+                
+
                   <div class="table-responsive dataTables_wrapper">
                    <table ui-jq="dataTable" ui-options="{
                         sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/getMurni/0',
@@ -238,6 +249,11 @@
 
 @section('plugin')
 <script type="text/javascript">
+  $("select.selectrincian").on('click',function() {
+    $('.table').DataTable().page.len($('.selectrincian').val()).draw();
+  });
+
+
 function hapus(id){
     var token        = $('#token').val();    
     $.confirm({
