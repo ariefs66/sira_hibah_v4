@@ -4087,7 +4087,7 @@ class lampiranController extends Controller
                     ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','pp.PENDAPATAN_DASHUK')
                     ->orderBy('rk.REKENING_KODE')
                     ->get();
-        print_r($pendapatan);exit;
+        //print_r($pendapatan);exit;
         foreach($pendapatan as $pd){
             if(strlen($pd->koderek)==1){
                 $tabel[$idx]['tingkat']=1;
@@ -4422,7 +4422,7 @@ class lampiranController extends Controller
                             'tgl'           =>$tgl,
                             'bln'           =>$bln,
                             'thn'           =>$thn,
-                            'detil'=>$tabel,'totalpendapatan'=>$total_pendapatan,'totalbelanja'=>$total_belanja,'totalpenerimaan'=>$total_penerimaan,'totalpengeluaran'=>$total_pengeluaran           
+                            'detil'=>$tabel,'totalpendapatan'=>$total_pendapatan,'totalbelanja'=>$total_belanja,'totalpenerimaan'=>$total_penerimaan,'totalpengeluaran'=>$total_pengeluaran               
                             );
         return View('budgeting.lampiran.perwal-1_ed',$data);
 

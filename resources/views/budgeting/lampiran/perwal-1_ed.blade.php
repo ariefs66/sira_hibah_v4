@@ -127,7 +127,7 @@
     <tr>
         <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
         <td class="border-rincian text_blok">{{ $rs['namarekening'] }}</td>
-        <td class="border-rincian text_blok kanan">&nbsp;</td>
+        <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
         <td class="border-rincian kanan "></td>
     </tr>
     @endif
