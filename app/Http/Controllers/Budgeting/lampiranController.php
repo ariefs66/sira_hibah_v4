@@ -4128,10 +4128,10 @@ class lampiranController extends Controller
         $btl=DB::table('REFERENSI.REF_REKENING as rk')
                     ->where('rk.REKENING_TAHUN',$tahun)
                     ->where('rk.REKENING_KUNCI','0')
-                    ->where('rk.REKENING_KODE','LIKE','5%');
+                    ->where('rk.REKENING_KODE','LIKE','5%')
+                    ->whereNotIn(DB::raw('substr(rk."REKENING_KODE",1,3)'),['5.2']);
         $btl = $btl->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
-        $btl=$btl->whereNotIn('rk.REKENING_KODE',['5.2','5.2.1','5.2.2','5.2.3'])
-                ->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
+        $btl=$btl->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
                     $join->on('dp.TAHUN','=','rk.REKENING_TAHUN')
                          ->where('dp.REKENING_KODE','like',DB::raw('rk."REKENING_KODE"'."||'%'"));
                 })
