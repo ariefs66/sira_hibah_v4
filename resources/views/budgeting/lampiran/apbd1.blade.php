@@ -181,7 +181,12 @@
 	<tr>
 		<td class="border-rincian">2</td>
 		<td class="border-rincian"><b>BELANJA</b></td>
-		<td class="border-rincian kanan total">{{ number_format((float)$btl+$bl, 2, ',', '.') }}</td>
+		<td class="border-rincian kanan total">
+		
+		@php $totbelanja =($bl1+$bl2+$bl3)+$btl; @endphp
+		{{ number_format((float)$totbelanja, 2, ',', '.') }}
+
+		</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">2.1</td>

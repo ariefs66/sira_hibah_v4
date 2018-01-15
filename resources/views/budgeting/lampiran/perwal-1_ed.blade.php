@@ -130,7 +130,7 @@
         @if($rs['koderekening']==6)
         <td class="border-rincian text_blok kanan">{{ number_format($totalpenerimaan-$totalpengeluaran,0,'.',',') }}</td>
         @else
-        <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],2,'.',',') }}</td>
         @endif
         <td class="border-rincian kanan "></td>
     </tr>
@@ -139,7 +139,7 @@
     <tr>
         <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
         <td class="border-rincian text_blok" style='padding-left: 10px'>{{ $rs['namarekening'] }}</td>
-        <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],2,'.',',') }}</td>
         <td class="border-rincian">{{ $rs['dashuk'] }}</td>
     </tr>
     @endif
@@ -153,7 +153,7 @@
         @else
         <td class="border-rincian" style='padding-left: 40px'>{{ $rs['namarekening'] }}</td>
         @endif
-        <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+        <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],2,'.',',') }}</td>
         <td class="border-rincian">{{ $rs['dashuk'] }}</td>
     </tr>
     @endif
@@ -163,9 +163,9 @@
         <td class="border-rincian text_blok kanan">{{ $rs['namajumlah'] }}</td>
         <td class="border-rincian text_blok kanan">
             @if($rs['totaljumlah']<0)
-            ({{ number_format(abs($rs['totaljumlah']),0,'.',',') }})
+            ({{ number_format(abs($rs['totaljumlah']),2,'.',',') }})
             @else
-            {{ number_format($rs['totaljumlah'],0,'.',',') }}
+            {{ number_format($rs['totaljumlah'],2,'.',',') }}
             @endif
         </td>
         <td class="border-rincian kanan "></td>
@@ -178,9 +178,9 @@
 		<td class="border-rincian kanan total"><b>
 		@php $tot = ($totalpendapatan-$totalbelanja)-($totalpenerimaan-$totalpengeluaran); @endphp	
 		@if($tot < 0)
-			({{ trim(number_format($tot,0,',','.'),"-") }})
+			({{ trim(number_format($tot,2,',','.'),"-") }})
 		@else
-			{{ number_format($tot,0,',','.') }}
+			{{ number_format($tot,2,',','.') }}
 		@endif
 		</b></td>
 		<td class="border-rincian kanan "></td>
