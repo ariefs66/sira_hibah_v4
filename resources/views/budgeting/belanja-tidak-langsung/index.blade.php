@@ -155,6 +155,12 @@
                   </thead>
                   <tbody>
                   </tbody>
+                  <tfoot>
+                      <tr>
+                        <td><b>Total</b></td>
+                        <td><b><text id="foot"></text></b></td>
+                      </tr>
+                    </tfoot>  
                 </table>
               </div>
             </div>
@@ -309,6 +315,13 @@
         </div> 
       </div>
 
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Dasar Hukum</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Dasar Hukum " id="dashuk" >          
+        </div> 
+      </div>
+
       <hr class="m-t-xl">
       <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanBTL()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
@@ -411,6 +424,7 @@
     var BTL_VOL         = $('#volume-btl').val();
     var BTL_SATUAN      = $('#satuan-btl').val();
     var BTL_TOTAL       = $('#total-btl').val();
+    var BTL_DASHUK       = $('#dashuk').val();
     var BTL_ID          = $('#id-btl').val();
     if(SUB_ID == "" || BTL_NAMA == "" || BTL_VOL == "" || BTL_SATUAN == "" || BTL_TOTAL == ""){
       $.alert('Form harap diisi!');
@@ -430,6 +444,7 @@
               'BTL_NAMA'        : BTL_NAMA, 
               'BTL_VOL'         : BTL_VOL, 
               'BTL_SATUAN'      : BTL_SATUAN, 
+              'BTL_DASHUK'      : BTL_DASHUK, 
               'BTL_TOTAL'       : BTL_TOTAL},
         success: function(msg){
           $('.table-pegawai').DataTable().ajax.reload();
@@ -450,6 +465,7 @@
           $('#volume-btl').val("");
           $('#satuan-btl').val("").trigger("chosen:updated");
           $('#total-btl').val("");
+          $('#dashuk').val("");
           $('#id-btl').val("");
         }
       });
@@ -512,6 +528,7 @@
         $('#keterangan-btl').val(data['BTL_KETERANGAN']);
         $('#volume-btl').val(data['BTL_VOLUME']);
         $('#total-btl').val(data['BTL_TOTAL']);
+        $('#dashuk').val(data['BTL_DASHUK']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");

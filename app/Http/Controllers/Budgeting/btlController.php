@@ -57,6 +57,7 @@ class btlController extends Controller
         $btl->BTL_KETERANGAN  = Input::get('BTL_NAMA');
         $btl->BTL_TOTAL     = Input::get('BTL_TOTAL');
         $btl->BTL_VOLUME    = Input::get('BTL_VOL');
+        $btl->BTL_DASHUK    = Input::get('BTL_DASHUK');
         $btl->BTL_KOEFISIEN   = Input::get('BTL_VOLUME').' '.Input::get('BTL_SATUAN');
         $btl->save();
 
@@ -74,6 +75,7 @@ class btlController extends Controller
         $btl->BTL_NAMA      = Input::get('BTL_NAMA');
         $btl->BTL_KETERANGAN  = Input::get('BTL_NAMA');
         $btl->BTL_TOTAL     = Input::get('BTL_TOTAL');
+        $btl->BTL_DASHUK    = Input::get('BTL_DASHUK');
         $btl->BTL_VOLUME    = Input::get('BTL_VOL');
         $btl->BTL_KOEFISIEN   = Input::get('BTL_VOLUME').' '.Input::get('BTL_SATUAN');
         $btl->save();
@@ -103,6 +105,7 @@ class btlController extends Controller
             'BTL_VOLUME'      => Input::get('BTL_VOL'),
             'BTL_KOEFISIEN'   => Input::get('BTL_VOLUME').' '.Input::get('BTL_SATUAN'),
             'BTL_TOTAL'       => Input::get('BTL_TOTAL'),
+            'BTL_DASHUK'       => Input::get('BTL_DASHUK'),
             'TIME_UPDATED'    => Carbon\Carbon::now(),
             'USER_UPDATED'    => Auth::user()->id
           ]);
@@ -119,6 +122,7 @@ class btlController extends Controller
             'BTL_VOLUME'      => Input::get('BTL_VOL'),
             'BTL_KOEFISIEN'   => Input::get('BTL_VOLUME').' '.Input::get('BTL_SATUAN'),
             'BTL_TOTAL'       => Input::get('BTL_TOTAL'),
+            'BTL_DASHUK'       => Input::get('BTL_DASHUK'),
             'TIME_UPDATED'    => Carbon\Carbon::now(),
             'USER_UPDATED'    => Auth::user()->id
           ]);
@@ -191,6 +195,8 @@ class btlController extends Controller
         $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
                       ->get();
+
+        $totPeg      = 0;                       
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -198,6 +204,8 @@ class btlController extends Controller
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.1',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
+
+          $totPeg += $data->total;
         }
       }
       else{
@@ -234,7 +242,7 @@ class btlController extends Controller
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
       }
-		  $out = array("aaData"=>$view);    	
+		  $out = array("aaData"=>$view, "totPeg"=>$totPeg);    	
     	return Response::JSON($out);
    	}
 
