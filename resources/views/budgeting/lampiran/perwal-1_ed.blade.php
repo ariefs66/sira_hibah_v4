@@ -142,7 +142,13 @@
     @if ($rs['tingkat']==3)
     <tr>
         <td class="border-rincian">{{ $rs['koderekening'] }}</td>
+        @if(strlen($rs['koderekening'])==5)
         <td class="border-rincian" style='padding-left: 20px'>{{ $rs['namarekening'] }}</td>
+        @elseif(strlen($rs['koderekening'])==8)
+        <td class="border-rincian" style='padding-left: 30px'>{{ $rs['namarekening'] }}</td>
+        @else
+        <td class="border-rincian" style='padding-left: 40px'>{{ $rs['namarekening'] }}</td>
+        @endif
         <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
         <td class="border-rincian kanan "></td>
     </tr>
