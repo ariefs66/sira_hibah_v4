@@ -4055,6 +4055,337 @@ class lampiranController extends Controller
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
 
+        $tabel=array();
+        $idx=0;
+
+        $total_pendapatan=0;
+        $total_belanja=0;
+        $total_penerimaan=0;
+        $total_pengeluaran=0;
+        $surplus=0;
+        $netto=0;
+
+        $pendapatan=DB::table('REFERENSI.REF_REKENING as rk')
+                    ->where('rk.REKENING_TAHUN',$tahun)
+                    ->where('rk.REKENING_KUNCI','0')
+                    ->where('rk.REKENING_KODE','LIKE','4%');
+        $pendapatan = $pendapatan->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+        $pendapatan=$pendapatan->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
+                        $join->on('dp.TAHUN','=','rk.REKENING_TAHUN')
+                             ->where('dp.REKENING_KODE','like',DB::raw('rk."REKENING_KODE"'."||'%'"));
+                    })
+                    ->select(DB::raw('1||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                             'rk.REKENING_KODE as koderek',
+                             'rk.REKENING_NAMA as namarek',
+                             DB::raw('SUM(dp."NILAI_MURNI") as nilai')
+                             )
+                    ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                    ->orderBy('rk.REKENING_KODE')
+                    ->get();
+        //print_r($pendapatan);exit;
+        foreach($pendapatan as $pd){
+            if(strlen($pd->koderek)==1){
+                $tabel[$idx]['tingkat']=1;
+                $tabel[$idx]['koderekening']=$pd->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                $tabel[$idx]['totalrekening']=$pd->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            elseif(strlen($pd->koderek)<=3){
+                $total_pendapatan+=$pd->nilai;
+
+                $tabel[$idx]['tingkat']=2;
+                $tabel[$idx]['koderekening']=$pd->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                $tabel[$idx]['totalrekening']=$pd->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            else{
+                if($pd->nilai>0){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['koderekening']=$pd->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
+                    $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+        }
+        $tabel[$idx]['tingkat']=4;
+        $tabel[$idx]['koderekening']=NULL;
+        $tabel[$idx]['namarekening']=NULL;
+        $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['namajumlah']="Jumlah Pendapatan";
+        $tabel[$idx]['totaljumlah']=$total_pendapatan;
+        $idx+=1;
+        //print_r($tabel);exit;//CEK PENDAPATAN
+        
+        $btl=DB::table('REFERENSI.REF_REKENING as rk')
+                    ->where('rk.REKENING_TAHUN',$tahun)
+                    ->where('rk.REKENING_KUNCI','0')
+                    ->where('rk.REKENING_KODE','LIKE','5%')
+                    ->whereNotIn(DB::raw('substr(rk."REKENING_KODE",1,3)'),['5.2']);
+        $btl = $btl->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+        $btl=$btl->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
+                    $join->on('dp.TAHUN','=','rk.REKENING_TAHUN')
+                         ->where('dp.REKENING_KODE','like',DB::raw('rk."REKENING_KODE"'."||'%'"));
+                })
+              ->select(DB::raw('2||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                       'rk.REKENING_KODE as koderek',
+                       'rk.REKENING_NAMA as namarek',
+                       DB::raw('SUM(dp."NILAI_MURNI") as nilai'))
+              ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+              ->orderBy('rk.REKENING_KODE')
+              ->get();
+        //print_r($btl);exit;
+        foreach($btl as $bt){
+            if(strlen($bt->koderek)==1){
+                $tabel[$idx]['tingkat']=1;
+                $tabel[$idx]['koderekening']=$bt->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            elseif(strlen($bt->koderek)<=3){
+                $total_belanja+=$bt->nilai;
+
+                $tabel[$idx]['tingkat']=2;
+                $tabel[$idx]['koderekening']=$bt->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            else{
+                if($bt->nilai>0){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+        }
+        
+        $bl=DB::table('REFERENSI.REF_REKENING as rk')
+                    ->where('rk.REKENING_TAHUN',$tahun)
+                    ->where('rk.REKENING_KUNCI','0')
+                    ->where('rk.REKENING_KODE','LIKE','5.2%');
+        $bl = $bl->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+        $bl = $bl->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
+                    $join->on('dp.TAHUN','=','rk.REKENING_TAHUN')
+                         ->where('dp.REKENING_KODE','like',DB::raw('rk."REKENING_KODE"'."||'%'"));
+                });
+        $bl = $bl->select(DB::raw('2||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                        'rk.REKENING_KODE as koderek',
+                        'rk.REKENING_NAMA as namarek',
+                        DB::raw('SUM(dp."NILAI_MURNI") as nilai')
+                    )
+                ->groupBy('rk.REKENING_TAHUN','rk.REKENING_KODE','rk.REKENING_NAMA')
+                ->orderBy('rk.REKENING_KODE')
+                ->get();
+        //print_r($bl);exit;
+        foreach($bl as $bt){
+            if(strlen($bt->koderek)==1){
+                $tabel[$idx]['tingkat']=1;
+                $tabel[$idx]['tiperekening']=2;
+                $tabel[$idx]['koderekening']=$bt->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            elseif(strlen($bt->koderek)<=3){
+                $total_belanja+=$bt->nilai;
+
+                $tabel[$idx]['tingkat']=2;
+                $tabel[$idx]['koderekening']=$bt->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            else{
+                if($bt->nilai>0){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+        }
+        
+        $tabel[$idx]['tingkat']=4;
+        $tabel[$idx]['koderekening']=NULL;
+        $tabel[$idx]['namarekening']=NULL;
+        $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['namajumlah']="Jumlah Belanja";
+        $tabel[$idx]['totaljumlah']=$total_belanja;
+        $idx+=1;
+
+        $surplus=$total_pendapatan-$total_belanja;
+        $tabel[$idx]['tingkat']=4;
+        $tabel[$idx]['koderekening']=NULL;
+        $tabel[$idx]['namarekening']=NULL;
+        $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['namajumlah']="Total Surplus/(Defisit)";
+        $tabel[$idx]['totaljumlah']=$surplus;
+        $idx+=1;
+        
+        $penerimaan=DB::table('REFERENSI.REF_REKENING as rk')
+                    ->where('rk.REKENING_TAHUN',$tahun)
+                    ->where('rk.REKENING_KUNCI','0')
+                    ->where('rk.REKENING_KODE','LIKE','6%')
+                    ->whereIn(DB::raw('substr(rk."REKENING_KODE",1,3)'),['6.1']);
+        $penerimaan = $penerimaan->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+        $penerimaan=$penerimaan->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
+                        $join->on('dp.TAHUN','=','rk.REKENING_TAHUN')
+                             ->where('dp.REKENING_KODE','like',DB::raw('rk."REKENING_KODE"'."||'%'"));
+                    })
+                    ->select(DB::raw('3||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                           'rk.REKENING_KODE as koderek',
+                           'rk.REKENING_NAMA as namarek',
+                           DB::raw('SUM(dp."NILAI_MURNI") as nilai'))
+                    ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                    ->orderBy('rk.REKENING_KODE')
+                    ->get();
+        //print_r($penerimaan);exit;
+        foreach($penerimaan as $bt){
+            if(strlen($bt->koderek)==1){
+                $tabel[$idx]['tingkat']=1;
+                $tabel[$idx]['tiperekening']=3;
+                $tabel[$idx]['koderekening']=$bt->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            elseif(strlen($bt->koderek)<=3){
+                $total_penerimaan+=$bt->nilai;
+
+                $tabel[$idx]['tingkat']=2;
+                $tabel[$idx]['koderekening']=$bt->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            else{
+                if(($bt->nilai>0) and substr($bt->koderek,0,3)=="6.1"){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+        }
+        
+        $tabel[$idx]['tingkat']=4;
+        $tabel[$idx]['koderekening']=NULL;
+        $tabel[$idx]['namarekening']=NULL;
+        $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['namajumlah']="Jumlah Penerimaan Pembiayaan";
+        $tabel[$idx]['totaljumlah']=$total_penerimaan;
+        $idx+=1;
+        
+        $pengeluaran=DB::table('REFERENSI.REF_REKENING as rk')
+                    ->where('rk.REKENING_TAHUN',$tahun)
+                    ->where('rk.REKENING_KUNCI','0')
+                    ->where('rk.REKENING_KODE','LIKE','6.2%');
+        $pengeluaran = $pengeluaran->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+        $pengeluaran=$pengeluaran->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
+                        $join->on('dp.TAHUN','=','rk.REKENING_TAHUN')
+                             ->where('dp.REKENING_KODE','like',DB::raw('rk."REKENING_KODE"'."||'%'"));
+                    })
+                    ->select(DB::raw('3||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                           'rk.REKENING_KODE as koderek',
+                           'rk.REKENING_NAMA as namarek',
+                           DB::raw('SUM(dp."NILAI_MURNI") as nilai'))
+                    ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                    ->orderBy('rk.REKENING_KODE')
+                    ->get();
+        //print_r($pendapatan);exit;
+        foreach($pengeluaran as $bt){
+            if(strlen($bt->koderek)==1){
+                $tabel[$idx]['tingkat']=1;
+                $tabel[$idx]['tiperekening']=3;
+                $tabel[$idx]['koderekening']=$bt->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            elseif(strlen($bt->koderek)<=3){
+                $total_pengeluaran+=$bt->nilai;
+
+                $tabel[$idx]['tingkat']=2;
+                $tabel[$idx]['koderekening']=$bt->koderek;
+                $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['namajumlah']=NULL;
+                $tabel[$idx]['totaljumlah']=NULL;
+                $idx+=1;
+            }
+            else{
+
+                if($bt->nilai>0){
+                    $tabel[$idx]['tingkat']=3;
+                    $tabel[$idx]['koderekening']=$bt->koderek;
+                    $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
+                    $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['totaljumlah']=NULL;
+                    $idx+=1;
+                }
+            }
+        }
+        
+        $tabel[$idx]['tingkat']=4;
+        $tabel[$idx]['koderekening']=NULL;
+        $tabel[$idx]['namarekening']=NULL;
+        $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['namajumlah']="Jumlah Pengeluaran Pembiayaan";
+        $tabel[$idx]['totaljumlah']=$total_pengeluaran;
+        $idx+=1;
+
+        $netto=$total_penerimaan-$total_pengeluaran;
+        $tabel[$idx]['tingkat']=4;
+        $tabel[$idx]['koderekening']=NULL;
+        $tabel[$idx]['namarekening']=NULL;
+        $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['namajumlah']="Pembiayaan Netto";
+        $tabel[$idx]['totaljumlah']=$netto;
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,
+                            'detil'=>$tabel,'totalpendapatan'=>$total_pendapatan,'totalbelanja'=>$total_belanja,'totalpenerimaan'=>$total_penerimaan,'totalpengeluaran'=>$total_pengeluaran               
+                            );
+        return View('budgeting.lampiran.perwal-1_ed',$data);
+
+        /*
         $skpd       = SKPD::where('SKPD_ID',$id)->first();
 
         $bl1     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
@@ -4475,8 +4806,9 @@ class lampiranController extends Controller
                             'pmb1'          =>$pmb1,               
                             'pmb2'          =>$pmb2,               
                             );
-
         return View('budgeting.lampiran.perwal-1',$data);
+        */
+        
     }
 
 
