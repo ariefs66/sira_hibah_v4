@@ -127,7 +127,11 @@
     <tr>
         <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
         <td class="border-rincian text_blok">{{ $rs['namarekening'] }}</td>
-        <td class="border-rincian text_blok kanan">&nbsp;</td>
+        @if($rs['koderekening']==6)
+        <td class="border-rincian text_blok kanan">{{ number_format($totalpenerimaan-$totalpengeluaran,0,'.',',') }}</td>
+        @else
+        <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+        @endif
         <td class="border-rincian kanan "></td>
     </tr>
     @endif
@@ -136,7 +140,7 @@
         <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
         <td class="border-rincian text_blok" style='padding-left: 10px'>{{ $rs['namarekening'] }}</td>
         <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
-        <td class="border-rincian kanan "></td>
+        <td class="border-rincian">{{ $rs['dashuk'] }}</td>
     </tr>
     @endif
     @if ($rs['tingkat']==3)
@@ -150,7 +154,7 @@
         <td class="border-rincian" style='padding-left: 40px'>{{ $rs['namarekening'] }}</td>
         @endif
         <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
-        <td class="border-rincian kanan "></td>
+        <td class="border-rincian">{{ $rs['dashuk'] }}</td>
     </tr>
     @endif
     @if ($rs['tingkat']==4)
