@@ -361,8 +361,8 @@ class blController extends Controller
             $thp    = 0;
         }
 
-        $data       = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
-                        ->where('BL_ID',$id)->get();
+        $data       = Rincian::join('EHARGA.DAT_KOMPONEN','DAT_KOMPONEN.KOMPONEN_ID','=','DAT_RINCIAN.KOMPONEN_ID')
+                        ->where('BL_ID',$id)->where('DAT_KOMPONEN.KOMPONEN_TAHUN',$tahun)->get();
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
