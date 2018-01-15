@@ -4422,7 +4422,7 @@ class lampiranController extends Controller
                             'tgl'           =>$tgl,
                             'bln'           =>$bln,
                             'thn'           =>$thn,
-                            'detil'=>$tabel,'totalpendapatan'=>$total_pendapatan,'totalbelanja'=>$total_belanja,'totalpenerimaan'=>$total_penerimaan,'totalpengeluaran'=>$total_pengeluaran               
+                            'detil'=>$tabel,'totalpendapatan'=>$total_pendapatan,'totalbelanja'=>$total_belanja,'totalpenerimaan'=>$total_penerimaan,'totalpengeluaran'=>$total_pengeluaran           
                             );
         return View('budgeting.lampiran.perwal-1_ed',$data);
 

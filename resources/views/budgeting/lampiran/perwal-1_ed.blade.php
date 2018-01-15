@@ -171,7 +171,14 @@
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"> <b>SISA LEBIH PEMBIAYAAN ANGGARAN TAHUN BERKENAAN</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>
+		@php $tot = ($totalpendapatan-$totalbelanja)-($totalpenerimaan-$totalpengeluaran); @endphp	
+		@if($tot < 0)
+			({{ trim(number_format($tot,0,',','.'),"-") }})
+		@else
+			{{ number_format($tot,0,',','.') }}
+		@endif
+		</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 
