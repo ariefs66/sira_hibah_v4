@@ -27,9 +27,7 @@
                   
                   @if(Auth::user()->level == 2)
                     @if($thp == 1 and Auth::user()->active == 1)
-                      <!-- <a class="pull-right btn m-t-n-sm btn-success" href="{{ url('/') }}/main/{{$tahun}}/murni/belanja-langsung/tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Langsung</a> -->
-                      <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
-
+                      <a class="pull-right btn m-t-n-sm btn-success" href="{{ url('/') }}/main/{{$tahun}}/murni/belanja-langsung/tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Langsung</a>
                     @else 
                       <p class="text-orange"> Pagu OPD : {{number_format($pagu,0,'.',',')}} | Pagu BL  : {{number_format($blpagu,0,'.',',')}} | RIncian  : {{number_format($rincian,0,'.',',')}}</p>
                     @endif
