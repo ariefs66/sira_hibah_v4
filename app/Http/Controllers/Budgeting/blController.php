@@ -361,8 +361,7 @@ class blController extends Controller
             $thp    = 0;
         }
 
-        $data       = Rincian::join('EHARGA.DAT_KOMPONEN','DAT_KOMPONEN.KOMPONEN_ID','=','DAT_RINCIAN.KOMPONEN_ID')
-                        ->where('BL_ID',$id)->where('DAT_KOMPONEN.KOMPONEN_TAHUN',$tahun)->get();
+        $data       = Rincian::where('BL_ID',$id)->get();
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
@@ -403,7 +402,7 @@ class blController extends Controller
                 $hargakomponen  = number_format(explode("#", $data->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
             }else{
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->RINCIAN_KOMPONEN.'</p>';
-                $hargakomponen  = number_format($data->RINCIAN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
+                $hargakomponen  = number_format($data->komponen->KOMPONEN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
             }
             if(Auth::user()->level == 8){
                  $checkbox = '<div class="m-t-n-lg">
