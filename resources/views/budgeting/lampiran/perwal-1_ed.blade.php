@@ -127,7 +127,11 @@
     <tr>
         <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
         <td class="border-rincian text_blok">{{ $rs['namarekening'] }}</td>
+        @if($rs['koderekening']==6)
+        <td class="border-rincian text_blok kanan">{{ number_format($totalpenerimaan-$totalpengeluaran,0,'.',',') }}</td>
+        @else
         <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+        @endif
         <td class="border-rincian kanan "></td>
     </tr>
     @endif

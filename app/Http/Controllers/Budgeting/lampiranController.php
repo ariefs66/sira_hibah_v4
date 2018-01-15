@@ -4273,7 +4273,7 @@ class lampiranController extends Controller
                     ->where('rk.REKENING_TAHUN',$tahun)
                     ->where('rk.REKENING_KUNCI','0')
                     ->where('rk.REKENING_KODE','LIKE','6%')
-                    ->whereIn(DB::raw('substr(rk."REKENING_KODE",1,3)'),['6.1']);
+                    ->whereNotIn(DB::raw('substr(rk."REKENING_KODE",1,3)'),['6.2']);
         $penerimaan = $penerimaan->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
         $penerimaan=$penerimaan->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
                         $join->on('dp.TAHUN','=','rk.REKENING_TAHUN')
