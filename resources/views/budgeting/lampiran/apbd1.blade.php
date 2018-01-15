@@ -288,9 +288,9 @@
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"><b>SISA LEBIH PEMBIAYAAN ANGGARAN TAHUN BERKENAAN</b></td>
 		<td class="border kanan total"><b>
-		@php $totRinkasan = $pendapatan-($btl+$bl)+($pmb1-$pmb2); @endphp
-		@if($totRinkasan < 0)
-		({{ number_format((float)$totRingkasan, 2, ',', '.') }})
+		@php $totRingkasan = $pendapatan-($btl+$bl)+($pmb1-$pmb2); @endphp
+		@if($totRingkasan < 0)
+		({{ trim(number_format((float)$totRingkasan, 2, ',', '.'),"-") }})
 		@else
 		{{ number_format((float)$totRingkasan, 2, ',', '.') }}
 		@endif
