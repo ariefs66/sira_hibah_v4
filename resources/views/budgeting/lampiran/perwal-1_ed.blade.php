@@ -141,7 +141,11 @@
     <tr>
         <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
         <td class="border-rincian text_blok" style='padding-left: 10px'>{{ $rs['namarekening'] }}</td>
+        @if($rs['koderekening']==5.2)
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)($rs['totalrekening']*0.01),2,'.',',') }}</td>
+        @else
         <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekening'],2,'.',',') }}</td>
+        @endif
         <td class="border-rincian">{{ $rs['dashuk'] }}</td>
     </tr>
     @endif
