@@ -4218,7 +4218,7 @@ class lampiranController extends Controller
                 $tabel[$idx]['tiperekening']=2;
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
-                $tabel[$idx]['totalrekening']=round($bt->nilai,0);
+                $tabel[$idx]['totalrekening']=ceil($bt->nilai);
                 $tabel[$idx]['dashuk']=NULL;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
