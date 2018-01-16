@@ -129,8 +129,6 @@
         <td class="border-rincian text_blok">{{ $rs['namarekening'] }}</td>
         @if($rs['koderekening']==6)
         <td class="border-rincian text_blok kanan total">{{ number_format((float)$totalpenerimaan-$totalpengeluaran,2,'.',',') }}</td>
-        @elseif($rs['koderekening']==5)
-        <td class="border-rincian text_blok kanan total">{{ number_format(round($rs['totalrekening']),2,'.',',') }}</td>
         @else
         <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekening'],2,'.',',') }}</td>
         @endif
