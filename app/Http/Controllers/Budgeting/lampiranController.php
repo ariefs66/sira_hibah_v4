@@ -4852,9 +4852,17 @@ class lampiranController extends Controller
         
     }
 
+    public function perwal2index($tahun,$status){
+        $tipe = 'Perwal'; 
+        if(Auth::user()->level == 2) $skpd = SKPD::where('SKPD_ID',UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID'))->get();
+        else  $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
+        $data       = ['tahun'=>$tahun,'status'=>$status,'tipe'=>$tipe,'skpd'=>$skpd,'i'=>1];
+        //if($tipe == 'apbd') return View('budgeting.lampiran.indexAPBD',$data);
+        return View('budgeting.lampiran.perwal2_index',$data);
+    }
 
-    public function perwal2($tahun,$status){
-        $id = 1;
+
+    public function perwal2($tahun,$status,$id){
         //dd($id);
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
         $tgl        = Carbon\Carbon::now()->format('d');
@@ -4869,6 +4877,11 @@ class lampiranController extends Controller
                             ->where('REF_URUSAN_SKPD.SKPD_ID',$id)
                             ->first();
                             //dd($urusan);
+        $bl         = BL::JOIN('BUDGETING.DAT_RINCIAN','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('BL_VALIDASI',1)
+                        ->sum('RINCIAN_TOTAL');                
 
        $bl_prog         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
@@ -4907,15 +4920,38 @@ class lampiranController extends Controller
                         ->get();                 
 
 
+    $btl_rek_1   =Rekening::where('REKENING_KODE','like','5.1.1')->where('REKENING_TAHUN',$tahun)->first();
+    $btl_rek_2   =Rekening::where('REKENING_KODE','like','5.1.2')->where('REKENING_TAHUN',$tahun)->first();
+    $btl_rek_3   =Rekening::where('REKENING_KODE','like','5.1.3')->where('REKENING_TAHUN',$tahun)->first();
+    $btl_rek_4   =Rekening::where('REKENING_KODE','like','5.1.4')->where('REKENING_TAHUN',$tahun)->first();
+    $btl_rek_5   =Rekening::where('REKENING_KODE','like','5.1.5')->where('REKENING_TAHUN',$tahun)->first();
+    $btl_rek_6   =Rekening::where('REKENING_KODE','like','5.1.6')->where('REKENING_TAHUN',$tahun)->first();
+    $btl_rek_7   =Rekening::where('REKENING_KODE','like','5.1.7')->where('REKENING_TAHUN',$tahun)->first();
+    $btl_rek_8   =Rekening::where('REKENING_KODE','like','5.1.8')->where('REKENING_TAHUN',$tahun)->first();
 
-        $btl       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+    $btl_rek_1_1   =Rekening::where('REKENING_KODE','like','5.1.1.01')->where('REKENING_TAHUN',$tahun)->first();
+    $btl_rek_1_2   =Rekening::where('REKENING_KODE','like','5.1.1.02')->where('REKENING_TAHUN',$tahun)->first();
+                       
+
+        $btl1_1       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
                         ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REF_SKPD.SKPD_ID',$id)
-                        ->where('REKENING_KODE','like','5.1.1%')
-                        ->selectRaw('sum("BTL_TOTAL") as pagu ')
+                        ->where('REKENING_KODE','like','5.1.1.01%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
                         ->get(); 
+
+        $btl1_2       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->where('REKENING_KODE','like','5.1.1.02%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
+                        ->get();                 
 
         $pendapatan = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->orderby('REKENING_KODE')
@@ -4942,8 +4978,6 @@ class lampiranController extends Controller
                         ->get();                                                        
 
 
-        //dd($pendapatan1);
-
                         
         
         $data       = array('tahun'         =>$tahun,
@@ -4955,13 +4989,18 @@ class lampiranController extends Controller
                             'urusan'        =>$urusan,        
                             'bl_prog'       =>$bl_prog,        
                             'bl_keg'        =>$bl_keg,        
-                            'bl_rek'        =>$bl_rek,        
-                            'btl'           =>$btl,        
+                            'bl_rek'        =>$bl_rek,                      
                             'pendapatan'    =>$pendapatan,        
                             'pendapatan1'    =>$pendapatan1,        
                             'pendapatan2'    =>$pendapatan2,        
                             'pendapatan3'    =>$pendapatan3,        
                             'pendapatan4'    =>$pendapatan4,        
+                            'btl_rek_1'      =>$btl_rek_1,        
+                            'btl_rek_1_1'      =>$btl_rek_1_1,        
+                            'btl_rek_1_2'      =>$btl_rek_1_2, 
+                            'btl1_1'        =>$btl1_1,       
+                            'btl1_2'        =>$btl1_2,      
+                            'bl'        =>$bl     
                             );
 
         return View('budgeting.lampiran.perwal-2',$data);
