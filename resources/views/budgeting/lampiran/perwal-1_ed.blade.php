@@ -80,9 +80,9 @@
 <body onload="window.print()">
 <div class="cetak">
 	<div style="margin-left: 330px;">
-	<h5>LAMPIRAN Ia &nbsp; &nbsp; &nbsp; Rancangan Peraturan Wali Kota Bandung</h5>
-	<h5>NOMOR : </h5>
-	<h5>TANGGAL : {{ $tgl }} {{ $bln }} {{ $thn }}</h5>
+	<h5 style="margin-right: -450px;">LAMPIRAN I Peraturan Wali Kota Bandung</h5>
+	<h5 style="margin-right: -418px;">NOMOR &nbsp; &nbsp; : </h5>
+	<h5 style="margin-right: -418px;">TANGGAL :</h5>
 	</div>
 	<br>
 <table class="header">
@@ -195,11 +195,11 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>WALIKOTA BANDUNG</b></td>
+		<td><b>WALI KOTA BANDUNG</b></td>
 	</tr>
 	<tr>
 		<td></td>
