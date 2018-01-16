@@ -242,10 +242,11 @@
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"><b>SURPLUS/(DEFISIT)</b></td>
 		<td class="border kanan total"><b>
-		@if(((float)$pendapatan-($bl+$btl1+$btl2+$btl3+$btl4+$btl5))<0)
-		({{ number_format(abs((float)$pendapatan-($bl+$btl1+$btl2+$btl3+$btl4+$btl5)), 2, ',', '.') }})
+		@php $surdef = $pendapatan-$totbelanja  @endphp	
+		@if($surdef<0)
+		({{ trim(number_format((float)$surdef, 2, ',', '.'),"-") }})
 		@else
-		{{ number_format((float)$pendapatan-($bl+$btl1+$btl2+$btl3+$btl4+$btl5), 2, ',', '.') }}
+		{{ number_format((float)$surdef, 2, ',', '.') }}
 		@endif
 		</b></td>
 	</tr>
