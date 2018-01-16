@@ -4256,7 +4256,7 @@ class lampiranController extends Controller
         $tabel[$idx]['totalrekening']=NULL;
         $tabel[$idx]['dashuk']=NULL;
         $tabel[$idx]['namajumlah']="Jumlah Belanja";
-        $tabel[$idx]['totaljumlah']=$total_belanja;
+        $tabel[$idx]['totaljumlah']=round($total_belanja);
         $idx+=1;
 
         $surplus=$total_pendapatan-$total_belanja;
@@ -4266,7 +4266,7 @@ class lampiranController extends Controller
         $tabel[$idx]['totalrekening']=NULL;
         $tabel[$idx]['dashuk']=NULL;
         $tabel[$idx]['namajumlah']="Total Surplus/(Defisit)";
-        $tabel[$idx]['totaljumlah']=ceil($surplus);
+        $tabel[$idx]['totaljumlah']=round($surplus);
         $idx+=1;
         
         $penerimaan=DB::table('REFERENSI.REF_REKENING as rk')
