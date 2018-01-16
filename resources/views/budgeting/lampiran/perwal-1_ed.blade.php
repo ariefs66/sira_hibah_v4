@@ -184,9 +184,9 @@
 		<td class="border-rincian kanan total"><b>
 		@php $tot = ($totalpendapatan-$totalbelanja)+($totalpenerimaan-$totalpengeluaran); @endphp	
 		@if($tot < 0)
-			({{ trim(number_format((float)$tot,2,',','.'),"-") }})
+			({{ trim(number_format((float)round($tot),2,',','.'),"-") }})
 		@else
-			{{ number_format((float)$tot, 2, ',', '.') }}
+			{{ number_format((float)round($tot), 2, ',', '.') }}
 		@endif
 		</b></td>
 		<td class="border-rincian kanan "></td>
