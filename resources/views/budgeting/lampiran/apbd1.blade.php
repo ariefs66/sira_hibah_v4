@@ -296,9 +296,9 @@
 		<td class="border kanan total"><b>
 		@php $totRingkasan = $surdef+($pmb1-$pmb2); @endphp
 		@if($totRingkasan < 0)
-		({{ trim(number_format((float)$totRingkasan, 2, ',', '.'),"-") }})
+		({{ trim(number_format($totRingkasan,0,',','.'),"-") }}),00
 		@else
-		{{ number_format((float)$totRingkasan, 2, ',', '.') }}
+		{{ number_format($totRingkasan,0,',','.')}},00
 		@endif
 	</tr>
 	<tr style="font-size: 5px;">
