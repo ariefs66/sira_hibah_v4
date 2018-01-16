@@ -481,7 +481,7 @@
                          <span>Lampiran 5</span>
                       </a>
                     </li>
-                    <li>
+                    <!-- <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/6" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 6</span>
                       </a>
@@ -520,7 +520,7 @@
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/apbd/13" class="padding-l-r-lg " target="_blank">
                          <span>Lampiran 13</span>
                       </a>
-                    </li>
+                    </li> -->
                 </ul>
                   </li> 
                   <li>
