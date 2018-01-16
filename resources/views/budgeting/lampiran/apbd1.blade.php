@@ -184,7 +184,7 @@
 		<td class="border-rincian kanan total">
 		
 		@php $totbelanja =($bl1+$bl2+$bl3)+$btl; @endphp
-		{{ number_format((float)$totbelanja, 2, ',', '.') }}
+		{{ number_format((float)$totbelanja-0.01, 2, ',', '.') }}
 
 		</td>
 	</tr>
@@ -221,7 +221,7 @@
 	<tr>
 		<td class="border-rincian">2.2</td>
 		<td class="border-rincian">&nbsp;<b>BELANJA LANGSUNG</b></td>
-		<td class="border-rincian kanan rekening">{{ number_format((float)$bl1+$bl2+$bl3, 2, ',', '.') }}</td>
+		<td class="border-rincian kanan rekening">{{ number_format((float)$bl1+$bl2+$bl3-0.01, 2, ',', '.') }}</td>
 	</tr>
 	<tr>
 		<td class="border-rincian">2.2.1</td>
@@ -236,13 +236,13 @@
 	<tr>
 		<td class="border-rincian">2.2.3</td>
 		<td class="border-rincian">&nbsp;&nbsp;Belanja Modal</td>
-		<td class="border-rincian kanan">{{ number_format((float)$bl3, 2, ',', '.') }}</td>
+		<td class="border-rincian kanan">{{ number_format((float)$bl3-0.01, 2, ',', '.') }}</td>
 	</tr>
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"><b>SURPLUS/(DEFISIT)</b></td>
 		<td class="border kanan total"><b>
-		@php $surdef = $pendapatan-$totbelanja  @endphp	
+		@php $surdef = $pendapatan-$totbelanja+0.01  @endphp	
 		@if($surdef<0)
 		({{ trim(number_format((float)$surdef, 2, ',', '.'),"-") }})
 		@else
