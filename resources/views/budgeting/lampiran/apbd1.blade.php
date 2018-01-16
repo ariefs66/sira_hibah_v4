@@ -75,6 +75,12 @@
 </head>
 <body onload="window.print()">
 <div class="cetak">
+	<div style="margin-left: 330px;">
+	<h5 style="margin-right: -150px;">LAMPIRAN I : Peraturan Daerah Kota Bandung</h5>
+	<h5>NOMOR : </h5>
+	<h5 style="margin-right: 10px;">TANGGAL :</h5>
+	</div>
+	<br>
 <table class="header">
 	<tr class="">
 		<td class="" colspan="2"></td>
@@ -84,9 +90,9 @@
 			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
 		</td>	
 		<td>
-			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>RINGKASAN RANCANGAN APBD</h3>
-			<h4>TAHUN ANGGARAN {{ $tahun }}</h4>
+			<h4 style="margin-right: 200px">PEMERINTAH KOTA BANDUNG</h4>
+			<h3 style="margin-right: 200px">RINGKASAN RANCANGAN APBD</h3>
+			<h4 style="margin-right: 200px">TAHUN ANGGARAN {{ $tahun }}</h4>
 		</td>
 	</tr>
 	<tr> <td colspan="2"></td> </tr>		
