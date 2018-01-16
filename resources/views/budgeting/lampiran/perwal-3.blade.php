@@ -118,12 +118,51 @@
 		<td class="border-rincian kanan"></td>
 	</tr>
 
+
+	@php $tot1=0; $tot2=0; @endphp
+	@foreach($btl1_1 as $btl)
+		@php $tot1+=$btl->pagu; @endphp
+	@endforeach
+	@foreach($btl1_2 as $btl)
+		@php $tot2+=$btl->pagu; @endphp
+	@endforeach
+
+
 	<tr>
-		<td class="border-rincian">4</td>
+		<td class="border-rincian">5.1.4</td>
 		<td class="border-rincian"><b>BELANJA HIBAH</b></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"><b>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
+	<tr>
+		<td class="border-rincian">{{$btl_rek_1->REKENING_KODE}}</td>
+		<td class="border-rincian"><b>{{$btl_rek_1->REKENING_NAMA}} </b></td>
+		<td class="border-rincian kanan"><b>{{ number_format($tot1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+	@foreach($btl1_1 as $btl)
+	<tr>
+		<td class="border-rincian">{{$btl->REKENING_KODE}}</td>
+		<td class="border-rincian">&nbsp;{{$btl->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan">{{$btl->pagu}}</td>
+		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
+	</tr>
+	@endforeach
+
+	<tr>
+		<td class="border-rincian">{{$btl_rek_2->REKENING_KODE}}</td>
+		<td class="border-rincian"><b>{{$btl_rek_2->REKENING_NAMA}} </b></td>
+		<td class="border-rincian kanan"><b>{{ number_format($tot2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+	@foreach($btl1_2 as $btl)
+	<tr>
+		<td class="border-rincian">{{$btl->REKENING_KODE}}</td>
+		<td class="border-rincian">&nbsp;{{$btl->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan">{{$btl->pagu}}</td>
+		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
+	</tr>
+	@endforeach
 	
 
 	<tr style="font-size: 5px;">
