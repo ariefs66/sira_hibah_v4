@@ -118,7 +118,8 @@ Route::get('/main/{tahun}/{status}/lampiran/apbd/12', 'Budgeting\lampiranControl
 Route::get('/main/{tahun}/{status}/lampiran/apbd/13', 'Budgeting\lampiranController@lampiran13');
 //LAMPIRAN PERWAL
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/1', 'Budgeting\lampiranController@perwal1');
-Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/2', 'Budgeting\lampiranController@perwal2');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/2', 'Budgeting\lampiranController@perwal2index');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/2/{id}', 'Budgeting\lampiranController@perwal2');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/3', 'Budgeting\lampiranController@perwal3');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/4', 'Budgeting\lampiranController@perwal4');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perwal/5', 'Budgeting\lampiranController@perwal5');

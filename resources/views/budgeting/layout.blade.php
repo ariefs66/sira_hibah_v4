@@ -453,7 +453,7 @@
                       <i class="text8 icon-bdg_arrow1 text"></i>
                       <i class="text8 icon-bdg_arrow2 text-active"></i>
                     </span>
-                    <span>APBD</span>
+                    <span>PERDA APBD</span>
                   </a>                
                    <ul class="nav nav-sub dk">
                     <li>
@@ -529,7 +529,7 @@
                       <i class="text8 icon-bdg_arrow1 text"></i>
                       <i class="text8 icon-bdg_arrow2 text-active"></i>
                     </span>
-                    <span>Perwal APBD</span>
+                    <span>PERWAL APBD</span>
                   </a>                
                    <ul class="nav nav-sub dk">
                     <li>
