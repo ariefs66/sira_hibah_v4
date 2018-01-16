@@ -128,9 +128,9 @@
         <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
         <td class="border-rincian text_blok">{{ $rs['namarekening'] }}</td>
         @if($rs['koderekening']==6)
-        <td class="border-rincian text_blok kanan">{{ number_format($totalpenerimaan-$totalpengeluaran,2,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan total">{{ number_format($totalpenerimaan-$totalpengeluaran,2,'.',',') }}</td>
         @else
-        <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],2,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan total">{{ number_format($rs['totalrekening'],2,'.',',') }}</td>
         @endif
         <td class="border-rincian kanan "></td>
     </tr>
@@ -139,7 +139,7 @@
     <tr>
         <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
         <td class="border-rincian text_blok" style='padding-left: 10px'>{{ $rs['namarekening'] }}</td>
-        <td class="border-rincian text_blok kanan">{{ number_format($rs['totalrekening'],2,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan total">{{ number_format($rs['totalrekening'],2,'.',',') }}</td>
         <td class="border-rincian">{{ $rs['dashuk'] }}</td>
     </tr>
     @endif
@@ -161,7 +161,7 @@
     <tr>
         <td class="border-rincian">&nbsp;</td>
         <td class="border-rincian text_blok kanan">{{ $rs['namajumlah'] }}</td>
-        <td class="border-rincian text_blok kanan">
+        <td class="border-rincian text_blok kanan total">
             @if($rs['totaljumlah']<0)
             ({{ number_format(abs($rs['totaljumlah']),2,'.',',') }})
             @else
