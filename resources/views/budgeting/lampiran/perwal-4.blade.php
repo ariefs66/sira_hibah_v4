@@ -118,6 +118,55 @@
 		<td class="border-rincian kanan"></td>
 	</tr>
 
+
+	<tr>
+		<td class="border-rincian">&nbsp; </td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian">&nbsp; </td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian">&nbsp; </td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian">&nbsp; </td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian">&nbsp; </td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+	<tr>
+		<td class="border-rincian">&nbsp; </td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+
+	<tr>
+		<td class="border-rincian">&nbsp; </td>
+		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
+	</tr>
+
 	@if(empty($rincian))
 	<tr>
 		<td class="border-rincian">4</td>
@@ -142,11 +191,11 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>WALIKOTA BANDUNG</b></td>
+		<td><b>WALI KOTA BANDUNG</b></td>
 	</tr>
 	<tr>
 		<td></td>
