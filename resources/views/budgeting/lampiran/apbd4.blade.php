@@ -142,7 +142,7 @@
         @if($rs->kode_urusan_ok=='t')
         <tr>
             <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
-            <td class="text_blok" width="5">{{ $rs->URUSAN_KODE }}</td>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="text_blok" width="5">&nbsp;</td>
@@ -156,8 +156,8 @@
         @if($rs->kode_unit_ok=='t')
         <tr>
             <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
-            <td class="text_blok" width="5">{{ $rs->URUSAN_KODE }}</td>
-            <td class="text_blok" width="5">{{ $rs->SKPD_KODE }}</td>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
+            <td class="text_blok" width="5">{{ substr($rs->SKPD_KODE,5,2) }}</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="border text_blok">{{ $rs->SKPD_NAMA }}</td>
@@ -170,8 +170,8 @@
         @if($rs->kode_program_ok=='t')
         <tr>
             <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
-            <td class="text_blok" width="5">{{ $rs->URUSAN_KODE }}</td>
-            <td class="text_blok" width="5">{{ $rs->SKPD_KODE }}</td>
+            <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
+            <td class="text_blok" width="5">{{ substr($rs->SKPD_KODE,5,2) }}</td>
             <td class="text_blok" width="5">{{ $rs->PROGRAM_KODE }}</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="border text_blok">{{ $rs->PROGRAM_NAMA }}</td>
@@ -184,8 +184,8 @@
         @if($rs->kode_giat_ok=='t')
         <tr>
             <td class="" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
-            <td class="" width="5">{{ $rs->URUSAN_KODE }}</td>
-            <td class="" width="5">{{ $rs->SKPD_KODE }}</td>
+            <td class="" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
+            <td class="" width="5">{{ substr($rs->SKPD_KODE,5,2) }}</td>
             <td class="" width="5">{{ $rs->PROGRAM_KODE }}</td>
             <td class="" width="5">{{ $rs->KEGIATAN_KODE }}</td>
             <td class="border">{{ $rs->KEGIATAN_NAMA }}</td>
