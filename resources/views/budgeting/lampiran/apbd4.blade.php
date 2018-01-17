@@ -197,10 +197,10 @@
     @endforeach
     <tr>
 	    <td class="border text_blok kanan" colspan="6">TOTAL</td>
-	    <td class="border text_blok kanan">{{ number_format($totalpegawaimurni,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format($totaljasamurni,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format($totalmodalmurni,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format(($totalpegawaimurni+$totaljasamurni+$totalmodalmurni),0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl1,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl2,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl3,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl,0,'.',',') }}</td>
 	</tr>
 	</tbody>	
 </table>
