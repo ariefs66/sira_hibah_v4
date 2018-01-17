@@ -185,12 +185,12 @@ $pagu_prog += $bk->BL_PAGU ;
 </tr>
 
 
-<tr>
+<!-- <tr>
 <td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}</td>
 <td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; Belanja Langsung </td>
 <td class="border-rincian kanan total">{{ number_format($bk->BL_PAGU,0,',','.') }}</td>
 <td class="border-rincian kanan total"></td>
-</tr>
+</tr> -->
 
 
 @foreach($bl_rek as $br)

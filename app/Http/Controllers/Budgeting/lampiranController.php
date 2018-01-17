@@ -2452,8 +2452,8 @@ class lampiranController extends Controller
                         ->get(); 
                                         
 
-        $bl_rek         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
-                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+        $bl_rek         = BL::
+                        JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_BL.SKPD_ID')
                         ->JOIN('BUDGETING.DAT_RINCIAN','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                         ->where('BL_TAHUN',$tahun)
