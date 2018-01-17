@@ -1694,7 +1694,7 @@ class lampiranController extends Controller
             $bl = $bl->select(DB::raw('2||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
                             'rk.REKENING_KODE as koderek',
                             'rk.REKENING_NAMA as namarek',
-                            DB::raw('(select sum(rd."RINCIAN_TOTAL") from "BUDGETING"."DAT_RINCIAN" as rd where rd."BL_ID" IN (select bl."BL_ID" from "BUDGETING"."DAT_BL" as bl where bl."BL_TAHUN"=rk."REKENING_TAHUN" and bl."BL_DELETED"=0 and bl."SKPD_ID"='.$id.') and rd."REKENING_ID" in (select r."REKENING_ID" from "REFERENSI"."REF_REKENING" as r where r."REKENING_TAHUN"=rk."REKENING_TAHUN" and r."REKENING_KODE" like rk."REKENING_KODE"'."||'%'".')) as nilai')
+                            DB::raw('(select sum(rd."RINCIAN_TOTAL") from "BUDGETING"."DAT_RINCIAN" as rd where rd."BL_ID" IN (select bl."BL_ID" from "BUDGETING"."DAT_BL" as bl where bl."BL_TAHUN"=rk."REKENING_TAHUN" and bl."BL_DELETED"=0 and bl."BL_VALIDASI"=1 and bl."SKPD_ID"='.$id.') and rd."REKENING_ID" in (select r."REKENING_ID" from "REFERENSI"."REF_REKENING" as r where r."REKENING_TAHUN"=rk."REKENING_TAHUN" and r."REKENING_KODE" like rk."REKENING_KODE"'."||'%'".')) as nilai')
                         )
                     ->groupBy('rk.REKENING_TAHUN','rk.REKENING_KODE','rk.REKENING_NAMA')
                     ->orderBy('rk.REKENING_KODE')
@@ -1725,30 +1725,30 @@ class lampiranController extends Controller
             $rincian = $rincian->where(DB::raw('length(rincian."REKENING_KODE")'),'<=',5);
             $rincian = $rincian->leftJoin('BUDGETING.RKP_LAMP_3_REK as rekap',function($join){
                             $join->on('rekap.SKPD_ID','=','rincian.SKPD_ID')
-                                 ->on('rekap.BL_ID','=','rincian.BL_ID')
+                                 ->on('rekap.KEGIATAN_ID','=','rincian.KEGIATAN_ID')
                                  ->on('rekap.TAHAPAN_ID','=','rincian.TAHAPAN_ID')
                                  ->on('rekap.TAHUN','=','rincian.TAHUN');
                        })
                        ->select('rincian.SKPD_KODE',
                                 'rincian.KEGIATAN_KODE',
-                                'rincian.BL_ID',
+                                'rincian.KEGIATAN_ID',
                                 'rincian.KEGIATAN_NAMA',
                                 'rekap.PROGRAM_KODE',
                                 'rekap.PROGRAM_NAMA',
                                 'rincian.REKENING_KODE',
                                 'rincian.REKENING_NAMA',
-                                'rincian.BL_MURNI as nilai',
+                                //'rincian.BL_MURNI as nilai',
+                                DB::raw('sum(rincian."BL_MURNI") as nilai'),
                                 DB::raw("'f' as kode_program_ok"),
                                 DB::raw("'f' as kode_giat_ok"))
                        ->groupBy('rincian.SKPD_KODE',
                                 'rincian.KEGIATAN_KODE',
-                                'rincian.BL_ID',
+                                'rincian.KEGIATAN_ID',
                                 'rincian.KEGIATAN_NAMA',
                                 'rekap.PROGRAM_KODE',
                                 'rekap.PROGRAM_NAMA',
                                 'rincian.REKENING_KODE',
-                                'rincian.REKENING_NAMA',
-                                'rincian.BL_MURNI')
+                                'rincian.REKENING_NAMA')
                        ->orderBy('rincian.SKPD_KODE')
                        ->orderBy('rekap.PROGRAM_KODE')
                        ->orderBy('rincian.KEGIATAN_KODE')
@@ -1762,9 +1762,9 @@ class lampiranController extends Controller
                     $bt->kode_program_ok="t";
                     $old_kode_program=$bt->PROGRAM_KODE;
                 }
-                if($bt->BL_ID!=$old_kode_giat){
+                if($bt->KEGIATAN_ID!=$old_kode_giat){
                     $bt->kode_giat_ok="t";
-                    $old_kode_giat=$bt->BL_ID;
+                    $old_kode_giat=$bt->KEGIATAN_ID;
                 }
 
                 if($bt->kode_program_ok=="t"){
@@ -1788,7 +1788,7 @@ class lampiranController extends Controller
                     $idx+=1;
                 }
 
-                if(($bt->kode_giat_ok=="t") or ($bt->BL_ID==$old_kode_giat)){
+                if(($bt->kode_giat_ok=="t") or ($bt->KEGIATAN_ID==$old_kode_giat)){
                     if($bt->kode_giat_ok=="t"){
                         $tabel[$idx]['tingkat']=1;
                         $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
