@@ -21,7 +21,9 @@ class urusanController extends Controller
     	$aksi 			= '';
     	$view 			= array();
     	foreach ($data as $data) {
+            if(Auth::user()->active==15){
     		$aksi 		= '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->URUSAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->URUSAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            }
     		array_push($view, array( 'no'			=>$no,
                                      'URUSAN_KODE'  =>$data->URUSAN_KODE,
                                      'URUSAN_NAMA'	=>$data->URUSAN_NAMA,
