@@ -130,22 +130,22 @@
 		<td class="border-rincian kanan total"><b>{{ number_format($tot_pen,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
-
+	@if($pad != 0)
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.4.1</td>
 		<td class="border-rincian">&nbsp;<b>PENDAPATAN ASLI DAERAH</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($pad,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
-
+	@endif
+	@if($pd != 0)
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.4.1.1</td>
 		<td class="border-rincian">&nbsp; &nbsp;<b>Pajak Daerah</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($pd,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
-
-
+	@endif
 	@foreach($pendapatan as $pen)
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$pen->REKENING_KODE}}</td>
