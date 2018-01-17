@@ -1737,8 +1737,8 @@ class lampiranController extends Controller
                                 'rekap.PROGRAM_NAMA',
                                 'rincian.REKENING_KODE',
                                 'rincian.REKENING_NAMA',
-                                //'rincian.BL_MURNI as nilai',
-                                DB::raw('sum(rincian."BL_MURNI") as nilai'),
+                                'rincian.BL_MURNI as nilai',
+                                //DB::raw('sum(rincian."BL_MURNI") as nilai'),
                                 DB::raw("'f' as kode_program_ok"),
                                 DB::raw("'f' as kode_giat_ok"))
                        ->groupBy('rincian.SKPD_KODE',
@@ -1748,7 +1748,7 @@ class lampiranController extends Controller
                                 'rekap.PROGRAM_KODE',
                                 'rekap.PROGRAM_NAMA',
                                 'rincian.REKENING_KODE',
-                                'rincian.REKENING_NAMA')
+                                'rincian.REKENING_NAMA','rincian.BL_MURNI')
                        ->orderBy('rincian.SKPD_KODE')
                        ->orderBy('rekap.PROGRAM_KODE')
                        ->orderBy('rincian.KEGIATAN_KODE')
@@ -1781,7 +1781,14 @@ class lampiranController extends Controller
                     $tabel[$idx]['akun6']="";
                     $tabel[$idx]['koderekening']=$bt->PROGRAM_KODE;
                     $tabel[$idx]['namarekening']=$bt->PROGRAM_NAMA;
-                    $tabel[$idx]['totalrekening']=NULL;
+                    $rekap = DB::table('BUDGETING.RKP_LAMP_3_REK as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.SKPD_KODE',$detil[0]->SKPD_KODE)
+                         ->where('rekap.PROGRAM_KODE',$bt->PROGRAM_KODE)
+                         ->select(DB::raw('sum("BL_MURNI") as blmurni'))
+                         ->get();
+                    $tabel[$idx]['totalrekening']=$rekap[0]->blmurni;
                     $tabel[$idx]['namajumlah']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $tabel[$idx]['totprog']=$totprog;
@@ -1803,7 +1810,15 @@ class lampiranController extends Controller
                         $tabel[$idx]['akun6']="";
                         $tabel[$idx]['koderekening']=$bt->KEGIATAN_KODE;
                         $tabel[$idx]['namarekening']=$bt->KEGIATAN_NAMA;
-                        $tabel[$idx]['totalrekening']=NULL;
+                        $rekap = DB::table('BUDGETING.RKP_LAMP_3_REK as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.SKPD_KODE',$detil[0]->SKPD_KODE)
+                         ->where('rekap.PROGRAM_KODE',$bt->PROGRAM_KODE)
+                         ->where('rekap.KEGIATAN_KODE',$bt->KEGIATAN_KODE)
+                         ->select(DB::raw('sum("BL_MURNI") as blmurni'))
+                         ->get();
+                        $tabel[$idx]['totalrekening']=$rekap[0]->blmurni;
                         $tabel[$idx]['namajumlah']=NULL;
                         $tabel[$idx]['totaljumlah']=NULL;
                         $tabel[$idx]['totprog']=$totprog;
@@ -2158,7 +2173,9 @@ class lampiranController extends Controller
                             'thn'           =>$thn,        
                             'skpd'          =>$skpd,        
                             'urusan'        =>$urusan,
-                            'rincian'       =>$tabel,    
+                            'rincian'       =>$tabel, 
+                            'totalpendapatan'=>$total_pendapatan,
+                            'totalbelanja'=>$total_belanja   
                             );
 
         return View('budgeting.lampiran.apbd3',$data);
