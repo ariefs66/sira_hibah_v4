@@ -81,6 +81,7 @@
 	<h5>TANGGAL : {{ $tgl }} {{ $bln }} {{ $thn }}</h5>
 	</div>
 	<br>
+	
 <table class="header">
 	<tr class="">
 		<td class="" colspan="2"></td>

@@ -76,9 +76,9 @@
 <body onload="window.print()">
 <div class="cetak">
 	<div style="margin-left: 330px;">
-	<h5>LAMPIRAN IV &nbsp; &nbsp; &nbsp; Peraturan Wali Kota Bandung</h5>
-	<h5>NOMOR : </h5>
-	<h5>TANGGAL : {{ $tgl }} {{ $bln }} {{ $thn }}</h5>
+	<h5 style="margin-right: -450px;">LAMPIRAN IV Peraturan Wali Kota Bandung</h5>
+	<h5 style="margin-right: -530px;">NOMOR &nbsp; &nbsp; : 1320 Tahun 2017</h5>
+	<h5 style="margin-right: -535px;">TANGGAL &nbsp;: 29 Desember 2017</h5>
 	</div>
 	<br>
 <table class="header">

@@ -80,8 +80,8 @@
 <div class="cetak">
 	<div style="margin-left: 330px;">
 	<h5 style="margin-right: -450px;">LAMPIRAN IV Peraturan Daerah Kota Bandung</h5>
-	<h5 style="margin-right: -413px;">NOMOR &nbsp; &nbsp; : </h5>
-	<h5 style="margin-right: -413px;">TANGGAL :</h5>
+	<h5 style="margin-right: -503px;">NOMOR &nbsp; &nbsp; : 12 Tahun 2017</h5>
+	<h5 style="margin-right: -523px;">TANGGAL &nbsp;: 29 Desember 2017</h5>
 	</div>
 	<br>
 <table class="header">
