@@ -22,7 +22,7 @@
               <div class="col-md-12">
                 <div class="panel bg-white">
                   <div class="wrapper-lg">
-                  @if(Auth::user()->level == 8) 
+                  @if(Auth::user()->level == 8 && Auth::user()->active == 15) 
                     <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                       <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Tambah <i class="fa fa-chevron-down"></i>
                       </button>
