@@ -16,6 +16,7 @@
 
 		td{
 			padding-left: 3px;
+			line-height: 1.5;
 		}
 	
 		table, tr, td{
@@ -136,10 +137,10 @@
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="border-rincian text_blok">{{ $rs->URUSAN_KAT1_NAMA }}</td>
-            <td class="border-rincian kanan text_blok">&nbsp;</td>
-            <td class="border-rincian kanan text_blok">&nbsp;</td>
-            <td class="border-rincian kanan text_blok">&nbsp;</td>
-            <td class="border-rincian kanan text_blok">&nbsp;</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_pendapatan_murni,0,'.',',') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_btl_murni,0,'.',',') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_bl_murni,0,'.',',') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format(($rs->subtotal1_btl_murni+$rs->subtotal1_bl_murni),0,'.',',') }}</td>
         </tr>
         @endif
         @if($rs->kode_urusan_ok=='t')
