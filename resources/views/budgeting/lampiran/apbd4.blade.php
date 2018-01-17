@@ -200,7 +200,7 @@
 	    <td class="border text_blok kanan">{{ number_format($bl1,2,',','.') }}</td>
 	    <td class="border text_blok kanan">{{ number_format($bl2,2,',','.') }}</td>
 	    <td class="border text_blok kanan">{{ number_format($bl3,2,',','.') }}</td>
-	    <td class="border text_blok kanan">{{ number_format($bl,2,',','.') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl-0.01,2,',','.') }}</td>
 	</tr>
 	</tbody>	
 </table>
