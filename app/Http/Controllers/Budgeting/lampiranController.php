@@ -1601,10 +1601,10 @@ class lampiranController extends Controller
                         ->select(DB::raw('1||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
                                  'rk.REKENING_KODE as koderek',
                                  'rk.REKENING_NAMA as namarek',
-                                 'dp.PENDAPATAN_DASHUK as dashuk',
+                                 'pp.PENDAPATAN_DASHUK as dashuk',
                                  DB::raw('SUM(dp."PENDAPATAN_TOTAL") as nilai')
                                  )
-                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','dp.PENDAPATAN_DASHUK')
+                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','pp.PENDAPATAN_DASHUK')
                         ->having(DB::raw('SUM(dp."PENDAPATAN_TOTAL")'),'<>','0')
                         ->orderBy('rk.REKENING_KODE')
                         ->get();
