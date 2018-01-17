@@ -144,9 +144,21 @@
 	<tr>
 		<td class="border-rincian">{{$btl->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp;{{$btl->REKENING_NAMA}}</td>
-		<td class="border-rincian kanan">{{$btl->pagu}}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
+		@foreach($btlz as $btlzx)
+		@if($btlzx->REKENING_KODE == $btl->REKENING_KODE)
+		<tr>
+			<td class="border-rincian"></td>
+			<td class="border-rincian">
+				&nbsp; {{$btlzx->BTL_NAMA}}
+			</td>
+			<td class="border-rincian kanan">{{ number_format($btlzx->BTL_TOTAL,0,',','.') }}</td>
+			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
+		</tr>
+		@endif
+		@endforeach
 	@endforeach
 
 	<tr>
@@ -158,11 +170,28 @@
 	@foreach($btl1_2 as $btl)
 	<tr>
 		<td class="border-rincian">{{$btl->REKENING_KODE}}</td>
-		<td class="border-rincian">&nbsp;{{$btl->REKENING_NAMA}}</td>
-		<td class="border-rincian kanan">{{$btl->pagu}}</td>
+		<td class="border-rincian">
+			&nbsp;{{$btl->REKENING_NAMA}}
+		</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
+		@foreach($btlz as $btlzx)
+		@if($btlzx->REKENING_KODE == $btl->REKENING_KODE)
+		<tr>
+			<td class="border-rincian"></td>
+			<td class="border-rincian">
+				&nbsp; {{$btlzx->BTL_NAMA}}
+			</td>
+			<td class="border-rincian kanan">{{ number_format($btlzx->BTL_TOTAL,0,',','.') }}</td>
+			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
+		</tr>
+		@endif
+		@endforeach
 	@endforeach
+
+	
+
 	
 
 	<tr style="font-size: 5px;">
