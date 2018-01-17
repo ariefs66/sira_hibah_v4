@@ -91,7 +91,7 @@
 		</td>	
 		<td>
 			<h4 style="margin-right: 200px">PEMERINTAH KOTA BANDUNG</h4>
-			<h3 style="margin-right: 200px">RINGKASAN RANCANGAN APBD</h3>
+			<h3 style="margin-right: 200px">RINGKASAN APBD</h3>
 			<h4 style="margin-right: 200px">TAHUN ANGGARAN {{ $tahun }}</h4>
 		</td>
 	</tr>
