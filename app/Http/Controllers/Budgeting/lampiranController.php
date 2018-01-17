@@ -1323,6 +1323,9 @@ class lampiranController extends Controller
                           DB::raw("'f' as urusan_ok"),
                           DB::raw("'f' as kode_urusan_ok"),
                           DB::raw("'f' as kode_unit_ok"),
+                          DB::raw("0 as subtotal1_pendapatan_murni"),
+                          DB::raw("0 as subtotal1_btl_murni"),
+                          DB::raw("0 as subtotal1_bl_murni"),
                           DB::raw("0 as subtotal_pendapatan_murni"),
                           DB::raw("0 as subtotal_btl_murni"),
                           DB::raw("0 as subtotal_bl_murni"))
@@ -1343,9 +1346,25 @@ class lampiranController extends Controller
                 $total_btl_murni+=$rs->BTL_MURNI;
                 $total_bl_murni+=$rs->BL_MURNI;
             }
-            if(substr($rs->URUSAN_KODE,1,1)!=$old_urusan){
+            /*if(substr($rs->URUSAN_KODE,1,1)!=$old_urusan){
                 $rs->urusan_ok='t';
                 $old_urusan=substr($rs->URUSAN_KODE,1,1);
+            }*/
+            if($rs->URUSAN_KAT1_NAMA!=$old_urusan){
+                $rs->urusan_ok='t';
+                $old_urusan=$rs->URUSAN_KAT1_NAMA;
+                $rekap = DB::table('BUDGETING.RKP_LAMP_2 as rekap')
+                         ->where('rekap.TAHUN',$tahun)
+                         ->where('rekap.TAHAPAN_ID',$tahapan)
+                         ->where('rekap.URUSAN_KAT1_KODE',$rs->URUSAN_KAT1_KODE)
+                         ->select(DB::raw('sum("PENDAPATAN_MURNI") as pendapatanmurni'),
+                                  DB::raw('sum("BTL_MURNI") as btlmurni'),
+                                  DB::raw('sum("BL_MURNI") as blmurni'))
+                         ->get();
+                //print_r($rekap);exit;
+                $rs->subtotal1_pendapatan_murni=$rekap[0]->pendapatanmurni;
+                $rs->subtotal1_btl_murni=$rekap[0]->btlmurni;
+                $rs->subtotal1_bl_murni=$rekap[0]->blmurni;
             }
             if($rs->URUSAN_KODE!=$old_kode_urusan){
                 $rs->kode_urusan_ok='t';
