@@ -79,14 +79,12 @@
 </head>
 <body onload="window.print()">
 <div class="cetak">
-	@if($skpd->SKPD_ID == 1)
 	<div style="margin-left: 330px;">
 	<h5 style="margin-right: -450px;">LAMPIRAN III Peraturan Daerah Kota Bandung</h5>
 	<h5 style="margin-right: -503px;">NOMOR &nbsp; &nbsp; &nbsp;: 12 Tahun 2017</h5>
 	<h5 style="margin-right: -528px;">TANGGAL &nbsp; : 29 Desember 2017</h5>
 	</div>
 	<br>
-	@endif
 <table class="header">
 	<tr class="">
 		<td class="" colspan="2"></td>
@@ -243,9 +241,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>
-		@if($skpd->SKPD_ID == 66) WALI KOTA BANDUNG @endif
-		</b></td>
+		<td><b>WALI KOTA BANDUNG</b></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -253,9 +249,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>
-		@if($skpd->SKPD_ID == 66) MOCHAMAD RIDWAN KAMIL @endif
-		</b></td>
+		<td><b>MOCHAMAD RIDWAN KAMIL</b></td>
 	</tr>
 	<tr>
 		<td></td>
