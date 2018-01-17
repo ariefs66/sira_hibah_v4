@@ -137,10 +137,10 @@
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="border-rincian text_blok">{{ $rs->URUSAN_KAT1_NAMA }}</td>
-            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_pendapatan_murni,0,'.',',') }}</td>
-            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_btl_murni,0,'.',',') }}</td>
-            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_bl_murni,0,'.',',') }}</td>
-            <td class="border-rincian text_blok kanan">{{ number_format(($rs->subtotal1_btl_murni+$rs->subtotal1_bl_murni),0,'.',',') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_pendapatan_murni,2,',','.') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_btl_murni,2,',','.') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal1_bl_murni,2,',','.') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format(($rs->subtotal1_btl_murni+$rs->subtotal1_bl_murni),2,',','.') }}</td>
         </tr>
         @endif
         @if($rs->kode_urusan_ok=='t')
@@ -149,10 +149,10 @@
             <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="border-rincian text_blok">{{ $rs->URUSAN_NAMA }}</td>
-            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_pendapatan_murni,0,'.',',') }}</td>
-            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_btl_murni,0,'.',',') }}</td>
-            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_bl_murni,0,'.',',') }}</td>
-            <td class="border-rincian text_blok kanan">{{ number_format(($rs->subtotal_btl_murni+$rs->subtotal_bl_murni),0,'.',',') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_pendapatan_murni,2,',','.') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_btl_murni,2,',','.') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_bl_murni,2,',','.') }}</td>
+            <td class="border-rincian text_blok kanan">{{ number_format(($rs->subtotal_btl_murni+$rs->subtotal_bl_murni),2,',','.') }}</td>
         </tr>
         @endif
         @if($rs->kode_unit_ok=='t')
@@ -161,19 +161,19 @@
             <td class="" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
             <td class="" width="5">{{ $rs->SKPD_KODE }}</td>
             <td class="border-rincian">{{ $rs->SKPD_NAMA }}</td>
-            <td class="border-rincian kanan">{{ number_format($rs->PENDAPATAN_MURNI,0,'.',',') }}</td>
-            <td class="border-rincian kanan">{{ number_format($rs->BTL_MURNI,0,'.',',') }}</td>
-            <td class="border-rincian kanan">{{ number_format($rs->BL_MURNI,0,'.',',') }}</td>
-            <td class="border-rincian kanan">{{ number_format(($rs->BTL_MURNI+$rs->BL_MURNI),0,'.',',') }}</td>
+            <td class="border-rincian kanan">{{ number_format($rs->PENDAPATAN_MURNI,2,',','.') }}</td>
+            <td class="border-rincian kanan">{{ number_format($rs->BTL_MURNI,2,',','.') }}</td>
+            <td class="border-rincian kanan">{{ number_format($rs->BL_MURNI,2,',','.') }}</td>
+            <td class="border-rincian kanan">{{ number_format(($rs->BTL_MURNI+$rs->BL_MURNI),2,',','.') }}</td>
         </tr>
         @endif
     @endforeach
     <tr>
         <td class="text_blok kanan" colspan="4">TOTAL</td>
-        <td class="border-rincian text_blok kanan">{{ number_format($totalpendapatanmurni,0,'.',',') }}</td>
-        <td class="border-rincian text_blok kanan">{{ number_format($totalbtlmurni,0,'.',',') }}</td>
-        <td class="border-rincian text_blok kanan">{{ number_format($totalblmurni,0,'.',',') }}</td>
-        <td class="border-rincian text_blok kanan">{{ number_format(($totalbtlmurni+$totalblmurni),0,'.',',') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format($totalpendapatanmurni,2,',','.') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format($totalbtlmurni,2,',','.') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format(round($totalblmurni+0.01,2),2,',','.') }}</td>
+        <td class="border-rincian text_blok kanan">{{ number_format(round(($totalbtlmurni+$totalblmurni+0.01),2),2,',','.') }}</td>
     </tr>
 	
 
