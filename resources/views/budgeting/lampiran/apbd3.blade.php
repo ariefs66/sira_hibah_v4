@@ -140,7 +140,7 @@
             <td class="text_blok" width="5">{{ $rs['akun5'] }}</td>
             <td class="text_blok" width="5">{{ $rs['akun6'] }}</td>
             <td class="border-rincian text_blok">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
-            <td class="border-rincian kanan text_blok">&nbsp;</td>
+            <td class="border-rincian kanan text_blok">&nbsp; {{ number_format($rs['totalrekening'],2,',','.') }} </td>
             <td class="border-rincian"></td>
         </tr>
         @endif
@@ -173,7 +173,7 @@
             <td class="" width="5">{{ $rs['akun4'] }}</td>
             <td class="" width="5">{{ $rs['akun5'] }}</td>
             <td class="" width="5">{{ $rs['akun6'] }}</td>
-            <td class="border-rincian" style='padding-left: 20px'>{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            <td class="border-rincian" style='padding-left: 20px'>{!! str_replace('&apos;',"'",$rs['namarekening']) !!} </td>
             <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],2,',','.') }}</td>
             <td class="border-rincian"></td>
         </tr>
