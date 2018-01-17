@@ -143,10 +143,15 @@
             <td class="border-rincian text_blok" style='padding-left: 10px'>{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
             @else
             <td class="border-rincian text_blok">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
-
             @endif
-            <td class="border-rincian kanan text_blok">&nbsp;</td>
 
+            @if($rs['akun1']==4)
+            <td class="border-rincian kanan text_blok">{{ number_format($totalpendapatan,2,',','.') }}</td>
+            @elseif($rs['akun1']==5)
+            <td class="border-rincian kanan text_blok">{{ number_format($totalbelanja,2,',','.') }}</td>
+            @else
+            <td class="border-rincian kanan text_blok">{{ number_format($rs['totalrekening'],2,',','.') }}</td>
+            @endif
             <td class="border-rincian"></td>
         </tr>
         @endif
