@@ -5046,7 +5046,7 @@ class lampiranController extends Controller
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
                         ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like','5.1.4.01%')
+                        ->where('REKENING_KODE','like','5.1.4.05%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
                         ->get(); 
@@ -5055,11 +5055,16 @@ class lampiranController extends Controller
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
                         ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like','5.1.4.05%')
+                        ->where('REKENING_KODE','like','5.1.4.06%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
-                        ->get();                  
-                        
+                        ->get();   
+
+
+        $btlz       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','5.1.4%')
+                        ->get();
         
         $data       = array('tahun'         =>$tahun,
                             'status'        =>$status,
@@ -5070,6 +5075,7 @@ class lampiranController extends Controller
                             'btl_rek_2'    =>$btl_rek_2,       
                             'btl1_1'    =>$btl1_1,       
                             'btl1_2'    =>$btl1_2,       
+                            'btlz'    =>$btlz,       
                             );
 
         return View('budgeting.lampiran.perwal-3',$data);

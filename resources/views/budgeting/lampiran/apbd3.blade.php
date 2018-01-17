@@ -230,7 +230,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>WALIKOTA BANDUNG</b></td>
+		<td><b>WALI KOTA BANDUNG</b></td>
 	</tr>
 	<tr>
 		<td></td>
