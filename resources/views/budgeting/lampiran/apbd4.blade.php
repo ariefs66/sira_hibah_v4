@@ -16,6 +16,7 @@
 
 		td{
 			padding-left: 3px;
+			line-height: 1.5;
 		}
 	
 		table, tr, td{
