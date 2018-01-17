@@ -2682,6 +2682,28 @@ class lampiranController extends Controller
             array_push($tabel,$rs);
         }
 
+        $bl     = Rincian::whereHas('bl',function($r){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        })
+                        ->sum('RINCIAN_TOTAL');
+
+            $bl1     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+                        ->whereHas('bl',function($r){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        })
+                        ->sum('RINCIAN_TOTAL');
+            $bl2     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
+                        ->whereHas('bl',function($r){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        })
+                        ->sum('RINCIAN_TOTAL');
+            $bl3     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
+                        ->whereHas('bl',function($r){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        })
+                        ->sum('RINCIAN_TOTAL'); 
+
+
         $data       = array('tahun'         =>$tahun,
                             'status'        =>$status,
                             'tgl'           =>$tgl,
@@ -2690,7 +2712,11 @@ class lampiranController extends Controller
                             'detil'=>$tabel,
                             'totalpegawaimurni'=>$total_pegawai_murni,
                             'totaljasamurni'=>$total_jasa_murni,
-                            'totalmodalmurni'=>$total_modal_murni
+                            'totalmodalmurni'=>$total_modal_murni,
+                            'bl'           =>$bl,
+                            'bl1'           =>$bl1,
+                            'bl2'           =>$bl2,
+                            'bl3'           =>$bl3,
                             );
         return View('budgeting.lampiran.apbd4',$data);
         /*
