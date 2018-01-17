@@ -127,10 +127,10 @@
 	</tr>
 
 	<tr>
-		<td class="border-rincian">&nbsp; </td>
-		<td class="border-rincian"></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian tengah">&nbsp; - </td>
+		<td class="border-rincian tengah">-</td>
+		<td class="border-rincian tengah">-</td>
+		<td class="border-rincian tengah">-</td>
 	</tr>
 
 	<tr>
