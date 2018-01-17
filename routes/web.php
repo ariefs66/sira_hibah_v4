@@ -105,6 +105,7 @@ Route::get('/main/{tahun}/{status}/lampiran-download/ppas/{tipe}', 'Budgeting\la
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/1', 'Budgeting\lampiranController@lampiran1');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/2', 'Budgeting\lampiranController@lampiran2');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/3', 'Budgeting\lampiranController@lampiran3Skpd');
+Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/3/alter/{id}', 'Budgeting\lampiranController@lampiran3Alter');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/3/{skpd}', 'Budgeting\lampiranController@lampiran3Detail');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/4', 'Budgeting\lampiranController@lampiran4');
 Route::get('/main/{tahun}/{status}/lampiran/apbd/perda/5', 'Budgeting\lampiranController@lampiran5');
