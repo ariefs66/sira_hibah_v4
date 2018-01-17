@@ -162,7 +162,7 @@
         <td class="border text_blok kanan">{{ number_format($totalgajimurni,2,',','.') }}</td>
         <td class="border text_blok kanan">{{ number_format($totalnongajimurni,2,',','.') }}</td>
         <td class="border text_blok kanan">{{ number_format($totalpegawaimurni,2,',','.') }}</td>
-        <td class="border text_blok kanan">{{ number_format($totaljasamurni+0.01,2,',','.') }}</td>
+        <td class="border text_blok kanan">{{ number_format($totaljasamurni,2,',','.') }}</td>
         <td class="border text_blok kanan">{{ number_format($totalmodalmurni+0.01,2,',','.') }}</td>
         <td class="border text_blok kanan">{{ number_format(($totalgajimurni+$totalnongajimurni+$totalpegawaimurni+$totaljasamurni+$totalmodalmurni)+0.01,2,',','.') }}</td>
     </tr>
