@@ -39,7 +39,7 @@ class programController extends Controller
         $aksi           = '';
     	$view 			= array();
     	foreach ($data as $data) {
-            if(Auth::user()->level==8){
+            if(Auth::user()->level==8 && Auth::user()->active==15){
                 $aksi       = '<div class="action visible pull-right"><a onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a><a onclick="return ubahProgram(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusProgram(\''.$data->PROGRAM_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             }else{
                 $aksi       = '<div class="action visible pull-right">
@@ -62,7 +62,7 @@ class programController extends Controller
     	$view 			= array();
     	foreach ($data as $data) {
             // <a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-eye"></i></a>
-            if(Auth::user()->level==8){
+            if(Auth::user()->level==8 && Auth::user()->active==15){
     		  $aksi 		= '<div class="action visible pull-right"><a onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             }
             else       $aksi = '';

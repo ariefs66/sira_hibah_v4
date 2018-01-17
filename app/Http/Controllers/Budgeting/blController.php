@@ -2937,7 +2937,7 @@ class blController extends Controller
             }
 
             //kunci rincian
-            if($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1){
+            if(($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1 ) and Auth::user()->level == 10){
                 //if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
                 if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
                     /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
@@ -2948,7 +2948,7 @@ class blController extends Controller
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
                 }                
             }else{
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
+                if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9) and Auth::user()->level == 10){
                     /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
                     <i></i></label>';*/
                     $rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
@@ -2969,7 +2969,7 @@ class blController extends Controller
 
             //HAPUS BL
             //<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
-            if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
+            if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8) && Auth::user()->active == 13) {
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
@@ -2977,18 +2977,20 @@ class blController extends Controller
             if($tahun < $tahunnow+1 and Auth::user()->level == 2){
                 $no   .= '<li><a onclick="return trftoperubahan(\''.$data->BL_ID.'\')"><i class="fa fa-repeat"></i> Perubahan</a></li>';
             }
+
+            if(Auth::user()->active == 5){
+                $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>';
+            }
             
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
-                <li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>
                 <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
-                <li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>
                 <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';

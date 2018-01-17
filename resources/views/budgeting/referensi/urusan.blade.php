@@ -22,7 +22,9 @@
               <div class="col-md-12">
                 <div class="panel bg-white">
                   <div class="wrapper-lg">
-                    <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah Urusan</button>                  
+                    @if(Auth::user()->active==15)
+                    <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah Urusan</button>   
+                    @endif
                     <h5 class="inline font-semibold text-orange m-n ">Urusan Tahun {{ $tahun }}</h5>
           					<div class="col-sm-1 pull-right m-t-n-sm">
                     	<select class="form-control dtSelect" id="dtSelect">

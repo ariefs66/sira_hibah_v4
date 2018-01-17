@@ -77,7 +77,7 @@
                           @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)
                             <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciGiatSKPD()" id="kuncigiatskpd"><i></i></label>
                           @endif
-                          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9)
+                          @if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9) && Auth::user()->active == 10)
                             <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciRincianSKPD()" id="kuncirincianskpd"><i></i></label>
                           @endif
                         </th>                                      
