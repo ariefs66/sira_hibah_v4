@@ -148,7 +148,7 @@
             <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
             <td class="text_blok" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
             <td class="text_blok" width="5">&nbsp;</td>
-            <td class="border-rincian text_blok">{{ $rs->URUSAN_NAMA }}</td>
+            <td class="border-rincian text_blok" style='padding-left: 10px'>{{ $rs->URUSAN_NAMA }}</td>
             <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_pendapatan_murni,2,',','.') }}</td>
             <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_btl_murni,2,',','.') }}</td>
             <td class="border-rincian text_blok kanan">{{ number_format($rs->subtotal_bl_murni,2,',','.') }}</td>
@@ -160,7 +160,7 @@
             <td class="" width="5">{{ substr($rs->URUSAN_KODE,0,1) }}</td>
             <td class="" width="5">{{ substr($rs->URUSAN_KODE,2,2) }}</td>
             <td class="" width="5">{{ $rs->SKPD_KODE }}</td>
-            <td class="border-rincian">{{ $rs->SKPD_NAMA }}</td>
+            <td class="border-rincian" style='padding-left: 20px'>{{ $rs->SKPD_NAMA }}</td>
             <td class="border-rincian kanan">{{ number_format($rs->PENDAPATAN_MURNI,2,',','.') }}</td>
             <td class="border-rincian kanan">{{ number_format($rs->BTL_MURNI,2,',','.') }}</td>
             <td class="border-rincian kanan">{{ number_format($rs->BL_MURNI,2,',','.') }}</td>
