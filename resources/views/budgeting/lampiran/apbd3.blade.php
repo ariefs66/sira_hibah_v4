@@ -16,6 +16,7 @@
 
 		td{
 			padding-left: 3px;
+			line-height: 1.5;
 		}
 	
 		table, tr, td{
@@ -155,8 +156,8 @@
             <td class="text_blok" width="5">{{ $rs['akun4'] }}</td>
             <td class="text_blok" width="5">{{ $rs['akun5'] }}</td>
             <td class="text_blok" width="5">{{ $rs['akun6'] }}</td>
-            <td class="border-rincian text_blok">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
-            <td class="border-rincian kanan text_blok">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+            <td class="border-rincian text_blok" style='padding-left: 10px'>{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            <td class="border-rincian kanan text_blok">{{ number_format($rs['totalrekening'],2,',','.') }}</td>
             <td class="border-rincian"></td>
         </tr>
         @endif
@@ -172,8 +173,8 @@
             <td class="" width="5">{{ $rs['akun4'] }}</td>
             <td class="" width="5">{{ $rs['akun5'] }}</td>
             <td class="" width="5">{{ $rs['akun6'] }}</td>
-            <td class="border-rincian">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
-            <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+            <td class="border-rincian" style='padding-left: 20px'>{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],2,',','.') }}</td>
             <td class="border-rincian"></td>
         </tr>
         @endif
@@ -189,8 +190,8 @@
             <td class="" width="5">{{ $rs['akun4'] }}</td>
             <td class="" width="5">{{ $rs['akun5'] }}</td>
             <td class="" width="5">{{ $rs['akun6'] }}</td>
-            <td class="border-rincian">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
-            <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],0,'.',',') }}</td>
+            <td class="border-rincian" style='padding-left: 30px'>{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            <td class="border-rincian kanan">{{ number_format($rs['totalrekening'],2,',','.') }}</td>
             <td class="border-rincian"></td>
         </tr>
         @endif
@@ -200,9 +201,9 @@
             <td class="border-rincian text_blok">{{ $rs['namajumlah'] }}</td>
             <td class="border-rincian kanan text_blok">
                 @if($rs['totaljumlah']<0)
-                ({{ number_format(abs($rs['totaljumlah']),0,'.',',') }})
+                ({{ number_format(abs($rs['totaljumlah']),2,',','.') }})
                 @else
-                {{ number_format($rs['totaljumlah'],0,'.',',') }}
+                {{ number_format($rs['totaljumlah'],2,',','.') }}
                 @endif
             </td>
             <td class="border-rincian"></td>
