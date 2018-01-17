@@ -9,6 +9,7 @@ use View;
 use Carbon;
 use Response;
 use Illuminate\Support\Facades\Input;
+use Auth;
 class urusanController extends Controller
 {
     public function index($tahun,$status){
@@ -23,6 +24,8 @@ class urusanController extends Controller
     	foreach ($data as $data) {
             if(Auth::user()->active==15){
     		$aksi 		= '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->URUSAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->URUSAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            }else{
+                $aksi="";
             }
     		array_push($view, array( 'no'			=>$no,
                                      'URUSAN_KODE'  =>$data->URUSAN_KODE,
