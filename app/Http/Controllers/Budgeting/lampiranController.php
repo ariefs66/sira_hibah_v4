@@ -1601,9 +1601,10 @@ class lampiranController extends Controller
                         ->select(DB::raw('1||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
                                  'rk.REKENING_KODE as koderek',
                                  'rk.REKENING_NAMA as namarek',
+                                 'dp.PENDAPATAN_DASHUK as dashuk',
                                  DB::raw('SUM(dp."PENDAPATAN_TOTAL") as nilai')
                                  )
-                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA')
+                        ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','dp.PENDAPATAN_DASHUK')
                         ->having(DB::raw('SUM(dp."PENDAPATAN_TOTAL")'),'<>','0')
                         ->orderBy('rk.REKENING_KODE')
                         ->get();
@@ -1627,6 +1628,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
                     $tabel[$idx]['totalrekening']=$pd->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -1647,6 +1649,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
                     $tabel[$idx]['totalrekening']=$pd->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=$pd->dashuk;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -1667,6 +1670,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
                     $tabel[$idx]['totalrekening']=$pd->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=$pd->dashuk;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -1687,6 +1691,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
                     $tabel[$idx]['totalrekening']=$pd->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=$pd->dashuk;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -1698,6 +1703,7 @@ class lampiranController extends Controller
             $tabel[$idx]['totalrekening']=NULL;
             $tabel[$idx]['namajumlah']="Jumlah Pendapatan";
             $tabel[$idx]['totaljumlah']=$total_pendapatan;
+            $tabel[$idx]['dashuk']=NULL;
             $idx+=1;
             //print_r($tabel);exit;//CEK PENDAPATAN
             
@@ -1718,8 +1724,9 @@ class lampiranController extends Controller
                            'rk.REKENING_KODE as koderek',
                            'rk.REKENING_NAMA as namarek',
                            'rk.REKENING_ID as idrek',
+                           'dp.BTL_DASHUK as dashuk',
                            DB::raw('SUM(dp."BTL_TOTAL") as nilai'))
-                  ->groupBy('rk.REKENING_ID','rk.REKENING_KODE','rk.REKENING_NAMA')
+                  ->groupBy('rk.REKENING_ID','rk.REKENING_KODE','rk.REKENING_NAMA','dp.BTL_DASHUK')
                   ->having(DB::raw('SUM(dp."BTL_TOTAL")'),'<>','0')
                   ->orderBy('rk.REKENING_KODE')
                   ->get();
@@ -1744,6 +1751,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -1764,6 +1772,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=$bt->dashuk;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -1784,6 +1793,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=$bt->dashuk;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -1804,6 +1814,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                     /**
@@ -1872,6 +1883,7 @@ class lampiranController extends Controller
             $tabel[$idx]['namarekening']="Belanja Langsung";
             $tabel[$idx]['totalrekening']=$bl[0]->nilai;
             $tabel[$idx]['namajumlah']=NULL;
+            $tabel[$idx]['dashuk']=NULL;
             $tabel[$idx]['totaljumlah']=NULL;
             $idx+=1;
             
@@ -1940,6 +1952,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=$bt->PROGRAM_NAMA;
                     $tabel[$idx]['totalrekening']=NULL;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -1961,6 +1974,7 @@ class lampiranController extends Controller
                         $tabel[$idx]['namarekening']=$bt->KEGIATAN_NAMA;
                         $tabel[$idx]['totalrekening']=NULL;
                         $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['dashuk']=NULL;
                         $tabel[$idx]['totaljumlah']=NULL;
                         $idx+=1;
                     }
@@ -1984,6 +1998,7 @@ class lampiranController extends Controller
                         $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
                         $tabel[$idx]['totalrekening']=$bt->nilai;
                         $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['dashuk']=NULL;
                         $tabel[$idx]['totaljumlah']=NULL;
                         $idx+=1;
                     }
@@ -2004,6 +2019,7 @@ class lampiranController extends Controller
                         $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
                         $tabel[$idx]['totalrekening']=$bt->nilai;
                         $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['dashuk']=NULL;
                         $tabel[$idx]['totaljumlah']=NULL;
                         $idx+=1;
                     }
@@ -2024,6 +2040,7 @@ class lampiranController extends Controller
                         $tabel[$idx]['namarekening']=ucwords(strtolower($bt->REKENING_NAMA));
                         $tabel[$idx]['totalrekening']=$bt->nilai;
                         $tabel[$idx]['namajumlah']=NULL;
+                        $tabel[$idx]['dashuk']=NULL;
                         $tabel[$idx]['totaljumlah']=NULL;
                         $idx+=1;
                     }
@@ -2043,6 +2060,7 @@ class lampiranController extends Controller
             $tabel[$idx]['tingkat']=5;
             $tabel[$idx]['koderekening']=NULL;
             $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['dashuk']=NULL;
             $tabel[$idx]['totalrekening']=NULL;
             $tabel[$idx]['namajumlah']="Total Surplus/(Defisit)";
             $tabel[$idx]['totaljumlah']=$surplus;
@@ -2088,6 +2106,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -2109,6 +2128,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -2129,6 +2149,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -2149,6 +2170,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -2157,6 +2179,7 @@ class lampiranController extends Controller
             $tabel[$idx]['tingkat']=5;
             $tabel[$idx]['koderekening']=NULL;
             $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['dashuk']=NULL;
             $tabel[$idx]['totalrekening']=NULL;
             $tabel[$idx]['namajumlah']="Jumlah Penerimaan Pembiayaan";
             $tabel[$idx]['totaljumlah']=$total_penerimaan;
@@ -2201,6 +2224,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -2223,6 +2247,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -2243,6 +2268,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -2263,6 +2289,7 @@ class lampiranController extends Controller
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
                     $tabel[$idx]['namajumlah']=NULL;
+                    $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
                     $idx+=1;
                 }
@@ -2281,6 +2308,7 @@ class lampiranController extends Controller
             $tabel[$idx]['tingkat']=5;
             $tabel[$idx]['koderekening']=NULL;
             $tabel[$idx]['namarekening']=NULL;
+            $tabel[$idx]['dashuk']=NULL;
             $tabel[$idx]['totalrekeningmurni']=NULL;
             $tabel[$idx]['totalrekening']=NULL;
             $tabel[$idx]['namajumlah']="Pembiayaan Netto";
