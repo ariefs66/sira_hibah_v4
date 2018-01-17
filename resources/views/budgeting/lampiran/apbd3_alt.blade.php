@@ -175,14 +175,14 @@ $pagu_prog += $bk->BL_PAGU ;
 
 
 @foreach($bl_keg as $bk)
-@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
+	@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
 <!-- kegiatan  -->
-<tr>
-<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}</td>
-<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$bk->KEGIATAN_NAMA}} </td>
-<td class="border-rincian kanan total">{{ number_format($bk->BL_PAGU,0,',','.') }}</td>
-<td class="border-rincian kanan total"></td>
-</tr>
+	<tr>
+	<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}</td>
+	<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$bk->KEGIATAN_NAMA}} </td>
+	<td class="border-rincian kanan total">{{ number_format($bk->BL_PAGU,0,',','.') }}</td>
+	<td class="border-rincian kanan total"></td>
+	</tr>
 
 
 <!-- <tr>
@@ -193,19 +193,20 @@ $pagu_prog += $bk->BL_PAGU ;
 </tr> -->
 
 
-@foreach($bl_rek as $br)
-@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID)
-<!-- rekening  -->
-<tr>
-<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.{{$br->REKENING_KODE}}</td>
-<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {{$br->REKENING_NAMA}} </td>
-<td class="border-rincian kanan total">{{ number_format($br->pagu,0,',','.') }}</td>
-<td class="border-rincian kanan total"></td>
-</tr>
-@endif
-@endforeach
+		@foreach($bl_rek as $br)
+			@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID)
+			<!-- rekening  -->
+					<tr>
+					<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.{{$br->REKENING_KODE}}</td>
+					<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {{$br->REKENING_NAMA}} </td>
+					<td class="border-rincian kanan total">{{ number_format($br->pagu,0,',','.') }}</td>
+					<td class="border-rincian kanan total"></td>
+					</tr>
+			
+			@endif
+		@endforeach
 
-@endif
+	@endif
 @endforeach
 @endforeach
 
