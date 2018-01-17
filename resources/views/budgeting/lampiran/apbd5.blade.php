@@ -79,9 +79,9 @@
 <body onload="window.print()">
 <div class="cetak">
 	<div style="margin-left: 330px;">
-	<h5>LAMPIRAN V &nbsp; &nbsp; &nbsp; Peraturan Daerah</h5>
-	<h5>NOMOR : </h5>
-	<h5>TANGGAL :</h5>
+	<h5 style="margin-right: -450px;">LAMPIRAN V Peraturan Daerah Kota Bandung</h5>
+	<h5 style="margin-right: -500px;">NOMOR &nbsp; &nbsp; : 12 Tahun 2017</h5>
+	<h5 style="margin-right: -520px;">TANGGAL &nbsp;: 29 Desember 2017</h5>
 	</div>
 	<br>
 <table class="header">	

@@ -76,9 +76,9 @@
 <body onload="window.print()">
 <div class="cetak">
 	<div style="margin-left: 330px;">
-	<h5>LAMPIRAN III &nbsp; &nbsp; &nbsp; Rancangan Peraturan Wali Kota Bandung</h5>
-	<h5>NOMOR : </h5>
-	<h5>TANGGAL : {{ $tgl }} {{ $bln }} {{ $thn }}</h5>
+	<h5 style="margin-right: -450px;">LAMPIRAN III Peraturan Wali Kota Bandung</h5>
+	<h5 style="margin-right: -530px;">NOMOR &nbsp; &nbsp; : 1320 Tahun 2017</h5>
+	<h5 style="margin-right: -535px;">TANGGAL &nbsp;: 29 Desember 2017</h5>
 	</div>
 	<br>
 <table class="header">
@@ -144,9 +144,21 @@
 	<tr>
 		<td class="border-rincian">{{$btl->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp;{{$btl->REKENING_NAMA}}</td>
-		<td class="border-rincian kanan">{{$btl->pagu}}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
+		@foreach($btlz as $btlzx)
+		@if($btlzx->REKENING_KODE == $btl->REKENING_KODE)
+		<tr>
+			<td class="border-rincian"></td>
+			<td class="border-rincian">
+				&nbsp; {{$btlzx->BTL_NAMA}}
+			</td>
+			<td class="border-rincian kanan">{{ number_format($btlzx->BTL_TOTAL,0,',','.') }}</td>
+			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
+		</tr>
+		@endif
+		@endforeach
 	@endforeach
 
 	<tr>
@@ -158,11 +170,28 @@
 	@foreach($btl1_2 as $btl)
 	<tr>
 		<td class="border-rincian">{{$btl->REKENING_KODE}}</td>
-		<td class="border-rincian">&nbsp;{{$btl->REKENING_NAMA}}</td>
-		<td class="border-rincian kanan">{{$btl->pagu}}</td>
+		<td class="border-rincian">
+			&nbsp;{{$btl->REKENING_NAMA}}
+		</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
+		@foreach($btlz as $btlzx)
+		@if($btlzx->REKENING_KODE == $btl->REKENING_KODE)
+		<tr>
+			<td class="border-rincian"></td>
+			<td class="border-rincian">
+				&nbsp; {{$btlzx->BTL_NAMA}}
+			</td>
+			<td class="border-rincian kanan">{{ number_format($btlzx->BTL_TOTAL,0,',','.') }}</td>
+			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
+		</tr>
+		@endif
+		@endforeach
 	@endforeach
+
+	
+
 	
 
 	<tr style="font-size: 5px;">
@@ -179,7 +208,7 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td></td>

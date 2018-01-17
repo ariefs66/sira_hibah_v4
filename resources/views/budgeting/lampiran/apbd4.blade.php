@@ -79,9 +79,9 @@
 <body onload="window.print()">
 <div class="cetak">
 	<div style="margin-left: 330px;">
-	<h5>LAMPIRAN IV &nbsp; &nbsp; &nbsp; Peraturan Daerah</h5>
-	<h5>NOMOR : </h5>
-	<h5>TANGGAL :</h5>
+	<h5 style="margin-right: -450px;">LAMPIRAN IV Peraturan Daerah Kota Bandung</h5>
+	<h5 style="margin-right: -503px;">NOMOR &nbsp; &nbsp; : 12 Tahun 2017</h5>
+	<h5 style="margin-right: -523px;">TANGGAL &nbsp;: 29 Desember 2017</h5>
 	</div>
 	<br>
 <table class="header">
@@ -197,10 +197,10 @@
     @endforeach
     <tr>
 	    <td class="border text_blok kanan" colspan="6">TOTAL</td>
-	    <td class="border text_blok kanan">{{ number_format($totalpegawaimurni,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format($totaljasamurni,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format($totalmodalmurni,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format(($totalpegawaimurni+$totaljasamurni+$totalmodalmurni),0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl1,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl2,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl3,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl,0,'.',',') }}</td>
 	</tr>
 	</tbody>	
 </table>
@@ -212,11 +212,11 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>WALIKOTA BANDUNG</b></td>
+		<td><b>WALI KOTA BANDUNG</b></td>
 	</tr>
 	<tr>
 		<td></td>
