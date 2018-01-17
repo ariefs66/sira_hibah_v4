@@ -139,8 +139,14 @@
             <td class="text_blok" width="5">{{ $rs['akun4'] }}</td>
             <td class="text_blok" width="5">{{ $rs['akun5'] }}</td>
             <td class="text_blok" width="5">{{ $rs['akun6'] }}</td>
+            @if(empty($rs['akun1']))
+            <td class="border-rincian text_blok" style='padding-left: 10px'>{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
+            @else
             <td class="border-rincian text_blok">{!! str_replace('&apos;',"'",$rs['namarekening']) !!}</td>
-            <td class="border-rincian kanan text_blok">&nbsp; {{ number_format($rs['totalrekening'],2,',','.') }} </td>
+
+            @endif
+            <td class="border-rincian kanan text_blok">&nbsp;</td>
+
             <td class="border-rincian"></td>
         </tr>
         @endif
