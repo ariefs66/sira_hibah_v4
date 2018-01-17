@@ -2526,7 +2526,7 @@ class lampiranController extends Controller
                             'sum_btl'           =>$sum_btl,        
                             );
 
-        return View('budgeting.lampiran.apbd3-alt',$data);
+        return View('budgeting.lampiran.apbd3_alt',$data);
     }
 
     public function lampiran4($tahun,$status){
