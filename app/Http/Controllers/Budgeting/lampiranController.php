@@ -2583,12 +2583,12 @@ class lampiranController extends Controller
                           'lampiran.PROGRAM_NAMA',
                           'lampiran.SKPD_KODE',
                           'lampiran.SKPD_NAMA',
-                          'lampiran.BL_ID',
+                          'lampiran.KEGIATAN_ID',
                           'lampiran.KEGIATAN_KODE',
                           'lampiran.KEGIATAN_NAMA',
-                          'lampiran.BL_PEGAWAI_MURNI',
-                          'lampiran.BL_JASA_MURNI',
-                          'lampiran.BL_MODAL_MURNI',
+                          DB::raw('sum(lampiran."BL_PEGAWAI_MURNI") as "BL_PEGAWAI_MURNI"'),
+                          DB::raw('sum(lampiran."BL_JASA_MURNI") as "BL_JASA_MURNI"'),
+                          DB::raw('sum(lampiran."BL_MODAL_MURNI") as "BL_MODAL_MURNI"'),
                           DB::raw("'f' as urusan_ok"),
                           DB::raw("'f' as kode_urusan_ok"),
                           DB::raw("'f' as kode_program_ok"),
@@ -2603,10 +2603,23 @@ class lampiranController extends Controller
                           DB::raw("0 as subprogram_pegawai_murni"),
                           DB::raw("0 as subprogram_jasa_murni"),
                           DB::raw("0 as subprogram_modal_murni"))
+                 ->groupBy('lampiran.TAHUN',
+                          'lampiran.URUSAN_KAT1_KODE',
+                          'lampiran.URUSAN_KAT1_NAMA',
+                          'lampiran.URUSAN_KODE',
+                          'lampiran.URUSAN_NAMA',
+                          'lampiran.PROGRAM_KODE',
+                          'lampiran.PROGRAM_NAMA',
+                          'lampiran.SKPD_KODE',
+                          'lampiran.SKPD_NAMA',
+                          'lampiran.KEGIATAN_ID',
+                          'lampiran.KEGIATAN_KODE',
+                          'lampiran.KEGIATAN_NAMA')
+                 ->orderBy('lampiran.URUSAN_KAT1_KODE','asc')
                  ->orderBy('lampiran.URUSAN_KODE','asc')
                  ->orderBy('lampiran.SKPD_KODE','asc')
                  ->orderBy('lampiran.PROGRAM_KODE','asc')
-                 ->orderBy('lampiran.BL_ID','asc')
+                 ->orderBy('lampiran.KEGIATAN_ID','asc')
                  ->get();
         //print_r($detil);exit;
         $old_urusan="";
@@ -2617,9 +2630,9 @@ class lampiranController extends Controller
         for($i=0;$i<count($detil);$i++){
             $rs=$detil[$i];
             
-            if(substr($rs->URUSAN_KODE,1,1)!=$old_urusan){
+            if($rs->URUSAN_KAT1_KODE!=$old_urusan){
                 $rs->urusan_ok='t';
-                $old_urusan=substr($rs->URUSAN_KODE,1,1);
+                $old_urusan=$rs->URUSAN_KAT1_KODE;
             }
             if($rs->URUSAN_KODE!=$old_kode_urusan){
                 $rs->kode_urusan_ok='t';
@@ -2672,9 +2685,9 @@ class lampiranController extends Controller
                 $rs->subprogram_jasa_murni=$rekap[0]->jasamurni;
                 $rs->subprogram_modal_murni=$rekap[0]->modalmurni;
             }
-            if($rs->BL_ID!=$old_kode_giat){
+            if($rs->KEGIATAN_ID!=$old_kode_giat){
                 $rs->kode_giat_ok='t';
-                $old_kode_giat=$rs->BL_ID;
+                $old_kode_giat=$rs->KEGIATAN_ID;
                 $total_pegawai_murni+=$rs->BL_PEGAWAI_MURNI;
                 $total_jasa_murni+=$rs->BL_JASA_MURNI;
                 $total_modal_murni+=$rs->BL_MODAL_MURNI;
