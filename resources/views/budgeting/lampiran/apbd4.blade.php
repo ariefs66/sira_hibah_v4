@@ -146,10 +146,10 @@
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="border text_blok">{{ $rs->URUSAN_NAMA }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->suburusan_pegawai_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->suburusan_jasa_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->suburusan_modal_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format(($rs->suburusan_pegawai_murni+$rs->suburusan_jasa_murni+$rs->suburusan_modal_murni),0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->suburusan_pegawai_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->suburusan_jasa_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->suburusan_modal_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format(($rs->suburusan_pegawai_murni+$rs->suburusan_jasa_murni+$rs->suburusan_modal_murni),2,',','.') }}</td>
         </tr>
         @endif
         @if($rs->kode_unit_ok=='t')
@@ -160,10 +160,10 @@
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="border text_blok">{{ $rs->SKPD_NAMA }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->subunit_pegawai_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->subunit_jasa_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->subunit_modal_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format(($rs->subunit_pegawai_murni+$rs->subunit_jasa_murni+$rs->subunit_modal_murni),0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subunit_pegawai_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subunit_jasa_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subunit_modal_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format(($rs->subunit_pegawai_murni+$rs->subunit_jasa_murni+$rs->subunit_modal_murni),2,',','.') }}</td>
         </tr>
         @endif
         @if($rs->kode_program_ok=='t')
@@ -174,10 +174,10 @@
             <td class="text_blok" width="5">{{ $rs->PROGRAM_KODE }}</td>
             <td class="text_blok" width="5">&nbsp;</td>
             <td class="border text_blok">{{ $rs->PROGRAM_NAMA }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->subprogram_pegawai_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->subprogram_jasa_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format($rs->subprogram_modal_murni,0,'.',',') }}</td>
-            <td class="border text_blok kanan">{{ number_format(($rs->subprogram_pegawai_murni+$rs->subprogram_jasa_murni+$rs->subprogram_modal_murni),0,'.',',') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subprogram_pegawai_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subprogram_jasa_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format($rs->subprogram_modal_murni,2,',','.') }}</td>
+            <td class="border text_blok kanan">{{ number_format(($rs->subprogram_pegawai_murni+$rs->subprogram_jasa_murni+$rs->subprogram_modal_murni),2,',','.') }}</td>
         </tr>
         @endif
         @if($rs->kode_giat_ok=='t')
@@ -188,19 +188,19 @@
             <td class="" width="5">{{ $rs->PROGRAM_KODE }}</td>
             <td class="" width="5">{{ $rs->KEGIATAN_KODE }}</td>
             <td class="border">{{ $rs->KEGIATAN_NAMA }}</td>
-            <td class="border kanan">{{ number_format($rs->BL_PEGAWAI_MURNI,0,'.',',') }}</td>
-            <td class="border kanan">{{ number_format($rs->BL_JASA_MURNI,0,'.',',') }}</td>
-            <td class="border kanan">{{ number_format($rs->BL_MODAL_MURNI,0,'.',',') }}</td>
-            <td class="border kanan">{{ number_format(($rs->BL_PEGAWAI_MURNI+$rs->BL_JASA_MURNI+$rs->BL_MODAL_MURNI),0,'.',',') }}</td>
+            <td class="border kanan">{{ number_format($rs->BL_PEGAWAI_MURNI,2,',','.') }}</td>
+            <td class="border kanan">{{ number_format($rs->BL_JASA_MURNI,2,',','.') }}</td>
+            <td class="border kanan">{{ number_format($rs->BL_MODAL_MURNI,2,',','.') }}</td>
+            <td class="border kanan">{{ number_format(($rs->BL_PEGAWAI_MURNI+$rs->BL_JASA_MURNI+$rs->BL_MODAL_MURNI),2,',','.') }}</td>
         </tr>
         @endif
     @endforeach
     <tr>
 	    <td class="border text_blok kanan" colspan="6">TOTAL</td>
-	    <td class="border text_blok kanan">{{ number_format($bl1,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format($bl2,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format($bl3,0,'.',',') }}</td>
-	    <td class="border text_blok kanan">{{ number_format($bl,0,'.',',') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl1,2,',','.') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl2,2,',','.') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl3,2,',','.') }}</td>
+	    <td class="border text_blok kanan">{{ number_format($bl,2,',','.') }}</td>
 	</tr>
 	</tbody>	
 </table>
