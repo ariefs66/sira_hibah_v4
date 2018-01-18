@@ -814,7 +814,7 @@ class blController extends Controller
         $out    = [ //'DATA'          => $data,
                     'REKENING_KODE' => $data->REKENING_KODE,
                     'REKENING_NAMA' => $data->REKENING_NAMA,
-                    //'TOTAL'         => number_format($data->total,0,'.',','),
+                    'TOTAL_VIEW'    => number_format($data->total,0,'.',','),
                     'TOTAL'         => $data->total,
                     (empty($data->AKB_JAN))?$jan=0:$jan=$data->AKB_JAN,
                     (empty($data->AKB_FEB))?$feb=0:$feb=$data->AKB_FEB,
@@ -1866,23 +1866,9 @@ class blController extends Controller
         if($status == 'murni') {
             //return $this->submitAKBEditMurni($tahun,$status);
             $akb_bl = AKB_BL::where('BL_ID',Input::get('bl_id'))
-                         ->where('REKENING_ID',Input::get('rek_id'))->value('AKB_ID');
+                         ->where('REKENING_ID',Input::get('rek_id'))->value('AKB_ID'); 
 
-            /*$sum_akb = Input::get('jan')+Input::get('feb')+Input::get('mar')+Input::get('apr')+Input::get('mei')+Input::get('jun')+Input::get('jul')+Input::get('agu')+Input::get('sep')+Input::get('okt')+Input::get('nov')+Input::get('des');*/
-            $sum_akb = Input::get('jan');
-
-            if($sum_akb == Input::get('total')){
-                return 1; 
-            }elseif ($sum_akb < Input::get('total')) {
-                return 2; 
-            }elseif ($sum_akb > Input::get('total')) {
-                return 3; 
-            }else{
-                return 0; 
-            }
-                  // dd($akb_bl);   
-
-            /*if(empty($akb_bl)){
+            if(empty($akb_bl)){
                 $akb = new AKB_BL;
                 $akb->BL_ID              = Input::get('bl_id');
                 $akb->REKENING_ID        = Input::get('rek_id');
@@ -1926,7 +1912,7 @@ class blController extends Controller
                  return 1; 
             }                
 
-             return 0; */
+             return 0; 
                
         }
         else return $this->submitAKBEditPerubahan($tahun,$status);
