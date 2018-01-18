@@ -691,7 +691,7 @@ class blController extends Controller
 
             $getAkb = AKB_BL::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
 
-            if((( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8 )and Auth::user()->active == 1){
+            if((( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8 )and Auth::user()->active == 5){
                 if(empty($getAkb) ){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -814,7 +814,8 @@ class blController extends Controller
         $out    = [ //'DATA'          => $data,
                     'REKENING_KODE' => $data->REKENING_KODE,
                     'REKENING_NAMA' => $data->REKENING_NAMA,
-                    'TOTAL'         => number_format($data->total,0,'.',','),
+                    //'TOTAL'         => number_format($data->total,0,'.',','),
+                    'TOTAL'         => $data->total,
                     (empty($data->AKB_JAN))?$jan=0:$jan=$data->AKB_JAN,
                     (empty($data->AKB_FEB))?$feb=0:$feb=$data->AKB_FEB,
                     (empty($data->AKB_MAR))?$mar=0:$mar=$data->AKB_MAR,
@@ -1867,9 +1868,21 @@ class blController extends Controller
             $akb_bl = AKB_BL::where('BL_ID',Input::get('bl_id'))
                          ->where('REKENING_ID',Input::get('rek_id'))->value('AKB_ID');
 
-                  // dd($akb_bl);      
+            /*$sum_akb = Input::get('jan')+Input::get('feb')+Input::get('mar')+Input::get('apr')+Input::get('mei')+Input::get('jun')+Input::get('jul')+Input::get('agu')+Input::get('sep')+Input::get('okt')+Input::get('nov')+Input::get('des');*/
+            $sum_akb = Input::get('jan');
 
-            if(empty($akb_bl)){
+            if($sum_akb == Input::get('total')){
+                return 1; 
+            }elseif ($sum_akb < Input::get('total')) {
+                return 2; 
+            }elseif ($sum_akb > Input::get('total')) {
+                return 3; 
+            }else{
+                return 0; 
+            }
+                  // dd($akb_bl);   
+
+            /*if(empty($akb_bl)){
                 $akb = new AKB_BL;
                 $akb->BL_ID              = Input::get('bl_id');
                 $akb->REKENING_ID        = Input::get('rek_id');
@@ -1913,7 +1926,7 @@ class blController extends Controller
                  return 1; 
             }                
 
-             return 0; 
+             return 0; */
                
         }
         else return $this->submitAKBEditPerubahan($tahun,$status);
@@ -2991,7 +3004,6 @@ class blController extends Controller
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
-                <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }
