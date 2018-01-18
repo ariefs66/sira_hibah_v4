@@ -2986,9 +2986,11 @@ class blController extends Controller
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
-            $tahunnow   = Carbon\Carbon::now()->format('Y');
-            if($tahun < $tahunnow+1 and Auth::user()->level == 2){
-                $no   .= '<li><a onclick="return trftoperubahan(\''.$data->BL_ID.'\')"><i class="fa fa-repeat"></i> Perubahan</a></li>';
+            if(Auth::user()->active == 1){
+                $tahunnow   = Carbon\Carbon::now()->format('Y');
+                if($tahun < $tahunnow+1 and Auth::user()->level == 2){
+                    $no   .= '<li><a onclick="return trftoperubahan(\''.$data->BL_ID.'\')"><i class="fa fa-repeat"></i> Perubahan</a></li>';
+                }
             }
 
             if(Auth::user()->active == 5){
