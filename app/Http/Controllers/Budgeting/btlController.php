@@ -641,7 +641,7 @@ class btlController extends Controller
                         $join->on('DAT_AKB_BTL.BTL_ID','=','DAT_BTL.BTL_ID')->on('DAT_AKB_BTL.REKENING_ID','=','DAT_BTL.REKENING_ID');
                     })
                     ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$id)
+                    ->where('DAT_BTL.SKPD_ID',$id)
                     ->orderBy("REKENING_NAMA")
                     ->selectRaw(' "DAT_BTL"."BTL_ID", "DAT_BTL"."REKENING_ID", "REKENING_NAMA", "BTL_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
                     ->get();                              
@@ -649,7 +649,7 @@ class btlController extends Controller
         else 
           $btl         = BTLPerubahan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
                               ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
-                              ->where('BTL_TAHUN',$tahun)->where('SKPD_ID',$id)->get();
+                              ->where('BTL_TAHUN',$tahun)->where('DAT_BTL.SKPD_ID',$id)->get();
 
           $skpd         = SKPD::where('SKPD_ID',$id)->first();
 
@@ -674,7 +674,7 @@ class btlController extends Controller
                         $join->on('DAT_AKB_BTL.BTL_ID','=','DAT_BTL.BTL_ID')->on('DAT_AKB_BTL.REKENING_ID','=','DAT_BTL.REKENING_ID');
                     })
                     ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$id)
+                    ->where('DAT_BTL.SKPD_ID',$id)
                     ->orderBy("REKENING_NAMA")
                     ->selectRaw(' "DAT_BTL"."BTL_ID", "DAT_BTL"."REKENING_ID", "REKENING_NAMA", "BTL_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
                     ->get(); 
@@ -688,7 +688,7 @@ class btlController extends Controller
 
             $getAkb = AKB_BTL::where('BTL_ID',$data->BTL_ID)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_BTL_ID');            
 
-            if(($thp == 1 or Auth::user()->level == 8 ) and Auth::user()->active == 1){
+            if(($thp == 1 or Auth::user()->level == 8 ) and Auth::user()->active == 5){
                 if(empty($getAkb) ){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
