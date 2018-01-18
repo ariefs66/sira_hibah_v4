@@ -163,11 +163,12 @@
         <th>Rincian</th>                       
         <th>Dashuk</th>                                       
         <th>Anggaran</th>                                       
+        <th>AKB</th>                                       
         <th>#</th>                                       
       </tr> 
       <tr>
         <th class="hide"></th>                    
-        <th colspan="5" class="th_search">
+        <th colspan="6" class="th_search">
           <i class="icon-bdg_search"></i>
           <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
         </th>
@@ -202,6 +203,7 @@
           { mData: 'RINCIAN' },
           { mData: 'DASHUK' },
           { mData: 'TOTAL' },
+          { mData: 'AKB' },
           { mData: 'AKSI' }
           ]
         });
