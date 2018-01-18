@@ -147,7 +147,8 @@
               <input type="text" class="form-control" placeholder="Masukan Kode Rekening" name="kode_rek" id="kode_rek" value="" readonly="">          
               <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
               <input type="hidden" class="form-control" name="id_btl" id="id_btl">          
-              <input type="hidden" class="form-control" name="id_rek" id="id_rek">          
+              <input type="hidden" class="form-control" name="id_rek" id="id_rek">  
+              <input type="hidden" class="form-control" name="total" id="total">        
             </div> 
           </div>
 
@@ -161,7 +162,7 @@
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Total Nominal</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Total Nominal" name="total" id="total" value="" readonly="">
+              <input type="text" class="form-control" placeholder="Total Nominal" name="total_view" id="total_view" value="" readonly="">
             </div> 
           </div>
 
@@ -283,12 +284,20 @@
     var okt       = $('#okt').val();
     var nov       = $('#nov').val();
     var des       = $('#des').val();
+    var total     = $('#total').val();
     var token     = $('#token').val();
 
-    if(rek_id == "" ){
-      $.alert('Form harap diisi!');
+    var total_akb = parseInt(jan)+parseInt(feb)+parseInt(mar)+parseInt(apr)+parseInt(mei)+parseInt(jun)+parseInt(jul)+parseInt(agu)+parseInt(sep)+parseInt(okt)+parseInt(nov)+parseInt(des);
+
+    total = parseInt(total);
+
+    if(jan == "" || feb == "" || mar == "" || apr == "" || mei == "" || jun == "" || jul == "" || agu == "" || sep == "" || nov == "" || des == "" ){
+      $.alert('Form harap diisi atau di nol kan!');
     }else{
-      if(rek_id == '') uri = "";
+      if(total != total_akb){
+         uri = "";
+        $.alert('total AKB yang di input tidak sesuai!');
+      }
       else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/akb/ubah";
      // uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
       $.ajax({
@@ -310,6 +319,7 @@
               'okt'     : okt, 
               'nov'     : nov, 
               'des'     : des, 
+              'total'   : total, 
               'tahun'   : '{{$tahun}}', 
             },
         success: function(msg){
@@ -326,7 +336,8 @@
               $('#sep').val('');
               $('#okt').val('');
               $('#nov').val('');
-              $('#des').val('');           
+              $('#des').val('');  
+              $('#total').val('');                    
               $.alert({
                 title:'Info',
                 content: 'Data berhasil disimpan',
@@ -360,6 +371,7 @@
         $('#id_rek').val(data['REKENING_ID']);
         $('#kode_rek').val(data['REKENING_KODE']);
         $('#total').val(data['TOTAL']);
+        $('#total_view').val(data['TOTAL_VIEW']);
         $('#jan').val(data['AKB_JAN']);
         $('#feb').val(data['AKB_FEB']);
         $('#mar').val(data['AKB_MAR']);
@@ -394,6 +406,7 @@
         $('#okt').val('');
         $('#nov').val('');
         $('#des').val('');
+        $('#total').val('');
   }); 
 
 
