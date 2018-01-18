@@ -197,6 +197,12 @@ Route::post('/main/{tahun}/{status}/pendapatan/hapus', 'Budgeting\pendapatanCont
 //PENDAPATAN-API
 Route::get('/main/{tahun}/{status}/pendapatan/getData', 'Budgeting\pendapatanController@getPendapatan');
 Route::get('/main/{tahun}/{status}/pendapatan/getDetail/{skpd}', 'Budgeting\pendapatanController@getDetail');
+Route::get('/main/{tahun}/{status}/pendapatan/akb/{id}', 'Budgeting\pendapatanController@showAKB');
+Route::get('/main/{tahun}/{status}/pendapatan/data/akb/{id}', 'Budgeting\pendapatanController@showDataAKB');
+Route::get('/main/{tahun}/{status}/pendapatan/akb/detail/{btl_id}/{rek_id}', 'Budgeting\pendapatanController@detailAKB');
+
+//simpan pendapatan
+Route::post('/main/{tahun}/{status}/pendapatan/akb/ubah', 'Budgeting\pendapatanController@submitAKBEdit');
 //------------------------------------------------------------------------------------------------------------------------
 //PEMBIAYAAN
 Route::get('/main/{tahun}/{status}/pembiayaan/', 'Budgeting\pembiayaanController@index');

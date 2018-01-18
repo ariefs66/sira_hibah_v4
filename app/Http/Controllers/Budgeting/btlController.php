@@ -718,7 +718,7 @@ class btlController extends Controller
             array_push($view, array( 'NO'             =>$no,
                                      'REKENING'       =>$data->REKENING_KODE.'<br><p class="text-orange">'.$data->REKENING_NAMA.'</p>',
                                      'TOTAL'          =>$data->total,
-                                     'TOTAL_VIEW'     =>number_format($data->total,0,'.',','),
+                                     'TOTAL_VIEW'     =>number_format((float)$data->total,0,'.',','),
                                      'JANUARI'        =>number_format($data->AKB_JAN,0,'.',','),
                                      'FEBRUARI'       =>number_format($data->AKB_FEB,0,'.',','),
                                      'MARET'          =>number_format($data->AKB_MAR,0,'.',','),
@@ -758,23 +758,29 @@ class btlController extends Controller
 
         }
 
+         $bagi    = $data->total/13; //dibagi 13
+         $sisa    = $bagi*12;  //bagi*12 bulan 
+         $selisih = $data->total-$sisa; //total - hasil 12 bln
+         //$jum     = $selisih+$sisa ;
+
+
         $out    = [ //'DATA'          => $data,
                     'REKENING_KODE' => $data->REKENING_KODE,
                     'REKENING_NAMA' => $data->REKENING_NAMA,
                     'TOTAL'         => $data->total,
                     'TOTAL_VIEW'    => number_format($data->total,0,'.',','),
-                    (empty($data->AKB_JAN))?$jan=0:$jan=$data->AKB_JAN,
-                    (empty($data->AKB_FEB))?$feb=0:$feb=$data->AKB_FEB,
-                    (empty($data->AKB_MAR))?$mar=0:$mar=$data->AKB_MAR,
-                    (empty($data->AKB_APR))?$apr=0:$apr=$data->AKB_APR,
-                    (empty($data->AKB_MEI))?$mei=0:$mei=$data->AKB_MEI,
-                    (empty($data->AKB_JUN))?$jun=0:$jun=$data->AKB_JUN,
-                    (empty($data->AKB_JUL))?$jul=0:$jul=$data->AKB_JUL,
-                    (empty($data->AKB_AUG))?$agu=0:$agu=$data->AKB_AUG,
-                    (empty($data->AKB_SEP))?$sep=0:$sep=$data->AKB_SEP,
-                    (empty($data->AKB_OKT))?$okt=0:$okt=$data->AKB_OKT,
-                    (empty($data->AKB_NOV))?$nov=0:$nov=$data->AKB_NOV,
-                    (empty($data->AKB_DES))?$des=0:$des=$data->AKB_DES,
+                    (empty($data->AKB_JAN))?$jan=$bagi:$jan=$data->AKB_JAN,
+                    (empty($data->AKB_FEB))?$feb=$bagi:$feb=$data->AKB_FEB,
+                    (empty($data->AKB_MAR))?$mar=$bagi:$mar=$data->AKB_MAR,
+                    (empty($data->AKB_APR))?$apr=$bagi:$apr=$data->AKB_APR,
+                    (empty($data->AKB_MEI))?$mei=$bagi:$mei=$data->AKB_MEI,
+                    (empty($data->AKB_JUN))?$jun=$bagi+$selisih:$jun=$data->AKB_JUN,
+                    (empty($data->AKB_JUL))?$jul=$bagi:$jul=$data->AKB_JUL,
+                    (empty($data->AKB_AUG))?$agu=$bagi:$agu=$data->AKB_AUG,
+                    (empty($data->AKB_SEP))?$sep=$bagi:$sep=$data->AKB_SEP,
+                    (empty($data->AKB_OKT))?$okt=$bagi:$okt=$data->AKB_OKT,
+                    (empty($data->AKB_NOV))?$nov=$bagi:$nov=$data->AKB_NOV,
+                    (empty($data->AKB_DES))?$des=$bagi:$des=$data->AKB_DES,
                     'AKB_JAN'       => $jan,
                     'AKB_FEB'       => $feb,
                     'AKB_MAR'       => $mar,

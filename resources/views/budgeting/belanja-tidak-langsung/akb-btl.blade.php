@@ -287,9 +287,9 @@
     var total     = $('#total').val();
     var token     = $('#token').val();
 
-    var total_akb = parseInt(jan)+parseInt(feb)+parseInt(mar)+parseInt(apr)+parseInt(mei)+parseInt(jun)+parseInt(jul)+parseInt(agu)+parseInt(sep)+parseInt(okt)+parseInt(nov)+parseInt(des);
+    var total_akb = parseFloat(jan)+parseFloat(feb)+parseFloat(mar)+parseFloat(apr)+parseFloat(mei)+parseFloat(jun)+parseFloat(jul)+parseFloat(agu)+parseFloat(sep)+parseFloat(okt)+parseFloat(nov)+parseFloat(des);
 
-    total = parseInt(total);
+    total = parseFloat(total);
 
     if(jan == "" || feb == "" || mar == "" || apr == "" || mei == "" || jun == "" || jul == "" || agu == "" || sep == "" || nov == "" || des == "" ){
       $.alert('Form harap diisi atau di nol kan!');
