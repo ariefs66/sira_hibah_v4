@@ -228,14 +228,18 @@ class pendapatanController extends Controller
         $no       = 1;
         $opsi       = '';
         foreach ($data as $data) {
-              if(Auth::user()->level == 9 or substr(Auth::user()->mod,10,1) == 1 or Auth::user()->level == 8){
-          $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
-            $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/pendapatan/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-
-              }else{
-                $opsi = '-';
-                $akb = '-';
-              }
+          if(Auth::user()->level == 9 or Auth::user()->level == 8){
+              $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            
+              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/pendapatan/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
+          }
+          elseif (substr(Auth::user()->mod,10,1) == 1 and Auth::user()->active == 5) {
+              $opsi = '-';
+              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/pendapatan/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
+          }else{
+            $opsi = '-';
+            $akb = '-';
+          }
           array_push($view, array( 'NO'       => $no++,
                        'AKSI'     => $opsi,
                        'AKB'     => $akb,
