@@ -36,8 +36,10 @@ use App\Model\UrusanKategori1;
 use App\Model\UrusanKategori2;
 use App\Model\AKB_BL; 
 use App\Model\AKB_BTL; 
+use App\Model\AKB_Pendapatan; 
 use App\Model\Staff; 
 use App\Model\User; 
+use App\Model\AKB_Pembiayaan; 
 class lampiranController extends Controller
 {
     // public function __construct(){
@@ -4082,7 +4084,7 @@ class lampiranController extends Controller
         $akb  = AKB_BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BTL.REKENING_ID')
                     ->join('BUDGETING.DAT_BTL','DAT_BTL.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
                     ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$id)->get();
+                    ->where('DAT_BTL.SKPD_ID',$id)->get();
 
         $skpd = SKPD::where('SKPD_ID',$id)->first();        
         
@@ -4094,6 +4096,43 @@ class lampiranController extends Controller
         $thn        = Carbon\Carbon::now()->format('Y');
         
             return View('budgeting.lampiran.akb-btl',['tahun'=>$tahun,'status'=>$status, 'akb'=>$akb, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'skpd'=>$skpd ]);
+    }
+
+    public function akbPendapatan($tahun, $status, $id){
+        
+        $akb  = AKB_Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PENDAPATAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_PENDAPATAN','DAT_PENDAPATAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
+                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                    ->where('DAT_PENDAPATAN.SKPD_ID',$id)->get();
+
+        $skpd = SKPD::where('SKPD_ID',$id)->first();        
+        
+         
+
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        
+            return View('budgeting.lampiran.akb-pendapatan',['tahun'=>$tahun,'status'=>$status, 'akb'=>$akb, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'skpd'=>$skpd ]);
+    }
+
+
+    public function akbPembiayaan($tahun, $status, $id){
+        
+        $akb  = AKB_Pembiayaan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_PEMBIAYAAN','DAT_PEMBIAYAAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
+                    ->where('DAT_PEMBIAYAAN.SKPD_ID',$id)->get();
+
+        $skpd = SKPD::where('SKPD_ID',$id)->first();        
+        
+
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        
+            return View('budgeting.lampiran.akb-pembiayaan',['tahun'=>$tahun,'status'=>$status, 'akb'=>$akb, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'skpd'=>$skpd ]);
     }
 
 

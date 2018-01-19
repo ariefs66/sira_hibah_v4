@@ -67,6 +67,7 @@ Route::post('/main/{tahun}/{status}/belanja-langsung/kuncirincianskpd', 'Budgeti
 Route::post('/main/{tahun}/{status}/belanja-langsung/setStaff', 'Budgeting\blController@setStaff');
 Route::post('/main/{tahun}/{status}/belanja-langsung/rincian-musrenbang/simpan', 'Budgeting\blController@setMusren');
 Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@submitAKBEdit');
+Route::post('/main/{tahun}/{status}/belanja-langsung/akb/hapus', 'Budgeting\blController@deleteAKB');
 
 //Route::post('/main/{tahun}/{status}/belanja-langsung/akb/ubah', 'Budgeting\blController@updateAKB');
 
@@ -156,6 +157,9 @@ Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd32/{s}', 'Budgeting\lampiran
 Route::get('/main/{tahun}/{status}/lampiran/akb/bl/{id}', 'Budgeting\lampiranController@akbBL');
 //AKB BTL
 Route::get('/main/{tahun}/{status}/lampiran/akb/btl/{id}', 'Budgeting\lampiranController@akbBTL');
+//pendapatan akb 
+Route::get('/main/{tahun}/{status}/lampiran/akb/pendapatan/{id}', 'Budgeting\lampiranController@akbPendapatan');
+Route::get('/main/{tahun}/{status}/lampiran/akb/pembiayaan/{id}', 'Budgeting\lampiranController@akbPembiayaan');
 //------------------------------------------------------------------------------------------------------------------------
 //BTL
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/', 'Budgeting\btlController@index');
@@ -178,6 +182,7 @@ Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/akb/detail/{btl_id}/{r
 
 //simpan BTL 
 Route::post('/main/{tahun}/{status}/belanja-tidak-langsung/akb/ubah', 'Budgeting\btlController@submitAKBEdit');
+Route::post('/main/{tahun}/{status}/belanja-tidak-langsung/akb/hapus', 'Budgeting\btlController@deleteAKB');
 //------------------------------------------------------------------------------------------------------------------------
 //BL-ARSIP
 Route::get('/main/{tahun}/{status}/arsip/belanja-langsung', 'Budgeting\arsipBLController@index');
@@ -199,10 +204,11 @@ Route::get('/main/{tahun}/{status}/pendapatan/getData', 'Budgeting\pendapatanCon
 Route::get('/main/{tahun}/{status}/pendapatan/getDetail/{skpd}', 'Budgeting\pendapatanController@getDetail');
 Route::get('/main/{tahun}/{status}/pendapatan/akb/{id}', 'Budgeting\pendapatanController@showAKB');
 Route::get('/main/{tahun}/{status}/pendapatan/data/akb/{id}', 'Budgeting\pendapatanController@showDataAKB');
-Route::get('/main/{tahun}/{status}/pendapatan/akb/detail/{btl_id}/{rek_id}', 'Budgeting\pendapatanController@detailAKB');
+Route::get('/main/{tahun}/{status}/pendapatan/akb/detail/{pendapatan_id}/{rek_id}', 'Budgeting\pendapatanController@detailAKB');
 
 //simpan pendapatan
 Route::post('/main/{tahun}/{status}/pendapatan/akb/ubah', 'Budgeting\pendapatanController@submitAKBEdit');
+Route::post('/main/{tahun}/{status}/pendapatan/akb/hapus', 'Budgeting\pendapatanController@deleteAKB');
 //------------------------------------------------------------------------------------------------------------------------
 //PEMBIAYAAN
 Route::get('/main/{tahun}/{status}/pembiayaan/', 'Budgeting\pembiayaanController@index');
@@ -210,6 +216,13 @@ Route::get('/main/{tahun}/{status}/pembiayaan/hapus/{id}', 'Budgeting\pembiayaan
 Route::post('/main/{tahun}/{status}/pembiayaan/simpan', 'Budgeting\pembiayaanController@submitAdd');
 Route::get('/main/{tahun}/{status}/pembiayaan/', 'Budgeting\pembiayaanController@index');
 Route::get('/main/{tahun}/{status}/pembiayaan/edit/{id}', 'Budgeting\pembiayaanController@edit');
+Route::get('/main/{tahun}/{status}/pembiayaan/akb/{id}', 'Budgeting\pembiayaanController@showAKB');
+Route::get('/main/{tahun}/{status}/pembiayaan/data/akb/{id}', 'Budgeting\pembiayaanController@showDataAKB');
+Route::get('/main/{tahun}/{status}/pembiayaan/akb/detail/{pendapatan_id}/{rek_id}', 'Budgeting\pembiayaanController@detailAKB');
+
+//simpan pembiayaan
+Route::post('/main/{tahun}/{status}/pembiayaan/akb/ubah', 'Budgeting\pembiayaanController@submitAKBEdit');
+Route::post('/main/{tahun}/{status}/pembiayaan/akb/hapus', 'Budgeting\pembiayaanController@deleteAKB');
 
 Route::post('/main/{tahun}/{status}/pembiayaan/update', 'Budgeting\pembiayaanController@update');
 Route::post('/main/{tahun}/{status}/pembiayaan/hapus', 'Budgeting\pembiayaanController@hapus');

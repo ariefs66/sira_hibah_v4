@@ -152,27 +152,27 @@
 	<tr class="border headrincian">
 		<td class="border" width="8%">{{$akbbl->REKENING_KODE}}</td>
 		<td class="border" width="8%">{{$akbbl->REKENING_NAMA}}</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_JAN,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_FEB,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_MAR,0,',','.') }},00</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_JAN,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_FEB,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_MAR,0,',','.') }}</td>
 		@php $tri1 = $akbbl->AKB_JAN+$akbbl->AKB_FEB+$akbbl->AKB_MAR @endphp
-		<td class="border" width="8%">{{ number_format($tri1,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_APR,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_MEI,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_JUN,0,',','.') }},00</td>
+		<td class="border" width="8%">{{ number_format($tri1,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_APR,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_MEI,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_JUN,0,',','.') }}</td>
 		@php $tri2 = $akbbl->AKB_APR+$akbbl->AKB_MEI+$akbbl->AKB_JUN @endphp
-		<td class="border" width="8%">{{ number_format($tri2,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_JUL,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_AUG,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_SEP,0,',','.') }},00</td>
+		<td class="border" width="8%">{{ number_format($tri2,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_JUL,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_AUG,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_SEP,0,',','.') }}</td>
 		@php $tri3 = $akbbl->AKB_JUL+$akbbl->AKB_AUG+$akbbl->AKB_SEP @endphp
-		<td class="border" width="8%">{{ number_format($tri3,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_OKT,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_NOV,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($akbbl->AKB_DES,0,',','.') }},00</td>
+		<td class="border" width="8%">{{ number_format($tri3,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_OKT,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_NOV,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($akbbl->AKB_DES,0,',','.') }}</td>
 		@php $tri4 = $akbbl->AKB_OKT+$akbbl->AKB_NOV+$akbbl->AKB_DES @endphp
-		<td class="border" width="8%">{{ number_format($tri4,0,',','.') }},00</td>
-		<td class="border" width="8%">{{ number_format($tri1+$tri2+$tri3+$tri4,0,',','.') }},00</td>
+		<td class="border" width="8%">{{ number_format($tri4,0,',','.') }}</td>
+		<td class="border" width="8%">{{ number_format($tri1+$tri2+$tri3+$tri4,0,',','.') }}</td>
 		@php $total += $tri1+$tri2+$tri3+$tri4 @endphp
 	</tr>
 	@endforeach
@@ -182,7 +182,7 @@
 	
 	<tr class="border">
 		<td class="border kanan" colspan="18"><b>Jumlah</b></td>
-		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td class="border kanan"><b>{{ number_format($total,0,',','.') }}</b></td>
 	</tr>
 	</tbody>	
 </table>
