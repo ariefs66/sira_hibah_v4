@@ -500,7 +500,6 @@ Route::get('/real/{tahun}','realController@index');
 Route::get('/real/{tahun}/getdata','realController@getdata');
 Route::get('/real/{tahun}/transferoutput','realController@transferoutput');
 
-
 //auto
 Route::get('/main/{tahun}/{status}/trfrw/{kec}', 'Budgeting\usulanController@trfRW');
 Route::get('/main/{tahun}/{status}/trfpkk/{kec}', 'Budgeting\usulanController@trfPKK');
