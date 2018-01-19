@@ -21,9 +21,9 @@
             <div class="col-md-12">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  @if(Auth::user()->level == 9 
+                  @if((Auth::user()->level == 9 
                       or substr(Auth::user()->mod,10,1) == 1
-                      or substr(Auth::user()->mod,0,1) == 1)
+                      or substr(Auth::user()->mod,0,1) == 1) and Auth::user()->active==1)
                   <button class="pull-right btn m-t-n-sm btn-success open-form-pendapatan"><i class="m-r-xs fa fa-plus"></i> Tambah Pendapatan</button>
                   @endif
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekappendapatan"><i class="m-r-xs fa fa-download"></i> Download</a>
