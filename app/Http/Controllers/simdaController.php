@@ -110,7 +110,7 @@ class simdaController extends Controller{
 		}
 	}
 
-	public function trfKegiatan($tahun){
+	public function trfKegiatan($tahun){ // transfer. kegiatan 
 		$data 	= BL::where('BL_TAHUN',$tahun)
 					->where('BL_DELETED',0)
 					->where('BL_VALIDASI',1)
