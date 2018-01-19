@@ -725,12 +725,10 @@
     var bl_id     = {{$bl->BL_ID}};
     var token     = $('#token').val();
 
-    var total_akb = parseInt(jan)+parseInt(feb)+parseInt(mar)+parseInt(apr)+parseInt(mei)+parseInt(jun)+parseInt(jul)+parseInt(agu)+parseInt(sep)+parseInt(okt)+parseInt(nov)+parseInt(des);
-
-    total = parseInt(total);
-
-    /*alert(total);
-    alert(total_akb);*/
+    total_akb = parseInt(jan)+parseInt(feb)+parseInt(mar)+parseInt(apr)+parseInt(mei)+parseInt(jun)+parseInt(jul)+parseInt(agu)+parseInt(sep)+parseInt(okt)+parseInt(nov)+parseInt(des);
+   
+   total = parseInt(total);
+   selisih = total-total_akb;
 
     if(jan == "" || feb == "" || mar == "" || apr == "" || mei == "" || jun == "" || jul == "" || agu == "" || sep == "" || nov == "" || des == "" ){
       $.alert('Form harap diisi atau di nol kan!');
@@ -739,6 +737,9 @@
       if(total != total_akb){
         uri = "";
         $.alert('total AKB yang di input tidak sesuai!');
+        $.alert("Total Rek Belanja : <b>"+total+"</b>");
+        $.alert("Total Input AKB : <b>"+total_akb+"</b>");
+        $.alert("selisih : <b>"+selisih+"</b>");
       } 
       else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
      // uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
@@ -851,6 +852,37 @@
         $('#des').val('');
         $('#total').val('');
   }); 
+
+
+  function hapus(bl,rek){
+    var token        = $('#token').val();    
+    $.confirm({
+      title: 'Hapus Data!',
+      content: 'Yakin hapus data?',
+      buttons: {
+        Ya: {
+          btnClass: 'btn-danger',
+          action: function(){
+            $.ajax({
+              url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/hapus",
+              type: "POST",
+              data: {'_token'         : token,
+              'BL_ID'           : bl,
+              'REKENING_ID'     : rek
+              },
+              success: function(msg){
+                $('.tabel-detail').DataTable().ajax.reload();                          
+                $.alert('Hapus Berhasil!');
+                $('#rincian-total').text(msg);
+              }
+            });
+          }
+        },
+        Tidak: function () {
+        }
+      }
+    });
+  }
 
 
 </script>

@@ -358,7 +358,9 @@ class pendapatanController extends Controller
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
-                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                <li><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Hapus</a></li>
                 <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }
             }else{
@@ -382,8 +384,8 @@ class pendapatanController extends Controller
 
             array_push($view, array( 'NO'             =>$no,
                                      'REKENING'       =>$data->REKENING_KODE.'<br><p class="text-orange">'.$data->REKENING_NAMA.'</p>',
-                                     'TOTAL'          =>$data->total,
-                                     'TOTAL_VIEW'     =>number_format($data->total,0,'.',','),
+                                     //'TOTAL'          =>$data->total,
+                                     'TOTAL'     =>number_format($data->total,0,'.',','),
                                      'JANUARI'        =>number_format($data->AKB_JAN,0,'.',','),
                                      'FEBRUARI'       =>number_format($data->AKB_FEB,0,'.',','),
                                      'MARET'          =>number_format($data->AKB_MAR,0,'.',','),
@@ -407,15 +409,15 @@ class pendapatanController extends Controller
         return $view;
     }
 
-     public function detailAKB($tahun,$status,$btl_id,$rek_id){
+     public function detailAKB($tahun,$status,$pendapatan_id,$rek_id){
         if($status == 'murni'){
 
              $data = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                     ->leftjoin('BUDGETING.DAT_AKB_PENDAPATAN',function($join){
                         $join->on('DAT_AKB_PENDAPATAN.PENDAPATAN_ID','=','DAT_PENDAPATAN.PENDAPATAN_ID')->on('DAT_AKB_PENDAPATAN.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID');
                     })
-                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('DAT_PENDAPATAN.PENDAPATAN_ID',$btl_id)
+                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                    ->where('DAT_PENDAPATAN.PENDAPATAN_ID',$pendapatan_id)
                     ->where('DAT_PENDAPATAN.REKENING_ID',$rek_id)
                     ->orderBy("REKENING_NAMA")
                     ->selectRaw(' "DAT_PENDAPATAN"."PENDAPATAN_ID", "DAT_PENDAPATAN"."REKENING_ID", "REKENING_KODE", "REKENING_NAMA", "PENDAPATAN_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
@@ -461,12 +463,12 @@ class pendapatanController extends Controller
 
      public function submitAKBEdit($tahun,$status){
         if($status == 'murni') {
-            $akb_pendapatan = AKB_Pendapatan::where('PENDAPATAN_ID',Input::get('pendapatan_id'))
+            $akb_pendapatan = AKB_Pendapatan::where('PENDAPATAN_ID',Input::get('id_pendapatan'))
                          ->where('REKENING_ID',Input::get('rek_id'))->value('AKB_PENDAPATAN_ID');
 
             if(empty($akb_pendapatan)){
                 $akb = new AKB_Pendapatan;
-                $akb->PENDAPATAN_ID      = Input::get('pendapatan_id');
+                $akb->PENDAPATAN_ID      = Input::get('id_pendapatan');
                 $akb->REKENING_ID        = Input::get('rek_id');
                 $akb->AKB_JAN            = Input::get('jan');
                 $akb->AKB_FEB            = Input::get('feb');
@@ -488,7 +490,7 @@ class pendapatanController extends Controller
                 return 1; 
 
             }else{
-                AKB_Pendapatan::where('PENDAPATAN_ID',Input::get('pendapatan_id'))
+                AKB_Pendapatan::where('PENDAPATAN_ID',Input::get('id_pendapatan'))
                          ->where('REKENING_ID',Input::get('rek_id'))
                  ->update([
                         'AKB_JAN'        => Input::get('jan'),
@@ -512,6 +514,11 @@ class pendapatanController extends Controller
                
         }
         else return $this->submitAKBEditPerubahan($tahun,$status);
+    }
+
+    public function deleteAKB(){
+        AKB_Pendapatan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->where('REKENING_ID',Input::get('REKENING_ID'))->delete();
+        return "Hapus Berhasil!";
     }
 
 }

@@ -693,7 +693,9 @@ class btlController extends Controller
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
-                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li><a onclick="return ubah(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                <li><a onclick="return hapus(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Hapus</a></li>
                 <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }
             }else{
@@ -717,8 +719,8 @@ class btlController extends Controller
 
             array_push($view, array( 'NO'             =>$no,
                                      'REKENING'       =>$data->REKENING_KODE.'<br><p class="text-orange">'.$data->REKENING_NAMA.'</p>',
-                                     'TOTAL'          =>$data->total,
-                                     'TOTAL_VIEW'     =>number_format((float)$data->total,0,'.',','),
+                                     //'TOTAL'          =>$data->total,
+                                     'TOTAL'     =>number_format((float)$data->total,0,'.',','),
                                      'JANUARI'        =>number_format($data->AKB_JAN,0,'.',','),
                                      'FEBRUARI'       =>number_format($data->AKB_FEB,0,'.',','),
                                      'MARET'          =>number_format($data->AKB_MAR,0,'.',','),
@@ -759,22 +761,24 @@ class btlController extends Controller
         }
 
          $bagi    = $data->total/13; //dibagi 13
-         $sisa    = $bagi*12;  //bagi*12 bulan 
-         $selisih = $data->total-$sisa; //total - hasil 12 bln
-         //$jum     = $selisih+$sisa ;
+         $utk12     = $bagi*12;  //bagi*12 bulan 
+         $sisa      = $data->total-$utk12; //total - hasil 12 bln
+         //$tambahan  = $bagi+$sisa ;
 
+        // $bagi    = $data->total/12; //dibagi 13
 
         $out    = [ //'DATA'          => $data,
                     'REKENING_KODE' => $data->REKENING_KODE,
                     'REKENING_NAMA' => $data->REKENING_NAMA,
                     'TOTAL'         => $data->total,
                     'TOTAL_VIEW'    => number_format($data->total,0,'.',','),
+                    //'TOTAL_VIEW'    => $data->total,
                     (empty($data->AKB_JAN))?$jan=$bagi:$jan=$data->AKB_JAN,
                     (empty($data->AKB_FEB))?$feb=$bagi:$feb=$data->AKB_FEB,
                     (empty($data->AKB_MAR))?$mar=$bagi:$mar=$data->AKB_MAR,
                     (empty($data->AKB_APR))?$apr=$bagi:$apr=$data->AKB_APR,
                     (empty($data->AKB_MEI))?$mei=$bagi:$mei=$data->AKB_MEI,
-                    (empty($data->AKB_JUN))?$jun=$bagi+$selisih:$jun=$data->AKB_JUN,
+                    (empty($data->AKB_JUN))?$jun=$bagi+$sisa:$jun=$data->AKB_JUN,
                     (empty($data->AKB_JUL))?$jul=$bagi:$jul=$data->AKB_JUL,
                     (empty($data->AKB_AUG))?$agu=$bagi:$agu=$data->AKB_AUG,
                     (empty($data->AKB_SEP))?$sep=$bagi:$sep=$data->AKB_SEP,
@@ -853,6 +857,11 @@ class btlController extends Controller
                
         }
         else return $this->submitAKBEditPerubahan($tahun,$status);
+    }
+
+    public function deleteAKB(){
+        AKB_BTL::where('BTL_ID',Input::get('BTL_ID'))->where('REKENING_ID',Input::get('REKENING_ID'))->delete();
+        return "Hapus Berhasil!";
     }
 
 }

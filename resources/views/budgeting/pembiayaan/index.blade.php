@@ -55,6 +55,7 @@
                     { mData: 'PEMBIAYAAN_DASHUK'},
                     { mData: 'PEMBIAYAAN_KETERANGAN'},
                     { mData: 'PEMBIAYAAN_TOTAL'},
+                    { mData: 'AKB'},
                     { mData: 'OPSI'}
                   ]}" class="table table-striped b-t b-b table-pembiayaan" id="table-pembiayaan">
                   <thead>
@@ -67,11 +68,12 @@
                       <th>DASAR HUKUM</th>
                       <th>KETERANGAN</th>
                       <th>TOTAL</th>
+                      <th>AKB</th>
                       <th>OPSI</th>
                     </tr>
                     <tr>
                       <th class="hide"></th>
-                      <th colspan="8" class="th_search">
+                      <th colspan="9" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>

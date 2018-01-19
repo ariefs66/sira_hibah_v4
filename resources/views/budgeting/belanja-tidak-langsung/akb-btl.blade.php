@@ -30,7 +30,7 @@
           <div class="col-md-12">
             <div class="panel bg-white">
               <div class="wrapper-lg">
-                <h5 class="inline font-semibold text-orange m-n ">AKB | SKPD : {{$skpd->SKPD_NAMA}} </h5>
+                <h5 class="inline font-semibold text-orange m-n ">AKB BTL | SKPD : {{$skpd->SKPD_NAMA}} </h5>
                 @if($thp == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
                 @elseif(Auth::user()->active == 0)
@@ -287,9 +287,13 @@
     var total     = $('#total').val();
     var token     = $('#token').val();
 
-    var total_akb = parseFloat(jan)+parseFloat(feb)+parseFloat(mar)+parseFloat(apr)+parseFloat(mei)+parseFloat(jun)+parseFloat(jul)+parseFloat(agu)+parseFloat(sep)+parseFloat(okt)+parseFloat(nov)+parseFloat(des);
-
-    total = parseFloat(total);
+   total_akb = parseInt(jan)+parseInt(feb)+parseInt(mar)+parseInt(apr)+parseInt(mei)+parseInt(jun)+parseInt(jul)+parseInt(agu)+parseInt(sep)+parseInt(okt)+parseInt(nov)+parseInt(des);
+   
+   total = parseInt(total);
+   selisih = total-total_akb;
+    /*alert("Total Input : "+total_akb);    
+    alert("Total : "+total);
+    alert("Selisih : "+selisih);*/
 
     if(jan == "" || feb == "" || mar == "" || apr == "" || mei == "" || jun == "" || jul == "" || agu == "" || sep == "" || nov == "" || des == "" ){
       $.alert('Form harap diisi atau di nol kan!');
@@ -297,6 +301,9 @@
       if(total != total_akb){
          uri = "";
         $.alert('total AKB yang di input tidak sesuai!');
+        $.alert("Total Rek Belanja : <b>"+total+"</b>");
+        $.alert("Total Input AKB : <b>"+total_akb+"</b>");
+        $.alert("selisih : <b>"+selisih+"</b>");
       }
       else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/akb/ubah";
      // uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
@@ -408,6 +415,37 @@
         $('#des').val('');
         $('#total').val('');
   }); 
+
+
+  function hapus(btl,rek){
+    var token        = $('#token').val();    
+    $.confirm({
+      title: 'Hapus Data!',
+      content: 'Yakin hapus data?',
+      buttons: {
+        Ya: {
+          btnClass: 'btn-danger',
+          action: function(){
+            $.ajax({
+              url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/akb/hapus",
+              type: "POST",
+              data: {'_token'         : token,
+              'BTL_ID'           : btl,
+              'REKENING_ID'     : rek
+              },
+              success: function(msg){
+                $('.tabel-detail').DataTable().ajax.reload();                          
+                $.alert('Hapus Berhasil!');
+                $('#rincian-total').text(msg);
+              }
+            });
+          }
+        },
+        Tidak: function () {
+        }
+      }
+    });
+  }
 
 
 </script>
