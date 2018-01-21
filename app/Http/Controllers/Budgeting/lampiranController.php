@@ -1827,7 +1827,6 @@ class lampiranController extends Controller
 
                     if(strlen($bt->REKENING_KODE)==3){
                         $total_belanja+=$bt->nilai;
-
                         $tabel[$idx]['tingkat']=3;
                         $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
                         $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
