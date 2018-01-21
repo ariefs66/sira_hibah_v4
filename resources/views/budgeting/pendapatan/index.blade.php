@@ -21,9 +21,9 @@
             <div class="col-md-12">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  @if(Auth::user()->level == 9 
+                  @if((Auth::user()->level == 9 
                       or substr(Auth::user()->mod,10,1) == 1
-                      or substr(Auth::user()->mod,0,1) == 1)
+                      or substr(Auth::user()->mod,0,1) == 1) and Auth::user()->active==1)
                   <button class="pull-right btn m-t-n-sm btn-success open-form-pendapatan"><i class="m-r-xs fa fa-plus"></i> Tambah Pendapatan</button>
                   @endif
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekappendapatan"><i class="m-r-xs fa fa-download"></i> Download</a>
@@ -163,11 +163,12 @@
         <th>Rincian</th>                       
         <th>Dashuk</th>                                       
         <th>Anggaran</th>                                       
+        <th>AKB</th>                                       
         <th>#</th>                                       
       </tr> 
       <tr>
         <th class="hide"></th>                    
-        <th colspan="5" class="th_search">
+        <th colspan="6" class="th_search">
           <i class="icon-bdg_search"></i>
           <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
         </th>
@@ -202,6 +203,7 @@
           { mData: 'RINCIAN' },
           { mData: 'DASHUK' },
           { mData: 'TOTAL' },
+          { mData: 'AKB' },
           { mData: 'AKSI' }
           ]
         });

@@ -36,8 +36,10 @@ use App\Model\UrusanKategori1;
 use App\Model\UrusanKategori2;
 use App\Model\AKB_BL; 
 use App\Model\AKB_BTL; 
+use App\Model\AKB_Pendapatan; 
 use App\Model\Staff; 
 use App\Model\User; 
+use App\Model\AKB_Pembiayaan; 
 class lampiranController extends Controller
 {
     // public function __construct(){
@@ -3736,42 +3738,42 @@ class lampiranController extends Controller
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
         $pendapatan = Pendapatan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
-                        ->where('SKPD_ID',$s)->get();
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->get();
                         
                         
         $btl = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                        ->where('SKPD_ID',$s)
+                        ->where('DAT_BTL.SKPD_ID',$s)
                         ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
         $btl1   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$s)
+                    ->where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.1%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
         $btl2   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$s)
+                    ->where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.3%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
         $btl3   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$s)
+                    ->where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.4%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');  
 
         $btl4   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$s)
+                    ->where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.7%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL'); 
 
         $btl5   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$s)
+                    ->where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.8%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');                     
         
         
         $bl     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->where('SKPD_ID',$s)
+                        ->where('DAT_BL.SKPD_ID',$s)
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
@@ -3779,7 +3781,7 @@ class lampiranController extends Controller
 
             $bl1     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->where('SKPD_ID',$s)
+                        ->where('DAT_BL.SKPD_ID',$s)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
@@ -3788,7 +3790,7 @@ class lampiranController extends Controller
 
             $bl2     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->where('SKPD_ID',$s)
+                        ->where('DAT_BL.SKPD_ID',$s)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
@@ -3797,7 +3799,7 @@ class lampiranController extends Controller
 
             $bl3     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->where('SKPD_ID',$s)
+                        ->where('DAT_BL.SKPD_ID',$s)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
@@ -3835,7 +3837,7 @@ class lampiranController extends Controller
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
         $pendapatan = Pendapatan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
-                        ->where('SKPD_ID',$s)->get();
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->get();
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
@@ -3863,15 +3865,15 @@ class lampiranController extends Controller
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
         $btl = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                        ->where('SKPD_ID',$s)->where('BTL_TAHUN',$tahun)->get();
+                        ->where('DAT_BTL.SKPD_ID',$s)->where('BTL_TAHUN',$tahun)->get();
 
         $btl1   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$s)
+                    ->where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.1.01%');})
                     ->where('BTL_TAHUN',$tahun)->get();
 
         $btl2   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$s)
+                    ->where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.1.02%');})
                     ->where('BTL_TAHUN',$tahun)->get();                          
 
@@ -3902,7 +3904,7 @@ class lampiranController extends Controller
         $bl_p = BL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                    ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                    ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
-                   ->where('SKPD_ID',$s)
+                   ->where('DAT_BL.SKPD_ID',$s)
                    ->groupBy("REF_KEGIATAN.PROGRAM_ID","PROGRAM_NAMA","PROGRAM_KODE")
                    ->orderby("PROGRAM_KODE")
                    ->selectRaw('"REF_KEGIATAN"."PROGRAM_ID","PROGRAM_NAMA", "PROGRAM_KODE", sum("BL_PAGU") as pagu')
@@ -3912,7 +3914,7 @@ class lampiranController extends Controller
                    ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                    ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
                    ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL.LOKASI_ID') 
-                   ->where('SKPD_ID',$s)
+                   ->where('DAT_BL.SKPD_ID',$s)
                    ->orderby("KEGIATAN_KODE")
                    ->selectRaw('"REF_KEGIATAN"."PROGRAM_ID", "DAT_BL"."KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA"')
                    ->get(); 
@@ -3920,13 +3922,13 @@ class lampiranController extends Controller
         $bl_idk = BL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                    ->join('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID') 
                    ->join('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')
-                   ->where('SKPD_ID',$s)
+                   ->where('DAT_BL.SKPD_ID',$s)
                    ->selectRaw('"KEGIATAN_ID","OUTPUT_TARGET","SATUAN_NAMA"')
                    ->get(); 
 
          $bl1     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->where('SKPD_ID',$s)
+                        ->where('DAT_BL.SKPD_ID',$s)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
@@ -3937,7 +3939,7 @@ class lampiranController extends Controller
 
         $bl2     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->where('SKPD_ID',$s)
+                        ->where('DAT_BL.SKPD_ID',$s)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
@@ -3948,7 +3950,7 @@ class lampiranController extends Controller
 
         $bl3     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->where('SKPD_ID',$s)
+                        ->where('DAT_BL.SKPD_ID',$s)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
                         ->whereHas('bl',function($r) use($tahun){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
@@ -4081,7 +4083,7 @@ class lampiranController extends Controller
         $akb  = AKB_BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BTL.REKENING_ID')
                     ->join('BUDGETING.DAT_BTL','DAT_BTL.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
                     ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('SKPD_ID',$id)->get();
+                    ->where('DAT_BTL.SKPD_ID',$id)->get();
 
         $skpd = SKPD::where('SKPD_ID',$id)->first();        
         
@@ -4093,6 +4095,43 @@ class lampiranController extends Controller
         $thn        = Carbon\Carbon::now()->format('Y');
         
             return View('budgeting.lampiran.akb-btl',['tahun'=>$tahun,'status'=>$status, 'akb'=>$akb, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'skpd'=>$skpd ]);
+    }
+
+    public function akbPendapatan($tahun, $status, $id){
+        
+        $akb  = AKB_Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PENDAPATAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_PENDAPATAN','DAT_PENDAPATAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
+                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                    ->where('DAT_PENDAPATAN.SKPD_ID',$id)->get();
+
+        $skpd = SKPD::where('SKPD_ID',$id)->first();        
+        
+         
+
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        
+            return View('budgeting.lampiran.akb-pendapatan',['tahun'=>$tahun,'status'=>$status, 'akb'=>$akb, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'skpd'=>$skpd ]);
+    }
+
+
+    public function akbPembiayaan($tahun, $status, $id){
+        
+        $akb  = AKB_Pembiayaan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_PEMBIAYAAN','DAT_PEMBIAYAAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
+                    ->where('DAT_PEMBIAYAAN.SKPD_ID',$id)->get();
+
+        $skpd = SKPD::where('SKPD_ID',$id)->first();        
+        
+
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        
+            return View('budgeting.lampiran.akb-pembiayaan',['tahun'=>$tahun,'status'=>$status, 'akb'=>$akb, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'skpd'=>$skpd ]);
     }
 
 

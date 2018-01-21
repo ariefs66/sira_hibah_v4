@@ -14,8 +14,7 @@
             </a>   
           </li>
           <li><a href= "{{ url('/') }}/main">Dashboard</a></li>
-          <li><i class="fa fa-angle-right"></i>Belanja</li>                               
-          <li><i class="fa fa-angle-right"></i>Belanja Tidak Langsung</li>                                
+          <li><i class="fa fa-angle-right"></i>Pendapatan</li>                               
           <li class="active"><i class="fa fa-angle-right"></i>Anggaran Kas Bulanan </li>                           
         </ul>
       </div>
@@ -30,13 +29,13 @@
           <div class="col-md-12">
             <div class="panel bg-white">
               <div class="wrapper-lg">
-                <h5 class="inline font-semibold text-orange m-n ">AKB BTL | SKPD : {{$skpd->SKPD_NAMA}} </h5>
+                <h5 class="inline font-semibold text-orange m-n ">AKB PENDAPATAN | SKPD : {{$skpd->SKPD_NAMA}} </h5>
                 @if($thp == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
                 @elseif(Auth::user()->active == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> User Tidak Aktif!</h5>
                 @else
-                <a class="pull-right btn m-t-n-sm btn-success" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/lampiran/akb/btl/{{$skpd->SKPD_ID}}" target="_blank">Print AKB</a>
+                <a class="pull-right btn m-t-n-sm btn-success" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/lampiran/akb/pendapatan/{{$skpd->SKPD_ID}}" target="_blank">Print AKB</a>
                 @endif
                 
                 <div class="col-sm-1 pull-right m-t-n-sm">
@@ -57,7 +56,7 @@
               <div role="tabpanel" class="active tab-pane" id="tab-1">  
                 <div class="table-responsive dataTables_wrapper">
                  <table ui-jq="dataTable" ui-options="{
-                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/data/akb/{{ $skpd->SKPD_ID }}',
+                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/data/akb/{{ $skpd->SKPD_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
                  { mData: 'REKENING' },
@@ -146,7 +145,7 @@
             <div class="col-sm-9">
               <input type="text" class="form-control" placeholder="Masukan Kode Rekening" name="kode_rek" id="kode_rek" value="" readonly="">          
               <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
-              <input type="hidden" class="form-control" name="id_btl" id="id_btl">          
+              <input type="hidden" class="form-control" name="id_pendapatan" id="id_pendapatan">          
               <input type="hidden" class="form-control" name="id_rek" id="id_rek">  
               <input type="hidden" class="form-control" name="total" id="total">        
             </div> 
@@ -270,7 +269,7 @@
 <script type="text/javascript">
 
   function simpanAKB(){
-    var btl_id    = $('#id_btl').val();
+    var id_pendapatan    = $('#id_pendapatan').val();
     var rek_id    = $('#id_rek').val();
     var jan       = $('#jan').val();
     var feb       = $('#feb').val();
@@ -287,13 +286,10 @@
     var total     = $('#total').val();
     var token     = $('#token').val();
 
-   total_akb = parseInt(jan)+parseInt(feb)+parseInt(mar)+parseInt(apr)+parseInt(mei)+parseInt(jun)+parseInt(jul)+parseInt(agu)+parseInt(sep)+parseInt(okt)+parseInt(nov)+parseInt(des);
+    total_akb = parseInt(jan)+parseInt(feb)+parseInt(mar)+parseInt(apr)+parseInt(mei)+parseInt(jun)+parseInt(jul)+parseInt(agu)+parseInt(sep)+parseInt(okt)+parseInt(nov)+parseInt(des);
    
    total = parseInt(total);
    selisih = total-total_akb;
-    /*alert("Total Input : "+total_akb);    
-    alert("Total : "+total);
-    alert("Selisih : "+selisih);*/
 
     if(jan == "" || feb == "" || mar == "" || apr == "" || mei == "" || jun == "" || jul == "" || agu == "" || sep == "" || nov == "" || des == "" ){
       $.alert('Form harap diisi atau di nol kan!');
@@ -305,14 +301,14 @@
         $.alert("Total Input AKB : <b>"+total_akb+"</b>");
         $.alert("selisih : <b>"+selisih+"</b>");
       }
-      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/akb/ubah";
+      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/akb/ubah";
      // uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/akb/ubah";
       $.ajax({
         url: uri,
         type: "POST",
         data: {'_token' : token,
               //'akb_id'  : akb_id, 
-              'btl_id'  : btl_id, 
+              'id_pendapatan'  : id_pendapatan, 
               'rek_id'  : rek_id, 
               'jan'     : jan, 
               'feb'     : feb, 
@@ -366,14 +362,14 @@
     }
   }
 
-  function ubah(BTL_ID, REKENING_ID){
+  function ubah(PEN_ID, REKENING_ID){
     $('#judul-form').text('Ubah Anggaran Kas Bulanan');
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/akb/detail/"+BTL_ID+"/"+REKENING_ID,
+      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/akb/detail/"+PEN_ID+"/"+REKENING_ID,
       success : function (data) {
         console.log(data);
-        $('#id_btl').val(data['BTL_ID']);
+        $('#id_pendapatan').val(data['PENDAPATAN_ID']);
         $('#nama_rek').val(data['REKENING_NAMA']);
         $('#id_rek').val(data['REKENING_ID']);
         $('#kode_rek').val(data['REKENING_KODE']);
@@ -416,8 +412,7 @@
         $('#total').val('');
   }); 
 
-
-  function hapus(btl,rek){
+function hapus(pendapatan,rek){
     var token        = $('#token').val();    
     $.confirm({
       title: 'Hapus Data!',
@@ -427,10 +422,10 @@
           btnClass: 'btn-danger',
           action: function(){
             $.ajax({
-              url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/akb/hapus",
+              url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/akb/hapus",
               type: "POST",
               data: {'_token'         : token,
-              'BTL_ID'           : btl,
+              'PENDAPATAN_ID'         : pendapatan,
               'REKENING_ID'     : rek
               },
               success: function(msg){
@@ -446,7 +441,6 @@
       }
     });
   }
-
 
 </script>
 

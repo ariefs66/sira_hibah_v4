@@ -33,6 +33,9 @@ use App\Model\SKPD;
 use App\Model\Pendapatan;
 use App\Model\PendapatanPerubahan;
 use App\Model\RkpPendapatan;
+use App\Model\Tahapan;
+use App\Model\AKB_Pendapatan;
+
 class pendapatanController extends Controller
 {
     public function index($tahun,$status){
@@ -225,17 +228,25 @@ class pendapatanController extends Controller
         $no       = 1;
         $opsi       = '';
         foreach ($data as $data) {
-              if(Auth::user()->level == 9 or substr(Auth::user()->mod,10,1) == 1 or Auth::user()->level == 8){
-          $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
-              }else{
+          if(Auth::user()->level == 9 or Auth::user()->level == 8){
+              $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            
+              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/pendapatan/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
+          }
+          elseif (substr(Auth::user()->mod,10,1) == 1 and Auth::user()->active == 5) {
               $opsi = '-';
-              }
+              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/pendapatan/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
+          }else{
+            $opsi = '-';
+            $akb = '-';
+          }
           array_push($view, array( 'NO'       => $no++,
                        'AKSI'     => $opsi,
+                       'AKB'     => $akb,
                        'REKENING'   => $data->rekening->REKENING_KODE.' - '.$data->rekening->REKENING_NAMA,
                        'RINCIAN'    => $data->PENDAPATAN_NAMA,
                        'DASHUK'    => $data->PENDAPATAN_DASHUK,
-                                       'TOTAL'    => number_format($data->PENDAPATAN_TOTAL,0,'.',',')));
+                       'TOTAL'    => number_format($data->PENDAPATAN_TOTAL,0,'.',',')));
         }
       }
       else{
@@ -282,4 +293,238 @@ class pendapatanController extends Controller
       
       return Response::JSON($data);
     }
+
+
+     public function showAKB($tahun,$status,$id){
+        $now = date('Y-m-d H:m:s');
+        if($status == 'murni')
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
+        else
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
+            $thp    = 1;
+        }else{
+            $thp    = 0;
+        }
+        if($status == 'murni') {
+          $pen  = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_PENDAPATAN',function($join){
+                        $join->on('DAT_AKB_PENDAPATAN.PENDAPATAN_ID','=','DAT_PENDAPATAN.PENDAPATAN_ID')->on('DAT_AKB_PENDAPATAN.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID');
+                    })
+                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                    ->where('DAT_PENDAPATAN.SKPD_ID',$id)
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_PENDAPATAN"."PENDAPATAN_ID", "DAT_PENDAPATAN"."REKENING_ID", "REKENING_NAMA", "PENDAPATAN_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->get();                              
+        }
+        else 
+          $pen='';
+
+          $skpd         = SKPD::where('SKPD_ID',$id)->first();
+
+
+        if($status == 'murni')
+         return View('budgeting.pendapatan.akb-pendapatan',['tahun'=>$tahun,'status'=>$status,'pen'=>$pen,'PENDAPATAN_ID'=>$id, 'thp'=>$thp, 'skpd'=>$skpd ]);
+        else
+         return View('budgeting.pendapatan.akb-pendapatan',['tahun'=>$tahun,'status'=>$status,'pen'=>$pen,'PENDAPATAN_ID'=>$id, 'thp'=>$thp, 'skpd'=>$skpd ]);
+    }
+
+     public function showDataAKB($tahun,$status,$id){
+        $now = date('Y-m-d H:m:s');
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
+        if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
+            $thp    = 1;
+        }else{
+            $thp    = 0;
+        }
+
+        $data = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_PENDAPATAN',function($join){
+                        $join->on('DAT_AKB_PENDAPATAN.PENDAPATAN_ID','=','DAT_PENDAPATAN.PENDAPATAN_ID')->on('DAT_AKB_PENDAPATAN.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID');
+                    })
+                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                    ->where('DAT_PENDAPATAN.SKPD_ID',$id)
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_PENDAPATAN"."PENDAPATAN_ID", "DAT_PENDAPATAN"."REKENING_ID", "REKENING_NAMA", "PENDAPATAN_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->get(); 
+       
+                 //   dd($data);
+
+        $view       = array();
+        $i         = 1;
+        
+        foreach ($data as $data) {
+
+            $getAkb = AKB_Pendapatan::where('PENDAPATAN_ID',$data->PENDAPATAN_ID)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_PENDAPATAN_ID');            
+
+            if(($thp == 1 or Auth::user()->level == 8 ) and Auth::user()->active == 5){
+                if(empty($getAkb) ){
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
+                    <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                }else{
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                <li><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Hapus</a></li>
+                <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                }
+            }else{
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
+            }
+
+            if(Auth::user()->level == 8){
+                 $checkbox = '<div class="m-t-n-lg">
+                                  <label class="i-checks">
+                                    <input type="checkbox" value="'.$data->REKENING_ID.'" class="cb" id="cb-'.$data->REKENING_ID.'"/><i></i>
+                                  </label>
+                            </div>';
+                $no        = $checkbox.$no;
+
+            }
+
+            $tri1 = $data->AKB_JAN + $data->AKB_FEB + $data->AKB_MAR;
+            $tri2 = $data->AKB_APR + $data->AKB_MEI + $data->AKB_JUN;
+            $tri3 = $data->AKB_JUL + $data->AKB_AUG + $data->AKB_SEP;
+            $tri4 = $data->AKB_OKT + $data->AKB_NOV + $data->AKB_DES;
+
+            array_push($view, array( 'NO'             =>$no,
+                                     'REKENING'       =>$data->REKENING_KODE.'<br><p class="text-orange">'.$data->REKENING_NAMA.'</p>',
+                                     //'TOTAL'          =>$data->total,
+                                     'TOTAL'     =>number_format($data->total,0,'.',','),
+                                     'JANUARI'        =>number_format($data->AKB_JAN,0,'.',','),
+                                     'FEBRUARI'       =>number_format($data->AKB_FEB,0,'.',','),
+                                     'MARET'          =>number_format($data->AKB_MAR,0,'.',','),
+                                     'APRIL'          =>number_format($data->AKB_APR,0,'.',','),
+                                     'MEI'            =>number_format($data->AKB_MEI,0,'.',','),
+                                     'JUNI'           =>number_format($data->AKB_JUN,0,'.',','),
+                                     'JULI'           =>number_format($data->AKB_JUL,0,'.',','),
+                                     'AGUSTUS'        =>number_format($data->AKB_AUG,0,'.',','),
+                                     'SEPTEMBER'      =>number_format($data->AKB_SEP,0,'.',','),
+                                     'OKTOBER'        =>number_format($data->AKB_OKT,0,'.',','),
+                                     'NOVEMBER'       =>number_format($data->AKB_NOV,0,'.',','),
+                                     'DESEMBER'       =>number_format($data->AKB_DES,0,'.',','),
+                                     'TRIWULAN1'      =>number_format($tri1,0,'.',','),
+                                     'TRIWULAN2'      =>number_format($tri2,0,'.',','),
+                                     'TRIWULAN3'      =>number_format($tri3,0,'.',','),
+                                     'TRIWULAN4'      =>number_format($tri4,0,'.',','),
+                                 ));
+        }
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+        return $view;
+    }
+
+     public function detailAKB($tahun,$status,$pendapatan_id,$rek_id){
+        if($status == 'murni'){
+
+             $data = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_PENDAPATAN',function($join){
+                        $join->on('DAT_AKB_PENDAPATAN.PENDAPATAN_ID','=','DAT_PENDAPATAN.PENDAPATAN_ID')->on('DAT_AKB_PENDAPATAN.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID');
+                    })
+                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
+                    ->where('DAT_PENDAPATAN.PENDAPATAN_ID',$pendapatan_id)
+                    ->where('DAT_PENDAPATAN.REKENING_ID',$rek_id)
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_PENDAPATAN"."PENDAPATAN_ID", "DAT_PENDAPATAN"."REKENING_ID", "REKENING_KODE", "REKENING_NAMA", "PENDAPATAN_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->first();
+
+        }
+
+        $bagi    = $data->total/12; 
+
+        $out    = [ //'DATA'          => $data,
+                    'REKENING_KODE' => $data->REKENING_KODE,
+                    'REKENING_NAMA' => $data->REKENING_NAMA,
+                    'TOTAL'         => $data->total,
+                    'TOTAL_VIEW'    => number_format($data->total,0,'.',','),
+                    (empty($data->AKB_JAN))?$jan=$bagi:$jan=$data->AKB_JAN,
+                    (empty($data->AKB_FEB))?$feb=$bagi:$feb=$data->AKB_FEB,
+                    (empty($data->AKB_MAR))?$mar=$bagi:$mar=$data->AKB_MAR,
+                    (empty($data->AKB_APR))?$apr=$bagi:$apr=$data->AKB_APR,
+                    (empty($data->AKB_MEI))?$mei=$bagi:$mei=$data->AKB_MEI,
+                    (empty($data->AKB_JUN))?$jun=$bagi:$jun=$data->AKB_JUN,
+                    (empty($data->AKB_JUL))?$jul=$bagi:$jul=$data->AKB_JUL,
+                    (empty($data->AKB_AUG))?$agu=$bagi:$agu=$data->AKB_AUG,
+                    (empty($data->AKB_SEP))?$sep=$bagi:$sep=$data->AKB_SEP,
+                    (empty($data->AKB_OKT))?$okt=$bagi:$okt=$data->AKB_OKT,
+                    (empty($data->AKB_NOV))?$nov=$bagi:$nov=$data->AKB_NOV,
+                    (empty($data->AKB_DES))?$des=$bagi:$des=$data->AKB_DES,
+                    'AKB_JAN'       => $jan,
+                    'AKB_FEB'       => $feb,
+                    'AKB_MAR'       => $mar,
+                    'AKB_APR'       => $apr,
+                    'AKB_MEI'       => $mei,
+                    'AKB_JUN'       => $jun,
+                    'AKB_JUL'       => $jul,
+                    'AKB_AUG'       => $agu,
+                    'AKB_SEP'       => $sep,
+                    'AKB_OKT'       => $okt,
+                    'AKB_NOV'       => $nov,
+                    'AKB_DES'       => $des,
+                    'REKENING_ID'   => $data->REKENING_ID,
+                    'PENDAPATAN_ID' => $data->PENDAPATAN_ID,
+                    ];
+        return $out;
+    }
+
+
+     public function submitAKBEdit($tahun,$status){
+        if($status == 'murni') {
+            $akb_pendapatan = AKB_Pendapatan::where('PENDAPATAN_ID',Input::get('id_pendapatan'))
+                         ->where('REKENING_ID',Input::get('rek_id'))->value('AKB_PENDAPATAN_ID');
+
+            if(empty($akb_pendapatan)){
+                $akb = new AKB_Pendapatan;
+                $akb->PENDAPATAN_ID      = Input::get('id_pendapatan');
+                $akb->REKENING_ID        = Input::get('rek_id');
+                $akb->AKB_JAN            = Input::get('jan');
+                $akb->AKB_FEB            = Input::get('feb');
+                $akb->AKB_MAR            = Input::get('mar');
+                $akb->AKB_APR            = Input::get('apr');
+                $akb->AKB_MEI            = Input::get('mei');
+                $akb->AKB_JUN            = Input::get('jun');
+                $akb->AKB_JUL            = Input::get('jul');
+                $akb->AKB_AUG            = Input::get('agu');
+                $akb->AKB_SEP            = Input::get('sep');
+                $akb->AKB_OKT            = Input::get('okt');
+                $akb->AKB_NOV            = Input::get('nov');
+                $akb->AKB_DES            = Input::get('des');
+                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->TIME_CREATED       = Carbon\Carbon::now();
+                $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+                $akb->save(); 
+
+                return 1; 
+
+            }else{
+                AKB_Pendapatan::where('PENDAPATAN_ID',Input::get('id_pendapatan'))
+                         ->where('REKENING_ID',Input::get('rek_id'))
+                 ->update([
+                        'AKB_JAN'        => Input::get('jan'),
+                        'AKB_FEB'        => Input::get('feb'),
+                        'AKB_MAR'        => Input::get('mar'),
+                        'AKB_APR'        => Input::get('apr'),
+                        'AKB_MEI'        => Input::get('mei'),
+                        'AKB_JUN'        => Input::get('jun'),
+                        'AKB_JUL'        => Input::get('jul'),
+                        'AKB_AUG'        => Input::get('agu'),
+                        'AKB_SEP'        => Input::get('sep'),
+                        'AKB_OKT'        => Input::get('okt'),
+                        'AKB_NOV'        => Input::get('nov'),
+                        'AKB_DES'        => Input::get('des')
+                        ]); 
+
+                 return 1; 
+            }                
+
+             return 0; 
+               
+        }
+        else return $this->submitAKBEditPerubahan($tahun,$status);
+    }
+
+    public function deleteAKB(){
+        AKB_Pendapatan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->where('REKENING_ID',Input::get('REKENING_ID'))->delete();
+        return "Hapus Berhasil!";
+    }
+
 }

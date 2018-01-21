@@ -28,14 +28,14 @@ Use Response;
 Use DB;
 class simdaController extends Controller{
 
-	public function index($tahun){
+	public function index($tahun){ // cek total belanja simda yang kode tidak sama dgn nol
 		$total 	= DB::connection('sqlsrv')->select('SELECT SUM(Total) FROM Ta_Belanja_Rinc_Sub WHERE Kd_Prog != 0');
 		print_r($total);exit();
 		$data  	= array('tahun'=>$tahun);
 		return view('tosimda',$data);
 	}
 
-	public function trfSubUnit($tahun){
+	public function trfSubUnit($tahun){ // transfer sub unit 
 		$data 	= Subunit::whereHas('skpd',function($skpd) use ($tahun){
 					$skpd->where('SKPD_TAHUN',$tahun);
 				})->get();
@@ -57,7 +57,7 @@ class simdaController extends Controller{
 									'Kd_Unit'		=> $Kd_Unit,
 									'Kd_Sub' 		=> $sub->SUB_KODE *1);
 				DB::connection('sqlsrv')->table('dbo.Ta_Sub_Unit')
-							->insert($value);
+							->insert($value); //input kode sub unit 
 			}
 		}
 		$count_sira 		= count($data);
@@ -67,7 +67,7 @@ class simdaController extends Controller{
 		return 'SIRA : '.$count_sira.'<br>SIMDA : '.$count_simda;
 	}
 
-	public function trfProgram($tahun){
+	public function trfProgram($tahun){ /// kirim program 
 		$data 	= BL::where('BL_TAHUN',$tahun)
 					->where('BL_DELETED',0)
 					->where('BL_VALIDASI',1)
@@ -110,7 +110,7 @@ class simdaController extends Controller{
 		}
 	}
 
-	public function trfKegiatan($tahun){
+	public function trfKegiatan($tahun){ // transfer. kegiatan 
 		$data 	= BL::where('BL_TAHUN',$tahun)
 					->where('BL_DELETED',0)
 					->where('BL_VALIDASI',1)

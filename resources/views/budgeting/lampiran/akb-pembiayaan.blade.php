@@ -94,37 +94,19 @@
 	</tr>
 </table>
 <table class="detail">	
-	<tr class="border">
-		<td width="18%">Urusan</td>
-		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_NAMA}}</td> 
-		<td></td>
-	</tr>
+	
 	<tr class="border">
 		<td width="18%">Nama SKPD</td>
-		<td width="55%">: {{$bl->skpd->SKPD_NAMA}}</td> 
+		<td width="55%">: {{$skpd->SKPD_NAMA}}</td> 
 		<td></td>
 	</tr>
-	<tr class="border">
-		<td width="18%">Sub SKPD </td>
-		<td width="55%">: {{$bl->subunit->SUB_NAMA}}</td> 
-		<td></td>
-	</tr>
-	<tr class="border">
-		<td width="18%">Nama Program</td>
-		<td width="85%">: {{$bl->kegiatan->program->PROGRAM_NAMA}}</td> 
-		<td></td>
-	</tr>
-	<tr class="border">
-		<td width="18%">Nama Kegiatan</td>
-		<td width="80%">: {{$bl->kegiatan->KEGIATAN_NAMA}}</td> 
-		<td></td>
-	</tr>
+	
 </table>
 
 <table class="rincian">
 	<tbody>
 	<tr class="border">
-		<td colspan="19"><h4>Belanja Langsung</h4></td>
+		<td colspan="19"><h4>Pendapatan</h4></td>
 	</tr>
 	<tr class="border headrincian">
 		<td class="border">Kode Rekening</td>
@@ -178,8 +160,6 @@
 	@endforeach
 
 	
-	
-	
 	<tr class="border">
 		<td class="border kanan" colspan="18"><b>Jumlah</b></td>
 		<td class="border kanan"><b>{{ number_format($total,0,',','.') }}</b></td>
@@ -188,24 +168,24 @@
 </table>
 <table class="ttd">
 	<tr>
-		<td width="75%"><span style="margin-left:-400px"></span></td>
+		<td width="75%"></td>
 		<td>Bandung, {{$tgl}} {{$bln}} {{$tahun}}</td>
 	</tr>
 	<tr>
-		<td><span style="margin-left:-400px"></span></td>
-		<td>Kepala {{ $bl->skpd->SKPD_NAMA }}</td>
+		<td></td>
+		<td>Kepala {{$skpd->SKPD_NAMA}}</td>
 	</tr>
 	<tr>
 		<td></td>
 		<td><br><br><br><br><br></td>
 	</tr>
 	<tr>
-		<td><span style="margin-left:-400px;border-bottom: 1px solid #000;padding-bottom: 1px;"></span></td>
-		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $bl->skpd->SKPD_KEPALA }}</span></td>
+		<td></td>
+		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $skpd->SKPD_KEPALA }}</span></td>
 	</tr>
 	<tr>
-		<td><span style="margin-left:-400px"></span></td>
-		<td>NIP. {{$bl->skpd->SKPD_KEPALA_NIP}}</td>
+		<td></td>
+		<td>NIP. {{$skpd->SKPD_KEPALA_NIP}}</td>
 	</tr>
 </table>
 </div>
