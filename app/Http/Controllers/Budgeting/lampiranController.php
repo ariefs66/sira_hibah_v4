@@ -1754,6 +1754,7 @@ class lampiranController extends Controller
                                 'rincian.REKENING_KODE',
                                 'rincian.REKENING_NAMA','rincian.BL_MURNI')
                        ->orderBy('rincian.SKPD_KODE')
+                       ->orderBy('rekap.URUSAN_KODE')
                        ->orderBy('rekap.PROGRAM_KODE')
                        ->orderBy('rincian.KEGIATAN_KODE')
                        ->orderBy('rincian.REKENING_KODE')
