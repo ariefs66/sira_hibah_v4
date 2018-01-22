@@ -1735,6 +1735,7 @@ class lampiranController extends Controller
                                 'rincian.KEGIATAN_KODE',
                                 'rincian.KEGIATAN_ID',
                                 'rincian.KEGIATAN_NAMA',
+                                'rekap.URUSAN_KODE',
                                 'rekap.PROGRAM_KODE',
                                 'rekap.PROGRAM_NAMA',
                                 'rincian.REKENING_KODE',
@@ -1747,6 +1748,7 @@ class lampiranController extends Controller
                                 'rincian.KEGIATAN_KODE',
                                 'rincian.KEGIATAN_ID',
                                 'rincian.KEGIATAN_NAMA',
+                                'rekap.URUSAN_KODE',
                                 'rekap.PROGRAM_KODE',
                                 'rekap.PROGRAM_NAMA',
                                 'rincian.REKENING_KODE',
@@ -1772,6 +1774,7 @@ class lampiranController extends Controller
                 if($bt->kode_program_ok=="t"){
                     $tabel[$idx]['tingkat']=1;
                     $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeurusan']=$bt->URUSAN_KODE;
                     $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
                     $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
                     $tabel[$idx]['nogiat']="000";
@@ -1829,7 +1832,6 @@ class lampiranController extends Controller
 
                     if(strlen($bt->REKENING_KODE)==3){
                         $total_belanja+=$bt->nilai;
-
                         $tabel[$idx]['tingkat']=3;
                         $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
                         $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
