@@ -334,7 +334,7 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td>Bandung, 28 Desember 2017</td>
 	</tr>
 	<tr>
 		<td></td>

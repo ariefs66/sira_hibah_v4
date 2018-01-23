@@ -78,6 +78,79 @@
 </head>
 <body onload="window.print()">
 <div class="cetak">
+
+<table class="">
+	<br><br><br><br><br><br><br><br><br>
+	<tr>
+		<td class="tengah">
+			<h2>Format DPA-SKPD</h2><br>
+		</td>
+	</tr>
+	<tr>
+		<td class="tengah">
+			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
+		</td>
+	</tr>
+	<br>
+	<tr class="">
+		<td class="" width="%">
+			<h4>PROVINSI/KABUPATEN/KOTA<br>DOKUMEN PELAKSANAAN ANGGARAN <br> SATUAN KERJA PERANGKAT DAERAH (DPA SKPD)<br> SEKRETARIAT DEARAH/DINAS/BADAN/KANTOR<br>....<br>TAHUN ANGGARAN {{$tahun}}</h4>
+		</td>
+		<td rowspan="" class="">
+		</td>
+	</tr>
+</table>
+<table class="">
+	<tr class="">
+		<td>&nbsp; </td>
+		<td>&nbsp; </td>
+		<td width="500px">
+			<table class="border" width="100px">
+				<tr class="border">
+					<td class="border">Kode</td>
+					<td class="border">Nama Formulir</td>
+				</tr>
+				<tr class="border-rincian">
+					<td class="border">DPA-SKPD</td>
+					<td class="border">Ringkasan Dokumen Pelaksanaan Anggaran Satuan Kerja Perangkat Daerah</td>
+				</tr>
+				<tr class="border">
+					<td class="border">DPA-SKPD1</td>
+					<td class="border">Rincian Dokumen Pelaksanaan Anggaran Pendapatan Satuan Kerja Perangkat Daerah</td>
+				</tr>
+				<tr class="border">
+					<td class="border">DPA-SKPD 2.1</td>
+					<td class="border">Rincian Dokumen Pelaksanaan Anggaran Belanja Tidak Langsung Satuan Kerja Perangkat Daerah</td>
+				</tr>
+				<tr class="border">
+					<td class="border">DPA-SKPD 2.2</td>
+					<td class="border">Rekapitulasi Belanja Langsung Menurut Program dan Kegiatan Satuan Kerja Perangkat Daerah </td>
+				</tr>
+				<tr class="border">
+					<td class="border">DPA-SKPD 2.2.1</td>
+					<td class="border">Rincian Dokumen Pelaksanaan Anggaran Belanja Langsung Program Kegiatan Satuan Kerja Perangkat Daerah</td>
+				</tr>
+				<tr class="border">
+					<td class="border">DPA-SKPD 3.1</td>
+					<td class="border">Rincian Penerimaan Pembiayaan</td>
+				</tr>
+				<tr class="border">
+					<td class="border">DPA-SKPD 3.2</td>
+					<td class="border">Rincian Pengeluaran Pembiayaan</td>
+				</tr>
+			</table>
+		</td>
+		<td>&nbsp; </td>
+		<td>&nbsp; </td>
+	</tr>
+</table>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br>
+
+
 <table class="header">
 	<tr class="border">
 		<td class="border" width="85%">
@@ -93,6 +166,7 @@
 		</td>
 	</tr>
 </table>
+
 <table class="detail">	
 	<tr class="border">
 		<td width="18%">Urusan Pemerintahan</td>
