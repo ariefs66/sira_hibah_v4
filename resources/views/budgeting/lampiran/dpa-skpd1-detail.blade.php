@@ -78,6 +78,96 @@
 </head>
 <body onload="window.print()">
 <div class="cetak">
+
+
+<table class="">
+	<br><br><br><br><br><br><br><br><br>
+	<tr>
+		<td class="tengah">
+			<h2>Format DPA-SKPD 1</h2><br>
+		</td>
+	</tr>
+	<tr>
+		<td class="tengah">
+			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
+		</td>
+	</tr>
+	<br>
+	<tr class="">
+		<td class="" width="%">
+			<h4>PROVINSI/KABUPATEN/KOTA<br>DOKUMEN PELAKSANAAN ANGGARAN <br> SATUAN KERJA PERANGKAT DAERAH (DPA SKPD)<br>....<br>TAHUN ANGGARAN {{$tahun}}</h4>
+		</td>
+		<td class="tengah">&nbsp;</td>
+	</tr>
+	<tr>
+		<td class="tengah">
+			<h1>PENDAPATAN</h1><br>
+		</td>
+	</tr>	
+</table>
+<table class="">
+	<tr class="">
+		<td>&nbsp; </td>
+		<td>&nbsp; </td>
+		<td width="200px">
+			<table class="" width="100px">
+				<tr class="">
+					<td class=""><b>No DPA SKPD</b></td>
+					<td class="border">xx</td>
+					<td class="border">xx</td>
+					<td class="border">xx</td>
+					<td class="border">xx</td>
+					<td class="border">xx</td>
+				</tr>
+			</table>
+		</td>
+		<td>&nbsp; </td>
+		<td>&nbsp; </td>
+	</tr>
+</table>
+<table class="">
+	<tr class="">
+		<td>&nbsp; </td>
+		<td>&nbsp; </td>
+		<td width="500px">
+			<table class="" width="100px">
+				<tr class="">
+					<td class="">URUSAN PEMERINTAHAN</td>
+					<td class="">..</td>
+				</tr>
+				<tr class="">
+					<td class="">ORGANISASI</td>
+					<td class="">..</td>
+				</tr>
+				<tr class="">
+					<td class="">Pengguna Anggaran / Kuasa Pengguna Anggaran</td>
+					<td class="">..</td>
+				</tr>
+				<tr class="">
+					<td class="">Nama</td>
+					<td class="">..</td>
+				</tr>
+				<tr class="">
+					<td class="">NIP</td>
+					<td class="">..</td>
+				</tr>
+				<tr class="">
+					<td class="">Jabatan</td>
+					<td class="">..</td>
+				</tr>
+			</table>
+		</td>
+		<td>&nbsp; </td>
+		<td>&nbsp; </td>
+	</tr>
+</table>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br>
+
+
 <table class="header">
 	<tr class="border">
 		<td class="border" width="85%" rowspan="2">
