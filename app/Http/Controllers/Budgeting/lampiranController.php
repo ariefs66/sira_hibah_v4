@@ -1973,6 +1973,7 @@ class lampiranController extends Controller
                                 'rincian.KEGIATAN_KODE',
                                 'rincian.KEGIATAN_ID',
                                 'rincian.KEGIATAN_NAMA',
+                                'rekap.URUSAN_KODE',
                                 'rekap.PROGRAM_KODE',
                                 'rekap.PROGRAM_NAMA',
                                 'rincian.REKENING_KODE',
@@ -1985,11 +1986,13 @@ class lampiranController extends Controller
                                 'rincian.KEGIATAN_KODE',
                                 'rincian.KEGIATAN_ID',
                                 'rincian.KEGIATAN_NAMA',
+                                'rekap.URUSAN_KODE',
                                 'rekap.PROGRAM_KODE',
                                 'rekap.PROGRAM_NAMA',
                                 'rincian.REKENING_KODE',
                                 'rincian.REKENING_NAMA','rincian.BL_MURNI')
                        ->orderBy('rincian.SKPD_KODE')
+                       ->orderBy('rekap.URUSAN_KODE')
                        ->orderBy('rekap.PROGRAM_KODE')
                        ->orderBy('rincian.KEGIATAN_KODE')
                        ->orderBy('rincian.REKENING_KODE')
@@ -2009,7 +2012,8 @@ class lampiranController extends Controller
 
                 if($bt->kode_program_ok=="t"){
                     $tabel[$idx]['tingkat']=1;
-                    $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    //$tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                    $tabel[$idx]['kodeurusan']=$bt->URUSAN_KODE;
                     $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
                     $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
                     $tabel[$idx]['nogiat']="000";
@@ -2038,7 +2042,7 @@ class lampiranController extends Controller
                 if(($bt->kode_giat_ok=="t") or ($bt->KEGIATAN_ID==$old_kode_giat)){
                     if($bt->kode_giat_ok=="t"){
                         $tabel[$idx]['tingkat']=1;
-                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeurusan']=$bt->URUSAN_KODE;
                         $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
                         $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
                         $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
@@ -2067,9 +2071,8 @@ class lampiranController extends Controller
 
                     if(strlen($bt->REKENING_KODE)==3){
                         $total_belanja+=$bt->nilai;
-
                         $tabel[$idx]['tingkat']=3;
-                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeurusan']=$bt->URUSAN_KODE;
                         $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
                         $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
                         $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
@@ -2090,7 +2093,7 @@ class lampiranController extends Controller
                     }
                     elseif(strlen($bt->REKENING_KODE)>3 and strlen($bt->REKENING_KODE)<=8){
                         $tabel[$idx]['tingkat']=3;
-                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeurusan']=$bt->URUSAN_KODE;
                         $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
                         $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
                         $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
@@ -2111,7 +2114,7 @@ class lampiranController extends Controller
                     }
                     else{
                         $tabel[$idx]['tingkat']=4;
-                        $tabel[$idx]['kodeurusan']=$detil[0]->URUSAN_KODE;
+                        $tabel[$idx]['kodeurusan']=$bt->URUSAN_KODE;
                         $tabel[$idx]['kodeskpd']=$detil[0]->SKPD_KODE;
                         $tabel[$idx]['kodeprogram']=$bt->PROGRAM_KODE;
                         $tabel[$idx]['nogiat']=$bt->KEGIATAN_KODE;
