@@ -80,12 +80,7 @@
 <div class="cetak">
 
 <table class="">
-	<br><br><br><br><br><br><br><br><br>
-	<tr>
-		<td class="tengah">
-			<h2>Format DPA-SKPD</h2><br>
-		</td>
-	</tr>
+	<br><br><br><br><br>
 	<tr>
 		<td class="tengah">
 			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
@@ -94,7 +89,12 @@
 	<br>
 	<tr class="">
 		<td class="" width="%">
-			<h4>PROVINSI/KABUPATEN/KOTA<br>DOKUMEN PELAKSANAAN ANGGARAN <br> SATUAN KERJA PERANGKAT DAERAH (DPA SKPD)<br> SEKRETARIAT DEARAH/DINAS/BADAN/KANTOR<br>....<br>TAHUN ANGGARAN {{$tahun}}</h4>
+			<h4><br>PEMERINTAH KOTA BANDUNG<br><br>
+				DOKUMEN PELAKSANAAN ANGGARAN <br> 
+				SATUAN KERJA PERANGKAT DAERAH <br> 
+				(DPA SKPD)<br> <br>
+				{{ $skpd->SKPD_NAMA }} <br>
+			TAHUN ANGGARAN {{$tahun}} <br> <br> <br></h4> 
 		</td>
 		<td rowspan="" class="">
 		</td>
@@ -107,8 +107,8 @@
 		<td width="500px">
 			<table class="border" width="100px">
 				<tr class="border">
-					<td class="border">Kode</td>
-					<td class="border">Nama Formulir</td>
+					<td class="border tengah"><b>Kode</b></td>
+					<td class="border tengah"><b>Nama Formulir</b></td>
 				</tr>
 				<tr class="border-rincian">
 					<td class="border">DPA-SKPD</td>
@@ -128,7 +128,7 @@
 				</tr>
 				<tr class="border">
 					<td class="border">DPA-SKPD 2.2.1</td>
-					<td class="border">Rincian Dokumen Pelaksanaan Anggaran Belanja Langsung Program Kegiatan Satuan Kerja Perangkat Daerah</td>
+					<td class="border">Rincian Dokumen Pelaksanaan Anggaran Belanja Langsung Program dan Per Kegiatan Satuan Kerja Perangkat Daerah</td>
 				</tr>
 				<tr class="border">
 					<td class="border">DPA-SKPD 3.1</td>
@@ -297,47 +297,47 @@
 	<tr class="border">
 		<td class="border">1</td>
 		<td class="border">Pendapatan</td> 
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
+		<td class="border kanan">{{ number_format($akb_pend_t1->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_pend_t2->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_pend_t3->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_pend_t4->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_pend_t1->total+$akb_pend_t2->total+$akb_pend_t3->total+$akb_pend_t4->total,0,',','.') }}</td>
 	</tr>
 	<tr class="border">
 		<td class="border">2.1</td>
 		<td class="border">Belanja Tidak Langsung</td> 
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
+		<td class="border kanan">{{ number_format($akb_btl_t1->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_btl_t2->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_btl_t3->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_btl_t4->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_btl_t1->total+$akb_btl_t2->total+$akb_btl_t3->total+$akb_btl_t4->total,0,',','.') }}</td>	
 	</tr>
 	<tr class="border">
 		<td class="border">2.2</td>
 		<td class="border">Belanja Langsung</td> 
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
+		<td class="border kanan">{{ number_format($akb_bl_t1->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_bl_t2->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_bl_t3->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_bl_t4->total,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_bl_t1->total+$akb_bl_t2->total+$akb_bl_t3->total+$akb_bl_t4->total,0,',','.') }}</td>
 	</tr>
 	<tr class="border">
 		<td class="border">3.1</td>
 		<td class="border">Penerimaan Pembiayaan</td> 
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
+		<td class="border kanan">{{ number_format($akb_pem->tri1,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_pem->tri2,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_pem->tri3,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_pem->tri4,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_pem->tri1+$akb_pem->tri2+$akb_pem->tri3+$akb_pem->tri4,0,',','.') }}</td>
 	</tr>
 	<tr class="border">
 		<td class="border">3.2</td>
 		<td class="border">Pengeluaran Pembiayaan</td> 
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
+		<td class="border kanan">{{ number_format($akb_peng->tri1,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_peng->tri2,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_peng->tri3,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_peng->tri4,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($akb_peng->tri1+$akb_peng->tri2+$akb_peng->tri3+$akb_peng->tri4,0,',','.') }}</td>
 	</tr>
 </table>
 <table class="ttd">
