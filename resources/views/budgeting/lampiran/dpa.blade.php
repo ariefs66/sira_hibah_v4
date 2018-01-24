@@ -81,12 +81,8 @@
 
 
 <table class="">
-	<br><br><br><br><br><br><br><br><br>
-	<tr>
-		<td class="tengah">
-			<h2>Format DPA-SKPD 2.1</h2><br>
-		</td>
-	</tr>
+	<br><br><br><br><br><br><br>
+	
 	<tr>
 		<td class="tengah">
 			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
@@ -95,7 +91,11 @@
 	<br>
 	<tr class="">
 		<td class="" width="%">
-			<h4>PROVINSI/KABUPATEN/KOTA<br>DOKUMEN PELAKSANAAN ANGGARAN <br> SATUAN KERJA PERANGKAT DAERAH (DPA SKPD)<br>....<br>TAHUN ANGGARAN {{$tahun}}</h4>
+			<h4><br>PEMERINTAH KOTA BANDUNG<br><br>
+				DOKUMEN PELAKSANAAN ANGGARAN <br> 
+				SATUAN KERJA PERANGKAT DAERAH <br> 
+				(DPA SKPD)<br> <br>
+			TAHUN ANGGARAN {{$tahun}} <br> <br> <br></h4> 
 		</td>
 		<td class="tengah">&nbsp;</td>
 	</tr>
@@ -129,55 +129,55 @@
 	<tr class="">
 		<td>&nbsp; </td>
 		<td>&nbsp; </td>
-		<td width="500px">
+		<td width="300px">
 			<table class="" width="100px">
 				<tr class="">
 					<td class="">URUSAN PEMERINTAHAN</td>
-					<td class="">..</td>
+					<td class="">{{ $urusan->URUSAN_KODE }} {{ $urusan->URUSAN_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">ORGANISASI</td>
-					<td class="">..</td>
+					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
+				</tr>
+				<tr class="">
+					<td class="">SUB UNIT ORGANISASI</td>
+					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">PROGRAM</td>
-					<td class="">..</td>
+					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">KEGIATAN</td>
-					<td class="">..</td>
+					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">LOKASI KEGIATAN</td>
-					<td class="">..</td>
+					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">SUMBER DANA</td>
-					<td class="">..</td>
+					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">JUMLAH ANGGARAN</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">TERBILANG</td>
-					<td class="">..</td>
+					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">Pengguna Anggaran / Kuasa Pengguna Anggaran</td>
-					<td class="">..</td>
+					<td class=""></td>
 				</tr>
 				<tr class="">
 					<td class="">NAMA</td>
-					<td class="">..</td>
+					<td class="">{{ $skpd->SKPD_KEPALA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">NIP</td>
-					<td class="">..</td>
+					<td class="">{{ $skpd->SKPD_KEPALA_NIP }}</td>
 				</tr>
 				<tr class="">
 					<td class="">JABATAN</td>
-					<td class="">..</td>
+					<td class="">Kepala {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 			</table>
 		</td>
@@ -447,24 +447,40 @@
 </table>
 <table class="ttd">
 	<tr>
-		<td width="75%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td class="tengah">Triwulan I</td>
+		<td class="kiri">Rp. {{ number_format($akb_bl->tri1,0,',','.') }}</td>
+		<td width="50%"> </td>
+		<td>Bandung, 3 Januari 2018</td>
 	</tr>
 	<tr>
-		<td></td>
-		<td>Kepala {{ $bl->subunit->skpd->SKPD_NAMA }}</td>
+		<td class="tengah">Triwulan II</td>
+		<td class="kiri">Rp. {{ number_format($akb_bl->tri2,0,',','.') }} </td>
+		<td width="50%"> </td>
+		<td><b>Pejabat Pengelola Keuangan Daerah</b></td>
 	</tr>
 	<tr>
+		<td class="tengah">Triwulan III</td>
+		<td class="kiri">Rp. {{ number_format($akb_bl->tri3,0,',','.') }} </td>
+		<td width="50%"> </td>
 		<td></td>
-		<td><br><br><br><br><br></td>
 	</tr>
 	<tr>
+		<td class="tengah">Triwulan IV</td>
+		<td class="kiri">Rp. {{ number_format($akb_bl->tri4,0,',','.') }}</td>
+		<td width="50%"> </td>
 		<td></td>
-		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $bl->subunit->skpd->SKPD_KEPALA }}</span></td>
 	</tr>
 	<tr>
+		<td class="kanan"><b>Jumlah</b></td>
+		<td class="kiri"><b>Rp. {{ number_format($akb_bl->tri1+$akb_bl->tri2+$akb_bl->tri3+$akb_bl->tri4,0,',','.') }}</b></td>
+		<td width="50%"> </td>
 		<td></td>
-		<td>NIP. {{ $bl->subunit->skpd->SKPD_KEPALA_NIP }}</td>
+	</tr>
+	<tr>
+		<td class="kiri"> </td>
+		<td class="kiri"> </td>
+		<td width="50%"> <br><br><br><br><br><br></td>
+		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs H. DADANG SUPRIATNA, MH <br><br> NIP. 19610308 199103 1 009 </span> </td>
 	</tr>
 </table>
 </div>

@@ -80,118 +80,6 @@
 <div class="cetak">
 
 
-<table class="">
-	<br><br><br><br><br><br><br><br><br>
-	<tr>
-		<td class="tengah">
-			<h2>Format DPA-SKPD 2.1</h2><br>
-		</td>
-	</tr>
-	<tr>
-		<td class="tengah">
-			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
-		</td>
-	</tr>
-	<br>
-	<tr class="">
-		<td class="" width="%">
-			<h4>PROVINSI/KABUPATEN/KOTA<br>DOKUMEN PELAKSANAAN ANGGARAN <br> SATUAN KERJA PERANGKAT DAERAH (DPA SKPD)<br>....<br>TAHUN ANGGARAN {{$tahun}}</h4>
-		</td>
-		<td class="tengah">&nbsp;</td>
-	</tr>
-	<tr>
-		<td class="tengah">
-			<h1>BELANJA LANGSUNG</h1><br>
-		</td>
-	</tr>	
-</table>
-<table class="">
-	<tr class="">
-		<td>&nbsp; </td>
-		<td>&nbsp; </td>
-		<td width="200px">
-			<table class="" width="100px">
-				<tr class="">
-					<td class=""><b>No DPA SKPD</b></td>
-					<td class="border">xx</td>
-					<td class="border">xx</td>
-					<td class="border">xx</td>
-					<td class="border">xx</td>
-					<td class="border">xx</td>
-				</tr>
-			</table>
-		</td>
-		<td>&nbsp; </td>
-		<td>&nbsp; </td>
-	</tr>
-</table>
-<table class="">
-	<tr class="">
-		<td>&nbsp; </td>
-		<td>&nbsp; </td>
-		<td width="500px">
-			<table class="" width="100px">
-				<tr class="">
-					<td class="">URUSAN PEMERINTAHAN</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">ORGANISASI</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">PROGRAM</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">KEGIATAN</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">LOKASI KEGIATAN</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">SUMBER DANA</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">JUMLAH ANGGARAN</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">TERBILANG</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">Pengguna Anggaran / Kuasa Pengguna Anggaran</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">NAMA</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">NIP</td>
-					<td class="">..</td>
-				</tr>
-				<tr class="">
-					<td class="">JABATAN</td>
-					<td class="">..</td>
-				</tr>
-			</table>
-		</td>
-		<td>&nbsp; </td>
-		<td>&nbsp; </td>
-	</tr>
-</table>
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br>
-
-
 <table class="header">
 	<tr class="border">
 		<td class="border" width="85%">
@@ -257,6 +145,14 @@
 		<td class="border">11=7+8+9+10</td>
 	</tr>
 
+	@php $a=0;$b=0;$c=0;$d=0; @endphp
+	@foreach($akb_bl as $akb)
+		@php $a+=$akb->tri1; @endphp
+		@php $b+=$akb->tri2; @endphp
+		@php $c+=$akb->tri3; @endphp
+		@php $d+=$akb->tri4; @endphp
+	@endforeach
+
 	@php $total_p=0; @endphp
 	@foreach($bl_p as $belp)
 	<tr>
@@ -265,11 +161,11 @@
 		<td class="border-rincian border"> &nbsp; <b> {{$belp->PROGRAM_NAMA}} </b></td>
 		<td class="border-rincian border"> &nbsp;  </td>
 		<td class="border-rincian border"> &nbsp;  </td>
-		<td class="border-rincian border"> &nbsp; - </td>
-		<td class="border-rincian border"> &nbsp; - </td>
-		<td class="border-rincian border"> &nbsp; - </td>
-		<td class="border-rincian kanan border"> </td>
-		<td class="border-rincian kanan border"> </td>
+		<td class="border-rincian border"> &nbsp; </td>
+		<td class="border-rincian border"> &nbsp;  {{$a}}</td>
+		<td class="border-rincian border"> &nbsp;  {{$b}}</td>
+		<td class="border-rincian kanan border"> {{$c}}</td>
+		<td class="border-rincian kanan border"> {{$d}}</td>
 		<td class="border-rincian kanan border"> <b> {{ number_format($belp->pagu,0,',','.') }},00 </b></td>
 		@php $total_p += $belp->pagu; @endphp
 	</tr>	
@@ -283,16 +179,14 @@
 				<td class="border-rincian kiri border"> {{$bel->KEGIATAN_KODE}} </td>
 				<td class="border-rincian border"> &nbsp; &nbsp; {{$bel->KEGIATAN_NAMA}} </td>
 				<td class="border-rincian border"> &nbsp; {{$bel->LOKASI_NAMA}} </td>
-				<td class="border-rincian border"> 
-				</td>
-				<td class="border-rincian border"> 
-				</td>
-				<td class="border-rincian border"> 
-				</td>
-				<td class="border-rincian border"> 
-				</td>
-				<td class="border-rincian kanan border"> </td>
-				<td class="border-rincian kanan border"> </td>
+				<td class="border-rincian border"> </td>		
+				<td class="border-rincian border"> APBD </td>
+				@foreach($akb_bl as $akb)
+				<td class="border-rincian border"> {{$akb->tri1}}</td>
+				<td class="border-rincian border"> {{$akb->tri2}}</td>
+				<td class="border-rincian kanan border"> {{$akb->tri3}}</td>
+				<td class="border-rincian kanan border"> {{$akb->tri4}}</td>
+				@endforeach
 				<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
 				@php $total += $bel->BL_PAGU; @endphp
 			</tr>
@@ -322,11 +216,11 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, {{$tgl}} {{$bln}} {{$tahun}}</td>
+		<td>Bandung, 3 Januari 2018</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>Kepala {{ $skpd->SKPD_NAMA }}</td>
+		<td><b>Pejabat Pengelola Keuangan Daerah</b></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -334,11 +228,13 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $skpd->SKPD_KEPALA }}</span></td>
+		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
+			Drs H. DADANG SUPRIATNA, MH 
+			 </span></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>NIP. {{ $skpd->SKPD_KEPALA_NIP }}</td>
+		<td>NIP. 19610308 199103 1 009</td>
 	</tr>
 </table>
 </div>

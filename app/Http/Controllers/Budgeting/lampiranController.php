@@ -40,6 +40,7 @@ use App\Model\AKB_Pendapatan;
 use App\Model\Staff; 
 use App\Model\User; 
 use App\Model\AKB_Pembiayaan; 
+use App\Model\Output; 
 class lampiranController extends Controller
 {
     // public function __construct(){
@@ -701,8 +702,17 @@ class lampiranController extends Controller
            
             $totalBL    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
 
+            $akb_bl   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
+                        ->where('DAT_AKB_BL.BL_ID',$s)
+                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->first(); 
 
-            return View('budgeting.lampiran.dpa',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke]);
+
+
+            return View('budgeting.lampiran.dpa',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke,'akb_bl'=>$akb_bl]);
 
         }else{
             $bl    = BLPerubahan::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
@@ -3978,129 +3988,115 @@ class lampiranController extends Controller
                         ->where('SKPD_ID',$s)->first();
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
+        $pendapatan = Pendapatan::where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan1 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan11 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan12 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan13 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan14 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.4%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                
+        $pendapatan2 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan21 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan22 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan23 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan3 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan31 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan33 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                        
+        $pendapatan34 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.4%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan35 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.5%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                                                                                   
 
-        $pendapatan = Pendapatan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
-                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->get();
                         
                         
-        $btl = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                        ->where('DAT_BTL.SKPD_ID',$s)
-                        ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+        $btl = BTL::where('DAT_BTL.SKPD_ID',$s)->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
-        $btl1   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('DAT_BTL.SKPD_ID',$s)
+        $btl1   = BTL::where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.1%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
-        $btl2   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('DAT_BTL.SKPD_ID',$s)
+        $btl2   = BTL::where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.3%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
-        $btl3   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('DAT_BTL.SKPD_ID',$s)
+        $btl3   = BTL::where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.4%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');  
 
-        $btl4   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('DAT_BTL.SKPD_ID',$s)
+        $btl4   = BTL::where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.7%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL'); 
 
-        $btl5   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('DAT_BTL.SKPD_ID',$s)
+        $btl5   = BTL::where('DAT_BTL.SKPD_ID',$s)
                     ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.8%');})
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');                     
         
         
         $bl     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
-                        ->whereHas('bl',function($r) use($tahun){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
-                        })
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
                         ->sum('RINCIAN_TOTAL');
 
             $bl1     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
-                        ->whereHas('bl',function($r) use($tahun){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
-                        })
                         ->sum('RINCIAN_TOTAL');
 
             $bl2     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
-                        ->whereHas('bl',function($r) use($tahun){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
-                        })
                         ->sum('RINCIAN_TOTAL');
 
             $bl3     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
                         ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
-                        ->whereHas('bl',function($r) use($tahun){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
-                        })
                         ->sum('RINCIAN_TOTAL'); 
                                                          
                         
-        $pembiayaan = Pembiayaan::All(); 
+        $pem  = Pembiayaan::where('DAT_PEMBIAYAAN.SKPD_ID',$s)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.1%');})->where('PEMBIAYAAN_TAHUN',$tahun)->sum('PEMBIAYAAN_TOTAL'); 
+        $peng = Pembiayaan::where('DAT_PEMBIAYAAN.SKPD_ID',$s)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.2%');})->where('PEMBIAYAAN_TAHUN',$tahun)->sum('PEMBIAYAAN_TOTAL');                
 
 
-        $akb_pend_t1   = AKB_Pendapatan::join('BUDGETING.DAT_PENDAPATAN','DAT_PENDAPATAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
+        $akb_pend   = AKB_Pendapatan::join('BUDGETING.DAT_PENDAPATAN','DAT_PENDAPATAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
                         ->where('DAT_PENDAPATAN.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as total ')
+                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->first();
-        $akb_pend_t2   = AKB_Pendapatan::join('BUDGETING.DAT_PENDAPATAN','DAT_PENDAPATAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
-                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)
-                        ->selectRaw(' (SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN")) as total ')
-                        ->first();
-        $akb_pend_t3   = AKB_Pendapatan::join('BUDGETING.DAT_PENDAPATAN','DAT_PENDAPATAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
-                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)
-                        ->selectRaw(' (SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP")) as total ')
-                        ->first();
-        $akb_pend_t4   = AKB_Pendapatan::join('BUDGETING.DAT_PENDAPATAN','DAT_PENDAPATAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
-                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)
-                        ->selectRaw(' (SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES")) as total ')
-                        ->first();
+       
 
-        $akb_btl_t1   = AKB_BTL::join('BUDGETING.DAT_BTL','DAT_BTL.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
+        $akb_btl   = AKB_BTL::join('BUDGETING.DAT_BTL','DAT_BTL.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
                         ->where('DAT_BTL.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as total ')
+                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->first();
-        $akb_btl_t2   = AKB_BTL::join('BUDGETING.DAT_BTL','DAT_BTL.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
-                        ->where('DAT_BTL.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as total ')
-                        ->first();
-        $akb_btl_t3   = AKB_BTL::join('BUDGETING.DAT_BTL','DAT_BTL.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
-                        ->where('DAT_BTL.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as total ')
-                        ->first();
-        $akb_btl_t4   = AKB_BTL::join('BUDGETING.DAT_BTL','DAT_BTL.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
-                        ->where('DAT_BTL.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as total ')
-                        ->first();
-
-        $akb_bl_t1   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
+       
+        $akb_bl   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as total ')
-                        ->first(); 
-        $akb_bl_t2   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
-                        ->where('DAT_BL.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as total ')
-                        ->first(); 
-        $akb_bl_t3   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
-                        ->where('DAT_BL.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as total ')
-                        ->first(); 
-        $akb_bl_t4   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
-                        ->where('DAT_BL.SKPD_ID',$s)
-                        ->selectRaw(' SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as total ')
+                       ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->first(); 
 
         $akb_pem   = AKB_Pembiayaan::join('BUDGETING.DAT_PEMBIAYAAN','DAT_PEMBIAYAAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
@@ -4127,11 +4123,10 @@ class lampiranController extends Controller
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
         
-            return View('budgeting.lampiran.dpa-skpd-detail',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'pendapatan'=>$pendapatan, 'bl'=>$bl, 'pembiayaan'=>$pembiayaan, 'btl'=>$btl, 'btl1'=>$btl1, 'btl2'=>$btl2, 'btl3'=>$btl3, 'btl4'=>$btl4, 'btl5'=>$btl5,'bl'=>$bl,'bl1'=>$bl1,'bl2'=>$bl2,'bl3'=>$bl3, 
-                'akb_pend_t1'=>$akb_pend_t1,'akb_pend_t2'=>$akb_pend_t2,'akb_pend_t3'=>$akb_pend_t3,'akb_pend_t4'=>$akb_pend_t4,
-                'akb_btl_t1'=>$akb_btl_t1,'akb_btl_t2'=>$akb_btl_t2,'akb_btl_t3'=>$akb_btl_t3,'akb_btl_t4'=>$akb_btl_t4,
-                'akb_bl_t1'=>$akb_bl_t1,'akb_bl_t2'=>$akb_bl_t2,'akb_bl_t3'=>$akb_bl_t3,'akb_bl_t4'=>$akb_bl_t4,
-                'akb_pem'=>$akb_pem, 'akb_peng'=>$akb_peng
+            return View('budgeting.lampiran.dpa-skpd-detail',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'pendapatan'=>$pendapatan,
+                'pendapatan1'=>$pendapatan1,'pendapatan11'=>$pendapatan11,'pendapatan12'=>$pendapatan12,'pendapatan13'=>$pendapatan13,'pendapatan14'=>$pendapatan14,'pendapatan2'=>$pendapatan2,'pendapatan21'=>$pendapatan21,'pendapatan22'=>$pendapatan22,'pendapatan23'=>$pendapatan23,'pendapatan3'=>$pendapatan3,'pendapatan31'=>$pendapatan31,'pendapatan33'=>$pendapatan33,'pendapatan34'=>$pendapatan34,'pendapatan35'=>$pendapatan35,
+             'bl'=>$bl, 'pem'=>$pem, 'peng'=>$peng, 'btl'=>$btl, 'btl1'=>$btl1, 'btl2'=>$btl2, 'btl3'=>$btl3, 'btl4'=>$btl4, 'btl5'=>$btl5,'bl'=>$bl,'bl1'=>$bl1,'bl2'=>$bl2,'bl3'=>$bl3, 
+                'akb_pend'=>$akb_pend, 'akb_btl'=>$akb_btl, 'akb_bl'=>$akb_bl,'akb_pem'=>$akb_pem, 'akb_peng'=>$akb_peng
 
         ]);
 
@@ -4302,8 +4297,19 @@ class lampiranController extends Controller
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
+
+
+        $akb_bl   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
+                        ->where('DAT_BL.SKPD_ID',$s)
+                        ->groupBy("DAT_AKB_BL.BL_ID")
+                         ->selectRaw(' "DAT_AKB_BL"."BL_ID", SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->get(); 
+
         
-            return View('budgeting.lampiran.dpa-skpd22-detail',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'bl_p'=>$bl_p, 'bl_idk'=>$bl_idk, 'bl1'=>$bl1, 'bl2'=>$bl2, 'bl3'=>$bl3 ]);
+            return View('budgeting.lampiran.dpa-skpd22-detail',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'bl_p'=>$bl_p, 'bl_idk'=>$bl_idk, 'bl1'=>$bl1, 'bl2'=>$bl2, 'bl3'=>$bl3, 'akb_bl'=>$akb_bl ]);
     }
 
 
