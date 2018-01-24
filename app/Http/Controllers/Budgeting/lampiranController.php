@@ -4100,23 +4100,24 @@ class lampiranController extends Controller
                         ->first(); 
 
         $akb_pem   = AKB_Pembiayaan::join('BUDGETING.DAT_PEMBIAYAAN','DAT_PEMBIAYAAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
                         ->where('DAT_PEMBIAYAAN.SKPD_ID',$s)
-                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.1%');})->where('PEMBIAYAAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','6.1%')
                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
                             SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->first();
-                        
 
         $akb_peng   = AKB_Pembiayaan::join('BUDGETING.DAT_PEMBIAYAAN','DAT_PEMBIAYAAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
                         ->where('DAT_PEMBIAYAAN.SKPD_ID',$s)
-                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.2%');})->where('PEMBIAYAAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','6.2%')
                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
                             SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
-                        ->first();                                                                         
+                        ->first();                                                                                       
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
