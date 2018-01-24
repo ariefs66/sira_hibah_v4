@@ -339,13 +339,13 @@
 		<td class="tengah">Triwulan I</td>
 		<td class="kiri">Rp. {{ number_format($akb_btl->tri1,0,',','.') }}</td>
 		<td width="50%"> </td>
-		<td>Bandung, {{$tgl}} {{$bln}} {{$tahun}}</td>
+		<td>Bandung, 3 Januari 2018</td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan II</td>
 		<td class="kiri">Rp. {{ number_format($akb_btl->tri2,0,',','.') }} </td>
 		<td width="50%"> </td>
-		<td>Kepala {{ $skpd->SKPD_NAMA }}</td>
+		<td><b>Pejabat Pengelola Keuangan Daerah</b></td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan III</td>
@@ -369,7 +369,8 @@
 		<td class="kiri"> </td>
 		<td class="kiri"> </td>
 		<td width="50%"> <br><br><br><br><br><br></td>
-		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $skpd->SKPD_KEPALA }}<br><br>NIP. {{ $skpd->SKPD_KEPALA_NIP }}</span></td>
+		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs H. DADANG SUPRIATNA, MH <br>
+			<br>NIP. 19610308 199103 1 009 </span></td>
 	</tr>
 </table>
 </div>
