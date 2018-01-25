@@ -113,9 +113,10 @@
 				<tr class="">
 					<td class=""><b>No DPA SKPD</b></td>
 					<td class="border">{{ $urusan->URUSAN_KODE }}</td>
-					<td class="border">{{ substr($skpd->SKPD_KODE,0,1) }}</td>
-					<td class="border">{{ substr($skpd->SKPD_KODE,2,2) }}</td>
 					<td class="border">{{ substr($skpd->SKPD_KODE,5,2) }}</td>
+					<td class="border">00</td>
+					<td class="border">00</td>
+					<td class="border">6</td>
 					<td class="border">1</td>
 				</tr>
 			</table>
@@ -128,18 +129,22 @@
 	<tr class="">
 		<td>&nbsp; </td>
 		<td>&nbsp; </td>
-		<td width="300px">
+		<td width="500px">
 			<table class="" width="100px">
 				<tr class="">
-					<td class="">URUSAN PEMERINTAHAN</td>
-					<td class="">{{ $urusan->URUSAN_KODE }} {{ $urusan->URUSAN_NAMA }}</td>
+					<td class=""><br><br>URUSAN PEMERINTAHAN</td>
+					<td class=""><br><br>{{ $urusan->URUSAN_KODE }} {{ $urusan->URUSAN_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">ORGANISASI</td>
 					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 				<tr class="">
-					<td class="">Pengguna Anggaran / Kuasa Pengguna Anggaran</td>
+					<td class="">SUB UNIT ORGANISASI</td>
+					<td class="">{{ $skpd->SKPD_KODE }}.{{ $skpd->SUB_KODE }} {{ $skpd->SUB_NAMA }} </td>
+				</tr>
+				<tr class="">
+					<td class=""><br>Pengguna Anggaran / <br>Kuasa Pengguna Anggaran</td>
 					<td class=""></td>
 				</tr>
 				<tr class="">
@@ -181,9 +186,9 @@
 	</tr>
 	<tr class="border">
 		<td class="border"> <h4>{{ $urusan->URUSAN_KODE }}</h4> </td>
-		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,0,1) }}</h4> </td>
-		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,2,2) }}</h4> </td>
 		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,5,2) }}</h4> </td>
+		<td class="border"> <h4>00</h4> </td>
+		<td class="border"> <h4>00</h4> </td>
 		<td class="border"> <h4>6</h4> </td>
 		<td class="border"> <h4>1</h4> </td>
 	</tr>
@@ -231,19 +236,13 @@
 	<tr>
 		<td class="border-rincian kiri border"> 6</td>
 		<td class="border-rincian border"> <b>Pembiayaan Daerah</b>  </td>
-		<td class="border-rincian kanan border"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($total,0,',','.') }}</b></td>
 	</tr>
-
-	@php $total=0; @endphp
-
-	@foreach($pembiayaan as $pem)
-		@php $total += $pem->PEMBIAYAAN_TOTAL; @endphp
-	@endforeach
 
 	<tr>
 		<td class="border-rincian kiri border"> 6.1</td>
 		<td class="border-rincian border"> <b> &nbsp; Penerimaan Pembiayaan Daerah</b>  </td>
-		<td class="border-rincian kanan border"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($total,0,',','.') }}</b></td>
 	</tr>
 	
 	@php $total=0; @endphp
@@ -252,7 +251,7 @@
 	<tr>
 		<td class="border-rincian kiri border"> {{$pem->rekening->REKENING_KODE}} </td>
 		<td class="border-rincian border"> &nbsp; &nbsp; {{$pem->rekening->REKENING_NAMA}} </td>
-		<td class="border-rincian kanan border">{{ number_format($pem->PEMBIAYAAN_TOTAL,0,',','.') }},00</td>
+		<td class="border-rincian kanan border">{{ number_format($pem->PEMBIAYAAN_TOTAL,0,',','.') }}</td>
 		@php $total += $pem->PEMBIAYAAN_TOTAL; @endphp
 	</tr>	
 	@endforeach		

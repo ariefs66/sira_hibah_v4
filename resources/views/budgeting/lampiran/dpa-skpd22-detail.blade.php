@@ -145,29 +145,49 @@
 		<td class="border">11=7+8+9+10</td>
 	</tr>
 
-	@php $a=0;$b=0;$c=0;$d=0; @endphp
-	@foreach($akb_bl as $akb)
-		@php $a+=$akb->tri1; @endphp
-		@php $b+=$akb->tri2; @endphp
-		@php $c+=$akb->tri3; @endphp
-		@php $d+=$akb->tri4; @endphp
-	@endforeach
 
-	@php $total_p=0; @endphp
+
+	@php 
+		$total_tri1=0; 
+		$total_tri2=0; 
+		$total_tri3=0; 
+		$total_tri4=0; 
+	@endphp
 	@foreach($bl_p as $belp)
+
+		@php			
+			$progtri1=0;
+			$progtri2=0;
+			$progtri3=0;
+			$progtri4=0;
+		@endphp
+		@foreach($bl as $bel)
+			@if($belp->PROGRAM_ID == $bel->PROGRAM_ID)
+				@foreach($akb_bl as $akb)
+					@if($bel->BL_ID == $akb->BL_ID)
+						@php 
+							$progtri1+=$akb->tri1;
+							$progtri2+=$akb->tri2;
+							$progtri3+=$akb->tri3;
+							$progtri4+=$akb->tri4;
+						@endphp
+					@endif
+				@endforeach
+			@endif	
+		@endforeach
+
 	<tr>
-		<td class="border-rincian kiri border"> {{$belp->PROGRAM_KODE}} </td>
-		<td class="border-rincian kiri border">  </td>
-		<td class="border-rincian border"> &nbsp; <b> {{$belp->PROGRAM_NAMA}} </b></td>
-		<td class="border-rincian border"> &nbsp;  </td>
-		<td class="border-rincian border"> &nbsp;  </td>
-		<td class="border-rincian border"> &nbsp; </td>
-		<td class="border-rincian border"> &nbsp;  {{$a}}</td>
-		<td class="border-rincian border"> &nbsp;  {{$b}}</td>
-		<td class="border-rincian kanan border"> {{$c}}</td>
-		<td class="border-rincian kanan border"> {{$d}}</td>
-		<td class="border-rincian kanan border"> <b> {{ number_format($belp->pagu,0,',','.') }},00 </b></td>
-		@php $total_p += $belp->pagu; @endphp
+		<td class="border-rincian kiri "> {{$belp->PROGRAM_KODE}} </td>
+		<td class="border-rincian kiri ">  </td>
+		<td class="border-rincian "> &nbsp; <b> {{$belp->PROGRAM_NAMA}} </b></td>
+		<td class="border-rincian "> &nbsp;  </td>
+		<td class="border-rincian "> &nbsp;  </td>
+		<td class="border-rincian "> &nbsp; </td>
+		<td class="border-rincian kanan border"> &nbsp;  {{ number_format($progtri1,0,',','.') }}</td>
+		<td class="border-rincian kanan border"> &nbsp;  {{ number_format($progtri2,0,',','.') }}</td>
+		<td class="border-rincian kanan border"> {{ number_format($progtri3,0,',','.') }}</td>
+		<td class="border-rincian kanan border"> {{ number_format($progtri4,0,',','.') }}</td>
+		<td class="border-rincian kanan border"> <b> {{ number_format($belp->pagu,0,',','.') }} </b></td>
 	</tr>	
 
 		@php $total=0; @endphp
@@ -175,24 +195,42 @@
 
 			@if($belp->PROGRAM_ID == $bel->PROGRAM_ID)
 			<tr>
-				<td class="border-rincian kiri border"> {{$bel->PROGRAM_KODE}} </td>
-				<td class="border-rincian kiri border"> {{$bel->KEGIATAN_KODE}} </td>
-				<td class="border-rincian border"> &nbsp; &nbsp; {{$bel->KEGIATAN_NAMA}} </td>
-				<td class="border-rincian border"> &nbsp; {{$bel->LOKASI_NAMA}} </td>
-				<td class="border-rincian border"> </td>		
-				<td class="border-rincian border"> APBD </td>
+				<td class="border-rincian kiri "> {{$bel->PROGRAM_KODE}} </td>
+				<td class="border-rincian kiri "> {{$bel->KEGIATAN_KODE}} </td>
+				<td class="border-rincian "> &nbsp; &nbsp; {{$bel->KEGIATAN_NAMA}} </td>
+				<td class="border-rincian "> &nbsp; {{$bel->LOKASI_NAMA}} </td>
+				<td class="border-rincian "> </td>		
+				<td class="border-rincian "> APBD </td>
+				@php $found = false; @endphp
 				@foreach($akb_bl as $akb)
-				<td class="border-rincian border"> {{$akb->tri1}}</td>
-				<td class="border-rincian border"> {{$akb->tri2}}</td>
-				<td class="border-rincian kanan border"> {{$akb->tri3}}</td>
-				<td class="border-rincian kanan border"> {{$akb->tri4}}</td>
+					@if($bel->BL_ID == $akb->BL_ID)
+							<td class="border-rincian kanan"> {{$akb->tri1}}</td>
+							<td class="border-rincian kanan"> {{$akb->tri2}}</td>
+							<td class="border-rincian kanan"> {{$akb->tri3}}</td>
+							<td class="border-rincian kanan"> {{$akb->tri4}}</td>
+						@php $found = true; @endphp
+					@endif
 				@endforeach
+				@if(!$found)
+					<td class="border-rincian"></td>
+					<td class="border-rincian"></td>
+					<td class="border-rincian"></td>
+					<td class="border-rincian"></td>
+				@endif
 				<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
 				@php $total += $bel->BL_PAGU; @endphp
 			</tr>
 			@endif
 
 		@endforeach	
+
+
+		@php			
+			$total_tri1 += $progtri1;
+			$total_tri2 += $progtri2;
+			$total_tri3 += $progtri3;
+			$total_tri4 += $progtri4;
+		@endphp
 
 	@endforeach	
 
@@ -202,12 +240,12 @@
 	<tr class="border">
 		<td class="border kanan" colspan="4"><b>Jumlah</b></td>
 		<td class="border kanan"></td>
-		<td class="border kanan"><b>,00</b></td>
-		<td class="border kanan"><b>,00</b></td>
-		<td class="border kanan"><b>,00</b></td>
-		<td class="border kanan"><b>,00</b></td>
-		<td class="border kanan"><b>,00</b></td>
-		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td class="border kanan"><b></b></td>
+		<td class="border kanan"><b>{{ number_format($total_tri1,0,',','.') }}</b></td>
+		<td class="border kanan"><b>{{ number_format($total_tri2,0,',','.') }}</b></td>
+		<td class="border kanan"><b>{{ number_format($total_tri3,0,',','.') }}</b></td>
+		<td class="border kanan"><b>{{ number_format($total_tri4,0,',','.') }}</b></td>
+		<td class="border kanan"><b>{{ number_format($totbl,0,',','.') }}</b></td>
 	</tr>
 
 	
