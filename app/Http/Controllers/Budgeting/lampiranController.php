@@ -628,9 +628,15 @@ class lampiranController extends Controller
     } 
 
 
-     public function dpa($tahun, $status, $id){
+     public function dpa($tahun, $status, $s, $id){
 
         $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        
+        $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+                        ->where('SKPD_ID',$s)->first();
+
+        $skpd = SKPD::JOIN('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SKPD_ID','=','REF_SKPD.SKPD_ID')
+                    ->where('REF_SKPD.SKPD_ID',$s)->first();
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
@@ -703,7 +709,7 @@ class lampiranController extends Controller
             $totalBL    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
 
             $akb_bl   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
-                        ->where('DAT_AKB_BL.BL_ID',$s)
+                        ->where('DAT_AKB_BL.BL_ID',$id)
                          ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
                             SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
@@ -712,7 +718,7 @@ class lampiranController extends Controller
 
 
 
-            return View('budgeting.lampiran.dpa',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke,'akb_bl'=>$akb_bl]);
+            return View('budgeting.lampiran.dpa',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke,'akb_bl'=>$akb_bl, 'urusan'=>$urusan,'skpd'=>$skpd ]);
 
         }else{
             $bl    = BLPerubahan::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
@@ -4453,7 +4459,8 @@ class lampiranController extends Controller
         $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
                         ->where('SKPD_ID',$s)->first();
 
-        $skpd = SKPD::where('SKPD_ID',$s)->first();
+        $skpd = SKPD::JOIN('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SKPD_ID','=','REF_SKPD.SKPD_ID')
+                    ->where('REF_SKPD.SKPD_ID',$s)->first();
 
         $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
 
