@@ -113,11 +113,13 @@
 			<table class="" width="100px">
 				<tr class="">
 					<td class=""><b>No DPA SKPD</b></td>
-					<td class="border">xx</td>
-					<td class="border">xx</td>
-					<td class="border">xx</td>
-					<td class="border">xx</td>
-					<td class="border">xx</td>
+					<td class="border">{{ $urusan->URUSAN_KODE }}</td>
+					<td class="border">{{ substr($skpd->SKPD_KODE,5,2) }}</td>
+					<td class="border">{{ $skpd->SUB_KODE }}</td>
+					<td class="border">{{ $bl->kegiatan->program->PROGRAM_KODE }}</td>
+					<td class="border">{{ $bl->kegiatan->KEGIATAN_KODE }}</td>
+					<td class="border">5</td>
+					<td class="border">2</td>
 				</tr>
 			</table>
 		</td>
@@ -129,11 +131,11 @@
 	<tr class="">
 		<td>&nbsp; </td>
 		<td>&nbsp; </td>
-		<td width="300px">
+		<td width="500px">
 			<table class="" width="100px">
 				<tr class="">
-					<td class="">URUSAN PEMERINTAHAN</td>
-					<td class="">{{ $urusan->URUSAN_KODE }} {{ $urusan->URUSAN_NAMA }}</td>
+					<td class=""><br>URUSAN PEMERINTAHAN</td>
+					<td class=""><br>{{ $urusan->URUSAN_KODE }} {{ $urusan->URUSAN_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">ORGANISASI</td>
@@ -141,30 +143,34 @@
 				</tr>
 				<tr class="">
 					<td class="">SUB UNIT ORGANISASI</td>
-					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
+					<td class="">{{ $skpd->SKPD_KODE }}.{{ $skpd->SUB_KODE }} {{ $skpd->SUB_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">PROGRAM</td>
-					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
+					<td class="">{{ $bl->kegiatan->program->urusan->URUSAN_KODE }}.{{ $bl->subunit->skpd->SKPD_KODE }}.{{ $bl->subunit->SUB_KODE }}.{{ $bl->kegiatan->program->PROGRAM_KODE }}
+						{{ $bl->kegiatan->program->PROGRAM_NAMA }}
+					</td>
 				</tr>
 				<tr class="">
 					<td class="">KEGIATAN</td>
-					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
+					<td class="">
+						{{ $bl->kegiatan->program->urusan->URUSAN_KODE }}.{{ $bl->subunit->skpd->SKPD_KODE }}.{{ $bl->subunit->SUB_KODE }}.{{ $bl->kegiatan->program->PROGRAM_KODE }}.{{ $bl->kegiatan->KEGIATAN_KODE }} {{ $bl->kegiatan->KEGIATAN_NAMA }}
+					</td>
 				</tr>
 				<tr class="">
 					<td class="">LOKASI KEGIATAN</td>
-					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
+					<td class="">{{ $bl->lokasi->LOKASI_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">SUMBER DANA</td>
-					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
+					<td class="">APBD</td>
 				</tr>
 				<tr class="">
 					<td class="">JUMLAH ANGGARAN</td>
-					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
+					<td class="">{{ number_format($bl->BL_PAGU,0,',','.') }}</td>
 				</tr>
 				<tr class="">
-					<td class="">Pengguna Anggaran / Kuasa Pengguna Anggaran</td>
+					<td class=""><br>Pengguna Anggaran / <br>Kuasa Pengguna Anggaran</td>
 					<td class=""></td>
 				</tr>
 				<tr class="">
@@ -194,15 +200,27 @@
 
 <table class="header">
 	<tr class="border">
-		<td class="border" width="85%">
-			<h4>RENCANA KERJA DAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH</h4>
+		<td class="border" width="85%" rowspan="2">
+			<h4>DOKUMEN PELAKSANAAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH </h4>
+		</td>
+		<td class="border" colspan="7">
+			<h4>Nomor DPA SKPD</h4>
 		</td>
 		<td rowspan="2" class="border">
-			<h4>Formulir<br>RKA-SKPD 2.2.1</h4>
+			<h4>Formulir<br>DPA-SKPD 2.2.2</h4>
 		</td>
 	</tr>
+	<tr class="border">		
+		<td class="border">{{ $urusan->URUSAN_KODE }}</td>
+		<td class="border">{{ substr($skpd->SKPD_KODE,5,2) }}</td>
+		<td class="border">{{ $skpd->SUB_KODE }}</td>
+		<td class="border">{{ $bl->kegiatan->program->PROGRAM_KODE }}</td>
+		<td class="border">{{ $bl->kegiatan->KEGIATAN_KODE }}</td>
+		<td class="border">5</td>
+		<td class="border">2</td>
+	</tr>
 	<tr>
-		<td>
+		<td colspan="8">
 			<h4>Kota Bandung<br>Tahun Anggaran {{$tahun}}</h4>
 		</td>
 	</tr>
@@ -238,16 +256,8 @@
 		<td colspan="2">: {{ $bl->lokasi->LOKASI_NAMA }}</td>
 	</tr>
 	<tr class="border">
-		<td>Jumlah Tahun n-1</td>
-		<td colspan="2">: Rp. 0</td>
-	</tr>
-	<tr class="border">
-		<td>Jumlah Tahun n-1</td>
+		<td>Jumlah</td>
 		<td colspan="2">: Rp. {{ number_format($bl->BL_PAGU,0,',','.') }}</td>
-	</tr>
-	<tr class="border">
-		<td>Jumlah Tahun n+1</td>
-		<td colspan="2">: Rp. 0</td>
 	</tr>
 </table>
 <table class="indikator">

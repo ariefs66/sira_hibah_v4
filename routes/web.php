@@ -150,7 +150,7 @@ Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd/{s}', 'Budgeting\lampiranCo
 Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd1/{s}', 'Budgeting\lampiranController@dpaSKPD1Detail');
 Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd21/{s}', 'Budgeting\lampiranController@dpaSKPD21Detail');
 Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd22/{s}', 'Budgeting\lampiranController@dpaSKPD22Detail');
-Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd221/{id}', 'Budgeting\lampiranController@dpa');
+Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd221/{s}/{id}', 'Budgeting\lampiranController@dpa');
 Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd31/{s}', 'Budgeting\lampiranController@dpaSKPD31Detail');
 Route::get('/main/{tahun}/{status}/lampiran/dpa/skpd32/{s}', 'Budgeting\lampiranController@dpaSKPD32Detail');
 //AKB BL
