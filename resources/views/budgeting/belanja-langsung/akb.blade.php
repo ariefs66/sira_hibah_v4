@@ -35,7 +35,7 @@
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd1/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 1</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd21/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 2.1</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd22/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 2.2</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{ $bl->subunit->SKPD_ID/{{ $bl->BL_ID}}" target="_blank">DPA-SKPD 2.2.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{ $bl->subunit->SKPD_ID}}/{{ $bl->BL_ID}}" target="_blank">DPA-SKPD 2.2.1</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd31/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.1</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.2</a></li>
                   </ul>

@@ -167,7 +167,7 @@
 				</tr>
 				<tr class="">
 					<td class="">JUMLAH ANGGARAN</td>
-					<td class="">{{ number_format($bl->BL_PAGU,0,',','.') }}</td>
+					<td class="">{{ number_format($totalBL,0,',','.') }}</td>
 				</tr>
 				<tr class="">
 					<td class=""><br>Pengguna Anggaran / <br>Kuasa Pengguna Anggaran</td>
@@ -257,7 +257,7 @@
 	</tr>
 	<tr class="border">
 		<td>Jumlah</td>
-		<td colspan="2">: Rp. {{ number_format($bl->BL_PAGU,0,',','.') }}</td>
+		<td colspan="2">: Rp. {{ number_format($totalBL,0,',','.') }}</td>
 	</tr>
 </table>
 <table class="indikator">
@@ -282,7 +282,7 @@
 	<tr>
 		<td>Masukan</td>
 		<td>Dana yang dibutuhkan</td>
-		<td>Rp. {{ number_format($bl->BL_PAGU,0,',','.') }},00</td>
+		<td>Rp. {{ number_format($totalBL,0,',','.') }},00</td>
 	</tr>
 	@if($bl->output)
 	@foreach($bl->output as $out)
