@@ -318,7 +318,7 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Dasar Hukum</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Dasar Hukum " id="dashuk" >          
+          <input type="text" class="form-control" placeholder="Dasar Hukum" id="dashuk" >          
         </div> 
       </div>
 

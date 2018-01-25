@@ -113,9 +113,10 @@
 				<tr class="">
 					<td class=""><b>No DPA SKPD</b></td>
 					<td class="border">{{ $urusan->URUSAN_KODE }}</td>
-					<td class="border">{{ substr($skpd->SKPD_KODE,0,1) }}</td>
-					<td class="border">{{ substr($skpd->SKPD_KODE,2,2) }}</td>
 					<td class="border">{{ substr($skpd->SKPD_KODE,5,2) }}</td>
+					<td class="border">00</td>
+					<td class="border">00</td>
+					<td class="border">5</td>
 					<td class="border">1</td>
 				</tr>
 			</table>
@@ -128,18 +129,18 @@
 	<tr class="">
 		<td>&nbsp; </td>
 		<td>&nbsp; </td>
-		<td width="300px">
+		<td width="500px">
 			<table class="" width="100px">
 				<tr class="">
-					<td class="">URUSAN PEMERINTAHAN</td>
-					<td class="">{{ $urusan->URUSAN_KODE }} {{ $urusan->URUSAN_NAMA }}</td>
+					<td class=""><br><br> URUSAN PEMERINTAHAN</td>
+					<td class=""><br><br> {{ $urusan->URUSAN_KODE }} {{ $urusan->URUSAN_NAMA }}</td>
 				</tr>
 				<tr class="">
 					<td class="">ORGANISASI</td>
 					<td class="">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
 				</tr>
 				<tr class="">
-					<td class="">Pengguna Anggaran / Kuasa Pengguna Anggaran</td>
+					<td class=""><br>Pengguna Anggaran /<br> Kuasa Pengguna Anggaran</td>
 					<td class=""></td>
 				</tr>
 				<tr class="">
@@ -181,9 +182,9 @@
 	</tr>
 	<tr class="border">
 		<td class="border"> <h4>{{ $urusan->URUSAN_KODE }}</h4> </td>
-		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,0,1) }}</h4> </td>
-		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,2,2) }}</h4> </td>
 		<td class="border"> <h4>{{ substr($skpd->SKPD_KODE,5,2) }}</h4> </td>
+		<td class="border"> <h4>00</h4> </td>
+		<td class="border"> <h4>00</h4> </td>
 		<td class="border"> <h4>5</h4> </td>
 		<td class="border"> <h4>1</h4> </td>
 	</tr>
@@ -234,96 +235,136 @@
 		<td class="border">6 = (3x5)</td>
 	</tr>
 	
-	@php $total=0; @endphp
-	@foreach($btl as $btll)
-		@php $total += $btll->BTL_TOTAL; @endphp
-	@endforeach
+	
 
 	<tr>
-		<td class="border-rincian kiri border"><b>5</b></td>
-		<td class="border-rincian border"> <b> Belanja </b></td>
-		<td class="border-rincian border">   </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border kanan"> <b>{{ number_format($total,0,',','.') }},00</b> </td>
+		<td class="border-rincian kiri "><b>5</b></td>
+		<td class="border-rincian "> <b> Belanja </b></td>
+		<td class="border-rincian ">   </td>
+		<td class="border-rincian "> </td>
+		<td class="border-rincian "> </td>
+		<td class="border-rincian border kanan"> <b>{{ number_format($totbtl,0,',','.') }}</b> </td>
 	</tr>	
 
 	<tr>
-		<td class="border-rincian kiri border"><b>5.1</b></td>
-		<td class="border-rincian border"> <b> &nbsp; Belanja Tidak Langsung</b></td>
-		<td class="border-rincian border">   </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border kanan"> <b>{{ number_format($total,0,',','.') }},00</b> </td>
+		<td class="border-rincian kiri "><b>5.1</b></td>
+		<td class="border-rincian "> <b> &nbsp; Belanja Tidak Langsung</b></td>
+		<td class="border-rincian ">   </td>
+		<td class="border-rincian "> </td>
+		<td class="border-rincian "> </td>
+		<td class="border-rincian border kanan"> <b>{{ number_format($totbtl,0,',','.') }}</b> </td>
 	</tr>
+	@if($totbtl1 !=0)
+		<tr>
+			<td class="border-rincian kiri "><b>5.1.1</b></td>
+			<td class="border-rincian "> <b> &nbsp; &nbsp; Belanja Pegawai </b></td>
+			<td class="border-rincian ">   </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian border kanan"> <b>{{ number_format($totbtl1,0,',','.') }}</b> </td>
+		</tr>
+			@foreach($btl1 as $btll1)
+			<tr>
+				<td class="border-rincian kiri "> {{$btll1->rekening->REKENING_KODE}} </td>
+				<td class="border-rincian "> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll1->BTL_NAMA}} </td>
+				<td class="border-rincian tengah ">   {{$btll1->BTL_VOLUME}} </td>
+				<td class="border-rincian tengah "> {{$btll1->BTL_KOEFISIEN}} </td>
+				<td class="border-rincian kanan "> {{ number_format($btll1->BTL_TOTAL,0,',','.') }} </td>
+				<td class="border-rincian kanan border"> {{ number_format($btll1->BTL_TOTAL,0,',','.') }}</td>
+			</tr>	
+			@endforeach	
+	@endif		
 
-	<tr>
-		<td class="border-rincian kiri border"><b>5.1.1</b></td>
-		<td class="border-rincian border"> <b> &nbsp; &nbsp; Belanja Pegawai </b></td>
-		<td class="border-rincian border">   </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border kanan"> <b>{{ number_format($total,0,',','.') }},00</b> </td>
-	</tr>
+	@if($totbtl3 !=0)
+		<tr>
+			<td class="border-rincian kiri "><b>5.1.3</b></td>
+			<td class="border-rincian "> <b> &nbsp; &nbsp;  Belanja Subsidi </b></td>
+			<td class="border-rincian ">   </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian border kanan"> <b>{{ number_format($totbtl3,0,',','.') }}</b> </td>
+		</tr>
+		@foreach($btl3 as $btll3)
+		<tr>
+			<td class="border-rincian kiri "> {{$btll3->rekening->REKENING_KODE}} </td>
+			<td class="border-rincian "> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll3->BTL_NAMA}} </td>
+			<td class="border-rincian tengah ">   {{$btll3->BTL_VOLUME}} </td>
+			<td class="border-rincian tengah "> {{$btll3->BTL_KOEFISIEN}} </td>
+			<td class="border-rincian kanan "> {{ number_format($btll3->BTL_TOTAL,0,',','.') }} </td>
+			<td class="border-rincian kanan border"> {{ number_format($btll3->BTL_TOTAL,0,',','.') }}</td>
+		</tr>	
+		@endforeach	
+	@endif	
 
-	@php $total1=0; @endphp
-	@foreach($btl1 as $btll1)	
-		@php $total1 += $btll1->BTL_TOTAL; @endphp
-	@endforeach
-	<tr>
-		<td class="border-rincian kiri border"><b>5.1.1.01</b></td>
-		<td class="border-rincian border"> <b> &nbsp; &nbsp; &nbsp; Belanja Gaji dan Tunjangan </b></td>
-		<td class="border-rincian border">   </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border kanan"> <b>{{ number_format($total1,0,',','.') }},00</b> </td>
-	</tr>	
+	@if($totbtl4 !=0)
+		<tr>
+			<td class="border-rincian kiri "><b>5.1.4</b></td>
+			<td class="border-rincian "> <b> &nbsp; &nbsp;  Belanja Hibah </b></td>
+			<td class="border-rincian ">   </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian border kanan"> <b>{{ number_format($totbtl4,0,',','.') }}</b> </td>
+		</tr>
+		@foreach($btl4 as $btll4)
+		<tr>
+			<td class="border-rincian kiri "> {{$btll4->rekening->REKENING_KODE}} </td>
+			<td class="border-rincian "> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll4->BTL_NAMA}} </td>
+			<td class="border-rincian tengah ">   {{$btll4->BTL_VOLUME}} </td>
+			<td class="border-rincian tengah "> {{$btll4->BTL_KOEFISIEN}} </td>
+			<td class="border-rincian kanan "> {{ number_format($btll4->BTL_TOTAL,0,',','.') }} </td>
+			<td class="border-rincian kanan border"> {{ number_format($btll4->BTL_TOTAL,0,',','.') }}</td>
+		</tr>	
+		@endforeach	
+	@endif	
 
-	@php $total1=0; @endphp
+	@if($totbtl7 !=0)
+		<tr>
+			<td class="border-rincian kiri "><b>5.1.7</b></td>
+			<td class="border-rincian "> <b> &nbsp; &nbsp;  Belanja Bantuan Keuangan Kepada Provinsi/kabupaten/kota Dan Pemerintahan Desa </b></td>
+			<td class="border-rincian ">   </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian border kanan"> <b>{{ number_format($totbtl7,0,',','.') }}</b> </td>
+		</tr>
+		@foreach($btl7 as $btll7)
+		<tr>
+			<td class="border-rincian kiri "> {{$btll7->rekening->REKENING_KODE}} </td>
+			<td class="border-rincian "> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll7->BTL_NAMA}} </td>
+			<td class="border-rincian tengah ">   {{$btll7->BTL_VOLUME}} </td>
+			<td class="border-rincian tengah "> {{$btll7->BTL_KOEFISIEN}} </td>
+			<td class="border-rincian kanan "> {{ number_format($btll7->BTL_TOTAL,0,',','.') }} </td>
+			<td class="border-rincian kanan border"> {{ number_format($btll7->BTL_TOTAL,0,',','.') }}</td>
+		</tr>	
+		@endforeach	
+	@endif	
 
-	@foreach($btl1 as $btll1)
-	<tr>
-		<td class="border-rincian kiri border"> {{$btll1->rekening->REKENING_KODE}} </td>
-		<td class="border-rincian border"> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll1->BTL_NAMA}} </td>
-		<td class="border-rincian kanan border">   {{$btll1->BTL_VOLUME}} </td>
-		<td class="border-rincian tengah border"> {{$btll1->BTL_KOEFISIEN}} </td>
-		<td class="border-rincian kanan border"> {{ number_format($btll1->BTL_TOTAL,0,',','.') }} </td>
-		<td class="border-rincian kanan border"> {{ number_format($btll1->BTL_TOTAL,0,',','.') }},00 </td>
-		@php $total1 += $btll1->BTL_TOTAL; @endphp
-	</tr>	
-	@endforeach	
+	@if($totbtl8 !=0)
+		<tr>
+			<td class="border-rincian kiri "><b>5.1.8</b></td>
+			<td class="border-rincian "> <b> &nbsp; &nbsp;  Belanja Tidak Terduga</b></td>
+			<td class="border-rincian ">   </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian "> </td>
+			<td class="border-rincian border kanan"> <b>{{ number_format($totbtl8,0,',','.') }}</b> </td>
+		</tr>
+		@foreach($btl8 as $btll8)
+		<tr>
+			<td class="border-rincian kiri "> {{$btll8->rekening->REKENING_KODE}} </td>
+			<td class="border-rincian "> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll8->BTL_NAMA}} </td>
+			<td class="border-rincian tengah ">   {{$btll8->BTL_VOLUME}} </td>
+			<td class="border-rincian tengah "> {{$btll8->BTL_KOEFISIEN}} </td>
+			<td class="border-rincian kanan "> {{ number_format($btll8->BTL_TOTAL,0,',','.') }} </td>
+			<td class="border-rincian kanan border"> {{ number_format($btll8->BTL_TOTAL,0,',','.') }}</td>
+		</tr>	
+		@endforeach	
+	@endif	
 
 
-	@php $total2=0; @endphp
-	@foreach($btl2 as $btll2)	
-		@php $total2 += $btll2->BTL_TOTAL; @endphp
-	@endforeach
-	<tr>
-		<td class="border-rincian kiri border"><b>5.1.1.02</b></td>
-		<td class="border-rincian border"> <b> &nbsp; &nbsp; &nbsp; Belanja Tambahan Penghasilan PNS </b></td>
-		<td class="border-rincian border">   </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border"> </td>
-		<td class="border-rincian border kanan"> <b>{{ number_format($total2,0,',','.') }},00</b> </td>
-	</tr>	
-
-	@php $total2=0; @endphp
-
-	@foreach($btl2 as $btll2)
-	<tr>
-		<td class="border-rincian kiri border"> {{$btll2->rekening->REKENING_KODE}} </td>
-		<td class="border-rincian border"> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll2->BTL_NAMA}} </td>
-		<td class="border-rincian kanan border">   {{$btll2->BTL_VOLUME}} </td>
-		<td class="border-rincian tengah border"> {{$btll2->BTL_KOEFISIEN}} </td>
-		<td class="border-rincian kanan border"> {{ number_format($btll2->BTL_TOTAL,0,',','.') }} </td>
-		<td class="border-rincian kanan border"> {{ number_format($btll2->BTL_TOTAL,0,',','.') }},00 </td>
-		@php $total2 += $btll2->BTL_TOTAL; @endphp
-	</tr>	
-	@endforeach	
+	
 	
 	<tr class="border">
 		<td class="border kanan" colspan="5"><b>Jumlah</b></td>
-		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td class="border kanan"><b>{{ number_format($totbtl,0,',','.') }},00</b></td>
 	</tr>
 
 	<tr class="border">
