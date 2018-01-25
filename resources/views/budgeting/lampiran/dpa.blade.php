@@ -460,7 +460,7 @@
 		<td class="tengah">Triwulan I</td>
 		<td class="kiri">Rp. {{ number_format($akb_bl->tri1,0,',','.') }}</td>
 		<td width="50%"> </td>
-		<td>Bandung, 3 Januari 2018</td>
+		<td>Bandung, 2 Januari 2018</td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan II</td>
