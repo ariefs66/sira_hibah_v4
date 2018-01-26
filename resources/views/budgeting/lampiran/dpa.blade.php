@@ -82,6 +82,7 @@
 
 <table class="">
 	<br><br><br><br><br><br><br>
+	<br><br><br><br><br>
 	
 	<tr>
 		<td class="tengah">
@@ -196,6 +197,7 @@
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br>
+<br><br><br><br><br><br>
 
 
 <table class="header">
@@ -220,7 +222,7 @@
 		<td class="border">2</td>
 	</tr>
 	<tr>
-		<td colspan="8">
+		<td colspan="10">
 			<h4>Kota Bandung<br>Tahun Anggaran {{$tahun}}</h4>
 		</td>
 	</tr>

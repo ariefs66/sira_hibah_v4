@@ -82,6 +82,7 @@
 
 <table class="">
 	<br><br><br><br><br><br><br>
+	<br><br><br><br><br><br>
 	<tr>
 		<td class="tengah">
 			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
@@ -170,6 +171,8 @@
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br>
+<br><br><br><br><br><br>
+<br><br><br><br><br>
 
 
 <table class="header">

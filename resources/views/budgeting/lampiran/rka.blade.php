@@ -129,7 +129,7 @@
 	</tr>
 	<tr class="border">
 		<td>Jumlah Tahun n-1</td>
-		<td colspan="2">: Rp. {{ number_format($bl->BL_PAGU,0,',','.') }}</td>
+		<td colspan="2">: Rp. {{ number_format($totalbl,0,',','.') }}</td>
 	</tr>
 	<tr class="border">
 		<td>Jumlah Tahun n+1</td>
@@ -158,7 +158,7 @@
 	<tr>
 		<td>Masukan</td>
 		<td>Dana yang dibutuhkan</td>
-		<td>Rp. {{ number_format($bl->BL_PAGU,0,',','.') }},00</td>
+		<td>Rp. {{ number_format($totalbl,0,',','.') }},00</td>
 	</tr>
 	@if($bl->output)
 	@foreach($bl->output as $out)
