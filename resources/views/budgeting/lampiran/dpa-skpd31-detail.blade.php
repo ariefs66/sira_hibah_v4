@@ -306,8 +306,8 @@
 		<td class="kiri"> </td>
 		<td width="50%"> <br><br><br><br><br><br></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
-			Drs H. DADANG SUPRIATNA, MH <br>
-			<br>NIP. 19610308 199103 1 009 </span></td>
+			Drs. DADANG SUPRIATNA, MH <br>
+			<br> </span> NIP. 19610308 199103 1 009 </td>
 	</tr>
 </table>
 </div>
