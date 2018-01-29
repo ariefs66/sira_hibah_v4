@@ -96,27 +96,27 @@
 <table class="detail">	
 	<tr class="border">
 		<td width="18%">Urusan</td>
-		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_NAMA}}</td> 
+		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}} {{$bl->kegiatan->program->urusan->URUSAN_NAMA}}</td> 
 		<td></td>
 	</tr>
 	<tr class="border">
 		<td width="18%">Nama SKPD</td>
-		<td width="55%">: {{$bl->skpd->SKPD_NAMA}}</td> 
+		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->skpd->SKPD_KODE}} {{$bl->skpd->SKPD_NAMA}}</td> 
 		<td></td>
 	</tr>
 	<tr class="border">
 		<td width="18%">Sub SKPD </td>
-		<td width="55%">: {{$bl->subunit->SUB_NAMA}}</td> 
+		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->skpd->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}} {{$bl->subunit->SUB_NAMA}}</td> 
 		<td></td>
 	</tr>
 	<tr class="border">
 		<td width="18%">Nama Program</td>
-		<td width="85%">: {{$bl->kegiatan->program->PROGRAM_NAMA}}</td> 
+		<td width="85%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->skpd->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}}.{{$bl->kegiatan->program->PROGRAM_KODE}} {{$bl->kegiatan->program->PROGRAM_NAMA}}</td> 
 		<td></td>
 	</tr>
 	<tr class="border">
 		<td width="18%">Nama Kegiatan</td>
-		<td width="80%">: {{$bl->kegiatan->KEGIATAN_NAMA}}</td> 
+		<td width="80%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->skpd->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}}.{{$bl->kegiatan->program->PROGRAM_KODE}}.{{$bl->kegiatan->KEGIATAN_KODE}} {{$bl->kegiatan->KEGIATAN_NAMA}}</td> 
 		<td></td>
 	</tr>
 </table>
