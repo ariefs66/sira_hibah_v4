@@ -267,7 +267,7 @@
 	<tr>
 		<td></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
-			Drs H. DADANG SUPRIATNA, MH 
+			Drs. DADANG SUPRIATNA, MH 
 			 </span></td>
 	</tr>
 	<tr>
