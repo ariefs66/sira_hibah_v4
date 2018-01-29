@@ -4565,7 +4565,7 @@ class lampiranController extends Controller
         
         $akb  = AKB_BL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BL.REKENING_ID')
                     ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
-                    ->where('DAT_AKB_BL.BL_ID',$id)->get();
+                    ->where('DAT_AKB_BL.BL_ID',$id)->orderby('REKENING_KODE')->get();
 
         $bl   = BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
                         ->where('DAT_BL.BL_ID',$id)->first();           // dd($akb->SKPD_ID);         
