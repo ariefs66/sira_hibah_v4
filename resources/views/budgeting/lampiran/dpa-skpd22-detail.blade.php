@@ -199,15 +199,29 @@
 				<td class="border-rincian kiri "> {{$bel->KEGIATAN_KODE}} </td>
 				<td class="border-rincian "> &nbsp; &nbsp; {{$bel->KEGIATAN_NAMA}} </td>
 				<td class="border-rincian "> &nbsp; {{$bel->LOKASI_NAMA}} </td>
-				<td class="border-rincian "> </td>		
+
+				<td class="border-rincian "> 
+				@php $found = false; @endphp
+				@foreach($bl_idk as $bl_i)
+					@if($bl_i->BL_ID == $bel->BL_ID)
+						{{$bl_i->OUTPUT_TARGET}} {{$bl_i->SATUAN_NAMA}}
+						@php $found = true; @endphp
+					@endif
+					@if(!$found)
+					
+				@endif		
+				@endforeach	
+				 </td>
+							
+
 				<td class="border-rincian "> APBD </td>
 				@php $found = false; @endphp
 				@foreach($akb_bl as $akb)
 					@if($bel->BL_ID == $akb->BL_ID)
-							<td class="border-rincian kanan"> {{$akb->tri1}}</td>
-							<td class="border-rincian kanan"> {{$akb->tri2}}</td>
-							<td class="border-rincian kanan"> {{$akb->tri3}}</td>
-							<td class="border-rincian kanan"> {{$akb->tri4}}</td>
+							<td class="border-rincian kanan"> {{ number_format($akb->tri1,0,',','.') }} </td>
+							<td class="border-rincian kanan"> {{ number_format($akb->tri2,0,',','.') }}</td>
+							<td class="border-rincian kanan"> {{ number_format($akb->tri3,0,',','.') }}</td>
+							<td class="border-rincian kanan"> {{ number_format($akb->tri4,0,',','.') }}</td>
 						@php $found = true; @endphp
 					@endif
 				@endforeach
@@ -217,7 +231,7 @@
 					<td class="border-rincian"></td>
 					<td class="border-rincian"></td>
 				@endif
-				<td class="border-rincian kanan border"> {{ number_format($bel->BL_PAGU,0,',','.') }},00</td>
+				<td class="border-rincian kanan border"> {{ number_format($bel->pagu,0,',','.') }},00</td>
 				@php $total += $bel->BL_PAGU; @endphp
 			</tr>
 			@endif

@@ -4397,12 +4397,18 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $totbl = BL::where('DAT_BL.SKPD_ID',$s)->sum('BL_PAGU');
+        $totbl = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('DAT_BL.BL_TAHUN',$tahun)
+                        ->where('DAT_BL.BL_DELETED',0)
+                        ->sum('RINCIAN_TOTAL');
 
         $bl_p = BL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                    ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                    ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
                    ->where('DAT_BL.SKPD_ID',$s)
+                   ->where('DAT_BL.BL_TAHUN',$tahun)
+                   ->where('DAT_BL.BL_DELETED',0)
                    ->groupBy("REF_KEGIATAN.PROGRAM_ID","PROGRAM_NAMA","PROGRAM_KODE")
                    ->orderby("PROGRAM_KODE")
                    ->selectRaw('"REF_KEGIATAN"."PROGRAM_ID","PROGRAM_NAMA", "PROGRAM_KODE", sum("BL_PAGU") as pagu')
@@ -4412,17 +4418,23 @@ class lampiranController extends Controller
                    ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                    ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
                    ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL.LOKASI_ID') 
+                   ->join('BUDGETING.DAT_RINCIAN','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID') 
                    ->where('DAT_BL.SKPD_ID',$s)
+                   ->where('DAT_BL.BL_TAHUN',$tahun)
+                   ->where('DAT_BL.BL_DELETED',0)
                    ->orderby("KEGIATAN_KODE")
-                   ->selectRaw('"DAT_BL"."BL_ID","REF_KEGIATAN"."PROGRAM_ID", "DAT_BL"."KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA"')
+                   ->groupBy("DAT_BL.BL_ID","REF_KEGIATAN.PROGRAM_ID", "DAT_BL.KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA")
+                   ->selectRaw('"DAT_BL"."BL_ID","REF_KEGIATAN"."PROGRAM_ID", "DAT_BL"."KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA", SUM("RINCIAN_TOTAL") as pagu')
                    ->get(); 
 
-        $bl_idk = BL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                   ->join('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID') 
+        $bl_idk = BL::join('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID') 
                    ->join('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')
                    ->where('DAT_BL.SKPD_ID',$s)
-                   ->selectRaw('"KEGIATAN_ID","OUTPUT_TARGET","SATUAN_NAMA"')
+                   ->where('DAT_BL.BL_TAHUN',$tahun)
+                   ->where('DAT_BL.BL_DELETED',0)
+                   ->selectRaw(' "DAT_BL"."BL_ID","OUTPUT_TARGET","SATUAN_NAMA"')
                    ->get(); 
+
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
