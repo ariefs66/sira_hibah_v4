@@ -3686,74 +3686,61 @@ class lampiranController extends Controller
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
-        $pendapatan = Pendapatan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
-                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->get();
+        $pendapatan = Pendapatan::where('SKPD_ID',$s)
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->get();
                         
                         
-        $btl = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                        ->where('DAT_BTL.SKPD_ID',$s)
-                        ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-
-        $btl1   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                    ->where('DAT_BTL.SKPD_ID',$s)
-                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.1%');})
+        $btl = BTL::where('DAT_BTL.SKPD_ID',$s)
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
-        $btl2   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
+        $btl1   = BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                     ->where('DAT_BTL.SKPD_ID',$s)
-                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.3%');})
+                    ->where('REKENING_KODE','like','5.1.1%')
                     ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
 
-        $btl3   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
+        $btl2   = BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                     ->where('DAT_BTL.SKPD_ID',$s)
-                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.4%');})
-                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');  
-
-        $btl4   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
+                    ->where('REKENING_KODE','like','5.1.3%')
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+        $btl3   = BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                     ->where('DAT_BTL.SKPD_ID',$s)
-                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.7%');})
-                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL'); 
-
-        $btl5   = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
+                    ->where('REKENING_KODE','like','5.1.4%')
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+        $btl4   = BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                     ->where('DAT_BTL.SKPD_ID',$s)
-                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.8%');})
-                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');                     
-        
+                    ->where('REKENING_KODE','like','5.1.7%')
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+        $btl5   = BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                    ->where('DAT_BTL.SKPD_ID',$s)
+                    ->where('REKENING_KODE','like','5.1.8%')
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
         
         $bl     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
-                        ->whereHas('bl',function($r) use($tahun){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
-                        })
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
                         ->sum('RINCIAN_TOTAL');
 
             $bl1     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
-                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
-                        ->whereHas('bl',function($r) use($tahun){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
-                        })
+                        ->where('REKENING_KODE','like','5.2.1%')
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
                         ->sum('RINCIAN_TOTAL');
-
+            
             $bl2     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
-                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
-                        ->whereHas('bl',function($r) use($tahun){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
-                        })
+                        ->where('REKENING_KODE','like','5.2.2%')
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
                         ->sum('RINCIAN_TOTAL');
-
+           
             $bl3     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                         ->where('DAT_BL.SKPD_ID',$s)
-                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
-                        ->whereHas('bl',function($r) use($tahun){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
-                        })
-                        ->sum('RINCIAN_TOTAL'); 
+                        ->where('REKENING_KODE','like','5.2.3%')
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->sum('RINCIAN_TOTAL');                        
                                                          
                         
         $pembiayaan = Pembiayaan::All();  
