@@ -210,11 +210,11 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 28 Desember 2017</td>
+		<td>Bandung, 28 Desember 2017 </td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>{{ $skpd->SKPD_BENDAHARA }}</td>
+		<td>{{ $skpd->SKPD_BENDAHARA }} </td>
 	</tr>
 	<tr>
 		<td></td>
