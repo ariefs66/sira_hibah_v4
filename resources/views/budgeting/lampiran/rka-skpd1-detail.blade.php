@@ -188,11 +188,11 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, {{$tgl}} {{$bln}} {{$tahun}}</td>
+		<td>Bandung, 28 Desember 2017</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>Kepala {{ $skpd->SKPD_NAMA }}</td>
+		<td>{{ $skpd->SKPD_BENDAHARA }}</td>
 	</tr>
 	<tr>
 		<td></td>
