@@ -338,7 +338,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>Kepala {{ $bl->subunit->skpd->SKPD_NAMA }}</td>
+		<td>{{ $bl->subunit->skpd->SKPD_NAMA }}</td>
 	</tr>
 	<tr>
 		<td></td>
