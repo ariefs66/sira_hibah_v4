@@ -137,7 +137,7 @@
 		<tr>
 			<td class="border-rincian kiri border"><b>{{ $urusan->URUSAN_KODE }}.{{ $skpd->SKPD_KODE }}.1.{{$pen->rekening->REKENING_KODE}}</b></td>
 			<td class="border-rincian border"> {{$pen->PENDAPATAN_NAMA}} </td>
-			<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }},00 </td>
+			<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }} </td>
 			@php $total += $pen->PENDAPATAN_TOTAL; @endphp
 		</tr>	
 		@endforeach
@@ -148,19 +148,19 @@
 	<tr>
 		<td class="border-rincian kiri border"><b>5</b></td>
 		<td class="border-rincian border"><b> Belanja</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($btl+$bl,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($btl+$bl,0,',','.') }}</b></td>
 	</tr>
 	<!-- belanja tidak langsung -->
 	<tr>
 		<td class="border-rincian kiri border"><b>5.1</b></td>
 		<td class="border-rincian border"><b> &nbsp; Belanja Tidak Langsung</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($btl,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($btl,0,',','.') }}</b></td>
 	</tr>
 
 	<tr>
 		<td class="border-rincian kiri border">5.1.1</td>
 		<td class="border-rincian border">&nbsp; &nbsp; Belanja Pegawai</td>
-		<td class="border-rincian kanan border">{{ number_format($btl1,0,',','.') }},00</td>
+		<td class="border-rincian kanan border">{{ number_format($btl1,0,',','.') }}</td>
 	</tr>
 
 
@@ -168,22 +168,22 @@
 	<tr>
 		<td class="border-rincian kiri border"><b>5.2</b></td>
 		<td class="border-rincian border"><b> &nbsp; Belanja Langsung</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($bl,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($bl,0,',','.') }}</b></td>
 	</tr>
 		<tr>
 			<td class="border-rincian kiri border">5.2.1</td>
 			<td class="border-rincian border">&nbsp; &nbsp; Belanja Pegawai</td>
-			<td class="border-rincian kanan border">{{ number_format($bl1,0,',','.') }},00</td>
+			<td class="border-rincian kanan border">{{ number_format($bl1,0,',','.') }}</td>
 		</tr>
 		<tr>
 			<td class="border-rincian kiri border">5.2.2</td>
 			<td class="border-rincian border">&nbsp; &nbsp; Belanja Barang dan Jasa</td>
-			<td class="border-rincian kanan border">{{ number_format($bl2,0,',','.') }},00</td>
+			<td class="border-rincian kanan border">{{ number_format($bl2,0,',','.') }}</td>
 		</tr>
 		<tr>
 			<td class="border-rincian kiri border">5.2.3</td>
 			<td class="border-rincian border">&nbsp; &nbsp; Belanja Modal</td>
-			<td class="border-rincian kanan border">{{ number_format($bl3,0,',','.') }},00</td>
+			<td class="border-rincian kanan border">{{ number_format($bl3,0,',','.') }}</td>
 		</tr>
 
 
@@ -197,24 +197,24 @@
 	<tr class="border">
 		<td class="border kanan" colspan="2"><b>Surplus / (Defisit)</b></td>
 		<td class="border kanan"><b>
-			@php $tot = $total - $btl + $bl; @endphp
+			@php $tot = $total-($btl + $bl); @endphp
 			@if($tot < 0)
 			 ({{ number_format(trim($tot,"-"),0,',','.') }})
 			@else
-			 {{ number_format($tot,0,',','.') }}
+			  {{ number_format($tot,0,',','.') }}
 			@endif  
-		,00</b></td>
+		</b></td>
 	</tr>
 	</tbody>	
 </table>
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 28 Desember 2017</td>
+		<td>Bandung, 28 Desember 2017 </td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>{{ $skpd->SKPD_BENDAHARA }}</td>
+		<td>{{ $skpd->SKPD_BENDAHARA }} </td>
 	</tr>
 	<tr>
 		<td></td>
