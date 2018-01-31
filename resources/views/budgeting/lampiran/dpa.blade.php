@@ -457,7 +457,7 @@
 	</tr>
 	</tbody>	
 </table>
-@if($bl->BL_ID == 2945) <br><br><br> <br><br><br>@endif
+@if($bl->BL_ID == 2945) <br><br><br> <br><br><br><br><br><br>@endif
 <table class="ttd">
 	<tr>
 		<td class="tengah">Triwulan I</td>
