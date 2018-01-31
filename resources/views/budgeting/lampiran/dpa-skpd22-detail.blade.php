@@ -208,8 +208,7 @@
 						@php $found = true; @endphp
 					@endif
 					@if(!$found)
-					
-				@endif		
+					@endif		
 				@endforeach	
 				 </td>
 							
