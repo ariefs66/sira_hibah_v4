@@ -488,6 +488,7 @@
 		<td width="50%"> </td>
 		<td></td>
 	</tr>
+	@if($bl->BL_ID == 2945) <br><br><br>@endif
 	<tr>
 		<td class="kiri"> </td>
 		<td class="kiri"> </td>
