@@ -26,7 +26,7 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                       <li><a class="open-form-btl">Tambah Komponen</a></li>
-                      <li><a class="open-ubah-komponen">Ubah Komponen</a></li>
+                      <!-- <li><a class="open-ubah-komponen">Ubah Komponen</a></li> -->
                       <li><a class="open-tambah-rekening">Tambah Rekening</a></li>
                     </ul>
                   </div>
