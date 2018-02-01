@@ -98,7 +98,7 @@ class dashboardController extends Controller
                             ->where('SKPD_ID',$skpd)
                             ->sum('RINCIAN_TOTAL');
             }
-            elseif($status=="perubahan"){
+            elseif($status=="perubahan" || $status=="pergeseran"){
                 $bl     = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
@@ -256,7 +256,7 @@ class dashboardController extends Controller
                             })
                             ->sum('RINCIAN_TOTAL');
             }
-            elseif($status=="perubahan"){
+            elseif($status=="perubahan" || $status=="pergeseran"){
                 $bl     = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
                 $pagu   = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
                 $blv    = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->count();
