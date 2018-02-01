@@ -557,6 +557,7 @@ class usulanController extends Controller
                 $komponen->KOMPONEN_SPESIFIKASI = $getKode->USULAN_SPESIFIKASI;
                 $komponen->KOMPONEN_HARGA       = $getKode->USULAN_HARGA;
                 $komponen->KOMPONEN_SATUAN      = $getKode->USULAN_SATUAN;
+                $komponen->TIME_CREATED         = Carbon\Carbon::now();
                 $komponen->save();
 
                 $idKomponen     = Komponen::where('KOMPONEN_KODE',$getKode->katkom->KATEGORI_KODE.".".$kode)->value('KOMPONEN_ID');
