@@ -184,7 +184,7 @@
 				</tr>
 				<tr class="">
 					<td class="">JABATAN</td>
-					<td class="">Kepala {{ $skpd->SKPD_BENDAHARA }}</td>
+					<td class="">{{ $skpd->SKPD_BENDAHARA }}</td>
 				</tr>
 			</table>
 		</td>
