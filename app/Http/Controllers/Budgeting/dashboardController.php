@@ -92,9 +92,11 @@ class dashboardController extends Controller
                                     $s->where('SKPD_ID',$skpd);
                             });
                         })->sum('RINCIAN_TOTAL');  
-                $pagu   = BL::whereHas('subunit',function($q) use ($skpd){
-                                    $q->where('SKPD_ID',$skpd);
-                            })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
+                
+                $pagu   = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                            ->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)
+                            ->where('SKPD_ID',$skpd)
+                            ->sum('RINCIAN_TOTAL');
             }
             elseif($status=="perubahan"){
                 $bl     = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
@@ -231,7 +233,9 @@ class dashboardController extends Controller
     	}else{
             if($status=="murni"){
                 $bl     = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->get();
-                $pagu   = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->sum('BL_PAGU');
+                $pagu   = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                            ->where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)
+                            ->sum('RINCIAN_TOTAL');
                 $blv    = BL::where('BL_TAHUN',$tahun)->where('BL_VALIDASI',1)->where('BL_DELETED',0)->count();
                 $bln    = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->count();
                 $btl    = BTL::where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
