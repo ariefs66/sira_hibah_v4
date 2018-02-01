@@ -201,6 +201,7 @@ class komponenController extends Controller
         $k->KOMPONEN_HARGA          = Input::get('KOMPONEN_HARGA');
         $k->KOMPONEN_SATUAN         = Input::get('KOMPONEN_SATUAN');
         $k->KOMPONEN_TAHUN          = $tahun;
+        $k->TIME_CREATED            = Carbon\Carbon::now();
         $k->save();
 
         $id         = Komponen::where('KOMPONEN_TAHUN',$tahun)->where('KOMPONEN_KODE',$kode)->value('KOMPONEN_ID');
@@ -222,6 +223,7 @@ class komponenController extends Controller
         'KOMPONEN_NAMA'       => Input::get('KOMPONEN_NAMA'),
         'KOMPONEN_SPESIFIKASI'=> Input::get('KOMPONEN_SPESIFIKASI'),
         'KOMPONEN_SATUAN'     => Input::get('KOMPONEN_SATUAN'),
+        'TIME_UPDATED'        => Carbon\Carbon::now(),
         'KOMPONEN_HARGA'      => Input::get('KOMPONEN_HARGA')]);
         
         $log        = new Log;
@@ -278,6 +280,7 @@ class komponenController extends Controller
                 $komp->KOMPONEN_HARGA       = $data->jumlah;
                 $komp->KOMPONEN_SATUAN      = $data->satuan;
                 $komp->KOMPONEN_KUNCI       = 0;
+                $komp->TIME_CREATED         = Carbon\Carbon::now();
                 $komp->save();
 
                 $komponen   = Komponen::where('KOMPONEN_TAHUN',$tahun)
@@ -329,6 +332,7 @@ class komponenController extends Controller
                 $komp->KOMPONEN_HARGA       = $data->jumlah;
                 $komp->KOMPONEN_SATUAN      = $data->satuan;
                 $komp->KOMPONEN_KUNCI       = 0;
+                $komp->TIME_CREATED         = Carbon\Carbon::now();
                 $komp->save();
 
                 $komponen   = Komponen::where('KOMPONEN_TAHUN',$tahun)
