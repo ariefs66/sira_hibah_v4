@@ -79,7 +79,7 @@
 	<tr>
 		<td></td>
 		<td></td>
-		<td colspan="3" style="text-align: justify;font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dipermaklumkan dengan hormat, menindak lanjuti Surat Edaran Sekertaris Daerah Kota Bandung Nomor @if($thn == 2018) 800/SE. 009 – BPKA Tanggal 26 Januari 2018 @else 027/SE. 088 – BPKA Tanggal 6 Juli 2017 @endif tentang Usulan e-Komponen untuk penyusunan Keputusan Walikota Bandung tentang Standar Satuan Harga dan Analisa Standar Belanja Pelaksanaan Anggaran Pendapatan dan Belanja Daerah Tahun Anggaran {{ $thn }}, bersama ini kami mengajukan permohonan penambahan/perubahan komponen agar dapat dimasukkan ke dalam Keputusan Walikota termaksud (daftar terlampir).<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Demikian kami sampaikan, atas perhatiannya  kami ucapkan terima kasih.</td>
+		<td colspan="3" style="text-align: justify;font-size: 16px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dipermaklumkan dengan hormat, menindak lanjuti Surat Edaran Sekertaris Daerah Kota Bandung Nomor @if($thn == 2018) 903/SE.009 – BPKA Tanggal 26 Januari 2018 @else 027/SE. 088 – BPKA Tanggal 6 Juli 2017 @endif tentang Usulan e-Komponen untuk penyusunan Keputusan Walikota Bandung tentang Standar Satuan Harga dan Analisa Standar Belanja Pelaksanaan Anggaran Pendapatan dan Belanja Daerah Tahun Anggaran {{ $thn }}, bersama ini kami mengajukan permohonan penambahan/perubahan komponen agar dapat dimasukkan ke dalam Keputusan Walikota termaksud (daftar terlampir).<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Demikian kami sampaikan, atas perhatiannya  kami ucapkan terima kasih.</td>
 	</tr>
 </table>
 <table width="100%" style="margin-top: 40px;">
