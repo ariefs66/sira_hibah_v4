@@ -153,7 +153,7 @@
 				</tr>
 				<tr class="">
 					<td class="">Jabatan</td>
-					<td class="">Kepala {{ $skpd->SKPD_NAMA }}</td>
+					<td class="">{{ $skpd->SKPD_BENDAHARA }}</td>
 				</tr>
 			</table>
 		</td>
