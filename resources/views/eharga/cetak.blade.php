@@ -106,11 +106,11 @@
 </table>
 <br><br>
 Tembusan :<br>
-1. Bapak Walikota Bandung (sebagai laporan);<br>
-2. Bapak Wakil Walikota Bandung (sebagai laporan);<br>
-3. Bapak Sekretaris Daerah Kota Bandung (sebagai laporan);<br>
-4. Bapak Asisten Pemerintahan Kota Bandung;<br>
-5. Bapak Asisten Administrasi Kota Bandung;<br>
+1. Walikota Bandung (sebagai laporan);<br>
+2. Wakil Walikota Bandung (sebagai laporan);<br>
+3. Sekretaris Daerah Kota Bandung (sebagai laporan);<br>
+4. Asisten Pemerintahan Kota Bandung;<br>
+5. Asisten Administrasi Kota Bandung;<br>
 <img style="margin-top: 20px" src="{{ url('/') }}/qr/{{$surat->SURAT_NO}}.png"><br>
 <p style="margin-top: -20px;margin-left: 40px;">{{$surat->SURAT_NO}}</p>
 <div class="page-break"></div>
