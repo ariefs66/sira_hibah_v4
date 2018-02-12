@@ -443,7 +443,7 @@
 	  @if($k->RINCIAN_PAJAK == 0)
 	  <td class="border-rincian kanan">0,00</td>
 	  @else
-	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL/10,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA*10/100,0,',','.') }},00 </td>
 	  @endif
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td>
 	 </tr>
