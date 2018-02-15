@@ -25,6 +25,7 @@ use App\Model\Tag;
 use App\Model\Lokasi;
 use App\Model\Satuan;
 use App\Model\BL;
+use App\Model\BLPerubahan;
 use App\Model\Kamus;
 use App\Model\Usulan;
 use App\Model\Indikator;
@@ -172,34 +173,66 @@ class downloadController extends Controller
     }
 
     public function rekapRincian($tahun,$status,$id){
-    	$bl 	= BL::where('BL_ID',$id)->first();
-    	$data 	= DB::select('SELECT "SUBRINCIAN_NAMA" AS "SUBRINCIAN",
-								"REKENING_KODE" AS "KODE REKENING", 
-								"REKENING_NAMA" AS "NAMA REKENING",
-								"KOMPONEN_KODE" AS "KODE KOMPONEN", 
-								"KOMPONEN_NAMA" AS "NAMA KOMPONEN",
-								"RINCIAN_VOLUME" AS "VOLUME", 
-								"RINCIAN_KOEFISIEN" AS "KOEFISIEN",
-								"KOMPONEN_HARGA" AS "HARGA SATUAN",
-								"RINCIAN_PAJAK"||\' %\' AS "PAJAK",
-								"RINCIAN_TOTAL" AS "TOTAL"
-								FROM "BUDGETING"."DAT_RINCIAN" RINCIAN
-								JOIN "REFERENSI"."REF_REKENING" REK
-								ON RINCIAN."REKENING_ID" = REK."REKENING_ID"
-								JOIN "EHARGA"."DAT_KOMPONEN" KOMP
-								ON RINCIAN."KOMPONEN_ID" = KOMP."KOMPONEN_ID"
-								JOIN "BUDGETING"."DAT_SUBRINCIAN" SUB
-								ON RINCIAN."SUBRINCIAN_ID" = SUB."SUBRINCIAN_ID"
-								WHERE RINCIAN."BL_ID" = '.$id.'
-								ORDER BY RINCIAN."SUBRINCIAN_ID","REKENING_KODE","KOMPONEN_NAMA"');
-    	$data = array_map(function ($value) {
-		    return (array)$value;
-		}, $data);
-    	Excel::create('REKAP BELANJA '.$bl->kegiatan->KEGIATAN_NAMA." ".Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
-	        $excel->sheet('REKAP BELANJA', function($sheet) use ($data) {
-	            $sheet->fromArray($data);
-	        });
-	    })->download('xls');
+    	if($status=='murni'){
+    		$bl 	= BL::where('BL_ID',$id)->first();
+	    	$data 	= DB::select('SELECT "SUBRINCIAN_NAMA" AS "SUBRINCIAN",
+									"REKENING_KODE" AS "KODE REKENING", 
+									"REKENING_NAMA" AS "NAMA REKENING",
+									"KOMPONEN_KODE" AS "KODE KOMPONEN", 
+									"KOMPONEN_NAMA" AS "NAMA KOMPONEN",
+									"RINCIAN_VOLUME" AS "VOLUME", 
+									"RINCIAN_KOEFISIEN" AS "KOEFISIEN",
+									"KOMPONEN_HARGA" AS "HARGA SATUAN",
+									"RINCIAN_PAJAK"||\' %\' AS "PAJAK",
+									"RINCIAN_TOTAL" AS "TOTAL"
+									FROM "BUDGETING"."DAT_RINCIAN" RINCIAN
+									JOIN "REFERENSI"."REF_REKENING" REK
+									ON RINCIAN."REKENING_ID" = REK."REKENING_ID"
+									JOIN "EHARGA"."DAT_KOMPONEN" KOMP
+									ON RINCIAN."KOMPONEN_ID" = KOMP."KOMPONEN_ID"
+									JOIN "BUDGETING"."DAT_SUBRINCIAN" SUB
+									ON RINCIAN."SUBRINCIAN_ID" = SUB."SUBRINCIAN_ID"
+									WHERE RINCIAN."BL_ID" = '.$id.'
+									ORDER BY RINCIAN."SUBRINCIAN_ID","REKENING_KODE","KOMPONEN_NAMA"');
+	    	$data = array_map(function ($value) {
+			    return (array)$value;
+			}, $data);
+	    	Excel::create('REKAP BELANJA '.$bl->kegiatan->KEGIATAN_NAMA." ".Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+		        $excel->sheet('REKAP BELANJA', function($sheet) use ($data) {
+		            $sheet->fromArray($data);
+		        });
+		    })->download('xls');
+    	}else{
+    		$bl 	= BLPerubahan::where('BL_ID',$id)->first();
+	    	$data 	= DB::select('SELECT "SUBRINCIAN_NAMA" AS "SUBRINCIAN",
+									"REKENING_KODE" AS "KODE REKENING", 
+									"REKENING_NAMA" AS "NAMA REKENING",
+									"KOMPONEN_KODE" AS "KODE KOMPONEN", 
+									"KOMPONEN_NAMA" AS "NAMA KOMPONEN",
+									"RINCIAN_VOLUME" AS "VOLUME", 
+									"RINCIAN_KOEFISIEN" AS "KOEFISIEN",
+									"KOMPONEN_HARGA" AS "HARGA SATUAN",
+									"RINCIAN_PAJAK"||\' %\' AS "PAJAK",
+									"RINCIAN_TOTAL" AS "TOTAL"
+									FROM "BUDGETING"."DAT_RINCIAN_PERUBAHAN" RINCIAN
+									JOIN "REFERENSI"."REF_REKENING" REK
+									ON RINCIAN."REKENING_ID" = REK."REKENING_ID"
+									JOIN "EHARGA"."DAT_KOMPONEN" KOMP
+									ON RINCIAN."KOMPONEN_ID" = KOMP."KOMPONEN_ID"
+									JOIN "BUDGETING"."DAT_SUBRINCIAN_PERUBAHAN" SUB
+									ON RINCIAN."SUBRINCIAN_ID" = SUB."SUBRINCIAN_ID"
+									WHERE RINCIAN."BL_ID" = '.$id.'
+									ORDER BY RINCIAN."SUBRINCIAN_ID","REKENING_KODE","KOMPONEN_NAMA"');
+	    	$data = array_map(function ($value) {
+			    return (array)$value;
+			}, $data);
+	    	Excel::create('REKAP BELANJA '.$bl->kegiatan->KEGIATAN_NAMA." ".Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+		        $excel->sheet('REKAP BELANJA', function($sheet) use ($data) {
+		            $sheet->fromArray($data);
+		        });
+		    })->download('xls');
+    	}
+    	
     }
 
     public function rekapMusrenbangSKPD($tahun,$status,$id){

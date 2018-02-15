@@ -123,7 +123,11 @@ class blController extends Controller
         //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
-                            ->where('TAHAPAN_STATUS','perubahan')
+                            //->where('TAHAPAN_STATUS','perubahan')
+                            ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })
                             ->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
@@ -181,7 +185,12 @@ class blController extends Controller
         if($status == 'murni')
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         else
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+            ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })
+            ->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
         }else{
@@ -440,7 +449,12 @@ class blController extends Controller
     public function showRincianPerubahan($tahun,$status,$id){
         //$now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
         $now = date('Y-m-d H:m:s');
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+        ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })
+        ->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
         }else{
@@ -594,10 +608,15 @@ class blController extends Controller
     }
 
     public function showRincianArsip($tahun,$status,$id){
-        //$now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+         if($status == 'murni') return $this->showRincianArsipMurni($tahun,$status,$id);
+         else return $this->showRincianArsipPerubahan($tahun,$status,$id);
+    }
+
+    public function showRincianArsipMurni($tahun,$status,$id){
         $now = date('Y-m-d H:m:s');
-        // print_r($now);exit();
+    
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->orderBy('TAHAPAN_ID','desc')->first();
+        
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
         }else{
@@ -605,6 +624,7 @@ class blController extends Controller
         }
 
         $data       = RincianArsip::where('BL_ID',$id)->get();
+
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
@@ -613,8 +633,80 @@ class blController extends Controller
         $view       = array();
         $i         = 1;
         $pajak      = '';
+        
         foreach ($data as $data) {
             if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
+                if($data->REKENING_ID == 0 or empty($data->subrincian)){
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                }else{
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                }
+            }else{
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a><i class="fa fa-pencil-square"></i>Ubah <i class="fa fa-lock"></i></a></li><li><a><i class="fa fa-close"></i>Hapus <i class="fa fa-lock"></i> </a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
+            }
+
+            if($data->RINCIAN_PAJAK == 10) $pajak = '<span class="text-success"><i class="fa fa-check"></i></span>';
+            else $pajak = '<span class="text-danger"><i class="fa fa-close"></i></span>';
+            if($data->subrincian) $sub = $data->subrincian->SUBRINCIAN_NAMA;
+            else $sub = '-';
+            if($data->PEKERJAAN_ID == '4' || $data->PEKERJAAN_ID == '5'){
+                $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $data->RINCIAN_KETERANGAN)[0].'</p>';
+                $hargakomponen  = number_format(explode("#", $data->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
+            }else{
+                $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->komponen->KOMPONEN_NAMA.'</p>';
+                $hargakomponen  = number_format($data->komponen->KOMPONEN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
+            }
+            if(Auth::user()->level == 8){
+                 $checkbox = '<div class="m-t-n-lg">
+                                  <label class="i-checks">
+                                    <input type="checkbox" value="'.$data->RINCIAN_ID.'" class="cb" id="cb-'.$data->RINCIAN_ID.'"/><i></i>
+                                  </label>
+                            </div>';
+                $no        = $checkbox.$no;
+
+            }
+            array_push($view, array( 'NO'             =>$no,
+                                     'REKENING'       =>$data->rekening->REKENING_KODE.'<br><p class="text-orange">'.$data->rekening->REKENING_NAMA.'</p>',
+                                     'KOMPONEN'       => $namakomponen,
+                                     'SUB'            =>$sub."<br><span class='text-orange'>".$data->RINCIAN_KETERANGAN."</span>",
+                                     'PAJAK'          =>$pajak,
+                                     'HARGA'          =>$hargakomponen,
+                                     'TOTAL'          =>number_format($data->RINCIAN_TOTAL,0,'.',',')));
+        }
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+        return $view;
+    }
+
+    public function showRincianArsipPerubahan($tahun,$status,$id){
+        $now = date('Y-m-d H:m:s');
+
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+                        ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->first(); 
+        
+        if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
+            $thp    = 1;
+        }else{
+            $thp    = 0;
+        }
+
+        $data       = RincianArsipPerubahan::where('BL_ID',$id)->get();
+
+        $staff      = Staff::where('BL_ID',$id)->get();
+        $mod        = 0;
+        foreach($staff as $s){
+            if($s->USER_ID == Auth::user()->id) $mod = 1;
+        }
+        $view       = array();
+        $i         = 1;
+        $pajak      = '';
+        
+        foreach ($data as $data) {
+            //if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
+            if(( $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){    
                 if($data->REKENING_ID == 0 or empty($data->subrincian)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -794,6 +886,7 @@ class blController extends Controller
                     'SATUAN3'       => $k2,
                     'VOL4'          => $v3,
                     'SATUAN4'       => $k3,
+                    'KET'           => $data->RINCIAN_KETERANGAN,
                     'PEKERJAAN_ID'  => $pekerjaan
                     ];
         return $out;
@@ -1376,7 +1469,12 @@ class blController extends Controller
                         * (Komponen::where('KOMPONEN_ID', Input::get('KOMPONEN_ID'))
                             ->value('KOMPONEN_HARGA') * $vol) ) / 100);
 
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+                        ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->first();
+
         $totalBL    = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
         $skpd       = $this->getSKPD($tahun);
         $totalOPD   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_PAGU');
@@ -2185,7 +2283,11 @@ class blController extends Controller
         else $harga      = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');
         $total      = ( $harga * $vol ) + (( Input::get('RINCIAN_PAJAK')*($harga*$vol))/100);
         
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+                        ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->first();
         
         $totalBL    = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
         // $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
@@ -2574,6 +2676,11 @@ class blController extends Controller
     }
 
     public function restoreRincianCB($tahun,$status){
+        if($status == 'murni') return $this->restoreRincianCBmurni($tahun,$status);
+        else return $this->restoreRincianCBperubahan($tahun,$status);
+    }
+
+    public function restoreRincianCBmurni($tahun,$status){
         $id             = Input::get('RINCIAN_ID');
         foreach ($id as $id) {
             $rincian       = RincianArsip::where('RINCIAN_ID',$id)->first();
@@ -2589,6 +2696,9 @@ class blController extends Controller
             $arcRincian->RINCIAN_KETERANGAN     = $rincian->RINCIAN_KETERANGAN;
             $arcRincian->PEKERJAAN_ID           = $rincian->PEKERJAAN_ID;
             $arcRincian->BL_ID                  = $rincian->BL_ID;
+            $arcRincian->RINCIAN_KOMPONEN       = $rincian->RINCIAN_KOMPONEN;
+            $arcRincian->RINCIAN_HARGA          = $rincian->RINCIAN_HARGA;
+            $arcRincian->RINCIAN_LOCK           = $rincian->RINCIAN_LOCK;
             $arcRincian->save();
             $komponen      = Komponen::where('KOMPONEN_ID',$rincian->KOMPONEN_ID)->first();
             RincianArsip::where('RINCIAN_ID',$id)->delete();
@@ -2602,6 +2712,43 @@ class blController extends Controller
         }
         BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
         $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');        
+        return number_format($totalrincian,0,'.',',');
+    }
+
+    public function restoreRincianCBperubahan($tahun,$status){
+        $id             = Input::get('RINCIAN_ID');
+        foreach ($id as $id) {
+            $arcRincian       = RincianArsipPerubahan::where('RINCIAN_ID',$id)->first();
+            $rincian           = new RincianPerubahan;
+            $rincian->RINCIAN_ID             = $arcRincian->RINCIAN_ID;
+            $rincian->SUBRINCIAN_ID          = $arcRincian->SUBRINCIAN_ID;
+            $rincian->REKENING_ID            = $arcRincian->REKENING_ID;
+            $rincian->KOMPONEN_ID            = $arcRincian->KOMPONEN_ID;
+            $rincian->RINCIAN_PAJAK          = $arcRincian->RINCIAN_PAJAK;
+            $rincian->RINCIAN_VOLUME         = $arcRincian->RINCIAN_VOLUME;
+            $rincian->RINCIAN_KOEFISIEN      = $arcRincian->RINCIAN_KOEFISIEN;
+            $rincian->RINCIAN_TOTAL          = $arcRincian->RINCIAN_TOTAL;
+            $rincian->RINCIAN_KETERANGAN     = $arcRincian->RINCIAN_KETERANGAN;
+            $rincian->PEKERJAAN_ID           = $arcRincian->PEKERJAAN_ID;
+            $rincian->BL_ID                  = $arcRincian->BL_ID;
+            $rincian->RINCIAN_KOMPONEN       = $arcRincian->RINCIAN_KOMPONEN;
+            $rincian->RINCIAN_HARGA          = $arcRincian->RINCIAN_HARGA;
+            $rincian->RINCIAN_LOCK           = $arcRincian->RINCIAN_LOCK;
+            $rincian->save();
+            
+            $komponen      = Komponen::where('KOMPONEN_ID',$arcRincian->KOMPONEN_ID)->first();
+
+            RincianArsipPerubahan::where('RINCIAN_ID',$id)->delete();
+
+            $log        = new Log;
+            $log->LOG_TIME                          = Carbon\Carbon::now();
+            $log->USER_ID                           = Auth::user()->id;
+            $log->LOG_ACTIVITY                      = 'Mengembalikan komponen '.$komponen->KOMPONEN_NAMA.' '.$rincian->RINCIAN_KOEFISIEN.' Total Rp. '.number_format($rincian->RINCIAN_TOTAL,0,',','.');
+            $log->LOG_DETAIL                        = 'BLP#'.Input::get('BL_ID');
+            $log->save();
+        }
+        BLPerubahan::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
+        $totalrincian   = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');        
         return number_format($totalrincian,0,'.',',');
     }
 
@@ -3031,7 +3178,13 @@ class blController extends Controller
     public function getDataPerubahan($tahun,$status,$filter){
         //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $now = date('Y-m-d H:m:s');
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+                         ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })
+                        ->orderBy('TAHAPAN_ID','desc')->first();
+
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
         }else{
@@ -3043,10 +3196,11 @@ class blController extends Controller
             $data       = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
+
         }elseif(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
             if($filter == 0){
                 //$data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
-                $data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take(1000)->get();
+                $data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
             }else{
                 $data       = BLPerubahan::whereHas('subunit',function($q) use ($filter){
                                         $q->where('SKPD_ID',$filter);
@@ -3151,11 +3305,14 @@ class blController extends Controller
 
             if(($data->BL_VALIDASI == 0 && Auth::user()->active==1 ) || Auth::user()->level==8){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li><li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li>
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
+                <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
+                <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li><li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
+                <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
 
