@@ -852,7 +852,15 @@ class lampiranController extends Controller
             }else {
                 $persen = 0;
             }
-                                         
+                      
+            $akb_bl   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
+                        ->where('DAT_AKB_BL.BL_ID',$id)
+                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->first(); 
+
            return View('budgeting.lampiran.dpa_perubahan',
                 [   'tahun'             =>$tahun,
                     'status'            =>$status,
@@ -881,7 +889,8 @@ class lampiranController extends Controller
                     'selisih'           =>$selisih,
                     'persen'            =>$persen,
                     'urusan'            =>$urusan,
-                    'skpd'              =>$skpd
+                    'skpd'              =>$skpd,
+                    'akb_bl'            =>$akb_bl
                 ]);
         }      
             
