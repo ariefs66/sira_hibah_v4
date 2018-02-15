@@ -878,8 +878,10 @@ class lampiranController extends Controller
                     'total_murni'       =>$total_murni,
                     'totalbl_murni'     =>$totalBLMurni,
                     'bl_murni'          =>$bl_murni,
-                    'selisih'          =>$selisih,
-                    'persen'            =>$persen
+                    'selisih'           =>$selisih,
+                    'persen'            =>$persen,
+                    'urusan'            =>$urusan,
+                    'skpd'              =>$skpd
                 ]);
         }      
             

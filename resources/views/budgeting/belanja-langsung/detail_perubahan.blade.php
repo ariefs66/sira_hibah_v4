@@ -26,8 +26,39 @@
             <div class="panel bg-white">
               <div class="panel-heading wrapper-lg">
                 <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung : {{ $bl->kegiatan->KEGIATAN_NAMA }}</h5>
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a>
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a>
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{$bl->subunit->SKPD_ID}}/{{$bl->BL_ID}}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a>
               </div>
+               <!-- <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+                  <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD </a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd1/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd21/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 2.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd22/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 2.2</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 2.2.1</a></li>
+                   
+                   @if(Auth::user()->level == 8 || Auth::user()->level == 9)
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd31/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 3.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 3.2</a></li>
+                    @endif
+                  </ul>
+                </div> -->
+                <!-- <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+                  <button class="btn btn-info dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak DPA <i class="fa fa-chevron-down"></i>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD </a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd1/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd21/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 2.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd22/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 2.2</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{ $bl->subunit->SKPD_ID}}/{{ $bl->BL_ID}}" target="_blank">DPA-SKPD 2.2.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd31/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.1</a></li>
+                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.2</a></li>
+                  </ul>
+                </div> -->
               <div class="tab-content tab-content-alt-1 bg-white">
                 <div class="bg-white wrapper-lg">
                   <div class="input-wrapper">
@@ -465,7 +496,7 @@
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
-      <h5>Tambah Komponen</h5>
+      <h5>Tambah / Edit Rincian</h5>
       <div class="form-group">
         <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
         <div class="col-sm-7">
@@ -623,7 +654,7 @@
         <input type="hidden" id="sisa-skpd_" class="form-control" readonly="">      
       </div> 
     </div>
-    <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Tambah Komponen</a>
+    <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Simpan Rincian</a>
   </div>
 </form>
 </div>
@@ -631,7 +662,7 @@
 <!--SIMPAN RINCIAN-->
 
 <!--EDIT RINCIAN-->
-<div class="overlay"></div>
+<!-- <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-rincian-ubah">
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
   <form id="simpan-komponen" class="form-horizontal">
@@ -724,7 +755,7 @@
     <div class="form-group" id="koef1">
       <label for="no_spp" class="col-md-3">Koefisien</label>          
       <div class="col-sm-5">
-        <input type="number" id="vol1-u" class="form-control" placeholder="Masukan Jumlah" required="">      
+        <input type="text" id="vol1-u" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Jumlah">     
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-1">
@@ -737,7 +768,7 @@
     <div class="form-group" id="koef2">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol2" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" id="vol2" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Jumlah">      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-2">
@@ -751,7 +782,7 @@
     <div class="form-group" id="koef3">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol3" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" id="vol3" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Jumlah"> 
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-3">
@@ -765,7 +796,7 @@
     <div class="form-group" id="koef4">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol4" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" id="vol4" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Jumlah"> 
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-4">
@@ -798,8 +829,9 @@
   </div>
 </form>
 </div>
-</div>
+</div> -->
 <!--END EDIT RINCIAN-->
+
 
 <!--PILIH KOMPONEN-->
 <div class="plih-komponen modal fade " id="kode-komponen" tabindex="-1" role="dialog">
@@ -1044,13 +1076,13 @@
     var REKENING_ID     = $('#rekening-belanja').val();
     var KOMPONEN_ID     = $('#id-komponen').val();
     var KOMPONEN_NAMA   = $('#nama-komponen').val();
+    var VOL1            = $('#vol1').val();
     
-    if($('#id-rincian').val() == ""){
+    /*if($('#id-rincian').val() == ""){
       var VOL1            = $('#vol1').val();
     }else {
       var VOL1            = $('#vol1-u').val();
-    }
-    
+    }*/
 
     var SAT1            = $('#satuan-1').val();
     var VOL2            = $('#vol2').val();
@@ -1165,7 +1197,7 @@
         if(data['DATA']['RINCIAN_PAJAK'] == 10){
           $('#pajak').prop('checked',true);
         }
-        $('#vol1-u').val(data['VOL1']);
+        $('#vol1').val(data['VOL1']);
         $('#satuan-1').find('option').remove().end().append('<option value="'+data['SATUAN1']+'">'+data['SATUAN1']+'</option>').trigger('chosen:updated');
         $('#vol2').val(data['VOL2']);
         $('#satuan-2').append('<option value="'+data['SATUAN2']+'" selected>'+data['SATUAN2']+'</option>').trigger('chosen:updated');
@@ -1176,7 +1208,7 @@
       }
     });
     $('.overlay').fadeIn('fast',function(){
-      $('.input-rincian-ubah').animate({'right':'0'},"linear");  
+      $('.input-rincian').animate({'right':'0'},"linear");  
       $("html, body").animate({ scrollTop: 0 }, "slow");
     });
 
