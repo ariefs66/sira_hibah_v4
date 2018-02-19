@@ -192,7 +192,7 @@
                             <th style="width: 1%" class="text text-center">Kode<br>(1)</th>
                             <th class="text text-center">Uraian<br>(2)</th>
                             <th class="text text-center">Murni<br>(3)</th>                                      
-                            <th class="text text-center">Perubahan<br>(4)</th>                                      
+                            <th class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif<br>(4)</th>                                      
                             <th class="text text-center">REALISASI<br>(5)</th>                                      
                             <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>                                      
                           </tr>
@@ -292,7 +292,7 @@
                   <th rowspan="2">Komponen</th>
                   <th rowspan="2">Paket Pekerjaan<br>Keterangan</th>
                   <th colspan="3" class="text text-center">Murni</th>
-                  <th colspan="3" class="text text-center">Perubahan</th>
+                  <th colspan="3" class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif</th>
                 </tr>
                 <tr>
                   <th style="width: 10%">Harga / Koefisien</th>
@@ -314,7 +314,7 @@
             </table>
           </div>
           @if(Auth::user()->level == 8)
-          <a class="btn input-xl m-t-md btn-danger pull-right m-r-md" onclick="return hapuscb()"><i class="fa fa-trash m-r-xs"></i>Hapus</a>
+          <!-- <a class="btn input-xl m-t-md btn-danger pull-right m-r-md" onclick="return hapuscb()"><i class="fa fa-trash m-r-xs"></i>Hapus</a> -->
           @endif
           <div class="tab-content" style="min-height: 75px;">                    
             <div class="form-group">
@@ -597,7 +597,7 @@
     <div class="form-group" id="koef2">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol2" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="vol2" class="form-control" placeholder="Masukan Jumlah" required="">           
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-2">
@@ -611,7 +611,7 @@
     <div class="form-group" id="koef3">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol3" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="vol3" class="form-control" placeholder="Masukan Jumlah" required="">      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-3">
@@ -625,7 +625,7 @@
     <div class="form-group" id="koef4">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol4" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="vol4" class="form-control" placeholder="Masukan Jumlah" required="">      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-4">
@@ -661,176 +661,6 @@
 </div>
 <!--SIMPAN RINCIAN-->
 
-<!--EDIT RINCIAN-->
-<!-- <div class="overlay"></div>
-<div class="bg-white wrapper-lg input-sidebar input-rincian-ubah">
-  <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
-  <form id="simpan-komponen" class="form-horizontal">
-    <div class="input-wrapper">
-      <h5>Ubah Komponen</h5>
-      <div class="form-group">
-        <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
-        <div class="col-sm-7">
-          <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="" disabled="true">
-            <option value="">Silahkan Pilih</option>
-            @foreach($subrincian as $sr)
-            <option value="{{ $sr->SUBRINCIAN_ID }}">{{ $sr->SUBRINCIAN_NAMA }}</option>
-            @endforeach
-          </select>
-        </div>
-        <div class="col-sm-2">
-          <button class="btn btn-warning col-md-1 w-full" data-toggle="modal" type="button" disabled="true" data-target="#pilih-paket-modal" id="pilih-paket"><i class="fa fa-plus"></i> Tambah</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3">Jenis</label>
-        <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="jenis-pekerjaan" required="" disabled="true">
-            <option value="">Silahkan Pilih Jenis</option>
-            @foreach($pekerjaan as $pkj)
-            <option value="{{ $pkj->PEKERJAAN_ID }}">{{ $pkj->PEKERJAAN_NAMA }}</option>
-            @endforeach
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3">Kategori</label>
-        <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="kategori-belanja" required="" disabled="true">
-            <option value="">Silahkan Pilih Kategori</option>
-            <option value="1">SSH</option>
-            <option value="2">HSPK</option>
-            <option value="3">ASB</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-sm-3">Rekening</label>
-        <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="rekening-belanja" required="" disabled="true">
-            <option value="">Silahkan Pilih Rekening</option>
-          </select>
-        </div>
-      </div>
-
-
-      <div class="form-group">
-        <label for="no_spp" class="col-md-3">Komponen</label>          
-        <div class="col-md-6">
-          <input type="text" class="form-control" placeholder="Komponen" id="nama-komponen" readonly="">          
-          <input type="hidden" class="form-control" readonly="" id="id-komponen">          
-          <input type="hidden" class="form-control" readonly="" id="id-rincian">          
-          <input type="hidden" class="form-control" readonly="" id="harga-komponen">          
-        </div>
-        <div class="col-md-1 m-l-n-md">
-        <a class="btn btn-warning" data-toggle="modal" data-target="#kode-komponen" id="pilih-komponen" disabled="true" style="display: none;">Pilih</a>
-        </div>
-        <div class="col-md-2">
-          <label for="no_spp" class="m-l-xl">Pajak</label>          
-          <div class="checkbox-remember pull-right m-t-n-xs">
-           <div class="checkbox">
-            <label class="checkbox-inline i-checks">
-              <input type="checkbox" id="pajak" disabled="true">
-              <i></i>  
-            </label>
-           </div>
-          </div>
-        </div>
-    </div>
-
-    <div class="form-group hide" id="harga-free">
-      <label for="no_spp" class="col-md-3">Harga</label>          
-      <div class="col-sm-9">
-        <input type="text" id="nominal1" class="form-control harga-free-input" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">  
-      </div> 
-    </div>
-
-    <div class="form-group">
-      <label for="no_spp" class="col-md-3">Keterangan</label>          
-      <div class="col-sm-9">
-        <input type="text" id="ket-belanja" class="form-control" placeholder="Masukan Keterangan" >          
-      </div> 
-    </div>
-
-    <div class="form-group" id="koef1">
-      <label for="no_spp" class="col-md-3">Koefisien</label>          
-      <div class="col-sm-5">
-        <input type="text" id="vol1-u" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Jumlah">     
-      </div> 
-      <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan-1">
-          @foreach($satuan as $sat)
-          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-          @endforeach        
-        </select>    
-      </div>
-    </div>
-    <div class="form-group" id="koef2">
-      <label for="no_spp" class="col-md-3"></label>          
-      <div class="col-sm-5">
-        <input type="text" id="vol2" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Jumlah">      
-      </div> 
-      <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan-2">
-          <option>Pilih Satuan</option>
-          @foreach($satuan as $sat)
-          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-          @endforeach
-        </select>    
-      </div>
-    </div>          
-    <div class="form-group" id="koef3">
-      <label for="no_spp" class="col-md-3"></label>          
-      <div class="col-sm-5">
-        <input type="text" id="vol3" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Jumlah"> 
-      </div> 
-      <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan-3">
-          <option>Pilih Satuan</option>
-          @foreach($satuan as $sat)
-          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-          @endforeach
-        </select>    
-      </div>
-    </div>
-    <div class="form-group" id="koef4">
-      <label for="no_spp" class="col-md-3"></label>          
-      <div class="col-sm-5">
-        <input type="text" id="vol4" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Jumlah"> 
-      </div> 
-      <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan-4">
-          <option>Pilih Satuan</option>
-          @foreach($satuan as $sat)
-          <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-          @endforeach
-        </select>    
-      </div>
-    </div>          
-    <hr class="m-t-xl">
-    <div class="form-group" id="koef4">
-      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian SKPD</label>          
-      <div class="col-sm-3">
-        <input type="text" id="rincian-skpd" class="form-control" readonly="">      
-        <input type="hidden" id="rincian-skpd_" class="form-control" readonly="">      
-      </div> 
-      <label for="no_spp" class="col-md-1">Pagu SKPD</label>          
-      <div class="col-sm-3">
-        <input type="text" id="pagu-skpd" class="form-control" readonly="">      
-        <input type="hidden" id="pagu-skpd_" class="form-control" readonly="">      
-      </div>
-      <label for="no_spp" class="col-md-1">Sisa Anggaran</label>          
-      <div class="col-sm-3">
-        <input type="text" id="sisa-skpd" class="form-control" readonly="">      
-        <input type="hidden" id="sisa-skpd_" class="form-control" readonly="">      
-      </div> 
-    </div>
-    <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Update Komponen</a>
-  </div>
-</form>
-</div>
-</div> -->
-<!--END EDIT RINCIAN-->
 
 
 <!--PILIH KOMPONEN-->

@@ -250,24 +250,37 @@ class pendapatanController extends Controller
         }
       }
       else{
-        $data   = PendapatanPerubahan::whereHas('subunit',function($q) use($skpd){
-              $q->where('SKPD_ID',$skpd);
-          })->where('PENDAPATAN_TAHUN',$tahun)->get();
+
+        $data   = PendapatanPerubahan::leftJoin('BUDGETING.DAT_PENDAPATAN','BUDGETING.DAT_PENDAPATAN.PENDAPATAN_ID','=','BUDGETING.DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID')
+              ->Join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+              ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$skpd)
+              ->where('DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_TAHUN',$tahun);
+
+        $data       = $data->groupBy('REF_REKENING.REKENING_KODE','REF_REKENING.REKENING_NAMA','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_NAMA')
+                      ->select('REF_REKENING.REKENING_KODE','REF_REKENING.REKENING_NAMA','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID',
+                      'DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_NAMA', DB::raw('SUM("BUDGETING"."DAT_PENDAPATAN_PERUBAHAN"."PENDAPATAN_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_PENDAPATAN"."PENDAPATAN_TOTAL") AS TOTAL_MURNI'))
+                      ->get();  
+
+
         $view       = array();
         $no       = 1;
         $opsi       = '';
         foreach ($data as $data) {
-              if(Auth::user()->level == 9 or substr(Auth::user()->mod,10,1) == 1){
-          $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+              if(Auth::user()->level == 8 or substr(Auth::user()->mod,10,1) == 1 or Auth::user()->level == 9){
+                $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->PENDAPATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->PENDAPATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+                $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/pendapatan/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
               }else{
               $opsi = '-';
+              $akb = '-';
               }
           array_push($view, array( 'NO'       => $no++,
-                       'AKSI'     => $opsi,
-                       'REKENING'   => $data->rekening->REKENING_KODE.' - '.$data->rekening->REKENING_NAMA,
-                       'RINCIAN'    => $data->PENDAPATAN_NAMA,
-                       'DASHUK'    => $data->DASHUK,
-                                       'TOTAL'    => number_format($data->PENDAPATAN_TOTAL,0,'.',',')));
+                       'AKSI'           => $opsi,
+                       'AKB'            => $akb,
+                       'REKENING'       => $data->REKENING_KODE.' - '.$data->REKENING_NAMA,
+                       'RINCIAN'        => $data->PENDAPATAN_NAMA,
+                       'DASHUK'         => $data->DASHUK,
+                       'TOTAL_MURNI'    => number_format($data->total_murni,0,'.',','),
+                        'TOTAL'         => number_format($data->total,0,'.',',')));
         }
       }
    		
@@ -300,7 +313,11 @@ class pendapatanController extends Controller
         if($status == 'murni')
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         else
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+                       ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
         }else{
@@ -318,7 +335,15 @@ class pendapatanController extends Controller
                     ->get();                              
         }
         else 
-          $pen='';
+          $pen  = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_PENDAPATAN',function($join){
+                        $join->on('DAT_AKB_PENDAPATAN.PENDAPATAN_ID','=','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID')->on('DAT_AKB_PENDAPATAN.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID');
+                    })
+                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN_PERUBAHAN.SUB_ID')
+                    ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$id)
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_PENDAPATAN_PERUBAHAN"."PENDAPATAN_ID", "DAT_PENDAPATAN_PERUBAHAN"."REKENING_ID", "REKENING_NAMA", "PENDAPATAN_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->get();
 
           $skpd         = SKPD::where('SKPD_ID',$id)->first();
 
