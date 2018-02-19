@@ -1010,6 +1010,17 @@ class blController extends Controller
                     ->orderBy("REKENING_NAMA")
                     ->selectRaw(' "DAT_RINCIAN"."BL_ID", "DAT_RINCIAN"."REKENING_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS TOTAL, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
                     ->first();
+        }else{
+            $data       = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_BL',function($join){
+                        $join->on('DAT_AKB_BL.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->on('DAT_AKB_BL.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID');
+                    })
+                    ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$bl_id)
+                    ->where('DAT_RINCIAN_PERUBAHAN.REKENING_ID',$rek_id)
+                    ->groupBy('DAT_RINCIAN_PERUBAHAN.BL_ID', 'DAT_RINCIAN_PERUBAHAN.REKENING_ID','REKENING_KODE', "REKENING_NAMA", "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" )
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_RINCIAN_PERUBAHAN"."BL_ID", "DAT_RINCIAN_PERUBAHAN"."REKENING_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS TOTAL, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->first();
         }
 
         $bagi    = $data->total/12; //dibagi 13
