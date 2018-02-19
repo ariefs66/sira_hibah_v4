@@ -356,7 +356,7 @@ class blController extends Controller
         if($status == 'murni')
         return View('budgeting.belanja-langsung.akb',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r, 'rincian_rek'=>$rincian_rek]);
         else
-        return View('budgeting.belanja-langsung.detail_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact]);
+        return View('budgeting.belanja-langsung.akb',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact]);
     }
 
     public function showDetailArsip($tahun,$status,$id){
