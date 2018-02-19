@@ -156,12 +156,15 @@
         <th>No</th>                                    
         <th>Rekening</th>                          
         <th>Rincian</th>                       
-        <th>Anggaran</th>                                       
+        <th>DASHUK</th>                       
+        <th>Anggaran Sebelum</th>                                       
+        <th>Anggaran Sesudah</th>                                       
+        <th>AKB</th>                                       
         <th>#</th>                                       
       </tr> 
       <tr>
         <th class="hide"></th>                    
-        <th colspan="5" class="th_search">
+        <th colspan="7" class="th_search">
           <i class="icon-bdg_search"></i>
           <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
         </th>
@@ -186,7 +189,7 @@
       }else{
         $('.pendapatan-rincian').slideUp('fast').remove();  
         $(this).addClass('shown');
-        btl_detail = '<tr class="pendapatan-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-pendapatan').html()+'</td></tr>';
+        btl_detail = '<tr class="pendapatan-rincian"><td style="padding:0!important;" colspan="4">'+$('#table-detail-pendapatan').html()+'</td></tr>';
         $(btl_detail).insertAfter('.table-pendapatan .table tbody tr.shown');
         $('.table-detail-pendapatan-isi').DataTable({
           sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/pendapatan/getDetail/"+skpd,
@@ -194,7 +197,10 @@
           { mData: 'NO' },
           { mData: 'REKENING' },
           { mData: 'RINCIAN' },
+          { mData: 'DASHUK' },
+          { mData: 'TOTAL_MURNI' },
           { mData: 'TOTAL' },
+          { mData: 'AKB' },
           { mData: 'AKSI' }
           ]
         });

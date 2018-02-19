@@ -349,7 +349,9 @@
         <th>No</th>                                    
         <th>Rekening</th>                          
         <th>Rincian</th>                       
-        <th>Anggaran</th>                                       
+        <th>Anggaran Sebelum</th>                                       
+        <th>Anggaran Sesudah</th>                                       
+        <th>AKB</th>                                       
         <th>#</th>                                       
       </tr> 
       <!-- <tr>
@@ -380,7 +382,7 @@
       }else{
         $('.btl-rincian').slideUp('fast').remove(); 
         $(this).addClass('shown');
-        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-btl').html()+'</td></tr>';
+        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="4">'+$('#table-detail-btl').html()+'</td></tr>';
         $(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
         $('.table-detail-btl-isi').DataTable({
           sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/getDetail/"+skpd+"/"+rek,
@@ -388,7 +390,9 @@
           { mData: 'NO' },
           { mData: 'REKENING' },
           { mData: 'RINCIAN' },
+          { mData: 'TOTAL_MURNI' },
           { mData: 'TOTAL' },
+          { mData: 'AKB' },
           { mData: 'AKSI' }
           ]
         });
@@ -532,6 +536,7 @@
         $('#skpd-btl').val(data['SKPD']).trigger("chosen:updated");
         $('#subunit-btl').append('<option value="'+data['SUB_ID']+'" selected>'+data['SUB_NAMA']+'</option>').trigger("chosen:updated");
         $('#rekening-btl').append('<option value="'+data['REKENING_ID']+'" selected>'+data['REKENING_KODE']+'-'+data['REKENING_NAMA']+'</option>').trigger("chosen:updated");
+        /*$('#satuan-btl').find('option').remove().end().append('<option value="'+data['SATUAN1']+'">'+data['SATUAN1']+'</option>').trigger('chosen:updated');*/
         $('#keterangan-btl').val(data['BTL_KETERANGAN']);
         $('#volume-btl').val(data['BTL_VOLUME']);
         $('#total-btl').val(data['BTL_TOTAL']);

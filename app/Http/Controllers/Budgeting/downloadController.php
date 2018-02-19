@@ -92,7 +92,8 @@ class downloadController extends Controller
     }
 
     public function rekapBTL($tahun,$status){
-    	$data 	= DB::select('SELECT "SKPD_KODE","SKPD_NAMA","REKENING_KODE","REKENING_NAMA","BTL_TOTAL" 
+    	if($status=='murni'){
+    		$data 	= DB::select('SELECT "SKPD_KODE","SKPD_NAMA","REKENING_KODE","REKENING_NAMA","BTL_TOTAL" 
 							FROM "BUDGETING"."DAT_BTL" BTL
 							JOIN "REFERENSI"."REF_REKENING" REK
 							ON BTL."REKENING_ID" = REK."REKENING_ID"
@@ -102,6 +103,19 @@ class downloadController extends Controller
 							ON SUB."SKPD_ID" = SKPD."SKPD_ID"
 							WHERE "BTL_TOTAL" != 0
 							ORDER BY "SKPD_KODE", "REKENING_KODE"');
+    	}else{
+    		$data 	= DB::select('SELECT "SKPD_KODE","SKPD_NAMA","REKENING_KODE","REKENING_NAMA","BTL_TOTAL" 
+							FROM "BUDGETING"."DAT_BTL_PERUBAHAN" BTL
+							JOIN "REFERENSI"."REF_REKENING" REK
+							ON BTL."REKENING_ID" = REK."REKENING_ID"
+							JOIN "REFERENSI"."REF_SUB_UNIT" SUB
+							ON BTL."SUB_ID" = SUB."SUB_ID"
+							JOIN "REFERENSI"."REF_SKPD" SKPD
+							ON SUB."SKPD_ID" = SKPD."SKPD_ID"
+							WHERE "BTL_TOTAL" != 0
+							ORDER BY "SKPD_KODE", "REKENING_KODE"');
+    	}
+    	
     	$data = array_map(function ($value) {
 		    return (array)$value;
 		}, $data);

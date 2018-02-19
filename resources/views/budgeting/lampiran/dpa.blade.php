@@ -227,6 +227,7 @@
 		</td>
 	</tr>
 </table>
+
 <table class="detail">	
 	<tr class="border">
 		<td width="18%">Urusan Pemerintahan</td>

@@ -233,6 +233,7 @@ class btlController extends Controller
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
                       ->get();
         $view       = array();
+        $totPeg      = 0;
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
                                   'KODE'    =>$data->SKPD_KODE,
@@ -240,6 +241,7 @@ class btlController extends Controller
                                   'REK'     =>'5.1.1',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
+          $totPeg += $data->total;
         }
       }
 		  $out = array("aaData"=>$view, "totPeg"=>$totPeg);    	
@@ -574,25 +576,36 @@ class btlController extends Controller
         }
       }
       else{
-        $data   = BTLPerubahan::whereHas('rekening', function($q) use ($id){
-              $q->where('REKENING_KODE','like',$id.'%');  
-            })->whereHas('subunit',function($x) use($skpd){
-              $x->where('SKPD_ID',$skpd);
-            })->where('BTL_TAHUN',$tahun)->get();
+        $data   = BTLPerubahan::leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
+              ->Join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+              ->where('REKENING_KODE','like',$id.'%')
+              ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$skpd)
+              ->where('DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun);
+
+        $data       = $data->groupBy('REF_REKENING.REKENING_KODE','DAT_BTL.BTL_ID','DAT_BTL.BTL_NAMA')
+                      ->select('REF_REKENING.REKENING_KODE','DAT_BTL.BTL_ID',
+                      'DAT_BTL.BTL_NAMA', DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
+                      ->get();   
+            
         $view       = array();
         $no         = 1;
         $opsi       = '';
         foreach ($data as $data) {
           if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1){
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }else{
             $opsi = '-';
+            $akb = '-';
           }
-          array_push($view, array( 'NO'       => $no++,
-                                   'AKSI'     => $opsi,
-                                   'REKENING'   => $data->rekening->REKENING_KODE,
-                                   'RINCIAN'    => $data->BTL_NAMA,
-                                   'TOTAL'    => number_format($data->BTL_TOTAL,0,'.',',')));
+          array_push($view, array( 'NO'             => $no++,
+                                   'AKSI'           => $opsi,
+                                   'AKB'            => $akb,
+                                   'REKENING'       => $data->REKENING_KODE,
+                                   'RINCIAN'        => $data->BTL_NAMA,
+                                   'TOTAL'          => number_format($data->total,0,'.',','),
+                                   'TOTAL_MURNI'    => number_format($data->total_murni,0,'.',',')
+                                 ));
         }
       }
    		
@@ -626,16 +639,19 @@ class btlController extends Controller
         if($status == 'murni')
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         else
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+                       ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->first();
+
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
         }else{
             $thp    = 0;
         }
         if($status == 'murni') {
-          /*$btl         = BTL::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                              ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
-                              ->where('BTL_TAHUN',$tahun)->where('SKPD_ID',$id)->get();*/
+          
           $btl = BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                     ->leftjoin('BUDGETING.DAT_AKB_BTL',function($join){
                         $join->on('DAT_AKB_BTL.BTL_ID','=','DAT_BTL.BTL_ID')->on('DAT_AKB_BTL.REKENING_ID','=','DAT_BTL.REKENING_ID');
@@ -646,10 +662,17 @@ class btlController extends Controller
                     ->selectRaw(' "DAT_BTL"."BTL_ID", "DAT_BTL"."REKENING_ID", "REKENING_NAMA", "BTL_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
                     ->get();                              
         }
-        else 
-          $btl         = BTLPerubahan::join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
-                              ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
-                              ->where('BTL_TAHUN',$tahun)->where('DAT_BTL.SKPD_ID',$id)->get();
+        else{
+          $btl = BTLPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_BTL',function($join){
+                        $join->on('DAT_AKB_BTL.BTL_ID','=','DAT_BTL_PERUBAHAN.BTL_ID')->on('DAT_AKB_BTL.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID');
+                    })
+                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL_PERUBAHAN.SUB_ID')
+                    ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$id)
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_BTL_PERUBAHAN"."BTL_ID", "DAT_BTL_PERUBAHAN"."REKENING_ID", "REKENING_NAMA", "BTL_TOTAL" AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->get();
+        }  
 
           $skpd         = SKPD::where('SKPD_ID',$id)->first();
 

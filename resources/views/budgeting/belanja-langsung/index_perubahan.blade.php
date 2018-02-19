@@ -72,7 +72,7 @@
                         <th rowspan="2" style="width: 1%">#</th>
                         <th rowspan="2">Program/Kegiatan/Sub Unit</th>
                         <th colspan="2" style="text-align: center;">Murni</th>                                      
-                        <th colspan="2" style="text-align: center;">Perubahan</th>                                      
+                        <th colspan="2" style="text-align: center;">@if($status=='pergeseran') Pergeseran @else Perubahan @endif</th>                                      
                         <th rowspan="2" width="16%">Status 
                           @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)
                             <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciGiatSKPD()" id="kuncigiatskpd"><i></i></label>
@@ -101,7 +101,7 @@
                       <tr>
                         <td colspan="2"> </td>
                         <td colspan="2"><b>Total Pagu Murni : Rp. <text id="pagu_murni"></text> </b></td>
-                        <td colspan="2"><b>Total Pagu Perubahan : Rp. <text id="pagu_perubahan"></text> </b></td>
+                        <td colspan="2"><b>Total Pagu @if($status=='pergeseran') Pergeseran @else Perubahan @endif : Rp. <text id="pagu_perubahan"></text> </b></td>
                         <td></td>
                       </tr>  
                     </tfoot>                                
@@ -198,9 +198,9 @@
         <input type="text" id="nominal1" class="form-control pagu" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
         <p>- Usulan Pagu Kegiatan</p>
         <input type="number" id="pagu_usulan" class="form-control">
-        <p class="m-t-sm">- Nomor Surat Usulan Perubahan</p>
+        <p class="m-t-sm">- Nomor Surat Usulan @if($status=='pergeseran') Pergeseran @else Perubahan @endif</p>
         <input type="text" class="form-control m-t-n-sm" placeholder="Masukan Nomor Surat Perubahan Ke TAPD" id="pagu_surat">
-        <p class="m-t-sm">- Alasan Perubahan</p>
+        <p class="m-t-sm">- Alasan @if($status=='pergeseran') Pergeseran @else Perubahan @endif</p>
         <textarea class="form-control m-t-n-sm" placeholder="Masukan Alasan Perubahan" id="pagu_catatan"></textarea>
         <input type="hidden" id="id-bl" class="form-control">
         <button class="btn btn-warning m-t-md" onclick="return simpanpagu()">Simpan</button>
