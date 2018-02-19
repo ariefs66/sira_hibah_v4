@@ -2349,8 +2349,7 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                //if($total+$now <= $totalBL){
-                if($total <= $totalBL){
+                if($total+$now <= $totalBL+2){
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
