@@ -2320,7 +2320,7 @@ class blController extends Controller
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
-                if($total+$now <= $totalBL){
+                if($total <= $totalBL){
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
@@ -2349,7 +2349,8 @@ class blController extends Controller
                     return 0;
                 }
             }else{
-                if($total+$now <= $totalBL){
+                //if($total+$now <= $totalBL){
+                if($total <= $totalBL){
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
