@@ -268,7 +268,11 @@ class blController extends Controller
         if($status == 'murni')
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         else
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->first();
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+                        ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->first();
         if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
             $thp    = 1;
         }else{
@@ -334,11 +338,20 @@ class blController extends Controller
         $impact     = Impact::where('PROGRAM_ID',$program)->get();
         $output     = Output::where('BL_ID',$id)->get();
 
-        $rincian_rek = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+
+        if($status=='murni'){
+            $rincian_rek = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                                 ->where('BL_ID', $bl->BL_ID)
                                 ->groupBy("REKENING_KODE","REKENING_NAMA","REF_REKENING.REKENING_ID")
                                 ->selectRaw('"REF_REKENING"."REKENING_ID","REKENING_KODE","REKENING_NAMA", SUM("RINCIAN_TOTAL") as total')
                                 ->get();
+        }else{
+            $rincian_rek = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                                ->where('BL_ID', $bl->BL_ID)
+                                ->groupBy("REKENING_KODE","REKENING_NAMA","REF_REKENING.REKENING_ID")
+                                ->selectRaw('"REF_REKENING"."REKENING_ID","REKENING_KODE","REKENING_NAMA", SUM("RINCIAN_TOTAL") as total')
+                                ->get();
+        } 
 
         if($status == 'murni')
         return View('budgeting.belanja-langsung.akb',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r, 'rincian_rek'=>$rincian_rek]);
