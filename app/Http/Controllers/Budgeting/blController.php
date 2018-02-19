@@ -356,7 +356,7 @@ class blController extends Controller
         if($status == 'murni')
         return View('budgeting.belanja-langsung.akb',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r, 'rincian_rek'=>$rincian_rek]);
         else
-        return View('budgeting.belanja-langsung.akb',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact]);
+        return View('budgeting.belanja-langsung.akb',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact, 'log_r'=>$log_r, 'rincian_rek'=>$rincian_rek]);
     }
 
     public function showDetailArsip($tahun,$status,$id){
@@ -370,7 +370,7 @@ class blController extends Controller
 
     public function showDataAKB($tahun,$status,$id){
         if($status == 'murni') return $this->showDataAKBMurni($tahun,$status,$id);
-        else return $this->showRincianPerubahan($tahun,$status,$id);
+        else return $this->showDataAKBPerubahan($tahun,$status,$id);
     }
 
     public function showRincianMurni($tahun,$status,$id){
@@ -780,6 +780,99 @@ class blController extends Controller
                     ->groupBy('DAT_RINCIAN.BL_ID', 'DAT_RINCIAN.REKENING_ID','REKENING_NAMA', "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" )
                     ->orderBy("REKENING_NAMA")
                     ->selectRaw(' "DAT_RINCIAN"."BL_ID", "DAT_RINCIAN"."REKENING_ID", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
+                    ->get();
+
+                 //   dd($data);
+
+        $staff      = Staff::where('BL_ID',$id)->get();
+        $mod        = 0;
+        foreach($staff as $s){
+            if($s->USER_ID == Auth::user()->id) $mod = 1;
+        }
+        $view       = array();
+        $i         = 1;
+        $pajak      = '';
+        foreach ($data as $data) {
+
+            $getAkb = AKB_BL::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
+
+            if((( $data->bl->kunci->KUNCI_RINCIAN == 1 and $thp == 1 ) and Auth::user()->active == 5) or Auth::user()->level == 8 ){
+                if(empty($getAkb) ){
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
+                    <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                }else{
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                <li><a onclick="return hapus(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Hapus</a></li>
+                <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                }
+            }else{
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
+            }
+
+            if(Auth::user()->level == 8){
+                 $checkbox = '<div class="m-t-n-lg">
+                                  <label class="i-checks">
+                                    <input type="checkbox" value="'.$data->REKENING_ID.'" class="cb" id="cb-'.$data->REKENING_ID.'"/><i></i>
+                                  </label>
+                            </div>';
+                $no        = $checkbox.$no;
+
+            }
+
+            $tri1 = $data->AKB_JAN + $data->AKB_FEB + $data->AKB_MAR;
+            $tri2 = $data->AKB_APR + $data->AKB_MEI + $data->AKB_JUN;
+            $tri3 = $data->AKB_JUL + $data->AKB_AUG + $data->AKB_SEP;
+            $tri4 = $data->AKB_OKT + $data->AKB_NOV + $data->AKB_DES;
+
+            array_push($view, array( 'NO'             =>$no,
+                                     'REKENING'       =>$data->REKENING_KODE.'<br><p class="text-orange">'.$data->REKENING_NAMA.'</p>',
+                                     'TOTAL'          =>number_format($data->total,0,'.',','),
+                                     'JANUARI'        =>number_format($data->AKB_JAN,0,'.',','),
+                                     'FEBRUARI'       =>number_format($data->AKB_FEB,0,'.',','),
+                                     'MARET'          =>number_format($data->AKB_MAR,0,'.',','),
+                                     'APRIL'          =>number_format($data->AKB_APR,0,'.',','),
+                                     'MEI'            =>number_format($data->AKB_MEI,0,'.',','),
+                                     'JUNI'           =>number_format($data->AKB_JUN,0,'.',','),
+                                     'JULI'           =>number_format($data->AKB_JUL,0,'.',','),
+                                     'AGUSTUS'        =>number_format($data->AKB_AUG,0,'.',','),
+                                     'SEPTEMBER'      =>number_format($data->AKB_SEP,0,'.',','),
+                                     'OKTOBER'        =>number_format($data->AKB_OKT,0,'.',','),
+                                     'NOVEMBER'       =>number_format($data->AKB_NOV,0,'.',','),
+                                     'DESEMBER'       =>number_format($data->AKB_DES,0,'.',','),
+                                     'TRIWULAN1'      =>number_format($tri1,0,'.',','),
+                                     'TRIWULAN2'      =>number_format($tri2,0,'.',','),
+                                     'TRIWULAN3'      =>number_format($tri3,0,'.',','),
+                                     'TRIWULAN4'      =>number_format($tri4,0,'.',','),
+                                 ));
+        }
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+        return $view;
+    }
+
+    public function showDataAKBPerubahan($tahun,$status,$id){
+        //$now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        $now = date('Y-m-d H:m:s');
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+                    ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->first();
+        if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
+            $thp    = 1;
+        }else{
+            $thp    = 0;
+        }
+
+        $data       = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                    ->leftjoin('BUDGETING.DAT_AKB_BL',function($join){
+                        $join->on('DAT_AKB_BL.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->on('DAT_AKB_BL.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID');
+                    })
+                    ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$id)
+                    ->groupBy('DAT_RINCIAN_PERUBAHAN.BL_ID', 'DAT_RINCIAN_PERUBAHAN.REKENING_ID','REKENING_NAMA', "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" )
+                    ->orderBy("REKENING_NAMA")
+                    ->selectRaw(' "DAT_RINCIAN_PERUBAHAN"."BL_ID", "DAT_RINCIAN_PERUBAHAN"."REKENING_ID", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS total, "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" ')
                     ->get();
 
                  //   dd($data);
