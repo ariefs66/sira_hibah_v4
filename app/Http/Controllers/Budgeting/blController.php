@@ -2537,7 +2537,7 @@ class blController extends Controller
             $total_JB_pergeseran = $total_JB_pergeseran-$komp_skrg; //1000-500 = 500
             $total_JB_pergeseran = $total_JB_pergeseran+$total; //500+300 = 800
         
-            if($total_JB_pergeseran > $total_JB_murni){    //800 < 1000
+            if($total_JB_pergeseran > $total_JB_murni+2){    //800 < 1000
                 return 101;
             }             
 
