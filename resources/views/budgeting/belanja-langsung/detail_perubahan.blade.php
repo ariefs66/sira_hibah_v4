@@ -221,10 +221,10 @@
               <div class="wrapper-lg">
                 <!-- <h5 class="inline font-semibold text-orange m-n ">Rincian</h5> -->
                 <h5 class="inline font-semibold text-orange m-n">Pagu &nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>Rincian : <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}<br>
-                  Selisih : {{ number_format($bl->BL_PAGU-$rinciantotal,0,'.',',') }} <br>
-                  5.2.1 : {{ number_format($JB_521,0,'.',',') }}
-                  5.2.2 : {{ number_format($JB_522,0,'.',',') }}
-                  5.2.3 : {{ number_format($JB_523,0,'.',',') }}
+                  Selisih Total: {{ number_format($bl->BL_PAGU-$rinciantotal,0,'.',',') }} <br>
+                  Selisih Belanja Pegawai : {{ number_format($JB_521,0,'.',',') }}<br>
+                  Selisih Belanja Barang & Jasa : {{ number_format($JB_522,0,'.',',') }}<br>
+                  Selisih Belanja Modal : {{ number_format($JB_523,0,'.',',') }}<br>
                 </span></h5>
 
                 @if($bl->kunci->KUNCI_RINCIAN == 0  and $mod == 1 and $thp == 1 and Auth::user()->active == 1)
