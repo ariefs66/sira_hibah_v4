@@ -38,11 +38,15 @@ use App\Model\UrusanSKPD;
 use App\Model\UrusanKategori1;
 use App\Model\UrusanKategori2;
 use App\Model\AKB_BL; 
+use App\Model\AKB_BL_Perubahan;
 use App\Model\AKB_BTL; 
+use App\Model\AKB_BTL_Perubahan; 
 use App\Model\AKB_Pendapatan; 
+use App\Model\AKB_Pendapatan_Perubahan; 
 use App\Model\Staff; 
 use App\Model\User; 
 use App\Model\AKB_Pembiayaan; 
+use App\Model\AKB_Pembiayaan_Perubahan; 
 use App\Model\Output; 
 class lampiranController extends Controller
 {
@@ -5339,13 +5343,24 @@ class lampiranController extends Controller
 
 
     public function akbBL($tahun, $status, $id){
-        
-        $akb  = AKB_BL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BL.REKENING_ID')
+
+        if($status=='murni'){
+            $akb  = AKB_BL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BL.REKENING_ID')
                     ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
                     ->where('DAT_AKB_BL.BL_ID',$id)->orderby('REKENING_KODE')->get();
 
-        $bl   = BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
+            $bl   = BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
                         ->where('DAT_BL.BL_ID',$id)->first();           // dd($akb->SKPD_ID);         
+        }
+        else{
+            $akb  = AKB_BL_Perubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BL_PERUBAHAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_AKB_BL_PERUBAHAN.BL_ID')
+                    ->where('DAT_AKB_BL_PERUBAHAN.BL_ID',$id)->orderby('REKENING_KODE')->get();
+
+            $bl   = BLPerubahan::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID')
+                        ->where('DAT_BL_PERUBAHAN.BL_ID',$id)->first();           // dd($akb->SKPD_ID);         
+
+        }
         
          
 
@@ -5359,11 +5374,17 @@ class lampiranController extends Controller
 
 
     public function akbBTL($tahun, $status, $id){
-        
-        $akb  = AKB_BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BTL.REKENING_ID')
+
+        if($status=='murni'){
+            $akb  = AKB_BTL::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BTL.REKENING_ID')
                     ->join('BUDGETING.DAT_BTL','DAT_BTL.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
                     ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BTL.SUB_ID')
                     ->where('DAT_BTL.SKPD_ID',$id)->get();
+        }else{
+            $akb  = AKB_BTL_Perubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_BTL_PERUBAHAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_BTL_PERUBAHAN','DAT_BTL_PERUBAHAN.BTL_ID','=','DAT_AKB_BTL_PERUBAHAN.BTL_ID')
+                    ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$id)->get();
+        }
 
         $skpd = SKPD::where('SKPD_ID',$id)->first();        
         
@@ -5378,15 +5399,18 @@ class lampiranController extends Controller
     }
 
     public function akbPendapatan($tahun, $status, $id){
-        
-        $akb  = AKB_Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PENDAPATAN.REKENING_ID')
+        if($status=='murni'){
+            $akb  = AKB_Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PENDAPATAN.REKENING_ID')
                     ->join('BUDGETING.DAT_PENDAPATAN','DAT_PENDAPATAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
                     ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_PENDAPATAN.SUB_ID')
                     ->where('DAT_PENDAPATAN.SKPD_ID',$id)->get();
-
-        $skpd = SKPD::where('SKPD_ID',$id)->first();        
-        
-         
+        }else{
+            $akb  = AKB_Pendapatan_Perubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_PENDAPATAN_PERUBAHAN','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID')
+                    ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$id)->get();
+        }
+               
+         $skpd = SKPD::where('SKPD_ID',$id)->first(); 
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
@@ -5398,13 +5422,17 @@ class lampiranController extends Controller
 
 
     public function akbPembiayaan($tahun, $status, $id){
-        
-        $akb  = AKB_Pembiayaan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
+        if($status=='murni'){
+            $akb  = AKB_Pembiayaan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
                     ->join('BUDGETING.DAT_PEMBIAYAAN','DAT_PEMBIAYAAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
                     ->where('DAT_PEMBIAYAAN.SKPD_ID',$id)->get();
+        }else{
+            $akb  = AKB_Pembiayaan_Perubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->join('BUDGETING.DAT_PEMBIAYAAN_PERUBAHAN','DAT_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID')
+                    ->where('DAT_PEMBIAYAAN_PERUBAHAN.SKPD_ID',$id)->get();
+        }
 
         $skpd = SKPD::where('SKPD_ID',$id)->first();        
-        
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');

@@ -970,6 +970,8 @@
               $.alert('Volume Tidak Bisa Ditambahkan');
             }else if(msg == 98){
               $.alert('Rekening Kurang Dari Realisasi');
+            }else if(msg == 101){
+              $.alert('Total Rincian Melebihi Total Per Jenis Belanja');
             }else if(msg != 0){
               if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5') location.reload();
               $('.input-rincian,.input-sidebar').animate({'right':'-1050px'},function(){
