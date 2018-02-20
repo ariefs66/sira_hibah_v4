@@ -2522,12 +2522,12 @@ class blController extends Controller
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
         
-            $total_JB_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+            $total_JB_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                         ->where('BL_ID',Input::get('BL_ID'))
                         ->where('REKENING_KODE','like',$tipe_rek.'%')
                         ->sum('RINCIAN_TOTAL'); //1000
 
-            $total_JB_pergeseran = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+            $total_JB_pergeseran = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
                         ->where('BL_ID',Input::get('BL_ID'))
                         ->where('REKENING_KODE','like',$tipe_rek.'%')
                         ->sum('RINCIAN_TOTAL'); //1000  
@@ -2537,7 +2537,7 @@ class blController extends Controller
             $total_JB_pergeseran = $total_JB_pergeseran-$komp_skrg; //1000-500 = 500
             $total_JB_pergeseran = $total_JB_pergeseran+$total; //500+300 = 800
         
-            if($total_JB_pergeseran > $total_JB_murni){
+            if($total_JB_pergeseran > $total_JB_murni){    //800 < 1000
                 return 101;
             }             
 
