@@ -257,10 +257,27 @@ class blController extends Controller
         $impact     = Impact::where('PROGRAM_ID',$program)->get();
         $output     = Output::where('BL_ID',$id)->get();
 
+
+
+        $JB_521 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                        ->where('BL_ID',Input::get('BL_ID'))
+                        ->where('REKENING_KODE','like','5.2.1%')
+                        ->sum('RINCIAN_TOTAL');   
+
+        $JB_522 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                        ->where('BL_ID',Input::get('BL_ID'))
+                        ->where('REKENING_KODE','like','5.2.2%')
+                        ->sum('RINCIAN_TOTAL');   
+        
+        $JB_523 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                        ->where('BL_ID',Input::get('BL_ID'))
+                        ->where('REKENING_KODE','like','5.2.3%')
+                        ->sum('RINCIAN_TOTAL');                                       
+
         if($status == 'murni')
         return View('budgeting.belanja-langsung.detail',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r]);
         else
-        return View('budgeting.belanja-langsung.detail_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact]);
+        return View('budgeting.belanja-langsung.detail_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'JB_521'=>$JB_521,'JB_522'=>$JB_522,'JB_523'=>$JB_523]);
     }
 
     public function showAKB($tahun,$status,$id){
