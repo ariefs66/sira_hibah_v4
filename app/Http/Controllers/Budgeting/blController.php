@@ -49,6 +49,7 @@ use App\Model\Urgensi;
 use App\Model\Realisasi;
 use App\Model\RincianLog;
 use App\Model\AKB_BL;
+use App\Model\AKB_BL_Perubahan;
 
 class blController extends Controller
 {
@@ -283,10 +284,12 @@ class blController extends Controller
 
         $pekerjaan  = Pekerjaan::all();
         $satuan     = Satuan::all();
+
         if($status == 'murni')
         $rincian    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
         else
         $rincian    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
@@ -302,6 +305,7 @@ class blController extends Controller
         $i           = 0;
         if($status == 'murni') $subrincian  = Subrincian::where('BL_ID',$id)->orderBy('SUBRINCIAN_NAMA')->get();
         else $subrincian  = SubrincianPerubahan::where('BL_ID',$id)->orderBy('SUBRINCIAN_NAMA')->get();
+        
         if($tag){
             foreach($tag as $t){
                 $tagView[$i]    = Tag::where('TAG_ID',$t)->value('TAG_NAMA');
@@ -866,8 +870,8 @@ class blController extends Controller
         }
 
         $data       = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                    ->leftjoin('BUDGETING.DAT_AKB_BL',function($join){
-                        $join->on('DAT_AKB_BL.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->on('DAT_AKB_BL.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID');
+                    ->leftjoin('BUDGETING.DAT_AKB_BL_PERUBAHAN',function($join){
+                        $join->on('DAT_AKB_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->on('DAT_AKB_BL_PERUBAHAN.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID');
                     })
                     ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$id)
                     ->groupBy('DAT_RINCIAN_PERUBAHAN.BL_ID', 'DAT_RINCIAN_PERUBAHAN.REKENING_ID','REKENING_NAMA', "AKB_JAN", "AKB_FEB", "AKB_MAR", "AKB_APR", "AKB_MEI", "AKB_JUN", "AKB_JUL", "AKB_AUG", "AKB_SEP", "AKB_OKT", "AKB_NOV", "AKB_DES" )
@@ -887,7 +891,7 @@ class blController extends Controller
         $pajak      = '';
         foreach ($data as $data) {
 
-            $getAkb = AKB_BL::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
+            $getAkb = AKB_BL_Perubahan::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
 
             if((( $data->bl->kunci->KUNCI_RINCIAN == 1 and $thp == 1 ) and Auth::user()->active == 5) or Auth::user()->level == 8 ){
                 if(empty($getAkb) ){
@@ -1012,8 +1016,8 @@ class blController extends Controller
                     ->first();
         }else{
             $data       = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                    ->leftjoin('BUDGETING.DAT_AKB_BL',function($join){
-                        $join->on('DAT_AKB_BL.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->on('DAT_AKB_BL.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID');
+                    ->leftjoin('BUDGETING.DAT_AKB_BL_PERUBAHAN',function($join){
+                        $join->on('DAT_AKB_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->on('DAT_AKB_BL_PERUBAHAN.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID');
                     })
                     ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$bl_id)
                     ->where('DAT_RINCIAN_PERUBAHAN.REKENING_ID',$rek_id)
@@ -2134,29 +2138,97 @@ class blController extends Controller
              return 0; 
                
         }
-        else return $this->submitAKBEditPerubahan($tahun,$status);
+        else{
+            $akb_bl = AKB_BL_Perubahan::where('BL_ID',Input::get('bl_id'))
+                         ->where('REKENING_ID',Input::get('rek_id'))->value('AKB_ID'); 
+
+            if(empty($akb_bl)){
+                $akb = new AKB_BL_Perubahan;
+                $akb->BL_ID              = Input::get('bl_id');
+                $akb->REKENING_ID        = Input::get('rek_id');
+                $akb->AKB_JAN            = Input::get('jan');
+                $akb->AKB_FEB            = Input::get('feb');
+                $akb->AKB_MAR            = Input::get('mar');
+                $akb->AKB_APR            = Input::get('apr');
+                $akb->AKB_MEI            = Input::get('mei');
+                $akb->AKB_JUN            = Input::get('jun');
+                $akb->AKB_JUL            = Input::get('jul');
+                $akb->AKB_AUG            = Input::get('agu');
+                $akb->AKB_SEP            = Input::get('sep');
+                $akb->AKB_OKT            = Input::get('okt');
+                $akb->AKB_NOV            = Input::get('nov');
+                $akb->AKB_DES            = Input::get('des');
+                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->TIME_CREATED       = Carbon\Carbon::now();
+                $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+                $akb->save(); 
+
+                return 1; 
+
+            }else{
+                AKB_BL_Perubahan::where('BL_ID',Input::get('bl_id'))
+                         ->where('REKENING_ID',Input::get('rek_id'))
+                 ->update([
+                        'AKB_JAN'        => Input::get('jan'),
+                        'AKB_FEB'        => Input::get('feb'),
+                        'AKB_MAR'        => Input::get('mar'),
+                        'AKB_APR'        => Input::get('apr'),
+                        'AKB_MEI'        => Input::get('mei'),
+                        'AKB_JUN'        => Input::get('jun'),
+                        'AKB_JUL'        => Input::get('jul'),
+                        'AKB_AUG'        => Input::get('agu'),
+                        'AKB_SEP'        => Input::get('sep'),
+                        'AKB_OKT'        => Input::get('okt'),
+                        'AKB_NOV'        => Input::get('nov'),
+                        'AKB_DES'        => Input::get('des')
+                        ]); 
+
+                 return 1; 
+            }                
+
+             return 0; 
+        }
     }
 
     public function submitAKBadd($tahun,$status,$id){
 
-        $rincian = Rincian::where('BL_ID',$id)
+        if($status=='murni'){
+            $rincian = Rincian::where('BL_ID',$id)
                         ->groupBy('REKENING_ID')
                         ->select("REKENING_ID")
                         ->get();
 
-        foreach ($rincian as $r) {
-            $akb = new AKB_BL;
-            $akb->BL_ID              = $id;
-            $akb->REKENING_ID        = $r->REKENING_ID;
-            $akb->USER_CREATED       = Auth::user()->id;
-            $akb->USER_CREATED       = Auth::user()->id;
-            $akb->TIME_CREATED       = Carbon\Carbon::now();
-            $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
-            $akb->save(); 
-        }  
+            foreach ($rincian as $r) {
+                $akb = new AKB_BL;
+                $akb->BL_ID              = $id;
+                $akb->REKENING_ID        = $r->REKENING_ID;
+                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->TIME_CREATED       = Carbon\Carbon::now();
+                $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+                $akb->save(); 
+            }  
 
-        return 'Berhasil!';             
-        
+            return 'Berhasil!';   
+        }else{
+            $rincian = RincianPerubahan::where('BL_ID',$id)
+                        ->groupBy('REKENING_ID')
+                        ->select("REKENING_ID")
+                        ->get();
+
+            foreach ($rincian as $r) {
+                $akb = new AKB_BL_Perubahan;
+                $akb->BL_ID              = $id;
+                $akb->REKENING_ID        = $r->REKENING_ID;
+                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->TIME_CREATED       = Carbon\Carbon::now();
+                $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
+                $akb->save(); 
+            }  
+
+            return 'Berhasil!'; 
+        }          
 
     }
 
@@ -2417,10 +2489,15 @@ class blController extends Controller
                                 $r->where('SKPD_ID',$skpd);
                             });
                         })->where('BL_ID','!=',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
+
+       /* $totalJenisBelanja = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                            ->*/
+
         // print_r($total);exit();
         $cekrealisasi   = Realisasi::where('BL_ID',Input::get('BL_ID'))
                                     ->where('REKENING_ID',Input::get('REKENING_ID'))
                                     ->first();
+
         $rekeningnow    = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))
                                     ->where('REKENING_ID',Input::get('REKENING_ID'))
                                     ->where('RINCIAN_ID','!=',Input::get('RINCIAN_ID'))
@@ -2433,6 +2510,32 @@ class blController extends Controller
                 return 98;
             }                        
         }
+
+        //cek pergeseran antar jenis belanja 
+        if($status=='pergeseran'){
+            /*
+            1. cek rekening temasuk jenis belanja apa 
+            2. ambil total per jenis belanja / jenis_JB
+            3. jenis_JB = JB_masuk + total_JB
+            4. jenis_JB > total_JB // MELEBIHI JENIS BELANJA     */
+
+            $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
+            $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
+        
+            $total_JB = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                        ->where('BL_ID',Input::get('BL_ID'))
+                        ->where('REKENING_KODE','like',$tipe_rek.'%')
+                        ->sum('RINCIAN_TOTAL');
+
+            $jenis_JB = $total_JB + $total;
+        
+            if($jenis_JB > $total_JB){
+                return 101;
+            }             
+
+        }                                           
+        //end cek pergeseran antar jenis belanja 
+
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
@@ -2618,9 +2721,14 @@ class blController extends Controller
         return "Hapus Berhasil!";
     }
 
-    public function deleteAKB(){
-        AKB_BL::where('BL_ID',Input::get('BL_ID'))->where('REKENING_ID',Input::get('REKENING_ID'))->delete();
-        return "Hapus Berhasil!";
+    public function deleteAKB($tahun,$status){
+        if($status=='murni'){
+            AKB_BL::where('BL_ID',Input::get('BL_ID'))->where('REKENING_ID',Input::get('REKENING_ID'))->delete();
+            return "Hapus Berhasil!";
+        }else{
+            AKB_BL_Perubahan::where('BL_ID',Input::get('BL_ID'))->where('REKENING_ID',Input::get('REKENING_ID'))->delete();
+            return "Hapus Berhasil!";
+        }
     }
         
 
