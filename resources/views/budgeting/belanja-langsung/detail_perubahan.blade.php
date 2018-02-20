@@ -230,6 +230,8 @@
                 @endif
                 @if(Auth::user()->level == 8)
                 <a class="pull-right btn m-t-n-sm btn-warning" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/detail/arsip/{{$BL_ID}}" target="_blank"><i class="fa fa-archive"></i></a>
+
+                <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
                 @endif
                 <!-- @if(($BL_ID == 5718 ) 
                     and $mod == 1 
