@@ -257,22 +257,61 @@ class blController extends Controller
         $impact     = Impact::where('PROGRAM_ID',$program)->get();
         $output     = Output::where('BL_ID',$id)->get();
 
+        $JB_521_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                        ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_RINCIAN.BL_ID',$id)
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REKENING_KODE','like','5.2.1%')
+                        ->sum('RINCIAN_TOTAL');
 
+         $JB_522_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                        ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_RINCIAN.BL_ID',$id)
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REKENING_KODE','like','5.2.2%')
+                        ->sum('RINCIAN_TOTAL'); 
+
+          $JB_523_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+                        ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_RINCIAN.BL_ID',$id)
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REKENING_KODE','like','5.2.3%')
+                        ->sum('RINCIAN_TOTAL');                                   
 
         $JB_521 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                        ->where('BL_ID',$id)
+                        ->join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$id)
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
                         ->where('REKENING_KODE','like','5.2.1%')
                         ->sum('RINCIAN_TOTAL');   
 
+
+
         $JB_522 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                        ->where('BL_ID',$id)
+                        ->join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$id)
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
                         ->where('REKENING_KODE','like','5.2.2%')
                         ->sum('RINCIAN_TOTAL');   
+                        
         
         $JB_523 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                        ->where('BL_ID',$id)
+                        ->join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('DAT_RINCIAN_PERUBAHAN.BL_ID',$id)
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
                         ->where('REKENING_KODE','like','5.2.3%')
-                        ->sum('RINCIAN_TOTAL');                                       
+                        ->sum('RINCIAN_TOTAL');  
+
+        $JB_521 = $JB_521_murni - $JB_521;                                                     
+        $JB_522 = $JB_522_murni - $JB_522;                                                     
+        $JB_523 = $JB_523_murni - $JB_523;  
+
 
         if($status == 'murni')
         return View('budgeting.belanja-langsung.detail',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r]);
