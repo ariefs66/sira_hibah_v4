@@ -48,6 +48,7 @@ use App\Model\User;
 use App\Model\AKB_Pembiayaan; 
 use App\Model\AKB_Pembiayaan_Perubahan; 
 use App\Model\Output; 
+use App\Model\OutputPerubahan; 
 class lampiranController extends Controller
 {
     // public function __construct(){
@@ -5063,8 +5064,13 @@ class lampiranController extends Controller
         return View('budgeting.lampiran.dpa-skpd22',$data);
     }
 
+    public function dpaSKPD22Detail($tahun,$status, $s){
 
-    public function dpaSKPD22Detail($tahun, $status, $s){
+        if($status == 'murni') return $this->dpaSKPD22DetailMurni($tahun, $status, $s);
+        else return $this->dpaSKPD22DetailPerubahan($tahun, $status, $s);
+    }
+
+    public function dpaSKPD22DetailMurni($tahun, $status, $s){
         $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
                         ->where('SKPD_ID',$s)->first();
 
@@ -5131,7 +5137,117 @@ class lampiranController extends Controller
             return View('budgeting.lampiran.dpa-skpd22-detail',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'bl_p'=>$bl_p, 'bl_idk'=>$bl_idk, 'akb_bl'=>$akb_bl, 'totbl'=>$totbl ]);
     }
 
+    public function dpaSKPD22DetailPerubahan($tahun, $status, $s){
+        $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+                        ->where('SKPD_ID',$s)->first();
 
+        $skpd = SKPD::where('SKPD_ID',$s)->first();
+
+        $totbl = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('DAT_BL.BL_TAHUN',$tahun)
+                        ->where('DAT_BL.BL_DELETED',0)
+                        ->where('DAT_BL.BL_VALIDASI',1)
+                        ->sum('RINCIAN_TOTAL');
+
+        $bl_p = BL::join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                   ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
+                   ->join('BUDGETING.DAT_RINCIAN','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID') 
+                   ->where('DAT_BL.SKPD_ID',$s)
+                   ->where('DAT_BL.BL_TAHUN',$tahun)
+                   ->where('DAT_BL.BL_DELETED',0)
+                   ->where('DAT_BL.BL_VALIDASI',1)
+                   ->groupBy("REF_KEGIATAN.PROGRAM_ID","PROGRAM_NAMA","PROGRAM_KODE")
+                   ->orderby("PROGRAM_KODE")
+                   ->selectRaw('"REF_KEGIATAN"."PROGRAM_ID","PROGRAM_NAMA", "PROGRAM_KODE", SUM("RINCIAN_TOTAL") as pagu ')
+                   ->get(); 
+
+        $bl = BL::join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                   ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
+                   ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL.LOKASI_ID') 
+                   ->join('BUDGETING.DAT_RINCIAN','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID') 
+                   ->where('DAT_BL.SKPD_ID',$s)
+                   ->where('DAT_BL.BL_TAHUN',$tahun)
+                   ->where('DAT_BL.BL_DELETED',0)
+                   ->where('DAT_BL.BL_VALIDASI',1)
+                   ->orderby("KEGIATAN_KODE")
+                   ->groupBy("DAT_BL.BL_ID","REF_KEGIATAN.PROGRAM_ID", "DAT_BL.KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA")
+                   ->selectRaw('"DAT_BL"."BL_ID","REF_KEGIATAN"."PROGRAM_ID", "DAT_BL"."KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA", SUM("RINCIAN_TOTAL") as pagu')
+                   ->get(); 
+
+        $bl_idk = BL::join('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID') 
+                   ->join('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')
+                   ->where('DAT_BL.SKPD_ID',$s)
+                   ->where('DAT_BL.BL_TAHUN',$tahun)
+                   ->where('DAT_BL.BL_DELETED',0)
+                   ->where('DAT_BL.BL_VALIDASI',1)
+                   ->selectRaw(' "DAT_BL"."BL_ID","OUTPUT_TARGET","SATUAN_NAMA"')
+                   ->get(); 
+
+        
+        /*pergeseran & perubahan*/ 
+        $totbl_pp = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                        ->where('DAT_BL_PERUBAHAN.BL_TAHUN',$tahun)
+                        ->where('DAT_BL_PERUBAHAN.BL_DELETED',0)
+                        ->where('DAT_BL_PERUBAHAN.BL_VALIDASI',1)
+                        ->sum('RINCIAN_TOTAL');
+
+        $bl_p_pp = BLPerubahan::join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL_PERUBAHAN.KEGIATAN_ID')
+                   ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
+                   ->join('BUDGETING.DAT_RINCIAN_PERUBAHAN','DAT_RINCIAN_PERUBAHAN.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID') 
+                   ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                   ->where('DAT_BL_PERUBAHAN.BL_TAHUN',$tahun)
+                   ->where('DAT_BL_PERUBAHAN.BL_DELETED',0)
+                   ->where('DAT_BL_PERUBAHAN.BL_VALIDASI',1)
+                   ->groupBy("REF_KEGIATAN.PROGRAM_ID","PROGRAM_NAMA","PROGRAM_KODE")
+                   ->orderby("PROGRAM_KODE")
+                   ->selectRaw('"REF_KEGIATAN"."PROGRAM_ID","PROGRAM_NAMA", "PROGRAM_KODE", SUM("RINCIAN_TOTAL") as pagu ')
+                   ->get(); 
+
+        $bl_pp = BLPerubahan::join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL_PERUBAHAN.KEGIATAN_ID')
+                   ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
+                   ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL_PERUBAHAN.LOKASI_ID') 
+                   ->join('BUDGETING.DAT_RINCIAN_PERUBAHAN','DAT_RINCIAN_PERUBAHAN.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID') 
+                   ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                   ->where('DAT_BL_PERUBAHAN.BL_TAHUN',$tahun)
+                   ->where('DAT_BL_PERUBAHAN.BL_DELETED',0)
+                   ->where('DAT_BL_PERUBAHAN.BL_VALIDASI',1)
+                   ->orderby("KEGIATAN_KODE")
+                   ->groupBy("DAT_BL_PERUBAHAN.BL_ID","REF_KEGIATAN.PROGRAM_ID", "DAT_BL_PERUBAHAN.KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA")
+                   ->selectRaw('"DAT_BL_PERUBAHAN"."BL_ID","REF_KEGIATAN"."PROGRAM_ID", "DAT_BL_PERUBAHAN"."KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA", SUM("RINCIAN_TOTAL") as pagu')
+                   ->get(); 
+
+        $bl_idk_pp = BLPerubahan::join('BUDGETING.DAT_OUTPUT_PERUBAHAN','DAT_OUTPUT_PERUBAHAN.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID') 
+                   ->join('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT_PERUBAHAN.SATUAN_ID')
+                   ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                   ->where('DAT_BL_PERUBAHAN.BL_TAHUN',$tahun)
+                   ->where('DAT_BL_PERUBAHAN.BL_DELETED',0)
+                   ->where('DAT_BL_PERUBAHAN.BL_VALIDASI',1)
+                   ->selectRaw(' "DAT_BL_PERUBAHAN"."BL_ID","OUTPUT_TARGET","SATUAN_NAMA"')
+                   ->get(); 
+        /*end pergeseran & perubahan*/           
+
+
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+
+        $akb_bl   = AKB_BL_Perubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_AKB_BL_PERUBAHAN.BL_ID')
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                        ->groupBy("DAT_BL_PERUBAHAN.BL_ID", "DAT_BL_PERUBAHAN.KEGIATAN_ID")
+                         ->selectRaw(' "DAT_BL_PERUBAHAN"."BL_ID", "DAT_BL_PERUBAHAN"."KEGIATAN_ID",
+                            SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->get(); 
+        
+            return View('budgeting.lampiran.dpa-skpd22-detail-perubahan',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'bl_p'=>$bl_p, 'bl_idk'=>$bl_idk, 'akb_bl'=>$akb_bl, 'totbl'=>$totbl,
+                'bl_pp'=>$bl_pp,'bl_p_pp'=>$bl_p_pp, 'bl_idk_pp'=>$bl_idk_pp, 'totbl_pp'=>$totbl_pp ]);
+    }
 
     public function dpaSKPD221($tahun,$status){
         $tipe = 'Lampiran DPA-SKPD 2.2.1'; 
