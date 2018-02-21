@@ -257,7 +257,7 @@ class blController extends Controller
         $impact     = Impact::where('PROGRAM_ID',$program)->get();
         $output     = Output::where('BL_ID',$id)->get();
 
-        /*$JB_521_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+        $JB_521_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                         ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->where('DAT_RINCIAN.BL_ID',$id)
                         ->where('BL_TAHUN',$tahun)
@@ -279,7 +279,7 @@ class blController extends Controller
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('REKENING_KODE','like','5.2.3%')
-                        ->sum('RINCIAN_TOTAL'); */                                  
+                        ->sum('RINCIAN_TOTAL');                                   
 
         $JB_521 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
                         ->join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
@@ -310,11 +310,11 @@ class blController extends Controller
 
                         //dd($JB_522_murni); 
         if($JB_521 != 0){
-            $JB_521 = $bl->BL_PAGU - $JB_521;
+            $JB_521 = $JB_521_murni - $JB_521;
         }elseif($JB_522 != 0){
-            $JB_522 = $bl->BL_PAGU - $JB_522;                                                     
+            $JB_522 = $JB_522_murni - $JB_522;                                                     
         }elseif($JB_523 != 0){
-            $JB_523 = $bl->BL_PAGU - $JB_523;  
+            $JB_523 = $JB_523_murni - $JB_523;  
         }                                
                                                              
         
