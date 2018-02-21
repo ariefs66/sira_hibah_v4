@@ -476,7 +476,7 @@ class pendapatanController extends Controller
         
         foreach ($data as $data) {
 
-            $getAkb = AKB_Pendapatan::where('PENDAPATAN_ID',$data->PENDAPATAN_ID)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_PENDAPATAN_ID');            
+            $getAkb = AKB_Pendapatan_Perubahan::where('PENDAPATAN_ID',$data->PENDAPATAN_ID)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_PENDAPATAN_ID');            
 
             if(($thp == 1 or Auth::user()->level == 8 ) and Auth::user()->active == 5){
                 if(empty($getAkb) ){
