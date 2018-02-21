@@ -104,8 +104,8 @@
                         <td colspan="2"> </td>
                         <td colspan="2"><b>Total Pagu Murni : Rp. <text id="pagu_murni"></text> </b></td>
                         <td colspan="2"><b>Total Pagu @if($status=='pergeseran') Pergeseran @else Perubahan @endif : Rp. <text id="pagu_perubahan"></text> </b></td>
-                        <td></td>
                         <td><b>Selisih : Rp. <text id="pagu_selisih"></text> </b></td>
+                        <td></td>
                       </tr>  
                     </tfoot>                                
                   </table>
