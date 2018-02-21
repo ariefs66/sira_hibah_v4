@@ -222,9 +222,9 @@
                 <!-- <h5 class="inline font-semibold text-orange m-n ">Rincian</h5> -->
                 <h5 class="inline font-semibold text-orange m-n">Pagu &nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>Rincian : <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}<br>
                   Selisih Total: {{ number_format($bl->BL_PAGU-$rinciantotal,0,'.',',') }} <br>
-                  Selisih Belanja Pegawai : {{ number_format($JB_521,0,'.',',') }}<br>
+                  <!-- Selisih Belanja Pegawai : {{ number_format($JB_521,0,'.',',') }}<br>
                   Selisih Belanja Barang & Jasa : {{ number_format($JB_522,0,'.',',') }}<br>
-                  Selisih Belanja Modal : {{ number_format($JB_523,0,'.',',') }}<br>
+                  Selisih Belanja Modal : {{ number_format($JB_523,0,'.',',') }}<br> -->
                 </span></h5>
 
                 @if($bl->kunci->KUNCI_RINCIAN == 0  and $mod == 1 and $thp == 1 and Auth::user()->active == 1)
@@ -237,7 +237,7 @@
                 @if(Auth::user()->level == 8)
                 <a class="pull-right btn m-t-n-sm btn-warning" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/detail/arsip/{{$BL_ID}}" target="_blank"><i class="fa fa-archive"></i></a>
 
-                <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
+                <!-- <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button> -->
                 @endif
                 <!-- @if(($BL_ID == 5718 ) 
                     and $mod == 1 
