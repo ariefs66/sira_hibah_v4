@@ -260,17 +260,17 @@ class blController extends Controller
 
 
         $JB_521 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                        ->where('BL_ID',Input::get('BL_ID'))
+                        ->where('BL_ID',$id)
                         ->where('REKENING_KODE','like','5.2.1%')
                         ->sum('RINCIAN_TOTAL');   
 
         $JB_522 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                        ->where('BL_ID',Input::get('BL_ID'))
+                        ->where('BL_ID',$id)
                         ->where('REKENING_KODE','like','5.2.2%')
                         ->sum('RINCIAN_TOTAL');   
         
         $JB_523 = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                        ->where('BL_ID',Input::get('BL_ID'))
+                        ->where('BL_ID',$id)
                         ->where('REKENING_KODE','like','5.2.3%')
                         ->sum('RINCIAN_TOTAL');                                       
 
@@ -3512,6 +3512,13 @@ class blController extends Controller
                                         $q->where('SKPD_ID',$filter);
                                 })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
 
+        $rincian_total_perubahan = BLPerubahan::join('BUDGETING.DAT_RINCIAN_PERUBAHAN','DAT_RINCIAN_PERUBAHAN.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID')
+                                ->where('SKPD_ID',$filter)
+                                ->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)
+                                ->sum('RINCIAN_TOTAL');
+
+        $pagu_selisih   = $pagu_perubahan - $rincian_total_perubahan;
+
        // $pagu_skpd      = SKPD::select('SKPD_PAGU')->where('SKPD_ID',$filter)->get();
 
         $view       = array();
@@ -3616,12 +3623,14 @@ class blController extends Controller
                                      'RINCIAN_SEBELUM'        =>number_format($realisasi,0,'.',','),
                                      'PAGU_SESUDAH'           =>number_format($data->BL_PAGU,0,'.',','),
                                      'RINCIAN_SESUDAH'        =>$totalRincian,
+                                     'SELISIH'        =>number_format($data->BL_PAGU-$data->rincian->sum('RINCIAN_TOTAL'),0,'.',','),
                                      'STATUS'         =>$kunci.' Kegiatan<br>'.$rincian.' Rincian<br>'.$validasi.' Validasi'));
             $i++;
         }
         $out = array("aaData"=>$view,
                     "pagu_murni"=>number_format($pagu_murni,0,'.',','),
                     "pagu_perubahan"=>number_format($pagu_perubahan,0,'.',','),
+                    "pagu_selisih"=>number_format($pagu_selisih,0,'.',','),
                     );      
         return Response::JSON($out);
         return $view;

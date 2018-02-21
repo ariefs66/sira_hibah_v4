@@ -65,6 +65,7 @@
                           { mData: 'RINCIAN_SEBELUM' },
                           { mData: 'PAGU_SESUDAH' },
                           { mData: 'RINCIAN_SESUDAH' },
+                          { mData: 'SELISIH' },
                           { mData: 'STATUS' }]
                       }" class="table table-jurnal table-striped b-t b-b" id="table-index">
                     <thead>
@@ -72,7 +73,7 @@
                         <th rowspan="2" style="width: 1%">#</th>
                         <th rowspan="2">Program/Kegiatan/Sub Unit</th>
                         <th colspan="2" style="text-align: center;">Murni</th>                                      
-                        <th colspan="2" style="text-align: center;">@if($status=='pergeseran') Pergeseran @else Perubahan @endif</th>                                      
+                        <th colspan="3" style="text-align: center;">@if($status=='pergeseran') Pergeseran @else Perubahan @endif</th>                                      
                         <th rowspan="2" width="16%">Status 
                           @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)
                             <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciGiatSKPD()" id="kuncigiatskpd"><i></i></label>
@@ -87,9 +88,10 @@
                         <th style="width: 1%">Realisasi</th>                                     
                         <th style="width: 1%">Pagu</th>                                      
                         <th style="width: 1%">Rincian</th>                                     
+                        <th style="width: 1%">Selisih</th>                                     
                       </tr>
                       <tr>
-                        <th colspan="9" class="th_search">
+                        <th colspan="10" class="th_search">
                           <i class="icon-bdg_search"></i>
                           <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                         </th>
@@ -103,6 +105,7 @@
                         <td colspan="2"><b>Total Pagu Murni : Rp. <text id="pagu_murni"></text> </b></td>
                         <td colspan="2"><b>Total Pagu @if($status=='pergeseran') Pergeseran @else Perubahan @endif : Rp. <text id="pagu_perubahan"></text> </b></td>
                         <td></td>
+                        <td><b>Selisih : Rp. <text id="pagu_selisih"></text> </b></td>
                       </tr>  
                     </tfoot>                                
                   </table>
@@ -435,10 +438,12 @@ function setStaff(){
           { mData: 'RINCIAN_SEBELUM' },
           { mData: 'PAGU_SESUDAH' },
           { mData: 'RINCIAN_SESUDAH' },
+          { mData: 'SELISIH' },
           { mData: 'STATUS' }],
           initComplete:function(setting,json){
             $("#pagu_murni").html(json.pagu_murni);
             $("#pagu_perubahan").html(json.pagu_perubahan);
+            $("#pagu_selisih").html(json.pagu_selisih);
         }
       });  
   });
