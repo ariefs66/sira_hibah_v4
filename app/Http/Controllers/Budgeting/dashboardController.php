@@ -327,7 +327,7 @@ class dashboardController extends Controller
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI','0')->get();
             }
-            elseif($status=="perubahan"){
+            else{
                 $staff  = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI','0')->get();

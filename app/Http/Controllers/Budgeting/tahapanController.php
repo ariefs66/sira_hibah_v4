@@ -66,9 +66,17 @@ class tahapanController extends Controller
     }
     
     public function indexperubahan($tahun,$status){
-        $tutup        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_SELESAI');
+        $tutup        = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+            ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_SELESAI');
         if($tutup != '0') $tutup = 1;
-        $tahapan     = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_NAMA');
+           $tahapan     = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+        ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_NAMA');
         if(empty($tahapan)){
             $tahapan    = 'RKPD';
         }elseif ($tahapan == 'RKPD') {
@@ -87,7 +95,11 @@ class tahapanController extends Controller
         if($status == 'murni')
         $data           = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID')->get();
     	else
-        $data 			= Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','perubahan')->orderBy('TAHAPAN_ID')->get();
+        $data 			= Tahapan::where('TAHAPAN_TAHUN',$tahun)
+    ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID')->get();
     	$no 			= 1;
     	$aksi 			= '';
     	$view 			= array();

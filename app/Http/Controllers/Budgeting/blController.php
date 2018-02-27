@@ -563,11 +563,16 @@ class blController extends Controller
                    /* if($data->KOMPONEN_ID == 0){
                         $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                     }else{*/
-                        $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')">
+                       /* $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')">
                         <i class="fa fa-pencil-square"></i>Ubah</a></li>
                         <li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')">
+                        <i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';*/
+                  
+                    $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')">
+                        <i class="fa fa-pencil-square"></i>Ubah</a></li>
                         <i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
-                   // }
+
+                  // }
                 }
             }else{
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
@@ -1692,7 +1697,7 @@ class blController extends Controller
                 return 101;
             }             
 
-        }   
+        }
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
@@ -2605,7 +2610,7 @@ class blController extends Controller
             1. cek rekening temasuk jenis belanja apa 
             2. ambil total per jenis belanja / jenis_JB
             3. jenis_JB = JB_masuk + total_JB
-            4. jenis_JB > total_JB // MELEBIHI JENIS BELANJA     */
+            4. jenis_JB > total_JB // MELEBIHI JENIS BELANJA  */   
 
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
@@ -2631,6 +2636,7 @@ class blController extends Controller
 
         }                                           
         //end cek pergeseran antar jenis belanja 
+
 
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
@@ -3572,14 +3578,16 @@ class blController extends Controller
         $validasi   = '';
         foreach ($data as $data) {
             $urgensi    = Urgensi::where('BL_ID',$data->BL_ID)->first();
-            if((Auth::user()->level == 1 or Auth::user()->level == 2) and (
+          /*  if((Auth::user()->level == 1 or Auth::user()->level == 2) and (
                 empty($urgensi->URGENSI_LATAR_BELAKANG) or
                 empty($urgensi->URGENSI_DESKRIPSI) or
                 empty($urgensi->URGENSI_TUJUAN) or
                 empty($urgensi->URGENSI_PENERIMA_1) or
-                empty($urgensi->URGENSI_PELAKSANAAN)) and $urgensi and ($skpd == 24 or $skpd == 15 or $skpd == 22 or $skpd == 14))
-            $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return seturgensi(\''.$data->BL_ID.'\')"><i class="fa fa-search"></i> Detail</a></li>';
-            else
+                empty($urgensi->URGENSI_PELAKSANAAN)) and ($skpd == 24 or $skpd == 15 or $skpd == 22 or $skpd == 14))
+                //empty($urgensi->URGENSI_PELAKSANAAN)) )  
+          $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return seturgensi(\''.$data->BL_ID.'\')"><i class="fa fa-search"></i> Detail</a></li>';
+         
+          else */
             $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
 
             if($data->Kunci->KUNCI_GIAT == 0 and $thp == 1){
@@ -3639,15 +3647,21 @@ class blController extends Controller
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
                 <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
+                <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>                
                 <li class="divider"></li>
-                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
+                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>'; 
                 /*<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>*/
+                /* $no        .= '<li class="divider"></li>
+                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>'; */
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
                 <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
+                <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
+               /*$no        .= '<li class="divider"></li>
+                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';*/
 
             }
             if(empty($data->rincian)) $totalRincian = 0;

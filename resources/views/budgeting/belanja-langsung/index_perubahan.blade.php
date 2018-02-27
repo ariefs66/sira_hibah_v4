@@ -26,7 +26,7 @@
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung |</h5>
                   <h5 class="inline font-semibold text-info m-n ">
                   @if(Auth::user()->level == 2 or Auth::user()->level == 1)
-                  Pagu OPD : {{ number_format($blpagu,0,'.',',') }} |
+                 // Pagu OPD : {{ number_format($blpagu,0,'.',',') }} |
                   Rincian  : {{ number_format($rincian,0,'.',',') }} |
                   Selisih  : {{ number_format($blpagu - $rincian,0,'.',',') }}
                   @endif  
@@ -198,7 +198,7 @@
         <h5 class="inline font-semibold text-orange m-n text16 ">Set Pagu</h5>
         <hr>
         <p>- Pagu Kegiatan</p>
-        <input type="text" id="nominal1" class="form-control pagu" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+        <input type="text" id="pagu" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
         <p>- Usulan Pagu Kegiatan</p>
         <input type="number" id="pagu_usulan" class="form-control">
         <p class="m-t-sm">- Nomor Surat Usulan @if($status=='pergeseran') Pergeseran @else Perubahan @endif</p>
@@ -534,15 +534,15 @@ function setStaff(){
         type  : "get",
         url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/getpagu/"+id,
         success : function (data) {
-          $('.pagu').val(data['BL_PAGU']);
+          $('#pagu').val(data['BL_PAGU']);
           $('#pagu_usulan').val(data['BL_PAGU_USULAN']);
           $('#pagu_catatan').val(data['BL_PAGU_CATATAN']);
           $('#pagu_surat').val(data['BL_PAGU_SURAT']);
           @if(Auth::user()->level == 2)
-            $('.pagu').attr('readonly',true); 
+            $('#pagu').attr('readonly',true); 
             $('#pagu_usulan').attr('readonly',false); 
           @else
-            $('.pagu').attr('readonly',false); 
+            $('#pagu').attr('readonly',false); 
             $('#pagu_usulan').attr('readonly',true);            
           @endif
         }
@@ -552,7 +552,7 @@ function setStaff(){
   function simpanpagu(){
     var token        = $('#token').val();    
     var id           = $('#id-bl').val();    
-    var pagu         = $('.pagu').val();    
+    var pagu         = $('#pagu').val();    
     var usulan       = $('#pagu_usulan').val();    
     var catatan      = $('#pagu_catatan').val();    
     var surat        = $('#pagu_surat').val();    
