@@ -845,7 +845,7 @@
 
   $("#jenis-pekerjaan").change(function(e, params){
     var id  = $('#jenis-pekerjaan').val();
-    if(id == '4' || id == '5'){
+    if(id == '4' || id == '5' || id == '6'){
       $('#nama-komponen').attr('readonly',false);
       $('#ket-belanja').attr('readonly',true);
       $('#harga-free').removeClass('hide');
