@@ -592,7 +592,7 @@
     <div class="form-group" id="koef1">
       <label for="no_spp" class="col-md-3">Koefisien</label>          
       <div class="col-sm-5">
-        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="vol1" class="form-control" placeholder="Masukan Jumlah" required="">      
+        <input type="text" onkeypress="return event.charCode >= 46 && event.charCode <= 57" id="vol1" class="form-control" placeholder="Masukan Jumlah" required="">      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-1">
