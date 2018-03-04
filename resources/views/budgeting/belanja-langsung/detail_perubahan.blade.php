@@ -239,6 +239,7 @@
 
                 <!-- <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button> -->
                 @endif
+                <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
                 <!-- @if(($BL_ID == 5718 ) 
                     and $mod == 1 
                     and $thp == 1 
@@ -578,7 +579,7 @@
     <div class="form-group hide" id="harga-free">
       <label for="no_spp" class="col-md-3">Harga</label>          
       <div class="col-sm-9">
-        <input type="text" id="nominal1" class="form-control harga-free-input" onkeyup="SetNumber('nominal1')" onmouseout="SetNumber('nominal1')" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
+        <input type="text" id="harga-free-input" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
       </div> 
     </div>
 
@@ -934,19 +935,22 @@
     var RINCIAN_KET     = $('#ket-belanja').val();
     var PEKERJAAN_ID    = $('#jenis-pekerjaan').val();
     var SUBRINCIAN_ID   = $('#paket-pekerjaan').val();
-    var HARGA           = $('.harga-free-input').val();
+    var HARGA           = $('#harga-free-input').val();
     if($('#pajak').is(':checked')) RINCIAN_PAJAK = 10;
     else RINCIAN_PAJAK = 0;
-    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5'){
+    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6'){
       KOMPONEN_ID   = '0';
     }
     console.log(KOMPONEN_ID);
     //if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SAT1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
-    if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
+    //if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
+    if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SUBRINCIAN_ID == ""){
+      //if(REKENING_ID == "" || VOL1 == "" || SUBRINCIAN_ID == ""){
       $.alert('Form harap diisi!');
     }else{
-      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5') && (HARGA == "" || KOMPONEN_NAMA == "")){
-        $.alert('Form harap diisi!');
+      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6') && (HARGA == "" || KOMPONEN_NAMA == "")){
+      //if(HARGA == "" || KOMPONEN_NAMA == "") {
+        $.alert('Form harap diisi-!');
       }else{
         if($('#id-rincian').val() == "") url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/simpan";
         else url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/ubah";

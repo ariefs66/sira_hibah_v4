@@ -476,7 +476,10 @@ class blController extends Controller
                 if(Auth::user()->active == 1){
                     $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{*/
-                    $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+                    //$no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
+               $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                    <li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li>
+                    <li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                // }          
             }
 
@@ -580,9 +583,11 @@ class blController extends Controller
 
             if($data->RINCIAN_PAJAK == 10) $pajak = '<span class="text-success"><i class="fa fa-check"></i></span>';
             else $pajak = '<span class="text-danger"><i class="fa fa-close"></i></span>';
+            
             if($data->subrincian) $sub = $data->subrincian->SUBRINCIAN_NAMA;
             else $sub = '-';
-            if($data->PEKERJAAN_ID == '4' || $data->PEKERJAAN_ID == '5'){
+            
+            if($data->PEKERJAAN_ID == '4' || $data->PEKERJAAN_ID == '5' || $data->PEKERJAAN_ID == '6'){
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $data->RINCIAN_KETERANGAN)[0].'</p>';
 
                 if (!empty($data->RINCIAN_KETERANGAN)){
@@ -1700,7 +1705,7 @@ class blController extends Controller
         }
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
-            if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+            if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
 
                 if($total+$now <= $totalBL){
@@ -1713,7 +1718,7 @@ class blController extends Controller
                     $rincian->RINCIAN_VOLUME                = $vol;
                     $rincian->RINCIAN_KOEFISIEN             = $koef;
                     $rincian->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
-                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6'){
                         $rincian->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
                         $rincian->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                     }else{
@@ -1747,6 +1752,7 @@ class blController extends Controller
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
                     $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    //$rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
                     $rincian->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
                     $rincian->RINCIAN_VOLUME                = $vol;
                     $rincian->RINCIAN_KOEFISIEN             = $koef;
@@ -1779,7 +1785,7 @@ class blController extends Controller
                 }
             }
         }elseif($tahapan->TAHAPAN_KUNCI_OPD == 1){
-            if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+            if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6'){
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
 
                if($total+$nowOPD <= $totalOPD){
@@ -1789,11 +1795,12 @@ class blController extends Controller
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
                     $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    //$rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
                     $rincian->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
                     $rincian->RINCIAN_VOLUME                = $vol;
                     $rincian->RINCIAN_KOEFISIEN             = $koef;
                     $rincian->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
-                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6'){
                         $rincian->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
                         $rincian->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                     }else{
@@ -1826,6 +1833,7 @@ class blController extends Controller
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
                     $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    //$rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
                     $rincian->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
                     $rincian->RINCIAN_VOLUME                = $vol;
                     $rincian->RINCIAN_KOEFISIEN             = $koef;
@@ -1862,6 +1870,7 @@ class blController extends Controller
             $rincian->BL_ID                         = Input::get('BL_ID');
             $rincian->REKENING_ID                   = Input::get('REKENING_ID');
             $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+            //$rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
             $rincian->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
             $rincian->RINCIAN_VOLUME                = $vol;
             $rincian->RINCIAN_KOEFISIEN             = $koef;
@@ -3788,7 +3797,13 @@ class blController extends Controller
     }
 
     public function getRekMusren($tahun,$status,$id){
-        $rincian    = Rincian::where('RINCIAN_ID',$id)->value('KOMPONEN_ID');
+        if($status == 'murni') {
+            $rincian    = Rincian::where('RINCIAN_ID',$id)->value('KOMPONEN_ID');
+        }
+        else{
+            $rincian    = RincianPerubahan::where('RINCIAN_ID',$id)->value('KOMPONEN_ID');
+        } 
+        
         $data       = Rekening::whereHas('rekom',function($q) use ($rincian){
                         $q->where('KOMPONEN_ID',$rincian);
                     })->where('REKENING_TAHUN',$tahun)->get();
@@ -3800,12 +3815,24 @@ class blController extends Controller
     }
 
     public function setMusren($tahun,$status){
-        Rincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->update([
+        if($status == 'murni'){
+            Rincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->update([
             'REKENING_ID'=>Input::get('REKENING_ID'),
             'PEKERJAAN_ID'=>Input::get('PEKERJAAN_ID'),
             'SUBRINCIAN_ID'=>Input::get('PAKET_ID')]);
 
-        $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
+            $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
+
+        }else{
+            RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->update([
+            'REKENING_ID'=>Input::get('REKENING_ID'),
+            'PEKERJAAN_ID'=>Input::get('PEKERJAAN_ID'),
+            'SUBRINCIAN_ID'=>Input::get('PAKET_ID')]);
+
+            $totalrincian   = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
+        }
+        
+        
         return number_format($totalrincian,0,'.',',');
     }
 

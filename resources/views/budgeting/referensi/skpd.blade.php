@@ -182,7 +182,9 @@
     var id_skpd         = $('#id_skpd').val();
     //var pagu            = $('.pagu').val();
     var token           = $('#token').val();
-    //alert(pagu);
+
+    /*alert(pagu);
+    alert(kode_skpd);*/
     if(kode_skpd == "" || nama_skpd == "" || kepala_nip == "" || pangkat == "" || kepala_skpd == "" || bendahara_nip == "" || pagu == ""){
       $.alert('Form harap diisi!');
     }else{
