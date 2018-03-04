@@ -345,8 +345,8 @@
               $('#skpd_').val('0').trigger("chosen:updated");
               $('#nama_kegiatan').val('');
               $('#id_giat').val('');
-              $('.table-program-head').DataTable().ajax.reload();              
-              f$.alert({
+              //$('.table-program-head').DataTable().ajax.reload();              
+              $.alert({
                 title:'Info',
                 content: 'Data berhasil disimpan',
                 autoClose: 'ok|1000',

@@ -66,6 +66,7 @@ class kegiatanController extends Controller
     						->orderBy('KEGIATAN_KODE','DESC')
     						->value('KEGIATAN_KODE');
     	$kode 		= "";
+        
     	if(empty($no)){
     		$kode 	= '001';
     	}else{

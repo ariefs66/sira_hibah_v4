@@ -86,8 +86,9 @@ class skpdController extends Controller
     	return $data;
     }
 
-    public function submitAdd(){
+    public function submitAdd($tahun,$status){
     	$skpd 		= new SKPD;
+
     	$cekKode 	= SKPD::where('SKPD_KODE',Input::get('kode_skpd'))
     						->where('SKPD_TAHUN',Input::get('tahun'))
     						->value('SKPD_KODE');
@@ -98,8 +99,8 @@ class skpdController extends Controller
 	    	$skpd->SKPD_KEPALA 			= Input::get('kepala_skpd');
 	    	$skpd->SKPD_BENDAHARA_NIP 	= Input::get('bendahara_nip');
 	    	$skpd->SKPD_BENDAHARA 	 	= Input::get('bendahara_skpd');
-            $skpd->SKPD_TAHUN           = Input::get('tahun');
-            $skpd->SKPD_PANGKAT         = Input::get('pangkat');
+            $skpd->SKPD_TAHUN           = $tahun;
+            $skpd->SKPD_JABATAN         = Input::get('pangkat');
             $skpd->SKPD_ALAMAT          = Input::get('alamat');
 	    	$skpd->SKPD_PAGU 		 	= Input::get('pagu');
 	    	$skpd->save();
@@ -107,6 +108,7 @@ class skpdController extends Controller
     	}else{
 	    	return '0';
     	}
+
     }
 
     public function submitEdit(){

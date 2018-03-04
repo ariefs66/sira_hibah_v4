@@ -73,7 +73,7 @@ return [
 	        //'host' => 'apbd.bandung.go.id',
             'port' => '5432',
             // 'port' => '5454',
-            'database' => 'local_sira_1',
+            'database' => 'hibah_app',
             //'database' => 'db_budget',
             // 'username' => 'postgres',
             'username' => 'postgres',
