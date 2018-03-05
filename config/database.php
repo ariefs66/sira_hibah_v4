@@ -69,7 +69,7 @@ return [
         'pgsql' => [
             'driver' => 'pgsql',
             // 'host' => '128.199.82.1',
-            'host' => 'localhost',
+            /*'host' => 'localhost',
 	        //'host' => 'apbd.bandung.go.id',
             'port' => '5432',
             // 'port' => '5454',
@@ -80,11 +80,11 @@ return [
             // 'password' => '6b0d2bda6bd883599202836b41a86d21',
             'password' => 'sulaeman',
             // 'password' => 'm4um4k4n?',*/
-            /*'host' => env('DB_HOST', ''),
+            'host' => env('DB_HOST', ''),
             'port' => env('DB_PORT', ''),
             'database' => env('DB_DATABASE', ''),
             'username' => env('DB_USERNAME', ''),
-            'password' => env('DB_PASSWORD', ''),*/
+            'password' => env('DB_PASSWORD', ''),
 
             'charset' => 'utf8',
             'prefix' => '',

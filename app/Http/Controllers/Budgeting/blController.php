@@ -3264,7 +3264,12 @@ class blController extends Controller
         return $view;
     }    
     public function getKomponen($tahun, $status, $id,$blid){
-        $kompbl     = Rincian::where('BL_ID',$blid)->select('KOMPONEN_ID')->get();
+        if($status=='murni'){
+            $kompbl     = Rincian::where('BL_ID',$blid)->select('KOMPONEN_ID')->get();
+        }else{
+            $kompbl     = RincianPerubahan::where('BL_ID',$blid)->select('KOMPONEN_ID')->get();
+        }
+        
         $komp       = array();
         $i          = 0;
         foreach($kompbl as $k){
