@@ -44,10 +44,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof CustomException) {
+        /*if ($exception instanceof CustomException) {
 			return response()->view('maintenance');
-		}
-		//return parent::render($request, $exception);
+		}*/
+		return parent::render($request, $exception);
     }
 
     /**
