@@ -232,6 +232,8 @@ $(window).load(function(){
 				btl_detail = '<tr class="pembiayaan-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-pembiayaan').html()+'</td></tr>';
 				$(btl_detail).insertAfter('.table-pembiayaan .table tbody tr.shown');
 				$('.table-detail-pembiayaan-isi').DataTable({
+					processing: true,
+					serverSide: true,
 					sAjaxSource: "/main/2018/murni/pembiayaan/getDetail/"+skpd,
 					aoColumns: [
 					{ mData: 'NO' },
@@ -262,6 +264,8 @@ $(window).load(function(){
 				$(data_detail).insertAfter('.table-program tbody tr.shown');
 				$('.mi-caret-down',this).addClass('mi-caret-up').css({'color':'#00b0ef'}).removeClass('mi-caret-down');
 				$('.table-detail-program-isi').DataTable({
+					processing: true,
+					serverSide: true,
 					sAjaxSource: "/main/2018/murni/pengaturan/program/getDataDetail/"+idprogram,
 					aoColumns: [
 					{ mData: 'KEGIATAN_ID',class: 'hide' },
@@ -291,6 +295,8 @@ $(window).load(function(){
 				$(data_detail).insertAfter('.table-program-adum tbody tr.shown');
 				$('.mi-caret-down',this).addClass('mi-caret-up').css({'color':'#00b0ef'}).removeClass('mi-caret-down');
 				$('.table-detail-program-isi').DataTable({
+					processing: true,
+					serverSide: true,
 					sAjaxSource: "/main/2018/murni/pengaturan/adum/program/getDataDetail/"+idprogram,
 					aoColumns: [
 					{ mData: 'KEGIATAN_KODE' },
