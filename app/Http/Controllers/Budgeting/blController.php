@@ -3438,6 +3438,7 @@ class blController extends Controller
             else
             $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
 			if(!isset($data->kunci->KUNCI_GIAT)){
+				$data->setAttribute('kunci', 'KUNCI_GIAT');
 				$data->kunci->setAttribute('KUNCI_GIAT', 0);
 			}
 
