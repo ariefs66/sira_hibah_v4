@@ -629,40 +629,40 @@
 </table>
 <table class="ttd" style="page-break-inside: avoid;">
 	<tr>
-		<td class="tengah">Triwulan I</td>
-		<td class="kiri">Rp. {{ number_format($akb_bl->tri1,0,',','.') }}</td>
-		<td width="50%"> </td>
+		<td class="tengah" width="15%">Triwulan I</td>
+		<td class="kiri" width="25%">Rp. {{ number_format($akb_bl->tri1,0,',','.') }}</td>
+		<td width="20%"> </td>
 		<td>Bandung, 2 Januari 2018</td>
 	</tr>
 	<tr>
-		<td class="tengah">Triwulan II</td>
-		<td class="kiri">Rp. {{ number_format($akb_bl->tri2,0,',','.') }} </td>
-		<td width="50%"> </td>
+		<td class="tengah" width="15%">Triwulan II</td>
+		<td class="kiri" width="25%">Rp. {{ number_format($akb_bl->tri2,0,',','.') }} </td>
+		<td width="20%"> </td>
 		<td><b>Pejabat Pengelola Keuangan Daerah</b></td>
 	</tr>
 	<tr>
-		<td class="tengah">Triwulan III</td>
-		<td class="kiri">Rp. {{ number_format($akb_bl->tri3,0,',','.') }} </td>
-		<td width="50%"> </td>
+		<td class="tengah" width="15%">Triwulan III</td>
+		<td class="kiri" width="25%">Rp. {{ number_format($akb_bl->tri3,0,',','.') }} </td>
+		<td width="20%"> </td>
 		<td></td>
 	</tr>
 	<tr>
-		<td class="tengah">Triwulan IV</td>
-		<td class="kiri">Rp. {{ number_format($akb_bl->tri4,0,',','.') }}</td>
-		<td width="50%"> </td>
+		<td class="tengah" width="15%">Triwulan IV</td>
+		<td class="kiri" width="25%">Rp. {{ number_format($akb_bl->tri4,0,',','.') }}</td>
+		<td width="20%"> </td>
 		<td></td>
 	</tr>
 	<tr>
-		<td class="kanan"><b>Jumlah</b></td>
-		<td class="kiri"><b>Rp. {{ number_format($akb_bl->tri1+$akb_bl->tri2+$akb_bl->tri3+$akb_bl->tri4,0,',','.') }}</b></td>
-		<td width="50%"> </td>
+		<td class="kanan" width="15%"><b>Jumlah</b></td>
+		<td class="kiri" width="25%"><b>Rp. {{ number_format($akb_bl->tri1+$akb_bl->tri2+$akb_bl->tri3+$akb_bl->tri4,0,',','.') }}</b></td>
+		<td width="20%"> </td>
 		<td></td>
 	</tr>
 
 	<tr>
-		<td class="kiri"> </td>
-		<td class="kiri"> </td>
-		<td width="50%"> <br><br><br><br><br><br></td>
+		<td class="kiri" width="15%"> </td>
+		<td class="kiri" width="25%"> </td>
+		<td width="20%"> <br><br><br><br><br><br></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. DADANG SUPRIATNA, MH <br><br> </span> NIP. 19610308 199103 1 009  </td>
 	</tr>
 </table>
