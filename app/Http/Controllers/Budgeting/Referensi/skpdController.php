@@ -9,6 +9,8 @@ use App\Model\Tahapan;
 use App\Model\BL;
 use App\Model\Kunci;
 use App\Model\Kunciperubahan;
+use App\Model\User;
+use App\Model\UserBudget;
 use Auth;
 use View;
 use Carbon;
@@ -115,18 +117,48 @@ class skpdController extends Controller
     	$cekKode 	= SKPD::where('SKPD_KODE',Input::get('kode_skpd'))
     						->where('SKPD_TAHUN',Input::get('tahun'))
     						->value('SKPD_KODE');
-    	if(empty($cekKode) || $cekKode == Input::get('kode_skpd')){    						
-    	SKPD::where('SKPD_ID',Input::get('id_skpd'))
-    			->update(['SKPD_KODE'			=>Input::get('kode_skpd'),
-    					  'SKPD_NAMA'  			=>Input::get('nama_skpd'),
-    					  'SKPD_KEPALA_NIP' 	=>Input::get('kepala_nip'),
-                          'SKPD_KEPALA'         =>Input::get('kepala_skpd'),
-                          'SKPD_JABATAN'        =>Input::get('pangkat'),
-    					  'SKPD_ALAMAT' 		=>Input::get('alamat'),
-    					  'SKPD_BENDAHARA_NIP' 	=>Input::get('bendahara_nip'),
-                          'SKPD_BENDAHARA'      =>Input::get('bendahara_skpd'),
-    					  'SKPD_PAGU' 		    =>Input::get('pagu'),
-    					  'SKPD_TAHUN'			=>Input::get('tahun')]);
+    	if(empty($cekKode) || $cekKode == Input::get('kode_skpd')){  
+		$nip_lama = SKPD::where('SKPD_ID',Input::get('id_skpd'))->value('SKPD_KEPALA_NIP');
+		$nip_bendahara = SKPD::where('SKPD_ID',Input::get('id_skpd'))->value('SKPD_BENDAHARA_NIP');
+		$kepala_baru = Input::get('kepala_skpd');
+		$bendahara_baru = Input::get('bendahara_skpd');
+		if(!empty($nip_lama)&&Input::get('kepala_nip') !== "-"){
+			$kepala_asal = User::where('email',$nip_lama);
+			if(!empty($kepala_asal)){
+				$kepala_baru = User::where('email',Input::get('kepala_nip'));
+				if(!empty($kepala_baru)){
+					UserBudget::where('USER_ID',$kepala_asal->value('id'))->where('SKPD_ID',Input::get('id_skpd'))->update(['USER_ID'=>$kepala_baru->value('id')]);
+					$kepala_baru = $kepala_baru->value('name');
+				}
+			}
+		}
+		if(!empty($nip_bendahara)&&Input::get('bendahara_nip') !== "-"){
+			$bendahara_asal = User::where('email',$nip_bendahara);
+			if(!empty($bendahara_asal)){
+				$bendahara_baru = User::where('email',Input::get('bendahara_nip'));
+				if(!empty($bendahara_baru)){
+					UserBudget::where('USER_ID',$bendahara_asal->value('id'))->where('SKPD_ID',Input::get('id_skpd'))->update(['USER_ID'=>$bendahara_baru->value('id')]);
+					$bendahara_baru = $bendahara_baru->value('name');
+				}
+			}
+		}
+		if(empty($kepala_baru)){
+			$kepala_baru = Input::get('kepala_skpd');
+		}
+		if(empty($bendahara_baru)){
+			$bendahara_baru = Input::get('bendahara_skpd');
+		}
+		SKPD::where('SKPD_ID',Input::get('id_skpd'))
+		->update(['SKPD_KODE'			=>Input::get('kode_skpd'),
+				  'SKPD_NAMA'  			=>Input::get('nama_skpd'),
+				  'SKPD_KEPALA_NIP' 	=>Input::get('kepala_nip'),
+				  'SKPD_KEPALA'         =>$kepala_baru,
+				  'SKPD_JABATAN'        =>Input::get('pangkat'),
+				  'SKPD_ALAMAT' 		=>Input::get('alamat'),
+				  'SKPD_BENDAHARA_NIP' 	=>Input::get('bendahara_nip'),
+				  'SKPD_BENDAHARA'      =>$bendahara_baru,
+				  'SKPD_PAGU' 		    =>Input::get('pagu'),
+				  'SKPD_TAHUN'			=>Input::get('tahun')]);
     		return '1';
     	}else{
 	    	return '0';
