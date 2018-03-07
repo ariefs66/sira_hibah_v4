@@ -627,7 +627,7 @@
 	</tr>
 	</tbody>	
 </table>
-<table class="ttd">
+<table class="ttd" style="page-break-inside: avoid;">
 	<tr>
 		<td class="tengah">Triwulan I</td>
 		<td class="kiri">Rp. {{ number_format($akb_bl->tri1,0,',','.') }}</td>
