@@ -191,16 +191,8 @@
 	</tr>
 </table>
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<br><br><br><br><br><br>
-<br><br><br><br><br><br>
-<br><br><br><br><br><br>
-<br><br><br><br><br><br>
-<br><br><br><br><br><br>
-
-
+<p style="page-break-after: always;">&nbsp;</p>
+<p style="page-break-before: always;">&nbsp;</p>
 
 <table class="header">
 	<tr class="border">
@@ -635,7 +627,7 @@
 	</tr>
 	</tbody>	
 </table>
-<table class="ttd">
+<table class="ttd" style="page-break-inside: avoid;">
 	<tr>
 		<td class="tengah">Triwulan I</td>
 		<td class="kiri">Rp. {{ number_format($akb_bl->tri1,0,',','.') }}</td>
