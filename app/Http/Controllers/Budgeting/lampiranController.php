@@ -5140,6 +5140,7 @@ class lampiranController extends Controller
     public function dpaSKPD22DetailPerubahan($tahun, $status, $s){
         $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
                         ->where('SKPD_ID',$s)->first();
+        $kat1 = UrusanKategori1::where('URUSAN_KAT1_ID',$urusan->URUSAN_KAT1_ID)->first();
 
         $skpd = SKPD::where('SKPD_ID',$s)->first();
 
@@ -5153,26 +5154,28 @@ class lampiranController extends Controller
         $bl_p = BL::join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                    ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
                    ->join('BUDGETING.DAT_RINCIAN','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID') 
+                   ->join('BUDGETING.DAT_RINCIAN_PERUBAHAN','DAT_RINCIAN_PERUBAHAN.BL_ID','=','DAT_BL.BL_ID') 
                    ->where('DAT_BL.SKPD_ID',$s)
                    ->where('DAT_BL.BL_TAHUN',$tahun)
                    ->where('DAT_BL.BL_DELETED',0)
                    ->where('DAT_BL.BL_VALIDASI',1)
                    ->groupBy("REF_KEGIATAN.PROGRAM_ID","PROGRAM_NAMA","PROGRAM_KODE")
                    ->orderby("PROGRAM_KODE")
-                   ->selectRaw('"REF_KEGIATAN"."PROGRAM_ID","PROGRAM_NAMA", "PROGRAM_KODE", SUM("RINCIAN_TOTAL") as pagu ')
+                   ->selectRaw('"REF_KEGIATAN"."PROGRAM_ID","PROGRAM_NAMA", "PROGRAM_KODE", SUM("DAT_RINCIAN"."RINCIAN_TOTAL") as pagu_murni, SUM("DAT_RINCIAN_PERUBAHAN"."RINCIAN_TOTAL") as pagu_perubahan')
                    ->get(); 
 
         $bl = BL::join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                    ->join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID') 
                    ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL.LOKASI_ID') 
                    ->join('BUDGETING.DAT_RINCIAN','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID') 
+                   ->join('BUDGETING.DAT_RINCIAN_PERUBAHAN','DAT_RINCIAN_PERUBAHAN.BL_ID','=','DAT_BL.BL_ID') 
                    ->where('DAT_BL.SKPD_ID',$s)
                    ->where('DAT_BL.BL_TAHUN',$tahun)
                    ->where('DAT_BL.BL_DELETED',0)
                    ->where('DAT_BL.BL_VALIDASI',1)
                    ->orderby("KEGIATAN_KODE")
                    ->groupBy("DAT_BL.BL_ID","REF_KEGIATAN.PROGRAM_ID", "DAT_BL.KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA")
-                   ->selectRaw('"DAT_BL"."BL_ID","REF_KEGIATAN"."PROGRAM_ID", "DAT_BL"."KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA", SUM("RINCIAN_TOTAL") as pagu')
+                   ->selectRaw('"DAT_BL"."BL_ID","REF_KEGIATAN"."PROGRAM_ID", "DAT_BL"."KEGIATAN_ID", "PROGRAM_KODE", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU", "LOKASI_NAMA", SUM("DAT_RINCIAN"."RINCIAN_TOTAL") as pagu_murni, SUM("DAT_RINCIAN_PERUBAHAN"."RINCIAN_TOTAL") as pagu_perubahan')
                    ->get(); 
 
         $bl_idk = BL::join('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID') 
@@ -5246,7 +5249,7 @@ class lampiranController extends Controller
                         ->get(); 
         
             return View('budgeting.lampiran.dpa-skpd22-detail-perubahan',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'bl_p'=>$bl_p, 'bl_idk'=>$bl_idk, 'akb_bl'=>$akb_bl, 'totbl'=>$totbl,
-                'bl_pp'=>$bl_pp,'bl_p_pp'=>$bl_p_pp, 'bl_idk_pp'=>$bl_idk_pp, 'totbl_pp'=>$totbl_pp ]);
+                'bl_pp'=>$bl_pp,'bl_p_pp'=>$bl_p_pp, 'bl_idk_pp'=>$bl_idk_pp, 'totbl_pp'=>$totbl_pp, 'kat1'=>$kat1 ]);
     }
 
     public function dpaSKPD221($tahun,$status){
