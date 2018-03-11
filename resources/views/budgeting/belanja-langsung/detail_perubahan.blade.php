@@ -227,7 +227,7 @@
                   Selisih Belanja Modal : {{ number_format($JB_523,0,'.',',') }}<br> -->
                 </span></h5>
 
-                @if($bl->kunci->KUNCI_RINCIAN == 0  and $mod == 1 and $thp == 1 and Auth::user()->active == 1)
+                @if(($bl->kunci->KUNCI_RINCIAN == 0  and $mod == 1 and $thp == 1 and Auth::user()->active == 1) or Auth::user()->level == 8)
                 <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
                 @elseif($thp == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
