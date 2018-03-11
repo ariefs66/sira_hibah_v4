@@ -618,7 +618,7 @@ class blController extends Controller
                 if (!empty($data->RINCIAN_KETERANGAN)){
                     $cek = explode("#", $data->RINCIAN_KETERANGAN);
                     $count = count($cek);
-                    if ($count > 1) {
+                    if ($count > 2) {
                         $hargakomponen  = number_format(explode("#", $data->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
                     }
                 }
