@@ -613,13 +613,15 @@ class blController extends Controller
             
             if($data->PEKERJAAN_ID == '4' || $data->PEKERJAAN_ID == '5' || $data->PEKERJAAN_ID == '6'){
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $data->RINCIAN_KETERANGAN)[0].'</p>';
-
+                $hargakomponen  = '<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
+                
                 if (!empty($data->RINCIAN_KETERANGAN)){
-                    $hargakomponen  = number_format(explode("#", $data->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
-                }else {
-                    $hargakomponen  = '<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
+                    $cek = explode("#", $data->RINCIAN_KETERANGAN);
+                    $count = count($cek);
+                    if ($count > 1) {
+                        $hargakomponen  = number_format(explode("#", $data->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
+                    }
                 }
-
             }else{
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->RINCIAN_KOMPONEN.'</p>';
                 $hargakomponen  = number_format($data->RINCIAN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
