@@ -2730,7 +2730,7 @@ class blController extends Controller
                         ->where('KEGIATAN_KODE','like',$keg_kode)
                         ->sum('RINCIAN_TOTAL'); 
 
-            $total_JB_pergeseran = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
+            $total_JB_pergeseran = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
                         ->join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
                         ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL_PERUBAHAN.KEGIATAN_ID')
                         ->where('BL_DELETED',0)
