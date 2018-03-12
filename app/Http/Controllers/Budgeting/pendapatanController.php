@@ -51,8 +51,12 @@ class pendapatanController extends Controller
       }else{
         $anggaran       = DB::table('BUDGETING.DAT_PENDAPATAN')->where('DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
                 ->sum('PENDAPATAN_TOTAL');
+        $anggaranp       = DB::table('BUDGETING.DAT_PENDAPATAN_PERUBAHAN')->where('DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_TAHUN',$tahun)
+                ->sum('PENDAPATAN_TOTAL');
                 //dd($anggaran);
-          return View('budgeting.pendapatan.index_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',',')]);
+        $selisih = ($anggaran-$anggaranp > 0 ? 'Rp. '.number_format(abs($anggaran-$anggaranp),0,'.',',') : '(Rp. '.number_format(abs($anggaran-$anggaranp),0,'.',',').')');
+        $selisih = ($anggaran-$anggaranp == 0 ? 'Rp. 0' : $selisih);
+         return View('budgeting.pendapatan.index_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'rekening'=>$rekening,'anggaran'=>number_format($anggaran,0,'.',','),'anggaranp'=>number_format($anggaranp,0,'.',','),'selisih'=>$selisih]);
       }
     }
 
@@ -206,11 +210,14 @@ class pendapatanController extends Controller
         //print_r($data);exit;
         $view       = array();
         foreach ($data as $data) {
-          array_push($view, array( 'ID'     =>$data->SKPD_ID,
+            $selisih = ($data->total_murni-$data->total > 0 ? 'Rp. '.number_format(abs($data->total_murni-$data->total),0,'.',',') : '(Rp. '.number_format(abs($data->total_murni-$data->total),0,'.',',').')');
+            $selisih = ($data->total_murni-$data->total == 0 ? 'Rp. 0' : $selisih);    
+            array_push($view, array( 'ID'     =>$data->SKPD_ID,
                        'KODE'     =>$data->SKPD_KODE,
                        'NAMA'     =>$data->SKPD_NAMA,
                        'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',','),
                        'TOTAL'    =>number_format($data->total,0,'.',','),
+                       'SELISIH'    =>$selisih,
                        'OPSI'    => '-'
                      ));
         }
@@ -274,6 +281,8 @@ class pendapatanController extends Controller
               $opsi = '-';
               $akb = '-';
               }
+        $selisih = ($data->total_murni-$data->total > 0 ? 'Rp. '.number_format(abs($data->total_murni-$data->total),0,'.',',') : '(Rp. '.number_format(abs($data->total_murni-$data->total),0,'.',',').')');
+        $selisih = ($data->total_murni-$data->total == 0 ? 'Rp. 0' : $selisih);
           array_push($view, array( 'NO'       => $no++,
                        'AKSI'           => $opsi,
                        'AKB'            => $akb,
@@ -281,7 +290,8 @@ class pendapatanController extends Controller
                        'RINCIAN'        => $data->PENDAPATAN_NAMA,
                        'DASHUK'         => $data->DASHUK,
                        'TOTAL_MURNI'    => number_format($data->total_murni,0,'.',','),
-                        'TOTAL'         => number_format($data->total,0,'.',',')));
+                        'TOTAL'         => number_format($data->total,0,'.',','),
+                        'SELISIH'    => $selisih));
         }
       }
    		
