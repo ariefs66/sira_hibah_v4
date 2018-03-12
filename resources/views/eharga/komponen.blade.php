@@ -443,6 +443,8 @@
   function loadTable(kategori){
     $('#table-komponen').DataTable().destroy();
     $('#table-komponen').DataTable({
+      processing: true,
+      serverSide: true,
       sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/_/referensi/komponen/getData/"+kategori,
       aoColumns: [
         { mData: 'NO'},
@@ -460,6 +462,8 @@
   function getrekening(komponen){
     $('#table-modal').DataTable().destroy();
     $('#table-modal').DataTable({
+      processing: true,
+      serverSide: true,
       sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/_/referensi/komponen/getrekening/"+komponen,
       aoColumns: [
         { mData: 'NO'},
@@ -473,6 +477,8 @@
   function getuser(komponen) {
     $('#table-modal').DataTable().destroy();
     $('#table-modal').DataTable({
+      processing: true,
+      serverSide: true,
       sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/_/referensi/komponen/getuser/"+komponen,
       aoColumns: [
         { mData: 'NO'},
