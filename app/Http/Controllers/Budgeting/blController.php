@@ -1706,11 +1706,8 @@ class blController extends Controller
         $hargakomponen  = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');
 
         //mode cek total jenis belanja per 1 sub unit
-<<<<<<< HEAD
-        if($status=='pergeseran'){
-=======
->>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
 
+        
         if($status=='pergeseran'){
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
@@ -1735,52 +1732,7 @@ class blController extends Controller
             }             
 
         }
-<<<<<<< HEAD
-        //mode cek total jenis belanja per 1 sub unit MCONTOH KEGIATAN PER KECAMATAN KALKULASI KELURAHAN
-       /* if($status=='pergeseran'){
-=======
-        
-//mode cek total jenis belanja per 1 sub unit MCONTOH KEGIATAN PER KECAMATAN KALKULASI KELURAHAN
-/*        if($status=='pergeseran'){
->>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
-            $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
-            $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
 
-            $keg_kode = BL::where('BL_ID',Input::get('BL_ID'))
-                            ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
-                            ->value('KEGIATAN_KODE');// GET KODE KEG 
-
-            $total_JB_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
-                        ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
-                        ->where('BL_DELETED',0)
-                        ->where('BL_TAHUN',$tahun)
-                        ->where('SKPD_ID',$skpd)
-                        ->where('REKENING_KODE','like',$tipe_rek.'%')
-                        ->where('KEGIATAN_KODE','like',$keg_kode)
-                        ->sum('RINCIAN_TOTAL'); 
-
-            $total_JB_pergeseran = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
-                        ->join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
-                        ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL_PERUBAHAN.KEGIATAN_ID')
-                        ->where('BL_DELETED',0)
-                        ->where('BL_TAHUN',$tahun)
-                        ->where('SKPD_ID',$skpd)
-                        ->where('REKENING_KODE','like',$tipe_rek.'%')
-                        ->where('KEGIATAN_KODE','like',$keg_kode)
-                        ->sum('RINCIAN_TOTAL');  
-
-            $total_JB_pergeseran = $total_JB_pergeseran+$total; //500+300 = 800
-        
-            if($total_JB_pergeseran > $total_JB_murni+3){    //800 < 1000
-                return 101;
-            }              
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
-        }*/
 
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
@@ -2692,13 +2644,10 @@ class blController extends Controller
             }                        
         }
 
+        /*
         //cek pergeseran antar jenis belanja 
        if($status=='pergeseran'){
-<<<<<<< HEAD
-            
-=======
 
->>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
         
@@ -2716,10 +2665,7 @@ class blController extends Controller
                         
             $total_JB_pergeseran = $total_JB_pergeseran-$komp_skrg; //1000-500 = 500
             $total_JB_pergeseran = $total_JB_pergeseran+$total; //500+300 = 800
-<<<<<<< HEAD
             
-            /*var_dump($total_JB_pergeseran);
-            var_dump($total_JB_murni);*/
 
             if($total_JB_pergeseran > $total_JB_murni+5){    //800 < 1000
                 return 101;
@@ -2727,62 +2673,7 @@ class blController extends Controller
 
         }                                        
         //end cek pergeseran antar jenis belanja 
-
-
-        /* if($status=='pergeseran'){
-=======
-        
-            if($total_JB_pergeseran > $total_JB_murni+10){    //800 < 1000
-                return 101;
-            }             
-
-        }                                          
-        //end cek pergeseran antar jenis belanja 
-
-
-       /*  if($status=='pergeseran'){
->>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
-            $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
-            $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
-
-            $keg_kode = BL::where('BL_ID',Input::get('BL_ID'))
-                            ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
-                            ->value('KEGIATAN_KODE');// GET KODE KEG 
-
-            $total_JB_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
-                        ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                        ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
-                        ->where('BL_DELETED',0)
-                        ->where('BL_TAHUN',$tahun)
-                        ->where('SKPD_ID',$skpd)
-                        ->where('REKENING_KODE','like',$tipe_rek.'%')
-                        ->where('REF_KEGIATAN.KEGIATAN_KODE',$keg_kode)
-                        ->sum('RINCIAN_TOTAL'); 
-
-            $total_JB_pergeseran = RincianPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
-                        ->join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
-                        ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL_PERUBAHAN.KEGIATAN_ID')
-                        ->where('BL_DELETED',0)
-                        ->where('BL_TAHUN',$tahun)
-                        ->where('SKPD_ID',$skpd)
-                        ->where('REKENING_KODE','like',$tipe_rek.'%')
-                        ->where('REF_KEGIATAN.KEGIATAN_KODE',$keg_kode)
-                        ->sum('RINCIAN_TOTAL');  
-            //var_dump($total_JB_murni . "pergeseran ". $total_JB_pergeseran );
-            $total_JB_pergeseran = $total_JB_pergeseran+$total; //500+300 = 800
-            //var_dump($total_JB_murni+3 . "pergeseran ". $total_JB_pergeseran );
-            if($total_JB_pergeseran > $total_JB_murni+3){    //800 < 1000
-                return 101;
-            }              
-
-<<<<<<< HEAD
-        }
-*/
-=======
-
-        }*/
-
->>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
+        */
 
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
