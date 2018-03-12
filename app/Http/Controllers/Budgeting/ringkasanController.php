@@ -7,19 +7,22 @@ use App\Http\Controllers\Controller;
 use View;
 use Excel;
 Use App\Model\Pendapatan;
+Use App\Model\PendapatanPerubahan;
 Use App\Model\PendapatanHistory;
 Use App\Model\BL;
 Use App\Model\Rincian;
+Use App\Model\RincianPerubahan;
 Use App\Model\RincianHistory;
 Use App\Model\BTL;
 Use App\Model\Pembiayaan;
+Use App\Model\PembiayaanPerubahan;
 Use App\Model\PembiayaanHistory;
 Use App\Model\Rekening;
 class ringkasanController extends Controller
 {
     public function index($tahun,$status){
     	$pendapatan 		= Pendapatan::where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
-        //dd($pendapatan);
+    	//dd($pendapatan);
     	$pendapatan1       = Pendapatan::wherehas('rekening',function($q){
             $q->where('REKENING_KODE','like','4.1%');
         })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
@@ -167,6 +170,155 @@ class ringkasanController extends Controller
               ->where('REKENING_KODE','LIKE', '6.2.3')
               ->sum('PEMBIAYAAN_TOTAL');               
 
+              $pendapatanp 		= PendapatanPerubahan::where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              //dd($pendapatan);
+              $pendapatan1p       = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.1%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan11p       = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.1.1%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan12p       = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.1.2%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan13p       = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.1.3%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan14p       = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.1.4%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan2p        = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.2%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan21p        = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.2.1%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan22p        = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.2.2%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan23p        = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.2.3%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan3p        = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.3%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan31p        = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.3.1%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan32p        = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.3.3%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan33p        = PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.3.4%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+              $pendapatan34p 		= PendapatanPerubahan::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','4.3.5%');
+              })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
+      
+              $btl1p      = BTL::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','5.1.1%');
+              })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+              $btl3p      = BTL::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','5.1.3%');
+              })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+              $btl4p      = BTL::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','5.1.4%');
+              })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+              $btl7p      = BTL::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','5.1.7%');
+              })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+              $btl8p      = BTL::wherehas('rekening',function($q){
+                  $q->where('REKENING_KODE','like','5.1.8%');
+              })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+      
+              $penerimaanp     = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.1%')
+                    ->sum('PEMBIAYAAN_TOTAL');
+      
+              $pengeluaranp    = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.2%')
+                    ->sum('PEMBIAYAAN_TOTAL');
+      
+                  $blvp     = RincianPerubahan::whereHas('bl',function($r){
+                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              })
+                              ->sum('RINCIAN_TOTAL');
+      
+                  $b1vp     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+                              ->whereHas('bl',function($r){
+                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              })
+                              ->sum('RINCIAN_TOTAL');
+                  $b2vp     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
+                              ->whereHas('bl',function($r){
+                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              })
+                              ->sum('RINCIAN_TOTAL');
+                  $b3vp     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
+                              ->whereHas('bl',function($r){
+                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              })
+                              ->sum('RINCIAN_TOTAL');
+      
+                  $blp      = RincianPerubahan::whereHas('bl',function($x){
+                                  $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              })->sum('RINCIAN_TOTAL');
+                  $b1p     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+                              ->whereHas('bl',function($x){
+                                  $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              })->sum('RINCIAN_TOTAL');
+                  $b2p     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
+                              ->whereHas('bl',function($x){
+                                  $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              })->sum('RINCIAN_TOTAL');
+                  $b3p     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
+                              ->whereHas('bl',function($x){
+                                  $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              })->sum('RINCIAN_TOTAL');
+      
+                  $pen611p     = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.1.1')
+                    ->sum('PEMBIAYAAN_TOTAL');
+      
+                  $pen612p     = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.1.2')
+                    ->sum('PEMBIAYAAN_TOTAL');
+      
+                  $pen613p     = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.1.3')
+                    ->sum('PEMBIAYAAN_TOTAL');
+                    
+                  $pen614p     = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.1.4')
+                    ->sum('PEMBIAYAAN_TOTAL');
+                    
+                  $pen615p     = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.1.5')
+                    ->sum('PEMBIAYAAN_TOTAL');
+                            
+      
+                  $peng621p    = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.2.1')
+                    ->sum('PEMBIAYAAN_TOTAL'); 
+      
+                  $peng622p    = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.2.2')
+                    ->sum('PEMBIAYAAN_TOTAL'); 
+                    
+                  $peng623p    = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
+                    ->where('PEMBIAYAAN_TAHUN',$tahun)
+                    ->where('REKENING_KODE','LIKE', '6.2.3')
+                    ->sum('PEMBIAYAAN_TOTAL');
+
               $info = 'Sesudah';
 
     	$data 	= [ 'tahun'		=>$tahun,
@@ -209,7 +361,45 @@ class ringkasanController extends Controller
                     'bl'		=>$bl,
     				'b1'		=>$b1,
     				'b2'		=>$b2,
-    				'b3'		=>$b3];
+                    'b3'		=>$b3,
+                    'penerimaanp'         =>$penerimaanp,
+                    'pengeluaranp'        =>$pengeluaranp,
+                    'pen611p'        =>$pen611p,
+                    'pen612p'        =>$pen612p,
+                    'pen613p'        =>$pen613p,
+                    'pen614p'        =>$pen614p,
+                    'pen615p'        =>$pen615p,
+                    'peng621p'        =>$peng621p,
+                    'peng622p'        =>$peng622p,
+                    'peng623p'        =>$peng623p,
+                    'pdp'        =>$pendapatanp,
+                    'pd1p'        =>$pendapatan1p,
+                    'pd11p'       =>$pendapatan11p,
+                    'pd12p'       =>$pendapatan12p,
+                    'pd13p'       =>$pendapatan13p,
+                    'pd14p'       =>$pendapatan14p,
+                    'pd2p'       =>$pendapatan2p,
+                    'pd21p'       =>$pendapatan21p,
+                    'pd22p'       =>$pendapatan22p,
+                    'pd23p'       =>$pendapatan23p,
+                    'pd3p'       =>$pendapatan3p,
+                    'pd31p'       =>$pendapatan31p,
+                    'pd32p'       =>$pendapatan32p,
+                    'pd33p'       =>$pendapatan33p,
+                    'pd34p'       =>$pendapatan34p,
+                    'btl1p'       =>$btl1p,
+                    'btl3p'       =>$btl3p,
+                    'btl4p'       =>$btl4p,
+                    'btl7p'       =>$btl7p,
+                    'btl8p'       =>$btl8p,
+    				'blvp'       =>$blvp,
+                    'b1vp'       =>$b1vp,
+                    'b2vp'       =>$b2vp,
+                    'b3vp'       =>$b3vp,
+                    'blp'		=>$blp,
+    				'b1p'		=>$b1p,
+    				'b2p'		=>$b2p,
+    				'b3p'		=>$b3p];
                     
     	return View('budgeting.ringkasan',$data);
     }

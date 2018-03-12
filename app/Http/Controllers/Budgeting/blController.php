@@ -468,7 +468,8 @@ class blController extends Controller
                     <li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                     }else{
-                        $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info-</a></li></ul></div>';
+                        $no = '<div class="dropdown dropdown-blend" style="float:right;">
+<a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info-</a></li></ul></div>';
                     }
                 
                 }
@@ -618,7 +619,7 @@ class blController extends Controller
                 if (!empty($data->RINCIAN_KETERANGAN)){
                     $cek = explode("#", $data->RINCIAN_KETERANGAN);
                     $count = count($cek);
-                    if ($count > 1) {
+                    if ($count > 2) {
                         $hargakomponen  = number_format(explode("#", $data->RINCIAN_KETERANGAN)[1],0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
                     }
                 }
@@ -1705,8 +1706,12 @@ class blController extends Controller
         $hargakomponen  = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');
 
         //mode cek total jenis belanja per 1 sub unit
+<<<<<<< HEAD
         if($status=='pergeseran'){
+=======
+>>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
 
+        if($status=='pergeseran'){
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
         
@@ -1730,8 +1735,14 @@ class blController extends Controller
             }             
 
         }
+<<<<<<< HEAD
         //mode cek total jenis belanja per 1 sub unit MCONTOH KEGIATAN PER KECAMATAN KALKULASI KELURAHAN
        /* if($status=='pergeseran'){
+=======
+        
+//mode cek total jenis belanja per 1 sub unit MCONTOH KEGIATAN PER KECAMATAN KALKULASI KELURAHAN
+/*        if($status=='pergeseran'){
+>>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
 
@@ -1765,7 +1776,10 @@ class blController extends Controller
                 return 101;
             }              
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
         }*/
 
 
@@ -2680,7 +2694,11 @@ class blController extends Controller
 
         //cek pergeseran antar jenis belanja 
        if($status=='pergeseran'){
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
         
@@ -2698,6 +2716,7 @@ class blController extends Controller
                         
             $total_JB_pergeseran = $total_JB_pergeseran-$komp_skrg; //1000-500 = 500
             $total_JB_pergeseran = $total_JB_pergeseran+$total; //500+300 = 800
+<<<<<<< HEAD
             
             /*var_dump($total_JB_pergeseran);
             var_dump($total_JB_murni);*/
@@ -2711,6 +2730,18 @@ class blController extends Controller
 
 
         /* if($status=='pergeseran'){
+=======
+        
+            if($total_JB_pergeseran > $total_JB_murni+10){    //800 < 1000
+                return 101;
+            }             
+
+        }                                          
+        //end cek pergeseran antar jenis belanja 
+
+
+       /*  if($status=='pergeseran'){
+>>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
 
@@ -2744,8 +2775,14 @@ class blController extends Controller
                 return 101;
             }              
 
+<<<<<<< HEAD
         }
 */
+=======
+
+        }*/
+
+>>>>>>> 39e46106dc2e356ea32b8750d00578f2302bbd5c
 
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
