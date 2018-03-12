@@ -38,7 +38,7 @@ use App\Model\AKB_BTL_Perubahan;
 class btlController extends Controller
 {
     public function index($tahun, $status){
-        $skpd       = SKPD::all();
+        $skpd       = SKPD::where('SKPD_TAHUN',$tahun);
       	$satuan 	= Satuan::all();
         if($status=="murni"){
           return View('budgeting.belanja-tidak-langsung.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'satuan'=>$satuan]);
