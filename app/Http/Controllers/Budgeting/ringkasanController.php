@@ -92,41 +92,41 @@ class ringkasanController extends Controller
               ->where('REKENING_KODE','LIKE', '6.2%')
               ->sum('PEMBIAYAAN_TOTAL');
 
-    	    $blv     = Rincian::whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+    	    $blv     = Rincian::whereHas('bl',function($r) use ($tahun) {
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
                         ->sum('RINCIAN_TOTAL');
 
 			$b1v     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
-                        ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        ->whereHas('bl',function($r) use ($tahun){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
                         ->sum('RINCIAN_TOTAL');
             $b2v     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
-                        ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        ->whereHas('bl',function($r) use ($tahun){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
                         ->sum('RINCIAN_TOTAL');
             $b3v     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
-                        ->whereHas('bl',function($r){
-                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        ->whereHas('bl',function($r) use ($tahun){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
                         ->sum('RINCIAN_TOTAL');
 
-            $bl      = Rincian::whereHas('bl',function($x){
-                            $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+            $bl      = Rincian::whereHas('bl',function($x) use ($tahun){
+                            $x->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })->sum('RINCIAN_TOTAL');
             $b1     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
-                        ->whereHas('bl',function($x){
-                            $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        ->whereHas('bl',function($x) use ($tahun){
+                            $x->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })->sum('RINCIAN_TOTAL');
             $b2     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
-                        ->whereHas('bl',function($x){
-                            $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        ->whereHas('bl',function($x) use ($tahun){
+                            $x->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })->sum('RINCIAN_TOTAL');
             $b3     = Rincian::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
-                        ->whereHas('bl',function($x){
-                            $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                        ->whereHas('bl',function($x) use ($tahun){
+                            $x->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })->sum('RINCIAN_TOTAL');
 
             $pen611     = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')
@@ -241,41 +241,41 @@ class ringkasanController extends Controller
                     ->where('REKENING_KODE','LIKE', '6.2%')
                     ->sum('PEMBIAYAAN_TOTAL');
       
-                  $blvp     = RincianPerubahan::whereHas('bl',function($r){
-                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                  $blvp     = RincianPerubahan::whereHas('bl',function($r) use ($tahun){
+                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                               })
                               ->sum('RINCIAN_TOTAL');
       
                   $b1vp     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
-                              ->whereHas('bl',function($r){
-                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              ->whereHas('bl',function($r) use ($tahun){
+                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                               })
                               ->sum('RINCIAN_TOTAL');
                   $b2vp     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
-                              ->whereHas('bl',function($r){
-                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              ->whereHas('bl',function($r) use ($tahun){
+                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                               })
                               ->sum('RINCIAN_TOTAL');
                   $b3vp     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
-                              ->whereHas('bl',function($r){
-                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              ->whereHas('bl',function($r) use ($tahun){
+                                  $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                               })
                               ->sum('RINCIAN_TOTAL');
       
-                  $blp      = RincianPerubahan::whereHas('bl',function($x){
-                                  $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                  $blp      = RincianPerubahan::whereHas('bl',function($x) use ($tahun){
+                                  $x->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                               })->sum('RINCIAN_TOTAL');
                   $b1p     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
-                              ->whereHas('bl',function($x){
-                                  $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              ->whereHas('bl',function($x) use ($tahun){
+                                  $x->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                               })->sum('RINCIAN_TOTAL');
                   $b2p     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
-                              ->whereHas('bl',function($x){
-                                  $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              ->whereHas('bl',function($x) use ($tahun){
+                                  $x->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                               })->sum('RINCIAN_TOTAL');
                   $b3p     = RincianPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
-                              ->whereHas('bl',function($x){
-                                  $x->where('BL_DELETED',0)->where('BL_TAHUN','2018');
+                              ->whereHas('bl',function($x) use ($tahun){
+                                  $x->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                               })->sum('RINCIAN_TOTAL');
       
                   $pen611p     = PembiayaanPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
