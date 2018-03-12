@@ -11,6 +11,7 @@ use App\Model\Urusan;
 use App\Model\Kegiatan;
 use App\Model\SKPD;
 use App\Model\Output;
+use App\Model\OutputPerubahan;
 use View;
 use Carbon;
 use Response;
@@ -165,12 +166,16 @@ class kegiatanController extends Controller
     }
 
     public function submitCapaian($tahun,$status){
+        if($status=="pergeseran"){
+            $o  = new OutputPerubahan;
+        }else{
             $o  = new Output;
-            $o->BL_ID               = Input::get('id');
-            $o->OUTPUT_TOLAK_UKUR   = Input::get('tolakukur');
-            $o->OUTPUT_TARGET       = Input::get('target');
-            $o->SATUAN_ID           = Input::get('satuan');
-            $o->save();            
+        }
+        $o->BL_ID               = Input::get('id');
+        $o->OUTPUT_TOLAK_UKUR   = Input::get('tolakukur');
+        $o->OUTPUT_TARGET       = Input::get('target');
+        $o->SATUAN_ID           = Input::get('satuan');
+        $o->save();            
         return 'Berhasil!';
     }
 
