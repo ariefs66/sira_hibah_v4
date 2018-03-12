@@ -48,22 +48,24 @@
                    { mData: 'KODE'},
                    { mData: 'NAMA'},
                    { mData: 'TOTAL_MURNI'},
-                   { mData: 'TOTAL'}
+                   { mData: 'TOTAL'},
+                   { mData: 'SELISIH'}
                    ]}" class="table table-pendapatan table-striped b-t b-b table-pendapatan" id="table-pendapatan">
                    <thead>
                     <tr>
                       <th class="hide" rowspan="2">ID</th>
                       <th rowspan="2" style="text-align: center;">Kode Perangkat Daerah</th>
                       <th rowspan="2" style="text-align: center;">Nama Perangkat Daerah</th>
-                      <th colspan="2" style="text-align: center;">Anggaran</th>
+                      <th colspan="3" style="text-align: center;">Anggaran</th>
                     </tr>
                     <tr>
                       <th style="text-align: center;">Sebelum</th>
                       <th style="text-align: center;">Sesudah</th>
+                      <th style="text-align: center;">Selisih</th>
                     </tr>  
                     <tr>
                       <th class="hide"></th>
-                      <th colspan="4" class="th_search">
+                      <th colspan="5" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -76,6 +78,8 @@
                         <td><b>Total</b></td>
                         <td><td>
                         <td><b>Rp. {{$anggaran}}</b></td>
+                        <td><b>Rp. {{$anggaranp}}</b></td>
+                        <td><b>{{$selisih}}</b></td>
                       </tr>
                     </tfoot> 
                 </table>
@@ -159,12 +163,13 @@
         <th>DASHUK</th>                       
         <th>Anggaran Sebelum</th>                                       
         <th>Anggaran Sesudah</th>                                       
+        <th>Selisih Anggaran</th>                                       
         <th>AKB</th>                                       
         <th>#</th>                                       
       </tr> 
       <tr>
         <th class="hide"></th>                    
-        <th colspan="7" class="th_search">
+        <th colspan="8" class="th_search">
           <i class="icon-bdg_search"></i>
           <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
         </th>
@@ -189,9 +194,10 @@
       }else{
         $('.pendapatan-rincian').slideUp('fast').remove();  
         $(this).addClass('shown');
-        btl_detail = '<tr class="pendapatan-rincian"><td style="padding:0!important;" colspan="4">'+$('#table-detail-pendapatan').html()+'</td></tr>';
+        btl_detail = '<tr class="pendapatan-rincian"><td style="padding:0!important;" colspan="5">'+$('#table-detail-pendapatan').html()+'</td></tr>';
         $(btl_detail).insertAfter('.table-pendapatan .table tbody tr.shown');
         $('.table-detail-pendapatan-isi').DataTable({
+          dom: 't',
           sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/pendapatan/getDetail/"+skpd,
           aoColumns: [
           { mData: 'NO' },
@@ -200,6 +206,7 @@
           { mData: 'DASHUK' },
           { mData: 'TOTAL_MURNI' },
           { mData: 'TOTAL' },
+          { mData: 'SELISIH' },
           { mData: 'AKB' },
           { mData: 'AKSI' }
           ]
