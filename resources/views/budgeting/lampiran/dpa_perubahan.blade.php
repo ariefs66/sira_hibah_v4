@@ -93,7 +93,7 @@
 			<h4><br>PEMERINTAH KOTA BANDUNG<br><br>
 				DOKUMEN PELAKSANAAN ANGGARAN <br> 
 				SATUAN KERJA PERANGKAT DAERAH <br> 
-				(DPA SKPD)<br> <br>
+				(DPPA SKPD)<br> <br>
 			TAHUN ANGGARAN {{$tahun}} <br> <br> <br></h4> 
 		</td>
 		<td class="tengah">&nbsp;</td>
@@ -111,7 +111,7 @@
 		<td width="200px">
 			<table class="" width="100px">
 				<tr class="">
-					<td class=""><b>No DPA SKPD</b></td>
+					<td class=""><b>No DPPA SKPD</b></td>
 					<td class="border">{{ $urusan->URUSAN_KODE }}</td>
 					<td class="border">{{ substr($skpd->SKPD_KODE,5,2) }}</td>
 					<td class="border">{{ $skpd->SUB_KODE }}</td>
@@ -200,10 +200,10 @@
 			<h4>DOKUMEN PELAKSANAAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH </h4>
 		</td>
 		<td class="border" colspan="7">
-			<h4>Nomor DPA SKPD</h4>
+			<h4>Nomor DPPA SKPD</h4>
 		</td>
 		<td rowspan="2" class="border">
-			<h4>Formulir<br>DPA-SKPD 2.2.1</h4>
+			<h4>Formulir<br>DPPA-SKPD 2.2.1</h4>
 		</td>
 	</tr>
 	<tr class="border">		

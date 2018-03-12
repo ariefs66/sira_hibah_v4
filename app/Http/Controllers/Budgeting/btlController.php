@@ -578,7 +578,7 @@ class btlController extends Controller
       }
       else{
         $data   = BTLPerubahan::leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
-              ->Join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+              ->leftJoin('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
               ->where('REKENING_KODE','like',$id.'%')
               ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$skpd)
               ->where('DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun);

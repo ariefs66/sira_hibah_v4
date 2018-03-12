@@ -93,7 +93,7 @@
 			<h4><br>PEMERINTAH KOTA BANDUNG<br><br>
 				DOKUMEN PELAKSANAAN ANGGARAN <br> 
 				SATUAN KERJA PERANGKAT DAERAH <br> 
-				(DPA SKPD)<br> <br>
+				(DPPA SKPD)<br> <br>
 				{{ $skpd->SKPD_NAMA }} <br>
 			TAHUN ANGGARAN {{$tahun}} <br> <br> <br></h4> 
 		</td>
@@ -112,31 +112,31 @@
 					<td class="border tengah"><b>Nama Formulir</b></td>
 				</tr>
 				<tr class="border-rincian">
-					<td class="border">DPA-SKPD</td>
+					<td class="border">DPPA-SKPD</td>
 					<td class="border">Ringkasan Dokumen Pelaksanaan Anggaran Satuan Kerja Perangkat Daerah</td>
 				</tr>
 				<tr class="border">
-					<td class="border">DPA-SKPD1</td>
+					<td class="border">DPPA-SKPD1</td>
 					<td class="border">Rincian Dokumen Pelaksanaan Anggaran Pendapatan Satuan Kerja Perangkat Daerah</td>
 				</tr>
 				<tr class="border">
-					<td class="border">DPA-SKPD 2.1</td>
+					<td class="border">DPPA-SKPD 2.1</td>
 					<td class="border">Rincian Dokumen Pelaksanaan Anggaran Belanja Tidak Langsung Satuan Kerja Perangkat Daerah</td>
 				</tr>
 				<tr class="border">
-					<td class="border">DPA-SKPD 2.2</td>
+					<td class="border">DPPA-SKPD 2.2</td>
 					<td class="border">Rekapitulasi Belanja Langsung Menurut Program dan Kegiatan Satuan Kerja Perangkat Daerah </td>
 				</tr>
 				<tr class="border">
-					<td class="border">DPA-SKPD 2.2.1</td>
+					<td class="border">DPPA-SKPD 2.2.1</td>
 					<td class="border">Rincian Dokumen Pelaksanaan Anggaran Belanja Langsung Program dan Per Kegiatan Satuan Kerja Perangkat Daerah</td>
 				</tr>
 				<tr class="border">
-					<td class="border">DPA-SKPD 3.1</td>
+					<td class="border">DPPA-SKPD 3.1</td>
 					<td class="border">Rincian Penerimaan Pembiayaan</td>
 				</tr>
 				<tr class="border">
-					<td class="border">DPA-SKPD 3.2</td>
+					<td class="border">DPPA-SKPD 3.2</td>
 					<td class="border">Rincian Pengeluaran Pembiayaan</td>
 				</tr>
 			</table>
@@ -159,7 +159,7 @@
 			<h4>RINGKASAN DOKUMEN PELAKSANAAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH <br> TAHUN ANGGARAN {{$tahun}}</h4>
 		</td>
 		<td rowspan="2" class="border">
-			<h4>Formulir<br>DPA-SKPD</h4>
+			<h4>Formulir<br>DPPA-SKPD</h4>
 		</td>
 	</tr>
 	<tr>

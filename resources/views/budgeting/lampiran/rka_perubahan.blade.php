@@ -84,7 +84,7 @@
 			<h4>RENCANA KERJA DAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH</h4>
 		</td>
 		<td rowspan="2" class="border">
-			<h4>Formulir<br>RKA-SKPD 2.2.1</h4>
+			<h4>Formulir<br>RKAP-SKPD 2.2.1</h4>
 		</td>
 	</tr>
 	<tr>

@@ -454,7 +454,7 @@
                       <i class="text8 icon-bdg_arrow1 text"></i>
                       <i class="text8 icon-bdg_arrow2 text-active"></i>
                     </span>
-                    <span>PERDA APBD</span>
+                    <span>PERDA @if($status=='murni') APBD @else APBDP @endif</span>
                   </a>                
                    <ul class="nav nav-sub dk">
                     <li>
@@ -530,7 +530,7 @@
                       <i class="text8 icon-bdg_arrow1 text"></i>
                       <i class="text8 icon-bdg_arrow2 text-active"></i>
                     </span>
-                    <span>PERWAL APBD</span>
+                    <span>PERWAL @if($status=='murni') APBD @else APBDP @endif </span>
                   </a>                
                    <ul class="nav nav-sub dk">
                     <li>
@@ -561,42 +561,42 @@
                       <i class="text8 icon-bdg_arrow1 text"></i>
                       <i class="text8 icon-bdg_arrow2 text-active"></i>
                     </span>
-                    <span>RKA</span>
+                    <span>@if($status=='murni') RKA @else RKAP @endif</span>
                   </a>                
                    <ul class="nav nav-sub dk">
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/rka/skpd" class="padding-l-r-lg " target="_blank">
-                         <span>RKA-SKPD</span>
+                         <span>@if($status=='murni') RKA-SKPD @else RKAP-SKPD @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/rka/skpd1" class="padding-l-r-lg " target="_blank">
-                         <span>RKA-SKPD 1</span>
+                         <span>@if($status=='murni') RKA-SKPD 1 @else RKAP-SKPD 1 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/rka/skpd21" class="padding-l-r-lg " target="_blank">
-                         <span>RKA-SKPD 2.1</span>
+                         <span>@if($status=='murni') RKA-SKPD 2.1 @else RKAP-SKPD 2.1 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/rka/skpd22" class="padding-l-r-lg " target="_blank">
-                         <span>RKA-SKPD 2.2</span>
+                         <span>@if($status=='murni') RKA-SKPD 2.2 @else RKAP-SKPD 2.2 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a onclick="$.alert('Ditutup!')" class="padding-l-r-lg " target="_blank">
-                         <span>RKA-SKPD 2.2.1</span>
+                         <span>@if($status=='murni') RKA-SKPD 2.2.1 @else RKAP-SKPD 2.2.1 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/rka/skpd31" class="padding-l-r-lg " target="_blank">
-                         <span>RKA-SKPD 3.1</span>
+                         <span>@if($status=='murni') RKA-SKPD 3.1 @else RKAP-SKPD 3.1 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/rka/skpd32" class="padding-l-r-lg " target="_blank">
-                         <span>RKA-SKPD 3.2</span>
+                         <span>@if($status=='murni') RKA-SKPD 3.2 @else RKAP-SKPD 3.2 @endif</span>
                       </a>
                     </li> 
                     </ul>
@@ -607,42 +607,42 @@
                       <i class="text8 icon-bdg_arrow1 text"></i>
                       <i class="text8 icon-bdg_arrow2 text-active"></i>
                     </span>
-                    <span>DPA</span>
+                    <span>@if($status=='murni') DPA-SKPD @else DPPA-SKPD  @endif</span>
                   </a>                
                    <ul class="nav nav-sub dk">
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/dpa/skpd" class="padding-l-r-lg " target="_blank">
-                         <span>DPA-SKPD</span>
+                         <span>@if($status=='murni') DPA-SKPD @else DPPA-SKPD  @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/dpa/skpd1" class="padding-l-r-lg " target="_blank">
-                         <span>DPA-SKPD 1</span>
+                         <span>@if($status=='murni') DPA-SKPD 1 @else DPPA-SKPD 1 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/dpa/skpd21" class="padding-l-r-lg " target="_blank">
-                         <span>DPA-SKPD 2.1</span>
+                         <span>@if($status=='murni') DPA-SKPD 2.1 @else DPPA-SKPD 2.1 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/dpa/skpd22" class="padding-l-r-lg " target="_blank">
-                         <span>DPA-SKPD 2.2</span>
+                         <span>@if($status=='murni') DPA-SKPD 2.2 @else DPPA-SKPD 2.2 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a onclick="$.alert('Ditutup!')" class="padding-l-r-lg " target="_blank">
-                         <span>DPA-SKPD 2.2.1</span>
+                         <span>@if($status=='murni') DPA-SKPD 2.2.1 @else DPPA-SKPD 2.2.1 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/dpa/skpd31" class="padding-l-r-lg " target="_blank">
-                         <span>DPA-SKPD 3.1</span>
+                         <span>@if($status=='murni') DPA-SKPD 3.1 @else DPPA-SKPD 3.1 @endif</span>
                       </a>
                     </li> 
                     <li>
                       <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/lampiran/dpa/skpd32" class="padding-l-r-lg " target="_blank">
-                         <span>DPA-SKPD 3.2</span>
+                         <span>@if($status=='murni') DPA-SKPD 3.2 @else DPPA-SKPD 3.2 @endif</span>
                       </a>
                     </li> 
                     </ul>
