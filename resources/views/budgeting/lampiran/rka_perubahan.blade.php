@@ -501,11 +501,11 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td>Bandung, 15 Maret 2018</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>Kepala {{ $bl->subunit->skpd->SKPD_NAMA }}</td>
+		<td>{{ $bl->subunit->skpd->SKPD_BENDAHARA }}</td>
 	</tr>
 	<tr>
 		<td></td>

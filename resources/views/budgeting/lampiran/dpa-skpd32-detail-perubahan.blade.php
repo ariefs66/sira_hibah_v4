@@ -266,15 +266,19 @@
 			@endif
 		</b></td>
 		<td class="border-rincian kanan border"><b>
+			@if($total !=0)
 			@php $per = ($slh * 100)/$total @endphp
 			{{ trim(number_format( $per, 2, ',', ' '),"-") }} %
+			@else
+			-
+			@endif
 		</b></td>
 	</tr>
 
 	<tr>
 		<td class="border-rincian kiri border"> 6.2</td>
 		<td class="border-rincian border"> <b> &nbsp; Pengeluaran Pembiayaan Daerah</b>  </td>
-		<td class="border-rincian kanan border"><b>{{ number_format($total,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($total,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($total_p,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>
 			@php $slh = $total_p-$total @endphp
@@ -285,8 +289,13 @@
 			@endif
 		</b></td>
 		<td class="border-rincian kanan border"><b>
+			@if($total !=0)
 			@php $per = ($slh * 100)/$total @endphp
 			{{ trim(number_format( $per, 2, ',', ' '),"-") }} %
+			@else
+			-
+			@endif
+
 		</b></td>
 	</tr>
 
@@ -326,7 +335,7 @@
 		<td class="tengah">Triwulan I</td>
 		<td class="kiri">Rp. {{ number_format($akb_peng->tri1,0,',','.') }}</td>
 		<td width="50%"> </td>
-		<td>Bandung, 2 Januari 2018</td>
+		<td>Bandung, 20 Maret 2018</td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan II</td>

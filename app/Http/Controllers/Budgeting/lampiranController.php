@@ -865,8 +865,8 @@ class lampiranController extends Controller
                 $persen = 0;
             }
                       
-            $akb_bl   = AKB_BL::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_AKB_BL.BL_ID')
-                        ->where('DAT_AKB_BL.BL_ID',$id)
+            $akb_bl   = AKB_BL_Perubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_AKB_BL_PERUBAHAN.BL_ID')
+                        ->where('DAT_AKB_BL_PERUBAHAN.BL_ID',$id)
                          ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
                             SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
@@ -3703,6 +3703,13 @@ class lampiranController extends Controller
 
 
     public function rkaSKPDDetail($tahun, $status, $s){
+
+        if($status == 'murni') return $this->rkaSKPDDetailMurni($tahun, $status, $s);
+        else return $this->rkaSKPDDetailPerubahan($tahun, $status, $s);
+        
+        }    
+
+    public function rkaSKPDDetailMurni($tahun, $status, $s){
         
         $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
                         ->where('SKPD_ID',$s)->first();
@@ -3774,6 +3781,250 @@ class lampiranController extends Controller
         $thn        = Carbon\Carbon::now()->format('Y');
         
             return View('budgeting.lampiran.rka-skpd-detail',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'pendapatan'=>$pendapatan, 'bl'=>$bl, 'pembiayaan'=>$pembiayaan, 'btl'=>$btl, 'btl1'=>$btl1, 'btl2'=>$btl2, 'btl3'=>$btl3, 'btl4'=>$btl4, 'btl5'=>$btl5,'bl'=>$bl,'bl1'=>$bl1,'bl2'=>$bl2,'bl3'=>$bl3 ]);
+    }
+
+    public function rkaSKPDDetailPerubahan($tahun, $status, $s){
+        
+        $urusan = Urusan::join('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+                        ->where('SKPD_ID',$s)->first();
+
+        $skpd = SKPD::where('SKPD_ID',$s)->first();
+        $pendapatan = Pendapatan::where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan1 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan11 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan12 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan13 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan14 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.4%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                
+        $pendapatan2 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan21 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan22 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan23 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan3 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan31 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan33 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                        
+        $pendapatan34 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.4%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan35 = Pendapatan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.5%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                                                                                   
+
+                        
+                        
+        $btl = BTL::where('DAT_BTL.SKPD_ID',$s)->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+
+        $btl1   = BTL::where('DAT_BTL.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.1%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+
+        $btl2   = BTL::where('DAT_BTL.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.3%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+
+        $btl3   = BTL::where('DAT_BTL.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.4%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');  
+
+        $btl4   = BTL::where('DAT_BTL.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.7%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL'); 
+
+        $btl5   = BTL::where('DAT_BTL.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.8%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');                     
+        
+        
+        $bl     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->sum('RINCIAN_TOTAL');
+
+            $bl1     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+                        ->sum('RINCIAN_TOTAL');
+
+            $bl2     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
+                        ->sum('RINCIAN_TOTAL');
+
+            $bl3     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                        ->where('DAT_BL.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
+                        ->sum('RINCIAN_TOTAL'); 
+                                                         
+                        
+        $pem  = Pembiayaan::where('DAT_PEMBIAYAAN.SKPD_ID',$s)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.1%');})->where('PEMBIAYAAN_TAHUN',$tahun)->sum('PEMBIAYAAN_TOTAL'); 
+        $peng = Pembiayaan::where('DAT_PEMBIAYAAN.SKPD_ID',$s)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.2%');})->where('PEMBIAYAAN_TAHUN',$tahun)->sum('PEMBIAYAAN_TOTAL');  
+
+
+        /* pergeseran & perubahan */
+
+        $pendapatan_p = PendapatanPerubahan::where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan1_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan11_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan12_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan13_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan14_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.1.4%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                
+        $pendapatan2_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan21_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan22_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.2%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan23_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.2.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan3_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan31_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.1%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan33_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.3%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                        
+        $pendapatan34_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.4%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
+        $pendapatan35_p = PendapatanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','4.3.5%');})         ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');                                                                                   
+
+                        
+                        
+        $btl_p = BTLPerubahan::where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+
+        $btl1_p   = BTLPerubahan::where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.1%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+
+        $btl2_p   = BTLPerubahan::where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.3%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+
+        $btl3_p   = BTLPerubahan::where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.4%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');  
+
+        $btl4_p   = BTLPerubahan::where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.7%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL'); 
+
+        $btl5_p   = BTLPerubahan::where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)
+                    ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.1.8%');})
+                    ->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');                     
+        
+        
+        $bl_p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->sum('RINCIAN_TOTAL');
+
+            $bl1_p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+                        ->sum('RINCIAN_TOTAL');
+
+            $bl2_p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.2%');})
+                        ->sum('RINCIAN_TOTAL');
+
+            $bl3_p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                        ->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.3%');})
+                        ->sum('RINCIAN_TOTAL'); 
+                                                         
+                        
+        $pem_p  = PembiayaanPerubahan::where('DAT_PEMBIAYAAN_PERUBAHAN.SKPD_ID',$s)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.1%');})->where('PEMBIAYAAN_TAHUN',$tahun)->sum('PEMBIAYAAN_TOTAL'); 
+        $peng_p = PembiayaanPerubahan::where('DAT_PEMBIAYAAN_PERUBAHAN.SKPD_ID',$s)
+                        ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.2%');})->where('PEMBIAYAAN_TAHUN',$tahun)->sum('PEMBIAYAAN_TOTAL');  
+
+
+        /*end pergeseran & perubahan  */
+
+
+
+        $akb_pend   = AKB_Pendapatan::join('BUDGETING.DAT_PENDAPATAN_PERUBAHAN','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
+                        ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)
+                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->first();
+       
+
+        $akb_btl   = AKB_BTL::join('BUDGETING.DAT_BTL_PERUBAHAN','DAT_BTL_PERUBAHAN.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
+                        ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)
+                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->first();
+       
+        $akb_bl   = AKB_BL::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_AKB_BL.BL_ID')
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
+                       ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->first(); 
+
+        $akb_pem   = AKB_Pembiayaan::join('BUDGETING.DAT_PEMBIAYAAN_PERUBAHAN','DAT_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
+                        ->where('DAT_PEMBIAYAAN_PERUBAHAN.SKPD_ID',$s)
+                        ->where('REKENING_KODE','like','6.1%')
+                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->first();
+
+        $akb_peng   = AKB_Pembiayaan::join('BUDGETING.DAT_PEMBIAYAAN_PERUBAHAN','DAT_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
+                        ->where('DAT_PEMBIAYAAN_PERUBAHAN.SKPD_ID',$s)
+                        ->where('REKENING_KODE','like','6.2%')
+                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
+                            SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
+                            SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
+                            SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
+                        ->first();                                                                                       
+
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+        
+            return View('budgeting.lampiran.rka-skpd-detail-perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 
+                'pendapatan'=>$pendapatan,'pendapatan1'=>$pendapatan1,'pendapatan11'=>$pendapatan11,'pendapatan12'=>$pendapatan12,'pendapatan13'=>$pendapatan13,'pendapatan14'=>$pendapatan14,'pendapatan2'=>$pendapatan2,'pendapatan21'=>$pendapatan21,'pendapatan22'=>$pendapatan22,'pendapatan23'=>$pendapatan23,'pendapatan3'=>$pendapatan3,'pendapatan31'=>$pendapatan31,'pendapatan33'=>$pendapatan33,'pendapatan34'=>$pendapatan34,'pendapatan35'=>$pendapatan35,
+                'pendapatan_p'=>$pendapatan_p,'pendapatan1_p'=>$pendapatan1_p,'pendapatan11_p'=>$pendapatan11_p,'pendapatan12_p'=>$pendapatan12_p,'pendapatan13_p'=>$pendapatan13_p,'pendapatan14_p'=>$pendapatan14_p,'pendapatan2_p'=>$pendapatan2_p,'pendapatan21_p'=>$pendapatan21_p,'pendapatan22_p'=>$pendapatan22_p,'pendapatan23_p'=>$pendapatan23_p,'pendapatan3_p'=>$pendapatan3_p,'pendapatan31_p'=>$pendapatan31_p,'pendapatan33_p'=>$pendapatan33_p,'pendapatan34_p'=>$pendapatan34_p,'pendapatan35_p'=>$pendapatan35_p,
+             'bl'=>$bl, 'pem'=>$pem, 'peng'=>$peng, 'btl'=>$btl, 'btl1'=>$btl1, 'btl2'=>$btl2, 'btl3'=>$btl3, 'btl4'=>$btl4, 'btl5'=>$btl5,'bl'=>$bl,'bl1'=>$bl1,'bl2'=>$bl2,'bl3'=>$bl3, 
+                'akb_pend'=>$akb_pend, 'akb_btl'=>$akb_btl, 'akb_bl'=>$akb_bl,'akb_pem'=>$akb_pem, 'akb_peng'=>$akb_peng,
+                'bl_p'=>$bl_p, 'pem_p'=>$pem_p, 'peng_p'=>$peng_p, 'btl_p'=>$btl_p, 'btl1_p'=>$btl1_p, 'btl2_p'=>$btl2_p, 'btl3_p'=>$btl3_p, 'btl4_p'=>$btl4_p, 'btl5_p'=>$btl5_p,'bl_p'=>$bl_p,'bl1_p'=>$bl1_p,'bl2_p'=>$bl2_p,'bl3_p'=>$bl3_p
+        ]);
+
     }
 
 
