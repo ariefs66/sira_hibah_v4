@@ -5561,6 +5561,72 @@ class lampiranController extends Controller
             return View('budgeting.lampiran.akb-pembiayaan',['tahun'=>$tahun,'status'=>$status, 'akb'=>$akb, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'skpd'=>$skpd ]);
     }
 
+public function updatePerwal1($tahun,$status){
+         $queryDewa = 'DELETE FROM "BUDGETING"."RKP_LAMP_1" WHERE "TAHUN"=\''.$tahun.'\';
+                        INSERT INTO "BUDGETING"."RKP_LAMP_1"
+         SELECT TB.TAHUN,TB."REKENING_ID",TB."REKENING_KODE",TB."REKENING_NAMA",TB.NILAI,TB.PERUBAHAN::INTEGER,TB.TAHAPAN::INTEGER FROM (
+         SELECT DP."PENDAPATAN_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."PENDAPATAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_PENDAPATAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."PENDAPATAN_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."PENDAPATAN_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."PENDAPATAN_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT DP."BTL_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."BTL_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_BTL" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."BTL_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."BTL_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."BTL_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT BL."BL_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."RINCIAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_RINCIAN" DP
+         LEFT JOIN "BUDGETING"."DAT_BL" BL ON BL."BL_ID"=DP."BL_ID"
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=BL."BL_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE BL."BL_TAHUN"=\''.$tahun.'\' AND BL."BL_DELETED"=0
+         GROUP BY BL."BL_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT DP."PEMBIAYAAN_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."PEMBIAYAAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_PEMBIAYAAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."PEMBIAYAAN_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."PEMBIAYAAN_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."PEMBIAYAAN_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         ) AS TB
+         ORDER BY TB.TAHUN,TB."REKENING_KODE";
+         UPDATE "BUDGETING"."RKP_LAMP_1" RP
+         SET "NILAI_PERUBAHAN"=TR.NILAI
+         FROM
+         (SELECT TB.TAHUN,TB."REKENING_ID",TB."REKENING_KODE",TB."REKENING_NAMA",TB.NILAI,TB.PERUBAHAN::INTEGER,TB.TAHAPAN::INTEGER FROM (
+         SELECT DP."PENDAPATAN_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."PENDAPATAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_PENDAPATAN_PERUBAHAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."PENDAPATAN_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."PENDAPATAN_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."PENDAPATAN_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT DP."BTL_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."BTL_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_BTL_PERUBAHAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."BTL_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."BTL_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."BTL_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT BL."BL_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."RINCIAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_RINCIAN_PERUBAHAN" DP
+         LEFT JOIN "BUDGETING"."DAT_BL_PERUBAHAN" BL ON BL."BL_ID"=DP."BL_ID"
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=BL."BL_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE BL."BL_TAHUN"=\''.$tahun.'\' AND BL."BL_DELETED"=0
+         GROUP BY BL."BL_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT DP."PEMBIAYAAN_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."PEMBIAYAAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_PEMBIAYAAN_PERUBAHAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."PEMBIAYAAN_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."PEMBIAYAAN_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."PEMBIAYAAN_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         ) AS TB) AS TR
+         WHERE RP."REKENING_ID"=TR."REKENING_ID";';
+        $result = DB::unprepared( $queryDewa );
+        if($result)
+            return 1;
+        else
+            return 0;
+     }
 
      public function perwal1($tahun,$status){
         $id = 1;
@@ -5626,6 +5692,7 @@ class lampiranController extends Controller
             }
             elseif(strlen($pd->koderek)<=3){
                 $total_pendapatan+=$pd->nilai;
+                $total_pendapatanp+=$pd->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$pd->koderek;
@@ -5704,6 +5771,7 @@ class lampiranController extends Controller
             }
             elseif(strlen($bt->koderek)<=3){
                 $total_belanja+=$bt->nilai;
+                $total_belanjap+=$bt->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$bt->koderek;
@@ -5767,6 +5835,7 @@ class lampiranController extends Controller
             }
             elseif(strlen($bt->koderek)<=3){
                 $total_belanja+=$bt->nilai;
+                $total_belanjap+=$bt->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$bt->koderek;
@@ -5938,6 +6007,7 @@ class lampiranController extends Controller
             }
             elseif(strlen($bt->koderek)<=3){
                 $total_pengeluaran+=$bt->nilai;
+                $total_pengeluaranp+=$bt->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$bt->koderek;
