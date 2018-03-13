@@ -3647,7 +3647,7 @@ class blController extends Controller
             if($data->Kunci->KUNCI_GIAT == 0 and $thp == 1){
                 if(Auth::user()->level == 8){
                     $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat">
-                    <input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
+                    <input type="checkbox" title="Buka Kegiatan" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
                 }else{
                     $kunci     = '<span class="text-success"><i class="fa fa-unlock kunci-giat"></i></span>';
                 }
@@ -3655,9 +3655,9 @@ class blController extends Controller
                 //$no        .='<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/ubah/'.$data->BL_ID.'"><i class="fa fa-pencil-square"></i> Ubah</a></li>';
                 //}
             }else{
-                if(Auth::user()->level == 8){
+                if(Auth::user()->level == 8 or Auth::user()->mod == '01000000000'){
                     $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat">
-                    <input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
+                    <input type="checkbox" title="Buka Kegiatan" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
                 }else{
                     $kunci      = '<span class="text-danger"><i class="fa fa-lock kunci-giat"></i></span>';
                 }             
@@ -3667,14 +3667,14 @@ class blController extends Controller
             }
 
             if($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1){
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
-                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'"><i></i></label>';
+                if(Auth::user()->mod == '11001000000' or Auth::user()->level == 9){
+                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r" title="Buka Rincian" ><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'"><i></i></label>';
                 }else{
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
                 }                
             }else{
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
-                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked><i></i></label>';
+                if(Auth::user()->mod == '11001000000' or Auth::user()->level == 9){
+                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r" title="Buka Rincian"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked><i></i></label>';
                 }else{
                     $rincian    = '<span class="text-danger"><i class="fa fa-lock kunci-rincian"></i></span>';
                 }             

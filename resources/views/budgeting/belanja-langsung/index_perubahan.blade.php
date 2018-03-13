@@ -76,10 +76,10 @@
                         <th colspan="3" style="text-align: center;">@if($status=='pergeseran') Pergeseran @else Perubahan @endif</th>                                      
                         <th rowspan="2" width="16%">Status 
                           @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8)
-                            <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciGiatSKPD()" id="kuncigiatskpd"><i></i></label>
+                            <label class="i-switch bg-danger m-t-xs m-r buka-giat" title="Buka Kegiatan"><input type="checkbox" onchange="return kunciGiatSKPD()" id="kuncigiatskpd"><i></i></label>
                           @endif
-                          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9)
-                            <label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kunciRincianSKPD()" id="kuncirincianskpd"><i></i></label>
+                          @if(Auth::user()->mod == '11001000000' or Auth::user()->level == 9)
+                            <label class="i-switch bg-danger m-t-xs m-r buka-giat" title="Buka Rincian"><input type="checkbox" onchange="return kunciRincianSKPD()" id="kuncirincianskpd"><i></i></label>
                           @endif
                         </th>                                      
                       </tr>
