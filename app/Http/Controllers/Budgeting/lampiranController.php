@@ -12,6 +12,7 @@ use Auth;
 use Excel;
 use DB;
 use App\Model\BL;
+use App\Model\Indikator;
 use App\Model\IndikatorPerubahan;
 use App\Model\Rincian;
 use App\Model\Rekening;

@@ -105,6 +105,7 @@
                     {{-- <option value="{{$tahun+1}}">{{$tahun+1}}</option> --}}
                     <option value="2017" id="o2017">2017 Perubahan</option>
                     <option value="2018" id="o2018">2018</option>
+                    <option value="2019" id="o2019">2019</option>
                   </select>
               </div>
            </li>
@@ -294,6 +295,7 @@
   $(function(){
     @if($tahun == 2017) $('#o2017').prop('selected',true);
     @elseif($tahun == 2018) $('#o2018').prop('selected',true);
+    @elseif($tahun == 2019) $('#o2019').prop('selected',true);
     @endif
   });
 </script>
