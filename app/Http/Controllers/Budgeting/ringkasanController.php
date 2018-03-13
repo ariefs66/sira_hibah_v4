@@ -598,6 +598,6 @@ class ringkasanController extends Controller
                     'b2'        =>$b2,
                     'b3'        =>$b3];
                     
-        return View('budgeting.ringkasan',$data);
+        return View('budgeting.ringkasan-sebelum',$data);
     }
 }
