@@ -106,7 +106,9 @@
 	<tr class="border headrincian">
 		<td class="border tengah" >NOMOR <br> URUT </td>
 		<td class="border tengah" >URAIAN</td>
-		<td class="border tengah" >JUMLAH</td>
+		<td class="border tengah" >MURNI</td>
+		<td class="border tengah" >PERUBAHAN</td>
+		<td class="border tengah" >SELISIH</td>
 		<td class="border tengah" >DASAR HUKUM</td>
 	</tr>		
 	<tr class="border headrincian">
@@ -114,10 +116,14 @@
 		<td class="border">2</td>
 		<td class="border">3</td>
 		<td class="border">4</td>
+		<td class="border">5</td>
+		<td class="border">6</td>
 	</tr>
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>
 		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
@@ -134,6 +140,20 @@
         @else
         <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekening'],2,'.',',') }}</td>
         @endif
+		@if($rs['koderekening']==6)
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)$totalpenerimaanp-$totalpengeluaranp,2,'.',',') }}</td>
+        @elseif($rs['koderekening']==5)
+        <td class="border-rincian text_blok kanan total">{{ number_format(ceil($rs['totalrekeningp']),2,'.',',') }}</td>
+        @else
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekeningp'],2,'.',',') }}</td>
+        @endif
+        @if($rs['koderekening']==6)
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)($totalpenerimaan+$totalpenerimaanp)-($totalpengeluaran+$totalpengeluaranp),2,'.',',') }}</td>
+        @elseif($rs['koderekening']==5)
+        <td class="border-rincian text_blok kanan total">{{ number_format(ceil($rs['totalrekeningp']-$rs['totalrekening']),2,'.',',') }}</td>
+        @else
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekeningp']-$rs['totalrekening'],2,'.',',') }}</td>
+        @endif
         <td class="border-rincian kanan "></td>
     </tr>
     @endif
@@ -145,6 +165,16 @@
         <td class="border-rincian text_blok kanan total">{{ number_format((float)($rs['totalrekening']+0.01),2,'.',',') }}</td>
         @else
         <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekening'],2,'.',',') }}</td>
+        @endif
+		@if($rs['koderekening']=='5.2')
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)($rs['totalrekeningp']+0.01),2,'.',',') }}</td>
+        @else
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekeningp'],2,'.',',') }}</td>
+        @endif
+		@if($rs['koderekening']=='5.2')
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)(($rs['totalrekeningp']-$rs['totalrekening'])+0.01),2,'.',',') }}</td>
+        @else
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekeningp']-$rs['totalrekening'],2,'.',',') }}</td>
         @endif
         <td class="border-rincian">{{ $rs['dashuk'] }}</td>
     </tr>
@@ -164,6 +194,16 @@
         @else
         <td class="border-rincian kanan">{{ number_format((float)$rs['totalrekening'],2,'.',',') }}</td>
         @endif
+        @if($rs['koderekening']=='5.2.2' or $rs['koderekening']=='5.2.3')
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)($rs['totalrekeningp']+0.01),2,'.',',') }}</td>
+        @else
+        <td class="border-rincian kanan">{{ number_format((float)$rs['totalrekeningp'],2,'.',',') }}</td>
+        @endif
+        @if($rs['koderekening']=='5.2.2' or $rs['koderekening']=='5.2.3')
+        <td class="border-rincian text_blok kanan total">{{ number_format((float)(($rs['totalrekeningp']-$rs['totalrekening'])+0.01),2,'.',',') }}</td>
+        @else
+        <td class="border-rincian kanan">{{ number_format((float)$rs['totalrekeningp']-$rs['totalrekening'],2,'.',',') }}</td>
+        @endif
         <td class="border-rincian">{{ $rs['dashuk'] }}</td>
     </tr>
     @endif
@@ -176,6 +216,21 @@
             ({{ number_format(abs((float)$rs['totaljumlah']),2,'.',',') }})
             @else
             {{ number_format((float)$rs['totaljumlah'],2,'.',',') }}
+            @endif
+        </td>
+		<td class="border-rincian text_blok kanan total">
+            @if($rs['totaljumlahp']<0)
+            ({{ number_format(abs((float)$rs['totaljumlahp']),2,'.',',') }})
+            @else
+            {{ number_format((float)$rs['totaljumlahp'],2,'.',',') }}
+            @endif
+        </td>
+		<td class="border-rincian text_blok kanan total">
+		@php $tots = ($rs['totaljumlah']-$rs['totaljumlahp']); @endphp	
+            @if($tots<0)
+            ({{ number_format(abs((float)$tots),2,'.',',') }})
+            @else
+            {{ number_format((float)$tots,2,'.',',') }}
             @endif
         </td>
         <td class="border-rincian kanan "></td>
@@ -191,6 +246,22 @@
 			({{ trim(number_format((float)round($tot),2,',','.'),"-") }})
 		@else
 			{{ number_format((float)round($tot), 2, ',', '.') }}
+		@endif
+		</b></td>
+		<td class="border-rincian kanan total"><b>
+		@php $totp = ($totalpendapatanp-$totalbelanjap)+($totalpenerimaanp-$totalpengeluaranp); @endphp	
+		@if($totp < 0)
+			({{ trim(number_format((float)round($totp),2,',','.'),"-") }})
+		@else
+			{{ number_format((float)round($totp), 2, ',', '.') }}
+		@endif
+		</b></td>
+		<td class="border-rincian kanan total"><b>
+		@php $tots = $totp-$tot; @endphp	
+		@if($tots < 0)
+			({{ trim(number_format((float)round($tots),2,',','.'),"-") }})
+		@else
+			{{ number_format((float)round($tots), 2, ',', '.') }}
 		@endif
 		</b></td>
 		<td class="border-rincian kanan "></td>
