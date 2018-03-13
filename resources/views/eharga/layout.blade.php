@@ -103,7 +103,6 @@
                     {{-- <option value="{{$tahun-1}}">{{$tahun-1}}</option> --}}
                     {{-- <option value="{{$tahun}}" selected="">{{$tahun}}</option> --}}
                     {{-- <option value="{{$tahun+1}}">{{$tahun+1}}</option> --}}
-                    <option value="2017" id="o2017">2017 Perubahan</option>
                     <option value="2018" id="o2018">2018</option>
                     <option value="2019" id="o2019">2019</option>
                   </select>
