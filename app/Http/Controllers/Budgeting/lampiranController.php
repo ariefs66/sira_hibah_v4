@@ -5561,6 +5561,72 @@ class lampiranController extends Controller
             return View('budgeting.lampiran.akb-pembiayaan',['tahun'=>$tahun,'status'=>$status, 'akb'=>$akb, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'skpd'=>$skpd ]);
     }
 
+public function updatePerwal1($tahun,$status){
+         $queryDewa = 'DELETE FROM "BUDGETING"."RKP_LAMP_1" WHERE "TAHUN"=\''.$tahun.'\';
+                        INSERT INTO "BUDGETING"."RKP_LAMP_1"
+         SELECT TB.TAHUN,TB."REKENING_ID",TB."REKENING_KODE",TB."REKENING_NAMA",TB.NILAI,TB.PERUBAHAN::INTEGER,TB.TAHAPAN::INTEGER FROM (
+         SELECT DP."PENDAPATAN_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."PENDAPATAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_PENDAPATAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."PENDAPATAN_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."PENDAPATAN_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."PENDAPATAN_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT DP."BTL_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."BTL_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_BTL" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."BTL_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."BTL_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."BTL_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT BL."BL_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."RINCIAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_RINCIAN" DP
+         LEFT JOIN "BUDGETING"."DAT_BL" BL ON BL."BL_ID"=DP."BL_ID"
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=BL."BL_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE BL."BL_TAHUN"=\''.$tahun.'\' AND BL."BL_DELETED"=0
+         GROUP BY BL."BL_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT DP."PEMBIAYAAN_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."PEMBIAYAAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_PEMBIAYAAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."PEMBIAYAAN_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."PEMBIAYAAN_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."PEMBIAYAAN_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         ) AS TB
+         ORDER BY TB.TAHUN,TB."REKENING_KODE";
+         UPDATE "BUDGETING"."RKP_LAMP_1" RP
+         SET "NILAI_PERUBAHAN"=TR.NILAI
+         FROM
+         (SELECT TB.TAHUN,TB."REKENING_ID",TB."REKENING_KODE",TB."REKENING_NAMA",TB.NILAI,TB.PERUBAHAN::INTEGER,TB.TAHAPAN::INTEGER FROM (
+         SELECT DP."PENDAPATAN_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."PENDAPATAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_PENDAPATAN_PERUBAHAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."PENDAPATAN_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."PENDAPATAN_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."PENDAPATAN_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT DP."BTL_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."BTL_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_BTL_PERUBAHAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."BTL_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."BTL_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."BTL_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT BL."BL_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."RINCIAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_RINCIAN_PERUBAHAN" DP
+         LEFT JOIN "BUDGETING"."DAT_BL_PERUBAHAN" BL ON BL."BL_ID"=DP."BL_ID"
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=BL."BL_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE BL."BL_TAHUN"=\''.$tahun.'\' AND BL."BL_DELETED"=0
+         GROUP BY BL."BL_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         UNION
+         SELECT DP."PEMBIAYAAN_TAHUN" AS TAHUN,DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA",SUM(DP."PEMBIAYAAN_TOTAL") AS NILAI,\'0\' AS PERUBAHAN,\'0\' AS TAHAPAN
+         FROM "BUDGETING"."DAT_PEMBIAYAAN_PERUBAHAN" DP
+         LEFT JOIN "REFERENSI"."REF_REKENING" RK ON RK."REKENING_TAHUN"=DP."PEMBIAYAAN_TAHUN" AND RK."REKENING_ID"=DP."REKENING_ID"
+         WHERE DP."PEMBIAYAAN_TAHUN"=\''.$tahun.'\'
+         GROUP BY DP."PEMBIAYAAN_TAHUN",DP."REKENING_ID",RK."REKENING_KODE",RK."REKENING_NAMA"
+         ) AS TB) AS TR
+         WHERE RP."REKENING_ID"=TR."REKENING_ID";';
+        $result = DB::unprepared( $queryDewa );
+        if($result)
+            return 1;
+        else
+            return 0;
+     }
 
      public function perwal1($tahun,$status){
         $id = 1;
@@ -5578,6 +5644,12 @@ class lampiranController extends Controller
         $total_belanja=0;
         $total_penerimaan=0;
         $total_pengeluaran=0;
+        $total_pendapatanp=0;
+        $total_belanjap=0;
+        $total_penerimaanp=0;
+        $total_pengeluaranp=0;
+        $surplusp=0;
+        $nettop=0;
         $surplus=0;
         $netto=0;
 
@@ -5598,7 +5670,8 @@ class lampiranController extends Controller
                              'rk.REKENING_KODE as koderek',
                              'rk.REKENING_NAMA as namarek',
                              'pp.PENDAPATAN_DASHUK as dashuk',
-                             DB::raw('SUM(dp."NILAI_MURNI") as nilai')
+                             DB::raw('SUM(dp."NILAI_MURNI") as nilai'),
+                             DB::raw('SUM(dp."NILAI_PERUBAHAN") as nilaip')
                              )
                     ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','pp.PENDAPATAN_DASHUK')
                     ->orderBy('rk.REKENING_KODE')
@@ -5610,21 +5683,26 @@ class lampiranController extends Controller
                 $tabel[$idx]['koderekening']=$pd->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
                 $tabel[$idx]['totalrekening']=$pd->nilai;
+                $tabel[$idx]['totalrekeningp']=$pd->nilaip;
                 $tabel[$idx]['dashuk']=NULL;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             elseif(strlen($pd->koderek)<=3){
                 $total_pendapatan+=$pd->nilai;
+                $total_pendapatanp+=$pd->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$pd->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
                 $tabel[$idx]['totalrekening']=$pd->nilai;
+                $tabel[$idx]['totalrekeningp']=$pd->nilaip;
                 $tabel[$idx]['dashuk']=$pd->dashuk;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             else{
@@ -5633,9 +5711,11 @@ class lampiranController extends Controller
                     $tabel[$idx]['koderekening']=$pd->koderek;
                     $tabel[$idx]['namarekening']=ucwords(strtolower($pd->namarek));
                     $tabel[$idx]['totalrekening']=$pd->nilai;
+                    $tabel[$idx]['totalrekeningp']=$pd->nilaip;
                     $tabel[$idx]['dashuk']=$pd->dashuk;
                     $tabel[$idx]['namajumlah']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
+                    $tabel[$idx]['totaljumlahp']=NULL;
                     $idx+=1;
                 }
             }
@@ -5644,9 +5724,11 @@ class lampiranController extends Controller
         $tabel[$idx]['koderekening']=NULL;
         $tabel[$idx]['namarekening']=NULL;
         $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
         $tabel[$idx]['namajumlah']="Jumlah Pendapatan";
         $tabel[$idx]['totaljumlah']=$total_pendapatan;
+        $tabel[$idx]['totaljumlahp']=$total_pendapatanp;
         $idx+=1;
         //print_r($tabel);exit;//CEK PENDAPATAN
         
@@ -5668,7 +5750,8 @@ class lampiranController extends Controller
                        'rk.REKENING_KODE as koderek',
                        'rk.REKENING_NAMA as namarek',
                        'pp.BTL_DASHUK as dashuk',
-                       DB::raw('SUM(dp."NILAI_MURNI") as nilai'))
+                       DB::raw('SUM(dp."NILAI_MURNI") as nilai'),
+                       DB::raw('SUM(dp."NILAI_PERUBAHAN") as nilaip'))
               ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','pp.BTL_DASHUK')
               ->orderBy('rk.REKENING_KODE')
               ->get();
@@ -5679,21 +5762,26 @@ class lampiranController extends Controller
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                 $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                 $tabel[$idx]['dashuk']=NULL;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             elseif(strlen($bt->koderek)<=3){
                 $total_belanja+=$bt->nilai;
+                $total_belanjap+=$bt->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                 $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                 $tabel[$idx]['dashuk']=$bt->dashuk;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             else{
@@ -5702,9 +5790,11 @@ class lampiranController extends Controller
                     $tabel[$idx]['koderekening']=$bt->koderek;
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                     $tabel[$idx]['dashuk']=$bt->dashuk;
                     $tabel[$idx]['namajumlah']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
+                    $tabel[$idx]['totaljumlahp']=NULL;
                     $idx+=1;
                 }
             }
@@ -5722,7 +5812,8 @@ class lampiranController extends Controller
         $bl = $bl->select(DB::raw('2||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
                         'rk.REKENING_KODE as koderek',
                         'rk.REKENING_NAMA as namarek',
-                        DB::raw('SUM(dp."NILAI_MURNI") as nilai')
+                        DB::raw('SUM(dp."NILAI_MURNI") as nilai'),
+                        DB::raw('SUM(dp."NILAI_PERUBAHAN") as nilaip')
                     )
                 ->groupBy('rk.REKENING_TAHUN','rk.REKENING_KODE','rk.REKENING_NAMA')
                 ->orderBy('rk.REKENING_KODE')
@@ -5735,21 +5826,26 @@ class lampiranController extends Controller
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                 $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                 $tabel[$idx]['dashuk']=NULL;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             elseif(strlen($bt->koderek)<=3){
                 $total_belanja+=$bt->nilai;
+                $total_belanjap+=$bt->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                 $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                 $tabel[$idx]['dashuk']=NULL;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             else{
@@ -5758,9 +5854,11 @@ class lampiranController extends Controller
                     $tabel[$idx]['koderekening']=$bt->koderek;
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                     $tabel[$idx]['dashuk']=NULL;
                     $tabel[$idx]['namajumlah']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
+                    $tabel[$idx]['totaljumlahp']=NULL;
                     $idx+=1;
                 }
             }
@@ -5770,19 +5868,24 @@ class lampiranController extends Controller
         $tabel[$idx]['koderekening']=NULL;
         $tabel[$idx]['namarekening']=NULL;
         $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
         $tabel[$idx]['namajumlah']="Jumlah Belanja";
         $tabel[$idx]['totaljumlah']=round($total_belanja);
+        $tabel[$idx]['totaljumlahp']=round($total_belanjap);
         $idx+=1;
 
         $surplus=$total_pendapatan-$total_belanja;
+        $surplusp=$total_pendapatanp-$total_belanjap;
         $tabel[$idx]['tingkat']=4;
         $tabel[$idx]['koderekening']=NULL;
         $tabel[$idx]['namarekening']=NULL;
         $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
         $tabel[$idx]['namajumlah']="Total Surplus/(Defisit)";
         $tabel[$idx]['totaljumlah']=round($surplus);
+        $tabel[$idx]['totaljumlahp']=round($surplusp);
         $idx+=1;
         
         $penerimaan=DB::table('REFERENSI.REF_REKENING as rk')
@@ -5803,7 +5906,8 @@ class lampiranController extends Controller
                            'rk.REKENING_KODE as koderek',
                            'rk.REKENING_NAMA as namarek',
                            'pp.PEMBIAYAAN_DASHUK as dashuk',
-                           DB::raw('SUM(dp."NILAI_MURNI") as nilai'))
+                           DB::raw('SUM(dp."NILAI_MURNI") as nilai'),
+                           DB::raw('SUM(dp."NILAI_PERUBAHAN") as nilaip'))
                     ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','pp.PEMBIAYAAN_DASHUK')
                     ->orderBy('rk.REKENING_KODE')
                     ->get();
@@ -5815,21 +5919,26 @@ class lampiranController extends Controller
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                 $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                 $tabel[$idx]['dashuk']=NULL;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             elseif(strlen($bt->koderek)<=3){
                 $total_penerimaan+=$bt->nilai;
+                $total_penerimaanp+=$bt->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                 $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                 $tabel[$idx]['dashuk']=$bt->dashuk;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             else{
@@ -5838,9 +5947,11 @@ class lampiranController extends Controller
                     $tabel[$idx]['koderekening']=$bt->koderek;
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                     $tabel[$idx]['dashuk']=$bt->dashuk;
                     $tabel[$idx]['namajumlah']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
+                    $tabel[$idx]['totaljumlahp']=NULL;
                     $idx+=1;
                 }
             }
@@ -5850,9 +5961,11 @@ class lampiranController extends Controller
         $tabel[$idx]['koderekening']=NULL;
         $tabel[$idx]['namarekening']=NULL;
         $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
         $tabel[$idx]['namajumlah']="Jumlah Penerimaan Pembiayaan";
         $tabel[$idx]['totaljumlah']=$total_penerimaan;
+        $tabel[$idx]['totaljumlahp']=$total_penerimaanp;
         $idx+=1;
         
         $pengeluaran=DB::table('REFERENSI.REF_REKENING as rk')
@@ -5872,7 +5985,8 @@ class lampiranController extends Controller
                            'rk.REKENING_KODE as koderek',
                            'rk.REKENING_NAMA as namarek',
                            'pp.PEMBIAYAAN_DASHUK as dashuk',
-                           DB::raw('SUM(dp."NILAI_MURNI") as nilai'))
+                           DB::raw('SUM(dp."NILAI_MURNI") as nilai'),
+                           DB::raw('SUM(dp."NILAI_PERUBAHAN") as nilaip'))
                     ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','pp.PEMBIAYAAN_DASHUK')
                     ->orderBy('rk.REKENING_KODE')
                     ->get();
@@ -5884,21 +5998,26 @@ class lampiranController extends Controller
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                 $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                 $tabel[$idx]['dashuk']=NULL;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             elseif(strlen($bt->koderek)<=3){
                 $total_pengeluaran+=$bt->nilai;
+                $total_pengeluaranp+=$bt->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$bt->koderek;
                 $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                 $tabel[$idx]['totalrekening']=$bt->nilai;
+                $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                 $tabel[$idx]['dashuk']=$bt->dashuk;
                 $tabel[$idx]['namajumlah']=NULL;
                 $tabel[$idx]['totaljumlah']=NULL;
+                $tabel[$idx]['totaljumlahp']=NULL;
                 $idx+=1;
             }
             else{
@@ -5908,9 +6027,11 @@ class lampiranController extends Controller
                     $tabel[$idx]['koderekening']=$bt->koderek;
                     $tabel[$idx]['namarekening']=ucwords(strtolower($bt->namarek));
                     $tabel[$idx]['totalrekening']=$bt->nilai;
+                    $tabel[$idx]['totalrekeningp']=$bt->nilaip;
                     $tabel[$idx]['dashuk']=$bt->dashuk;
                     $tabel[$idx]['namajumlah']=NULL;
                     $tabel[$idx]['totaljumlah']=NULL;
+                    $tabel[$idx]['totaljumlahp']=NULL;
                     $idx+=1;
                 }
             }
@@ -5920,25 +6041,30 @@ class lampiranController extends Controller
         $tabel[$idx]['koderekening']=NULL;
         $tabel[$idx]['namarekening']=NULL;
         $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
         $tabel[$idx]['namajumlah']="Jumlah Pengeluaran Pembiayaan";
         $tabel[$idx]['totaljumlah']=$total_pengeluaran;
+        $tabel[$idx]['totaljumlahp']=$total_pengeluaranp;
         $idx+=1;
 
         $netto=$total_penerimaan-$total_pengeluaran;
+        $nettop=$total_penerimaanp-$total_pengeluaranp;
         $tabel[$idx]['tingkat']=4;
         $tabel[$idx]['koderekening']=NULL;
         $tabel[$idx]['namarekening']=NULL;
         $tabel[$idx]['totalrekening']=NULL;
+        $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
         $tabel[$idx]['namajumlah']="Pembiayaan Netto";
         $tabel[$idx]['totaljumlah']=$netto;
+        $tabel[$idx]['totaljumlahp']=$nettop;
         $data       = array('tahun'         =>$tahun,
                             'status'        =>$status,
                             'tgl'           =>$tgl,
                             'bln'           =>$bln,
                             'thn'           =>$thn,
-                            'detil'=>$tabel,'totalpendapatan'=>$total_pendapatan,'totalbelanja'=>$total_belanja,'totalpenerimaan'=>$total_penerimaan,'totalpengeluaran'=>$total_pengeluaran               
+                            'detil'=>$tabel,'totalpendapatanp'=>$total_pendapatanp,'totalbelanjap'=>$total_belanjap,'totalpenerimaanp'=>$total_penerimaanp,'totalpengeluaranp'=>$total_pengeluaranp,'totalpendapatan'=>$total_pendapatan,'totalbelanja'=>$total_belanja,'totalpenerimaan'=>$total_penerimaan,'totalpengeluaran'=>$total_pengeluaran               
                             );
         return View('budgeting.lampiran.perwal-1_ed',$data);
 
