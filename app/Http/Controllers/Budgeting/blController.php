@@ -3665,6 +3665,7 @@ class blController extends Controller
                 //    $no        .='<li><a><i class="fa fa-pencil-square"></i> Ubah <i class="fa fa-lock"></i></a></li>';   
                 //}
             }
+            
 
             if($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1){
                 if(Auth::user()->mod == '11001000000' or Auth::user()->level == 9){
