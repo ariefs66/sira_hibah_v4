@@ -57,7 +57,7 @@ class BLPerubahan extends Model
         return $this->hasMany('App\Model\Staff','BL_ID');
     }
     public function output(){
-        return $this->hasMany('App\Model\Output','BL_ID');
+        return $this->hasMany('App\Model\OutputPerubahan','BL_ID');
     }
     public function pagurincian(){
         return $this->hasMany('App\Model\PaguRincian','BL_ID');
