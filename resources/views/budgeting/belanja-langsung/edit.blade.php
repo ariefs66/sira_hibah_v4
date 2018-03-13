@@ -31,13 +31,14 @@
 
                 <div class="tab-content tab-content-alt-1 bg-white">
                   <div class="bg-white wrapper-lg input-jurnal">
-                    <form action="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/detail/ubah/simpan/" method="POST" class="form-horizontal">
+                    <form action="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/detail/ubah/simpan" method="POST" class="form-horizontal">
                       <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">                            
+                      <input type="hidden" name="bl_id" value="{{ $id }}" />
                       <div class="input-wrapper">
+                      @if(count($subunit)>0 )
                         <div class="form-group">
                           <label class="col-sm-1">Sub Unit</label>
                           <div class="col-sm-11">
-                              <input type="hidden" name="bl_id" value="{{ $id }}" />
                             <select ui-jq="chosen" class="w-full program" name="sub_id" id="sub_id" required="">
                               @foreach($subunit as $su)
                               @if($bl->SUB_ID == $su->SUB_ID)
@@ -49,6 +50,8 @@
                             </select>
                           </div>
                         </div>
+                        @endif
+                      @if(count($program)>0 )
                         <div class="form-group">
                           <label class="col-sm-1">Program</label>
                           <div class="col-sm-5">
@@ -62,6 +65,9 @@
                               @endforeach
                             </select>
                           </div>
+                        @else
+                        <div class="form-group">
+                        @endif
                           <label class="col-sm-1">Kegiatan</label>
                           <div class="col-sm-5">
                             <select ui-jq="chosen" class="w-full kegiatan" id="kegiatan" name="kegiatan" required="">
@@ -183,16 +189,29 @@
                         </div>                                  
                         <hr class="m-t-xl">
                         <div id="out1">
+         
+                <div class="panel-heading wrapper-lg">
+                  <h5 class="inline font-semibold text-orange m-n ">Indikator Belanja Langsung</h5>
+                </div>
+
+                <div class="tab-content tab-content-alt-1 bg-white">
+                  <div class="bg-white wrapper-lg input-jurnal">
+                    <form action="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/detail/ubah/simpan/" method="POST" class="form-horizontal">
+                      <input type="hidden" name="_token" id="tokenoutput" value="{{ csrf_token() }}">                            
+                      <div class="input-wrapper">                                  
+                        <div id="out1">
                         <div class="form-group">
                           <label class="col-sm-1">Output</label>
                           <div class="col-sm-6">
-                            <input type="text" class="form-control" name="keluaran[]" placeholder="Keluaran">
+                            <input type="text" class="form-control" name="keluaran" placeholder="Keluaran" id="tolak-ukur">
+                            <input type="hidden" class="form-control" name="id" placeholder="Keluaran" id="id-indikator">
+                            <input type="hidden" class="form-control" name="id-bl" placeholder="Keluaran" id="id-bl" value="{{$id}}">
                           </div>
                           <div class="col-sm-2">
-                            <input type="number" class="form-control" name="target-keluaran[]" placeholder="Target">
+                            <input type="text" class="form-control" name="target-keluaran" placeholder="Target" id="target-capaian">
                           </div>
                           <div class="col-sm-2">
-                            <select ui-jq="chosen" class="w-full" id="select-out-1" name="satuan-keluaran[]">
+                            <select class="w-full" name="satuan-capaian" id="satuan-capaian">
                               <option value="">Satuan</option>
                               @foreach($satuan as $st)
                               <option value="{{ $st->SATUAN_ID }}">{{ $st->SATUAN_NAMA }}</option>
@@ -200,27 +219,29 @@
                             </select>
                           </div>
                           <div class="col-sm-1">
-                            <a class="btn btn-success" id="tambah-output"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-success" id="tambah-output" onclick="return simpanCapaian()"><i class="fa fa-plus"></i></a>
                           </div>
                         </div>
                         </div>
                         <hr class="m-t-xl">
                         <div class="table-responsive dataTables_wrapper">
                           <table ui-jq="dataTable" ui-options="{
-                                sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/capaian/{{ $bl->KEGIATAN_ID }}',
+                                sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/capaianedit/{{ $id }}',
                                 aoColumns: [
                                   { mData: 'INDIKATOR' },
                                   { mData: 'TOLAK_UKUR' },
-                                  { mData: 'TARGET',class:'text-right' }]
+                                  { mData: 'TARGET',class:'text-right' },
+                                  { mData: 'OPSI',class:'text-right' }]
                               }" class="table table-striped b-t b-b"  id="tabel-indikator">
                             <thead>
                               <tr>
                                 <th width="20%">Indikator</th>
                                 <th>Tolak Ukur</th>
                                 <th width="15%">Target</th>
+                                <th width="12%">OPSI</th>
                               </tr>
                               <tr>
-                                <th colspan="3" class="th_search">
+                                <th colspan="4" class="th_search">
                                   <i class="icon-bdg_search"></i>
                                   <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                                 </th>
@@ -230,6 +251,11 @@
                             </tbody>                        
                           </table>
                         </div>
+                     </div>
+                   </form>
+                 </div>
+               </div>
+                      </div>
                         <hr class="m-t-xl">
                         <div class="form-group">
                           <div class="col-md-12">
@@ -281,18 +307,79 @@
         { mData: 'TARGET',class:'text-right' }]
     });
   }); 
+  function hapusOutput(id){
+      token       = $('#tokenoutput').val();
+      $.ajax({
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/hapusOutput",
+          type: "POST",
+          data: {'_token'         : token,
+                'id'              : id},
+          success: function(msg){
+            $.alert(msg);
+            $('#table-capaian').DataTable().ajax.reload();
+          }
+      }); 
+    }   
+    function editOutput(id){
+      $.ajax({
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/output/"+id,
+          type: "GET",
+          success: function(msg){
+            $('#tolak-ukur').val(msg['OUTPUT_TOLAK_UKUR']);
+            $('#target-capaian').val(msg['OUTPUT_TARGET']);
+            $('#satuan-capaian').val(msg['SATUAN_ID']);
+            $('#id-indikator').val(msg['OUTPUT_ID']);
+          }
+      }); 
+    }
 
-  $('#tambah-output').on('click', function(){
-    $('#out1').append('<div class="form-group"><label class="col-sm-1"></label><div class="col-sm-6"><input type="text" class="form-control" name="keluaran[]" placeholder="Keluaran" required=""></div><div class="col-sm-2"><input type="number" class="form-control" name="target-keluaran[]" placeholder="Target" required=""></div><div class="col-sm-2"><select class="w-full output-satuan" name="satuan-keluaran[]" required=""></select></div><div class="col-sm-1"></div></div>');
-
+    function simpanCapaian(){
+    id          = $('#id-bl').val();
+    tipe        = $('#indikator-capaian').val();
+    tolakukur   = $('#tolak-ukur').val();
+    target      = $('#target-capaian').val();
+    satuan      = $('#satuan-capaian').val();
+    token       = $('#token').val();
+    type        = $('#tipe-capaian').val();
+    idindikator = $('#id-indikator').val();
+    if(idindikator){
+        uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/kegiatan/editCapaian"; 
+    }else{
+        uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/kegiatan/submitCapaian"; 
+    }
     $.ajax({
-      type  : "get",
-      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/satuan/getData",
-      success : function (data) {
-        $('.output-satuan').find('option').remove().end().append(data).trigger('chosen:updated');
-        $('.output-satuan').chosen();
-      }
+        url: uri,
+        type: "POST",
+        data: {'_token'         : token,
+              'id'              : id, 
+              'idindikator'     : idindikator, 
+              'tipe'            : tipe,
+              'tolakukur'       : tolakukur, 
+              'target'          : target, 
+              'satuan'          : satuan},
+        success: function(msg){
+          $.alert(msg);
+          $('#id-indikator').val(null);
+          $('#tolak-ukur').val(null);
+          $('#target-capaian').val(null);
+          $('#satuan-capaian').val(0);
+          $('#tabel-indikator').DataTable().ajax.reload();
+        }
     });
-  })
+  }
+
+  function hapusOutput(id){
+      token       = $('#token').val();
+      $.ajax({
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/hapusOutput",
+          type: "POST",
+          data: {'_token'         : token,
+                'id'              : id},
+          success: function(msg){
+            $.alert(msg);
+            $('#tabel-indikator').DataTable().ajax.reload();
+          }
+      }); 
+    }
 </script>
 @endsection
