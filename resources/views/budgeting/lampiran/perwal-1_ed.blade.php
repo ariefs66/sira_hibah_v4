@@ -235,7 +235,7 @@
             @endif
         </td>
 		<td class="border-rincian text_blok kanan total">
-		@php $tots = ($rs['totaljumlah']-$rs['totaljumlahp']); @endphp	
+		@php $tots = ($rs['totaljumlahp']-$rs['totaljumlah']); @endphp	
             @if($tots<0)
             ({{ number_format(abs((float)$tots),2,'.',',') }})
             @else
