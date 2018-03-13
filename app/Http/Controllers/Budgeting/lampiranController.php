@@ -12,7 +12,7 @@ use Auth;
 use Excel;
 use DB;
 use App\Model\BL;
-use App\Model\Indikator;
+use App\Model\IndikatorPerubahan;
 use App\Model\Rincian;
 use App\Model\Rekening;
 use App\Model\Outcome;
@@ -64,8 +64,11 @@ class lampiranController extends Controller
 
     public function rka($tahun, $status, $id){
 
-        $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
-
+        if($status=='murni'){
+            $indikator  = Indikator::where('BL_ID',$id)->orderBy('INDIKATOR')->get();
+        }else{
+            $indikator  = IndikatorPerubahan::where('BL_ID',$id)->orderBy('INDIKATOR')->get();    
+        }
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
