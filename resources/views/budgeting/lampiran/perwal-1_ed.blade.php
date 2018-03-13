@@ -1,300 +1,317 @@
-<!DOCTYPE html>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<html>
-<head>
-	<title></title>
-	<style type="text/css">
-		* {
-	      margin: 0;
-	      padding: 0;
-	    }
+@extends('budgeting.layout')
 
-		body{
-			font-family: Tahoma;
-			font-size: 80%;
-		}
+@section('content')
+<div id="content" class="app-content" role="main">
+  <div class="hbox hbox-auto-xs hbox-auto-sm ng-scope">
+    <div class="col">
+      <div class="app-content-body ">
 
-		td{
-			padding-left: 3px;
-			line-height: 1.5;
-		}
-	
-		table, tr, td{
-			border-collapse: collapse;
-		}
-		.rekening{
-			border: 1px solid;
-			border-style: dashed;
-		}		
-		.total{
-			border: 1px solid;
-		}		
-		.header, .border, .detail, .indikator, .rincian, .ttd  {
-			border : 1px solid;
-		}
-		.indikator > tbody > tr > td {
-			border: 1px solid;			
-		}		
-		.border-rincian{
-			border-left: 1px solid;
-			border-right: 1px solid;
-		}
-		.headrincian{
-			text-align: center;
-			vertical-align: middle;
-			font-weight: bold;
-		}
-		.ttd{
-			text-align: center;
-		}
-		table{
-			width: 100%;
-		}
-		h3, h4, h5{
-			text-align: center;
-			margin-top: 0px;
-			margin-bottom: 0px;
-		}
-		h5{
-			size: 110%;
-		}
-		.kanan{
-			text-align: right;
-			padding-right: 5px;
-		}
-		.tengah{
-			text-align: center;
-		}
-		.text_blok{
-            font-weight: bold;
-        }
-    	@media print {
-		    footer {page-break-after: always;}
-			table { page-break-inside:auto; }
-	    	tr    { page-break-inside:auto; page-break-after:auto }
-	    	thead { display:table-header-group; }
-	    	tfoot { display:table-footer-group; }		    
-		}
-	</style>
-</head>
-<body onload="window.print()">
-<div class="cetak">
-	<div style="margin-left: 330px;">
-	<h5 style="margin-right: -450px;">LAMPIRAN I Peraturan Wali Kota Bandung</h5>
-	<h5 style="margin-right: -520px;">NOMOR &nbsp; &nbsp; : 1320 Tahun 2017</h5>
-	<h5 style="margin-right: -525px;">TANGGAL &nbsp;: 29 Desember 2017</h5>
-	</div>
-	<br>
-<table class="header">
-	<tr class="">
-		<td class="" colspan="2"></td>
-	</tr>
-	<tr>	
-		<td class="">
-			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
-		</td>	
-		<td>
-			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>RINGKASAN APBD BERDASARKAN RINCIAN OBYEK PENDAPATAN, BELANJA DAN PEMBIAYAAN</h3>
-			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
-		</td>
-	</tr>
-	<tr> <td colspan="2"></td> </tr>
-</table>
-<table class="rincian">
-	<tbody>
-	<tr class="border headrincian">
-		<td class="border tengah" >NOMOR <br> URUT </td>
-		<td class="border tengah" >URAIAN</td>
-		<td class="border tengah" >MURNI</td>
-		<td class="border tengah" >PERUBAHAN</td>
-		<td class="border tengah" >SELISIH</td>
-		<td class="border tengah" >DASAR HUKUM</td>
-	</tr>		
-	<tr class="border headrincian">
-		<td class="border" width="8%">1</td>
-		<td class="border">2</td>
-		<td class="border">3</td>
-		<td class="border">4</td>
-		<td class="border">5</td>
-		<td class="border">6</td>
-	</tr>
-	<tr style="font-size: 5px;">
-		<td class="border-rincian">&nbsp;</td>
-		<td class="border-rincian"></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
-	</tr>
-
-	@foreach($detil as $rs)
-    @if ($rs['tingkat']==1)
-    <tr>
-        <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
-        <td class="border-rincian text_blok">{{ $rs['namarekening'] }}</td>
-        @if($rs['koderekening']==6)
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)$totalpenerimaan-$totalpengeluaran,2,'.',',') }}</td>
-        @elseif($rs['koderekening']==5)
-        <td class="border-rincian text_blok kanan total">{{ number_format(ceil($rs['totalrekening']),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekening'],2,'.',',') }}</td>
-        @endif
-		@if($rs['koderekening']==6)
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)$totalpenerimaanp-$totalpengeluaranp,2,'.',',') }}</td>
-        @elseif($rs['koderekening']==5)
-        <td class="border-rincian text_blok kanan total">{{ number_format(ceil($rs['totalrekeningp']),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekeningp'],2,'.',',') }}</td>
-        @endif
-        @if($rs['koderekening']==6)
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)($totalpenerimaan+$totalpenerimaanp)-($totalpengeluaran+$totalpengeluaranp),2,'.',',') }}</td>
-        @elseif($rs['koderekening']==5)
-        <td class="border-rincian text_blok kanan total">{{ number_format(ceil($rs['totalrekeningp']-$rs['totalrekening']),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekeningp']-$rs['totalrekening'],2,'.',',') }}</td>
-        @endif
-        <td class="border-rincian kanan "></td>
-    </tr>
-    @endif
-    @if ($rs['tingkat']==2)
-    <tr>
-        <td class="border-rincian text_blok">{{ $rs['koderekening'] }}</td>
-        <td class="border-rincian text_blok" style='padding-left: 10px'>{{ $rs['namarekening'] }}</td>
-        @if($rs['koderekening']=='5.2')
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)($rs['totalrekening']+0.01),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekening'],2,'.',',') }}</td>
-        @endif
-		@if($rs['koderekening']=='5.2')
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)($rs['totalrekeningp']+0.01),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekeningp'],2,'.',',') }}</td>
-        @endif
-		@if($rs['koderekening']=='5.2')
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)(($rs['totalrekeningp']-$rs['totalrekening'])+0.01),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)$rs['totalrekeningp']-$rs['totalrekening'],2,'.',',') }}</td>
-        @endif
-        <td class="border-rincian">{{ $rs['dashuk'] }}</td>
-    </tr>
-    @endif
-    @if ($rs['tingkat']==3)
-    <tr>
-        <td class="border-rincian">{{ $rs['koderekening'] }}</td>
-        @if(strlen($rs['koderekening'])==5)
-        <td class="border-rincian" style='padding-left: 20px'>{{ $rs['namarekening'] }}</td>
-        @elseif(strlen($rs['koderekening'])==8)
-        <td class="border-rincian" style='padding-left: 30px'>{{ $rs['namarekening'] }}</td>
-        @else
-        <td class="border-rincian" style='padding-left: 40px'>{{ $rs['namarekening'] }}</td>
-        @endif
-        @if($rs['koderekening']=='5.2.2' or $rs['koderekening']=='5.2.3')
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)($rs['totalrekening']+0.01),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian kanan">{{ number_format((float)$rs['totalrekening'],2,'.',',') }}</td>
-        @endif
-        @if($rs['koderekening']=='5.2.2' or $rs['koderekening']=='5.2.3')
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)($rs['totalrekeningp']+0.01),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian kanan">{{ number_format((float)$rs['totalrekeningp'],2,'.',',') }}</td>
-        @endif
-        @if($rs['koderekening']=='5.2.2' or $rs['koderekening']=='5.2.3')
-        <td class="border-rincian text_blok kanan total">{{ number_format((float)(($rs['totalrekeningp']-$rs['totalrekening'])+0.01),2,'.',',') }}</td>
-        @else
-        <td class="border-rincian kanan">{{ number_format((float)$rs['totalrekeningp']-$rs['totalrekening'],2,'.',',') }}</td>
-        @endif
-        <td class="border-rincian">{{ $rs['dashuk'] }}</td>
-    </tr>
-    @endif
-    @if ($rs['tingkat']==4)
-    <tr>
-        <td class="border-rincian">&nbsp;</td>
-        <td class="border-rincian text_blok kanan">{{ $rs['namajumlah'] }}</td>
-        <td class="border-rincian text_blok kanan total">
-            @if($rs['totaljumlah']<0)
-            ({{ number_format(abs((float)$rs['totaljumlah']),2,'.',',') }})
-            @else
-            {{ number_format((float)$rs['totaljumlah'],2,'.',',') }}
-            @endif
-        </td>
-		<td class="border-rincian text_blok kanan total">
-            @if($rs['totaljumlahp']<0)
-            ({{ number_format(abs((float)$rs['totaljumlahp']),2,'.',',') }})
-            @else
-            {{ number_format((float)$rs['totaljumlahp'],2,'.',',') }}
-            @endif
-        </td>
-		<td class="border-rincian text_blok kanan total">
-		@php $tots = ($rs['totaljumlah']-$rs['totaljumlahp']); @endphp	
-            @if($tots<0)
-            ({{ number_format(abs((float)$tots),2,'.',',') }})
-            @else
-            {{ number_format((float)$tots,2,'.',',') }}
-            @endif
-        </td>
-        <td class="border-rincian kanan "></td>
-    </tr>
-    @endif
-    @endforeach
-	<tr>
-		<td class="border-rincian"></td>
-		<td class="border-rincian kanan"> <b>SISA LEBIH PEMBIAYAAN ANGGARAN TAHUN BERKENAAN</b></td>
-		<td class="border-rincian kanan total"><b>
-		@php $tot = ($totalpendapatan-$totalbelanja)+($totalpenerimaan-$totalpengeluaran); @endphp	
-		@if($tot < 0)
-			({{ trim(number_format((float)round($tot),2,',','.'),"-") }})
-		@else
-			{{ number_format((float)round($tot), 2, ',', '.') }}
-		@endif
-		</b></td>
-		<td class="border-rincian kanan total"><b>
-		@php $totp = ($totalpendapatanp-$totalbelanjap)+($totalpenerimaanp-$totalpengeluaranp); @endphp	
-		@if($totp < 0)
-			({{ trim(number_format((float)round($totp),2,',','.'),"-") }})
-		@else
-			{{ number_format((float)round($totp), 2, ',', '.') }}
-		@endif
-		</b></td>
-		<td class="border-rincian kanan total"><b>
-		@php $tots = $totp-$tot; @endphp	
-		@if($tots < 0)
-			({{ trim(number_format((float)round($tots),2,',','.'),"-") }})
-		@else
-			{{ number_format((float)round($tots), 2, ',', '.') }}
-		@endif
-		</b></td>
-		<td class="border-rincian kanan "></td>
-	</tr>
-
-
-</tbody>	
-<table class="ttd">
-	<tr>
-		<td></td>
-		<td><br></td>
-	</tr>
-	<tr>
-		<td width="60%"></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><b>WALI KOTA BANDUNG</b></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><br><br><br><br><br></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><b>MOCHAMAD RIDWAN KAMIL</b></td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><br><br></td>
-	</tr>
-</table>
+        <div class="bg-light lter">    
+          <ul class="breadcrumb bg-white m-b-none">
+            <li><a href="#" class="btn no-shadow" ui-toggle-class="app-aside-folded" target=".app">
+              <i class="icon-bdg_expand1 text"></i>
+              <i class="icon-bdg_expand2 text-active"></i>
+            </a>   </li>
+            <li><a href= "{{ url('/') }}/main">Dashboard</a></li>
+            <li class="active"><i class="fa fa-angle-right"></i>Pendapatan</li>                                
+          </ul>
+        </div>
+        <div class="wrapper-lg">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel bg-white">
+                <div class="wrapper-lg">
+                  @if(Auth::user()->level == 9 
+                      or substr(Auth::user()->mod,10,1) == 1
+                      or substr(Auth::user()->mod,0,1) == 1)
+                  <button class="pull-right btn m-t-n-sm btn-success open-form-pendapatan"><i class="m-r-xs fa fa-plus"></i> Tambah Pendapatan</button>
+                  @endif
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekappendapatan"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <h5 class="inline font-semibold text-orange m-n ">Pendapatan</h5>
+                  <div class="col-sm-1 pull-right m-t-n-sm">
+                   <select class="form-control">
+                     <option value="">Baris</option>
+                     <option value="kegiatanA">10</option>
+                     <option value="kegiatanA">25</option>
+                     <option value="kegiatanA">50</option>
+                     <option value="kegiatanA">100</option>
+                   </select>
+                 </div>                    
+               </div>           
+               <div class="tab-content tab-content-alt-1 bg-white">
+                <div role="tabpanel" class="active tab-pane" id="tab-1">  
+                  <div class="table-responsive dataTables_wrapper table-pendapatan">
+                   <table ui-jq="dataTable" ui-options="{
+                   sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pendapatan/getData',
+                   aoColumns: [
+                   { mData: 'ID',class:'hide'},
+                   { mData: 'KODE'},
+                   { mData: 'NAMA'},
+                   { mData: 'TOTAL_MURNI'},
+                   { mData: 'TOTAL'},
+                   { mData: 'SELISIH'}
+                   ]}" class="table table-pendapatan table-striped b-t b-b table-pendapatan" id="table-pendapatan">
+                   <thead>
+                    <tr>
+                      <th class="hide" rowspan="2">ID</th>
+                      <th rowspan="2" style="text-align: center;">Kode Perangkat Daerah</th>
+                      <th rowspan="2" style="text-align: center;">Nama Perangkat Daerah</th>
+                      <th colspan="3" style="text-align: center;">Anggaran</th>
+                    </tr>
+                    <tr>
+                      <th style="text-align: center;">Sebelum</th>
+                      <th style="text-align: center;">Sesudah</th>
+                      <th style="text-align: center;">Selisih</th>
+                    </tr>  
+                    <tr>
+                      <th class="hide"></th>
+                      <th colspan="5" class="th_search">
+                        <i class="icon-bdg_search"></i>
+                        <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                        <td><b>Total</b></td>
+                        <td><td>
+                        <td><b>Rp. {{$anggaran}}</b></td>
+                        <td><b>Rp. {{$anggaranp}}</b></td>
+                        <td><b>{{$selisih}}</b></td>
+                      </tr>
+                    </tfoot> 
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-</body>
-</html>
+</div>
+</div>
+<div class="overlay"></div>
+<div class="bg-white wrapper-lg input-sidebar input-pendapatan">
+  <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
+  <form class="form-horizontal">
+    <div class="input-wrapper">
+      <h5>Tambah Pendapatan</h5>
+      <div class="form-group">
+        <label class="col-sm-3">Unit</label>
+        <div class="col-sm-9">
+          <input type="hidden" id="id-pendapatan">
+          <select ui-jq="chosen" class="w-full" id="skpd-pendapatan" required="">
+            <option value="">Silahkan Pilih SKPD</option>
+            @foreach($skpd as $s)
+            <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3">Sub Unit</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="subunit-pendapatan" required="">
+            <option value="">Silahkan Pilih Sub Unit</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-3">Rekening</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="rekening-pendapatan" required="">
+            <option value="">Silahkan Pilih Rekening</option>
+            @foreach($rekening as $rek)
+            <option value="{{ $rek->REKENING_ID }}">{{ $rek->REKENING_KODE }} - {{ $rek->REKENING_NAMA }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Peruntukan</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Masukan Keterangan" id="nama-pendapatan" required="">          
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Anggaran</label>          
+        <div class="col-sm-9">
+          <input type="number" class="form-control" placeholder="Masukan Anggaran" id="total-pendapatan" required="">          
+        </div> 
+      </div>
+
+      <hr class="m-t-xl">
+      <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
+      <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPendapatan()"><i class="fa fa-save m-r-xs "></i>Simpan Pendapatan</a>
+    </div>
+  </form>
+</div>
+</div>
+
+<div id="table-detail-pendapatan" class="hide bg-white">
+  <table ui-jq="dataTable" class="table table-detail-pendapatan-isi table-striped b-t b-b">
+    <thead>
+      <tr>
+        <th>No</th>                                    
+        <th>Rekening</th>                          
+        <th>Rincian</th>                       
+        <th>DASHUK</th>                       
+        <th>Anggaran Sebelum</th>                                       
+        <th>Anggaran Sesudah</th>                                       
+        <th>Selisih Anggaran</th>                                       
+        <th>AKB</th>                                       
+        <th>#</th>                                       
+      </tr> 
+      <tr>
+        <th class="hide"></th>                    
+        <th colspan="8" class="th_search">
+          <i class="icon-bdg_search"></i>
+          <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
+        </th>
+      </tr>                                       
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+@endsection
+
+@section('plugin')
+<script>
+  $('.table-pendapatan').on('click', '.table-pendapatan > tbody > tr ', function () {
+    if($("tr").hasClass('pendapatan-rincian') == false){
+      skpd = $(this).children("td").eq(0).html();
+    }
+    if(!$(this).hasClass('pendapatan-rincian')){
+      if($(this).hasClass('shown')){      
+        $('.pendapatan-rincian').slideUp('fast').remove();  
+        $(this).removeClass('shown'); 
+      }else{
+        $('.pendapatan-rincian').slideUp('fast').remove();  
+        $(this).addClass('shown');
+        btl_detail = '<tr class="pendapatan-rincian"><td style="padding:0!important;" colspan="5">'+$('#table-detail-pendapatan').html()+'</td></tr>';
+        $(btl_detail).insertAfter('.table-pendapatan .table tbody tr.shown');
+        $('.table-detail-pendapatan-isi').DataTable({
+          sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/pendapatan/getDetail/"+skpd,
+          aoColumns: [
+          { mData: 'NO' },
+          { mData: 'REKENING' },
+          { mData: 'RINCIAN' },
+          { mData: 'DASHUK' },
+          { mData: 'TOTAL_MURNI' },
+          { mData: 'TOTAL' },
+          { mData: 'SELISIH' },
+          { mData: 'AKB' },
+          { mData: 'AKSI' }
+          ]
+        });
+      }
+    }
+  });
+</script>
+<script type="text/javascript">
+  $("#skpd-pendapatan").change(function(e, params){
+    var id  = $('#skpd-pendapatan').val();
+    $('#subunit-pendapatan').find('option').remove().end().append('<option>Pilih Subunit</option>');
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/subunit/"+id,
+      success : function (data) {
+        $('#subunit-pendapatan').append(data).trigger('chosen:updated');
+      }
+    });
+  });
+
+  function simpanPendapatan(){
+    var token           = $('#token').val();    
+    var SUB_ID          = $('#subunit-pendapatan').val();
+    var REKENING_ID     = $('#rekening-pendapatan').val();
+    var PENDAPATAN_NAMA = $('#nama-pendapatan').val();
+    var PENDAPATAN_TOTAL= $('#total-pendapatan').val();
+    var PENDAPATAN_ID   = $('#id-pendapatan').val();    
+    if(SUB_ID == "" || REKENING_ID == "" || PENDAPATAN_NAMA == "" || PENDAPATAN_TOTAL == ""){
+      $.alert('Form harap diisi!');
+    }else{
+      if(PENDAPATAN_ID == ""){
+        uri    = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/simpan";
+      }else{
+        uri    = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/ubah";
+      }
+      $.ajax({
+        url: uri,
+        type: "POST",
+        data: {'_token'         : token,
+              'SUB_ID'          : SUB_ID, 
+              'REKENING_ID'     : REKENING_ID,
+              'PENDAPATAN_ID'   : PENDAPATAN_ID, 
+              'PENDAPATAN_NAMA' : PENDAPATAN_NAMA, 
+              'PENDAPATAN_TOTAL': PENDAPATAN_TOTAL},
+        success: function(msg){
+          $('#table-pendapatan').DataTable().ajax.reload();
+          $.alert(msg);
+          $('#id-pendapatan').val('');
+          $('#skpd-pendapatan').val('').trigger('chosen:updated');
+          $('#subunit-pendapatan').val('').trigger('chosen:updated');
+          $('#rekening-pendapatan').val('').trigger('chosen:updated');
+          $('#nama-pendapatan').val('').trigger('chosen:updated');
+          $('#total-pendapatan').val('').trigger('chosen:updated');
+          $('.input-pendapatan,.input-sidebar').animate({'right':'-1050px'},function(){
+              $('.overlay').fadeOut('fast');
+          });
+        }
+      });
+    }
+  }
+
+  function hapus(id){
+    var token        = $('#token').val();    
+    $.confirm({
+        title: 'Hapus Data!',
+        content: 'Yakin hapus data?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/hapus",
+                      type: "POST",
+                      data: {'_token'             : token,
+                            'PENDAPATAN_ID'       : id},
+                      success: function(msg){
+                          $.alert(msg);
+                          $('#table-pendapatan').DataTable().ajax.reload();                          
+                        }
+                  });
+                }
+            },
+            Tidak: function () {
+            }
+        }
+    });
+  } 
+
+   function ubah(id) {
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pendapatan/edit/"+id,
+      success : function (data) {
+        $('#id-pendapatan').val(data['PENDAPATAN_ID']);
+        $('#skpd-pendapatan').val(data['SKPD']).trigger("chosen:updated");
+        $('#subunit-pendapatan').append('<option value="'+data['SUB_ID']+'" selected>'+data['SUB_NAMA']+'</option>').trigger("chosen:updated");
+        $('#rekening-pendapatan').append('<option value="'+data['REKENING_ID']+'" selected>'+data['REKENING_KODE']+'-'+data['REKENING_NAMA']+'</option>').trigger("chosen:updated");
+        $('#nama-pendapatan').val(data['PENDAPATAN_NAMA']);
+        $('#total-pendapatan').val(data['PENDAPATAN_TOTAL']);
+        $('.overlay').fadeIn('fast',function(){
+          $('.input-pendapatan').animate({'right':'0'},"linear");  
+          $("html, body").animate({ scrollTop: 0 }, "slow");
+        }); 
+      }
+    });   
+  } 
+</script>
+@endsection
