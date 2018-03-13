@@ -180,7 +180,11 @@ class kegiatanController extends Controller
     }
 
     public function hapusOutput($tahun,$status){
-        Output::where('OUTPUT_ID',Input::get('id'))->delete();
+        if($status=="pergeseran"){
+            OutputPerubahan::where('OUTPUT_ID',Input::get('id'))->delete();
+        }else{
+            Output::where('OUTPUT_ID',Input::get('id'))->delete();
+        }
         return 'Berhasil!';
     }
 
