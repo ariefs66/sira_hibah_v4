@@ -232,7 +232,7 @@
 				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
 				,0,',','.') }}</td>
 				
-			@if(!empty($btlzx->BTL_TOTAL)&&!empty($btlzx_p->BTL_TOTAL)
+			@if(!empty($btlzx->BTL_TOTAL)&&!empty($btlzx_p->BTL_TOTAL))
 			<td class="border-rincian kanan">{{ number_format(
 				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
 				,0,',','.') }}%</td>
