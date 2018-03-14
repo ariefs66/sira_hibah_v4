@@ -224,6 +224,7 @@ class ringkasanController extends Controller
               $btl4p      = BTL::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.4%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
+              dd($btl4p);
               $btl7p      = BTL::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.7%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
