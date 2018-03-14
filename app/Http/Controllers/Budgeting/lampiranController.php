@@ -7423,7 +7423,6 @@ public function updatePerwal1($tahun,$status){
         ->orderBy('SKPD_KODE')
         ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "REF_PROGRAM"."PROGRAM_ID", "PROGRAM_KODE", "PROGRAM_NAMA" ')
         ->get(); 
-        $bl_progs=0;
 
         /*kegaiatn sesuai pagu                  */
         $bl_keg         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
@@ -7444,7 +7443,6 @@ public function updatePerwal1($tahun,$status){
         ->orderBy('KEGIATAN_KODE')
         ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN"."KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA", "BL_PAGU" ')
         ->get();
-                         $bl_kegs=0;               
 
         $bl_rek         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
@@ -7469,8 +7467,7 @@ public function updatePerwal1($tahun,$status){
         ->orderBy('SKPD_KODE')
         ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "DAT_BL_PERUBAHAN"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
         ->get();   
-        $bl_reks=0;
-
+        
     $btl_rek_1   =Rekening::where('REKENING_KODE','like','5.1.1')->where('REKENING_TAHUN',$tahun)->first();
     $btl_rek_2   =Rekening::where('REKENING_KODE','like','5.1.2')->where('REKENING_TAHUN',$tahun)->first();
     $btl_rek_3   =Rekening::where('REKENING_KODE','like','5.1.3')->where('REKENING_TAHUN',$tahun)->first();
@@ -7503,7 +7500,6 @@ public function updatePerwal1($tahun,$status){
         ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
         ->get();
-        $btl1_1s=0;
         $btl1_2       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
                         ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
@@ -7523,7 +7519,6 @@ public function updatePerwal1($tahun,$status){
         ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
         ->get(); 
-        $btl1_2s=0; 
 
         $pendapatan = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('SKPD_ID',$id)
@@ -7612,18 +7607,20 @@ public function updatePerwal1($tahun,$status){
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('SKPD_ID',$id)
                         ->where('REKENING_KODE','like', '4.1.1.04%')
-                        ->get();   
-                                                      
-       $pendapatans = 0;
-        $tot_pens = 0; 
-        $pads = 0;
+                        ->get();
+        $bl_progs=0;
+        $bl_reks=0;
+        $bl_kegs=0;                                       
+        $btl1_1s=0;        
+        $btl1_2s=0; 
+        $pendapatans = 0;
+        $tot_pens = $tot_penp-$tot_pen; 
+        $pads = $padp-$pad;
         $pds =  $pdp-$pd;                                                        
         $pendapatan1s = 0; 
         $pendapatan2s = 0; 
         $pendapatan3s = 0;
         $pendapatan4s = 0;   
-
-
 
         $data       = array('tahun'         =>$tahun,
                             'status'        =>$status,
