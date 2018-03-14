@@ -1,5 +1,8 @@
 # Laravel PHP Framework
 
+[![Repo on GitHub](https://img.shields.io/badge/repo-GitHub-3D76C2.svg)](https://github.com/allrested/SIRA_Bandung)
+[![Repo on Bandung](https://img.shields.io/badge/repo-GitLab-6C488A.svg)](https://git.bandung.go.id/arief62/SIRA)
+
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
 [![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
 [![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
