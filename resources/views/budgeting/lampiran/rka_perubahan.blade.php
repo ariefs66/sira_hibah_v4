@@ -388,7 +388,7 @@
 		@endif
 	</tr>
 	@endif
-	<?php $q++;$s++;?>
+	<?php $q++;$s++;?>  
 	<tr>
 		<td class="border-rincian kiri"><b>{{ $r->rekening->REKENING_KODE }}</b></td>
 		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $r->rekening->REKENING_NAMA }}</b></td>
