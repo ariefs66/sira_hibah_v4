@@ -78,6 +78,7 @@
 </head>
 <body onload="window.print()">
 <div class="cetak">
+
 <table class="header">
 	<tr class="border">
 		<td class="border" width="85%">
@@ -185,6 +186,7 @@
 	</tr>
 	</tbody>	
 </table>
+
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
@@ -284,6 +286,7 @@
 		<td class="border"></td>
 	</tr>
 </table>
+
 </div>
 </body>
 </html>
