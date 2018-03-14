@@ -180,13 +180,11 @@
 			</td>
 			<td class="border-rincian kanan">{{ number_format($btlzx->BTL_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ number_format($btlzx_p->BTL_TOTAL,0,',','.') }}</td>
-			<td class="border-rincian kanan">{{ number_format(
-				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
-				,0,',','.') }}</td>
+			<td class="border-rincian kanan">{{ number_format($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL,0,',','.') }}</td>
 			@if($btlzx->BTL_TOTAL!==0&&$btlzx_p->BTL_TOTAL!==0)
+			@php var_dump($btlzx->BTL_TOTAL);var_dump($btlzx_p->BTL_TOTAL); var_dump($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL); die();@endphp
 			<td class="border-rincian kanan">{{ number_format(
-				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
-				,0,',','.') }}%</td>
+				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL)/$btlzx->BTL_TOTAL,0,',','.') }}%</td>
 			@else
 			<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
 			@endif
@@ -235,13 +233,12 @@
 				,0,',','.') }}</td>
 				
 			@if($btlzx->BTL_TOTAL!==0&&$btlzx_p->BTL_TOTAL!==0)
+			@php var_dump($btlzx->BTL_TOTAL);var_dump($btlzx_p->BTL_TOTAL); var_dump($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL); die();@endphp
 			<td class="border-rincian kanan">{{ number_format(
 				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
 				,0,',','.') }}%</td>
 			@else
-			<td class="border-rincian kanan">{{ number_format(
-				0
-				,0,',','.') }}%</td>
+			<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
 			@endif
 			
 			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
