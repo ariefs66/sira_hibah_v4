@@ -493,7 +493,11 @@
 		<td class="border kanan"><b>{{ number_format($total_murni,0,',','.') }},00</b></td>
 		<td class="border kanan" colspan="4"><b>Jumlah</b></td>
 		<td class="border kanan"><b>{{ number_format($total,0,',','.') }},00</b></td>
-		<td class="border kanan"> <b> @if($selisih < 0) ({{ number_format(trim($selisih,"-"),0,',','.') }},00) @else {{ number_format($selisih,0,',','.') }},00 @endif</b></td>
+		<td class="border kanan"> <b> 
+			@if($selisih < 0) 
+			({{ trim($selisih,"-") }}) 
+			@else {{ $selisih }}
+			@endif</b></td>
 		<td class="border tengah"><b> {{number_format(trim($persen,"-"), 2, ',', ' ')}}% </b></td>
 	</tr>
 	</tbody>	
