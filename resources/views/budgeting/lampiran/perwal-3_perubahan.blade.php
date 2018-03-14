@@ -181,7 +181,7 @@
 			<td class="border-rincian kanan">{{ number_format($btlzx->BTL_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ number_format($btlzx_p->BTL_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ number_format($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL,0,',','.') }}</td>
-			@if($btlzx->BTL_TOTAL!==0&&$btlzx_p->BTL_TOTAL!==0)
+			@if(empty($btlzx->BTL_TOTAL)&&empty($btlzx_p->BTL_TOTAL))
 			@php var_dump($btlzx->BTL_TOTAL);var_dump($btlzx_p->BTL_TOTAL); var_dump($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL); die();@endphp
 			<td class="border-rincian kanan">{{ number_format(
 				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL)/$btlzx->BTL_TOTAL,0,',','.') }}%</td>
@@ -232,8 +232,7 @@
 				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
 				,0,',','.') }}</td>
 				
-			@if($btlzx->BTL_TOTAL!==0&&$btlzx_p->BTL_TOTAL!==0)
-			@php var_dump($btlzx->BTL_TOTAL);var_dump($btlzx_p->BTL_TOTAL); var_dump($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL); die();@endphp
+			@if(!empty($btlzx->BTL_TOTAL)&&!empty($btlzx_p->BTL_TOTAL)
 			<td class="border-rincian kanan">{{ number_format(
 				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
 				,0,',','.') }}%</td>
