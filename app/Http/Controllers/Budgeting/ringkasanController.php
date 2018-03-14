@@ -215,20 +215,20 @@ class ringkasanController extends Controller
                   $q->where('REKENING_KODE','like','4.3.5%');
               })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
       
-              $btl1p      = BTL::wherehas('rekening',function($q){
+              $btl1p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.1%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-              $btl3p      = BTL::wherehas('rekening',function($q){
+              $btl3p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.3%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-              $btl4p      = BTL::wherehas('rekening',function($q){
+              $btl4p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.4%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-              dd($btl4p);
-              $btl7p      = BTL::wherehas('rekening',function($q){
+              
+              $btl7p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.7%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-              $btl8p      = BTL::wherehas('rekening',function($q){
+              $btl8p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.8%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
       
