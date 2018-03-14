@@ -1131,6 +1131,19 @@ class blController extends Controller
                     'REKENING_NAMA' => $data->REKENING_NAMA,
                     'TOTAL_VIEW'    => number_format($data->total,0,'.',','),
                     'TOTAL'         => $data->total,
+                    'AKB_JAN'       => $data->AKB_JAN,
+                    'AKB_FEB'       => $data->AKB_FEB,
+                    'AKB_MAR'       => $data->AKB_MAR,
+                    'AKB_APR'       => $data->AKB_APR,
+                    'AKB_MEI'       => $data->AKB_MEI,
+                    'AKB_JUN'       => $data->AKB_JUN,
+                    'AKB_JUL'       => $data->AKB_JUL,
+                    'AKB_AUG'       => $data->AKB_AUG,
+                    'AKB_SEP'       => $data->AKB_SEP,
+                    'AKB_OKT'       => $data->AKB_OKT,
+                    'AKB_NOV'       => $data->AKB_NOV,
+                    'AKB_DES'       => $data->AKB_DES,
+                    /*
                     (empty($data->AKB_JAN))?$jan=$bagi:$jan=$data->AKB_JAN,
                     (empty($data->AKB_FEB))?$feb=$bagi:$feb=$data->AKB_FEB,
                     (empty($data->AKB_MAR))?$mar=$bagi:$mar=$data->AKB_MAR,
@@ -1154,8 +1167,9 @@ class blController extends Controller
                     'AKB_SEP'       => $sep,
                     'AKB_OKT'       => $okt,
                     'AKB_NOV'       => $nov,
-                    'AKB_DES'       => $des,
+                    'AKB_DES'       => $des,*/
                     'REKENING_ID'   => $data->REKENING_ID,
+                    'BL_ID'         => $data->BL_ID,
                     ];
         return $out;
     }
@@ -3738,9 +3752,9 @@ class blController extends Controller
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
-            if(Auth::user()->active == 5){
+            //if(Auth::user()->active == 5){
                 $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>';
-            }
+            //}
 
             if(($data->BL_VALIDASI == 0 && Auth::user()->active==1 ) || Auth::user()->level==8){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';

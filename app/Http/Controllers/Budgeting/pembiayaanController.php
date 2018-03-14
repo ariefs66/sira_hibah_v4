@@ -391,6 +391,19 @@ public function index($tahun,$status){
                     'REKENING_NAMA' => $data->REKENING_NAMA,
                     'TOTAL'         => $data->total,
                     'TOTAL_VIEW'    => number_format($data->total,0,'.',','),
+                    'AKB_JAN'       => $data->AKB_JAN,
+                    'AKB_FEB'       => $data->AKB_FEB,
+                    'AKB_MAR'       => $data->AKB_MAR,
+                    'AKB_APR'       => $data->AKB_APR,
+                    'AKB_MEI'       => $data->AKB_MEI,
+                    'AKB_JUN'       => $data->AKB_JUN,
+                    'AKB_JUL'       => $data->AKB_JUL,
+                    'AKB_AUG'       => $data->AKB_AUG,
+                    'AKB_SEP'       => $data->AKB_SEP,
+                    'AKB_OKT'       => $data->AKB_OKT,
+                    'AKB_NOV'       => $data->AKB_NOV,
+                    'AKB_DES'       => $data->AKB_DES,
+                    /*
                     (empty($data->AKB_JAN))?$jan=0:$jan=$data->AKB_JAN,
                     (empty($data->AKB_FEB))?$feb=0:$feb=$data->AKB_FEB,
                     (empty($data->AKB_MAR))?$mar=0:$mar=$data->AKB_MAR,
@@ -414,7 +427,7 @@ public function index($tahun,$status){
                     'AKB_SEP'       => $sep,
                     'AKB_OKT'       => $okt,
                     'AKB_NOV'       => $nov,
-                    'AKB_DES'       => $des,
+                    'AKB_DES'       => $des,*/
                     'REKENING_ID'   => $data->REKENING_ID,
                     'PEMBIAYAAN_ID' => $data->PEMBIAYAAN_ID,
                     ];
