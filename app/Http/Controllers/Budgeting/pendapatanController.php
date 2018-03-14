@@ -106,6 +106,10 @@ class pendapatanController extends Controller
 
     public function submitEdit($tahun,$status){
       if($status=="murni"){
+        $skpd=0;
+        if(!empty(Input::get('SUB_ID'))){
+            $skpd = Subunit::where('SUB_ID',Input::get('SUB_ID'))->value('SKPD_ID');
+        }
         Pendapatan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->update([
             'SUB_ID'                  => Input::get('SUB_ID'),
             'PENDAPATAN_NAMA'         => Input::get('PENDAPATAN_NAMA'),
@@ -114,13 +118,18 @@ class pendapatanController extends Controller
             'PENDAPATAN_DASHUK'        => Input::get('PENDAPATAN_DASHUK'),
             'PENDAPATAN_TOTAL'        => Input::get('PENDAPATAN_TOTAL'),
             'TIME_UPDATED'            => Carbon\Carbon::now(),
-            'USER_UPDATED'            => Auth::user()->id
+            'USER_UPDATED'            => Auth::user()->id,
+            'SKPD_ID'            => $skpd
           ]);
 
         $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
         $datapd    = Pendapatan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->first();
       }
       else{
+        $skpd=0;
+        if(!empty(Input::get('SUB_ID'))){
+            $skpd = Subunit::where('SUB_ID',Input::get('SUB_ID'))->value('SKPD_ID');
+        }
         PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->update([
             'SUB_ID'                  => Input::get('SUB_ID'),
             'PENDAPATAN_NAMA'         => Input::get('PENDAPATAN_NAMA'),
@@ -129,7 +138,8 @@ class pendapatanController extends Controller
             'PENDAPATAN_DASHUK'        => Input::get('PENDAPATAN_DASHUK'),
             'PENDAPATAN_TOTAL'        => Input::get('PENDAPATAN_TOTAL'),
             'TIME_UPDATED'            => Carbon\Carbon::now(),
-            'USER_UPDATED'            => Auth::user()->id
+            'USER_UPDATED'            => Auth::user()->id,
+            'SKPD_ID'            => $skpd
           ]);
 
         $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
