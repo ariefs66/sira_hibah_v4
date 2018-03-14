@@ -188,9 +188,7 @@
 				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
 				,0,',','.') }}%</td>
 			@else
-			<td class="border-rincian kanan">{{ number_format(
-				(0
-				,0,',','.') }}%</td>
+			<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
 			@endif
 			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
 		</tr>
