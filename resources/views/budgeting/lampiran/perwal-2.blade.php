@@ -157,15 +157,21 @@
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@endif
+	@php $pendapatanp = array(count($pendapatan)); @endphp
+	@foreach($pendapatanp as $pen)
+		@php $pendapatanp[] = number_format($pen->PENDAPATAN_TOTAL,0,',','.'); @endphp
+	@endforeach
+	@php $i=0; @endphp;
 	@foreach($pendapatan as $pen)
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp;{{$pen->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan total">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format($pendapatanp[i],0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format($pendapatanp[i]-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan total">{{$pen->PENDAPATAN_DASHUK}}</td>
-	</tr>	
+	</tr>
+	@php $i+=1;@endphp	
 	@endforeach
 
 
@@ -194,7 +200,7 @@
 		<td class="border-rincian"><b>BELANJA</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2+$bl,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p+$blp,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(($tot1p+$tot2p+$blp)-($tot1+$tot2+$bl),0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 
@@ -204,7 +210,7 @@
 		<td class="border-rincian"><b>&nbsp; BELANJA TIDAK LANGSUNG</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(($tot1p+$tot2p)-($tot1+$tot2),0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 
@@ -213,7 +219,7 @@
 		<td class="border-rincian"><b>&nbsp; &nbsp; {{$btl_rek_1->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(($tot1p+$tot2p)-($tot1+$tot2),0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 
@@ -224,19 +230,25 @@
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$btl_rek_1_1->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan total">{{ number_format($tot1,0,',','.') }}</td>
 		<td class="border-rincian kanan total">{{ number_format($tot1p,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format(($tot1p-$tot1),0,',','.') }}</td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
+	@php $btlp = array(count($btl1_1p)); $i=0; @endphp
+	@foreach($btl1_1p as $btl)
+	@php	$btlp[] = $btl->pagu; @endphp
+	@endforeach
+	@php $i=1; @endphp
 	@foreach($btl1_1 as $btl)
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.
 			{{$btl->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; &nbsp; {{$btl->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btlp[$i],0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btlp[$i]-$btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
+	@php $i+=1; @endphp
 	@endforeach
 
 	<tr>
@@ -245,19 +257,26 @@
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$btl_rek_1_2->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan total">{{ number_format($tot2,0,',','.') }}</td>
 		<td class="border-rincian kanan total">{{ number_format($tot2p,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format($tot2p-$tot2,0,',','.') }}</td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
+	
+	@php $btl1_2pp = array(count($btl1_2p)); $i=0; @endphp
+	@foreach($btl1_2p as $btl)
+	@php	$btl1_2pp[] = $btl->pagu; @endphp
+	@endforeach
+	@php $i=1; @endphp
 	@foreach($btl1_2 as $btl)
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.
 			{{$btl->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; &nbsp; {{$btl->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl1_2pp[$i],0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl1_2pp[$i]-$btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
+	@php $i+=1; @endphp
 	@endforeach
 	
 
@@ -267,7 +286,7 @@
 		<td class="border-rincian"><b>&nbsp; BELANJA LANGSUNG</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($bl,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($blp,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($bls,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@foreach($bl_prog as $bp)
@@ -296,9 +315,14 @@
 			<td class="border-rincian"> &nbsp; &nbsp; <b>{{$bp->PROGRAM_NAMA}}</b></td>
 			<td class="border-rincian kanan total"><b>{{ number_format($pagu_prog,0,',','.') }}</b></td>
 			<td class="border-rincian kanan total"><b>{{ number_format($pagu_progp,0,',','.') }}</b></td>
-			<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
+			<td class="border-rincian kanan total"><b>{{ number_format($pagu_progp-$pagu_prog,0,',','.') }}</b></td>
 			<td class="border-rincian kanan total"></td>
 		</tr>
+		@php $bkp = array(count($bl_kegp)); $i=0; @endphp
+		@foreach($bl_kegp as $bk)
+			@php $bkp[] = $bk->BL_PAGU @endphp
+		@endforeach
+		@php $i=1; @endphp
 		
 		@foreach($bl_keg as $bk)
 			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
@@ -307,10 +331,17 @@
 				<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.2.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}</td>
 				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$bk->KEGIATAN_NAMA}} </td>
 				<td class="border-rincian kanan total">{{ number_format($bk->BL_PAGU,0,',','.') }}</td>
-				<td class="border-rincian kanan total">{{ number_format($bk->BL_PAGU,0,',','.') }}</td>
-				<td class="border-rincian kanan total">{{ number_format(0,0,',','.') }}</td>
+				<td class="border-rincian kanan total">{{ number_format($bkp[$i],0,',','.') }}</td>
+				<td class="border-rincian kanan total">{{ number_format($bkp[$i]-$bk->BL_PAGU,0,',','.') }}</td>
 				<td class="border-rincian kanan total"></td>
+				@php $i+=1; @endphp
 			</tr>
+
+		@php $brp = array(count($bl_rekp)); $j=0; @endphp
+		@foreach($bl_rekp as $br)
+			@php $brp[] = $br->pagu; @endphp
+		@endforeach
+		@php $j=1; @endphp
 
 				@foreach($bl_rek as $br)
 					@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID)
@@ -319,10 +350,11 @@
 						<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.{{$br->REKENING_KODE}}</td>
 						<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$br->REKENING_NAMA}} </td>
 						<td class="border-rincian kanan ">{{ number_format($br->pagu,0,',','.') }}</td>
-						<td class="border-rincian kanan ">{{ number_format($br->pagu,0,',','.') }}</td>
-						<td class="border-rincian kanan ">{{ number_format(0,0,',','.') }}</td>
+						<td class="border-rincian kanan ">{{ number_format($brp[$j],0,',','.') }}</td>
+						<td class="border-rincian kanan ">{{ number_format($brp[$j]-$br->pagu,0,',','.') }}</td>
 						<td class="border-rincian kanan "></td>
 					</tr>
+					@php $j+=1; @endphp
 					@endif
 				@endforeach
 
