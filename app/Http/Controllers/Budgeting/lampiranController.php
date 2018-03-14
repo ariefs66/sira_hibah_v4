@@ -873,6 +873,8 @@ class lampiranController extends Controller
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->first(); 
 
+                       dd($akb_bl);
+
            return View('budgeting.lampiran.dpa_perubahan',
                 [   'tahun'             =>$tahun,
                     'status'            =>$status,
