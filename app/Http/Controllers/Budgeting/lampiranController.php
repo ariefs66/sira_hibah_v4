@@ -7542,13 +7542,18 @@ public function updatePerwal1($tahun,$status){
     }
 
     public function perwal3($tahun,$status){
+        if($status == 'murni') return $this->perwal3Murni($tahun, $status);
+        else return $this->perwal3Perubahan($tahun, $status);
+
+    }
+
+    public function perwal3Murni($tahun,$status){
         //dd($id);
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
         $bln        = $this->bulan($gbln*1);
         $thn        = Carbon\Carbon::now()->format('Y');
-
 
         $btl_rek_1   =Rekening::where('REKENING_KODE','like','5.1.4.01')->where('REKENING_TAHUN',$tahun)->first();      
         $btl_rek_2   =Rekening::where('REKENING_KODE','like','5.1.4.02')->where('REKENING_TAHUN',$tahun)->first();      
@@ -7595,6 +7600,90 @@ public function updatePerwal1($tahun,$status){
                             );
 
         return View('budgeting.lampiran.perwal-3',$data);
+    }
+
+     public function perwal3Perubahan($tahun,$status){
+        //dd($id);
+        $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
+        $tgl        = Carbon\Carbon::now()->format('d');
+        $gbln       = Carbon\Carbon::now()->format('m');
+        $bln        = $this->bulan($gbln*1);
+        $thn        = Carbon\Carbon::now()->format('Y');
+
+        $btl_rek_1   =Rekening::where('REKENING_KODE','like','5.1.4.01')->where('REKENING_TAHUN',$tahun)->first();      
+        $btl_rek_2   =Rekening::where('REKENING_KODE','like','5.1.4.02')->where('REKENING_TAHUN',$tahun)->first();      
+        $btl_rek_3   =Rekening::where('REKENING_KODE','like','5.1.4.03')->where('REKENING_TAHUN',$tahun)->first();
+        $btl_rek_4   =Rekening::where('REKENING_KODE','like','5.1.4.04')->where('REKENING_TAHUN',$tahun)->first();      
+        $btl_rek_5   =Rekening::where('REKENING_KODE','like','5.1.4.05')->where('REKENING_TAHUN',$tahun)->first();
+        $btl_rek_6   =Rekening::where('REKENING_KODE','like','5.1.4.06')->where('REKENING_TAHUN',$tahun)->first();      
+        $btl_rek_7   =Rekening::where('REKENING_KODE','like','5.1.4.07')->where('REKENING_TAHUN',$tahun)->first();                            
+
+        $btl1_1       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','5.1.4.05%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
+                        ->get(); 
+
+        $btl1_2       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','5.1.4.06%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
+                        ->get();   
+
+
+        $btlz       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','5.1.4%')
+                        ->get();
+
+        /*perubahan / pergeseran*/ 
+        
+        $btl1_1_p       = BTLPerubahan::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL_PERUBAHAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','5.1.4.05%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
+                        ->get(); 
+
+        $btl1_2_p       = BTLPerubahan::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL_PERUBAHAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','5.1.4.06%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
+                        ->get();   
+
+
+        $btlz_p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like','5.1.4%')
+                        ->get();               
+        
+        $data       = array('tahun'         =>$tahun,
+                            'status'        =>$status,
+                            'tgl'           =>$tgl,
+                            'bln'           =>$bln,
+                            'thn'           =>$thn,        
+                            'btl_rek_1'    =>$btl_rek_1,       
+                            'btl_rek_2'    =>$btl_rek_2,       
+                            'btl1_1'    =>$btl1_1,       
+                            'btl1_2'    =>$btl1_2,       
+                            'btlz'      =>$btlz,       
+                            'btl1_1_p'    =>$btl1_1_p,       
+                            'btl1_2_p'    =>$btl1_2_p,       
+                            'btlz_p'    =>$btlz_p,       
+                            );
+
+        return View('budgeting.lampiran.perwal-3_perubahan',$data);
     }
 
 
