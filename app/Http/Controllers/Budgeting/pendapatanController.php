@@ -152,7 +152,8 @@ class pendapatanController extends Controller
         }
         else{
           $datapendapatan     = PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->first();
-          PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->update(array('PENDAPATAN_TOTAL'=>0));
+          PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->delete();
+          //PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->update(array('PENDAPATAN_TOTAL'=>0));
         }
         
         $log        = new Log;
