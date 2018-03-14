@@ -183,7 +183,7 @@
 			<td class="border-rincian kanan">{{ number_format(
 				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
 				,0,',','.') }}</td>
-			@if($btlzx->BTL_TOTAL!==0)
+			@if($btlzx->BTL_TOTAL!==0||$btlzx_p->BTL_TOTAL!==0)
 			<td class="border-rincian kanan">{{ number_format(
 				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
 				,0,',','.') }}%</td>
@@ -234,7 +234,7 @@
 				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
 				,0,',','.') }}</td>
 				
-			@if($btlzx->BTL_TOTAL!==0)
+			@if($btlzx->BTL_TOTAL!==0||$btlzx_p->BTL_TOTAL!==0)
 			<td class="border-rincian kanan">{{ number_format(
 				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
 				,0,',','.') }}%</td>
