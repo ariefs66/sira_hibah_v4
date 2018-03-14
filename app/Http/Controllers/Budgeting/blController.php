@@ -2852,7 +2852,7 @@ class blController extends Controller
                     'RINCIAN_PAJAK'                 => Input::get('RINCIAN_PAJAK'),
                     'RINCIAN_VOLUME'                => $vol,
                     'RINCIAN_KOEFISIEN'             => $koef,
-                    'RINCIAN_TOTAL'                 => round($total),
+                    'RINCIAN_TOTAL'                 => $total,
                     'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                     'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                     'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
