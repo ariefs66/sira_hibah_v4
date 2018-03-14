@@ -106,7 +106,9 @@
 	<tr class="border headrincian">
 		<td class="border tengah" >KODE <br> REKENING </td>
 		<td class="border tengah" >URAIAN</td>
-		<td class="border tengah" >JUMLAH</td>
+		<td class="border tengah" >MURNI</td>
+		<td class="border tengah" >PERGESERAN</td>
+		<td class="border tengah" >SELISIH</td>
 		<td class="border tengah" >DASAR HUKUM</td>
 	</tr>		
 	<tr class="border headrincian">
@@ -114,10 +116,13 @@
 		<td class="border">2</td>
 		<td class="border">3</td>
 		<td class="border">4</td>
+		<td class="border">5</td>
+		<td class="border">6</td>
 	</tr>
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>
 		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
@@ -128,6 +133,8 @@
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.4</td>
 		<td class="border-rincian"><b>PENDAPATAN</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot_pen,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($tot_penp,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($tot_pens,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@if($pad != 0)
@@ -135,6 +142,8 @@
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.4.1</td>
 		<td class="border-rincian">&nbsp;<b>PENDAPATAN ASLI DAERAH</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($pad,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($padp,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($pads,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@endif
@@ -143,6 +152,8 @@
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.4.1.1</td>
 		<td class="border-rincian">&nbsp; &nbsp;<b>Pajak Daerah</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($pd,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($pdp,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($pds,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@endif
@@ -150,6 +161,8 @@
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp;{{$pen->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan total">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan total">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan total">{{$pen->PENDAPATAN_DASHUK}}</td>
 	</tr>	
@@ -167,11 +180,21 @@
 	@foreach($btl1_2 as $btl)
 		@php $tot2 += $btl->pagu; @endphp
 	@endforeach
+	@php $tot1p = 0; @endphp
+	@foreach($btl1_1p as $btl)
+		@php $tot1p += $btl->pagu; @endphp
+	@endforeach
+	@php $tot2p = 0; @endphp
+	@foreach($btl1_2p as $btl)
+		@php $tot2p += $btl->pagu; @endphp
+	@endforeach
 
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5</td>
 		<td class="border-rincian"><b>BELANJA</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2+$bl,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p+$blp,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 
@@ -180,6 +203,8 @@
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.1</td>
 		<td class="border-rincian"><b>&nbsp; BELANJA TIDAK LANGSUNG</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 
@@ -187,6 +212,8 @@
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$btl_rek_1->REKENING_KODE}}</td>
 		<td class="border-rincian"><b>&nbsp; &nbsp; {{$btl_rek_1->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 
@@ -196,6 +223,8 @@
 			{{$btl_rek_1_1->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$btl_rek_1_1->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan total">{{ number_format($tot1,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format($tot1p,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format(0,0,',','.') }}</td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@foreach($btl1_1 as $btl)
@@ -204,6 +233,8 @@
 			{{$btl->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; &nbsp; {{$btl->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
 	@endforeach
@@ -213,6 +244,8 @@
 			{{$btl_rek_1_2->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$btl_rek_1_2->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan total">{{ number_format($tot2,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format($tot2p,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format(0,0,',','.') }}</td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@foreach($btl1_2 as $btl)
@@ -221,6 +254,8 @@
 			{{$btl->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; &nbsp; {{$btl->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
 	@endforeach
@@ -231,16 +266,26 @@
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.2</td>
 		<td class="border-rincian"><b>&nbsp; BELANJA LANGSUNG</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($bl,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($blp,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@foreach($bl_prog as $bp)
 		@php
 			$pagu_prog = 0;
+			$pagu_progp = 0;
 		@endphp
 		@foreach($bl_keg as $bk)
 			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
 			@php
 				$pagu_prog += $bk->BL_PAGU ;
+			@endphp
+			@endif
+		@endforeach	
+		@foreach($bl_kegp as $bk)
+			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
+			@php
+				$pagu_progp += $bk->BL_PAGU ;
 			@endphp
 			@endif
 		@endforeach	
@@ -250,6 +295,8 @@
 			<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.2.{{$bp->PROGRAM_KODE}}</td>
 			<td class="border-rincian"> &nbsp; &nbsp; <b>{{$bp->PROGRAM_NAMA}}</b></td>
 			<td class="border-rincian kanan total"><b>{{ number_format($pagu_prog,0,',','.') }}</b></td>
+			<td class="border-rincian kanan total"><b>{{ number_format($pagu_progp,0,',','.') }}</b></td>
+			<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
 			<td class="border-rincian kanan total"></td>
 		</tr>
 		
@@ -260,6 +307,8 @@
 				<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5.2.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}</td>
 				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$bk->KEGIATAN_NAMA}} </td>
 				<td class="border-rincian kanan total">{{ number_format($bk->BL_PAGU,0,',','.') }}</td>
+				<td class="border-rincian kanan total">{{ number_format($bk->BL_PAGU,0,',','.') }}</td>
+				<td class="border-rincian kanan total">{{ number_format(0,0,',','.') }}</td>
 				<td class="border-rincian kanan total"></td>
 			</tr>
 
@@ -270,6 +319,8 @@
 						<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.{{$br->REKENING_KODE}}</td>
 						<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$br->REKENING_NAMA}} </td>
 						<td class="border-rincian kanan ">{{ number_format($br->pagu,0,',','.') }}</td>
+						<td class="border-rincian kanan ">{{ number_format($br->pagu,0,',','.') }}</td>
+						<td class="border-rincian kanan ">{{ number_format(0,0,',','.') }}</td>
 						<td class="border-rincian kanan "></td>
 					</tr>
 					@endif
@@ -293,7 +344,7 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td>Bandung, 16 {{ $bln }} {{ $thn }}</td>
 	</tr>
 	<tr>
 		<td></td>
