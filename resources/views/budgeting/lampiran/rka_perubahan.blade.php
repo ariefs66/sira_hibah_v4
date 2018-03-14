@@ -496,7 +496,7 @@
 		<td class="border kanan"> <b> 
 			@if($selisih < 0) 
 			({{ trim($selisih,"-") }}) 
-			@else {{ $selisih }}
+			@else {{ $selisih }} 
 			@endif</b></td>
 		<td class="border tengah"><b> {{number_format(trim($persen,"-"), 2, ',', ' ')}}% </b></td>
 	</tr>
