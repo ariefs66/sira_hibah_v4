@@ -81,8 +81,8 @@
 <div class="cetak">
 	<div style="margin-left: 330px;">
 	<h5 style="margin-right: -450px;">LAMPIRAN I Peraturan Wali Kota Bandung</h5>
-	<h5 style="margin-right: -520px;">NOMOR &nbsp; &nbsp; : 1320 Tahun 2017</h5>
-	<h5 style="margin-right: -525px;">TANGGAL &nbsp;: 29 Desember 2017</h5>
+	<h5 style="margin-right: -520px;">NOMOR &nbsp; &nbsp; : 1320 Tahun 2018</h5>
+	<h5 style="margin-right: -525px;">TANGGAL &nbsp;: 16 Maret 2018</h5>
 	</div>
 	<br>
 <table class="header">
