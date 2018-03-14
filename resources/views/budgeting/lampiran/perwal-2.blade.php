@@ -169,9 +169,9 @@
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@endif
-	@php $pendapatanp = array(count($pendapatan)); @endphp
+	@php $pendapatnp = array(count($pendapatanp)); @endphp
 	@foreach($pendapatanp as $pen)
-		@php $pendapatanp[] = number_format($pen->PENDAPATAN_TOTAL,0,',','.'); @endphp
+		@php $pendapatnp[] = number_format($pen->PENDAPATAN_TOTAL,0,',','.'); @endphp
 	@endforeach
 	@php $i=0; @endphp;
 	@foreach($pendapatan as $pen)
@@ -179,11 +179,11 @@
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp;{{$pen->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan total">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format($pendapatanp[i],0,',','.') }}</td>
-		@if(($pendapatanp[i]-$pen->PENDAPATAN_TOTAL)<0)
-		<td class="border-rincian kanan total">({{ number_format(abs($pendapatanp[i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
+		<td class="border-rincian kanan total">{{ number_format($pendapatnp[$i],0,',','.') }}</td>
+		@if(($pendapatnp[$i]-$pen->PENDAPATAN_TOTAL)<0)
+		<td class="border-rincian kanan total">({{ number_format(abs($pendapatnp[$i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
-		<td class="border-rincian kanan total">{{ number_format($pendapatanp[i]-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format($pendapatnp[$i]-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan total">{{$pen->PENDAPATAN_DASHUK}}</td>
 	</tr>
