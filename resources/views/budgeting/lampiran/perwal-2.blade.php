@@ -330,7 +330,11 @@
 		<td class="border-rincian"><b>&nbsp; BELANJA LANGSUNG</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($bl,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($blp,0,',','.') }}</b></td>
+		@if($bls<0)
+		<td class="border-rincian kanan total"><b>({{ number_format(abs($bls),0,',','.') }})</b></td>
+		@else
 		<td class="border-rincian kanan total"><b>{{ number_format($bls,0,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@foreach($bl_prog as $bp)
