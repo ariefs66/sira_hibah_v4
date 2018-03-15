@@ -291,8 +291,7 @@
    total = parseInt(total);
    selisih = total-total_akb;
 
-    //if(jan == "" || feb == "" || mar == "" || apr == "" || mei == "" || jun == "" || jul == "" || agu == "" || sep == "" || nov == "" || des == "" ){
-    if(apr == "" || mei == "" || jun == "" || jul == "" || agu == "" || sep == "" || okt == "" || nov == "" || des == "" ){  
+    if(jan == "" || feb == "" || mar == "" || apr == "" || mei == "" || jun == "" || jul == "" || agu == "" || sep == "" || nov == "" || des == "" ){
       $.alert('Form harap diisi atau di nol kan!');
     }else{
       if(total != total_akb){
