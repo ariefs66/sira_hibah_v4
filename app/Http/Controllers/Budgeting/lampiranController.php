@@ -7691,7 +7691,11 @@ public function updatePerwal1($tahun,$status){
                             'pd'        =>$pd     
                             );
 
-        return View('budgeting.lampiran.perwal-2',$data);
+        if($status=="murni"){
+            return View('budgeting.lampiran.perwal-2',$data);
+        }else{
+            return View('budgeting.lampiran.perwal-2_perubahan',$data);
+        }
     }
 
     public function perwal3($tahun,$status){
