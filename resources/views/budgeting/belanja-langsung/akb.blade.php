@@ -605,21 +605,21 @@
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Januari</label>
             <div class="col-sm-9">
-               <input type="text" class="form-control" placeholder="Nominal" name="jan" id="jan" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="" readonly="">
+               <input type="text" class="form-control" placeholder="Nominal" name="jan" id="jan" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && event.charCode == 45"  value="" readonly="">
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Februari</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="feb" id="feb" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="" readonly="">
+              <input type="text" class="form-control" placeholder="Nominal" name="feb" id="feb" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && event.charCode == 45"  value="" readonly="">
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Maret</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="mar" id="mar" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="" readonly="">            
+              <input type="text" class="form-control" placeholder="Nominal" name="mar" id="mar" onkeypress="return event.charCode >= 48 && event.charCode <= 57 && event.charCode == 45"  value="" readonly="">            
             </div> 
           </div>
 
