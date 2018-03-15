@@ -6597,9 +6597,14 @@ public function updatePerwal1($tahun,$status){
         $tabel[$idx]['totalrekening']=NULL;
         $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
+        /*
         $tabel[$idx]['namajumlah']="Jumlah Pendapatan";
         $tabel[$idx]['totaljumlah']=$total_pendapatan;
         $tabel[$idx]['totaljumlahp']=$total_pendapatanp;
+        */
+        $tabel[$idx]['namajumlah']=NULL;
+        $tabel[$idx]['totaljumlah']=NULL;
+        $tabel[$idx]['totaljumlahp']=NULL;
         $idx+=1;
         //print_r($tabel);exit;//CEK PENDAPATAN
         
@@ -6741,10 +6746,14 @@ public function updatePerwal1($tahun,$status){
         $tabel[$idx]['totalrekening']=NULL;
         $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
+        /*
         $tabel[$idx]['namajumlah']="Jumlah Belanja";
         $tabel[$idx]['totaljumlah']=round($total_belanja);
         $tabel[$idx]['totaljumlahp']=round($total_belanjap);
-        $idx+=1;
+        */
+        $tabel[$idx]['namajumlah']=NULL;
+        $tabel[$idx]['totaljumlah']=NULL;
+        $tabel[$idx]['totaljumlahp']=NULL;
 
         $surplus=$total_pendapatan-$total_belanja;
         $surplusp=$total_pendapatanp-$total_belanjap;

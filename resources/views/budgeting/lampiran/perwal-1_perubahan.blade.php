@@ -105,7 +105,7 @@
 		<td class="border tengah" >NOMOR <br> URUT </td>
 		<td class="border tengah" >URAIAN</td>
 		<td class="border tengah" >MURNI</td>
-		<td class="border tengah" >PERUBAHAN</td>
+		<td class="border tengah" >{{strtoupper($status)}}</td>
 		<td class="border tengah" >SELISIH</td>
 		<td class="border tengah" >DASAR HUKUM</td>
 	</tr>		
@@ -221,6 +221,8 @@
         <td class="border-rincian text_blok kanan total">
             @if($rs['totaljumlah']<0)
             ({{ number_format(abs((float)$rs['totaljumlah']),2,'.',',') }})
+            @elseif($rs['totaljumlah']==NULL)
+            &nbsp;
             @else
             {{ number_format((float)$rs['totaljumlah'],2,'.',',') }}
             @endif
@@ -228,6 +230,8 @@
 		<td class="border-rincian text_blok kanan total">
             @if($rs['totaljumlahp']<0)
             ({{ number_format(abs((float)$rs['totaljumlahp']),2,'.',',') }})
+            @elseif($rs['totaljumlah']==NULL)
+            &nbsp;
             @else
             {{ number_format((float)$rs['totaljumlahp'],2,'.',',') }}
             @endif
@@ -236,6 +240,8 @@
 		@php $tots = ($rs['totaljumlahp']-$rs['totaljumlah']); @endphp	
             @if($tots<0)
             ({{ number_format(abs((float)$tots),2,'.',',') }})
+            @elseif($rs['totaljumlah']==NULL)
+            &nbsp;
             @else
             {{ number_format((float)$tots,2,'.',',') }}
             @endif
