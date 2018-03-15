@@ -101,22 +101,22 @@
 	</tr>
 	<tr class="border">
 		<td width="18%">Nama SKPD</td>
-		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->SKPD_KODE}} {{$bl->SKPD_NAMA}}</td> 
+		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->skpd->SKPD_KODE}} {{$bl->skpd->SKPD_NAMA}}</td> 
 		<td></td>
 	</tr>
 	<tr class="border">
 		<td width="18%">Sub SKPD </td>
-		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}} {{$bl->subunit->SUB_NAMA}}</td> 
+		<td width="55%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->skpd->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}} {{$bl->subunit->SUB_NAMA}}</td> 
 		<td></td>
 	</tr>
 	<tr class="border">
 		<td width="18%">Nama Program</td>
-		<td width="85%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}}.{{$bl->kegiatan->program->PROGRAM_KODE}} {{$bl->kegiatan->program->PROGRAM_NAMA}}</td> 
+		<td width="85%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->skpd->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}}.{{$bl->kegiatan->program->PROGRAM_KODE}} {{$bl->kegiatan->program->PROGRAM_NAMA}}</td> 
 		<td></td>
 	</tr>
 	<tr class="border">
 		<td width="18%">Nama Kegiatan</td>
-		<td width="80%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}}.{{$bl->kegiatan->program->PROGRAM_KODE}}.{{$bl->kegiatan->KEGIATAN_KODE}} {{$bl->kegiatan->KEGIATAN_NAMA}}</td> 
+		<td width="80%">: {{$bl->kegiatan->program->urusan->URUSAN_KODE}}.{{$bl->skpd->SKPD_KODE}}.{{$bl->subunit->SUB_KODE}}.{{$bl->kegiatan->program->PROGRAM_KODE}}.{{$bl->kegiatan->KEGIATAN_KODE}} {{$bl->kegiatan->KEGIATAN_NAMA}}</td> 
 		<td></td>
 	</tr>
 </table>
@@ -193,7 +193,7 @@
 	</tr>
 	<tr>
 		<td><span style="margin-left:-400px"></span></td>
-		<td>Kepala {{ $bl->SKPD_NAMA }}</td>
+		<td>Kepala {{ $bl->skpd->SKPD_NAMA }}</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -201,11 +201,11 @@
 	</tr>
 	<tr>
 		<td><span style="margin-left:-400px;border-bottom: 1px solid #000;padding-bottom: 1px;"></span></td>
-		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $bl->SKPD_KEPALA }}</span></td>
+		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{ $bl->skpd->SKPD_KEPALA }}</span></td>
 	</tr>
 	<tr>
 		<td><span style="margin-left:-400px"></span></td>
-		<td>NIP. {{$bl->SKPD_KEPALA_NIP}}</td>
+		<td>NIP. {{$bl->skpd->SKPD_KEPALA_NIP}}</td>
 	</tr>
 </table>
 </div>

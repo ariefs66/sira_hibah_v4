@@ -6340,7 +6340,6 @@ class lampiranController extends Controller
                     ->where('DAT_AKB_BL.BL_ID',$id)->orderby('REKENING_KODE')->get();
 
             $bl   = BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
-                        ->join('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_BL_PERUBAHAN.SKPD_ID')
                         ->where('DAT_BL.BL_ID',$id)->first();           // dd($akb->SKPD_ID);         
         }
         else{
@@ -6349,7 +6348,6 @@ class lampiranController extends Controller
                     ->where('DAT_AKB_BL_PERUBAHAN.BL_ID',$id)->orderby('REKENING_KODE')->get();
 
             $bl   = BLPerubahan::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID')
-                        ->join('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_BL_PERUBAHAN.SKPD_ID')
                         ->where('DAT_BL_PERUBAHAN.BL_ID',$id)->first();           // dd($akb->SKPD_ID);         
 
         }
