@@ -1131,6 +1131,31 @@ class blController extends Controller
                     'REKENING_NAMA' => $data->REKENING_NAMA,
                     'TOTAL_VIEW'    => number_format($data->total,0,'.',','),
                     'TOTAL'         => $data->total,
+                    (empty($data->AKB_JAN))?$jan=0:$jan=$data->AKB_JAN,
+                    (empty($data->AKB_FEB))?$feb=0:$feb=$data->AKB_FEB,
+                    (empty($data->AKB_MAR))?$mar=0:$mar=$data->AKB_MAR,
+                    (empty($data->AKB_APR))?$apr=0:$apr=$data->AKB_APR,
+                    (empty($data->AKB_MEI))?$mei=0:$mei=$data->AKB_MEI,
+                    (empty($data->AKB_JUN))?$jun=0:$jun=$data->AKB_JUN,
+                    (empty($data->AKB_JUL))?$jul=0:$jul=$data->AKB_JUL,
+                    (empty($data->AKB_AUG))?$agu=0:$agu=$data->AKB_AUG,
+                    (empty($data->AKB_SEP))?$sep=0:$sep=$data->AKB_SEP,
+                    (empty($data->AKB_OKT))?$okt=0:$okt=$data->AKB_OKT,
+                    (empty($data->AKB_NOV))?$nov=0:$nov=$data->AKB_NOV,
+                    (empty($data->AKB_DES))?$des=0:$des=$data->AKB_DES,
+                    'AKB_JAN'       => $jan,
+                    'AKB_FEB'       => $feb,
+                    'AKB_MAR'       => $mar,
+                    'AKB_APR'       => $apr,
+                    'AKB_MEI'       => $mei,
+                    'AKB_JUN'       => $jun,
+                    'AKB_JUL'       => $jul,
+                    'AKB_AUG'       => $agu,
+                    'AKB_SEP'       => $sep,
+                    'AKB_OKT'       => $okt,
+                    'AKB_NOV'       => $nov,
+                    'AKB_DES'       => $des,
+                    /*
                     (empty($data->AKB_JAN))?$jan=$bagi:$jan=$data->AKB_JAN,
                     (empty($data->AKB_FEB))?$feb=$bagi:$feb=$data->AKB_FEB,
                     (empty($data->AKB_MAR))?$mar=$bagi:$mar=$data->AKB_MAR,
@@ -1154,8 +1179,9 @@ class blController extends Controller
                     'AKB_SEP'       => $sep,
                     'AKB_OKT'       => $okt,
                     'AKB_NOV'       => $nov,
-                    'AKB_DES'       => $des,
+                    'AKB_DES'       => $des,*/
                     'REKENING_ID'   => $data->REKENING_ID,
+                    'BL_ID'         => $data->BL_ID,
                     ];
         return $out;
     }
@@ -3738,9 +3764,9 @@ class blController extends Controller
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
-            if(Auth::user()->active == 5){
+            //if(Auth::user()->active == 5){
                 $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>';
-            }
+            //}
 
             if(($data->BL_VALIDASI == 0 && Auth::user()->active==1 ) || Auth::user()->level==8){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';

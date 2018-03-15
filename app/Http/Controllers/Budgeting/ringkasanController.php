@@ -10,10 +10,12 @@ Use App\Model\Pendapatan;
 Use App\Model\PendapatanPerubahan;
 Use App\Model\PendapatanHistory;
 Use App\Model\BL;
+Use App\Model\BLPerubahan;
 Use App\Model\Rincian;
 Use App\Model\RincianPerubahan;
 Use App\Model\RincianHistory;
 Use App\Model\BTL;
+Use App\Model\BTLPerubahan;
 Use App\Model\Pembiayaan;
 Use App\Model\PembiayaanPerubahan;
 Use App\Model\PembiayaanHistory;
@@ -215,19 +217,20 @@ class ringkasanController extends Controller
                   $q->where('REKENING_KODE','like','4.3.5%');
               })->where('PENDAPATAN_TAHUN',$tahun)->sum('PENDAPATAN_TOTAL');
       
-              $btl1p      = BTL::wherehas('rekening',function($q){
+              $btl1p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.1%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-              $btl3p      = BTL::wherehas('rekening',function($q){
+              $btl3p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.3%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-              $btl4p      = BTL::wherehas('rekening',function($q){
+              $btl4p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.4%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-              $btl7p      = BTL::wherehas('rekening',function($q){
+              
+              $btl7p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.7%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
-              $btl8p      = BTL::wherehas('rekening',function($q){
+              $btl8p      = BTLPerubahan::wherehas('rekening',function($q){
                   $q->where('REKENING_KODE','like','5.1.8%');
               })->where('BTL_TAHUN',$tahun)->sum('BTL_TOTAL');
       

@@ -264,9 +264,9 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalbl,0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format(($totalbl - $totalbl_murni),0,',','.') }},00</b></td>
-		@if(!empty($totalbl_murni) and $totalbl_murni!=0)
+		@if(!empty($totalbl_murni) and $totalbl_murni != 0)
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalbl - $totalbl_murni) * 100)/$totalbl_murni, 2, ',', ' '),"-") }}% </b></td>
-		@elseif(!empty($totalbl) and $totalbl!=0 and (empty($totalbl_murni) or $totalbl_murni==0))
+		@elseif(!empty($totalbl) and $totalbl!=0 and (empty($totalbl_murni) and $totalbl_murni==0))
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalbl) * 100)/$totalbl, 2, ',', ' '),"-") }}% </b></td>
 		@else
 		<td class="border-rincian tengah"><b> 0,00% </b></td>

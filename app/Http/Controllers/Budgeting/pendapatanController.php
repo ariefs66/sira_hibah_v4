@@ -106,6 +106,10 @@ class pendapatanController extends Controller
 
     public function submitEdit($tahun,$status){
       if($status=="murni"){
+        $skpd=0;
+        if(!empty(Input::get('SUB_ID'))){
+            $skpd = Subunit::where('SUB_ID',Input::get('SUB_ID'))->value('SKPD_ID');
+        }
         Pendapatan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->update([
             'SUB_ID'                  => Input::get('SUB_ID'),
             'PENDAPATAN_NAMA'         => Input::get('PENDAPATAN_NAMA'),
@@ -114,13 +118,18 @@ class pendapatanController extends Controller
             'PENDAPATAN_DASHUK'        => Input::get('PENDAPATAN_DASHUK'),
             'PENDAPATAN_TOTAL'        => Input::get('PENDAPATAN_TOTAL'),
             'TIME_UPDATED'            => Carbon\Carbon::now(),
-            'USER_UPDATED'            => Auth::user()->id
+            'USER_UPDATED'            => Auth::user()->id,
+            'SKPD_ID'            => $skpd
           ]);
 
         $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
         $datapd    = Pendapatan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->first();
       }
       else{
+        $skpd=0;
+        if(!empty(Input::get('SUB_ID'))){
+            $skpd = Subunit::where('SUB_ID',Input::get('SUB_ID'))->value('SKPD_ID');
+        }
         PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->update([
             'SUB_ID'                  => Input::get('SUB_ID'),
             'PENDAPATAN_NAMA'         => Input::get('PENDAPATAN_NAMA'),
@@ -129,7 +138,8 @@ class pendapatanController extends Controller
             'PENDAPATAN_DASHUK'        => Input::get('PENDAPATAN_DASHUK'),
             'PENDAPATAN_TOTAL'        => Input::get('PENDAPATAN_TOTAL'),
             'TIME_UPDATED'            => Carbon\Carbon::now(),
-            'USER_UPDATED'            => Auth::user()->id
+            'USER_UPDATED'            => Auth::user()->id,
+            'SKPD_ID'            => $skpd
           ]);
 
         $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
@@ -152,7 +162,8 @@ class pendapatanController extends Controller
         }
         else{
           $datapendapatan     = PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->first();
-          PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->update(array('PENDAPATAN_TOTAL'=>0));
+          PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->delete();
+          //PendapatanPerubahan::where('PENDAPATAN_ID',Input::get('PENDAPATAN_ID'))->update(array('PENDAPATAN_TOTAL'=>0));
         }
         
         $log        = new Log;
@@ -578,6 +589,31 @@ class pendapatanController extends Controller
                     'REKENING_NAMA' => $data->REKENING_NAMA,
                     'TOTAL'         => $data->total,
                     'TOTAL_VIEW'    => number_format($data->total,0,'.',','),
+                    (empty($data->AKB_JAN))?$jan=0:$jan=$data->AKB_JAN,
+                    (empty($data->AKB_FEB))?$feb=0:$feb=$data->AKB_FEB,
+                    (empty($data->AKB_MAR))?$mar=0:$mar=$data->AKB_MAR,
+                    (empty($data->AKB_APR))?$apr=0:$apr=$data->AKB_APR,
+                    (empty($data->AKB_MEI))?$mei=0:$mei=$data->AKB_MEI,
+                    (empty($data->AKB_JUN))?$jun=0:$jun=$data->AKB_JUN,
+                    (empty($data->AKB_JUL))?$jul=0:$jul=$data->AKB_JUL,
+                    (empty($data->AKB_AUG))?$agu=0:$agu=$data->AKB_AUG,
+                    (empty($data->AKB_SEP))?$sep=0:$sep=$data->AKB_SEP,
+                    (empty($data->AKB_OKT))?$okt=0:$okt=$data->AKB_OKT,
+                    (empty($data->AKB_NOV))?$nov=0:$nov=$data->AKB_NOV,
+                    (empty($data->AKB_DES))?$des=0:$des=$data->AKB_DES,
+                    'AKB_JAN'       => $jan,
+                    'AKB_FEB'       => $feb,
+                    'AKB_MAR'       => $mar,
+                    'AKB_APR'       => $apr,
+                    'AKB_MEI'       => $mei,
+                    'AKB_JUN'       => $jun,
+                    'AKB_JUL'       => $jul,
+                    'AKB_AUG'       => $agu,
+                    'AKB_SEP'       => $sep,
+                    'AKB_OKT'       => $okt,
+                    'AKB_NOV'       => $nov,
+                    'AKB_DES'       => $des,
+                    /*
                     (empty($data->AKB_JAN))?$jan=$bagi:$jan=$data->AKB_JAN,
                     (empty($data->AKB_FEB))?$feb=$bagi:$feb=$data->AKB_FEB,
                     (empty($data->AKB_MAR))?$mar=$bagi:$mar=$data->AKB_MAR,
@@ -601,7 +637,7 @@ class pendapatanController extends Controller
                     'AKB_SEP'       => $sep,
                     'AKB_OKT'       => $okt,
                     'AKB_NOV'       => $nov,
-                    'AKB_DES'       => $des,
+                    'AKB_DES'       => $des,*/
                     'REKENING_ID'   => $data->REKENING_ID,
                     'PENDAPATAN_ID' => $data->PENDAPATAN_ID,
                     ];
