@@ -310,6 +310,9 @@
 		@endif
 	</tr>
 	
+
+	<!-- 5.2.1 -->
+
 	@foreach($rekening as $r)
 	@if($s != 0)
 	@if($reke[$s-1]->REKENING_KODE != $reke[$s]->REKENING_KODE)
@@ -386,7 +389,9 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format(($totalrek[$q] - $totalrek_murni[$q]),0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>
+			{{ number_format(($totalrek[$q] - $totalrek_murni[$q]),0,',','.') }},00
+		</b></td>
 		@if(empty($totalrek_murni[$q]) or $totalrek_murni[$q]==0)
 		<td class="border-rincian tengah"><b> - </b></td>
 		@else
