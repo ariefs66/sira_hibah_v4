@@ -190,63 +190,63 @@
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">April</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="apr" id="apr" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">        
+              <input type="text" class="form-control" placeholder="Nominal" name="apr" id="apr" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value="">        
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Mei</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="mei" id="mei" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value="">         
+              <input type="text" class="form-control" placeholder="Nominal" name="mei" id="mei" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value="">         
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Juni </label>
             <div class="col-sm-9">
-             <input type="text" class="form-control" placeholder="Nominal" name="jun" id="jun" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+             <input type="text" class="form-control" placeholder="Nominal" name="jun" id="jun" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Juli </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="jul" id="jul" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="jul" id="jul" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Agustus </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="agu" id="agu" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="agu" id="agu" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">September </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="sep" id="sep" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="sep" id="sep" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Oktober </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="okt" id="okt" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="okt" id="okt" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">November </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="nov" id="nov" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="nov" id="nov" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value=""> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_urusan" class="col-md-3">Desember </label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" placeholder="Nominal" name="des" id="des" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  value=""> 
+              <input type="text" class="form-control" placeholder="Nominal" name="des" id="des" onkeypress="return event.charCode >= 45 && event.charCode <= 57"  value=""> 
             </div> 
           </div>
          

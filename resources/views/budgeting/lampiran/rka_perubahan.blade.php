@@ -419,6 +419,23 @@
 	<?php $l=0;?>
 	@foreach($paket[$m] as $p)
 
+	<tr>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $p->subrincian->SUBRINCIAN_NAMA }}<b></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL-$p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">0,00%</td>
+	 </tr>
+
 	@foreach($komponen[$m][$l++] as $k)
 	<tr>
 	  <td class="border-rincian tengah"></td>
@@ -426,12 +443,12 @@
 	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- @foreach(explode('#', $k->RINCIAN_KETERANGAN) as $info) 
     	{{$info}}@break
   	  @endforeach
-  	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->subrincian->SUBRINCIAN_NAMA }})</i><br>
+  	  </i>
   	  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
   	  </td>
 	  @else
 	  <td class="border-rincian">
-	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->subrincian->SUBRINCIAN_NAMA }})</i><br>
+	  	</i>
 	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{ $k->RINCIAN_KOMPONEN }}
 	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
 	  	  	  </td>
