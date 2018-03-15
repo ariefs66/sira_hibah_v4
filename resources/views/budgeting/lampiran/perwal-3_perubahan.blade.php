@@ -165,8 +165,8 @@
 		<td class="border-rincian">&nbsp;{{$btl->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
 		@foreach($btlz as $btlzx)
@@ -180,13 +180,12 @@
 			</td>
 			<td class="border-rincian kanan">{{ number_format($btlzx->BTL_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ number_format($btlzx_p->BTL_TOTAL,0,',','.') }}</td>
-			<td class="border-rincian kanan">{{ number_format($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL,0,',','.') }}</td>
-			@if(empty($btlzx->BTL_TOTAL)&&empty($btlzx_p->BTL_TOTAL))
 			<td class="border-rincian kanan">{{ number_format(
-				(($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL)/$btlzx->BTL_TOTAL)*100,0,',','.') }}%</td>
-			@else
-			<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
-			@endif
+				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
+				,0,',','.') }}</td>
+			<td class="border-rincian kanan">{{ number_format(
+				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
+				,0,',','.') }}%</td>
 			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
 		</tr>
 		@endif
@@ -230,15 +229,9 @@
 			<td class="border-rincian kanan">{{ number_format(
 				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
 				,0,',','.') }}</td>
-				
-			@if(!empty($btlzx->BTL_TOTAL)&&!empty($btlzx_p->BTL_TOTAL))
 			<td class="border-rincian kanan">{{ number_format(
-				(($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL)/$btlzx_p->BTL_TOTAL)*100
+				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
 				,0,',','.') }}%</td>
-			@else
-			<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
-			@endif
-			
 			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
 		</tr>
 		@endif
