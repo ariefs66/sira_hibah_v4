@@ -6930,6 +6930,7 @@ public function updatePerwal1($tahun,$status){
         $tabel[$idx]['namajumlah']="Pembiayaan Netto";
         $tabel[$idx]['totaljumlah']=$netto;
         $tabel[$idx]['totaljumlahp']=$nettop;
+
         $data       = array('tahun'         =>$tahun,
                             'status'        =>$status,
                             'tgl'           =>$tgl,
@@ -6937,7 +6938,11 @@ public function updatePerwal1($tahun,$status){
                             'thn'           =>$thn,
                             'detil'=>$tabel,'totalpendapatanp'=>$total_pendapatanp,'totalbelanjap'=>$total_belanjap,'totalpenerimaanp'=>$total_penerimaanp,'totalpengeluaranp'=>$total_pengeluaranp,'totalpendapatan'=>$total_pendapatan,'totalbelanja'=>$total_belanja,'totalpenerimaan'=>$total_penerimaan,'totalpengeluaran'=>$total_pengeluaran               
                             );
-        return View('budgeting.lampiran.perwal-1_ed',$data);
+                            if($status=="murni"){
+                                return View('budgeting.lampiran.perwal-1_ed',$data);
+                            }else{
+                                return View('budgeting.lampiran.perwal-1_perubahan',$data);
+                            }
 
         /*
         $skpd       = SKPD::where('SKPD_ID',$id)->first();
