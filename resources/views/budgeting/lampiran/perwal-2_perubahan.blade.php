@@ -28,6 +28,9 @@
 		.total{
 			border: 1px solid;
 		}		
+		.garis{
+			border: 1px dashed;
+		}		
 		.header, .border, .detail, .indikator, .rincian, .ttd  {
 			border : 1px solid;
 		}
@@ -130,7 +133,7 @@
 
 	@if($tot_pen != 0)
 	<tr>
-		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.4</td>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.00.00.{{$skpd->SKPD_KODE}}.4</td>
 		<td class="border-rincian"><b>PENDAPATAN</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot_pen,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot_penp,0,',','.') }}</b></td>
@@ -212,7 +215,7 @@
 	@endforeach
 
 	<tr>
-		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.5</td>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.00.00.{{$skpd->SKPD_KODE}}.5</td>
 		<td class="border-rincian"><b>BELANJA</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2+$bl,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p+$blp,0,',','.') }}</b></td>

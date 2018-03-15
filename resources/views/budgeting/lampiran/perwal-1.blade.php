@@ -28,6 +28,9 @@
 		.total{
 			border: 1px solid;
 		}		
+		.garis{
+			border: 1px solid;
+		}		
 		.header, .border, .detail, .indikator, .rincian, .ttd  {
 			border : 1px solid;
 		}

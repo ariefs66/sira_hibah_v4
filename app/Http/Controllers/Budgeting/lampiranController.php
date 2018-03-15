@@ -145,10 +145,10 @@ class lampiranController extends Controller
 
         }else{
             $bl    = BLPerubahan::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
-            $total = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+            $total = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
             $rekening       = RincianPerubahan::leftJoin('BUDGETING.DAT_RINCIAN',function($join){
-                                $join->on('BUDGETING.DAT_RINCIAN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID')
-                                     ->on('BUDGETING.DAT_RINCIAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID');
+                                $join->on('BUDGETING.DAT_RINCIA_PERUBAHANN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID')
+                                     ->on('BUDGETING.DAT_RINCIAN_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID');
                               })
                               ->whereHas('bl', function($x) use ($tahun){
                                 $x->where('BL_TAHUN','=',$tahun);
@@ -160,7 +160,7 @@ class lampiranController extends Controller
                               ->orderBy('DAT_RINCIAN_PERUBAHAN.REKENING_ID')
                               ->groupBy('DAT_RINCIAN_PERUBAHAN.REKENING_ID')
                               //->selectRaw('SUM("RINCIAN_TOTAL") AS TOTAL, "REKENING_ID"')
-                              ->select(['DAT_RINCIAN_PERUBAHAN.REKENING_ID',DB::raw('sum("DAT_RINCIAN_PERUBAHAN"."RINCIAN_TOTAL") as "TOTAL"'),DB::raw('sum("BUDGETING"."DAT_RINCIAN"."RINCIAN_TOTAL") as "TOTAL_MURNI"')])
+                              ->select(['DAT_RINCIAN_PERUBAHAN.REKENING_ID',DB::raw('sum("DAT_RINCIAN"."RINCIAN_TOTAL") as "TOTAL"'),DB::raw('sum("BUDGETING"."DAT_RINCIAN"."RINCIAN_TOTAL") as "TOTAL_MURNI"')])
                               ->get();
 
             $bl_murni       = BL::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
@@ -6501,7 +6501,6 @@ public function updatePerwal1($tahun,$status){
 
      public function perwal1($tahun,$status){
         $id = 1;
-        //dd($id);
         $tahapan        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_NAMA','RAPBD')->value('TAHAPAN_ID');
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
@@ -6510,7 +6509,9 @@ public function updatePerwal1($tahun,$status){
 
         $tabel=array();
         $idx=0;
-
+        /*
+        //dd($id);
+        
         $total_pendapatan=0;
         $total_belanja=0;
         $total_penerimaan=0;
@@ -6563,7 +6564,6 @@ public function updatePerwal1($tahun,$status){
             }
             elseif(strlen($pd->koderek)<=3){
                 $total_pendapatan+=$pd->nilai;
-                $total_pendapatanp+=$pd->nilaip;
 
                 $tabel[$idx]['tingkat']=2;
                 $tabel[$idx]['koderekening']=$pd->koderek;
@@ -6591,23 +6591,71 @@ public function updatePerwal1($tahun,$status){
                 }
             }
         }
+
+        $idxp=$idx;
+        $idx=0;
+        $pendapatanp=DB::table('REFERENSI.REF_REKENING as rk')
+        ->where('rk.REKENING_TAHUN',$tahun)
+        ->where('rk.REKENING_KUNCI','0')
+        ->where('rk.REKENING_KODE','LIKE','4%');
+        $pendapatanp = $pendapatanp->where(DB::raw('length(rk."REKENING_KODE")'),'<=',15);
+        $pendapatanp=$pendapatanp->leftJoin('BUDGETING.RKP_LAMP_1 as dp',function($join) use ($tahun){
+                    $join->on('dp.TAHUN','=','rk.REKENING_TAHUN')
+                        ->where('dp.REKENING_KODE','like',DB::raw('rk."REKENING_KODE"'."||'%'"));
+                })
+                ->leftJoin('BUDGETING.DAT_PENDAPATAN_PERUBAHAN as pp',function($join) use ($tahun){
+                    $join->on('pp.PENDAPATAN_TAHUN','=','rk.REKENING_TAHUN')
+                        ->on('pp.REKENING_ID','=','rk.REKENING_ID');
+                })
+                ->select(DB::raw('1||SUBSTRING(rk."REKENING_KODE",2,4) as koderekening'),
+                        'rk.REKENING_KODE as koderek',
+                        'rk.REKENING_NAMA as namarek',
+                        'pp.PENDAPATAN_DASHUK as dashuk',
+                        DB::raw('SUM(dp."NILAI_MURNI") as nilai'),
+                        DB::raw('SUM(dp."NILAI_PERUBAHAN") as nilaip')
+                        )
+                ->groupBy('rk.REKENING_KODE','rk.REKENING_NAMA','pp.PENDAPATAN_DASHUK')
+                ->orderBy('rk.REKENING_KODE')
+                ->get();
+            foreach($pendapatanp as $pd){
+            if(strlen($pd->koderek)==1){
+                $tabel[$idx]['totalrekeningp']=$pd->nilaip;
+                $tabel[$idx]['totaljumlahp']=NULL;
+                $idx+=1;
+            }
+            elseif(strlen($pd->koderek)<=3){
+                $total_pendapatanp+=$pd->nilaip;
+                $tabel[$idx]['totalrekeningp']=$pd->nilaip;
+                $tabel[$idx]['totaljumlahp']=NULL;
+                $idx+=1;
+            }
+            else{
+                if($pd->nilai>0){
+                    $tabel[$idx]['totalrekeningp']=$pd->nilaip;
+                    $tabel[$idx]['totaljumlahp']=NULL;
+                    $idx+=1;
+                }
+            }
+            }
+        $idx=$idxp;
         $tabel[$idx]['tingkat']=4;
         $tabel[$idx]['koderekening']=NULL;
         $tabel[$idx]['namarekening']=NULL;
         $tabel[$idx]['totalrekening']=NULL;
         $tabel[$idx]['totalrekeningp']=NULL;
         $tabel[$idx]['dashuk']=NULL;
+        */
         /*
         $tabel[$idx]['namajumlah']="Jumlah Pendapatan";
         $tabel[$idx]['totaljumlah']=$total_pendapatan;
         $tabel[$idx]['totaljumlahp']=$total_pendapatanp;
-        */
         $tabel[$idx]['namajumlah']=NULL;
         $tabel[$idx]['totaljumlah']=NULL;
         $tabel[$idx]['totaljumlahp']=NULL;
         $idx+=1;
+        */
         //print_r($tabel);exit;//CEK PENDAPATAN
-        
+        /*
         $btl=DB::table('REFERENSI.REF_REKENING as rk')
                     ->where('rk.REKENING_TAHUN',$tahun)
                     ->where('rk.REKENING_KUNCI','0')
@@ -6751,6 +6799,7 @@ public function updatePerwal1($tahun,$status){
         $tabel[$idx]['totaljumlah']=round($total_belanja);
         $tabel[$idx]['totaljumlahp']=round($total_belanjap);
         */
+        /*
         $tabel[$idx]['namajumlah']=NULL;
         $tabel[$idx]['totaljumlah']=NULL;
         $tabel[$idx]['totaljumlahp']=NULL;
@@ -6953,7 +7002,7 @@ public function updatePerwal1($tahun,$status){
                                 return View('budgeting.lampiran.perwal-1_perubahan',$data);
                             }
 
-        /*
+        */
         $skpd       = SKPD::where('SKPD_ID',$id)->first();
 
         $bl1     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
@@ -7189,7 +7238,7 @@ public function updatePerwal1($tahun,$status){
                         ->get(); 
            $pendapatan17 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like', '4.1.4.14%')
+                        ->where('REKENING_KODE','like', '4.1.4.14%')->orderBy('REF_REKENING', 'asc')
                         ->get();  
            $pendapatan18 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
@@ -7287,95 +7336,773 @@ public function updatePerwal1($tahun,$status){
             $pmb2           = Pembiayaan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.2%');})->where('PEMBIAYAAN_TAHUN',$tahun)->get();                                
 
 
+        if($status=="murni"){
+            $data       = array('tahun'         =>$tahun,
+                        'status'        =>$status,
+                        'tgl'           =>$tgl,
+                        'bln'           =>$bln,
+                        'thn'           =>$thn,        
+                        'skpd'          =>$skpd,        
+                        'urusan'        =>$urusan,        
+                        'bl_rek'        =>$bl_rek,        
+                        'btl1'           =>$btl1,        
+                        'btl2'           =>$btl2,        
+                        'btl3'           =>$btl3,        
+                        'btl4'           =>$btl4,        
+                        'btl5'           =>$btl5,        
+                        'btl6'           =>$btl6,        
+                        'btl7'           =>$btl7,        
+                        'btl8'           =>$btl8,        
+                        'pendapatan'    =>$pendapatan,        
+                        'pendapatan1'    =>$pendapatan1,        
+                        'pendapatan2'    =>$pendapatan2,        
+                        'pendapatan3'    =>$pendapatan3,        
+                        'pendapatan4'    =>$pendapatan4,        
+                        'pendapatan5'    =>$pendapatan5,        
+                        'pendapatan6'    =>$pendapatan6,        
+                        'pendapatan7'    =>$pendapatan7,        
+                        'pendapatan8'    =>$pendapatan8,        
+                        'pendapatan9'    =>$pendapatan9,        
+                        'pendapatan10'    =>$pendapatan10,        
+                        'pendapatan11'    =>$pendapatan11,        
+                        'pendapatan12'    =>$pendapatan12,        
+                        'pendapatan13'    =>$pendapatan13,        
+                        'pendapatan14'    =>$pendapatan14,        
+                        'pendapatan15'    =>$pendapatan15,        
+                        'pendapatan16'    =>$pendapatan16,        
+                        'pendapatan17'    =>$pendapatan17,        
+                        'pendapatan18'    =>$pendapatan18,        
+                        'pendapatan19'    =>$pendapatan19,        
+                        'pendapatan20'    =>$pendapatan20,        
+                        'pendapatan21'    =>$pendapatan21,        
+                        'pendapatan22'    =>$pendapatan22,        
+                        'pendapatan23'    =>$pendapatan23,        
+                        'pendapatan24'    =>$pendapatan24,        
+                        'pendapatan25'    =>$pendapatan25,        
+                        'totpad'          =>$totpad,        
+                        'totpad1'          =>$totpad1,        
+                        'totpad2'          =>$totpad2,        
+                        'totpad3'          =>$totpad3,        
+                        'totpad4'          =>$totpad4,        
+                        'totpad5'          =>$totpad5,        
+                        'totpad6'          =>$totpad6,        
+                        'totpad7'          =>$totpad7,        
+                        'totpad8'          =>$totpad8,        
+                        'totpad9'          =>$totpad9,        
+                        'totpad10'         =>$totpad10,        
+                        'totpad11'         =>$totpad11,        
+                        'bl1'          =>$bl1,        
+                        'bl2'          =>$bl2,        
+                        'bl3'          =>$bl3,        
+                        'rek1'          =>$rek1,        
+                        'rek2'          =>$rek2,        
+                        'rek3'          =>$rek3,        
+                        'rek4'          =>$rek4,        
+                        'rek5'          =>$rek5,        
+                        'rek6'          =>$rek6,        
+                        'rek7'          =>$rek7,        
+                        'rek8'          =>$rek8, 
+                        'rek11'          =>$rek11,               
+                        'rek12'          =>$rek12,               
+                        'rek13'          =>$rek13,               
+                        'rek14'          =>$rek14,               
+                        'rek15'          =>$rek15,               
+                        'rek16'          =>$rek16,               
+                        'rek17'          =>$rek17,               
+                        'rek18'          =>$rek18,               
+                        'rb1'          =>$rb1,               
+                        'rb2'          =>$rb2,               
+                        'rb3'          =>$rb3,               
+                        'pembiayaan'          =>$pembiayaan,               
+                        'btlrek1'          =>$btlrek1,               
+                        'btlrek2'          =>$btlrek2,               
+                        'btlrek3'          =>$btlrek3,               
+                        'btlrek4'          =>$btlrek4,               
+                        'btlrek5'          =>$btlrek5,               
+                        'btlrek6'          =>$btlrek6,               
+                        'pmb1'          =>$pmb1,               
+                        'pmb2'          =>$pmb2,               
+                        );
+            return View('budgeting.lampiran.perwal-1',$data);
+        }else{
+
+            $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+            ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL_PERUBAHAN.SUB_ID')
+            //->where('SKPD_ID',$s)
+            ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
+            ->whereHas('bl',function($r) use($tahun){
+                $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
+            })
+            ->sum('RINCIAN_TOTAL');
+
+            $urusanp     = Urusan::JOIN('REFERENSI.REF_URUSAN_SKPD','REF_URUSAN_SKPD.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+                            ->JOIN('REFERENSI.REF_URUSAN_KATEGORI1','REF_URUSAN_KATEGORI1.URUSAN_KAT1_ID','=','REF_URUSAN.URUSAN_KAT1_ID')
+                            ->where('REF_URUSAN_SKPD.SKPD_ID',$id)
+                            ->first();
+                            //dd($urusan);
+            $rb1p = Rekening::where('REKENING_KODE','LIKE','5.2.1')->first();                                     
+            $rb2p = Rekening::where('REKENING_KODE','LIKE','5.2.2')->first();                                     
+            $rb3p = Rekening::where('REKENING_KODE','LIKE','5.2.3')->first(); 
+
+            $rb11p = Rekening::where('REKENING_KODE','LIKE','5.2.1%')->first();                                     
+
+            $bl1p     = RincianPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                        ->where('REKENING_KODE','like',$rb1->REKENING_KODE.'%')
+                        ->whereHas('bl',function($r) use($tahun){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
+                        })
+                        ->orderBy("REKENING_KODE")
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
+                        ->get();
+
+            $bl2p     = RincianPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                        ->where('REKENING_KODE','like',$rb2->REKENING_KODE.'%')
+                        ->whereHas('bl',function($r) use($tahun){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
+                        })
+                        ->orderBy("REKENING_KODE")
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
+                        ->get();                
+
+            $bl3p     = RincianPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                        ->where('REKENING_KODE','like',$rb3->REKENING_KODE.'%')
+                        ->whereHas('bl',function($r) use($tahun){
+                            $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
+                        })
+                        ->orderBy("REKENING_KODE")
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
+                        ->get();                  
+
+
+            $bl_rekp         = BLPerubahan::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL_PERUBAHAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+                        ->JOIN('BUDGETING.DAT_RINCIAN_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('REF_SKPD.SKPD_ID',$id)
+                        ->groupBy("SKPD_KODE", "SKPD_NAMA", "DAT_BL_PERUBAHAN.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy('SKPD_KODE')
+                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "DAT_BL_PERUBAHAN"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
+                        ->get();                 
+
+
+            $rek1p = Rekening::where('REKENING_KODE','LIKE','5.1.1')->first();                
+            $rek2p = Rekening::where('REKENING_KODE','LIKE','5.1.2')->first();                
+            $rek3p = Rekening::where('REKENING_KODE','LIKE','5.1.3')->first();                
+            $rek4p = Rekening::where('REKENING_KODE','LIKE','5.1.4')->first();                
+            $rek5p = Rekening::where('REKENING_KODE','LIKE','5.1.5')->first();                
+            $rek6p = Rekening::where('REKENING_KODE','LIKE','5.1.6')->first();                
+            $rek7p = Rekening::where('REKENING_KODE','LIKE','5.1.7')->first();                
+            $rek8p = Rekening::where('REKENING_KODE','LIKE','5.1.8')->first(); 
+
+            $rek11p = Rekening::where('REKENING_KODE','LIKE','5.1.1.01')->first();   
+            $rek12p = Rekening::where('REKENING_KODE','LIKE','5.1.2.01')->first();   
+            $rek13p = Rekening::where('REKENING_KODE','LIKE','5.1.3.01')->first();   
+            $rek14p = Rekening::where('REKENING_KODE','LIKE','5.1.4.01')->first();   
+            $rek15p = Rekening::where('REKENING_KODE','LIKE','5.1.5.01')->first();   
+            $rek16p = Rekening::where('REKENING_KODE','LIKE','5.1.6.01')->first();   
+            $rek17p = Rekening::where('REKENING_KODE','LIKE','5.1.7.01')->first();   
+            $rek18p = Rekening::where('REKENING_KODE','LIKE','5.1.8.01')->first(); 
+
+            $btlrek1p = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '5.1.1.01')
+                        ->get(); 
+            $btlrek2p = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '5.1.1.02')
+                        ->get(); 
+            $btlrek3p = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '5.1.1.03')
+                        ->get(); 
+            $btlrek4p = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '5.1.1.04')
+                        ->get(); 
+            $btlrek5p = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '5.1.1.05')
+                        ->get(); 
+            $btlrek6p = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '5.1.1.06')
+                        ->get(); 
+                                                                    
+
+
+            $btl1p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek1p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl2p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek2p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl3p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek3p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get();                               
+            $btl4p       =BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek4p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl5p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek5p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl6p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek6p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl7p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek7p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl8p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek8p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+
+
+            $pendapatanp = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->orderby('REKENING_KODE')
+                        ->get();
+
+            $pendapatan1p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.01%')
+                        ->get(); 
+            $pendapatan2p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.02%')
+                        ->get(); 
+            $pendapatan3p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.03%')
+                        ->get();
+            $pendapatan4p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.04%')
+                        ->get();
+            $pendapatan5p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.05%')
+                        ->get();
+            $pendapatan6p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.07%')
+                        ->get(); 
+            $pendapatan7p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.08%')
+                        ->get(); 
+            $pendapatan8p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.11%')
+                        ->get();  
+            $pendapatan9p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1.12%')
+                        ->get();
+            //pajak retribusi               
+            $pendapatan10p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.2.01%')
+                        ->get();  
+            $pendapatan11p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.2.02%')
+                        ->get(); 
+            $pendapatan12p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.2.03%')
+                        ->get(); 
+            //Hasil Pengelolaan Kekayaan Daerah yang Dipisahkan
+            $pendapatan13p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.3.01%')
+                        ->get(); 
+            // Lain-lain Pendapatan Asli Daerah yang Sah
+            $pendapatan14p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.4.01%')
+                        ->get(); 
+            $pendapatan15p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.4.02%')
+                        ->get(); 
+            $pendapatan16p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.4.11%')
+                        ->get(); 
+            $pendapatan17p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.4.14%')
+                        ->get();  
+            $pendapatan18p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.4.16%')
+                        ->get(); 
+
+            $pendapatan19p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.1.01%')
+                        ->get();    
+            $pendapatan20p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.1.02%')
+                        ->get();  
+            $pendapatan21p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.2.01%')
+                        ->get(); 
+            $pendapatan22p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.01%')
+                        ->get();   
+            $pendapatan23p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.1.01%')
+                        ->get(); 
+            $pendapatan24p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.3.01%')
+                        ->get();  
+            $pendapatan25p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.5.01%')
+                        ->get();     
+
+            $totpadp = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+
+            $totpad1p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.1%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+
+            $totpad2p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.2%')
+                        ->sum('PENDAPATAN_TOTAL');  
+
+            $totpad3p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.3%')
+                        ->sum('PENDAPATAN_TOTAL');     
+
+            $totpad4p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.1.4%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+
+            $totpad5p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2%')
+                        ->sum('PENDAPATAN_TOTAL');
+            $totpad6p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.1%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+                $totpad7p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.2%')
+                        ->sum('PENDAPATAN_TOTAL');
+                $totpad8p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+                $totpad9p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3%')
+                        ->sum('PENDAPATAN_TOTAL');
+                $totpad10p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.1%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+                $totpad11p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.3%')
+                        ->sum('PENDAPATAN_TOTAL'); 
+
+
+                        $pembiayaanp = PembiayaanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')->get();  
+
+            $pmb1p           = PembiayaanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.1%');})->where('PEMBIAYAAN_TAHUN',$tahun)->get();         
+
+            $pmb2p           = PembiayaanPerubahan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.2%');})->where('PEMBIAYAAN_TAHUN',$tahun)->get();                                
+
+            $bl1s = 0;
+            $urusans  = 0;
+            $rb1s = 0;                                     
+            $rb2s = 0;                                     
+            $rb3s = 0; 
+            $rb11s = 0;                                     
+            $bl1s = 0;
+            $bl2s = 0;
+            $bl3s = 0;                  
+            $bl_reks = 0;                 
+            $rek1s = 0;                
+            $rek2s = 0;                
+            $rek3s = 0;                
+            $rek4s = 0;                
+            $rek5s = 0;                
+            $rek6s = 0;                
+            $rek7s = 0;                
+            $rek8s = 0; 
+            $rek11s = 0;   
+            $rek12s = 0;   
+            $rek13s = 0;   
+            $rek14s = 0;   
+            $rek15s = 0;   
+            $rek16s = 0;   
+            $rek17s = 0;   
+            $rek18s = 0; 
+            $btlrek1s = 0; 
+            $btlrek2s = 0; 
+            $btlrek3s = 0; 
+            $btlrek4s = 0; 
+            $btlrek5s = 0; 
+            $btlrek6s = 0;  
+            $btl1s = 0; 
+            $btl2s = 0; 
+            $btl3s = 0;                               
+            $btl4s = 0; 
+            $btl5s = 0; 
+            $btl6s = 0; 
+            $btl7s = 0; 
+            $btl8s = 0;
+            $pendapatans = 0;
+            $pendapatan1s = 0; 
+            $pendapatan2s = 0; 
+            $pendapatan3s = 0;
+            $pendapatan4s = 0;
+            $pendapatan5s = 0;
+            $pendapatan6s = 0; 
+            $pendapatan7s = 0; 
+            $pendapatan8s = 0;  
+            $pendapatan9s = 0;         
+            $pendapatan10s = 0;  
+            $pendapatan11s = 0; 
+            $pendapatan12s = 0;
+            $pendapatan13s = 0; 
+            $pendapatan14s = 0; 
+            $pendapatan15s = 0; 
+            $pendapatan16s = 0; 
+            $pendapatan17s = 0;  
+            $pendapatan18s = 0; 
+            $pendapatan19s = 0;    
+            $pendapatan20s = 0;  
+            $pendapatan21s = 0; 
+            $pendapatan22s = 0;   
+            $pendapatan23s = 0; 
+            $pendapatan24s = 0;  
+            $pendapatan25s = 0;     
+            $totpads = $totpadp-$totpad; 
+            $totpad1s = $totpad1p-$totpad1; 
+            $totpad2s = 0;  
+            $totpad3s = 0;
+            $totpad4s = 0; 
+            $totpad5s = 0;
+            $totpad6s = 0; 
+            $totpad7s = 0;
+            $totpad8s = 0; 
+            $totpad9s = 0;
+            $totpad10s = 0; 
+            $totpad11s = 0; 
+            $pembiayaans = 0;  
+            $pmb1s = 0;         
+            $pmb2s = 0;                                
+
+            $data       = array('tahun'         =>$tahun,
+                        'status'        =>$status,
+                        'tgl'           =>$tgl,
+                        'bln'           =>$bln,
+                        'thn'           =>$thn,        
+                        'skpd'          =>$skpd,        
+                        'urusan'        =>$urusan,        
+                        'bl_rek'        =>$bl_rek,        
+                        'btl1'           =>$btl1,        
+                        'btl2'           =>$btl2,        
+                        'btl3'           =>$btl3,        
+                        'btl4'           =>$btl4,        
+                        'btl5'           =>$btl5,        
+                        'btl6'           =>$btl6,        
+                        'btl7'           =>$btl7,        
+                        'btl8'           =>$btl8,        
+                        'pendapatan'    =>$pendapatan,        
+                        'pendapatan1'    =>$pendapatan1,        
+                        'pendapatan2'    =>$pendapatan2,        
+                        'pendapatan3'    =>$pendapatan3,        
+                        'pendapatan4'    =>$pendapatan4,        
+                        'pendapatan5'    =>$pendapatan5,        
+                        'pendapatan6'    =>$pendapatan6,        
+                        'pendapatan7'    =>$pendapatan7,        
+                        'pendapatan8'    =>$pendapatan8,        
+                        'pendapatan9'    =>$pendapatan9,        
+                        'pendapatan10'    =>$pendapatan10,        
+                        'pendapatan11'    =>$pendapatan11,        
+                        'pendapatan12'    =>$pendapatan12,        
+                        'pendapatan13'    =>$pendapatan13,        
+                        'pendapatan14'    =>$pendapatan14,        
+                        'pendapatan15'    =>$pendapatan15,        
+                        'pendapatan16'    =>$pendapatan16,        
+                        'pendapatan17'    =>$pendapatan17,        
+                        'pendapatan18'    =>$pendapatan18,        
+                        'pendapatan19'    =>$pendapatan19,        
+                        'pendapatan20'    =>$pendapatan20,        
+                        'pendapatan21'    =>$pendapatan21,        
+                        'pendapatan22'    =>$pendapatan22,        
+                        'pendapatan23'    =>$pendapatan23,        
+                        'pendapatan24'    =>$pendapatan24,        
+                        'pendapatan25'    =>$pendapatan25,        
+                        'totpad'          =>$totpad,        
+                        'totpad1'          =>$totpad1,        
+                        'totpad2'          =>$totpad2,        
+                        'totpad3'          =>$totpad3,        
+                        'totpad4'          =>$totpad4,        
+                        'totpad5'          =>$totpad5,        
+                        'totpad6'          =>$totpad6,        
+                        'totpad7'          =>$totpad7,        
+                        'totpad8'          =>$totpad8,        
+                        'totpad9'          =>$totpad9,        
+                        'totpad10'         =>$totpad10,        
+                        'totpad11'         =>$totpad11,        
+                        'bl1'          =>$bl1,        
+                        'bl2'          =>$bl2,        
+                        'bl3'          =>$bl3,        
+                        'rek1'          =>$rek1,        
+                        'rek2'          =>$rek2,        
+                        'rek3'          =>$rek3,        
+                        'rek4'          =>$rek4,        
+                        'rek5'          =>$rek5,        
+                        'rek6'          =>$rek6,        
+                        'rek7'          =>$rek7,        
+                        'rek8'          =>$rek8, 
+                        'rek11'          =>$rek11,               
+                        'rek12'          =>$rek12,               
+                        'rek13'          =>$rek13,               
+                        'rek14'          =>$rek14,               
+                        'rek15'          =>$rek15,               
+                        'rek16'          =>$rek16,               
+                        'rek17'          =>$rek17,               
+                        'rek18'          =>$rek18,               
+                        'rb1'          =>$rb1,               
+                        'rb2'          =>$rb2,               
+                        'rb3'          =>$rb3,                
+                        'pembiayaan'          =>$pembiayaan,               
+                        'btlrek1'          =>$btlrek1,               
+                        'btlrek2'          =>$btlrek2,               
+                        'btlrek3'          =>$btlrek3,               
+                        'btlrek4'          =>$btlrek4,               
+                        'btlrek5'          =>$btlrek5,               
+                        'btlrek6'          =>$btlrek6,               
+                        'pmb1'          =>$pmb1,               
+                        'pmb2'          =>$pmb2,       
+                        'pembiayaanp'          =>$pembiayaanp,               
+                        'btlrek1p'          =>$btlrek1p,               
+                        'btlrek2p'          =>$btlrek2p,               
+                        'btlrek3p'          =>$btlrek3p,               
+                        'btlrek4p'          =>$btlrek4p,               
+                        'btlrek5p'          =>$btlrek5p,               
+                        'btlrek6p'          =>$btlrek6p,               
+                        'pmb1p'          =>$pmb1p,               
+                        'pmb2p'          =>$pmb2p,
+                        'bl_rekp'        =>$bl_rek,        
+                        'btl1p'           =>$btl1p,        
+                        'btl2p'           =>$btl2p,        
+                        'btl3p'           =>$btl3p,        
+                        'btl4p'           =>$btl4p,        
+                        'btl5p'           =>$btl5p,        
+                        'btl6p'           =>$btl6p,        
+                        'btl7p'           =>$btl7p,        
+                        'btl8p'           =>$btl8p,        
+                        'pendapatanp'    =>$pendapatanp,        
+                        'pendapatan1p'    =>$pendapatan1p,        
+                        'pendapatan2p'    =>$pendapatan2p,        
+                        'pendapatan3p'    =>$pendapatan3p,        
+                        'pendapatan4p'    =>$pendapatan4p,        
+                        'pendapatan5p'    =>$pendapatan5p,        
+                        'pendapatan6p'    =>$pendapatan6p,        
+                        'pendapatan7p'    =>$pendapatan7p,        
+                        'pendapatan8p'    =>$pendapatan8p,        
+                        'pendapatan9p'    =>$pendapatan9p,        
+                        'pendapatan10p'    =>$pendapatan10p,        
+                        'pendapatan11p'    =>$pendapatan11p,        
+                        'pendapatan12p'    =>$pendapatan12p,        
+                        'pendapatan13p'    =>$pendapatan13p,        
+                        'pendapatan14p'    =>$pendapatan14p,        
+                        'pendapatan15p'    =>$pendapatan15p,        
+                        'pendapatan16p'    =>$pendapatan16p,        
+                        'pendapatan17p'    =>$pendapatan17p,        
+                        'pendapatan18p'    =>$pendapatan18p,        
+                        'pendapatan19p'    =>$pendapatan19p,        
+                        'pendapatan20p'    =>$pendapatan20p,        
+                        'pendapatan21p'    =>$pendapatan21p,        
+                        'pendapatan22p'    =>$pendapatan22p,        
+                        'pendapatan23p'    =>$pendapatan23p,        
+                        'pendapatan24p'    =>$pendapatan24p,        
+                        'pendapatan25p'    =>$pendapatan25p,        
+                        'totpadp'          =>$totpadp,        
+                        'totpad1p'          =>$totpad1p,        
+                        'totpad2p'          =>$totpad2p,        
+                        'totpad3p'          =>$totpad3p,        
+                        'totpad4p'          =>$totpad4p,        
+                        'totpad5p'          =>$totpad5p,        
+                        'totpad6p'          =>$totpad6p,        
+                        'totpad7p'          =>$totpad7p,        
+                        'totpad8p'          =>$totpad8p,        
+                        'totpad9p'          =>$totpad9p,        
+                        'totpad10p'         =>$totpad10p,        
+                        'totpad11p'         =>$totpad11p,        
+                        'bl1p'          =>$bl1p,        
+                        'bl2p'          =>$bl2p,        
+                        'bl3p'          =>$bl3p,        
+                        'rek1p'          =>$rek1p,        
+                        'rek2p'          =>$rek2p,        
+                        'rek3p'          =>$rek3p,        
+                        'rek4p'          =>$rek4p,        
+                        'rek5p'          =>$rek5p,        
+                        'rek6p'          =>$rek6p,        
+                        'rek7p'          =>$rek7p,        
+                        'rek8p'          =>$rek8p, 
+                        'rek11p'          =>$rek11p,               
+                        'rek12p'          =>$rek12p,               
+                        'rek13p'          =>$rek13p,               
+                        'rek14p'          =>$rek14p,               
+                        'rek15p'          =>$rek15p,               
+                        'rek16p'          =>$rek16p,               
+                        'rek17p'          =>$rek17p,               
+                        'rek18p'          =>$rek18p,               
+                        'rb1p'          =>$rb1p,               
+                        'rb2p'          =>$rb2p,               
+                        'rb3p'          =>$rb3p,               
+                        'pembiayaanp'          =>$pembiayaanp,               
+                        'btlrek1p'          =>$btlrek1p,               
+                        'btlrek2p'          =>$btlrek2p,               
+                        'btlrek3p'          =>$btlrek3p,               
+                        'btlrek4p'          =>$btlrek4p,               
+                        'btlrek5p'          =>$btlrek5p,               
+                        'btlrek6p'          =>$btlrek6p,               
+                        'pmb1p'          =>$pmb1p,               
+                        'pmb2p'          =>$pmb2p,    
+                        'pembiayaanp'          =>$pembiayaanp,               
+                        'btlrek1p'          =>$btlrek1p,               
+                        'btlrek2p'          =>$btlrek2p,               
+                        'btlrek3p'          =>$btlrek3p,               
+                        'btlrek4p'          =>$btlrek4p,               
+                        'btlrek5p'          =>$btlrek5p,               
+                        'btlrek6p'          =>$btlrek6p,               
+                        'pmb1p'          =>$pmb1p,               
+                        'pmb2p'          =>$pmb2p,
+                        'bl_reks'        =>$bl_reks,        
+                        'btl1s'           =>$btl1s,        
+                        'btl2s'           =>$btl2s,        
+                        'btl3s'           =>$btl3s,        
+                        'btl4s'           =>$btl4s,        
+                        'btl5s'           =>$btl5s,        
+                        'btl6s'           =>$btl6s,        
+                        'btl7s'           =>$btl7s,        
+                        'btl8s'           =>$btl8s,        
+                        'pendapatans'    =>$pendapatans,        
+                        'pendapatan1s'    =>$pendapatan1s,        
+                        'pendapatan2s'    =>$pendapatan2s,        
+                        'pendapatan3s'    =>$pendapatan3s,        
+                        'pendapatan4s'    =>$pendapatan4s,        
+                        'pendapatan5s'    =>$pendapatan5s,        
+                        'pendapatan6s'    =>$pendapatan6s,        
+                        'pendapatan7s'    =>$pendapatan7s,        
+                        'pendapatan8s'    =>$pendapatan8s,        
+                        'pendapatan9s'    =>$pendapatan9s,        
+                        'pendapatan10s'    =>$pendapatan10s,        
+                        'pendapatan11s'    =>$pendapatan11s,        
+                        'pendapatan12s'    =>$pendapatan12s,        
+                        'pendapatan13s'    =>$pendapatan13s,        
+                        'pendapatan14s'    =>$pendapatan14s,        
+                        'pendapatan15s'    =>$pendapatan15s,        
+                        'pendapatan16s'    =>$pendapatan16s,        
+                        'pendapatan17s'    =>$pendapatan17s,        
+                        'pendapatan18s'    =>$pendapatan18s,        
+                        'pendapatan19s'    =>$pendapatan19s,        
+                        'pendapatan20s'    =>$pendapatan20s,        
+                        'pendapatan21s'    =>$pendapatan21s,        
+                        'pendapatan22s'    =>$pendapatan22s,        
+                        'pendapatan23s'    =>$pendapatan23s,        
+                        'pendapatan24s'    =>$pendapatan24s,        
+                        'pendapatan25s'    =>$pendapatan25s,        
+                        'totpads'          =>$totpads,        
+                        'totpad1s'          =>$totpad1s,        
+                        'totpad2s'          =>$totpad2s,        
+                        'totpad3s'          =>$totpad3s,        
+                        'totpad4s'          =>$totpad4s,        
+                        'totpad5s'          =>$totpad5s,        
+                        'totpad6s'          =>$totpad6s,        
+                        'totpad7s'          =>$totpad7s,        
+                        'totpad8s'          =>$totpad8s,        
+                        'totpad9s'          =>$totpad9s,        
+                        'totpad10s'         =>$totpad10s,        
+                        'totpad11s'         =>$totpad11s,        
+                        'bl1s'          =>$bl1s,        
+                        'bl2s'          =>$bl2s,        
+                        'bl3s'          =>$bl3s,        
+                        'rek1s'          =>$rek1s,        
+                        'rek2s'          =>$rek2s,        
+                        'rek3s'          =>$rek3s,        
+                        'rek4s'          =>$rek4s,        
+                        'rek5s'          =>$rek5s,        
+                        'rek6s'          =>$rek6s,        
+                        'rek7s'          =>$rek7s,        
+                        'rek8s'          =>$rek8s, 
+                        'rek11s'          =>$rek11s,               
+                        'rek12s'          =>$rek12s,               
+                        'rek13s'          =>$rek13s,               
+                        'rek14s'          =>$rek14s,               
+                        'rek15s'          =>$rek15s,               
+                        'rek16s'          =>$rek16s,               
+                        'rek17s'          =>$rek17s,               
+                        'rek18s'          =>$rek18s,               
+                        'rb1s'          =>$rb1s,               
+                        'rb2s'          =>$rb2s,               
+                        'rb3s'          =>$rb3s,               
+                        'pembiayaans'          =>$pembiayaans,               
+                        'btlrek1s'          =>$btlrek1s,               
+                        'btlrek2s'          =>$btlrek2s,               
+                        'btlrek3s'          =>$btlrek3s,               
+                        'btlrek4s'          =>$btlrek4s,               
+                        'btlrek5s'          =>$btlrek5s,               
+                        'btlrek6s'          =>$btlrek6s,               
+                        'pmb1s'          =>$pmb1s,               
+                        'pmb2s'          =>$pmb2s,                    
+                        );
+            return View('budgeting.lampiran.perwal-1_perubahan',$data);
+
+        }
         
-        $data       = array('tahun'         =>$tahun,
-                            'status'        =>$status,
-                            'tgl'           =>$tgl,
-                            'bln'           =>$bln,
-                            'thn'           =>$thn,        
-                            'skpd'          =>$skpd,        
-                            'urusan'        =>$urusan,        
-                            'bl_rek'        =>$bl_rek,        
-                            'btl1'           =>$btl1,        
-                            'btl2'           =>$btl2,        
-                            'btl3'           =>$btl3,        
-                            'btl4'           =>$btl4,        
-                            'btl5'           =>$btl5,        
-                            'btl6'           =>$btl6,        
-                            'btl7'           =>$btl7,        
-                            'btl8'           =>$btl8,        
-                            'pendapatan'    =>$pendapatan,        
-                            'pendapatan1'    =>$pendapatan1,        
-                            'pendapatan2'    =>$pendapatan2,        
-                            'pendapatan3'    =>$pendapatan3,        
-                            'pendapatan4'    =>$pendapatan4,        
-                            'pendapatan5'    =>$pendapatan5,        
-                            'pendapatan6'    =>$pendapatan6,        
-                            'pendapatan7'    =>$pendapatan7,        
-                            'pendapatan8'    =>$pendapatan8,        
-                            'pendapatan9'    =>$pendapatan9,        
-                            'pendapatan10'    =>$pendapatan10,        
-                            'pendapatan11'    =>$pendapatan11,        
-                            'pendapatan12'    =>$pendapatan12,        
-                            'pendapatan13'    =>$pendapatan13,        
-                            'pendapatan14'    =>$pendapatan14,        
-                            'pendapatan15'    =>$pendapatan15,        
-                            'pendapatan16'    =>$pendapatan16,        
-                            'pendapatan17'    =>$pendapatan17,        
-                            'pendapatan18'    =>$pendapatan18,        
-                            'pendapatan19'    =>$pendapatan19,        
-                            'pendapatan20'    =>$pendapatan20,        
-                            'pendapatan21'    =>$pendapatan21,        
-                            'pendapatan22'    =>$pendapatan22,        
-                            'pendapatan23'    =>$pendapatan23,        
-                            'pendapatan24'    =>$pendapatan24,        
-                            'pendapatan25'    =>$pendapatan25,        
-                            'totpad'          =>$totpad,        
-                            'totpad1'          =>$totpad1,        
-                            'totpad2'          =>$totpad2,        
-                            'totpad3'          =>$totpad3,        
-                            'totpad4'          =>$totpad4,        
-                            'totpad5'          =>$totpad5,        
-                            'totpad6'          =>$totpad6,        
-                            'totpad7'          =>$totpad7,        
-                            'totpad8'          =>$totpad8,        
-                            'totpad9'          =>$totpad9,        
-                            'totpad10'         =>$totpad10,        
-                            'totpad11'         =>$totpad11,        
-                            'bl1'          =>$bl1,        
-                            'bl2'          =>$bl2,        
-                            'bl3'          =>$bl3,        
-                            'rek1'          =>$rek1,        
-                            'rek2'          =>$rek2,        
-                            'rek3'          =>$rek3,        
-                            'rek4'          =>$rek4,        
-                            'rek5'          =>$rek5,        
-                            'rek6'          =>$rek6,        
-                            'rek7'          =>$rek7,        
-                            'rek8'          =>$rek8, 
-                            'rek11'          =>$rek11,               
-                            'rek12'          =>$rek12,               
-                            'rek13'          =>$rek13,               
-                            'rek14'          =>$rek14,               
-                            'rek15'          =>$rek15,               
-                            'rek16'          =>$rek16,               
-                            'rek17'          =>$rek17,               
-                            'rek18'          =>$rek18,               
-                            'rb1'          =>$rb1,               
-                            'rb2'          =>$rb2,               
-                            'rb3'          =>$rb3,               
-                            'pembiayaan'          =>$pembiayaan,               
-                            'btlrek1'          =>$btlrek1,               
-                            'btlrek2'          =>$btlrek2,               
-                            'btlrek3'          =>$btlrek3,               
-                            'btlrek4'          =>$btlrek4,               
-                            'btlrek5'          =>$btlrek5,               
-                            'btlrek6'          =>$btlrek6,               
-                            'pmb1'          =>$pmb1,               
-                            'pmb2'          =>$pmb2,               
-                            );
-        return View('budgeting.lampiran.perwal-1',$data);
-        */
+        
         
     }
 
