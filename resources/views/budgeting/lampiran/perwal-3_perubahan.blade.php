@@ -77,8 +77,8 @@
 <div class="cetak">
 	<div style="margin-left: 330px;">
 	<h5 style="margin-right: -450px;">LAMPIRAN III Peraturan Wali Kota Bandung</h5>
-	<h5 style="margin-right: -530px;">NOMOR &nbsp; &nbsp; : 1320 Tahun 2017</h5>
-	<h5 style="margin-right: -535px;">TANGGAL &nbsp;: 29 Desember 2017</h5>
+	<h5 style="margin-right: -530px;">NOMOR &nbsp; &nbsp; : 1320 Tahun 2018</h5>
+	<h5 style="margin-right: -535px;">TANGGAL &nbsp;: 16 Maret 2018</h5>
 	</div>
 	<br>
 <table class="header">
@@ -140,23 +140,35 @@
 		@php $tot2+=$btl->pagu; @endphp
 	@endforeach
 
+	@php $tot1p=0; $tot2p=0; @endphp
+	@foreach($btl1_1_p as $btl)
+		@php $tot1p+=$btl->pagu; @endphp
+	@endforeach
+	@foreach($btl1_2_p as $btl)
+		@php $tot2p+=$btl->pagu; @endphp
+	@endforeach
+	@php $persen=((($tot1p+$tot2p)-($tot1+$tot2))/($tot1p+$tot2p)) * 100; @endphp
 
 	<tr>
 		<td class="border-rincian">5.1.4</td>
 		<td class="border-rincian"><b>BELANJA HIBAH</b></td>
 		<td class="border-rincian kanan"><b>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"><b>{{ number_format($tot1p+$tot2p,0,',','.') }}</b></td>
+		<td class="border-rincian kanan"><b>{{ number_format(($tot1p+$tot2p)-($tot1+$tot2),0,',','.') }}</b></td>
+		@if($persen<0)
+			<td class="border-rincian kanan">({{ number_format(abs($persen),0,',','.') }}%)</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format($persen,0,',','.') }}%</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
 	<tr>
 		<td class="border-rincian">{{$btl_rek_1->REKENING_KODE}}</td>
 		<td class="border-rincian"><b>{{$btl_rek_1->REKENING_NAMA}} </b></td>
 		<td class="border-rincian kanan"><b>{{ number_format($tot1,0,',','.') }}</b></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"><b>{{ number_format($tot1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
 		<td class="border-rincian kanan"></td>
 	</tr>
 	@foreach($btl1_1 as $btl)
@@ -165,8 +177,8 @@
 		<td class="border-rincian">&nbsp;{{$btl->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
 		@foreach($btlz as $btlzx)
@@ -180,12 +192,13 @@
 			</td>
 			<td class="border-rincian kanan">{{ number_format($btlzx->BTL_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ number_format($btlzx_p->BTL_TOTAL,0,',','.') }}</td>
+			<td class="border-rincian kanan">{{ number_format($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL,0,',','.') }}</td>
+			@if(!empty($btlzx_p->BTL_TOTAL))
 			<td class="border-rincian kanan">{{ number_format(
-				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
-				,0,',','.') }}</td>
-			<td class="border-rincian kanan">{{ number_format(
-				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
-				,0,',','.') }}%</td>
+				(($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL)/$btlzx_p->BTL_TOTAL)*100,0,',','.') }}%</td>
+			@else
+			<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
+			@endif
 			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
 		</tr>
 		@endif
@@ -199,8 +212,8 @@
 		<td class="border-rincian"><b>{{$btl_rek_2->REKENING_NAMA}} </b></td>
 		<td class="border-rincian kanan"><b>{{ number_format($tot2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan"><b>{{ number_format($tot2,0,',','.') }}</b></td>
-		<td class="border-rincian kanan"><b>{{ number_format($tot2,0,',','.') }}</b></td>
-		<td class="border-rincian kanan"><b>{{ number_format($tot2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan"><b>{{ number_format(0,0,',','.') }}%</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
 	@foreach($btl1_2 as $btl)
@@ -211,8 +224,8 @@
 		</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
 		@foreach($btlz as $btlzx)
@@ -229,9 +242,15 @@
 			<td class="border-rincian kanan">{{ number_format(
 				$btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL
 				,0,',','.') }}</td>
+				
+			@if(!empty($btlzx_p->BTL_TOTAL))
 			<td class="border-rincian kanan">{{ number_format(
-				($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL*100)/$btlzx->BTL_TOTAL
+				(($btlzx_p->BTL_TOTAL-$btlzx->BTL_TOTAL)/$btlzx_p->BTL_TOTAL)*100
 				,0,',','.') }}%</td>
+			@else
+			<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}%</td>
+			@endif
+			
 			<td class="border-rincian kanan">{{$btlzx->BTL_DASHUK}}</td>
 		</tr>
 		@endif
@@ -274,7 +293,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><br><br></td>
+		<td><br></td>
 	</tr>
 </table>
 </div>
