@@ -8108,10 +8108,14 @@ public function updatePerwal1($tahun,$status){
 
     public function perwal2index($tahun,$status){
         $tipe = 'Perwal'; 
-        if(Auth::user()->level == 2) $skpd = SKPD::where('SKPD_ID',UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID'))->get();
-        else  $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
+
+        if(Auth::user()->level == 2) 
+            $skpd = SKPD::where('SKPD_ID',UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID'))->get();
+        else  
+            $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
         $data       = ['tahun'=>$tahun,'status'=>$status,'tipe'=>$tipe,'skpd'=>$skpd,'i'=>1];
         //if($tipe == 'apbd') return View('budgeting.lampiran.indexAPBD',$data);
+       // dd($skpd);
         return View('budgeting.lampiran.perwal2_index',$data);
     }
 

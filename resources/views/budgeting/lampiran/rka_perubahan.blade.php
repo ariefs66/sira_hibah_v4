@@ -263,7 +263,14 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalbl,0,',','.') }},00</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format(($totalbl - $totalbl_murni),0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>
+			@php $tot_slh = $totalbl - $totalbl_murni; @endphp
+			@if($tot_slh < 0)
+				({{ trim(number_format(($totalbl - $totalbl_murni),0,',','.'),"-") }},00)
+			@else
+				{{ number_format(($totalbl - $totalbl_murni),0,',','.') }},00
+			@endif
+		</b></td>
 		@if(!empty($totalbl_murni) and $totalbl_murni!=0)
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalbl - $totalbl_murni) * 100)/$totalbl_murni, 2, ',', ' '),"-") }}% </b></td>
 		@elseif(!empty($totalbl) and $totalbl!=0 and (empty($totalbl_murni) or $totalbl_murni==0))
@@ -286,7 +293,14 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalbl,0,',','.') }},00</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format(($totalbl - $totalbl_murni),0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>
+			@php $tot_slh = $totalbl - $totalbl_murni; @endphp
+			@if($tot_slh < 0)
+				({{ trim(number_format(($totalbl - $totalbl_murni),0,',','.'),"-") }},00)
+			@else
+				{{ number_format(($totalbl - $totalbl_murni),0,',','.') }},00
+			@endif
+		</b></td>
 		@if(!empty($totalbl_murni) and $totalbl_murni!=0)
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalbl - $totalbl_murni) * 100)/$totalbl_murni, 2, ',', ' '),"-") }}% </b></td>
 		@elseif(!empty($totalbl) and $totalbl!=0 and (empty($totalbl_murni) or $totalbl_murni==0))
@@ -296,6 +310,9 @@
 		@endif
 	</tr>
 	
+
+	<!-- 5.2.1 -->
+
 	@foreach($rekening as $r)
 	@if($s != 0)
 	@if($reke[$s-1]->REKENING_KODE != $reke[$s]->REKENING_KODE)
@@ -312,7 +329,14 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format(($totalreke[$s] - $totalreke_murni[$s]),0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>
+			@php $slh = $totalreke[$s] - $totalreke_murni[$s] @endphp
+			@if($slh < 0)
+				({{ trim(number_format(($slh),0,',','.'),"-") }},00)
+			@else
+				{{ number_format(($slh),0,',','.') }},00
+			@endif
+		</b></td>
 		@if(empty($totalreke_murni[$s]) or $totalreke_murni[$s]==0)
 		<td class="border-rincian tengah"><b> - </b></td>
 		@else
@@ -334,7 +358,14 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalreke[$s],0,',','.') }},00</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format(($totalreke[$s] - $totalreke_murni[$s]),0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>
+			@php $slh1 = $totalreke[$s] - $totalreke_murni[$s] @endphp
+			@if($slh1 < 0)
+				({{ trim(number_format(($slh1),0,',','.'),"-") }},00)
+			@else
+				{{ number_format(($slh1),0,',','.') }},00
+			@endif
+		</b></td>
 		@if(empty($totalreke_murni[$s]) or $totalreke_murni[$s]==0)
 		<td class="border-rincian tengah"><b> - </b></td>
 		@else
@@ -358,7 +389,9 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format(($totalrek[$q] - $totalrek_murni[$q]),0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>
+			{{ number_format(($totalrek[$q] - $totalrek_murni[$q]),0,',','.') }},00
+		</b></td>
 		@if(empty($totalrek_murni[$q]) or $totalrek_murni[$q]==0)
 		<td class="border-rincian tengah"><b> - </b></td>
 		@else
@@ -419,6 +452,23 @@
 	<?php $l=0;?>
 	@foreach($paket[$m] as $p)
 
+	<tr>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $p->subrincian->SUBRINCIAN_NAMA }}<b></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL-$p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">0,00%</td>
+	 </tr>
+
 	@foreach($komponen[$m][$l++] as $k)
 	<tr>
 	  <td class="border-rincian tengah"></td>
@@ -426,12 +476,12 @@
 	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- @foreach(explode('#', $k->RINCIAN_KETERANGAN) as $info) 
     	{{$info}}@break
   	  @endforeach
-  	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->subrincian->SUBRINCIAN_NAMA }})</i><br>
+  	  </i>
   	  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
   	  </td>
 	  @else
 	  <td class="border-rincian">
-	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->subrincian->SUBRINCIAN_NAMA }})</i><br>
+	  	</i>
 	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{ $k->RINCIAN_KOMPONEN }}
 	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
 	  	  	  </td>
