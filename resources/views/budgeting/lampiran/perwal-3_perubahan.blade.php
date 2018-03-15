@@ -153,25 +153,25 @@
 	@php $persen=((($tot1p+$tot2p)-($tot1+$tot2))/($tot1p+$tot2p)) * 100; @endphp
 
 	<tr>
-		<td class="border-rincian">5.1.4</td>
+		<td class="border-rincian"><b>5.1.4</b></td>
 		<td class="border-rincian"><b>BELANJA HIBAH</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(($tot1p+$tot2p)-($tot1+$tot2),0,',','.') }}</b></td>
 		@if($persen<0)
-			<td class="border-rincian kanan total">({{ number_format(abs($persen),0,',','.') }}%)</td>
+			<td class="border-rincian kanan total"><b>({{ number_format(abs($persen),0,',','.') }}%)</b></td>
 		@else
-		<td class="border-rincian kanan total">{{ number_format($persen,0,',','.') }}%</td>
+		<td class="border-rincian kanan total"><b>{{ number_format($persen,0,',','.') }}%</b></td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
 	<tr>
-		<td class="border-rincian">{{$btl_rek_1->REKENING_KODE}}</td>
+		<td class="border-rincian"><b>{{$btl_rek_1->REKENING_KODE}}</b></td>
 		<td class="border-rincian"><b>{{$btl_rek_1->REKENING_NAMA}} </b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot1+26587800000,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total">{{ number_format(26587800000,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format(26587800000/($tot1+26587800000)*100,0,',','.') }}%</td>
+		<td class="border-rincian kanan total"><b>{{ number_format(26587800000,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(26587800000/($tot1+26587800000)*100,0,',','.') }}%</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
 	@foreach($btl1_1 as $btl)
@@ -211,7 +211,7 @@
 	@endforeach
 
 	<tr>
-		<td class="border-rincian">{{$btl_rek_2->REKENING_KODE}}</td>
+		<td class="border-rincian"><b>{{$btl_rek_2->REKENING_KODE}}</b></td>
 		<td class="border-rincian"><b>{{$btl_rek_2->REKENING_NAMA}} </b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($tot2,0,',','.') }}</b></td>
