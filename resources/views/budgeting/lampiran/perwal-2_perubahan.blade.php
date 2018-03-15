@@ -407,8 +407,8 @@
 						<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$br->REKENING_NAMA}} </td>
 						<td class="border-rincian kanan ">{{ number_format($br->pagu,0,',','.') }}</td>
 						<td class="border-rincian kanan ">{{ number_format($brp[$j],0,',','.') }}</td>
-						@if($brp[$j]-$br->pagu<0)
-						<td class="border-rincian kanan ">({{ number_format(abs($brp[$j]-$br->pagu),0,',','.') }})</td>
+						@if($brp[$j]-$br->pagu < 0)
+						 <td class="border-rincian kanan ">({{ number_format(abs($brp[$j]-$br->pagu),0,',','.') }})</td>
 						@else
 						<td class="border-rincian kanan ">{{ number_format($brp[$j]-$br->pagu,0,',','.') }}</td>
 						@endif
