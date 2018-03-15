@@ -207,7 +207,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan1s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan1s),0,',','.') }})</td>
@@ -247,13 +247,13 @@
 	@foreach($pendapatan2p as $pen)
 		@php $pendapatan2_totalp[] = $pen->PENDAPATAN_TOTAL; @endphp
 	@endforeach
-	@php $i=1;@endphp;
+	@php $i=1;@endphp
 
 	@foreach($pendapatan2 as $pen)
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan2_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan2s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan2s),0,',','.') }})</td>
@@ -296,7 +296,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -339,7 +339,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan4_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan4s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan4s),0,',','.') }})</td>
@@ -382,7 +382,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -425,7 +425,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -468,7 +468,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -511,7 +511,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -554,7 +554,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -597,7 +597,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -640,7 +640,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -683,7 +683,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -726,7 +726,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -769,7 +769,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -812,7 +812,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -855,7 +855,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -898,7 +898,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -933,7 +933,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -952,7 +952,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -971,7 +971,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -990,7 +990,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1009,7 +1009,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1035,7 +1035,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1054,7 +1054,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1075,7 +1075,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1100,7 +1100,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1126,7 +1126,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1144,7 +1144,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1162,7 +1162,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1180,7 +1180,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1198,7 +1198,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach
@@ -1229,7 +1229,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach	
@@ -1247,7 +1247,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach	
@@ -1270,7 +1270,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>	
 	@endforeach		
@@ -1294,7 +1294,7 @@
 		<tr>
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-			<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+			<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
 		@endforeach	
@@ -1326,7 +1326,7 @@
 		<tr>
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-			<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+			<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
 		@endforeach
@@ -1351,7 +1351,7 @@
 		<tr>
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-			<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+			<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
 		@endforeach

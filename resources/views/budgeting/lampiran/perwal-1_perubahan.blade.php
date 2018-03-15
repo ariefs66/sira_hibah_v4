@@ -1448,36 +1448,60 @@
 	@endif
 
 
+	@php $totbt5p=0 @endphp
+	@foreach($btl5p as $bt5)
+		@php $totbt5p += $bt5->pagu @endphp
+	@endforeach
 
 	@php $totbt5=0 @endphp
 	@foreach($btl5 as $bt5)
 		@php $totbt5 += $bt5->pagu @endphp
 	@endforeach
+	@php $totbt5s=$totbt5p-$totbt5; @endphp
 	@if($totbt5!=0)
 	<tr>
 		<td class="border-rincian">{{$rek5->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$rek5->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($totbt5,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($totbt5,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($totbt5,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($totbt5p,0,',','.') }}</b></td>
+		@if($totbt5s<0)
+		<td class="border-rincian kanan total"><b>({{ number_format(abs($totbt5s),0,',','.') }})</b></td>
+		@else
+		<td class="border-rincian kanan total"><b>{{ number_format($totbt5s,0,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan "></td>
 	</tr>
 	<tr>
 		<td class="border-rincian">{{$rek15->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$rek15->REKENING_NAMA}} </td>
 		<td class="border-rincian kanan total">{{ number_format($totbt5,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format($totbt5,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format($totbt5,0,',','.') }}</td>
+		<td class="border-rincian kanan total">{{ number_format($totbt5p,0,',','.') }}</td>
+		@if($totbt5s<0)
+		<td class="border-rincian kanan total"><b>({{ number_format(abs($totbt5s),0,',','.') }})</b></td>
+		@else
+		<td class="border-rincian kanan total"><b>{{ number_format($totbt5s,0,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan "></td>
 	</tr>
+
+	@php $bt5p=0; $totbt5p= array(count($btl5p)); @endphp
+	@foreach($btl5p as $bt5)
+		@php $totbt5p[] = $bt5->pagu; @endphp
+		@php $bt5p += $bt5->pagu;  @endphp
+	@endforeach
+	@php  $i=1; @endphp
 	@foreach($btl5 as $bt5)
 		@if($bt5->pagu!==0)
 		<tr>
 			<td class="border-rincian">{{$bt5->REKENING_KODE}}</td>
 			<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$bt5->REKENING_NAMA}}</td>
 			<td class="border-rincian kanan">{{ number_format($bt5->pagu,0,',','.') }}</td>
-			<td class="border-rincian kanan">{{ number_format($bt5->pagu,0,',','.') }}</td>
-			<td class="border-rincian kanan">{{ number_format($bt5->pagu,0,',','.') }}</td>
+			<td class="border-rincian kanan">{{ number_format($totbt5p[$i],0,',','.') }}</td>
+			@if($totbt5p[$i]-$bt5->pagu<0)
+			<td class="border-rincian kanan">({{ number_format(abs($totbt5p[$i]-$bt5->pagu),0,',','.') }})</td>
+			@else
+			<td class="border-rincian kanan">{{ number_format($totbt5p[$i]-$bt5->pagu,0,',','.') }}</td>
+			@endif
 			<td class="border-rincian kanan "></td>
 		</tr>
 		@endif
@@ -1594,7 +1618,9 @@
 	<tr>
 		<td class="border-rincian">5.2</td>
 		<td class="border-rincian"><b>&nbsp; BELANJA LANGSUNG</b></td>
-		<td class="border-rincian kanan total">-</td>
+		<td class="border-rincian kanan total"><b>3.812.607.276.595</b></td>
+		<td class="border-rincian kanan total"><b>3.812.607.276.595</b></td>
+		<td class="border-rincian kanan total"><b>0</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@php $totbl1=0 @endphp
@@ -1619,6 +1645,7 @@
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@foreach($bl1 as $b1)
+	@if($b1->pagu!==0)
 	<tr>
 		<td class="border-rincian">{{$b1->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$b1->REKENING_NAMA}}</td>
@@ -1627,6 +1654,7 @@
 		<td class="border-rincian kanan ">{{ number_format($b1->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan "></td>
 	</tr>
+	@endif
 	@endforeach
 
 
@@ -1643,6 +1671,7 @@
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@foreach($bl2 as $b2)
+	@if($b2->pagu!==0)
 	<tr>
 		<td class="border-rincian">{{$b2->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$b2->REKENING_NAMA}}</td>
@@ -1651,21 +1680,35 @@
 		<td class="border-rincian kanan ">{{ number_format($b2->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan "></td>
 	</tr>
+	@endif
 	@endforeach
 
 	@php $totbl3=0 @endphp
 	@foreach($bl3 as $b3)
 		@php $totbl3+=$b3->pagu @endphp
+		@php $bl3p+=$b3->pagu @endphp
 	@endforeach
+
+	@php $totbl3p=0 @endphp
+	@foreach($bl3p as $b3)
+		@php $totbl3p+=$b3->pagu @endphp
+		@php $bl3p+=$b3->pagu @endphp
+	@endforeach
+
 	<tr>
 		<td class="border-rincian">{{$rb3->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$rb3->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($totbl3,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($totbl3,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($totbl3,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($totbl3p,0,',','.') }}</b></td>
+		@if($totbl3p-$totbl3<0)
+		<td class="border-rincian kanan total"><b>{{ number_format($totbl3p-$totbl3,0,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan total"><b>{{ number_format($totbl3p-$totbl3,0,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@foreach($bl3 as $b3)
+	@if($b3->pagu!==0)
 	<tr>
 		<td class="border-rincian">{{$b3->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$b3->REKENING_NAMA}}</td>
@@ -1674,6 +1717,7 @@
 		<td class="border-rincian kanan ">{{ number_format($b3->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan "></td>
 	</tr>
+	@endif
 	@endforeach
 
 	<tr>
@@ -1681,7 +1725,7 @@
 		<td class="border-rincian kanan"> <b>Surpluss / (Defisit)</b></td>
 		<td class="border-rincian kanan total"><b>(415.333.370.810)</b></td>
 		<td class="border-rincian kanan total"><b>(415.333.370.810)</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 
