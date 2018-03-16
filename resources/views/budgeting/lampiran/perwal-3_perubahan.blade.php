@@ -10,8 +10,8 @@
 	    }
 
 		body{
-			font-family: Tahoma;
-			font-size: 80%;
+			font-family: bookman old style;
+			font-size: 100%;
 		}
 
 		td{
@@ -93,9 +93,9 @@
 			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
 		</td>	
 		<td>
-			<h4 style="margin-left: -1000px">PEMERINTAH KOTA BANDUNG</h4>
-			<h3 style="margin-left: -1000px">PENJABARAN PERUBAHAN APBD <br> DAFTAR BELANJA HIBAH</h3>
-			<h5 style="margin-left: -1000px">TAHUN ANGGARAN {{ $tahun }}</h5>
+			<h4 style="margin-left: -1300px">PEMERINTAH KOTA BANDUNG</h4>
+			<h3 style="margin-left: -1300px">PENJABARAN PERUBAHAN APBD <br> DAFTAR BELANJA HIBAH</h3>
+			<h5 style="margin-left: -1300px">TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
 	</tr>
 	<tr> <td colspan="2"></td> </tr>
@@ -153,17 +153,17 @@
 	@php $persen=((($tot1p+$tot2p)-($tot1+$tot2))/($tot1p+$tot2p)) * 100; @endphp
 
 	<tr>
-		<td class="border-rincian"><b>5.1.4</b></td>
-		<td class="border-rincian"><b>BELANJA HIBAH</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($tot1p+$tot2p,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(($tot1p+$tot2p)-($tot1+$tot2),0,',','.') }}</b></td>
+		<td class="border-rincian"><b><br><br>5.1.4</b></td>
+		<td class="border-rincian"><b><br><br>BELANJA HIBAH</b></td>
+		<td class="border-rincian kanan total"><b><br><br>{{ number_format($tot1+$tot2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b><br><br>{{ number_format($tot1p+$tot2p,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b><br><br>{{ number_format(($tot1p+$tot2p)-($tot1+$tot2),0,',','.') }}</b></td>
 		@if($persen<0)
-			<td class="border-rincian kanan total"><b>({{ number_format(abs($persen),0,',','.') }}%)</b></td>
+			<td class="border-rincian kanan total"><b><br><br>({{ number_format(abs($persen),0,',','.') }}%)</b></td>
 		@else
-		<td class="border-rincian kanan total"><b>{{ number_format($persen,0,',','.') }}%</b></td>
+		<td class="border-rincian kanan total"><b><br><br>{{ number_format($persen,0,',','.') }}%</b></td>
 		@endif
-		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"><br><br></td>
 	</tr>
 	<tr>
 		<td class="border-rincian"><b>{{$btl_rek_1->REKENING_KODE}}</b></td>
@@ -211,12 +211,12 @@
 	@endforeach
 
 	<tr>
-		<td class="border-rincian"><b>{{$btl_rek_2->REKENING_KODE}}</b></td>
-		<td class="border-rincian"><b>{{$btl_rek_2->REKENING_NAMA}} </b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($tot2,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format($tot2,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}%</b></td>
+		<td class="border-rincian"><b><br><br>{{$btl_rek_2->REKENING_KODE}}</b></td>
+		<td class="border-rincian"><b><br><br>{{$btl_rek_2->REKENING_NAMA}} </b></td>
+		<td class="border-rincian kanan total"><b><br><br>{{ number_format($tot2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b><br><br>{{ number_format($tot2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b><br><br>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b><br><br>{{ number_format(0,0,',','.') }}%</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
 	@foreach($btl1_2 as $btl)
@@ -273,6 +273,7 @@
 	</tr>		
 	</tbody>	
 </table>
+
 <table class="ttd">
 	<tr>
 		<td></td>
