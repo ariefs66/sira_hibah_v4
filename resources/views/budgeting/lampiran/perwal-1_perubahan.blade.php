@@ -1278,9 +1278,9 @@
 		<td class="border-rincian kanan"><b>{{number_format($totpad11,0,',','.') }}</b></td>
 		<td class="border-rincian kanan"><b>{{ number_format($totpad11p,0,',','.') }}</b></td>
 		@if ($totpad11p<0)
-		<td class="border-rincian kanan"><b>({{ number_format(abs($totpad11p),0,',','.') }})</b></td>
+		<td class="border-rincian kanan"><b>({{ number_format(abs(0),0,',','.') }})</b></td>
 		@else
-		<td class="border-rincian kanan"><b>{{ number_format($totpad11p,0,',','.') }}</b></td>
+		<td class="border-rincian kanan"><b>{{ number_format(0,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -1316,7 +1316,7 @@
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 			<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan ">{{ number_format($pendapatan24_totalp[$i],0,',','.') }}</td>
-			@if ($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL<0)
+			@if ($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL < 0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
@@ -1325,6 +1325,43 @@
 		</tr>	
 		@php $i+=1;@endphp
 		@endforeach
+
+
+
+		<tr>
+			<td class="border-rincian">4.3.5</td>
+			<td class="border-rincian">&nbsp; &nbsp; Bantuan keuangan dari Provinsi Jawa Barat </td>
+			<td class="border-rincian kanan garis">{{ number_format($banprov_murni,0,',','.') }}</td>
+			<td class="border-rincian kanan garis">{{ number_format($banprov,0,',','.') }}</td>
+			@if ($banprov-$banprov_murni < 0)
+		<td class="border-rincian kanan garis"><b>({{ number_format(abs($banprov-$banprov_murni),0,',','.') }})</b></td>
+		@else
+		<td class="border-rincian kanan garis"><b>{{ number_format($banprov-$banprov_murni,0,',','.') }}</b></td>
+		@endif
+			<td class="border-rincian kanan"></td>
+		</tr>	
+		
+		@foreach($banprov_detail_murni as $pen_m)
+		@foreach($banprov_detail as $pen)
+		@if($pen_m->PENDAPATAN_ID == $pen->PENDAPATAN_ID)
+		<tr>
+			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
+			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
+			<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+			<td class="border-rincian kanan ">{{ number_format($pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
+			@if($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL < 0)
+		<td class="border-rincian kanan">({{ number_format(abs($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL),0,',','.') }})</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		@endif
+			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
+		</tr>	
+		@endif
+		@endforeach
+		@endforeach
+
+
+
 
 		<tr>
 		<td class="border-rincian">5</td>

@@ -7896,12 +7896,37 @@ public function updatePerwal1($tahun,$status){
             $dakNonFisik_detail_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->get(); 
+
+            $banprov_detail_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.5%')
                         ->get();  
+
+             $banprov_detail = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.5%')
+                        ->orderBy('REKENING_KODE')
+                        ->get();   
+
+             $banprov = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.5%')
+                        ->sum('PENDAPATAN_TOTAL');        
+
+              $banprov_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.3.5%')
+                        ->sum('PENDAPATAN_TOTAL');                         
 
                         //dd($dakNonFisik_detail_murni);                                             
                                                  
 
             $data       = array('tahun'         =>$tahun,
+                        'banprov_murni'            =>$banprov_murni,
+                        'banprov'            =>$banprov,
+                        'banprov_detail_murni'            =>$banprov_detail_murni,
+                        'banprov_detail'            =>$banprov_detail,
                         'dakFisik'            =>$dakFisik,
                         'dakFisik_murni'        =>$dakFisik_murni,
                         'dakFisik_detail'     =>$dakFisik_detail,
