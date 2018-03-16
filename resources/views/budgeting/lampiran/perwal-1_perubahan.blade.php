@@ -80,7 +80,7 @@
 <div class="cetak">
 	<div style="margin-left: 330px;">
 	<h5>LAMPIRAN Ia &nbsp; &nbsp; &nbsp; Rancangan Peraturan Wali Kota Bandung</h5>
-	<h5>NOMOR : </h5>
+	<h5>NOMOR : 475 Tahun 2018</h5>
 	<h5>TANGGAL : 16 {{ $bln }} {{ $thn }}</h5>
 	</div>
 	<br>
@@ -1156,6 +1156,7 @@
 		@php $pendapatan22_totalp[] = $pen->PENDAPATAN_TOTAL; @endphp
 	@endforeach
 	@php $i=1;@endphp
+
 	@foreach($pendapatan22 as $pen)
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
@@ -1166,6 +1167,28 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan22s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan22s,0,',','.') }}</td>
+		@endif
+		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
+	</tr>
+	@php $i+=1;@endphp
+	@endforeach
+
+	@php $pendapatan223_totalp = array(count($pendapatan223p)); $i=0; @endphp
+	@foreach($pendapatan223p as $pen)
+		@php $pendapatan223_totalp[] = $pen->PENDAPATAN_TOTAL; @endphp
+	@endforeach
+	@php $i=1;@endphp
+
+	@foreach($pendapatan223 as $pen)
+	<tr>
+		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
+		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($pendapatan223_totalp[$i],0,',','.') }}</td>
+		@if ($pendapatan223_totalp[$i]-$pen->PENDAPATAN_TOTAL < 0)
+		<td class="border-rincian kanan">({{ number_format(abs($pendapatan223_totalp[$i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format($pendapatan223_totalp[$i]-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>

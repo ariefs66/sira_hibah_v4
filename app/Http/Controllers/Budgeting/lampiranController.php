@@ -7260,7 +7260,13 @@ public function updatePerwal1($tahun,$status){
             $pendapatan22 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.01%')
-                        ->get();   
+                        ->get(); 
+
+            $pendapatan223 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->get();              
+
             $pendapatan23 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.3.1.01%')
@@ -7376,6 +7382,7 @@ public function updatePerwal1($tahun,$status){
                         'pendapatan20'    =>$pendapatan20,        
                         'pendapatan21'    =>$pendapatan21,        
                         'pendapatan22'    =>$pendapatan22,        
+                        'pendapatan223'    =>$pendapatan223,        
                         'pendapatan23'    =>$pendapatan23,        
                         'pendapatan24'    =>$pendapatan24,        
                         'pendapatan25'    =>$pendapatan25,        
@@ -7681,7 +7688,15 @@ public function updatePerwal1($tahun,$status){
             $pendapatan22p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.01%')
-                        ->get();   
+                        ->get(); 
+
+            $pendapatan223p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->get();             
+
+
+
             $pendapatan23p = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.3.1.01%')
@@ -7748,6 +7763,7 @@ public function updatePerwal1($tahun,$status){
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.3.3%')
                         ->sum('PENDAPATAN_TOTAL'); 
+
 
 
                         $pembiayaanp = PembiayaanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN_PERUBAHAN.REKENING_ID')->get();  
@@ -7877,6 +7893,7 @@ public function updatePerwal1($tahun,$status){
                         'pendapatan20'    =>$pendapatan20,        
                         'pendapatan21'    =>$pendapatan21,        
                         'pendapatan22'    =>$pendapatan22,        
+                        'pendapatan223'    =>$pendapatan223,        
                         'pendapatan23'    =>$pendapatan23,        
                         'pendapatan24'    =>$pendapatan24,        
                         'pendapatan25'    =>$pendapatan25,        
@@ -7964,6 +7981,7 @@ public function updatePerwal1($tahun,$status){
                         'pendapatan20p'    =>$pendapatan20p,        
                         'pendapatan21p'    =>$pendapatan21p,        
                         'pendapatan22p'    =>$pendapatan22p,        
+                        'pendapatan223p'    =>$pendapatan223p,        
                         'pendapatan23p'    =>$pendapatan23p,        
                         'pendapatan24p'    =>$pendapatan24p,        
                         'pendapatan25p'    =>$pendapatan25p,        
