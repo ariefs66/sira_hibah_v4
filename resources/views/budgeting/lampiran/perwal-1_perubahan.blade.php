@@ -1497,7 +1497,7 @@
 		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$rek4->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($totbt4,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($totbt4p,0,',','.') }}</b></td>
-		@if($totbt4p-$totbt4)
+		@if($totbt4p-$totbt4 < 0)
 		<td class="border-rincian kanan total"><b>({{ number_format(abs($totbt4p-$totbt4),0,',','.') }})</b></td>
 		@else
 		<td class="border-rincian kanan total"><b>{{ number_format($totbt4p-$totbt4,0,',','.') }}</b></td>
@@ -1524,6 +1524,11 @@
 			<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$bt4->REKENING_NAMA}}</td>
 			<td class="border-rincian kanan">{{ number_format($bt4->pagu,0,',','.') }}</td>
 			<td class="border-rincian kanan">{{ number_format($totbt4pp[$i],0,',','.') }}</td>
+			@if($totbt4pp[$i]-$$bt4->pagu < 0)
+			<td class="border-rincian kanan total">{{ number_format(abs($totbt4pp[$i]-$bt4->pagu),0,',','.') }}</td>
+			@else
+			<td class="border-rincian kanan total">{{ number_format($totbt4pp[$i]-$bt4->pagu,0,',','.') }}</td>
+			@endif
 			<td class="border-rincian kanan">{{ number_format($totbt4pp[$i]-$bt4->pagu,0,',','.') }}</td>
 			<td class="border-rincian kanan "></td>
 		</tr>
