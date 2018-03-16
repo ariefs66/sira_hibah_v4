@@ -1163,7 +1163,7 @@
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan22_totalp[$i],0,',','.') }}</td>
-		@if ($pendapatan22s<0)
+		@if ($pendapatan22s < 0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan22s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan22s,0,',','.') }}</td>
@@ -1178,6 +1178,15 @@
 		@php $pendapatan223_totalp[] = $pen->PENDAPATAN_TOTAL; @endphp
 	@endforeach
 	@php $i=1;@endphp
+
+	<tr>
+			<td class="border-rincian">4.2.3.02</td>
+			<td class="border-rincian">&nbsp; &nbsp; Dana Alokasi Khusus (Non Fisik) </td>
+		<td class="border-rincian kanan garis">359.111.975.000</td>
+		<td class="border-rincian kanan garis">493.647.642.000</td>
+		<td class="border-rincian kanan garis">134.535.667.000</td>
+		<td class="border-rincian kanan"></td>
+	</tr>	
 
 	@foreach($pendapatan223 as $pen)
 	<tr>
