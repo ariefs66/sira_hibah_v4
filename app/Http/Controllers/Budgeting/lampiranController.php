@@ -7917,12 +7917,35 @@ public function updatePerwal1($tahun,$status){
               $banprov_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.3.5%')
-                        ->sum('PENDAPATAN_TOTAL');                         
+                        ->sum('PENDAPATAN_TOTAL');   
+
+
+               $jumBelanja_murni = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                                    ->WHERE('BL_TAHUN',$tahun)                               
+                                    ->WHERE('BL_DELETED',0)                               
+                                    ->WHERE('BL_VALIDASI',1)
+                                    ->sum('RINCIAN_TOTAL');
+
+               $jumBelanja = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                                    ->WHERE('BL_TAHUN',$tahun)                               
+                                    ->WHERE('BL_DELETED',0)                               
+                                    ->WHERE('BL_VALIDASI',1)
+                                    ->sum('RINCIAN_TOTAL');                               
+
+                $jumBTL_murni = BTL::where('BTL_TAHUN',$tahun)
+                                    ->sum('BTL_TOTAL');                                
+
+                $jumBTL = BTLPerubahan::where('BTL_TAHUN',$tahun)
+                                    ->sum('BTL_TOTAL');                                
 
                         //dd($dakNonFisik_detail_murni);                                             
                                                  
 
             $data       = array('tahun'         =>$tahun,
+                        'jumBTL_murni'      =>$jumBTL_murni,
+                        'jumBTL'            =>$jumBTL,
+                        'jumBelanja_murni'      =>$jumBelanja_murni,
+                        'jumBelanja'            =>$jumBelanja,
                         'banprov_murni'            =>$banprov_murni,
                         'banprov'            =>$banprov,
                         'banprov_detail_murni'            =>$banprov_detail_murni,

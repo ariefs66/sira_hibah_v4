@@ -1366,18 +1366,26 @@
 		<tr>
 		<td class="border-rincian"><br>5</td>
 		<td class="border-rincian"><b><br>BELANJA</b></td>
-		<td class="border-rincian kanan total"><b><br>7.087.951.845.203</b></td>
-		<td class="border-rincian kanan total"><b><br>7.343.668.053.501</b></td>
-		<td class="border-rincian kanan total"><b><br>0</b></td>
-		<td class="border-rincian kanan "><br></td>
+		<td class="border-rincian kanan total"><b><br>{{ number_format($jumBelanja_murni,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b><br>{{ number_format($jumBelanja,0,',','.') }}</b></td>
+		@if($jumBelanja-$jumBelanja_murni < 0)
+		<td class="border-rincian kanan total"><b><br>({{ number_format(abs($jumBelanja-$jumBelanja_murni),0,',','.') }})</b></td>
+		@else
+		<td class="border-rincian kanan total"><b><br>{{ number_format($jumBelanja-$jumBelanja_murni,0,',','.') }}</b></td>
+		@endif
+		<td class="border-rincian kanan total"><br></td>
 	</tr>
 	<tr>
 		<td class="border-rincian">5.1</td>
-		<td class="border-rincian"><b>&nbsp; BELANJA TIDAK LANGSUNG</b></td>
-		<td class="border-rincian kanan total"><b>3.275.344.568.608</b></td>
-		<td class="border-rincian kanan total"><b>3.275.344.568.608</b></td>
-		<td class="border-rincian kanan total"><b>0</b></td>
-		<td class="border-rincian kanan "></td>
+		<td class="border-rincian"><b>BELANJA TIDAK LANGSUNG</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($jumBTL_murni,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($jumBTL,0,',','.') }}</b></td>
+		@if($jumBTL-$jumBTL_murni < 0)
+		<td class="border-rincian kanan total"><b>({{ number_format(abs($jumBTL-$jumBTL_murni),0,',','.') }})</b></td>
+		@else
+		<td class="border-rincian kanan total"><b>{{ number_format($jumBTL-$jumBTL_murni,0,',','.') }}</b></td>
+		@endif
+		<td class="border-rincian kanan total"></td>
 	</tr>
 
 	@php $totbt1=0 @endphp
