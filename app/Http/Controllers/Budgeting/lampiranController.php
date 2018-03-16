@@ -7870,7 +7870,12 @@ public function updatePerwal1($tahun,$status){
             $dakFisik_detail = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.01%')
-                        ->get();            
+                        ->get(); 
+
+            $dakFisik_detail_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.01%')
+                        ->get();                        
 
             $dakNonFisik_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
@@ -7885,16 +7890,25 @@ public function updatePerwal1($tahun,$status){
             $dakNonFisik_detail = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.02%')
-                        ->get();                                   
+                        ->get(); 
+
+            $dakNonFisik_detail_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->get();  
+
+                        //dd($dakNonFisik_detail_murni);                                             
                                                  
 
             $data       = array('tahun'         =>$tahun,
                         'dakFisik_murni'        =>$dakFisik_murni,
                         'dakFisik'        =>$dakFisik,
                         'dakFisik_detail' =>$dakFisik_detail,
+                        'dakFisik_detail_murni' =>$dakFisik_detail_murni,
                         'dakNonFisik_murni'        =>$dakNonFisik_murni,
                         'dakNonFisik'        =>$dakNonFisik,
                         'dakNonFisik_detail' =>$dakNonFisik_detail,
+                        'dakNonFisik_detail_murni' =>$dakNonFisik_detail_murni,
                         'status'        =>$status,
                         'tgl'           =>$tgl,
                         'bln'           =>$bln,

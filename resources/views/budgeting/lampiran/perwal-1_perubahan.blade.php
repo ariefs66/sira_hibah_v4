@@ -1151,27 +1151,26 @@
 		<td class="border-rincian kanan garis">{{ number_format($dakFisik-$dakFisik_murni,0,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
-	@php $pendapatan22_totalp = array(count($pendapatan22p)); $i=0; @endphp
-	@foreach($pendapatan22p as $pen)
-		@php $pendapatan22_totalp[] = $pen->PENDAPATAN_TOTAL; @endphp
-	@endforeach
-	@php $i=1;@endphp
 
-	@foreach($pendapatan22 as $pen)
+	@foreach($dakFisik_detail as $pen)
+	@foreach($dakFisik_detail_murni as $pen_m)
+	@if($pen_m->PENDAPATAN_ID==$pen->PENDAPATAN_ID)
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($pendapatan22_totalp[$i],0,',','.') }}</td>
-		@if ($pendapatan22s < 0)
-		<td class="border-rincian kanan">({{ number_format(abs($pendapatan22s),0,',','.') }})</td>
+		<td class="border-rincian kanan ">{{ number_format($pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		@if ($pen_m->PENDAPATAN_TOTAL-$pen->PENDAPATAN_TOTAL < 0)
+		<td class="border-rincian kanan">({{ number_format(abs($pen_m->PENDAPATAN_TOTAL-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
-		<td class="border-rincian kanan">{{ number_format($pendapatan22s,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($pen_m->PENDAPATAN_TOTAL-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
-	@php $i+=1;@endphp
+	@endif
 	@endforeach
+	@endforeach
+	
 
 	@php $pendapatan223_totalp = array(count($pendapatan223p)); $i=0; @endphp
 	@foreach($pendapatan223p as $pen)
@@ -1188,20 +1187,23 @@
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
-	@foreach($pendapatan223 as $pen)
+	@foreach($dakFisik_detail as $pen)
+	@foreach($dakFisik_detail_murni as $pen_m)
+	@if($pen_m->PENDAPATAN_ID==$pen->PENDAPATAN_ID)
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($pendapatan223_totalp[$i],0,',','.') }}</td>
-		@if ($pendapatan223_totalp[$i]-$pen->PENDAPATAN_TOTAL < 0)
-		<td class="border-rincian kanan">({{ number_format(abs($pendapatan223_totalp[$i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
+		<td class="border-rincian kanan ">{{ number_format($pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		@if ($pen_m->PENDAPATAN_TOTAL-$pen->PENDAPATAN_TOTAL < 0)
+		<td class="border-rincian kanan">({{ number_format(abs($pen_m->PENDAPATAN_TOTAL-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
-		<td class="border-rincian kanan">{{ number_format($pendapatan223_totalp[$i]-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($pen_m->PENDAPATAN_TOTAL-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
-	@php $i+=1;@endphp
+	@endif
+	@endforeach
 	@endforeach
 	
 
