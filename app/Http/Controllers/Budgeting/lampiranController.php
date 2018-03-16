@@ -7890,6 +7890,7 @@ public function updatePerwal1($tahun,$status){
             $dakNonFisik_detail = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->orderBy('REKENING_KODE')
                         ->get(); 
 
             $dakNonFisik_detail_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
