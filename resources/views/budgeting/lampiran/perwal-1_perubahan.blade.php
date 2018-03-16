@@ -1424,7 +1424,23 @@
 		@endif
 		<td class="border-rincian kanan "></td>
 	</tr>
+	@php $head = $rek11->REKENING_KODE;$count=0; @endphp
 	@foreach($btl1 as $bt1)
+		@if(substr($bt1->REKENING_KODE,0,8)!==$head && $count<2 )
+			@php $head=substr($bt1->REKENING_KODE,0,8); $count+=1;@endphp
+			<tr>
+				<td class="border-rincian">{{$head}}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaPegawai[$count-1]}} </td>
+				<td class="border-rincian kanan garis">{{ number_format($murniBelanjaPegawai[$count-1],0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($perubahanBelanjaPegawai[$count-1],0,',','.') }}</td>
+				@if ($totbt1s<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($selisihBelanjaPegawai[$count-1]),0,',','.') }}</td>
+				@else
+				<td class="border-rincian kanan garis">{{ number_format($selisihBelanjaPegawai[$count-1],0,',','.') }}</td>
+				@endif
+				<td class="border-rincian kanan "></td>
+			</tr>
+		@endif
 		@if ($bt1->pagu != 0 && $btl1pz[$i] !=0)
 		<tr>
 			<td class="border-rincian">{{$bt1->REKENING_KODE}}</td>
@@ -1442,7 +1458,6 @@
 		@php $i+=1; @endphp
 	@endforeach
 	@endif
-
 	@php $totbt2=0 @endphp
 	@foreach($btl2 as $bt2)
 		@php $totbt2+=$bt2->pagu @endphp
@@ -1517,8 +1532,23 @@
 		@endif
 		<td class="border-rincian kanan "></td>
 	</tr>
-
+	@php $head = $rek14->REKENING_KODE;$count=0; @endphp
 	@foreach($btl4 as $bt4)
+		@if(substr($bt4->REKENING_KODE,0,8)!==$head && $count<2 )
+			@php $head=substr($bt4->REKENING_KODE,0,8); $count+=1;@endphp
+			<tr>
+				<td class="border-rincian">{{$head}}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaPegawai[$count-1]}} </td>
+				<td class="border-rincian kanan garis">{{ number_format($murniBelanja,0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1p,0,',','.') }}</td>
+				@if ($totbt1s<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($totbt1s),0,',','.') }}</td>
+				@else
+				<td class="border-rincian kanan garis">{{ number_format($totbt1s,0,',','.') }}</td>
+				@endif
+				<td class="border-rincian kanan "></td>
+			</tr>
+		@endif
 		<tr>
 			<td class="border-rincian">{{$bt4->REKENING_KODE}}</td>
 			<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$bt4->REKENING_NAMA}}</td>
@@ -1670,8 +1700,23 @@
 		<td class="border-rincian kanan "></td>
 	</tr>
 
-	
+	@php $head = $rek17->REKENING_KODE;$count=0; @endphp
 	@foreach($btl7 as $bt7)
+	@if(substr($bt7->REKENING_KODE,0,8)!==$head && $count<1 )
+			@php $head=substr($bt7->REKENING_KODE,0,8); $count+=1;@endphp
+			<tr>
+				<td class="border-rincian">{{$head}}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; Belanja Nomor 3 </td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1,0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1p,0,',','.') }}</td>
+				@if ($totbt1s<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($totbt1s),0,',','.') }}</td>
+				@else
+				<td class="border-rincian kanan garis">{{ number_format($totbt1s,0,',','.') }}</td>
+				@endif
+				<td class="border-rincian kanan "></td>
+			</tr>
+		@endif
 		<tr>
 			<td class="border-rincian">{{$bt7->REKENING_KODE}}</td>
 			<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$bt7->REKENING_NAMA}}</td>
@@ -1770,9 +1815,23 @@
 		@php $totblmodal1 += $bt5->pagu;  @endphp
 	@endforeach
 	@php  $i=1; @endphp
-
+	@php $head = $rek14->REKENING_KODE;$count=0; @endphp
 	@foreach($bl1 as $b1)
-
+	@if(substr($b1->REKENING_KODE,0,8)!==$head && $count<5 )
+			@php $head=substr($b1->REKENING_KODE,0,8); $count+=1;@endphp
+			<tr>
+				<td class="border-rincian">{{$head}}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; Belanja Langsung 1 </td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1,0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1p,0,',','.') }}</td>
+				@if ($totbt1s<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($totbt1s),0,',','.') }}</td>
+				@else
+				<td class="border-rincian kanan garis">{{ number_format($totbt1s,0,',','.') }}</td>
+				@endif
+				<td class="border-rincian kanan "></td>
+			</tr>
+		@endif
 <!-- arief -->
 	@if($b1->pagu!==0)
 	
@@ -1821,9 +1880,24 @@
 		@endif
 		<td class="border-rincian kanan "></td>
 	</tr>
-
+	@php $head = $rb2->REKENING_KODE;$count=0; @endphp
 	@foreach($bl2 as $b2)
 	@if($b2->pagu!==0)
+	@if(substr($b2->REKENING_KODE,0,8)!==$head && $count<26 )
+			@php $head=substr($b2->REKENING_KODE,0,8); $count+=1;@endphp
+			<tr>
+				<td class="border-rincian">{{$head}}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; Belanja Langsung 2 </td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1,0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1p,0,',','.') }}</td>
+				@if ($totbt1s<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($totbt1s),0,',','.') }}</td>
+				@else
+				<td class="border-rincian kanan garis">{{ number_format($totbt1s,0,',','.') }}</td>
+				@endif
+				<td class="border-rincian kanan "></td>
+			</tr>
+		@endif
 	<tr>
 		<td class="border-rincian">{{$b2->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$b2->REKENING_NAMA}}</td>
@@ -1843,7 +1917,7 @@
 	<!-- murni -->
 	
 	<!-- perubahan -->
-	
+	<!-- modal -->
 	@php $totblmodal3=0; $blmodal3= array(count($bl3p)); @endphp
 	@foreach($bl3p as $bt5)
 		@php $blmodal3[] = $bt5->pagu; @endphp
@@ -1860,7 +1934,23 @@
 		
 		<td class="border-rincian kanan "></td>
 	</tr>
+	@php $head = $rb3->REKENING_KODE;$count=0; @endphp
 	@foreach($bl3 as $b3)
+	@if(substr($b3->REKENING_KODE,0,8)!==$head && $count<49 )
+			@php $head=substr($b3->REKENING_KODE,0,8); $count+=1;@endphp
+			<tr>
+				<td class="border-rincian">{{$head}}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaPegawai[1]}} </td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1,0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($totbt1p,0,',','.') }}</td>
+				@if ($totbt1s<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($totbt1s),0,',','.') }}</td>
+				@else
+				<td class="border-rincian kanan garis">{{ number_format($totbt1s,0,',','.') }}</td>
+				@endif
+				<td class="border-rincian kanan "></td>
+			</tr>
+		@endif
 	@if($b3->pagu!==0)
 	<tr>
 		<td class="border-rincian">{{$b3->REKENING_KODE}}</td>

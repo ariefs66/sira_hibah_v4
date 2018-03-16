@@ -7949,6 +7949,42 @@ public function updatePerwal1($tahun,$status){
                         //dd($dakNonFisik_detail_murni);                                             
                                                  
 
+                          
+
+            $headBelanjaPegawai= array(Rekening::where('REKENING_KODE','LIKE','5.1.1.02')->value('REKENING_NAMA'),
+                                        Rekening::where('REKENING_KODE','LIKE','5.1.1.03')->value('REKENING_NAMA'));
+            $murniBelanjaPegawai= array(1197672677506,13251819463);
+            $perubahanBelanjaPegawai= array(1197672677506 ,13251819463 );
+            $selisihBelanjaPegawai= array(0,0);
+
+            $headBelanjaHibah= array(Rekening::where('REKENING_KODE','LIKE','5.1.1.02')->value('REKENING_NAMA'),
+            Rekening::where('REKENING_KODE','LIKE','5.1.1.03')->value('REKENING_NAMA'));
+            $murniBelanjaHibah= array(192544137970,221963696500);
+            $perubahanBelanjaHibah= array(219131937970,221963696500);
+            $selisihBelanjaHibah= array(26587800000,0);
+
+            $headBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $murniBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $perubahanBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $selisihBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+
+            $headBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $murniBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $perubahanBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $selisihBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+
+            $headBelanjaBarjas= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $murniBelanjaBarjas= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $perubahanBelanjaBarjas= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $selisihBelanjaBarjas= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+
+            $headBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $murniBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $perubahanBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $selisihBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+
+
+
             $data       = array('tahun'         =>$tahun,
                         'jumBTL_murni'      =>$jumBTL_murni,
                         'jumBTL'            =>$jumBTL,
@@ -8225,7 +8261,31 @@ public function updatePerwal1($tahun,$status){
                         'btlrek5s'          =>$btlrek5s,               
                         'btlrek6s'          =>$btlrek6s,               
                         'pmb1s'          =>$pmb1s,               
-                        'pmb2s'          =>$pmb2s,                    
+                        'pmb2s'          =>$pmb2s, 
+                        'headBelanjaPegawai' => $headBelanjaPegawai,
+                        'murniBelanjaPegawai'     => $murniBelanjaPegawai,
+                        'perubahanBelanjaPegawai'     => $perubahanBelanjaPegawai,
+                        'selisihBelanjaPegawai'       => $selisihBelanjaPegawai,
+                        'headBelanjaHibah'     => $headBelanjaHibah,
+                        'murniBelanjaHibah'     => $murniBelanjaHibah,
+                        'perubahanBelanjaHibah'     => $perubahanBelanjaHibah,
+                        'selisihBelanjaHibah'       => $selisihBelanjaHibah,
+                        'headBelanjaBanprov'    => $headBelanjaBanprov,
+                        'murniBelanjaBanprov'       => $murniBelanjaBanprov,
+                        'perubahanBelanjaBanprov'       => $perubahanBelanjaBanprov,
+                        'selisihBelanjaBanprov'     => $selisihBelanjaBanprov,
+                        'headBelanjaPegawaiL'       => $headBelanjaPegawaiL,
+                        'murniBelanjaPegawaiL'      => $murniBelanjaPegawaiL,
+                        'perubahanBelanjaPegawaiL'      => $perubahanBelanjaPegawaiL,
+                        'selisihBelanjaPegawaiL'    => $selisihBelanjaPegawaiL,
+                        'headBelanjaBarjas'     => $headBelanjaBarjas,
+                        'murniBelanjaBarjas'    => $murniBelanjaBarjas,
+                        'perubahanBelanjaBarjas'    => $perubahanBelanjaBarjas,
+                        'selisihBelanjaBarjas'      => $selisihBelanjaBarjas,
+                        'headBelanjaModal'      => $headBelanjaModal,
+                        'murniBelanjaModal'    => $murniBelanjaModal,
+                        'perubahanBelanjaModal'     => $perubahanBelanjaModal,
+                        'selisihBelanjaModal'   => $selisihBelanjaModal
                         );
             return View('budgeting.lampiran.perwal-1_perubahan',$data);
 
