@@ -7962,11 +7962,11 @@ public function updatePerwal1($tahun,$status){
             $murniBelanjaHibah= array(192544137970,221963696500);
             $perubahanBelanjaHibah= array(219131937970,221963696500);
             $selisihBelanjaHibah= array(26587800000,0);
-
-            $headBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $murniBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $perubahanBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $selisihBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            
+            $headBelanjaBanprov= array(Rekening::where('REKENING_KODE','LIKE','5.1.7.05')->value('REKENING_NAMA'));
+            $murniBelanjaBanprov= array(1000000000);
+            $perubahanBelanjaBanprov= array(1000000000);
+            $selisihBelanjaBanprov= array(0);
 
             $headBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
             $murniBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
