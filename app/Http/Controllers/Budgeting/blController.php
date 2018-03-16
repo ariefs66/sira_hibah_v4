@@ -1732,7 +1732,7 @@ class blController extends Controller
 
         //mode cek total jenis belanja per 1 sub unit
 
-        /*
+        
         if($status=='pergeseran'){
             $cek_rek   =  Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->value('REKENING_KODE');
             $tipe_rek  = substr($cek_rek,0,5); //5.2.1 / 5.2.2 / 5.2.3
@@ -1757,7 +1757,7 @@ class blController extends Controller
             }             
 
         }
-        */
+        
 
 
 
@@ -2715,7 +2715,7 @@ class blController extends Controller
             }                        
         }
 
-        /*
+        
         //cek pergeseran antar jenis belanja 
        if($status=='pergeseran'){
 
@@ -2744,7 +2744,7 @@ class blController extends Controller
 
         }                                        
         //end cek pergeseran antar jenis belanja 
-        */
+        
 
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
