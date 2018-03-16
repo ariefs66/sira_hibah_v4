@@ -1364,12 +1364,12 @@
 
 
 		<tr>
-		<td class="border-rincian">5</td>
-		<td class="border-rincian"><b>BELANJA</b></td>
-		<td class="border-rincian kanan total"><b>7.087.951.845.203</b></td>
-		<td class="border-rincian kanan total"><b>7.343.668.053.501</b></td>
-		<td class="border-rincian kanan total"><b>0</b></td>
-		<td class="border-rincian kanan "></td>
+		<td class="border-rincian"><br>5</td>
+		<td class="border-rincian"><b><br>BELANJA</b></td>
+		<td class="border-rincian kanan total"><b><br>7.087.951.845.203</b></td>
+		<td class="border-rincian kanan total"><b><br>7.343.668.053.501</b></td>
+		<td class="border-rincian kanan total"><b><br>0</b></td>
+		<td class="border-rincian kanan "><br></td>
 	</tr>
 	<tr>
 		<td class="border-rincian">5.1</td>
