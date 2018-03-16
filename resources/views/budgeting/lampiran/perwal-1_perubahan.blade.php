@@ -1187,8 +1187,8 @@
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
-	@foreach($dakFisik_detail as $pen)
-	@foreach($dakFisik_detail_murni as $pen_m)
+	@foreach($dakNonFisik_detail as $pen)
+	@foreach($dakNonFisik_detail_murni as $pen_m)
 	@if($pen_m->PENDAPATAN_ID==$pen->PENDAPATAN_ID)
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>

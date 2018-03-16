@@ -7901,12 +7901,12 @@ public function updatePerwal1($tahun,$status){
                                                  
 
             $data       = array('tahun'         =>$tahun,
+                        'dakFisik'            =>$dakFisik,
                         'dakFisik_murni'        =>$dakFisik_murni,
-                        'dakFisik'        =>$dakFisik,
-                        'dakFisik_detail' =>$dakFisik_detail,
+                        'dakFisik_detail'     =>$dakFisik_detail,
                         'dakFisik_detail_murni' =>$dakFisik_detail_murni,
-                        'dakNonFisik_murni'        =>$dakNonFisik_murni,
                         'dakNonFisik'        =>$dakNonFisik,
+                        'dakNonFisik_murni'        =>$dakNonFisik_murni,
                         'dakNonFisik_detail' =>$dakNonFisik_detail,
                         'dakNonFisik_detail_murni' =>$dakNonFisik_detail_murni,
                         'status'        =>$status,
