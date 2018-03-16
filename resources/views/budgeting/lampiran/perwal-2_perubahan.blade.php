@@ -443,7 +443,7 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, 16 {{ $bln }} {{ $thn }}</td>
+		<td><!-- Bandung, 16 {{ $bln }} {{ $thn }} --></td>
 	</tr>
 	<tr>
 		<td></td>
