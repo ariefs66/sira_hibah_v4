@@ -571,9 +571,9 @@
 	<tr>
 		<td class="border-rincian">4.1.2</td>
 		<td class="border-rincian"><b>&nbsp; &nbsp;Retribusi Daerah</b></td>
-		<td class="border-rincian kanan">{{ number_format($totpad2,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($totpad2,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
     @php $totP10=0 @endphp	
@@ -708,12 +708,12 @@
 		<tr>
 		<td class="border-rincian">4.1.3</td>
 		<td class="border-rincian"><b>&nbsp; &nbsp; Hasil Pengelolaan Kekayaan Daerah yang Dipisahkan</b></td>
-		<td class="border-rincian kanan">{{ number_format($totpad3,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($totpad3p,0,',','.') }}</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad3,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad3p,0,',','.') }}</b></td>
 		@if ($totpad3s<0)
-		<td class="border-rincian kanan">({{ number_format(abs($totpad3s),0,',','.') }})</td>
+		<td class="border-rincian kanan border"><b>({{ number_format(abs($totpad3s),0,',','.') }})</b></td>
 		@else
-		<td class="border-rincian kanan">{{ number_format($totpad3s,0,',','.') }}</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad3s,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
@@ -764,12 +764,12 @@
 	<tr>
 		<td class="border-rincian">4.1.4</td>
 		<td class="border-rincian"><b>&nbsp; &nbsp; Lain-lain Pendapatan Asli Daerah yang Sah</b></td>
-		<td class="border-rincian kanan">{{ number_format($totpad4,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($totpad4p,0,',','.') }}</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad4,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad4p,0,',','.') }}</b></td>
 		@if ($totpad4s<0)
-		<td class="border-rincian kanan">({{ number_format(abs($totpad4s),0,',','.') }})</td>
+		<td class="border-rincian kanan border"><b>({{ number_format(abs($totpad4s),0,',','.') }})</b></td>
 		@else
-		<td class="border-rincian kanan">{{ number_format($totpad4s,0,',','.') }}</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad4s,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
@@ -972,12 +972,12 @@
 	<tr>
 		<td class="border-rincian">4.2</td>
 		<td class="border-rincian"><b>&nbsp;DANA PERIMBANGAN</b></td>
-		<td class="border-rincian kanan">{{ number_format($totpad5,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($totpad5p,0,',','.') }}</td>
-		@if ($totpad5s<0)
-		<td class="border-rincian kanan">({{ number_format(abs($totpad5s),0,',','.') }})</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad5,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad5p,0,',','.') }}</b></td>
+		@if ($totpad5s < 0)
+		<td class="border-rincian kanan border"><b>({{ number_format(abs($totpad5s),0,',','.') }})</b></td>
 		@else
-		<td class="border-rincian kanan">{{ number_format($totpad5s,0,',','.') }}</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad5s,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
@@ -985,9 +985,9 @@
 	<tr>
 		<td class="border-rincian">4.2.1</td>
 		<td class="border-rincian"><b>&nbsp; &nbsp;Bagi Hasil Pajak/Bagi Hasil Bukan Pajak</b></td>
-		<td class="border-rincian kanan">{{ number_format($totpad6,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($totpad6p,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad6,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad6p,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	<tr>
     @php $totP19=0 @endphp	
@@ -1155,7 +1155,7 @@
 	@foreach($pendapatan22p as $pen)
 		@php $pendapatan22_totalp[] = $pen->PENDAPATAN_TOTAL; @endphp
 	@endforeach
-	@php $i=1;@endphp;
+	@php $i=1;@endphp
 	@foreach($pendapatan22 as $pen)
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
@@ -1204,7 +1204,7 @@
 			@php $totP23p += $pen->PENDAPATAN_TOTAL @endphp
 		@php $pendapatan23_totalp[] = $pen->PENDAPATAN_TOTAL; @endphp
 	@endforeach
-	@php $i=1; @endphp;
+	@php $i=1; @endphp
 		@php $totP23=0; @endphp	
 		@foreach($pendapatan23 as $pen)
 			@php $totP23 += $pen->PENDAPATAN_TOTAL @endphp
@@ -1234,7 +1234,7 @@
 		@endif
 			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
-	@php $i+=1;@endphp;
+	@php $i+=1;@endphp
 		@endforeach
 
 
@@ -1256,7 +1256,7 @@
 			@php $totP24 += $pen->PENDAPATAN_TOTAL @endphp
 		@endforeach
 		@php $totP24p=0; @endphp	
-		@php $i=1;@endphp;
+		@php $i=1;@endphp
 		@foreach($pendapatan24p as $pen)
 		
 			@php $pendapatan24_totalp[] = $pen->PENDAPATAN_TOTAL; @endphp
@@ -1289,7 +1289,7 @@
 		@endif
 			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
-		@php $i+=1;@endphp;
+		@php $i+=1;@endphp
 		@endforeach
 
 		<tr>
@@ -1727,12 +1727,12 @@
 	<tr>
 		<td class="border-rincian">{{$rb2->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; <b>{{$rb2->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan total">{{ number_format($totbl2,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format($totblmodal2,0,',','.') }}</td>
+		<td class="border-rincian kanan total"><b>{{ number_format($totbl2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($totblmodal2,0,',','.') }}</b></td>
 		@if($totbl1s < 0 )
-		<td class="border-rincian kanan total">({{ number_format(abs($totblmodal2-$totbl2),0,',','.') }})</td>
+		<td class="border-rincian kanan total"><b>({{ number_format(abs($totblmodal2-$totbl2),0,',','.') }})</b></td>
 		@else
-		<td class="border-rincian kanan total">{{ number_format($totblmodal2-$totbl2,0,',','.') }}</td>
+		<td class="border-rincian kanan total"><b>{{ number_format($totblmodal2-$totbl2,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan "></td>
 	</tr>
