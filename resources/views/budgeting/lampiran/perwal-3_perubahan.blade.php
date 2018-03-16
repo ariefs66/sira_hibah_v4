@@ -284,7 +284,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>WALIKOTA BANDUNG</b></td>
+		<td><b>PJs WALIKOTA BANDUNG</b></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -292,7 +292,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>MOCHAMAD RIDWAN KAMIL</b></td>
+		<td><b>MUHAMAD SOLIHIN</b></td>
 	</tr>
 	<tr>
 		<td></td>
