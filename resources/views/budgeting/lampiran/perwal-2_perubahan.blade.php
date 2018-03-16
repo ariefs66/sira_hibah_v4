@@ -103,7 +103,7 @@
 <table class="rincian">
 	<tbody>
 	<tr class="border "> 
-		<td colspan="4"><b>Urusan Pemerintah : </b> {{$urusan->URUSAN_KODE}} &nbsp; &nbsp; &nbsp; {{$urusan->URUSAN_KAT1_NAMA}}<br> 
+		<td colspan="7"><b>Urusan Pemerintah : </b> {{$urusan->URUSAN_KODE}} &nbsp; &nbsp; &nbsp; {{$urusan->URUSAN_KAT1_NAMA}}<br> 
 		<b>Organisasi &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;: </b>{{$skpd->SKPD_KODE}} &nbsp; {{$skpd->SKPD_NAMA}} </td> 
 	</tr>	
 	<tr class="border headrincian">
@@ -125,6 +125,7 @@
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>
 		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
@@ -428,6 +429,9 @@
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>
 		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
+		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>		
 	</tbody>	
