@@ -7257,6 +7257,7 @@ public function updatePerwal1($tahun,$status){
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.2.01%')
                         ->get(); 
+
             $pendapatan22 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.01%')
@@ -7852,9 +7853,48 @@ public function updatePerwal1($tahun,$status){
             $totpad11s = 0; 
             $pembiayaans = 0;  
             $pmb1s = 0;         
-            $pmb2s = 0;                                
+            $pmb2s = 0;  
+
+
+            $dakFisik_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.01%')
+                        ->sum('PENDAPATAN_TOTAL');   
+
+            $dakFisik = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.01%')
+                        ->sum('PENDAPATAN_TOTAL');             
+
+
+            $dakFisik_detail = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.01%')
+                        ->get();            
+
+            $dakNonFisik_murni = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->sum('PENDAPATAN_TOTAL');    
+
+            $dakNonFisik = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->sum('PENDAPATAN_TOTAL');                
+
+            $dakNonFisik_detail = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->get();                                   
+                                                 
 
             $data       = array('tahun'         =>$tahun,
+                        'dakFisik_murni'        =>$dakFisik_murni,
+                        'dakFisik'        =>$dakFisik,
+                        'dakFisik_detail' =>$dakFisik_detail,
+                        'dakNonFisik_murni'        =>$dakNonFisik_murni,
+                        'dakNonFisik'        =>$dakNonFisik,
+                        'dakNonFisik_detail' =>$dakNonFisik_detail,
                         'status'        =>$status,
                         'tgl'           =>$tgl,
                         'bln'           =>$bln,

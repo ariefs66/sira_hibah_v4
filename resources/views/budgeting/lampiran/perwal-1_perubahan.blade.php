@@ -1146,9 +1146,9 @@
 	<tr>
 			<td class="border-rincian">4.2.3.01</td>
 			<td class="border-rincian">&nbsp; &nbsp; Dana Alokasi Khusus </td>
-		<td class="border-rincian kanan garis">359.111.975.000</td>
-		<td class="border-rincian kanan garis">493.647.642.000</td>
-		<td class="border-rincian kanan garis">134.535.667.000</td>
+		<td class="border-rincian kanan garis">{{ number_format($dakFisik_murni,0,',','.') }}</td>
+		<td class="border-rincian kanan garis">{{ number_format($dakFisik,0,',','.') }}</td>
+		<td class="border-rincian kanan garis">{{ number_format($dakFisik-$dakFisik_murni,0,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan22_totalp = array(count($pendapatan22p)); $i=0; @endphp
@@ -1182,9 +1182,9 @@
 	<tr>
 			<td class="border-rincian">4.2.3.02</td>
 			<td class="border-rincian">&nbsp; &nbsp; Dana Alokasi Khusus (Non Fisik) </td>
-		<td class="border-rincian kanan garis">359.111.975.000</td>
-		<td class="border-rincian kanan garis">493.647.642.000</td>
-		<td class="border-rincian kanan garis">134.535.667.000</td>
+		<td class="border-rincian kanan garis">{{ number_format($dakNonFisik_murni,0,',','.') }}</td>
+		<td class="border-rincian kanan garis">{{ number_format($dakNonFisik,0,',','.') }}</td>
+		<td class="border-rincian kanan garis">{{ number_format($dakNonFisik-$dakNonFisik_murni,0,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
