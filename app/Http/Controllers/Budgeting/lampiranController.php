@@ -7540,6 +7540,66 @@ public function updatePerwal1($tahun,$status){
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '5.1.1.06')
                         ->get(); 
+                                                                    
+
+
+            $btl1p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek1p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl2p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek2p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl3p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek3p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get();                               
+            $btl4p       =BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek4p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl5p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek5p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl6p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek6p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl7p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek7p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+            $btl8p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                        ->where('BTL_TAHUN',$tahun)
+                        ->where('REKENING_KODE','like',$rek8p->REKENING_KODE.'%')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
+                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
+                        ->get(); 
+
 
             $pendapatanp = PendapatanPerubahan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN_PERUBAHAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
@@ -7884,82 +7944,12 @@ public function updatePerwal1($tahun,$status){
                                     ->sum('BTL_TOTAL');                                
 
                 $jumBTL = BTLPerubahan::where('BTL_TAHUN',$tahun)
-                                    ->sum('BTL_TOTAL'); 
-
-
-            $btl11       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like','5.1.1.01%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get(); 
-
-            $btl11_murni  = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like','5.1.1.01%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get();   
-
-
-            $btl2p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like',$rek2p->REKENING_KODE.'%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get(); 
-            $btl3p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like',$rek3p->REKENING_KODE.'%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get();                               
-            $btl4p       =BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like',$rek4p->REKENING_KODE.'%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get(); 
-            $btl5p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like',$rek5p->REKENING_KODE.'%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get(); 
-            $btl6p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like',$rek6p->REKENING_KODE.'%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get(); 
-            $btl7p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like',$rek7p->REKENING_KODE.'%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get(); 
-            $btl8p       = BTLPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
-                        ->where('BTL_TAHUN',$tahun)
-                        ->where('REKENING_KODE','like',$rek8p->REKENING_KODE.'%')
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy("REKENING_KODE")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
-                        ->get();                                                    
+                                    ->sum('BTL_TOTAL');                                
 
                         //dd($dakNonFisik_detail_murni);                                             
                                                  
 
             $data       = array('tahun'         =>$tahun,
-                        'btl11_murni'       =>$btl11_murni,
-                        'btl11'             =>$btl11,
                         'jumBTL_murni'      =>$jumBTL_murni,
                         'jumBTL'            =>$jumBTL,
                         'jumBelanja_murni'      =>$jumBelanja_murni,
