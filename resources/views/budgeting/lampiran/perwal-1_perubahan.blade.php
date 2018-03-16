@@ -987,7 +987,7 @@
 		<td class="border-rincian"><b>&nbsp; &nbsp;Bagi Hasil Pajak/Bagi Hasil Bukan Pajak</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad6,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad6p,0,',','.') }}</b></td>
-		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format($totpad6p-$totpad6,0,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	<tr>
     @php $totP19=0 @endphp	
