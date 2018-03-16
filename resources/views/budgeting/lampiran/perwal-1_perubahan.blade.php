@@ -1702,7 +1702,13 @@
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$b1->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan ">{{ number_format($b1->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan ">{{ number_format($blmodal[$i],0,',','.') }}</td>
+		@if($blmodal[$i]-$b1->pagu < 0)
+		<td class="border-rincian kanan ">({{ number_format(abs($blmodal[$i]-$b1->pagu),0,',','.') }})</td>
+		@else
 		<td class="border-rincian kanan ">{{ number_format($blmodal[$i]-$b1->pagu,0,',','.') }}</td>
+		@endif
+		<td class="border-rincian kanan "></td>
+		@php $i+=1 @endphp
 		<td class="border-rincian kanan "></td>
 		@php $i+=1 @endphp
 	</tr>
@@ -1744,7 +1750,11 @@
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$b2->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan ">{{ number_format($b2->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan ">{{ number_format($blmodal2[$i],0,',','.') }}</td>
+		@if($blmodal2[$i]-$b2->pagu < 0)
+		<td class="border-rincian kanan ">({{ number_format(abs($blmodal2[$i]-$b2->pagu),0,',','.') }})</td>
+		@else
 		<td class="border-rincian kanan ">{{ number_format($blmodal2[$i]-$b2->pagu,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan "></td>
 		@php $i+=1 @endphp
 	</tr>
@@ -1778,7 +1788,11 @@
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$b3->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan ">{{ number_format($b3->pagu,0,',','.') }}</td>
 		<td class="border-rincian kanan ">{{ number_format($blmodal3[$i],0,',','.') }}</td>
+		@if($blmodal3[$i]-$b3->pagu < 0)
+		<td class="border-rincian kanan ">({{ number_format(abs($blmodal3[$i]-$b3->pagu),0,',','.') }})</td>
+		@else
 		<td class="border-rincian kanan ">{{ number_format($blmodal3[$i]-$b3->pagu,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan "></td>
 		@php $i+=1 @endphp
 	</tr>
