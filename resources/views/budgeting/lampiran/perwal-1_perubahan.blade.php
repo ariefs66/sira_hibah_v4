@@ -1160,7 +1160,7 @@
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan ">{{ number_format($pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
-		@if ($pen_m->PENDAPATAN_TOTAL-$pen->PENDAPATAN_TOTAL < 0)
+		@if ($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL < 0)
 		<td class="border-rincian kanan">({{ number_format(abs($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
@@ -1195,7 +1195,7 @@
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
 		<td class="border-rincian kanan ">{{ number_format($pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
-		@if ($pen_m->PENDAPATAN_TOTAL-$pen->PENDAPATAN_TOTAL < 0)
+		@if ($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL < 0)
 		<td class="border-rincian kanan">({{ number_format(abs($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
