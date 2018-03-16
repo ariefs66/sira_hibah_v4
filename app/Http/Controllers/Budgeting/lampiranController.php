@@ -7032,7 +7032,7 @@ public function updatePerwal1($tahun,$status){
                         })
                         ->orderBy("REKENING_KODE")
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
+                        ->selectRaw(' "REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
                         ->get();
 
         $bl2     = Rincian::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
@@ -7452,8 +7452,8 @@ public function updatePerwal1($tahun,$status){
                             $r->where('BL_VALIDASI',1)->where('BL_DELETED',0)->where('BL_TAHUN',$tahun);
                         })
                         ->orderBy("REKENING_KODE")
-                        ->groupBy("REKENING_KODE", "REKENING_NAMA")
-                        ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
+                        ->groupBy("REKENING_KODE", "REKENING_NAMA","BL_ID")
+                        ->selectRaw(' "REKENING_KODE", "REKENING_NAMA", sum("RINCIAN_TOTAL") as pagu ')
                         ->get();
 
             $bl2p     = RincianPerubahan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
