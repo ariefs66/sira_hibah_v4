@@ -207,7 +207,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan1s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan1s),0,',','.') }})</td>
@@ -253,7 +253,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan2_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan2s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan2s),0,',','.') }})</td>
@@ -296,7 +296,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan3_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan3s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
@@ -339,7 +339,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan4_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan4s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan4s),0,',','.') }})</td>
@@ -382,7 +382,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan5_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan5s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan5s),0,',','.') }})</td>
@@ -425,7 +425,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan6_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan6s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan6s),0,',','.') }})</td>
@@ -469,7 +469,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan7_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan7s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan7s),0,',','.') }})</td>
@@ -512,7 +512,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan8_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan8s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan8s),0,',','.') }})</td>
@@ -555,7 +555,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan9_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan9s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan9s),0,',','.') }})</td>
@@ -607,7 +607,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan10_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan10s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan10s),0,',','.') }})</td>
@@ -650,7 +650,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan11_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan11s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan11s),0,',','.') }})</td>
@@ -693,7 +693,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan12_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan12s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan12s),0,',','.') }})</td>
@@ -748,7 +748,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan13_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan13s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan13s),0,',','.') }})</td>
@@ -792,7 +792,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan14_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan14s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan14s),0,',','.') }})</td>
@@ -835,7 +835,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan15_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan15s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan15s),0,',','.') }})</td>
@@ -878,7 +878,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan16_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan16s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan16s),0,',','.') }})</td>
@@ -921,7 +921,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan17_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan17s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan17s),0,',','.') }})</td>
@@ -959,7 +959,7 @@
 	<tr>
 		<td class="border-rincian">4.1.4.16.01</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp;Pendapatan Jasa Layanan Umum BLUD</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($totP18,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($totP18,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($totP18p,0,',','.') }}</td>
 		@if ($pendapatan18s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($totP18s),0,',','.') }})</td>
@@ -1021,7 +1021,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan19_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan19s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan19s),0,',','.') }})</td>
@@ -1064,7 +1064,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan20_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan20s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan20s),0,',','.') }})</td>
@@ -1114,7 +1114,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan21_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan21s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan21s),0,',','.') }})</td>
@@ -1160,7 +1160,7 @@
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-		<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
+		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan22_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan22s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan22s),0,',','.') }})</td>
@@ -1225,8 +1225,8 @@
 		<tr>
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-			<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-			<td class="border-rincian kanan "><i>{{ number_format($pendapatan23_totalp[$i],0,',','.') }}</i></td>
+			<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+			<td class="border-rincian kanan ">{{ number_format($pendapatan23_totalp[$i],0,',','.') }}</td>
 			@if ($pendapatan23_totalp[$i]-$pen->PENDAPATAN_TOTAL<0)
 		<td class="border-rincian kanan"><b>({{ number_format(abs($pendapatan23_totalp[$i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</b></td>
 		@else
@@ -1280,8 +1280,8 @@
 		<tr>
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
-			<td class="border-rincian kanan "><i>{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</i></td>
-			<td class="border-rincian kanan "><i>{{ number_format($pendapatan24_totalp[$i],0,',','.') }}</i></td>
+			<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+			<td class="border-rincian kanan ">{{ number_format($pendapatan24_totalp[$i],0,',','.') }}</td>
 			@if ($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
