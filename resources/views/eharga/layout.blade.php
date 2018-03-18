@@ -238,6 +238,12 @@
                 </a>                
               </li>
               <li>
+                <a href="{{ url('/') }}/harga/{{ $tahun }}/kategori/rekening" class="auto padding-l-r-lg">                  
+                  <i class="icon-bdg_form"></i>
+                  <span class="font-semibold">Kategori Rek-Komponen</span>
+                </a>                
+              </li>
+              <li>
                 <a href="{{ url('/') }}/harga/{{ $tahun }}/komponen" class="auto padding-l-r-lg">                  
                   <i class="icon-bdg_layout"></i>
                   <span class="font-semibold">Komponen</span>

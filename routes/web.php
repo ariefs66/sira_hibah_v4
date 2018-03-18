@@ -424,6 +424,14 @@ Route::post('/harga/{tahun}/rekening/delete', 'Budgeting\Referensi\rekeningContr
 Route::post('/harga/{tahun}/rekening/add/submit', 'Budgeting\Referensi\rekeningController@submitAdd');
 Route::post('/harga/{tahun}/rekening/edit/submit', 'Budgeting\Referensi\rekeningController@submitEdit');
 Route::post('/harga/{tahun}/rekening/{kunci}', 'Budgeting\Referensi\rekeningController@kunci');
+//KATEGORI REKENING
+Route::get('/harga/{tahun}/kategori/rekening', 'Budgeting\Referensi\rekeningController@kategoriRekening');
+Route::get('/harga/{tahun}/kategori/rekening/getData', 'Budgeting\Referensi\rekeningController@katRekGetData');
+Route::get('/harga/{tahun}/kategori/rekening/getData/{id}', 'Budgeting\Referensi\rekeningController@katRekGetDetail');
+Route::post('/harga/{tahun}/kategori/rekening/add/submit', 'Budgeting\Referensi\rekeningController@submitAddKategori');
+Route::post('/harga/{tahun}/kategori/rekening/edit/submit', 'Budgeting\Referensi\rekeningController@submitEditKategori');
+Route::post('/harga/{tahun}/kategori/rekening/delete', 'Budgeting\Referensi\rekeningController@deleteKategori');
+Route::post('/harga/{tahun}/kategori/rekening/{kunci}', 'Budgeting\Referensi\rekeningController@kuncikategori');
 //------------------------------------------------------------------------------------------------------------------------
 //STATISTIK
 //------------------------------------------------------------------------------------------------------------------------
