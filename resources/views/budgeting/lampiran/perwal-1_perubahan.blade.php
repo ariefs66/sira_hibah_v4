@@ -1825,13 +1825,13 @@
 			@php $head=substr($b1->REKENING_KODE,0,8); $count+=1;@endphp
 			<tr>
 				<td class="border-rincian">{{$head}}</td>
-				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; Belanja Langsung 1 </td>
-				<td class="border-rincian kanan garis">{{ number_format($totbt1,0,',','.') }}</td>
-				<td class="border-rincian kanan garis">{{ number_format($totbt1p,0,',','.') }}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaPegawaiL[$count-1]}} </td>
+				<td class="border-rincian kanan garis">{{ number_format($murniBelanjaPegawaiL[$count-1],0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($perubahanBelanjaPegawaiL[$count-1],0,',','.') }}</td>
 				@if ($totbt1s<0)
-				<td class="border-rincian kanan garis">{{ number_format(abs($totbt1s),0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format(abs($selisihBelanjaPegawaiL[$count-1]),0,',','.') }}</td>
 				@else
-				<td class="border-rincian kanan garis">{{ number_format($totbt1s,0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($selisihBelanjaPegawaiL[$count-1],0,',','.') }}</td>
 				@endif
 				<td class="border-rincian kanan "></td>
 			</tr>
@@ -1891,13 +1891,13 @@
 			@php $head=substr($b2->REKENING_KODE,0,8); $count+=1;@endphp
 			<tr>
 				<td class="border-rincian">{{$head}}</td>
-				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; Belanja Langsung 2 </td>
-				<td class="border-rincian kanan garis">{{ number_format($totbt1,0,',','.') }}</td>
-				<td class="border-rincian kanan garis">{{ number_format($totbt1p,0,',','.') }}</td>
-				@if ($totbt1s<0)
-				<td class="border-rincian kanan garis">{{ number_format(abs($totbt1s),0,',','.') }}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaBarjas[$count-1]}} </td>
+				<td class="border-rincian kanan garis">{{ number_format($murniBelanjaPegawai[$count-1],0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($perubahanBelanjaPegawai[$count-1],0,',','.') }}</td>
+				@if ($selisihBelanjaPegawai[$count-1]<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($selisihBelanjaPegawai[$count-1]),0,',','.') }}</td>
 				@else
-				<td class="border-rincian kanan garis">{{ number_format($totbt1s,0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($selisihBelanjaPegawai[$count-1],0,',','.') }}</td>
 				@endif
 				<td class="border-rincian kanan "></td>
 			</tr>

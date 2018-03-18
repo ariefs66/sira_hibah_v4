@@ -12,7 +12,7 @@ class OutputPerubahan extends Model
     public $incrementing 	= false;
 
     public function bl(){
-    	return $this->belongsTo('App\Model\BL','BL_ID');
+    	return $this->belongsTo('App\Model\BLPerubahan','BL_ID');
     }
     public function satuan(){
     	return $this->belongsTo('App\Model\Satuan','SATUAN_ID');
