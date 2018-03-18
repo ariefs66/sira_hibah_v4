@@ -300,14 +300,20 @@
 		<td>Rp. {{ number_format($bl->BL_PAGU,0,',','.') }},00</td>
 	</tr>
 	@if($bl->output)
+	@php $output=""; $target=""; @endphp
 	@foreach($bl->output as $out)
+	@foreach($bl_murni->output as $out_murni)
+	@php $target2 = $out_murni->OUTPUT_TARGET . ' ' . $out_murni->satuan->SATUAN_NAMA; @endphp
 	<tr>
 		<td>Keluaran</td>
+		<td>{{ ($out_murni->OUTPUT_TOLAK_UKUR != $output ? $out_murni->OUTPUT_TOLAK_UKUR : "-") }}</td>
 		<td>{{ $out->OUTPUT_TOLAK_UKUR }}</td>
-		<td>{{ $out->OUTPUT_TOLAK_UKUR }}</td>
-		<td>{{ $out->OUTPUT_TARGET }} {{ $out->satuan->SATUAN_NAMA }}</td>
+		
+		<td>{{ ($target2 != $target ? $target2 : '-' ) }}</td>
 		<td>{{ $out->OUTPUT_TARGET }} {{ $out->satuan->SATUAN_NAMA }}</td>
 	</tr>
+	@php $output = $out_murni->OUTPUT_TOLAK_UKUR; $target = $out_murni->OUTPUT_TARGET . ' ' . $out_murni->satuan->SATUAN_NAMA @endphp
+	@endforeach	
 	@endforeach	
 	@endif
 	@if($bl->kegiatan->program->impact)

@@ -277,7 +277,7 @@
 			@endif
 		</b> </td>
 		<td class="border-rincian border kanan"> 
-			@php $per = ($slh * 100)/$totbtl @endphp
+			@php $per = (($totbtl_p - $totbtl) * 100)/$totbtl @endphp
 				{{ trim(number_format( $per, 2, ',', ' '),"-") }} %
 		</td>
 	</tr>	

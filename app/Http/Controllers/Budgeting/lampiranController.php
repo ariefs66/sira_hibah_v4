@@ -7962,21 +7962,75 @@ public function updatePerwal1($tahun,$status){
             $murniBelanjaHibah= array(192544137970,221963696500);
             $perubahanBelanjaHibah= array(219131937970,221963696500);
             $selisihBelanjaHibah= array(26587800000,0);
+            
+            $headBelanjaBanprov= array(Rekening::where('REKENING_KODE','LIKE','5.1.7.05')->value('REKENING_NAMA'));
+            $murniBelanjaBanprov= array(1000000000);
+            $perubahanBelanjaBanprov= array(1000000000);
+            $selisihBelanjaBanprov= array(0);
 
-            $headBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $murniBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $perubahanBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $selisihBelanjaBanprov= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $headBelanjaPegawaiL= array(Rekening::where('REKENING_KODE','LIKE','5.2.1.01')->value('REKENING_NAMA'),Rekening::where('REKENING_KODE','LIKE','5.2.1.02')->value('REKENING_NAMA'),Rekening::where('REKENING_KODE','LIKE','5.2.1.03')->value('REKENING_NAMA'),Rekening::where('REKENING_KODE','LIKE','5.2.1.05')->value('REKENING_NAMA'),Rekening::where('REKENING_KODE','LIKE','5.2.1.07')->value('REKENING_NAMA'));
+            $murniBelanjaPegawaiL= array(0,0,0,0,0);
+            $perubahanBelanjaPegawaiL= array(0,0,0,0,0);
+            $selisihBelanjaPegawaiL= array(0,0,0,0,0);
 
-            $headBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $murniBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $perubahanBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $selisihBelanjaPegawaiL= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $idbarjas=array('5.2.2.01',
+            '5.2.2.02',
+            '5.2.2.03',
+            '5.2.2.04',
+            '5.2.2.05',
+            '5.2.2.06',
+            '5.2.2.07',
+            '5.2.2.08',
+            '5.2.2.09',
+            '5.2.2.10',
+            '5.2.2.11',
+            '5.2.2.12',
+            '5.2.2.13',
+            '5.2.2.14',
+            '5.2.2.15',
+            '5.2.2.16',
+            '5.2.2.17',
+            '5.2.2.20',
+            '5.2.2.21',
+            '5.2.2.22',
+            '5.2.2.25',
+            '5.2.2.26',
+            '5.2.2.27',
+            '5.2.2.28',
+            '5.2.2.29',
+            '5.2.2.31');
 
-            $headBelanjaBarjas= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $murniBelanjaBarjas= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $perubahanBelanjaBarjas= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $selisihBelanjaBarjas= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
+            $nilaibarjas=array(0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0);
+
+            $headBelanjaBarjas= Rekening::whereIn('REKENING_KODE', [$idbarjas])->pluck('REKENING_NAMA')->toArray();
+            $murniBelanjaBarjas= $nilaibarjas;
+            $perubahanBelanjaBarjas= $nilaibarjas;
+            $selisihBelanjaBarjas= $nilaibarjas;
 
             $headBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
             $murniBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
