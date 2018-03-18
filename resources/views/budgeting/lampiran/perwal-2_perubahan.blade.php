@@ -80,8 +80,8 @@
 <div class="cetak">
 	<div style="margin-left: 330px;">
 	<h5 style="margin-right: -450px;">LAMPIRAN II Peraturan Wali Kota Bandung</h5>
-	<h5 style="margin-right: -525px;">NOMOR &nbsp; &nbsp; : <!-- 475 Tahun 2018 --></h5>
-	<h5 style="margin-right: -530px;">TANGGAL &nbsp;: <!-- 16 Maret 2018 --></h5>
+	<h5 style="margin-right: -525px;">NOMOR &nbsp; &nbsp; : 475 Tahun 2018</h5>
+	<h5 style="margin-right: -530px;">TANGGAL &nbsp;: 16 Maret 2018</h5>
 	</div>
 	<br>
 <table class="header">
@@ -94,7 +94,7 @@
 		</td>	
 		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>PENJABARAN PERUBAHAN APBD</h3>
+			<h3>RINGKASAN APBD BERDASARKAN RINCIAN OBYEK PENDAPATAN, BELANJA DAN PEMBIAYAAN</h3>
 			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
 	</tr>
@@ -443,7 +443,7 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td><!-- Bandung, 16 {{ $bln }} {{ $thn }} --></td>
+		<td>Bandung, 16 {{ $bln }} {{ $thn }}</td>
 	</tr>
 	<tr>
 		<td></td>
