@@ -605,7 +605,7 @@ class btlController extends Controller
             $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }else{
             $opsi = '-';
-            $akb = '-';
+            $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }
           array_push($view, array( 'NO'             => $no++,
                                    'AKSI'           => $opsi,

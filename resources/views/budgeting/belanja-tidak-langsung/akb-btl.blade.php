@@ -31,13 +31,8 @@
             <div class="panel bg-white">
               <div class="wrapper-lg">
                 <h5 class="inline font-semibold text-orange m-n ">AKB BTL | SKPD : {{$skpd->SKPD_NAMA}} </h5>
-                @if($thp == 0)
-                <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
-                @elseif(Auth::user()->active == 0)
-                <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> User Tidak Aktif!</h5>
-                @else
+                
                 <a class="pull-right btn m-t-n-sm btn-success" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/lampiran/akb/btl/{{$skpd->SKPD_ID}}" target="_blank">Print AKB</a>
-                @endif
                 
                 <div class="col-sm-1 pull-right m-t-n-sm">
                   <select class="form-control selectrincian" id="selectrincian">
