@@ -173,7 +173,7 @@ class btlController extends Controller
     }
 
    	public function getPegawai($tahun,$status){
-      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
+      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
       if($status=="murni"){
         if(Auth::user()->level==8 || Auth::user()->level==9){
             $data       = DB::table('BUDGETING.DAT_BTL')
@@ -193,7 +193,7 @@ class btlController extends Controller
                       ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
                       ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
                       ->where('REKENING_KODE','like','5.1.1%')
-                      ->where('REF_SKPD.SKPD_ID',$skpd);
+                      ->where('REF_SKPD.SKPD_ID',1);
 
             $data     = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
@@ -218,33 +218,29 @@ class btlController extends Controller
         }
       }
       else{
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-          $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
-                        ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
-                        ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
-                        ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                        ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                        ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                        ->where('REKENING_KODE','like','5.1.1%');
-          
-          $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                        ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
-                        ->get();
-        }else{
-          $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
-                        ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
-                        ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
-                        ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                        ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                        ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                        ->where('REKENING_KODE','like','5.1.1%')
-                        ->where('REF_SKPD.SKPD_ID',$skpd);
-          
-          $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                        ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
-                        ->get();  
-        }
-
+        $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
+                      ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
+                      ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
+                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
+                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
+                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
+                      ->where('REKENING_KODE','like','5.1.1%');
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
+                      ->get();
         $view       = array();
         $totPeg      = 0;
         foreach ($data as $data) {
@@ -262,31 +258,29 @@ class btlController extends Controller
    	}
 
    	public function getSubsidi($tahun,$status){
-      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
       if($status=="murni"){
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-            $data       = DB::table('BUDGETING.DAT_BTL')
+        $data       = DB::table('BUDGETING.DAT_BTL')
                       ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
                       ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
                       ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
                       ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
                       ->where('REKENING_KODE','like','5.1.3%');
-            $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
                       ->get();
-        }else{
-            $data       = DB::table('BUDGETING.DAT_BTL')
-                      ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
-                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                      ->where('REKENING_KODE','like','5.1.3%')
-                      ->where('REF_SKPD.SKPD_ID',$skpd);
-            $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
-                      ->get();
-        }
-        
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -297,31 +291,29 @@ class btlController extends Controller
         }
       }
       else{
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-            $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
+        $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
                       ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
                       ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
                       ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
                       ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
                       ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
                       ->where('REKENING_KODE','like','5.1.3%');
-            $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
                       ->get();
-        }else{
-            $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
-                      ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
-                      ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
-                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                      ->where('REKENING_KODE','like','5.1.3%')
-                      ->where('REF_SKPD.SKPD_ID',$skpd);
-            $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
-                      ->get();
-        } 
-        
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -338,31 +330,29 @@ class btlController extends Controller
    	}
 
    	public function getHibah($tahun,$status){
-      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
       if($status=="murni"){
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-          $data       = DB::table('BUDGETING.DAT_BTL')
+        $data       = DB::table('BUDGETING.DAT_BTL')
                       ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
                       ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
                       ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
                       ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
                       ->where('REKENING_KODE','like','5.1.4%');
-           $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
                       ->get();
-        }else{
-          $data       = DB::table('BUDGETING.DAT_BTL')
-                      ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
-                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                      ->where('REKENING_KODE','like','5.1.4%')
-                      ->where('REF_SKPD.SKPD_ID',$skpd);
-           $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
-                      ->get();
-        }
-        
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -373,31 +363,29 @@ class btlController extends Controller
         }
       }
       else{
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-            $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
+        $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
                       ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
                       ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
                       ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
                       ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
                       ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
                       ->where('REKENING_KODE','like','5.1.4%');
-            $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
                       ->get();
-        }else{
-            $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
-                      ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
-                      ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
-                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                      ->where('REKENING_KODE','like','5.1.4%')
-                      ->where('REF_SKPD.SKPD_ID',$skpd);
-            $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
-                      ->get();
-        }
-        
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -414,31 +402,29 @@ class btlController extends Controller
    	}
 
    	public function getBantuan($tahun,$status){
-      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
       if($status=="murni"){
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-          $data       = DB::table('BUDGETING.DAT_BTL')
-                        ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
-                        ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                        ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                        ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                        ->where('REKENING_KODE','like','5.1.7%');
-          $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                        ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
-                        ->get();
-        }else{
-          $data       = DB::table('BUDGETING.DAT_BTL')
-                        ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
-                        ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                        ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                        ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                        ->where('REKENING_KODE','like','5.1.7%')
-                        ->where('REF_SKPD.SKPD_ID',$skpd);
-          $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                        ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
-                        ->get();
-        }
-
+        $data       = DB::table('BUDGETING.DAT_BTL')
+                      ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
+                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
+                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
+                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
+                      ->where('REKENING_KODE','like','5.1.7%');
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
+                      ->get();
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -449,31 +435,29 @@ class btlController extends Controller
         }
       }
       else{
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-          $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
+        $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
                       ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
                       ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
                       ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
                       ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
                       ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
                       ->where('REKENING_KODE','like','5.1.7%');
-          $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
                       ->get();
-        }else{
-          $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
-                      ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
-                      ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
-                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                      ->where('REKENING_KODE','like','5.1.7%')
-                      ->where('REF_SKPD.SKPD_ID',$skpd);
-          $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
-                      ->get();
-        }
-        
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -489,30 +473,29 @@ class btlController extends Controller
       return Response::JSON($out);
    	}
    	public function getBTT($tahun,$status){
-      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
       if($status=="murni"){
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-          $data       = DB::table('BUDGETING.DAT_BTL')
-                        ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
-                        ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                        ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                        ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                        ->where('REKENING_KODE','like','5.1.8%');
-          $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                        ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
-                        ->get();
-        }else{
-          $data       = DB::table('BUDGETING.DAT_BTL')
-                        ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
-                        ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                        ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                        ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                        ->where('REKENING_KODE','like','5.1.8%')
-                        ->where('REF_SKPD.SKPD_ID',$skpd);
-          $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                        ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
-                        ->get();
-        }
+        $data       = DB::table('BUDGETING.DAT_BTL')
+                      ->where('BUDGETING.DAT_BTL.BTL_TAHUN',$tahun)
+                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
+                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
+                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
+                      ->where('REKENING_KODE','like','5.1.8%');
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL'))
+                      ->get();
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -523,31 +506,29 @@ class btlController extends Controller
         }
       }
       else{
-        if(Auth::user()->level==8 || Auth::user()->level==9){
-            $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
+        $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
                       ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
                       ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
                       ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
                       ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
                       ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
                       ->where('REKENING_KODE','like','5.1.8%');
-            $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
+        // if(Auth::user()->level == 1 or Auth::user()->level == 2 or Auth::user()->level == 3 or Auth::user()->level == 4){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        //     $data       = $data->where('DAT_BTL.SKPD_ID',$skpd); 
+        // }elseif(Auth::user()->level == 5 or Auth::user()->level == 6){
+        //     $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        //     $skpd_      = array(); 
+        //     $i = 0;
+        //     foreach($skpd as $s){
+        //         $skpd_[$i]   = $s->SKPD_ID;
+        //         $i++;
+        //     } 
+        //     $data       = $data->whereIn('DAT_BTL.SKPD_ID',$skpd_);         
+        // }
+        $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
                       ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
                       ->get();
-        }else{
-            $data       = DB::table('BUDGETING.DAT_BTL_PERUBAHAN')
-                      ->where('BUDGETING.DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
-                      ->leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
-                      ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_BTL_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                      ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_BTL_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                      ->where('REKENING_KODE','like','5.1.8%')
-                      ->where('REF_SKPD.SKPD_ID',$skpd);
-            $data       = $data->groupBy('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                      ->select('REF_SUB_UNIT.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
-                      ->get();
-        }
-        
         $view       = array();
         foreach ($data as $data) {
           array_push($view, array('ID'      =>$data->SKPD_ID,
@@ -593,7 +574,7 @@ class btlController extends Controller
              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }else{
             $opsi = '-';
-            $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
+            $akb = '-';
           }
           array_push($view, array( 'NO'       => $no++,
                                    'AKSI'     => $opsi,
@@ -831,7 +812,7 @@ class btlController extends Controller
 
             $getAkb = AKB_BTL_Perubahan::where('BTL_ID',$data->BTL_ID)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_BTL_ID');            
 
-            if(Auth::user()->active == 5){
+            if(($thp == 1 or Auth::user()->level == 8 ) and Auth::user()->active == 5){
                 if(empty($getAkb) ){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -842,7 +823,7 @@ class btlController extends Controller
                 /*<li><a onclick="return hapus(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Hapus</a></li>*/
                 }
             }else{
-                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info*</a></li></ul></div>';                
+                $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
             }
 
             if(Auth::user()->level == 8){

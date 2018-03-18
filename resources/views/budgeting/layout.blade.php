@@ -255,8 +255,17 @@
                     </a>
                   </li>
                   @endif
+
                   <li>
+                    @if((Auth::user()->level == 8 or Auth::user()->level == 9)
+                        or substr(Auth::user()->mod,10,1) == 1 
+                        or Auth::user()->level == 0 
+                        or substr(Auth::user()->mod,1,1) == 1 
+                        or substr(Auth::user()->mod,0,1) == 1)
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung" class="padding-l-r-lg ">
+                    @else
+                    <a onclick="$.alert('Masih Ditutup')" class="padding-l-r-lg ">
+                    @endif
                        <span >Belanja Tidak Langsung</span>
                     </a>
                   </li>
