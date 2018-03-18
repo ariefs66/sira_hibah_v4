@@ -24,7 +24,6 @@
         
       </div>
 
-
       <div class="wrapper-lg" style="margin-top: -75px;">
         <div class="row">
           <div class="col-md-12">
@@ -44,8 +43,6 @@
                   </select>
                 </div>  
               </div>
-
-            
 
             <div class="tab-content tab-content-alt-1 bg-white" id="tab-detail">
             <!-- Tab1 -->
