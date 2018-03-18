@@ -147,7 +147,7 @@ class lampiranController extends Controller
             $bl    = BLPerubahan::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
             $total = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
             $rekening       = RincianPerubahan::leftJoin('BUDGETING.DAT_RINCIAN',function($join){
-                                $join->on('BUDGETING.DAT_RINCIA_PERUBAHANN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID')
+                                $join->on('BUDGETING.DAT_RINCIAN_PERUBAHAN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID')
                                      ->on('BUDGETING.DAT_RINCIAN_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID');
                               })
                               ->whereHas('bl', function($x) use ($tahun){

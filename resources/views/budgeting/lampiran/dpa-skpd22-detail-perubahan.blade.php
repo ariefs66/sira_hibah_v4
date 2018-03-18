@@ -243,12 +243,16 @@
 	<tr>
 		<td></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
-			Drs. DADANG SUPRIATNA, MH 
+			<!-- Drs. DADANG SUPRIATNA, MH  -->
+			Drs. R Budhi Rukmana, M.AP
 			 </span></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>NIP. 19610308 199103 1 009</td>
+		<td>
+			<!-- NIP. 19610308 199103 1 009 -->
+			NIP. 19690712 198910 1 001
+		</td>
 	</tr>
 </table>
 </div>
