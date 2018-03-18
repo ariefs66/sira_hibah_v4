@@ -644,7 +644,7 @@
 		<td class="tengah" width="15%">Triwulan II</td>
 		<td class="kiri" width="25%">Rp. {{ number_format($akb_bl->tri2,0,',','.') }} </td>
 		<td width="20%"> </td>
-		<td><b>Pejabat Pengelola Keuangan Daerah</b></td>
+		<td><b>Plh Pejabat Pengelola Keuangan Daerah</b></td>
 	</tr>
 	<tr>
 		<td class="tengah" width="15%">Triwulan III</td>
