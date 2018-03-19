@@ -542,11 +542,11 @@
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($r->TOTAL,0,',','.') }},00</b></td>
 		<td class="border-rincian kanan border"><b> {{ number_format(( $r->TOTAL - $r->TOTAL_MURNI) ,0,',','.') }},00</b></td>
-		@if((empty($r->TOTAL_MURNI) or $r->TOTAL_MURNI==0) and (!empty($r->TOTAL) or $r->TOTAL!=0))
+		@if((empty($r->TOTAL_MURNI) or $r->TOTAL_MURNI==0) and (!empty($r->TOTAL) and $r->TOTAL!=0))
 		<td class="border-rincian tengah">{{ trim(number_format( ( ( $r->TOTAL) * 100)/$r->TOTAL , 2, ',', ' '),"-") }}%</td>
-		@elseif((!empty($r->TOTAL_MURNI) or $r->TOTAL_MURNI!=0) and (empty($r->TOTAL) or $r->TOTAL==0))
+		@elseif((!empty($r->TOTAL_MURNI) and $r->TOTAL_MURNI!=0) and (empty($r->TOTAL) or $r->TOTAL==0))
 		<td class="border-rincian tengah">
-			@if($r->TOTAL_MURNI != 0 )
+			@if(!empty($r->TOTAL_MURNI) && $r->TOTAL_MURNI !== 0 )
 			{{ trim(number_format( ( ( $r->TOTAL_MURNI) * 100)/$r->TOTAL_MURNI , 2, ',', ' '),"-") }}
 			@else
 			-
