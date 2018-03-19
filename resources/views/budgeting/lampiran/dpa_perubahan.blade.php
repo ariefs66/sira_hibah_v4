@@ -597,16 +597,16 @@
 	  <td class="border-rincian tengah"></td>
 	  <td class="border-rincian kanan"></td>
 	  <td class="border-rincian kanan"></td>
-	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL_MURNI,0,',','.') }},00</td>
 	  <td class="border-rincian tengah"></td>
 	  <td class="border-rincian tengah"></td>
 	  <td class="border-rincian kanan"></td>
 	  <td class="border-rincian kanan"></td>
 	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
-	  @if($p->TOTAL-$p->TOTAL<0)
-	  <td class="border-rincian kanan rekening">({{ number_format(abs($p->TOTAL-$p->TOTAL),0,',','.') }},00)</td>
+	  @if($p->TOTAL-$p->TOTAL_MURNI<0)
+	  <td class="border-rincian kanan rekening">({{ number_format(abs($p->TOTAL-$p->TOTAL_MURNI),0,',','.') }},00)</td>
 	  @else
-	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL-$p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL-$p->TOTAL_MURNI,0,',','.') }},00</td>
 	  @endif
 	  <td class="border-rincian kanan">0,00%</td>
 	 </tr>
