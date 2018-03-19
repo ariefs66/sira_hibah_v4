@@ -1097,11 +1097,11 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 2 Januari 2018</td>
+		<td>Bandung, 20 Maret 2018</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>SEKERTARIS DAERAH</td>
+		<td>Plh. SEKERTARIS DAERAH</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -1110,11 +1110,11 @@
 	<tr>
 		<td></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
-		Dr. H. YOSSI IRIANTO, M.Si</span></td>
+		Dr. Hj. Evi Syaefini Shaleha, M.Pd</span></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>NIP. 19620429 198509 1 001</td>
+		<td>NIP. 19581228 197804 2 002 </td>
 	</tr>
 </table>
 </div>

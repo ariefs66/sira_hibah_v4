@@ -554,6 +554,24 @@
 	<?php $l=0;?>
 	@foreach($paket[$m] as $p)
 
+	<tr>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>{{ $p->subrincian->SUBRINCIAN_NAMA }}<b></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian tengah"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan"></td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL-$p->TOTAL,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">0,00%</td>
+	 </tr>
+
+
 	@foreach($komponen[$m][$l++] as $k)
 	<tr>
 	  <td class="border-rincian tengah"></td>
@@ -561,12 +579,10 @@
 	  <td class="border-rincian">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- @foreach(explode('#', $k->RINCIAN_KETERANGAN) as $info) 
     	{{$info}}@break
   	  @endforeach
-  	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->subrincian->SUBRINCIAN_NAMA }})</i><br>
   	  <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
   	  </td>
 	  @else
 	  <td class="border-rincian">
-	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->subrincian->SUBRINCIAN_NAMA }})</i><br>
 	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{ $k->RINCIAN_KOMPONEN }}
 	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
 	  	  	  </td>
@@ -599,12 +615,12 @@
 	<!--RINCIAN PERHITUNGAN PERUBAHAN-->
 	  <td class="border-rincian tengah">{{ $k->RINCIAN_VOLUME }}</td>
 	  <td class="border-rincian tengah">{{ preg_replace("/[^A-Za-z]/"," ",$k->RINCIAN_KOEFISIEN) }}</td>
-	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA,0,',','.') }},00</td>
 
 	  @if($k->RINCIAN_PAJAK == 0)
 	  <td class="border-rincian kanan">0,00</td>
 	  @else
-	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA/10,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA/10,0,',','.') }},00 </td>
 	  @endif
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td>
 
@@ -644,7 +660,7 @@
 		<td class="tengah" width="15%">Triwulan II</td>
 		<td class="kiri" width="25%">Rp. {{ number_format($akb_bl->tri2,0,',','.') }} </td>
 		<td width="20%"> </td>
-		<td><b>Plh Pejabat Pengelola Keuangan Daerah</b></td>
+		<td><b>Plh. Pejabat Pengelola Keuangan Daerah</b></td>
 	</tr>
 	<tr>
 		<td class="tengah" width="15%">Triwulan III</td>

@@ -234,7 +234,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>Plh Pejabat Pengelola Keuangan Daerah</b></td>
+		<td><b>Plh. Pejabat Pengelola Keuangan Daerah</b></td>
 	</tr>
 	<tr>
 		<td></td>
