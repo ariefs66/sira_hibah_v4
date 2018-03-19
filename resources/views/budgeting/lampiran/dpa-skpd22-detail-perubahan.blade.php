@@ -148,34 +148,39 @@
 		<td class="border"><h5>9</h5></td>
 		<td class="border"><h5>10</h5></td>
 	</tr>
-	@php
-	$totmurni = 0;
-	$totperubahan = 0;
-	$totselisih = 0;
-	$totpersen = 0;
-	@endphp
-	@foreach($bl_p as $belp)
+	@foreach($bl_p_pp as $belp)
+		@php $pagu=0; @endphp
+		@foreach($bl as $bel)
+			@if($belp->PROGRAM_ID == $bel->PROGRAM_ID)
+				@php $pagu += $bel->pagu; @endphp
+			@endif	
+		@endforeach
+
 	<tr>
 		<td class="border-rincian kiri "> {{$belp->PROGRAM_KODE}} </td>
 		<td class="border-rincian kiri ">  </td>
 		<td class="border-rincian "> &nbsp; <b> {{$belp->PROGRAM_NAMA}} </b></td>
+		<td class="border-rincian "> &nbsp;  </td>
+		<td class="border-rincian "> &nbsp;  </td>
 		<td class="border-rincian "> &nbsp; </td>
-		<td class="border-rincian "> &nbsp; </td>
-		<td class="border-rincian "> &nbsp; </td>
-		<td class="border-rincian kanan border"> &nbsp;  {{ number_format($belp->pagu_murni,2,',','.') }}</td>
-		<td class="border-rincian kanan border"> &nbsp;  {{ number_format($belp->pagu_perubahan,2,',','.') }}</td>
-		@php $selisih = $belp->pagu_perubahan-$belp->pagu_murni;
-		$format = $selisih >= 0 ? number_format($selisih,2,',','.') : number_format(abs($selisih),2,',','.');
-		$persen = $selisih >= 0 ? number_format(abs($selisih / $belp->pagu_murni * 100),2,',','.') : '('.number_format(abs($selisih / $belp->pagu_murni * 100),2,',','.').')'; 
-		$totmurni = $totmurni + $belp->pagu_murni;
-		$totperubahan = $totperubahan + $belp->pagu_perubahan;
-		$totselisih = $totselisih + $selisih;
-		$totpersen = $totpersen + ($selisih / $belp->pagu_murni * 100);
-		@endphp
-		<td class="border-rincian kanan border"> {{ $format }}</td>
-		<td class="border-rincian kanan border"> {{ $persen }}</td>
+		<td class="border-rincian kanan border"> &nbsp;  {{ number_format($pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan border"> &nbsp;  {{ number_format($belp->pagu,0,',','.') }}</td>
+		@if($belp->pagu-$pagu<0)
+		<td class="border-rincian kanan border"> ({{ number_format(abs($belp->pagu-$pagu),0,',','.') }})</td>
+		@else
+		<td class="border-rincian kanan border"> {{ number_format($belp->pagu-$pagu,0,',','.') }}</td>
+		@endif
+		@if($belp->pagu>0)
+			@if($belp->pagu-$pagu<0)
+		<td class="border-rincian kanan border"> ({{ number_format(abs(($belp->pagu-$pagu) / $belp->pagu * 100),2,',','.') }}%) </td>
+			@else
+		<td class="border-rincian kanan border"> {{ number_format(($belp->pagu-$pagu) / $belp->pagu * 100,2,',','.') }}% </td>
+			@endif
+		@endif
 	</tr>	
-		@foreach($bl as $bel)
+
+		@php $total=0; @endphp
+		@foreach($bl_pp as $bel)
 
 			@if($belp->PROGRAM_ID == $bel->PROGRAM_ID)
 			<tr>
@@ -186,7 +191,7 @@
 
 				<td class="border-rincian "> 
 				@php $found = false; @endphp
-				@foreach($bl_idk as $bl_i)
+				@foreach($bl_idk_pp as $bl_i)
 					@if($bl_i->BL_ID == $bel->BL_ID)
 						{{$bl_i->OUTPUT_TARGET}} {{$bl_i->SATUAN_NAMA}}
 						@php $found = true; @endphp
@@ -198,13 +203,42 @@
 							
 
 				<td class="border-rincian "> APBD </td>
-				<td class="border-rincian kanan border"> &nbsp;  {{ number_format($bel->pagu_murni,2,',','.') }}</td>
-				<td class="border-rincian kanan border"> &nbsp;  {{ number_format($bel->pagu_perubahan,2,',','.') }}</td>
-				@php $selisih = $bel->pagu_perubahan-$bel->pagu_murni;
-				$format = $selisih >= 0 ? number_format($selisih,2,',','.') : '('.number_format(abs($selisih),2,',','.').')';
-				$persen = $selisih >= 0 ? number_format(abs($selisih / $bel->pagu_murni * 100),2,',','.') : '('.number_format(abs($selisih / $bel->pagu_murni * 100),2,',','.').')'; @endphp
-				<td class="border-rincian kanan border"> {{ $format }}</td>
-				<td class="border-rincian kanan border"> {{ $persen }}</td>
+				@php $found = false; $selisih=0;@endphp
+				@foreach($bl as $akb)
+					@if($bel->BL_ID == $akb->BL_ID)
+							<td class="border-rincian kanan"> {{ number_format($akb->pagu,0,',','.') }}</td>
+						@php $found = true; $selisih=$akb->pagu; @endphp
+					@endif
+				@endforeach
+				@if(!$found)
+					<td class="border-rincian kanan">0</td>
+				@endif
+				@php $found = false; //Mengambil belanja perubahan @endphp
+				@foreach($bl_pp as $akb)
+					@if($bel->BL_ID == $akb->BL_ID)
+							<td class="border-rincian kanan"> {{ number_format($akb->pagu,0,',','.') }}</td>
+							@if($akb->pagu-$selisih<0)
+							<td class="border-rincian kanan"> ({{ number_format(abs($akb->pagu-$selisih),0,',','.') }})</td>
+							@else
+							<td class="border-rincian kanan"> {{ number_format($akb->pagu-$selisih,0,',','.') }}</td>
+							@endif
+							@if($akb->pagu>0)
+								@if($akb->pagu-$selisih<0)
+							<td class="border-rincian kanan border"> ({{ number_format(abs(($akb->pagu-$selisih) / $akb->pagu * 100),2,',','.') }}%) </td>
+								@else
+							<td class="border-rincian kanan border"> {{ number_format(($akb->pagu-$selisih) / $akb->pagu * 100,2,',','.') }}% </td>
+								@endif
+							@endif
+						@php $found = true; @endphp
+					@endif
+				@endforeach
+				@if(!$found)
+					<td class="border-rincian"></td>
+					<td class="border-rincian"></td>
+					<td class="border-rincian kanan border"></td>
+				@endif
+
+				@php $total += $bel->BL_PAGU; @endphp
 			</tr>
 			@endif
 
@@ -212,16 +246,22 @@
 	@endforeach	
 
 		
-
-	
 	<tr class="border">
 		<td class="border kanan" colspan="4"><b>Jumlah</b></td>
 		<td class="border kanan"></td>
 		<td class="border kanan"><b></b></td>
-		<td class="border kanan"><b>{{ number_format($totmurni,2	,',','.') }}</b></td>
-		<td class="border kanan"><b>{{ number_format($totperubahan,2,',','.') }}</b></td>
-		<td class="border kanan"><b>{{ $totselisih >=0 ? number_format($totselisih,2,',','.') : '('.number_format(abs($totselisih),2,',','.').')' }}</b></td>
-		<td class="border kanan"><b>{{ $totpersen >= 0 ? number_format($totpersen,2,',','.') : '('.number_format(abs($totpersen),2,',','.').')' }}</b></td>
+		<td class="border kanan"><b>{{ number_format($totbl,0,',','.') }}</b></td>
+		<td class="border kanan"><b>{{ number_format($totbl_pp,0,',','.') }}</b></td>
+		@if($totbl_pp-$totbl<0)
+		<td class="border kanan"><b>({{ number_format(abs($totbl_pp-$totbl),0,',','.') }})</b></td>
+		@else
+		<td class="border kanan"><b>{{ number_format($totbl_pp-$totbl,0,',','.') }}</b></td>
+		@endif
+		@if($totbl_pp-$totbl<0)
+		<td class="border kanan"><b>({{ number_format(abs(($totbl_pp-$totbl)/$totbl_pp*100),2,',','.') }}%)</b></td>
+		@else
+		<td class="border kanan"><b>{{ number_format(abs(($totbl_pp-$totbl)/$totbl_pp*100),2,',','.') }}%</b></td>
+		@endif		
 	</tr>
 
 	
