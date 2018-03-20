@@ -91,7 +91,7 @@
 	<tr class="">
 		<td class="" width="%">
 			<h4><br>PEMERINTAH KOTA BANDUNG<br><br>
-				DOKUMEN PELAKSANAAN ANGGARAN <br> 
+				DOKUMEN PELAKSANAAN PERUBAHAN ANGGARAN <br> 
 				SATUAN KERJA PERANGKAT DAERAH <br> 
 				(DPPA SKPD)<br> <br>
 			TAHUN ANGGARAN {{$tahun}} <br> <br> <br></h4> 
@@ -197,7 +197,7 @@
 <table class="header">
 	<tr class="border">
 		<td class="border" width="85%" rowspan="2">
-			<h4>DOKUMEN PELAKSANAAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH </h4>
+			<h4>DOKUMEN PELAKSANAAN PERUBAHAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH </h4>
 		</td>
 		<td class="border" colspan="7">
 			<h4>Nomor DPPA SKPD</h4>
@@ -347,7 +347,7 @@
 <table class="rincian">
 	<tbody>
 	<tr class="border">
-		<td colspan="14"><h4>Rincian Anggaran Belanja Langsung<br>Menurut Program dan Per Kegiatan Satuan Kerja Perangkat Daerah</h4></td>
+		<td colspan="14"><h4>Rincian Perubahan Anggaran Belanja Langsung<br>Menurut Program dan Per Kegiatan Satuan Kerja Perangkat Daerah</h4></td>
 	</tr>
 	<tr class="border headrincian">
 		<td class="border" rowspan="2">Kode Rekening</td>
@@ -597,18 +597,18 @@
 	  <td class="border-rincian tengah"></td>
 	  <td class="border-rincian kanan"></td>
 	  <td class="border-rincian kanan"></td>
-	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL_MURNI,0,',','.') }},00</td>
+	  <td class="border-rincian kanan rekening"></td>
 	  <td class="border-rincian tengah"></td>
 	  <td class="border-rincian tengah"></td>
 	  <td class="border-rincian kanan"></td>
 	  <td class="border-rincian kanan"></td>
-	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL,0,',','.') }},00</td>
-	  @if($p->TOTAL-$p->TOTAL_MURNI<0)
-	  <td class="border-rincian kanan rekening">({{ number_format(abs($p->TOTAL-$p->TOTAL_MURNI),0,',','.') }},00)</td>
+	  <td class="border-rincian kanan rekening"></td>
+	  @if($p->TOTAL-$p->TOTAL<0)
+	  <td class="border-rincian kanan rekening"></td>
 	  @else
-	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL-$p->TOTAL_MURNI,0,',','.') }},00</td>
+	  <td class="border-rincian kanan rekening"></td>
 	  @endif
-	  <td class="border-rincian kanan">0,00%</td>
+	  <td class="border-rincian kanan"></td>
 	 </tr>
 
 

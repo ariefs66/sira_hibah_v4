@@ -91,10 +91,10 @@
 	<br>
 	<tr class="">
 		<td class="" width="%">
-			<h4><br>PEMERINTAH KOTA BANDUNG<br><br>
-				DOKUMEN PELAKSANAAN ANGGARAN <br> 
-				SATUAN KERJA PERANGKAT DAERAH <br> 
-				(DPPA SKPD)<br> <br>
+			<h4><br>PEMERINTAH KOTA BANDUNG<br><br>				
+DOKUMEN PELAKSANAAN PERUBAHAN ANGGARAN <br> 
+PEJABAT PENGELOLA KEUANGAN DAERAH <br> 
+                                (DPPA PPKD)<br> <br>
 			TAHUN ANGGARAN {{$tahun}} <br> <br> <br></h4> 
 		</td>
 		<td class="tengah">&nbsp;</td>
@@ -167,13 +167,18 @@
 	</tr>
 </table>
 
-<p style="page-break-after: always;">&nbsp;</p>
-<p style="page-break-before: always;">&nbsp;</p>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br>
+<br><br><br><br><br><br>
+<br><br><br><br><br>
+
 
 <table class="header">
 	<tr class="border">
 		<td class="border" width="85%" rowspan="2">
-			<h4>DOKUMEN PELAKSANAAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH </h4>
+			<h4>DOKUMEN PELAKSANAAN PERUBAHAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH </h4>
 		</td>
 		<td class="border" colspan="6">
 			<h4>Nomor DPPA SKPD</h4>
@@ -369,5 +374,3 @@
 </div>
 </body>
 </html>
-
-

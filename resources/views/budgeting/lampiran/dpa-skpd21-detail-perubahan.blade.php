@@ -92,7 +92,7 @@
 	<tr class="">
 		<td class="" width="%">
 			<h4><br>PEMERINTAH KOTA BANDUNG<br><br>
-				DOKUMEN PELAKSANAAN ANGGARAN <br> 
+				DOKUMEN PELAKSANAAN PERUBAHAN ANGGARAN <br> 
 				SATUAN KERJA PERANGKAT DAERAH <br> 
 				(DPPA SKPD)<br> <br>
 			TAHUN ANGGARAN {{$tahun}} <br> <br> <br></h4> 
@@ -163,13 +163,18 @@
 	</tr>
 </table>
 
-<p style="page-break-after: always;">&nbsp;</p>
-<p style="page-break-before: always;">&nbsp;</p>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br>
+<br><br><br><br><br><br>
+<br><br><br><br><br><br>
+
 
 <table class="header">
 	<tr class="border">
 		<td class="border" width="85%" rowspan="2">
-			<h4>DOKUMEN PELAKSANAAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH </h4>
+			<h4>DOKUMEN PELAKSANAAN PERUBAHAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH </h4>
 		</td>
 		<td class="border" colspan="6">
 			<h4>Nomor DPPA SKPD</h4>
@@ -210,7 +215,7 @@
 <table class="rincian">
 	<tbody>
 	<tr class="border">
-		<td colspan="12"><h4>Rincian Dokumen Pelaksanaan Anggaran <br> 
+		<td colspan="12"><h4>Rincian Dokumen Pelaksanaan Perubahan Anggaran <br> 
 		Belanja Tidak Langsung Satuan Kerja Perangkat Daerah</h4></td>
 	</tr>	
 	<tr class="border headrincian">

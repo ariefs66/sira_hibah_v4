@@ -562,7 +562,7 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 15 Maret 2017</td>
+		<td>Bandung, 15 Maret 2018</td>
 	</tr>
 	<tr>
 		<td></td>

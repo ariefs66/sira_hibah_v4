@@ -5204,9 +5204,7 @@ class lampiranController extends Controller
 
         /*end pergeseran & perubahan  */
 
-
-
-        $akb_pend   = AKB_Pendapatan::join('BUDGETING.DAT_PENDAPATAN_PERUBAHAN','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
+	$akb_pend   = AKB_Pendapatan_Perubahan::join('BUDGETING.DAT_PENDAPATAN_PERUBAHAN','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID')
                         ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)
                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
@@ -5215,7 +5213,7 @@ class lampiranController extends Controller
                         ->first();
        
 
-        $akb_btl   = AKB_BTL::join('BUDGETING.DAT_BTL_PERUBAHAN','DAT_BTL_PERUBAHAN.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
+        $akb_btl   = AKB_BTL_Perubahan::join('BUDGETING.DAT_BTL_PERUBAHAN','DAT_BTL_PERUBAHAN.BTL_ID','=','DAT_AKB_BTL_PERUBAHAN.BTL_ID')
                         ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)
                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
@@ -5223,7 +5221,7 @@ class lampiranController extends Controller
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->first();
        
-        $akb_bl   = AKB_BL::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_AKB_BL.BL_ID')
+        $akb_bl   = AKB_BL_Perubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_AKB_BL_PERUBAHAN.BL_ID')
                         ->where('DAT_BL_PERUBAHAN.SKPD_ID',$s)
                        ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
@@ -5231,8 +5229,8 @@ class lampiranController extends Controller
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->first(); 
 
-        $akb_pem   = AKB_Pembiayaan::join('BUDGETING.DAT_PEMBIAYAAN_PERUBAHAN','DAT_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
-                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
+        $akb_pem   = AKB_Pembiayaan_Perubahan::join('BUDGETING.DAT_PEMBIAYAAN_PERUBAHAN','DAT_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
                         ->where('DAT_PEMBIAYAAN_PERUBAHAN.SKPD_ID',$s)
                         ->where('REKENING_KODE','like','6.1%')
                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
@@ -5241,15 +5239,16 @@ class lampiranController extends Controller
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->first();
 
-        $akb_peng   = AKB_Pembiayaan::join('BUDGETING.DAT_PEMBIAYAAN_PERUBAHAN','DAT_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN.PEMBIAYAAN_ID')
-                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN.REKENING_ID')
+        $akb_peng   = AKB_Pembiayaan_Perubahan::join('BUDGETING.DAT_PEMBIAYAAN_PERUBAHAN','DAT_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID','=','DAT_AKB_PEMBIAYAAN_PERUBAHAN.PEMBIAYAAN_ID')
+                        ->join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_AKB_PEMBIAYAAN_PERUBAHAN.REKENING_ID')
                         ->where('DAT_PEMBIAYAAN_PERUBAHAN.SKPD_ID',$s)
                         ->where('REKENING_KODE','like','6.2%')
                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
                             SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
-                        ->first();                                                                                       
+                        ->first();       
+	
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
@@ -5639,15 +5638,14 @@ class lampiranController extends Controller
                         ->selectRaw(' "REKENING_KODE", "REKENING_NAMA", sum("PENDAPATAN_TOTAL") as total ')
                         ->get();                        
         /* end pergeseran atau perubahan*/                                          
-        
-        $akb_pen  = AKB_Pendapatan::join('BUDGETING.DAT_PENDAPATAN_PERUBAHAN','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN.PENDAPATAN_ID')
+        $akb_pen  = AKB_Pendapatan_Perubahan::join('BUDGETING.DAT_PENDAPATAN_PERUBAHAN','DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID','=','DAT_AKB_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID')
                         ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)
                         ->where('DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_TAHUN',$tahun)
                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
                             SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
-                        ->first();
+                        ->first();  
 
                         //dd($akb_pen);
 
@@ -5887,16 +5885,15 @@ class lampiranController extends Controller
                     ->get();                                                    
 
         /*end pergeseran & perubahan*/                                                  
-
-        $akb_btl   = AKB_BTL::join('BUDGETING.DAT_BTL_PERUBAHAN','DAT_BTL_PERUBAHAN.BTL_ID','=','DAT_AKB_BTL.BTL_ID')
+              
+              $akb_btl   = AKB_BTL_Perubahan::join('BUDGETING.DAT_BTL_PERUBAHAN','DAT_BTL_PERUBAHAN.BTL_ID','=','DAT_AKB_BTL_PERUBAHAN.BTL_ID')
                         ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$s)
                         ->where('DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun)
                         ->selectRaw(' SUM("AKB_JAN")+SUM("AKB_FEB")+SUM("AKB_MAR") as tri1, 
                             SUM("AKB_APR")+SUM("AKB_MEI")+SUM("AKB_JUN") as tri2, 
                             SUM("AKB_JUL")+SUM("AKB_AUG")+SUM("AKB_SEP") as tri3,
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
-                        ->first();    
-
+                        ->first(); 
 
         $tgl        = Carbon\Carbon::now()->format('d');
         $gbln       = Carbon\Carbon::now()->format('m');
@@ -7938,28 +7935,31 @@ public function updatePerwal1($tahun,$status){
                                                  
 
                           
+            $header=array('5.1.1.02','5.1.1.03','5.1.1.05','5.1.1.06');
+            $value=array_fill(0, 4, 0);
+            $headBelanjaPegawai= Rekening::whereIn('REKENING_KODE', $header)->pluck('REKENING_NAMA')->toArray();
+            $murniBelanjaPegawai= $value;
+            $perubahanBelanjaPegawai= $value;
+            $selisihBelanjaPegawai= $value;
 
-            $headBelanjaPegawai= array(Rekening::where('REKENING_KODE','LIKE','5.1.1.02')->value('REKENING_NAMA'),
-                                        Rekening::where('REKENING_KODE','LIKE','5.1.1.03')->value('REKENING_NAMA'));
-            $murniBelanjaPegawai= array(1197672677506,13251819463);
-            $perubahanBelanjaPegawai= array(1197672677506 ,13251819463 );
-            $selisihBelanjaPegawai= array(0,0);
-
-            $headBelanjaHibah= array(Rekening::where('REKENING_KODE','LIKE','5.1.1.02')->value('REKENING_NAMA'),
-            Rekening::where('REKENING_KODE','LIKE','5.1.1.03')->value('REKENING_NAMA'));
+            $header=array('5.1.4.05','5.1.4.06');
+            $headBelanjaHibah= Rekening::whereIn('REKENING_KODE', $header)->pluck('REKENING_NAMA')->toArray();
             $murniBelanjaHibah= array(192544137970,221963696500);
             $perubahanBelanjaHibah= array(219131937970,221963696500);
             $selisihBelanjaHibah= array(26587800000,0);
             
-            $headBelanjaBanprov= array(Rekening::where('REKENING_KODE','LIKE','5.1.7.05')->value('REKENING_NAMA'));
+            $header=array('5.1.7.01');
+            $headBelanjaBanprov= Rekening::whereIn('REKENING_KODE', $header)->pluck('REKENING_NAMA')->toArray();
             $murniBelanjaBanprov= array(1000000000);
             $perubahanBelanjaBanprov= array(1000000000);
             $selisihBelanjaBanprov= array(0);
 
-            $headBelanjaPegawaiL= array(Rekening::where('REKENING_KODE','LIKE','5.2.1.01')->value('REKENING_NAMA'),Rekening::where('REKENING_KODE','LIKE','5.2.1.02')->value('REKENING_NAMA'),Rekening::where('REKENING_KODE','LIKE','5.2.1.03')->value('REKENING_NAMA'),Rekening::where('REKENING_KODE','LIKE','5.2.1.05')->value('REKENING_NAMA'),Rekening::where('REKENING_KODE','LIKE','5.2.1.07')->value('REKENING_NAMA'));
-            $murniBelanjaPegawaiL= array(0,0,0,0,0);
-            $perubahanBelanjaPegawaiL= array(0,0,0,0,0);
-            $selisihBelanjaPegawaiL= array(0,0,0,0,0);
+            $header=array('5.2.1.01','5.2.1.02','5.2.1.03','5.2.1.05','5.2.1.07');
+            $value=array_fill(0, 5, 0);
+            $headBelanjaPegawaiL= Rekening::whereIn('REKENING_KODE', $header)->orderBy('REKENING_KODE','desc')->pluck('REKENING_NAMA')->toArray();
+            $murniBelanjaPegawaiL= $value;
+            $perubahanBelanjaPegawaiL= $value;
+            $selisihBelanjaPegawaiL= $value;
 
             $idbarjas=array('5.2.2.01',
             '5.2.2.02',
@@ -8015,17 +8015,17 @@ public function updatePerwal1($tahun,$status){
             0,
             0);
 
-            $headBelanjaBarjas= Rekening::whereIn('REKENING_KODE', [$idbarjas])->pluck('REKENING_NAMA')->toArray();
+            $headBelanjaBarjas= Rekening::whereIn('REKENING_KODE', $idbarjas)->pluck('REKENING_NAMA')->toArray();
             $murniBelanjaBarjas= $nilaibarjas;
             $perubahanBelanjaBarjas= $nilaibarjas;
             $selisihBelanjaBarjas= $nilaibarjas;
 
-            $headBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $murniBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $perubahanBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-            $selisihBelanjaModal= array("Belanja Tambahan Penghasilan PNS","Belanja Penerimaan lainnya Pimpinan dan anggota DPRD serta KDH/WKDH");
-
-
+            $header=array_fill(0, 49, 0);
+            $value=array_fill(0, 49, 0);
+            $headBelanjaModal= $header;
+            $murniBelanjaModal= $value;
+            $perubahanBelanjaModal= $value;
+            $selisihBelanjaModal= $value;
 
             $data       = array('tahun'         =>$tahun,
                         'jumBTL_murni'      =>$jumBTL_murni,

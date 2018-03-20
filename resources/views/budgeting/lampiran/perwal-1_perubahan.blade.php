@@ -277,7 +277,7 @@
 	@php $totP3s=$totP3p-$totP3; @endphp
 	<tr>
 	<td class="border-rincian">4.1.1.03</td>
-		<td class="border-rincian">&nbsp; &nbsp; Pajak Restoran</td>
+		<td class="border-rincian">&nbsp; &nbsp; Pajak Hiburan</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP3,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP3p,0,',','.') }}</td>
 		@if ($totP3s<0)
@@ -363,7 +363,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.1.05</td>
-		<td class="border-rincian">&nbsp; &nbsp; Pajak Reklame</td>
+		<td class="border-rincian">&nbsp; &nbsp; Pajak Penerangan Jalan</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP5,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP5p,0,',','.') }}</td>
 		@if ($totP5s<0)
@@ -406,7 +406,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.1.07</td>
-		<td class="border-rincian">&nbsp; &nbsp; Pajak Reklame</td>
+		<td class="border-rincian">&nbsp; &nbsp; Pajak Parkir</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP6,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP6p,0,',','.') }}</td>
 		@if ($totP6s<0)
@@ -450,7 +450,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.1.08</td>
-		<td class="border-rincian">&nbsp; &nbsp; Pajak Reklame</td>
+		<td class="border-rincian">&nbsp; &nbsp; Pajak Air Bawah Tanah</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP7,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP7p,0,',','.') }}</td>
 		@if ($totP7s<0)
@@ -493,7 +493,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.1.11</td>
-		<td class="border-rincian">&nbsp; &nbsp; Pajak Reklame</td>
+		<td class="border-rincian">&nbsp; &nbsp; Pajak Bumi dan Bangunan (PBB)</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP8,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP8p,0,',','.') }}</td>
 		@if ($totP8s<0)
@@ -570,7 +570,7 @@
 	<!-- pajak retribusi -->
 	<tr>
 		<td class="border-rincian">4.1.2</td>
-		<td class="border-rincian"><b>&nbsp; &nbsp;Retribusi Daerah</b></td>
+		<td class="border-rincian"><b>&nbsp; &nbsp;Hasil Retribusi Daerah</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
@@ -729,7 +729,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.3.01</td>
-		<td class="border-rincian">&nbsp; &nbsp; Hasil Pengelolaan Kekayaan Daerah yang Dipisahkan </td>
+		<td class="border-rincian">&nbsp; &nbsp; Bagian Laba Atas Penyertaan Modal pada Perusahaan Milik Daerah / BUMD </td>
 		<td class="border-rincian kanan garis">{{ number_format($totP13,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP13p,0,',','.') }}</td>
 		@if ($totP13s<0)
@@ -816,7 +816,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.4.02</td>
-		<td class="border-rincian">&nbsp; &nbsp; Lain-lain Pendapatan Asli Daerah yang Sah </td>
+		<td class="border-rincian">&nbsp; &nbsp; Penerimaan Jasa Giro </td>
 		<td class="border-rincian kanan garis">{{ number_format($totP15,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP15p,0,',','.') }}</td>
 		@if ($totP15s<0)
@@ -859,7 +859,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.4.11</td>
-		<td class="border-rincian">&nbsp; &nbsp; Lain-lain Pendapatan Asli Daerah yang Sah </td>
+		<td class="border-rincian">&nbsp; &nbsp; Fasilitas Sosial dan Fasilitas Umum </td>
 		<td class="border-rincian kanan garis">{{ number_format($totP16,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP16p,0,',','.') }}</td>
 		@if ($totP16s<0)
@@ -902,7 +902,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.4.14</td>
-		<td class="border-rincian">&nbsp; &nbsp; Lain-lain Pendapatan Asli Daerah yang Sah </td>
+		<td class="border-rincian">&nbsp; &nbsp; Pendapatan dari Pemanfaatan Kekayaan Daerah </td>
 		<td class="border-rincian kanan garis">{{ number_format($totP17,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP17p,0,',','.') }}</td>
 		@if ($totP17s<0)
@@ -945,7 +945,7 @@
 
 	<tr>
 		<td class="border-rincian">4.1.4.16</td>
-		<td class="border-rincian">&nbsp; &nbsp; Lain-lain Pendapatan Asli Daerah yang Sah </td>
+		<td class="border-rincian">&nbsp; &nbsp; Pendapatan BLUD </td>
 		<td class="border-rincian kanan garis">{{ number_format($totP18,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP18p,0,',','.') }}</td>
 		@if ($totP18s<0)
@@ -1002,7 +1002,7 @@
 
 	<tr>
 		<td class="border-rincian">4.2.1.01</td>
-		<td class="border-rincian">&nbsp; &nbsp; Bagi Hasil Pajak/Bagi Hasil Bukan Pajak </td>
+		<td class="border-rincian">&nbsp; &nbsp; Bagi Hasil Pajak </td>
 		<td class="border-rincian kanan garis">{{ number_format($totP19,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP19p,0,',','.') }}</td>
 		@if ($totP19s<0)
@@ -1520,21 +1520,9 @@
 		<td class="border-rincian kanan "></td>
 	</tr>
 	<!-- kalkulasi 4 blok -->
-	<tr>
-		<td class="border-rincian">{{$rek14->REKENING_KODE}}</td>
-		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$rek14->REKENING_NAMA}} </td>
-		<td class="border-rincian kanan total">{{ number_format($totbt4,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format($totbt4p,0,',','.') }}</td>
-		@if($totbt4p-$totbt4<0)
-		<td class="border-rincian kanan total">{{ number_format(abs($totbt4p-$totbt4),0,',','.') }}</td>
-		@else
-		<td class="border-rincian kanan total">{{ number_format($totbt4p-$totbt4,0,',','.') }}</td>
-		@endif
-		<td class="border-rincian kanan "></td>
-	</tr>
 	@php $head = $rek14->REKENING_KODE;$count=0; @endphp
 	@foreach($btl4 as $bt4)
-		@if(substr($bt4->REKENING_KODE,0,8)!==$head && $count<2 )
+		@if(substr($bt4->REKENING_KODE,0,8)!==$head && $count<3 )
 			@php $head=substr($bt4->REKENING_KODE,0,8); $count+=1;@endphp
 			<tr>
 				<td class="border-rincian">{{$head}}</td>
@@ -1710,13 +1698,13 @@
 			@php $head=substr($bt7->REKENING_KODE,0,8); $count+=1;@endphp
 			<tr>
 				<td class="border-rincian">{{$head}}</td>
-				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaHibah[$count-1]}} </td>
-				<td class="border-rincian kanan garis">{{ number_format($murniBelanjaPegawai[$count-1],0,',','.') }}</td>
-				<td class="border-rincian kanan garis">{{ number_format($perubahanBelanjaPegawai[$count-1],0,',','.') }}</td>
-				@if ($selisihBelanjaPegawai[$count-1]<0)
-				<td class="border-rincian kanan garis">{{ number_format(abs($selisihBelanjaPegawai[$count-1]),0,',','.') }}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaBanprov[$count-1]}} </td>
+				<td class="border-rincian kanan garis">{{ number_format($murniBelanjaBanprov[$count-1],0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($perubahanBelanjaBanprov[$count-1],0,',','.') }}</td>
+				@if ($selisihBelanjaBanprov[$count-1]<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($selisihBelanjaBanprov[$count-1]),0,',','.') }}</td>
 				@else
-				<td class="border-rincian kanan garis">{{ number_format($selisihBelanjaPegawai[$count-1],0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($selisihBelanjaBanprov[$count-1],0,',','.') }}</td>
 				@endif
 				<td class="border-rincian kanan "></td>
 			</tr>
@@ -1892,12 +1880,12 @@
 			<tr>
 				<td class="border-rincian">{{$head}}</td>
 				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaBarjas[$count-1]}} </td>
-				<td class="border-rincian kanan garis">{{ number_format($murniBelanjaPegawai[$count-1],0,',','.') }}</td>
-				<td class="border-rincian kanan garis">{{ number_format($perubahanBelanjaPegawai[$count-1],0,',','.') }}</td>
-				@if ($selisihBelanjaPegawai[$count-1]<0)
-				<td class="border-rincian kanan garis">{{ number_format(abs($selisihBelanjaPegawai[$count-1]),0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($murniBelanjaBarjas[$count-1],0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($perubahanBelanjaBarjas[$count-1],0,',','.') }}</td>
+				@if ($selisihBelanjaBarjas[$count-1]<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($selisihBelanjaBarjas[$count-1]),0,',','.') }}</td>
 				@else
-				<td class="border-rincian kanan garis">{{ number_format($selisihBelanjaPegawai[$count-1],0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($selisihBelanjaBarjas[$count-1],0,',','.') }}</td>
 				@endif
 				<td class="border-rincian kanan "></td>
 			</tr>
@@ -1943,14 +1931,14 @@
 	@if(substr($b3->REKENING_KODE,0,8)!==$head && $count<49 )
 			@php $head=substr($b3->REKENING_KODE,0,8); $count+=1;@endphp
 			<tr>
-				<td class="border-rincian">{{$head}}</td>
-				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaPegawai[1]}} </td>
-				<td class="border-rincian kanan garis">{{ number_format($totbt1,0,',','.') }}</td>
-				<td class="border-rincian kanan garis">{{ number_format($totbt1p,0,',','.') }}</td>
-				@if ($totbt1s<0)
-				<td class="border-rincian kanan garis">{{ number_format(abs($totbt1s),0,',','.') }}</td>
+			<td class="border-rincian">{{$head}}</td>
+				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$headBelanjaBarjas[$count-1]}} </td>
+				<td class="border-rincian kanan garis">{{ number_format($murniBelanjaModal[$count-1],0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($perubahanBelanjaModal[$count-1],0,',','.') }}</td>
+				@if ($selisihBelanjaModal[$count-1]<0)
+				<td class="border-rincian kanan garis">{{ number_format(abs($selisihBelanjaModal[$count-1]),0,',','.') }}</td>
 				@else
-				<td class="border-rincian kanan garis">{{ number_format($totbt1s,0,',','.') }}</td>
+				<td class="border-rincian kanan garis">{{ number_format($selisihBelanjaModal[$count-1],0,',','.') }}</td>
 				@endif
 				<td class="border-rincian kanan "></td>
 			</tr>
