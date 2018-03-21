@@ -192,8 +192,8 @@
 				<td class="border-rincian kanan border"> &nbsp;  {{ number_format($bel->pagu_murni,2,',','.') }}</td>
 				<td class="border-rincian kanan border"> &nbsp;  {{ number_format($bel->pagu_perubahan,2,',','.') }}</td>
 				@php $selisih = $bel->pagu_perubahan-$bel->pagu_murni;
-				$format = $selisih >= 0 ? number_format($selisih,2,',','.') : '('.number_format(abs($selisih),2,',','.').')';
-				$persen = $selisih >= 0 ? number_format(abs($selisih / $bel->pagu_murni * 100),2,',','.') : '('.number_format(abs($selisih / $bel->pagu_murni * 100),2,',','.').')'; @endphp
+				$format = $selisih > 0 ? number_format($selisih,2,',','.') : '('.number_format(abs($selisih),2,',','.').')';
+				$persen = $selisih > 0 ? number_format(abs($selisih / $bel->pagu_murni * 100),2,',','.') : ( $selisih == 0 ? number_format(0,2,',','.') : '('.number_format(abs($selisih / $bel->pagu_murni * 100),2,',','.').')' ); @endphp
 				<td class="border-rincian kanan border"> {{ $format }}</td>
 				<td class="border-rincian kanan border"> {{ $persen }}</td>
 			</tr>
