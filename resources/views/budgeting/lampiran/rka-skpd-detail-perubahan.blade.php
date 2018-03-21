@@ -84,7 +84,7 @@
 <table class="header">
 	<tr class="border">
 		<td class="border" width="85%">
-			<h4>RENCANA KERJA DAN ANGGARAN<br>SATUAN KERJA PERANGKAT DAERAH</h4>
+			<h4>RENCANA KERJA DAN ANGGARAN PERUBAHAN<br>SATUAN KERJA PERANGKAT DAERAH</h4>
 		</td>
 		<td rowspan="2" class="border">
 			<h4>Formulir<br>RKA-SKPD</h4>

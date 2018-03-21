@@ -170,12 +170,14 @@
 		@else
 		<td class="border-rincian kanan border"> {{ number_format($belp->pagu-$pagu,0,',','.') }}</td>
 		@endif
-		@if($belp->pagu>0)
+		@if($pagu>0)
 			@if($belp->pagu-$pagu<0)
 		<td class="border-rincian kanan border"> ({{ number_format(abs(($belp->pagu-$pagu) / $belp->pagu * 100),2,',','.') }}%) </td>
 			@else
 		<td class="border-rincian kanan border"> {{ number_format(($belp->pagu-$pagu) / $belp->pagu * 100,2,',','.') }}% </td>
 			@endif
+		@else
+		<td class="border-rincian kanan border"> {{ number_format(0,2,',','.') }}% </td>
 		@endif
 	</tr>	
 
@@ -228,6 +230,8 @@
 								@else
 							<td class="border-rincian kanan border"> {{ number_format(($akb->pagu-$selisih) / $akb->pagu * 100,2,',','.') }}% </td>
 								@endif
+							@else
+							<td class="border-rincian kanan border"> {{ number_format(0,2,',','.') }}% </td>
 							@endif
 						@php $found = true; @endphp
 					@endif
