@@ -1366,12 +1366,12 @@
 		<tr>
 		<td class="border-rincian"><br>5</td>
 		<td class="border-rincian"><b><br>BELANJA</b></td>
-		<td class="border-rincian kanan total"><b><br>{{ number_format($jumBelanja_murni,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b><br>{{ number_format($jumBelanja,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b><br>7.239.813.537.305</b></td>
+		<td class="border-rincian kanan total"><b><br>7.418.332.448.642</b></td>
 		@if($jumBelanja-$jumBelanja_murni < 0)
-		<td class="border-rincian kanan total"><b><br>({{ number_format(abs($jumBelanja-$jumBelanja_murni),0,',','.') }})</b></td>
+		<td class="border-rincian kanan total"><b><br>178.518.911.337</b></td>
 		@else
-		<td class="border-rincian kanan total"><b><br>{{ number_format($jumBelanja-$jumBelanja_murni,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b><br>178.518.911.337</b></td>
 		@endif
 		<td class="border-rincian kanan total"><br></td>
 	</tr>
