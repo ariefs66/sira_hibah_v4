@@ -8373,12 +8373,14 @@ public function updatePerwal1($tahun,$status){
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('BL_VALIDASI',1)
+                        ->where('SKPD_ID',$id)
                         ->sum('RINCIAN_TOTAL');  
         $blp         = BLPerubahan::JOIN('BUDGETING.DAT_RINCIAN_PERUBAHAN','DAT_RINCIAN_PERUBAHAN.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID')
-        ->where('BL_TAHUN',$tahun)
-        ->where('BL_DELETED',0)
-        ->where('BL_VALIDASI',1)
-        ->sum('RINCIAN_TOTAL');
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('BL_VALIDASI',1)
+                        ->where('SKPD_ID',$id)
+                        ->sum('RINCIAN_TOTAL');
         $bls=$blp-$bl; 
 
        $bl_prog         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
