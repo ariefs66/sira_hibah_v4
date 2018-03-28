@@ -339,13 +339,21 @@ class staffController extends Controller
         return 'Berhasil!';
     }
 
-    public function aktivasiUser(){
-        User::where('id',Input::get('id'))->update(['active'=>1]);
+    public function aktivasiUser($tahun){
+        $user_id = UserBudget::where('id',Input::get('id'))->where('TAHUN',$tahun)->pluck('SKPD_ID');
+        $user_id = UserBudget::where('SKPD_ID',$user_id)->pluck('id');
+        foreach ($user_id as $id) {
+            User::where('id',$id)->update(['active'=>1]);
+        }
         return 'User telah di aktifkan';
     }
 
-    public function nonAktivasiUser(){
-        User::where('id',Input::get('id'))->update(['active'=>0]);
+    public function nonAktivasiUser($tahun){
+        $user_id = UserBudget::where('id',Input::get('id'))->where('TAHUN',$tahun)->pluck('SKPD_ID');
+        $user_id = UserBudget::where('SKPD_ID',$user_id)->pluck('id');
+        foreach ($user_id as $id) {
+            User::where('id',$id)->update(['active'=>0]);
+        }
         return 'User di non aktifkan';
     }
 
