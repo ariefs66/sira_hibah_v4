@@ -80,7 +80,7 @@ class simdaController extends Controller{
 			$Kd_Urusan 	= substr($skpd->SKPD->SKPD_KODE, 0,1);
 			$Kd_Urusan1 = substr($program->urusan->URUSAN_KODE, 0,1);
 			$Kd_Bidang 	= substr($skpd->SKPD->SKPD_KODE, 2,2)*1;
-			$Kd_Bidang1 = substr($program->urusan->URUSAN_KODE, 2,2)*1;
+			$Kd_Bidang1 = substr($program->urusan->URUSAN_KODE, 2,2)*1;		//ngecek null
 			$Kd_Unit 	= substr($skpd->SKPD->SKPD_KODE, 5,2)*1;
 			$Kd_Sub 	= $skpd->SUB_KODE *1;
 			$Ket_Prog 	= $program->PROGRAM_NAMA;
