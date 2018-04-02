@@ -189,7 +189,7 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"><span style="margin-left:-400px"></span></td>
-		<td>Bandung, 2 Januari 2018</td>
+		<td>Bandung, 20 Maret 2018</td>
 	</tr>
 	<tr>
 		<td><span style="margin-left:-400px"></span></td>
