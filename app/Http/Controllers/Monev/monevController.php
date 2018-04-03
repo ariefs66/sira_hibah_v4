@@ -162,15 +162,14 @@ class monevController extends Controller
          return Response::JSON($out);
       }      
 
-   public function getDetail($tahun){
+   public function getDetail($tahun, $skpd, $id){
+
         $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
-                        ->Join('BUDGETING.DAT_OUTPUT','DAT_OUTPUT.BL_ID','=','DAT_BL.BL_ID')
-                        ->Join('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')
+                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('SKPD_ID',1)
-                        //->groupBy('KEGIATAN_NAMA',"REF_KEGIATAN.KEGIATAN_ID","KEGIATAN_KODE","OUTPUT_TOLAK_UKUR","OUTPUT_TARGET","SATUAN_NAMA","DAT_BL.BL_ID","BL_PAGU" )
-                        ->selectRaw(' "KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","OUTPUT_TOLAK_UKUR","OUTPUT_TARGET","SATUAN_NAMA","DAT_BL"."BL_ID","BL_PAGU" ')
+                        ->selectRaw(' "KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","DAT_BL"."BL_ID","BL_PAGU" ')
                         ->get();
 
         $view       = array();
@@ -178,7 +177,7 @@ class monevController extends Controller
         $opsi       = '';
         $akb       = '';
         foreach ($data as $data) {
-          if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1){
+          if(Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }elseif(Auth::user()->level == 2){
@@ -187,10 +186,9 @@ class monevController extends Controller
           }
           array_push($view, array( 'NO'       => $no++,
                                    'KEGIATAN'     => $data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA,
-                                   'OUTPUT'     => $data->OUTPUT_TOLAK_UKUR,
-                                   'TARGET'   => $data->OUTPUT_TARGET.' '.$data->SATUAN_NAMA,
                                    'KINERJA'    => '',
-                                   'TOTAL'    => number_format($data->BL_PAGU,0,'.',',')));
+                                   'TOTAL'    => number_format($data->BL_PAGU,0,'.',','),
+                                    'AKSI' => $akb ));
         }
          
         $out = array("aaData"=>$view);       

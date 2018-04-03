@@ -62,6 +62,7 @@
                     sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1',
                     aoColumns: [
                     { mData: 'ID'},
+                    { mData: 'PROGRAM_ID', sClass:'hide'},
                     { mData: 'PROGRAM'},
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
@@ -70,7 +71,8 @@
                   ]}" class="table table-btl table-striped b-t b-b table-pegawai " id="table-pegawai">
                   <thead>
                     <tr>                   
-                      <th class:'hide'>No </th>
+                      <th>No </th>
+                      <th class="hide">ID </th>
                       <th>PROGRAM </th>
                       <th>OUTCOME </th>
                       <th>TARGET </th>
@@ -96,6 +98,7 @@
                     sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2',
                     aoColumns: [
                     { mData: 'ID'},
+                    { mData: 'PROGRAM_ID', sClass:'hide'},
                     { mData: 'PROGRAM'},
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
@@ -104,7 +107,8 @@
                   ]}" class="table table-btl table-striped b-t b-b table-subsidi" id="table-subsidi">
                  <thead>
                     <tr>                   
-                      <th class:'hide'>No </th>
+                      <th>No </th>
+                      <th class="hide">ID </th>
                       <th>PROGRAM </th>
                       <th>OUTCOME </th>
                       <th>TARGET </th>
@@ -130,6 +134,7 @@
                     sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3',
                     aoColumns: [
                     { mData: 'ID'},
+                    { mData: 'PROGRAM_ID', sClass:'hide'},
                     { mData: 'PROGRAM'},
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
@@ -138,7 +143,8 @@
                   ]}" class="table table-btl table-striped b-t b-b table-hibah" id="table-hibah">
                   <thead>
                     <tr>                   
-                      <th class:'hide'>No </th>
+                      <th>No </th>
+                      <th class="hide">ID </th>
                       <th>PROGRAM </th>
                       <th>OUTCOME </th>
                       <th>TARGET </th>
@@ -170,6 +176,7 @@
                     sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4',
                     aoColumns: [
                     { mData: 'ID'},
+                    { mData: 'PROGRAM_ID', sClass:'hide'},
                     { mData: 'PROGRAM'},
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
@@ -178,7 +185,8 @@
                   ]}" class="table table-btl table-striped b-t b-b table-bantuan" id="table-bantuan">
                  <thead>
                     <tr>                   
-                      <th class:'hide'>No </th>
+                      <th>No </th>
+                      <th class='hide'>ID </th>
                       <th>PROGRAM </th>
                       <th>OUTCOME </th>
                       <th>TARGET </th>
@@ -306,8 +314,6 @@
       <tr>
         <th>No</th>                                    
         <th>KEGIATAN</th>                          
-        <th>OUTPUT</th>                       
-        <th>TARGET</th>                                       
         <th>KINERJA</th>                                       
         <th>TOTAL</th>                                       
         <th>#</th>                                       
@@ -340,15 +346,13 @@
       }else{
         $('.btl-rincian').slideUp('fast').remove(); 
         $(this).addClass('shown');
-        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-btl').html()+'</td></tr>';
+        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="6">'+$('#table-detail-btl').html()+'</td></tr>';
         $(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
         $('.table-detail-btl-isi').DataTable({
           sAjaxSource: "/monev/{{ $tahun }}/getDetail/"+skpd+"/"+kegiatan,
           aoColumns: [
           { mData: 'NO' },
           { mData: 'KEGIATAN' },
-          { mData: 'OUTPUT' },
-          { mData: 'TARGET' },
           { mData: 'KINERJA' },
           { mData: 'TOTAL' },
           { mData: 'AKSI' }
