@@ -569,3 +569,12 @@ Route::get('/asosiasi/{tahun}/kegiatan', 'Asosiasi\asosiasiController@kegiatan')
 Route::get('/main/{tahun}/{status}/rekapAll', 'Budgeting\lampiranController@rekapAll');
 Route::get('/main/{tahun}/{status}/rekapBerbeda/paguRincian', 'Budgeting\lampiranController@berbedaPaguRincian');
 Route::get('/main/{tahun}/{status}/rekapBelanja', 'Budgeting\lampiranController@rekapBelanja');
+
+
+//MONEV
+Route::get('/monev/{tahun}', 'Monev\monevController@index');
+Route::get('/monev/{tahun}/getTriwulan1', 'Monev\monevController@getTriwulan1');
+Route::get('/monev/{tahun}/getTriwulan2', 'Monev\monevController@getTriwulan2');
+Route::get('/monev/{tahun}/getTriwulan3', 'Monev\monevController@getTriwulan3');
+Route::get('/monev/{tahun}/getTriwulan4', 'Monev\monevController@getTriwulan4');
+Route::get('/monev/{tahun}/getDetail', 'Monev\monevController@getDetail');

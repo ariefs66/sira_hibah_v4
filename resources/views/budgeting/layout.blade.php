@@ -172,6 +172,13 @@
               @endif
               <li class="divider"></li>
               <li>
+                <a href="{{ url('/') }}/monev/{{$tahun}}" onclick="$.alert('Ditutup!')">
+                  <i class="icon-bdg_uikit"></i>
+                  <span>Monev</span>
+                </a>
+              </li>
+              <li class="divider"></li>
+              <li>
                 <a href="/keluar/{{ Auth::user()->id }}">
                   <i class="icon-bdg_arrow4"></i>
                   <span>Logout</span>
