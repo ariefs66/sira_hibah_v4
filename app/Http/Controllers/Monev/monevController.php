@@ -196,4 +196,12 @@ class monevController extends Controller
         $out = array("aaData"=>$view);       
       return Response::JSON($out);
       }   
+
+      public function cetak($tahun){
+
+         return View('monev.pdf',
+            [   'tahun'             =>$tahun
+            ]);
+              
+      }
 }
