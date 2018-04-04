@@ -53,6 +53,7 @@ class komponenController extends Controller
         //dd($req);
         $start = ($req->iDisplayStart == "")? 0 : $req->iDisplayStart;
         $length = ($req->iDisplayLength == "")? 10 : $req->iDisplayLength;
+        $kategori = ($req->sSearch == "")? $kategori : urldecode($req->sSearch);
     	$data 	= Komponen::where('KOMPONEN_KODE','like',$kategori.'%')
                             ->where('KOMPONEN_TAHUN',$tahun)
                             ->limit($length)
