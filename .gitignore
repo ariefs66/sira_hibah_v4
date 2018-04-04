@@ -4,6 +4,6 @@
 Homestead.yaml
 Homestead.json
 .env
-*.env
+env_dev
+config/database_server.php
 database/notes/*
-.env
