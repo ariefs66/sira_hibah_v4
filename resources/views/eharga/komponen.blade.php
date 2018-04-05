@@ -457,6 +457,7 @@
         @endif
         { mData: 'AKSI' }]
     });
+    $.fn.dataTable.ext.errMode = 'none';
   }
 
   function getrekening(komponen){

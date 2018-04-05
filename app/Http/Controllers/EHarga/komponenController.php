@@ -49,12 +49,21 @@ class komponenController extends Controller
     	return View('eharga.komponen',$data);
     }
 
-    public function getReferensi($tahun,$status,$kategori){
+    public function getReferensi(Request $req, $tahun,$status,$kategori){
+        //dd($req);
+        $start = ($req->iDisplayStart == "")? 0 : $req->iDisplayStart;
+        $length = ($req->iDisplayLength == "")? 10 : $req->iDisplayLength;
+        $kategori = ($req->sSearch == "")? $kategori : urldecode($req->sSearch);
     	$data 	= Komponen::where('KOMPONEN_KODE','like',$kategori.'%')
-					    	->where('KOMPONEN_TAHUN',$tahun)
+                            ->where('KOMPONEN_TAHUN',$tahun)
+                            ->limit($length)
+							->offset($start)
 					    	->orderBy('KOMPONEN_KODE')
-					    	->get();
-    	$i = 1;
+                            ->get();
+        $display = $data->count();
+        $count = Komponen::where('KOMPONEN_KODE','like',$kategori.'%')->where('KOMPONEN_TAHUN',$tahun)->get()->count();
+        
+    	$i = $start+1;
         $view = array();
         foreach ($data as $data) {
             if(substr(Auth::user()->mod,4,1) == 1 or substr(Auth::user()->mod,6,1) == 1){
@@ -96,7 +105,8 @@ class komponenController extends Controller
                                      'KOMPONEN_HARGA'    	=>number_format($data->KOMPONEN_HARGA,0,'.',',')));
             $i++;
         }
-        $out = array("aaData"=>$view);      
+        $out = array("iTotalRecords" 		=> intval($display),
+        "iTotalDisplayRecords"  => intval($count),"aaData"=>$view);      
         return Response::JSON($out);
     }
 

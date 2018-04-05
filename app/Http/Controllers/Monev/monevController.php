@@ -13,6 +13,7 @@ use Carbon;
 use App\Model\SKPD;
 use App\Model\Program;
 use App\Model\Kegiatan;
+use App\Model\Monev\Monev_Kegiatan;
 use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
@@ -56,6 +57,7 @@ class monevController extends Controller
         foreach ($data as $data) {
           array_push($view, array('ID'               =>$no,
                                    'PROGRAM_ID'      =>$data->PROGRAM_ID, 
+                                   'MODE'      =>1, 
                                    'PROGRAM'         =>$data->PROGRAM_KODE.'-'.$data->PROGRAM_NAMA, 
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
@@ -87,6 +89,7 @@ class monevController extends Controller
         foreach ($data as $data) {
           array_push($view, array('ID'               =>$no,
                                    'PROGRAM_ID'      =>$data->PROGRAM_ID, 
+                                   'MODE'      =>2, 
                                    'PROGRAM'         =>$data->PROGRAM_KODE.'-'.$data->PROGRAM_NAMA, 
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
@@ -118,6 +121,7 @@ class monevController extends Controller
         foreach ($data as $data) {
           array_push($view, array('ID'               =>$no,
                                    'PROGRAM_ID'      =>$data->PROGRAM_ID, 
+                                   'MODE'      =>3, 
                                    'PROGRAM'         =>$data->PROGRAM_KODE.'-'.$data->PROGRAM_NAMA, 
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
@@ -150,6 +154,7 @@ class monevController extends Controller
         foreach ($data as $data) {
           array_push($view, array('ID'               =>$no,
                                    'PROGRAM_ID'      =>$data->PROGRAM_ID, 
+                                   'MODE'      =>4, 
                                    'PROGRAM'         =>$data->PROGRAM_KODE.'-'.$data->PROGRAM_NAMA, 
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
@@ -162,7 +167,96 @@ class monevController extends Controller
          return Response::JSON($out);
       }      
 
-   public function getDetail($tahun, $skpd, $id){
+   public function getData($tahun, $mode=1, $id){
+
+        $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+                        ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL.BL_ID','BL_PAGU')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('SKPD_ID',1)
+                        ->where('BL_ID',$id)
+                        ->get();
+
+        $monev_keg  = Monev_Kegiatan::where('KEGIATAN_ID',$id)->first();
+        
+        if($monev_keg){
+          $kegiatanid = $monev_keg->KEGIATAN_ID;
+          $kinerja = 'KEGIATAN_T'.$mode;
+          $penghambat = 'KEGIATAN_PENGHAMBAT_T'.$mode;
+          $pendukung = 'KEGIATAN_PENDUKUNG_T'.$mode;
+          $kinerja = $monev_keg->$kinerja;
+          $penghambat = $monev_keg->$penghambat;
+          $pendukung = $monev_keg->$pendukung;
+        }else{
+          $kegiatanid = "";
+          $kinerja = "";
+          $penghambat = "";
+          $pendukung = "";
+        }
+
+        $view       = array();
+        $no         = 1;
+        $opsi       = '';
+        $akb       = '';
+        foreach ($data as $data) {
+          if(Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
+            $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
+             $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
+          }elseif(Auth::user()->level == 2){
+            $opsi = '-';
+            $akb = '';
+          }
+          array_push($view, array( 'KEGIATAN_ID'       => $data->KEGIATAN_ID,
+                                   'PROGRAM_ID'       => $data->PROGRAM_ID,
+                                   'PROGRAM_NAMA'       => $data->PROGRAM_NAMA,
+                                   'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
+                                   'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
+                                   'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
+                                   'TARGET'       => '',
+                                   'MODE'       => $mode,
+                                   'ID'       => $kegiatanid,
+                                   'KINERJA'       => $kinerja,
+                                   'KEGIATAN_PENDUKUNG'       => $pendukung,
+                                   'KEGIATAN_PENGHAMBAT'       => $penghambat));
+        }
+         
+        $out = array("aaData"=>$view);       
+      return Response::JSON($out);
+      }   
+
+    public function simpanKegiatan($tahun,$mode=1){
+      $mode = Input::get('MODE');
+      $kinerja = 'KEGIATAN_T'.$mode;
+      $pendukung = 'KEGIATAN_PENDUKUNG_T'.$mode;
+      $penghambat = 'KEGIATAN_PENGHAMBAT_T'.$mode;
+
+      $id = Input::get('KEGIATAN_ID');
+      $keg = Monev_Kegiatan::find($id);
+        if($keg){
+          $keg->USER_UPDATED       = Auth::user()->id;
+          $keg->TIME_UPDATED       = Carbon\Carbon::now();
+        }else{
+          $keg = new Monev_Kegiatan;
+          $keg->KEGIATAN_ID = Input::get('KEGIATAN_ID');
+          $keg->USER_CREATED       = Auth::user()->id;
+          $keg->TIME_CREATED       = Carbon\Carbon::now();
+        }
+      $keg->PROGRAM_ID        = Input::get('PROGRAM_ID');
+      $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
+      $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
+      $keg->KEGIATAN_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
+      $keg->$kinerja        = Input::get('KINERJA');
+      $keg->KEGIATAN_VALIDASI        = 0;
+      $keg->KEGIATAN_INPUT        = 0;
+      $keg->$pendukung        = Input::get('PENDUKUNG');
+      $keg->$penghambat        = Input::get('PENGHAMBAT');
+      //var_dump($keg);
+      $keg->save(); 
+        return 'Berhasil!';
+    }
+
+      public function getDetail($tahun, $skpd, $mode=1, $id){
 
         $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
@@ -178,7 +272,7 @@ class monevController extends Controller
         $akb       = '';
         foreach ($data as $data) {
           if(Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
-            $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }elseif(Auth::user()->level == 2){
             $opsi = '-';
@@ -188,7 +282,7 @@ class monevController extends Controller
                                    'KEGIATAN'     => $data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA,
                                    'KINERJA'    => '',
                                    'TOTAL'    => number_format($data->BL_PAGU,0,'.',','),
-                                    'AKSI' => $akb ));
+                                    'AKSI' => $opsi ));
         }
          
         $out = array("aaData"=>$view);       

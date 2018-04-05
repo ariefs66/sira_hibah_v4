@@ -577,5 +577,7 @@ Route::get('/monev/{tahun}/getTriwulan1', 'Monev\monevController@getTriwulan1');
 Route::get('/monev/{tahun}/getTriwulan2', 'Monev\monevController@getTriwulan2');
 Route::get('/monev/{tahun}/getTriwulan3', 'Monev\monevController@getTriwulan3');
 Route::get('/monev/{tahun}/getTriwulan4', 'Monev\monevController@getTriwulan4');
-Route::get('/monev/{tahun}/getDetail/{skpd}/{id}', 'Monev\monevController@getDetail');
+Route::get('/monev/{tahun}/getDetail/{skpd}/{mode}/{id}', 'Monev\monevController@getDetail');
+Route::get('/monev/{tahun}/getData/{mode}/{id}', 'Monev\monevController@getData');
 Route::get('/monev/{tahun}/cetak', 'Monev\monevController@cetak');
+Route::post('/monev/{tahun}/kegiatan/simpan/{mode}', 'Monev\monevController@simpanKegiatan');

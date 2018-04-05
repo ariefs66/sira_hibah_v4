@@ -63,6 +63,7 @@
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
+                    { mData: 'MODE', sClass:'hide'},
                     { mData: 'PROGRAM'},
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
@@ -73,6 +74,7 @@
                     <tr>                   
                       <th>No </th>
                       <th class="hide">ID </th>
+                      <th class="hide">MODE </th>
                       <th>PROGRAM </th>
                       <th>OUTCOME </th>
                       <th>TARGET </th>
@@ -81,7 +83,7 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th colspan="6" class="th_search">
+                      <th colspan="7" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -99,6 +101,7 @@
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
+                    { mData: 'MODE', sClass:'hide'},
                     { mData: 'PROGRAM'},
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
@@ -109,6 +112,7 @@
                     <tr>                   
                       <th>No </th>
                       <th class="hide">ID </th>
+                      <th class="hide">MODE </th>
                       <th>PROGRAM </th>
                       <th>OUTCOME </th>
                       <th>TARGET </th>
@@ -117,7 +121,7 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th colspan="6" class="th_search">
+                      <th colspan="7" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -135,6 +139,7 @@
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
+                    { mData: 'MODE', sClass:'hide'},
                     { mData: 'PROGRAM'},
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
@@ -145,6 +150,7 @@
                     <tr>                   
                       <th>No </th>
                       <th class="hide">ID </th>
+                      <th class="hide">MODE </th>
                       <th>PROGRAM </th>
                       <th>OUTCOME </th>
                       <th>TARGET </th>
@@ -153,7 +159,7 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th colspan="6" class="th_search">
+                      <th colspan="7" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -177,6 +183,7 @@
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
+                    { mData: 'MODE', sClass:'hide'},
                     { mData: 'PROGRAM'},
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
@@ -187,6 +194,7 @@
                     <tr>                   
                       <th>No </th>
                       <th class='hide'>ID </th>
+                      <th class='hide'>MODE </th>
                       <th>PROGRAM </th>
                       <th>OUTCOME </th>
                       <th>TARGET </th>
@@ -195,7 +203,7 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th colspan="6" class="th_search">
+                      <th colspan="7" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -225,78 +233,59 @@
       <div class="form-group">
         <label class="col-sm-3">Program</label>
         <div class="col-sm-9">
-          <input type="hidden" id="id-btl">
-          <select ui-jq="chosen" class="w-full" id="jenis-btl">
-            <option value="">Silahkan Pilih Jenis</option>
-            <option value="5.1.1">Pegawai</option>
-            <option value="5.1.3">Subsidi</option>
-            <option value="5.1.4">Hibah</option>
-            <option value="5.1.7">Bantuan Keuangan</option>
-            <option value="5.1.8">Belanja Tidak Terduga</option>
+          <input type="hidden" id="id">
+          <input type="hidden" id="keg-id">
+          <input type="hidden" id="keg-kode">
+          <input type="hidden" id="keg-nama">
+          <input type="hidden" id="prog-id">
+          <input type="hidden" id="prog-nama">
+          <input type="hidden" id="mode">
+          <select ui-jq="chosen" class="w-full" id="program" disabled>
+            <option value="">Silahkan Pilih Program</option>
           </select>
         </div>
       </div>
       <div class="form-group">
         <label class="col-sm-3">Kegiatan</label>
         <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="skpd-btl">
-            <option value="">Silahkan Pilih SKPD</option>
-            @foreach($skpd as $s)
-            <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
-            @endforeach
+          <select ui-jq="chosen" class="w-full" id="kegiatan" disabled>
+            <option value="">Silahkan Pilih Kegiatan</option>
           </select>
         </div>
       </div>   
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Anggaran</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Total Anggaran" id="anggaran" disabled>          
+        </div> 
+      </div>
       <div class="form-group">
         <label class="col-sm-3">Output</label>
         <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="subunit-btl">
-            <option value="">Silahkan Pilih Subunit</option>
-          </select>
-        </div>
-      </div>   
-      <div class="form-group">
-        <label class="col-sm-3">output</label>
-        <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="rekening-btl">
+          <select ui-jq="chosen" class="w-full" id="target" disabled>
             <option value="">Silahkan Pilih Rekening</option>
           </select>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="no_spp" class="col-md-3">Peruntukan</label>          
+        <label for="no_spp" class="col-md-3">Kinerja</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Masukan Keterangan" id="keterangan-btl">          
+          <input type="text" class="form-control" placeholder="Masukan Target Kinerja" id="kinerja" >          
         </div> 
       </div>
 
       <div class="form-group">
-        <label for="no_spp" class="col-md-3">Koefisien</label>          
-        <div class="col-sm-5">
-          <input type="text" class="form-control" placeholder="Masukan Jumlah" id="volume-btl">      
-        </div> 
-        <div class="col-sm-4">
-          <select ui-jq="chosen" class="w-full" id="satuan-btl">
-            <option value="">Satuan</option>
-            @foreach($satuan as $sat)
-            <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-            @endforeach
-          </select>    
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="no_spp" class="col-md-3">Anggaran</label>          
+        <label for="no_spp" class="col-md-3">Pendukung</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Masukan Anggaran" id="total-btl" >          
+          <input type="text" class="form-control" placeholder="Pendukung" id="pendukung" >          
         </div> 
       </div>
 
       <div class="form-group">
-        <label for="no_spp" class="col-md-3">Dasar Hukum</label>          
+        <label for="no_spp" class="col-md-3">Penghambat</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Dasar Hukum" id="dashuk" >          
+          <input type="text" class="form-control" placeholder="Penghambat" id="penghambat" >          
         </div> 
       </div>
 
@@ -338,6 +327,7 @@
     if($("tr").hasClass('btl-rincian') == false){
       skpd      = $(this).children("td").eq(0).html();
       kegiatan  = $(this).children("td").eq(1).html();
+      mode      = $(this).children("td").eq(2).html();
     }
     if(!$(this).hasClass('btl-rincian')){
       if($(this).hasClass('shown')){      
@@ -349,7 +339,7 @@
         btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="6">'+$('#table-detail-btl').html()+'</td></tr>';
         $(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
         $('.table-detail-btl-isi').DataTable({
-          sAjaxSource: "/monev/{{ $tahun }}/getDetail/"+skpd+"/"+kegiatan,
+          sAjaxSource: "/monev/{{ $tahun }}/getDetail/"+skpd+"/"+mode+"/"+kegiatan,
           aoColumns: [
           { mData: 'NO' },
           { mData: 'KEGIATAN' },
@@ -392,36 +382,38 @@
   });
 
   function simpanBTL(){
-    var id              = $('#jenis-btl').val();
+    var id              = $('#id').val();
     var token           = $('#token').val();    
-    var SUB_ID          = $('#subunit-btl').val();
-    var REKENING_ID     = $('#rekening-btl').val();
-    var BTL_NAMA        = $('#keterangan-btl').val();
-    var BTL_VOL         = $('#volume-btl').val();
-    var BTL_SATUAN      = $('#satuan-btl').val();
-    var BTL_TOTAL       = $('#total-btl').val();
-    var BTL_DASHUK       = $('#dashuk').val();
-    var BTL_ID          = $('#id-btl').val();
-    if(SUB_ID == "" || BTL_NAMA == "" || BTL_VOL == "" || BTL_SATUAN == "" || BTL_TOTAL == ""){
+    var mode            = $('#mode').val();
+    var KEGIATAN_ID          = $('#keg-id').val();
+    var KEGIATAN_KODE     = $('#keg-kode').val();
+    var KEGIATAN_NAMA     = $('#keg-nama').val();
+    var PROGRAM_ID     = $('#prog-id').val();
+    var PROGRAM_NAMA     = $('#prog-nama').val();
+    var KEGIATAN_ANGGARAN     = $('#anggaran').val();
+    var TARGET     = $('#target').val();
+    var KINERJA        = $('#kinerja').val();
+    var PENDUKUNG         = $('#pendukung').val();
+    var PENGHAMBAT      = $('#penghambat').val();
+    if(KINERJA == "" || PENDUKUNG == "" || PENGHAMBAT == ""){
       $.alert('Form harap diisi!');
     }else{
-      if(BTL_ID == ""){
-        uri   = "{{ url('/') }}/main/{{ $tahun }}/belanja-tidak-langsung/simpan";
-      }else{
-        uri   = "{{ url('/') }}/main/{{ $tahun }}/belanja-tidak-langsung/ubah";
-      }
+        uri   = "{{ url('/') }}/monev/{{ $tahun }}/kegiatan/simpan/"+mode;
       $.ajax({
         url: uri,
         type: "POST",
-        data: {'_token'         : token,
-              'BTL_ID'          : BTL_ID, 
-              'SUB_ID'          : SUB_ID, 
-              'REKENING_ID'     : REKENING_ID,
-              'BTL_NAMA'        : BTL_NAMA, 
-              'BTL_VOL'         : BTL_VOL, 
-              'BTL_SATUAN'      : BTL_SATUAN, 
-              'BTL_DASHUK'      : BTL_DASHUK, 
-              'BTL_TOTAL'       : BTL_TOTAL},
+        data: {'_token'             : token,
+              'KEGIATAN_ID'         : KEGIATAN_ID, 
+              'KEGIATAN_KODE'       : KEGIATAN_KODE, 
+              'KEGIATAN_NAMA'       : KEGIATAN_NAMA, 
+              'PROGRAM_ID'          : PROGRAM_ID, 
+              'PROGRAM_NAMA'        : PROGRAM_NAMA, 
+              'KEGIATAN_ANGGARAN'   : KEGIATAN_ANGGARAN, 
+              'TARGET'              : TARGET, 
+              'KINERJA'             : KINERJA, 
+              'PENDUKUNG'           : PENDUKUNG, 
+              'PENGHAMBAT'          : PENGHAMBAT, 
+              'MODE'          : mode},
         success: function(msg){
           $('.table-pegawai').DataTable().ajax.reload();
           $('.table-subsidi').DataTable().ajax.reload();
@@ -433,16 +425,13 @@
           $('.input-btl,.input-sidebar').animate({'right':'-1050px'},function(){
               $('.overlay').fadeOut('fast');
           });
-          $('#jenis-btl').val("").trigger("chosen:updated");
-          $('#skpd-btl').val("").trigger("chosen:updated");
-          $('#subunit-btl').val("").trigger("chosen:updated");
-          $('#rekening-btl').val("").trigger("chosen:updated");
-          $('#keterangan-btl').val("");
-          $('#volume-btl').val("");
-          $('#satuan-btl').val("").trigger("chosen:updated");
-          $('#total-btl').val("");
-          $('#dashuk').val("");
-          $('#id-btl').val("");
+          $('#kegiatan').val("").trigger("chosen:updated");
+          $('#program').val("").trigger("chosen:updated");
+          $('#anggaran').val("");
+          $('#kinerja').val("");
+          $('#pendukung').val("");
+          $('#penghambat').val("");
+          $('#target').val("");
         }
       });
     }
@@ -491,20 +480,26 @@
     });
   }
 
-  function ubah(id) {
+  function ubah(mode=1,id) {
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/main/{{ $tahun }}/belanja-tidak-langsung/edit/"+id,
+      url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+mode+"/"+id,
       success : function (data) {
-        $('#id-btl').val(data['BTL_ID']);
-        $('#jenis-btl').val(data['JENIS_BTL']).trigger("chosen:updated");
-        $('#skpd-btl').val(data['SKPD']).trigger("chosen:updated");
-        $('#subunit-btl').append('<option value="'+data['SUB_ID']+'" selected>'+data['SUB_NAMA']+'</option>').trigger("chosen:updated");
-        $('#rekening-btl').append('<option value="'+data['REKENING_ID']+'" selected>'+data['REKENING_KODE']+'-'+data['REKENING_NAMA']+'</option>').trigger("chosen:updated");
-        $('#keterangan-btl').val(data['BTL_KETERANGAN']);
-        $('#volume-btl').val(data['BTL_VOLUME']);
-        $('#total-btl').val(data['BTL_TOTAL']);
-        $('#dashuk').val(data['BTL_DASHUK']);
+        data = data.aaData[0];
+        $('#id').val(data['ID']);
+        $('#keg-id').val(data['KEGIATAN_ID']);
+        $('#keg-kode').val(data['KEGIATAN_KODE']);
+        $('#keg-nama').val(data['KEGIATAN_NAMA']);
+        $('#prog-id').val(data['PROGRAM_ID']);
+        $('#prog-nama').val(data['PROGRAM_NAMA']);
+        $('#mode').val(data['MODE']);
+        $('#program').append('<option value="'+data['PROGRAM_ID']+'" selected>'+data['PROGRAM_NAMA']+'</option>').trigger("chosen:updated");
+        $('#kegiatan').append('<option value="'+data['KEGIATAN_ID']+'" selected>'+data['KEGIATAN_KODE']+'-'+data['KEGIATAN_NAMA']+'</option>').trigger("chosen:updated");
+        $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
+        $('#target').val(data['TARGET']);
+        $('#kinerja').val(data['KINERJA']);
+        $('#pendukung').val(data['KEGIATAN_PENDUKUNG']);
+        $('#penghambat').val(data['KEGIATAN_PENGHAMBAT']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
