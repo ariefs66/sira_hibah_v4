@@ -54,12 +54,12 @@ class komponenController extends Controller
         $start = ($req->iDisplayStart == "")? 0 : $req->iDisplayStart;
         $length = ($req->iDisplayLength == "")? 10 : $req->iDisplayLength;
         $kategori = ($req->sSearch == "")? $kategori : urldecode($req->sSearch);
-        $kondisi = 'KOMPONEN_NAMA';
+        $kondisi = 'LOWER(KOMPONEN_NAMA)';
         if (preg_match('/[.].*[0-9]|[0-9].*[.]/', $kategori))
         {
             $kondisi = 'KOMPONEN_KODE';
         }
-    	$data 	= Komponen::where($kondisi,'like',$kategori.'%')
+    	$data 	= Komponen::where($kondisi,'like',strtolower($kategori).'%')
                             ->where('KOMPONEN_TAHUN',$tahun)
                             ->limit($length)
 							->offset($start)
