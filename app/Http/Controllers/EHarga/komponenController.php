@@ -55,7 +55,7 @@ class komponenController extends Controller
         $length = ($req->iDisplayLength == "")? 10 : $req->iDisplayLength;
         $kategori = ($req->sSearch == "")? $kategori : urldecode($req->sSearch);
         $kondisi = 'KOMPONEN_NAMA';
-        if (preg_match('/[0-9]|[0-9]/', $kategori))
+        if (preg_match('/[.].*[0-9]|[0-9].*[.]/', $kategori))
         {
             $kondisi = 'KOMPONEN_KODE';
         }
