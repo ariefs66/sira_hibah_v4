@@ -572,6 +572,7 @@ Route::get('/main/{tahun}/{status}/rekapBelanja', 'Budgeting\lampiranController@
 
 
 //MONEV
+Route::get('/monev/{tahun}/excel', 'ExcelController@getExport');
 Route::get('/monev/{tahun}', 'Monev\monevController@index');
 Route::get('/monev/{tahun}/getTriwulan1', 'Monev\monevController@getTriwulan1');
 Route::get('/monev/{tahun}/getTriwulan2', 'Monev\monevController@getTriwulan2');
