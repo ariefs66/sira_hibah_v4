@@ -23,9 +23,20 @@
                   
                   <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah Monev</button>
                   
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/download/rekapbtl"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
                   <a class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak"><i class="m-r-xs fa fa-file"></i> Print</a>
                   <h5 class="inline font-semibold text-orange m-n ">Monev</h5>
+                  @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+                  <div class="col-sm-4 pull-right m-t-n-sm">
+                   <select ui-jq="chosen" class="form-control" id="filter-skpd">
+                     <option value="">- Pilih OPD -</option>
+                     @foreach($skpd as $pd)
+                     <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
+                     @endforeach
+                   </select>
+                   
+                 </div>
+                 @endif
                   <div class="col-sm-1 pull-right m-t-n-sm">
                    <select class="form-control dtSelect" id="dtSelect">
                             <option value="10">10</option>
@@ -59,7 +70,7 @@
               <div role="tabpanel" class="active tab-pane " id="tab-1">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -507,5 +518,27 @@
       }
     });   
   } 
+
+
+  $('#filter-skpd').change(function(e, params){
+      var id  = $('#filter-skpd').val();
+      $('#table-index').DataTable().destroy();
+      $('#table-index').DataTable({
+        sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/getTriwulan1/"+id,
+        aoColumns: [
+          { mData: 'ID'},
+          { mData: 'PROGRAM_ID', sClass:'hide'},
+          { mData: 'MODE', sClass:'hide'},
+          { mData: 'PROGRAM'},
+          { mData: 'OUTCOME'},
+          { mData: 'TARGET'},
+          { mData: 'KINERJA'},
+          { mData: 'TOTAL'}],
+          initComplete:function(setting,json){
+            $("#pagu_foot").html(json.pagu_foot);
+            $("#rincian_foot").html(json.rincian_foot);
+        }
+      });  
+  });
 </script>
 @endsection
