@@ -316,6 +316,7 @@ class monevController extends Controller
       }else{
         $prog->SKPD_ID        = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
       }
+      $skpd = $prog->SKPD_ID;
       $prog->PROGRAM_KODE        = Input::get('KEGIATAN_KODE');
       $prog->PROGRAM_NAMA        = Input::get('PROGRAM_NAMA');
       $prog->PROGRAM_VALIDASI        = 0;
@@ -323,8 +324,9 @@ class monevController extends Controller
       $prog->SATUAN        = Input::get('SATUAN');
       $prog->save(); 
       $id = Input::get('KEGIATAN_ID');
-      $keg = Monev_Kegiatan::find($id);
+      $keg = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
         if($keg){
+          $keg = Monev_Kegiatan::find($keg->KEGIATAN_ID);
           $keg->USER_UPDATED       = Auth::user()->id;
           $keg->TIME_UPDATED       = Carbon\Carbon::now();
         }else{
