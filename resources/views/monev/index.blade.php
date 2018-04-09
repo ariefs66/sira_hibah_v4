@@ -287,7 +287,7 @@
           <input type="text" class="form-control" placeholder="Masukan Target Kinerja" id="kinerja" >          
         </div> 
         <div class="col-sm-4">
-          <select class="w-full" name="satuan" id="satuan">
+        <select ui-jq="chosen" class="w-full" id="satuan">
             <option value="">Satuan</option>
             @foreach($satuan as $st)
             <option value="{{ $st->SATUAN_ID }}">{{ $st->SATUAN_NAMA }}</option>
@@ -526,6 +526,7 @@
         $('#prog-kode').val(data['PROGRAM_KODE']);
         $('#skpd-id').val(data['SKPD_ID']);
         $('#mode').val(data['MODE']);
+        $('#satuan').val(data['SATUAN_ID']).trigger("chosen:updated");
         $('#program').append('<option value="'+data['PROGRAM_ID']+'" selected>'+data['PROGRAM_NAMA']+'</option>').trigger("chosen:updated");
         $('#kegiatan').append('<option value="'+data['KEGIATAN_ID']+'" selected>'+data['KEGIATAN_KODE']+'-'+data['KEGIATAN_NAMA']+'</option>').trigger("chosen:updated");
         $('#anggaran').val(data['KEGIATAN_ANGGARAN']);

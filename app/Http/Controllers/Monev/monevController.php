@@ -232,22 +232,7 @@ class monevController extends Controller
                         ->where('BL_ID',$id)
                         ->get();
 
-        $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->first();
-        
-        if($monev_keg){
-          $kegiatanid = $monev_keg->KEGIATAN_ID;
-          $kinerja = 'KEGIATAN_T'.$mode;
-          $penghambat = 'KEGIATAN_PENGHAMBAT_T'.$mode;
-          $pendukung = 'KEGIATAN_PENDUKUNG_T'.$mode;
-          $kinerja = $monev_keg->$kinerja;
-          $penghambat = $monev_keg->$penghambat;
-          $pendukung = $monev_keg->$pendukung;
-        }else{
-          $kegiatanid = "";
-          $kinerja = "";
-          $penghambat = "";
-          $pendukung = "";
-        }
+
 
         $view       = array();
         $no         = 1;
@@ -257,6 +242,24 @@ class monevController extends Controller
             
           $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
           $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
+          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->first();
+        
+          if($monev_keg){
+            $kegiatanid = $monev_keg->KEGIATAN_ID;
+            $kinerja = 'KEGIATAN_T'.$mode;
+            $penghambat = 'KEGIATAN_PENGHAMBAT_T'.$mode;
+            $pendukung = 'KEGIATAN_PENDUKUNG_T'.$mode;
+            $kinerja = $monev_keg->$kinerja;
+            $penghambat = $monev_keg->$penghambat;
+            $pendukung = $monev_keg->$pendukung;
+            $satuan = $monev_keg->SATUAN;
+          }else{
+            $kegiatanid = "";
+            $kinerja = "";
+            $penghambat = "";
+            $pendukung = "";
+            $satuan = "";
+          }
 
           array_push($view, array( 'KEGIATAN_ID'       => $data->KEGIATAN_ID,
                                    'PROGRAM_ID'       => $data->PROGRAM_ID,
@@ -269,6 +272,7 @@ class monevController extends Controller
                                    'ID'       => $kegiatanid,
                                    'KINERJA'       => $kinerja,
                                    'KEGIATAN_PENDUKUNG'       => $pendukung,
+                                   'SATUAN_ID'       => $satuan,
                                    'KEGIATAN_PENGHAMBAT'       => $penghambat));
         }
          
