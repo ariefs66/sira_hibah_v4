@@ -307,11 +307,16 @@ class monevController extends Controller
         $prog->PROGRAM_TAHUN        = $tahun;
         $prog->PROGRAM_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
       }
-      $prog->SKPD_ID        = Auth::user()->id;
+      if(!empty(Input::get('SKPD_ID'))){
+        $prog->SKPD_ID        = Input::get('SKPD_ID');
+      }else{
+        $prog->SKPD_ID        = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
+      }
       $prog->PROGRAM_KODE        = Input::get('KEGIATAN_KODE');
       $prog->PROGRAM_NAMA        = Input::get('PROGRAM_NAMA');
       $prog->PROGRAM_VALIDASI        = 0;
       $prog->PROGRAM_INPUT        = 0;
+      $prog->SATUAN        = Input::get('SATUAN');
       $prog->save(); 
       $id = Input::get('KEGIATAN_ID');
       $keg = Monev_Kegiatan::find($id);
@@ -324,7 +329,12 @@ class monevController extends Controller
           $keg->USER_CREATED       = Auth::user()->id;
           $keg->TIME_CREATED       = Carbon\Carbon::now();
         }
-      $keg->PROGRAM_ID        = Input::get('PROGRAM_ID');
+      $keg->PROGRAM_ID        = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
+      if(!empty(Input::get('SKPD_ID'))){
+        $keg->SKPD_ID        = Input::get('SKPD_ID');
+      }else{
+        $keg->SKPD_ID        = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
+      }
       $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
       $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
       $keg->KEGIATAN_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
@@ -333,6 +343,7 @@ class monevController extends Controller
       $keg->KEGIATAN_INPUT        = 0;
       $keg->$pendukung        = Input::get('PENDUKUNG');
       $keg->$penghambat        = Input::get('PENGHAMBAT');
+      $keg->SATUAN        = Input::get('SATUAN');
       
       $keg->save(); 
         return 'Berhasil!';
