@@ -70,13 +70,16 @@ class monevController extends Controller
         $totPeg      = 0;
         $no=1;
         foreach ($data as $data) {
+          $monev        = Monev_Program::where('REF_PROGRAM_ID',$data->PROGRAM_ID)->where('PROGRAM_TAHUN',$tahun)
+                          ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_PROGRAM.SATUAN');
           array_push($view, array('ID'               =>$no,
                                    'PROGRAM_ID'      =>$data->PROGRAM_ID, 
-                                   'MODE'      =>1, 
+                                   'MODE'            =>1, 
                                    'PROGRAM'         =>$data->PROGRAM_KODE.'-'.$data->PROGRAM_NAMA, 
+                                   'PROGRAM_KODE'    =>$data->PROGRAM_KODE, 
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
-                                   'KINERJA'         =>'', 
+                                   'KINERJA'         =>$monev->value('PROGRAM_T1').' '.$monev->value('SATUAN_NAMA'), 
                                    'TOTAL'           =>number_format($data->total,0,'.',',')));
           $no++;
         }
@@ -115,13 +118,16 @@ class monevController extends Controller
         $totPeg      = 0;
         $no=1;
         foreach ($data as $data) {
-          array_push($view, array('ID'               =>$no,
+          $monev        = Monev_Program::where('REF_PROGRAM_ID',$data->PROGRAM_ID)->where('PROGRAM_TAHUN',$tahun)
+                          ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_PROGRAM.SATUAN');
+         array_push($view, array('ID'               =>$no,
                                    'PROGRAM_ID'      =>$data->PROGRAM_ID, 
                                    'MODE'      =>2, 
                                    'PROGRAM'         =>$data->PROGRAM_KODE.'-'.$data->PROGRAM_NAMA, 
+                                   'PROGRAM_KODE'    =>$data->PROGRAM_KODE, 
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
-                                   'KINERJA'         =>'', 
+                                   'KINERJA'         =>$monev->value('PROGRAM_T2').' '.$monev->value('SATUAN_NAMA'), 
                                    'TOTAL'           =>number_format($data->total,0,'.',',')));
           $no++;
         }
@@ -160,13 +166,16 @@ class monevController extends Controller
         $totPeg      = 0;
         $no=1;
         foreach ($data as $data) {
+          $monev        = Monev_Program::where('REF_PROGRAM_ID',$data->PROGRAM_ID)->where('PROGRAM_TAHUN',$tahun)
+                          ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_PROGRAM.SATUAN');
           array_push($view, array('ID'               =>$no,
                                    'PROGRAM_ID'      =>$data->PROGRAM_ID, 
-                                   'MODE'      =>3, 
+                                   'MODE'            =>3, 
                                    'PROGRAM'         =>$data->PROGRAM_KODE.'-'.$data->PROGRAM_NAMA, 
+                                   'PROGRAM_KODE'    =>$data->PROGRAM_KODE, 
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
-                                   'KINERJA'         =>'', 
+                                   'KINERJA'         =>$monev->value('PROGRAM_T2').' '.$monev->value('SATUAN_NAMA'), 
                                    'TOTAL'           =>number_format($data->total,0,'.',',')));
           $no++;
         }
@@ -206,13 +215,16 @@ class monevController extends Controller
         $totPeg      = 0;
         $no=1;
         foreach ($data as $data) {
+          $monev        = Monev_Program::where('REF_PROGRAM_ID',$data->PROGRAM_ID)->where('PROGRAM_TAHUN',$tahun)
+          ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_PROGRAM.SATUAN');
           array_push($view, array('ID'               =>$no,
                                    'PROGRAM_ID'      =>$data->PROGRAM_ID, 
                                    'MODE'      =>4, 
                                    'PROGRAM'         =>$data->PROGRAM_KODE.'-'.$data->PROGRAM_NAMA, 
+                                   'PROGRAM_KODE'    =>$data->PROGRAM_KODE, 
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
-                                   'KINERJA'         =>'', 
+                                   'KINERJA'         =>$monev->value('PROGRAM_T2').' '.$monev->value('SATUAN_NAMA'), 
                                    'TOTAL'           =>number_format($data->total,0,'.',',')));
           $no++;
         }
@@ -231,7 +243,6 @@ class monevController extends Controller
                         ->where('SKPD_ID',1)
                         ->where('BL_ID',$id)
                         ->get();
-
 
 
         $view       = array();
@@ -288,7 +299,39 @@ class monevController extends Controller
       $kinerjap = 'PROGRAM_T'.$mode;
       $pendukungp = 'PROGRAM_PENDUKUNG_T'.$mode;
       $penghambatp = 'PROGRAM_PENGHAMBAT_T'.$mode;
-
+      $before = 0;
+      $id = Input::get('KEGIATAN_ID');
+      $skpd = Input::get('SKPD_ID');
+      if(empty($skpd)){
+        $skpd = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
+      }
+      $keg = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
+        if($keg){
+          $keg = Monev_Kegiatan::find($keg->KEGIATAN_ID);
+          $keg->USER_UPDATED       = Auth::user()->id;
+          $keg->TIME_UPDATED       = Carbon\Carbon::now();
+        }else{
+          $keg = new Monev_Kegiatan;
+          $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
+          $keg->USER_CREATED       = Auth::user()->id;
+          $keg->TIME_CREATED       = Carbon\Carbon::now();
+        }
+      $keg->PROGRAM_ID        = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
+      
+      $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
+      $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
+      $keg->KEGIATAN_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
+      $before = intval($keg->$kinerja);
+      $keg->$kinerja        = Input::get('KINERJA');
+      $keg->KEGIATAN_VALIDASI        = 0;
+      $keg->KEGIATAN_INPUT        = 0;
+      $keg->SKPD_ID        = $skpd;
+      $keg->$pendukung        = Input::get('PENDUKUNG');
+      $keg->$penghambat        = Input::get('PENGHAMBAT');
+      $keg->SATUAN        = Input::get('SATUAN');
+      
+      $keg->save(); 
+      
       $program = Input::get('PROGRAM_ID');
       $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->first();
       
@@ -296,7 +339,7 @@ class monevController extends Controller
         $prog = Monev_Program::find($prog->PROGRAM_ID);
         $prog->USER_UPDATED       = Auth::user()->id;
         $prog->TIME_UPDATED       = Carbon\Carbon::now();
-        $prog->$kinerjap        = intval($prog->$kinerjap)+ intval(Input::get('KINERJA'));
+        $prog->$kinerjap        = intval($prog->$kinerjap) - $before + intval(Input::get('KINERJA'));
         $prog->$pendukungp        = $prog->$pendukungp . ' ' . Input::get('PENDUKUNG');
         $prog->$penghambatp        = $prog->$penghambatp. ' ' . Input::get('PENGHAMBAT');
         $prog->PROGRAM_ANGGARAN       += intval(Input::get('KEGIATAN_ANGGARAN'));
@@ -311,47 +354,13 @@ class monevController extends Controller
         $prog->PROGRAM_TAHUN        = $tahun;
         $prog->PROGRAM_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
       }
-      if(!empty(Input::get('SKPD_ID'))){
-        $prog->SKPD_ID        = Input::get('SKPD_ID');
-      }else{
-        $prog->SKPD_ID        = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
-      }
-      $skpd = $prog->SKPD_ID;
+      $prog->SKPD_ID        = $skpd;
       $prog->PROGRAM_KODE        = Input::get('KEGIATAN_KODE');
       $prog->PROGRAM_NAMA        = Input::get('PROGRAM_NAMA');
       $prog->PROGRAM_VALIDASI        = 0;
       $prog->PROGRAM_INPUT        = 0;
       $prog->SATUAN        = Input::get('SATUAN');
       $prog->save(); 
-      $id = Input::get('KEGIATAN_ID');
-      $keg = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
-        if($keg){
-          $keg = Monev_Kegiatan::find($keg->KEGIATAN_ID);
-          $keg->USER_UPDATED       = Auth::user()->id;
-          $keg->TIME_UPDATED       = Carbon\Carbon::now();
-        }else{
-          $keg = new Monev_Kegiatan;
-          $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
-          $keg->USER_CREATED       = Auth::user()->id;
-          $keg->TIME_CREATED       = Carbon\Carbon::now();
-        }
-      $keg->PROGRAM_ID        = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
-      if(!empty(Input::get('SKPD_ID'))){
-        $keg->SKPD_ID        = Input::get('SKPD_ID');
-      }else{
-        $keg->SKPD_ID        = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
-      }
-      $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
-      $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
-      $keg->KEGIATAN_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
-      $keg->$kinerja        = Input::get('KINERJA');
-      $keg->KEGIATAN_VALIDASI        = 0;
-      $keg->KEGIATAN_INPUT        = 0;
-      $keg->$pendukung        = Input::get('PENDUKUNG');
-      $keg->$penghambat        = Input::get('PENGHAMBAT');
-      $keg->SATUAN        = Input::get('SATUAN');
-      
-      $keg->save(); 
         return 'Berhasil!';
     }
 
@@ -376,6 +385,7 @@ class monevController extends Controller
           
           array_push($view, array( 'NO'       => $no++,
                                    'KEGIATAN'     => $data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA,
+                                   'KEGIATAN_ID'     => $data->KEGIATAN_ID,
                                    'KINERJA'    => '',
                                    'TOTAL'    => number_format($data->BL_PAGU,0,'.',','),
                                     'AKSI' => $opsi ));
