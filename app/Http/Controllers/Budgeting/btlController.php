@@ -588,7 +588,7 @@ class btlController extends Controller
         $opsi       = '';
         $akb       = '';
         foreach ($data as $data) {
-          if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1){
+          if(Auth::user()->level == 9 or Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }elseif(Auth::user()->level == 2){
@@ -619,7 +619,7 @@ class btlController extends Controller
         $no         = 1;
         $opsi       = '';
         foreach ($data as $data) {
-          if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1){
+          if(Auth::user()->level == 9 or Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }elseif(Auth::user()->level == 2){
@@ -838,9 +838,9 @@ class btlController extends Controller
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
-                /*<li><a onclick="return ubah(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>*/
-                /*<li><a onclick="return hapus(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Hapus</a></li>*/
+                <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li>
+                <li><a onclick="return ubah(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li>
+                <li><a onclick="return hapus(\''.$data->BTL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Hapus</a></li></ul></div>';
                 }
             }else{
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info*</a></li></ul></div>';                

@@ -678,15 +678,25 @@
 		<td width="50%"> </td>
 		<td></td>
 	</tr>
+
+	@php 
+		$totakb = $akb_btl->tri1+$akb_btl->tri2+$akb_btl->tri3+$akb_btl->tri4;
+		$slh_akb = $totakb-$totbtl_p;
+	@endphp
+
 	<tr>
 		<td class="tengah">Triwulan IV</td>
-		<td class="kiri">Rp. {{ number_format($akb_btl->tri4,0,',','.') }} </td>
+		<td class="kiri">
+			Rp. {{ number_format($akb_btl->tri4-$slh_akb,0,',','.') }} 
+		</td>
 		<td width="50%"> </td>
 		<td></td>
 	</tr>
 	<tr>
 		<td class="kanan"><b>Jumlah</b></td>
-		<td class="kiri"><b> Rp. {{ number_format($akb_btl->tri1+$akb_btl->tri2+$akb_btl->tri3+$akb_btl->tri4,0,',','.') }}</b></td>
+		<td class="kiri"><b> 
+			Rp. {{ number_format($totakb-$slh_akb,0,',','.') }}
+		</b></td>
 		<td width="50%"> </td>
 		<td></td>
 	</tr>
