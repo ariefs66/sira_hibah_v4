@@ -346,7 +346,11 @@
 <script>
   $('.table-btl').on('click', '.table-btl > tbody > tr ', function () {
     if($("tr").hasClass('btl-rincian') == false){
-      skpd      = $(this).children("td").eq(0).html();
+      @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+      skpd     = $('#filter-skpd').val();
+    @else
+      skpd     = $('#skpd-id').val();
+    @endif
       kegiatan  = $(this).children("td").eq(1).html();
       mode      = $(this).children("td").eq(2).html();
     }
