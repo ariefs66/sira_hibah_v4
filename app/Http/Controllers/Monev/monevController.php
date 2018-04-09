@@ -232,7 +232,7 @@ class monevController extends Controller
                         ->where('BL_ID',$id)
                         ->get();
 
-        $monev_keg  = Monev_Kegiatan::where('KEGIATAN_ID',$id)->first();
+        $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->first();
         
         if($monev_keg){
           $kegiatanid = $monev_keg->KEGIATAN_ID;
@@ -320,7 +320,7 @@ class monevController extends Controller
           $keg->TIME_UPDATED       = Carbon\Carbon::now();
         }else{
           $keg = new Monev_Kegiatan;
-          $keg->KEGIATAN_ID = Input::get('KEGIATAN_ID');
+          $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
           $keg->USER_CREATED       = Auth::user()->id;
           $keg->TIME_CREATED       = Carbon\Carbon::now();
         }
@@ -333,7 +333,7 @@ class monevController extends Controller
       $keg->KEGIATAN_INPUT        = 0;
       $keg->$pendukung        = Input::get('PENDUKUNG');
       $keg->$penghambat        = Input::get('PENGHAMBAT');
-      //var_dump($keg);
+      
       $keg->save(); 
         return 'Berhasil!';
     }

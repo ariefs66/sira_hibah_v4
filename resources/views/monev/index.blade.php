@@ -70,7 +70,7 @@
               <div role="tabpanel" class="active tab-pane " id="tab-1">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/2',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -108,7 +108,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-2">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/2',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -146,7 +146,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-3">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/2',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -190,7 +190,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-4">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/2',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -490,7 +490,7 @@
         }
     });
   }
-
+  
   function ubah(mode=1,id) {
     $.ajax({
       type  : "get",
@@ -522,9 +522,9 @@
 
   $('#filter-skpd').change(function(e, params){
       var id  = $('#filter-skpd').val();
-      $('#table-index').DataTable().destroy();
-      $('#table-index').DataTable({
-        sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/getTriwulan1/"+id,
+      $('#table-pegawai').DataTable().destroy();
+      $('#table-pegawai').DataTable({
+        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/"+id,
         aoColumns: [
           { mData: 'ID'},
           { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -539,6 +539,57 @@
             $("#rincian_foot").html(json.rincian_foot);
         }
       });  
+      $('#table-subsidi').DataTable().destroy();
+      $('#table-subsidi').DataTable({
+        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/"+id,
+        aoColumns: [
+          { mData: 'ID'},
+          { mData: 'PROGRAM_ID', sClass:'hide'},
+          { mData: 'MODE', sClass:'hide'},
+          { mData: 'PROGRAM'},
+          { mData: 'OUTCOME'},
+          { mData: 'TARGET'},
+          { mData: 'KINERJA'},
+          { mData: 'TOTAL'}],
+          initComplete:function(setting,json){
+            $("#pagu_foot").html(json.pagu_foot);
+            $("#rincian_foot").html(json.rincian_foot);
+        }
+      }); 
+      $('#table-hibah').DataTable().destroy();
+      $('#table-hibah').DataTable({
+        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/"+id,
+        aoColumns: [
+          { mData: 'ID'},
+          { mData: 'PROGRAM_ID', sClass:'hide'},
+          { mData: 'MODE', sClass:'hide'},
+          { mData: 'PROGRAM'},
+          { mData: 'OUTCOME'},
+          { mData: 'TARGET'},
+          { mData: 'KINERJA'},
+          { mData: 'TOTAL'}],
+          initComplete:function(setting,json){
+            $("#pagu_foot").html(json.pagu_foot);
+            $("#rincian_foot").html(json.rincian_foot);
+        }
+      }); 
+      $('#table-bantuan').DataTable().destroy();
+      $('#table-bantuan').DataTable({
+        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/"+id,
+        aoColumns: [
+          { mData: 'ID'},
+          { mData: 'PROGRAM_ID', sClass:'hide'},
+          { mData: 'MODE', sClass:'hide'},
+          { mData: 'PROGRAM'},
+          { mData: 'OUTCOME'},
+          { mData: 'TARGET'},
+          { mData: 'KINERJA'},
+          { mData: 'TOTAL'}],
+          initComplete:function(setting,json){
+            $("#pagu_foot").html(json.pagu_foot);
+            $("#rincian_foot").html(json.rincian_foot);
+        }
+      }); 
   });
 </script>
 @endsection
