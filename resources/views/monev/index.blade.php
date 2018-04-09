@@ -108,7 +108,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-2">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -146,7 +146,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-3">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -190,7 +190,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-4">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -245,10 +245,12 @@
         <label class="col-sm-3">Program</label>
         <div class="col-sm-9">
           <input type="hidden" id="id">
+          <input type="hidden" id="skpd-id">
           <input type="hidden" id="keg-id">
           <input type="hidden" id="keg-kode">
           <input type="hidden" id="keg-nama">
           <input type="hidden" id="prog-id">
+          <input type="hidden" id="prog-kode">
           <input type="hidden" id="prog-nama">
           <input type="hidden" id="mode">
           <select ui-jq="chosen" class="w-full" id="program" disabled>
@@ -281,9 +283,17 @@
 
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Kinerja</label>          
-        <div class="col-sm-9">
+        <div class="col-sm-5">
           <input type="text" class="form-control" placeholder="Masukan Target Kinerja" id="kinerja" >          
         </div> 
+        <div class="col-sm-4">
+        <select ui-jq="chosen" class="w-full" id="satuan">
+            <option value="">Satuan</option>
+            @foreach($satuan as $st)
+            <option value="{{ $st->SATUAN_ID }}">{{ $st->SATUAN_NAMA }}</option>
+            @endforeach
+          </select>
+        </div>
       </div>
 
       <div class="form-group">
@@ -396,11 +406,18 @@
     var id              = $('#id').val();
     var token           = $('#token').val();    
     var mode            = $('#mode').val();
-    var KEGIATAN_ID          = $('#keg-id').val();
+    var KEGIATAN_ID     = $('#keg-id').val();
     var KEGIATAN_KODE     = $('#keg-kode').val();
     var KEGIATAN_NAMA     = $('#keg-nama').val();
     var PROGRAM_ID     = $('#prog-id').val();
     var PROGRAM_NAMA     = $('#prog-nama').val();
+    var PROGRAM_KODE     = $('#prog-kode').val();
+    @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+    var SKPD_ID     = $('#filter-skpd').val();
+    @else
+    var SKPD_ID     = $('#skpd-id').val();
+    @endif
+    var SATUAN     = $('#satuan').val();
     var KEGIATAN_ANGGARAN     = $('#anggaran').val();
     var TARGET     = $('#target').val();
     var KINERJA        = $('#kinerja').val();
@@ -414,10 +431,13 @@
         url: uri,
         type: "POST",
         data: {'_token'             : token,
+              'SKPD_ID'             : SKPD_ID, 
+              'SATUAN'             : SATUAN, 
               'KEGIATAN_ID'         : KEGIATAN_ID, 
               'KEGIATAN_KODE'       : KEGIATAN_KODE, 
               'KEGIATAN_NAMA'       : KEGIATAN_NAMA, 
               'PROGRAM_ID'          : PROGRAM_ID, 
+              'PROGRAM_KODE'        : PROGRAM_KODE, 
               'PROGRAM_NAMA'        : PROGRAM_NAMA, 
               'KEGIATAN_ANGGARAN'   : KEGIATAN_ANGGARAN, 
               'TARGET'              : TARGET, 
@@ -490,7 +510,7 @@
         }
     });
   }
-
+  
   function ubah(mode=1,id) {
     $.ajax({
       type  : "get",
@@ -503,7 +523,10 @@
         $('#keg-nama').val(data['KEGIATAN_NAMA']);
         $('#prog-id').val(data['PROGRAM_ID']);
         $('#prog-nama').val(data['PROGRAM_NAMA']);
+        $('#prog-kode').val(data['PROGRAM_KODE']);
+        $('#skpd-id').val(data['SKPD_ID']);
         $('#mode').val(data['MODE']);
+        $('#satuan').val(data['SATUAN_ID']).trigger("chosen:updated");
         $('#program').append('<option value="'+data['PROGRAM_ID']+'" selected>'+data['PROGRAM_NAMA']+'</option>').trigger("chosen:updated");
         $('#kegiatan').append('<option value="'+data['KEGIATAN_ID']+'" selected>'+data['KEGIATAN_KODE']+'-'+data['KEGIATAN_NAMA']+'</option>').trigger("chosen:updated");
         $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
@@ -522,9 +545,9 @@
 
   $('#filter-skpd').change(function(e, params){
       var id  = $('#filter-skpd').val();
-      $('#table-index').DataTable().destroy();
-      $('#table-index').DataTable({
-        sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/getTriwulan1/"+id,
+      $('#table-pegawai').DataTable().destroy();
+      $('#table-pegawai').DataTable({
+        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/"+id,
         aoColumns: [
           { mData: 'ID'},
           { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -539,6 +562,57 @@
             $("#rincian_foot").html(json.rincian_foot);
         }
       });  
+      $('#table-subsidi').DataTable().destroy();
+      $('#table-subsidi').DataTable({
+        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/"+id,
+        aoColumns: [
+          { mData: 'ID'},
+          { mData: 'PROGRAM_ID', sClass:'hide'},
+          { mData: 'MODE', sClass:'hide'},
+          { mData: 'PROGRAM'},
+          { mData: 'OUTCOME'},
+          { mData: 'TARGET'},
+          { mData: 'KINERJA'},
+          { mData: 'TOTAL'}],
+          initComplete:function(setting,json){
+            $("#pagu_foot").html(json.pagu_foot);
+            $("#rincian_foot").html(json.rincian_foot);
+        }
+      }); 
+      $('#table-hibah').DataTable().destroy();
+      $('#table-hibah').DataTable({
+        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/"+id,
+        aoColumns: [
+          { mData: 'ID'},
+          { mData: 'PROGRAM_ID', sClass:'hide'},
+          { mData: 'MODE', sClass:'hide'},
+          { mData: 'PROGRAM'},
+          { mData: 'OUTCOME'},
+          { mData: 'TARGET'},
+          { mData: 'KINERJA'},
+          { mData: 'TOTAL'}],
+          initComplete:function(setting,json){
+            $("#pagu_foot").html(json.pagu_foot);
+            $("#rincian_foot").html(json.rincian_foot);
+        }
+      }); 
+      $('#table-bantuan').DataTable().destroy();
+      $('#table-bantuan').DataTable({
+        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/"+id,
+        aoColumns: [
+          { mData: 'ID'},
+          { mData: 'PROGRAM_ID', sClass:'hide'},
+          { mData: 'MODE', sClass:'hide'},
+          { mData: 'PROGRAM'},
+          { mData: 'OUTCOME'},
+          { mData: 'TARGET'},
+          { mData: 'KINERJA'},
+          { mData: 'TOTAL'}],
+          initComplete:function(setting,json){
+            $("#pagu_foot").html(json.pagu_foot);
+            $("#rincian_foot").html(json.rincian_foot);
+        }
+      }); 
   });
 </script>
 @endsection
