@@ -588,7 +588,7 @@ class btlController extends Controller
         $opsi       = '';
         $akb       = '';
         foreach ($data as $data) {
-          if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1){
+          if(Auth::user()->level == 9 or Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }elseif(Auth::user()->level == 2){
@@ -619,7 +619,7 @@ class btlController extends Controller
         $no         = 1;
         $opsi       = '';
         foreach ($data as $data) {
-          if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1){
+          if(Auth::user()->level == 9 or Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }elseif(Auth::user()->level == 2){
