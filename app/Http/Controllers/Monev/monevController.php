@@ -14,6 +14,7 @@ use App\Model\SKPD;
 use App\Model\Program;
 use App\Model\Kegiatan;
 use App\Model\Monev\Monev_Kegiatan;
+use App\Model\Monev\Monev_Program;
 use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
@@ -284,18 +285,20 @@ class monevController extends Controller
       $pendukungp = 'PROGRAM_PENDUKUNG_T'.$mode;
       $penghambatp = 'PROGRAM_PENGHAMBAT_T'.$mode;
 
-      $program = Input::get('KEGIATAN_ID');
-      $prog = Monev_Program::where('PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun);
+      $program = Input::get('PROGRAM_ID');
+      $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->first();
+      
       if($prog){
+        $prog = Monev_Program::find($prog->PROGRAM_ID);
         $prog->USER_UPDATED       = Auth::user()->id;
         $prog->TIME_UPDATED       = Carbon\Carbon::now();
-        $prog->$kinerjap        += intval(Input::get('KINERJA'));
+        $prog->$kinerjap        = intval($prog->$kinerjap)+ intval(Input::get('KINERJA'));
         $prog->$pendukungp        = $prog->$pendukungp . ' ' . Input::get('PENDUKUNG');
         $prog->$penghambatp        = $prog->$penghambatp. ' ' . Input::get('PENGHAMBAT');
         $prog->PROGRAM_ANGGARAN       += intval(Input::get('KEGIATAN_ANGGARAN'));
       }else{
         $prog = new Monev_Program;
-        $prog->PROGRAM_ID = Input::get('PROGRAM_ID');
+        $prog->REF_PROGRAM_ID = Input::get('PROGRAM_ID');
         $prog->USER_CREATED       = Auth::user()->id;
         $prog->TIME_CREATED       = Carbon\Carbon::now();
         $prog->$kinerjap        = intval(Input::get('KINERJA'));
@@ -307,8 +310,8 @@ class monevController extends Controller
       $prog->SKPD_ID        = Auth::user()->id;
       $prog->PROGRAM_KODE        = Input::get('KEGIATAN_KODE');
       $prog->PROGRAM_NAMA        = Input::get('PROGRAM_NAMA');
-      $keg->KEGIATAN_VALIDASI        = 0;
-      $keg->KEGIATAN_INPUT        = 0;
+      $prog->PROGRAM_VALIDASI        = 0;
+      $prog->PROGRAM_INPUT        = 0;
       $prog->save(); 
       $id = Input::get('KEGIATAN_ID');
       $keg = Monev_Kegiatan::find($id);
