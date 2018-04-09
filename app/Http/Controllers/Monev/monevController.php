@@ -84,8 +84,8 @@ class monevController extends Controller
          return Response::JSON($out);
       }
 
-   public function getTriwulan2($tahun){
-          if(Auth::user()->level == 8){
+   public function getTriwulan2($tahun, $filter){
+          if(Auth::user()->level == 8){  
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->Join('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
@@ -129,7 +129,7 @@ class monevController extends Controller
          return Response::JSON($out);
       }
       
-   public function getTriwulan3($tahun){
+   public function getTriwulan3($tahun, $filter){
         if(Auth::user()->level == 8){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
@@ -175,7 +175,7 @@ class monevController extends Controller
       }
       
 
-      public function getTriwulan4($tahun){
+      public function getTriwulan4($tahun, $filter){
         if(Auth::user()->level == 8){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
@@ -280,7 +280,36 @@ class monevController extends Controller
       $kinerja = 'KEGIATAN_T'.$mode;
       $pendukung = 'KEGIATAN_PENDUKUNG_T'.$mode;
       $penghambat = 'KEGIATAN_PENGHAMBAT_T'.$mode;
+      $kinerjap = 'PROGRAM_T'.$mode;
+      $pendukungp = 'PROGRAM_PENDUKUNG_T'.$mode;
+      $penghambatp = 'PROGRAM_PENGHAMBAT_T'.$mode;
 
+      $program = Input::get('KEGIATAN_ID');
+      $prog = Monev_Program::where('PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun);
+      if($prog){
+        $prog->USER_UPDATED       = Auth::user()->id;
+        $prog->TIME_UPDATED       = Carbon\Carbon::now();
+        $prog->$kinerjap        += intval(Input::get('KINERJA'));
+        $prog->$pendukungp        = $prog->$pendukungp . ' ' . Input::get('PENDUKUNG');
+        $prog->$penghambatp        = $prog->$penghambatp. ' ' . Input::get('PENGHAMBAT');
+        $prog->PROGRAM_ANGGARAN       += intval(Input::get('KEGIATAN_ANGGARAN'));
+      }else{
+        $prog = new Monev_Program;
+        $prog->PROGRAM_ID = Input::get('PROGRAM_ID');
+        $prog->USER_CREATED       = Auth::user()->id;
+        $prog->TIME_CREATED       = Carbon\Carbon::now();
+        $prog->$kinerjap        = intval(Input::get('KINERJA'));
+        $prog->$pendukungp        = Input::get('PENDUKUNG');
+        $prog->$penghambatp        = Input::get('PENGHAMBAT');
+        $prog->PROGRAM_TAHUN        = $tahun;
+        $prog->PROGRAM_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
+      }
+      $prog->SKPD_ID        = Auth::user()->id;
+      $prog->PROGRAM_KODE        = Input::get('KEGIATAN_KODE');
+      $prog->PROGRAM_NAMA        = Input::get('PROGRAM_NAMA');
+      $keg->KEGIATAN_VALIDASI        = 0;
+      $keg->KEGIATAN_INPUT        = 0;
+      $prog->save(); 
       $id = Input::get('KEGIATAN_ID');
       $keg = Monev_Kegiatan::find($id);
         if($keg){

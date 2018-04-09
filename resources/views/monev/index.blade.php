@@ -70,7 +70,7 @@
               <div role="tabpanel" class="active tab-pane " id="tab-1">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/0',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/2',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -108,7 +108,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-2">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/2',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -146,7 +146,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-3">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/2',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -190,7 +190,7 @@
             <div role="tabpanel" class="tab-pane" id="tab-4">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4',
+                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/2',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
