@@ -240,7 +240,7 @@ class monevController extends Controller
                         ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
-                        ->where('SKPD_ID',1)
+                        ->where('SKPD_ID',$skpd)
                         ->where('PROGRAM_ID',$id)
                         ->get();
 
@@ -275,12 +275,14 @@ class monevController extends Controller
           array_push($view, array( 'KEGIATAN_ID'       => $data->KEGIATAN_ID,
                                    'PROGRAM_ID'       => $data->PROGRAM_ID,
                                    'PROGRAM_NAMA'       => $data->PROGRAM_NAMA,
+                                   'PROGRAM_KODE'       => $data->PROGRAM_KODE,
                                    'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
                                    'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
                                    'TARGET'       => '',
                                    'MODE'       => $mode,
                                    'ID'       => $kegiatanid,
+                                   'SKPD_ID'       => $skpd,
                                    'KINERJA'       => $kinerja,
                                    'KEGIATAN_PENDUKUNG'       => $pendukung,
                                    'SATUAN_ID'       => $satuan,

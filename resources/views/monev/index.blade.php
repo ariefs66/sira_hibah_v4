@@ -349,7 +349,7 @@
       @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
       skpd     = $('#filter-skpd').val();
     @else
-      skpd     = $('#skpd-id').val();
+      skpd     = @php echo SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get(); @endphp
     @endif
       kegiatan  = $(this).children("td").eq(1).html();
       mode      = $(this).children("td").eq(2).html();
