@@ -356,7 +356,7 @@ class monevController extends Controller
         $prog->PROGRAM_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
       }
       $prog->SKPD_ID        = $skpd;
-      $prog->PROGRAM_KODE        = Input::get('KEGIATAN_KODE');
+      $prog->PROGRAM_KODE        = Input::get('PROGRAM_KODE');
       $prog->PROGRAM_NAMA        = Input::get('PROGRAM_NAMA');
       $prog->PROGRAM_VALIDASI        = 0;
       $prog->PROGRAM_INPUT        = 0;
@@ -400,10 +400,42 @@ class monevController extends Controller
       return Response::JSON($out);
       }   
 
-      public function cetak($tahun){
+      public function cetak($tahun, $skpd){
+        $prog = Monev_Program::where('DAT_PROGRAM.SKPD_ID',$skpd)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_PROGRAM.SATUAN')
+        ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID')
+                ->where('PROGRAM_TAHUN',$tahun)->get();
+        $program = array();
+        foreach ($prog as $prog) {
+        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('PROGRAM_ID',$prog->PROGRAM_ID)->get(),
+                                 'PROGRAM_ID'     => $prog->PROGRAM_ID,
+                                 'SKPD_ID'     => $prog->SKPD_ID,
+                                 'SKPD'     => $prog->SKPD_NAMA,
+                                 'PROGRAM_KODE'     => $prog->PROGRAM_KODE,
+                                 'PROGRAM_NAMA'     => $prog->PROGRAM_NAMA,
+                                 'PROGRAM_ANGGARAN'     => $prog->PROGRAM_ANGGARAN,
+                                 'PROGRAM_T1'     => $prog->PROGRAM_T1,
+                                 'PROGRAM_T2'     => $prog->PROGRAM_T2,
+                                 'PROGRAM_T3'     => $prog->PROGRAM_T3,
+                                 'PROGRAM_T4'     => $prog->PROGRAM_T4,
+                                 'PROGRAM_PENDUKUNG_T1'     => $prog->PROGRAM_PENDUKUNG_T1,
+                                 'PROGRAM_PENDUKUNG_T2'     => $prog->PROGRAM_PENDUKUNG_T2,
+                                 'PROGRAM_PENDUKUNG_T3'     => $prog->PROGRAM_PENDUKUNG_T3,
+                                 'PROGRAM_PENDUKUNG_T4'     => $prog->PROGRAM_PENDUKUNG_T4,
+                                 'PROGRAM_PENGHAMBAT_T1'     => $prog->PROGRAM_PENGHAMBAT_T1,
+                                 'PROGRAM_PENGHAMBAT_T2'     => $prog->PROGRAM_PENGHAMBAT_T2,
+                                 'PROGRAM_PENGHAMBAT_T3'     => $prog->PROGRAM_PENGHAMBAT_T3,
+                                 'PROGRAM_PENGHAMBAT_T4'     => $prog->PROGRAM_PENGHAMBAT_T4,
+                                 'PROGRAM_TAHUN'     => $prog->PROGRAM_TAHUN,
+                                 'SASARAN_NAMA'     => $prog->SASARAN_NAMA,
+                                 'REF_PROGRAM_ID'     => $prog->REF_PROGRAM_ID,
+                                 'SATUAN'    => $prog->SATUAN_NAMA ));
+      }
+      $i=1;
 
          return View('monev.pdf',
-            [   'tahun'             =>$tahun
+            [   'tahun'             =>$tahun,
+                'program'           =>$program,
+                'i'                 =>$i
             ]);
               
       }

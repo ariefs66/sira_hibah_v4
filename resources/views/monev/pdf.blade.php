@@ -151,9 +151,25 @@ Periode Pelaksanaan : {{$tahun}}</h4>
 		<td class="border">K</td>
 		<td class="border">Rp</td>
 	</tr>	
-
+	@foreach($program as $p)
 	<tr class="border headrincian">
-		<td class="border">1</td>
+		<td class="border">{{ $i++ }}</td>
+		<td class="border">{{ $p['SASARAN_NAMA'] }}</td>
+		<td class="border">{{ $p['PROGRAM_NAMA'] }}</td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border">{{ number_format($p['PROGRAM_ANGGARAN'],0,',','.') }}</td>
+		<td class="border">{{ $p['PROGRAM_T1'] . ' ' . $p['SATUAN'] }}</td>
+		<td class="border"></td>
+		<td class="border">{{ $p['PROGRAM_T2'] . ' ' . $p['SATUAN'] }}</td>
+		<td class="border"></td>
+		<td class="border">{{ $p['PROGRAM_T3'] . ' ' . $p['SATUAN'] }}</td>
+		<td class="border"></td>
+		<td class="border">{{ $p['PROGRAM_T4'] . ' ' . $p['SATUAN'] }}</td>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
@@ -161,24 +177,39 @@ Periode Pelaksanaan : {{$tahun}}</h4>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
+		<td class="border">{{ $p['SKPD']}}</td>
 	</tr>	
+	@foreach($p['KEGIATAN'] as $k)
+	<tr class="border headrincian">
+		<td class="border">{{ $i++ }}</td>
+		<td class="border">{{ $k['SASARAN_NAMA'] }}</td>
+		<td class="border">{{ $k['KEGIATAN_NAMA'] }}</td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border">{{ number_format($k['KEGIATAN_ANGGARAN'],0,',','.') }}</td>
+		<td class="border">{{ $k['KEGIATAN_T1'] . ' ' . $p['SATUAN'] }}</td>
+		<td class="border"></td>
+		<td class="border">{{ $k['KEGIATAN_T2'] . ' ' . $p['SATUAN'] }}</td>
+		<td class="border"></td>
+		<td class="border">{{ $k['KEGIATAN_T3'] . ' ' . $p['SATUAN'] }}</td>
+		<td class="border"></td>
+		<td class="border">{{ $k['KEGIATAN_T4'] . ' ' . $p['SATUAN'] }}</td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border">{{ $p['SKPD']}}</td>
+	</tr>	
+	@endforeach
+	@endforeach
+	
 	
 	<tr class="border">
 		<td class="border kanan" colspan="10"><b>Rata-rata capaian kinerja (%)</b></td>

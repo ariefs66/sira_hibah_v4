@@ -24,7 +24,11 @@
                   <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah Monev</button>
                   
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
-                  <a class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak"><i class="m-r-xs fa fa-file"></i> Print</a>
+@if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/0"><i class="m-r-xs fa fa-file"></i> Print</a>
+@else
+                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get()}}"><i class="m-r-xs fa fa-file"></i> Print</a>
+@endif
                   <h5 class="inline font-semibold text-orange m-n ">Monev</h5>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
                   <div class="col-sm-4 pull-right m-t-n-sm">
@@ -554,6 +558,8 @@
 
   $('#filter-skpd').change(function(e, params){
       var id  = $('#filter-skpd').val();
+      $("#print").attr("href", "{{ url('/') }}/monev/{{$tahun}}/cetak/"+id);
+      $.fn.dataTable.ext.errMode = 'none';
       $('#table-pegawai').DataTable().destroy();
       $('#table-pegawai').DataTable({
         sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/"+id,
