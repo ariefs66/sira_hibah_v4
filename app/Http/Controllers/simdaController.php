@@ -28,9 +28,61 @@ Use Response;
 Use DB;
 class simdaController extends Controller{
 
+	// Untuk Menggunakan API ini, pastikan pada web server anda telah terinstall ekstensi PDO_SQLSERVER
+    // Yang dimana tersedia dalam paketan Microsoft Drivers 4.3 for PHP for SQL Server
+	// (https://www.microsoft.com/en-us/download/details.aspx?id=55642)
+	/* Cara install PHP 7.0 di Ubuntu 16.04
+sudo su
+apt-get update
+apt-get -y install php7.0 mcrypt php7.0-mcrypt php-mbstring php-pear php7.0-dev
+php7.0-xml 
+	*/
+	/* Cara install file yang dibutuhkan ekstensi sql server
+sudo su
+curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list >
+/etc/apt/sources.list.d/mssql-release.list
+exit
+sudo apt-get update
+sudo ACCEPT_EULA=Y apt-get install msodbcsql mssql-tools
+sudo apt-get install unixodbc-dev
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile
+echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+source ~/.bashrc
+	*/
+	/* Cara menambahkan konfigurasi ekstensi Sql Server
+sudo pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e
+"s|.*:\s*||"` system
+sudo pecl install sqlsrv
+sudo pecl install pdo_sqlsrv
+	*/
+	/* Cara menginstall Apache
+sudo su
+apt-get install libapache2-mod-php7.0 apache2
+a2dismod mpm_event
+a2enmod mpm_prefork
+a2enmod php7.0
+echo "extension=sqlsrv.so" >> /etc/php/7.0/apache2/php.ini
+echo "extension=pdo_sqlsrv.so" >> /etc/php/7.0/apache2/php.ini
+	*/
+	/* Restart Apache
+sudo service apache2 restart
+	*/
+    // Setelah itu, installkan Microsoft® ODBC Driver 13 for SQL Server® - Windows
+	// (https://www.microsoft.com/en-us/download/details.aspx?id=50420)
+	/* Cara install Microsoft® ODBC Driver 13 for SQL Server® - Linux
+sudo su
+curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssqlrelease.list
+exit
+sudo apt-get update
+sudo ACCEPT_EULA=Y apt-get install msodbcsql=13.0.1.0-1 mssql-tools
+sudo apt-get install unixodbc-dev-utf16 #this step is optional but recommended*
+	*/
+
 	public function index($tahun){ // cek total belanja simda yang kode tidak sama dgn nol
-		$total 	= DB::connection('sqlsrv')->select('SELECT SUM(Total) FROM Ta_Belanja_Rinc_Sub WHERE Kd_Prog != 0');
-		print_r($total);exit();
+		$total 	= DB::connection('sqlsrv')->select('SELECT SUM(Total) as Total FROM Ta_Belanja_Rinc_Sub WHERE Kd_Prog != 0');
+		//print_r($total);exit();
 		$data  	= array('tahun'=>$tahun);
 		return view('tosimda',$data);
 	}
