@@ -4695,7 +4695,7 @@ class lampiranController extends Controller
                             SUM("AKB_OKT")+SUM("AKB_NOV")+SUM("AKB_DES") as tri4 ')
                         ->get(); 
         
-            return View('budgeting.lampiran.dpa-skpd22-detail-perubahan',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'bl_p'=>$bl_p, 'bl_idk'=>$bl_idk, 'akb_bl'=>$akb_bl, 'totbl'=>$totbl,
+            return View('budgeting.lampiran.rka-skpd22-detail-perubahan',['tahun'=>$tahun,'status'=>$status, 'bl'=>$bl,'skpd'=>$skpd, 'tgl'=>$tgl, 'gbln'=>$gbln, 'bln'=>$bln, 'urusan'=>$urusan, 'bl_p'=>$bl_p, 'bl_idk'=>$bl_idk, 'akb_bl'=>$akb_bl, 'totbl'=>$totbl,
                 'bl_pp'=>$bl_pp,'bl_p_pp'=>$bl_p_pp, 'bl_idk_pp'=>$bl_idk_pp, 'totbl_pp'=>$totbl_pp, 'kat1'=>$kat1 ]);
     }
 
