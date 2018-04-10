@@ -2,7 +2,7 @@
 <html lang="en" class="">
 <head>
   <meta charset="utf-8" />
-  <title>.bdg Asosiasi</title>
+  <title>.bdg Monev</title>
   <meta name="description" content="Bandung Eharga" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <link rel="stylesheet" href="{{ url('/') }}/libs_dashboard/assets/animate.css/animate.css" type="text/css" />
@@ -37,8 +37,8 @@
         </button>
         <!-- brand -->
         <a href="#" class="navbar-brand text-lt">          
-          <img src="{{ url('/') }}/assets/img/logo-harga@2x-.png" srcset="{{ url('/') }}/assets/img/logo-harga@2x-.png 2x" alt="." class="small-logo hide">
-          <img src="{{ url('/') }}/assets/img/logo-harga@2x-.png" srcset="{{ url('/') }}/assets/img/logo-harga@2x-.png 2x" alt="." class="large-logo">
+          <img src="{{ url('/') }}/assets/img/logo-monev@2x.png" srcset="{{ url('/') }}/assets/img/logo-monev@2x.png 2x" alt="." class="small-logo hide">
+          <img src="{{ url('/') }}/assets/img/logo-monev@2x.png" srcset="{{ url('/') }}/assets/img/logo-monev@2x.png 2x" alt="." class="large-logo">
         </a>
         <!-- / brand -->
       </div>
