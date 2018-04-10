@@ -27,7 +27,7 @@
 @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
                   <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/0"><i class="m-r-xs fa fa-file"></i> Print</a>
 @else
-                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get()}}"><i class="m-r-xs fa fa-file"></i> Print</a>
+                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-file"></i> Print</a>
 @endif
                   <h5 class="inline font-semibold text-orange m-n ">Monev</h5>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
@@ -353,7 +353,7 @@
       @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
       skpd     = $('#filter-skpd').val();
     @else
-      skpd     = @php echo SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get(); @endphp
+      skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
     @endif
       kegiatan  = $(this).children("td").eq(1).html();
       mode      = $(this).children("td").eq(2).html();
@@ -523,7 +523,7 @@
     @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
     skpd     = $('#filter-skpd').val();
     @else
-    skpd     = $('#skpd-id').val();
+    skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
     @endif
     $.ajax({
       type  : "get",

@@ -384,14 +384,31 @@ class monevController extends Controller
         $opsi       = '';
         $akb       = '';
         foreach ($data as $data) {
+
+          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->first();
+        
+          if($monev_keg){
+            $kegiatanid = $monev_keg->KEGIATAN_ID;
+            $kinerja = 'KEGIATAN_T'.$mode;
+            $penghambat = 'KEGIATAN_PENGHAMBAT_T'.$mode;
+            $pendukung = 'KEGIATAN_PENDUKUNG_T'.$mode;
+            $kinerja = $monev_keg->$kinerja;
+            $penghambat = $monev_keg->$penghambat;
+            $pendukung = $monev_keg->$pendukung;
+            $satuan = $monev_keg->SATUAN_NAMA;
+          }else{
+            $kegiatanid = "";
+            $kinerja = "";
+            $penghambat = "";
+            $pendukung = "";
+            $satuan = "";
+          }
           
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
-            $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-          
           array_push($view, array( 'NO'       => $no++,
                                    'KEGIATAN'     => $data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA,
                                    'KEGIATAN_ID'     => $data->KEGIATAN_ID,
-                                   'KINERJA'    => '',
+                                   'KINERJA'    => $kinerja.' '.$satuan,
                                    'TOTAL'    => number_format($data->BL_PAGU,0,'.',','),
                                     'AKSI' => $opsi ));
         }
