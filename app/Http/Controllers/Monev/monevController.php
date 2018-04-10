@@ -233,15 +233,17 @@ class monevController extends Controller
          return Response::JSON($out);
       }      
 
-   public function getData($tahun, $mode=1, $id){
-
+   public function getData($tahun, $skpd, $mode=1, $id){
+    if(empty($skpd)){
+      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
+    }
         $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('SKPD_ID',$skpd)
-                        ->where('PROGRAM_ID',$id)
+                        ->where('BL_ID',$id)
                         ->get();
 
 
@@ -318,7 +320,6 @@ class monevController extends Controller
           $keg->USER_CREATED       = Auth::user()->id;
           $keg->TIME_CREATED       = Carbon\Carbon::now();
         }
-      $keg->PROGRAM_ID        = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
       
       $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
       $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
@@ -331,9 +332,7 @@ class monevController extends Controller
       $keg->$pendukung        = Input::get('PENDUKUNG');
       $keg->$penghambat        = Input::get('PENGHAMBAT');
       $keg->SATUAN        = Input::get('SATUAN');
-      
-      $keg->save(); 
-      
+    
       $program = Input::get('PROGRAM_ID');
       $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->first();
       
@@ -363,6 +362,9 @@ class monevController extends Controller
       $prog->PROGRAM_INPUT        = 0;
       $prog->SATUAN        = Input::get('SATUAN');
       $prog->save(); 
+      
+      $keg->PROGRAM_ID        = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
+      $keg->save(); 
         return 'Berhasil!';
     }
 

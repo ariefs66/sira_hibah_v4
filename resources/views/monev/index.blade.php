@@ -516,9 +516,14 @@
   }
   
   function ubah(mode=1,id) {
+    @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+    skpd     = $('#filter-skpd').val();
+    @else
+    skpd     = $('#skpd-id').val();
+    @endif
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+mode+"/"+id,
+      url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
       success : function (data) {
         data = data.aaData[0];
         $('#id').val(data['ID']);
