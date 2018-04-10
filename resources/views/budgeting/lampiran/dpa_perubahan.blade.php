@@ -655,7 +655,12 @@
 	<!--RINCIAN PERHITUNGAN PERUBAHAN-->
 	  <td class="border-rincian tengah">{{ $k->RINCIAN_VOLUME }}</td>
 	  <td class="border-rincian tengah">{{ preg_replace("/[^A-Za-z]/"," ",$k->RINCIAN_KOEFISIEN) }}</td>
+
+	  @if($k->BL_ID == 4327)
+	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA,0,',','.') }},00</td>
+	  @elseif
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA,0,',','.') }},00</td>
+	  @endif
 
 	  @if($k->RINCIAN_PAJAK == 0)
 	  <td class="border-rincian kanan">0,00</td>
