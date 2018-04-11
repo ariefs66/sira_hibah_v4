@@ -365,6 +365,7 @@ Route::get('/harga/{tahun}/usulan/getData/surat', 'EHarga\usulanController@getSu
 Route::get('/harga/{tahun}/usulan/getData/detail/{id}', 'EHarga\usulanController@getDetail');
 Route::get('/harga/{tahun}/usulan/getData/status/{post}', 'EHarga\usulanController@getStatus');
 Route::get('/harga/{tahun}/usulan/getAlasan/{id}', 'EHarga\usulanController@getAlasan');
+Route::get('/harga/{tahun}/usulan/getKomponen', 'EHarga\usulanController@getKomponen');
 Route::get('/harga/{tahun}/usulan/getSuggest/{id}', 'EHarga\usulanController@getSugest');
 Route::get('/harga/{tahun}/usulan/getSuggest_/{id}', 'EHarga\usulanController@getSugest_');
 Route::get('/harga/{tahun}/usulan/getUbah/{id}', 'EHarga\usulanController@getUbah');

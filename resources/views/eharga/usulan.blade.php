@@ -88,6 +88,8 @@
                       <div class="table-responsive dataTables_wrapper table-usulan">
                       @if(Auth::user()->app != 4)              
                        <table ui-jq="dataTable" ui-options="{
+                       processing: true,
+                       serverSide: true,
                        sAjaxSource: '{{ url('/') }}/harga/{{$tahun}}/usulan/getData',
                        aoColumns: [
                        { mData: 'ID',class:'hide'}, 
@@ -346,18 +348,6 @@
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="rekening" required="">
             <option value="">Silahkan Pilih Rekening</option>
-            @foreach($rekening as $rek)
-            <option value="{{ $rek->REKENING_ID }}">{{ $rek->REKENING_KODE }} - {{ $rek->REKENING_NAMA }}</option>
-            @endforeach
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="col-sm-3">Komponen</label>
-        <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="komponen" required="">
-            <option value="">Silahkan Input Komponen</option>
             @foreach($rekening as $rek)
             <option value="{{ $rek->REKENING_ID }}">{{ $rek->REKENING_KODE }} - {{ $rek->REKENING_NAMA }}</option>
             @endforeach
@@ -815,13 +805,33 @@
 
 @section('plugin')
 <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="{{ url('/') }}/assets/js/jquery.ui.autocomplete.scroll.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.11.0/js/bootstrap-tour.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
     $("#app").trigger('click');
-    $("#komponen").select2({
-      tags: true
+    $( function() {
+    $( "#komponen-nama" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax( {
+          url: "{{ url('/') }}/harga/{{ $tahun }}/usulan/getKomponen",
+          data: {
+            term: request.term
+          },
+          success: function( data ) {
+            response( data );
+          }
+        } );
+      },
+      minLength: 1,
+      maxShowItems: 5,
+      select: function( event, ui ) {
+        $( "#spesifikasi" ).val(ui.item.spek);
+        //$( "#satuan" ).val(ui.item.satuan).trigger('chosen:updated');
+        //$( "#harga" ).val(ui.item.harga);
+      }
     });
+  } );
   });
   $(function(){
     var tour = new Tour({

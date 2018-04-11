@@ -39,6 +39,7 @@ class usulanController extends Controller
     						->whereRaw('LENGTH("REKENING_KODE") = 11')
     						->get();
     	$Satuan 	= Satuan::all();
+    	$komponen 	= Komponen::all();
         $dataDukung = DataDukung::where('SKPD_ID',$skpd)->get();
         $user       = User::whereRaw("substring(mod from 5 for 1) = '1'")->get();
         $jenis      = SKPD::whereHas('userbudget',function($q) use ($id){
@@ -47,7 +48,7 @@ class usulanController extends Controller
         if($jenis == 2 or $jenis == 4) $jenis = 1;
         else $jenis = 0;
         // print_r($jenis);exit();
-    	return View('eharga.usulan',['tahun'=>$tahun,'rekening'=>$Rekening,'satuan'=>$Satuan,'user'=>$user,'datadukung'=>$dataDukung,'status'=>'murni','jenis'=>$jenis]);
+    	return View('eharga.usulan',['tahun'=>$tahun,'rekening'=>$Rekening,'satuan'=>$Satuan,'komponen'=>$komponen,'user'=>$user,'datadukung'=>$dataDukung,'status'=>'murni','jenis'=>$jenis]);
     }
 
     public function showSurat($tahun){
@@ -103,7 +104,10 @@ class usulanController extends Controller
         return $view;
     }
 
-    public function getUsulan($tahun){
+    public function getUsulan(Request $req, $tahun){
+        $start = ($req->iDisplayStart == "")? 0 : $req->iDisplayStart;
+        $length = ($req->iDisplayLength == "")? 10 : $req->iDisplayLength;
+        $kategori = ($req->sSearch == "")? FALSE : urldecode($req->sSearch);
         //GET USULAN STAFF
         $data='';
         if(substr(Auth::user()->mod,3,1) == 1){
@@ -111,8 +115,9 @@ class usulanController extends Controller
                                     ->where('USULAN_TAHUN',$tahun)
                                     ->where('USULAN_POSISI',0)
                                     ->where('USULAN_STATUS',0)
-                                    ->orderBy('USULAN_ID')                                
-        							->get();
+                                    ->orderBy('USULAN_ID')
+                                    ->limit($length)
+                                    ->offset($start);
         }
         elseif(substr(Auth::user()->mod,6,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',2)
@@ -120,7 +125,8 @@ class usulanController extends Controller
                                     ->where('USULAN_STATUS',0)
                                     ->where('USER_POST',null)
                                     ->orderBy('USULAN_ID')
-                                    ->get();
+                                    ->limit($length)
+                                    ->offset($start);
         }
         elseif(substr(Auth::user()->mod,4,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',2)
@@ -128,20 +134,23 @@ class usulanController extends Controller
                                     ->where('USULAN_STATUS',0)
                                     ->where('USER_POST',Auth::user()->id)                                    
                                     ->orderBy('USULAN_ID')
-                                    ->get();
+                                    ->limit($length)
+                                    ->offset($start);
         }elseif(substr(Auth::user()->mod,5,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',5)
                                     ->where('USULAN_TAHUN',$tahun)            
                                     ->where('USULAN_STATUS',0)
                                     ->orderBy('USULAN_ID')
-                                    ->get();
+                                    ->limit($length)
+                                    ->offset($start);
         }elseif(substr(Auth::user()->mod,0,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',4)
                                     ->where('USULAN_TAHUN',$tahun)            
                                     ->where('USULAN_STATUS',0)
                                     ->whereRaw('"SURAT_ID" IS NOT NULL')                                    
                                     ->orderBy('USULAN_ID')
-                                    ->get();
+                                    ->limit($length)
+                                    ->offset($start);
         }elseif(Auth::user()->level == 2){
             $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
@@ -180,16 +189,25 @@ class usulanController extends Controller
                                         ->where('USULAN_POSISI',3)
                                         ->where('USULAN_STATUS',0)
                                         ->where('USULAN_TAHUN',$tahun)
-                                        ->orderBy('USULAN_ID')                                
-                                        ->get();
+                                        ->orderBy('USULAN_ID')
+                                        ->limit($length)
+                                        ->offset($start);
         }else if(Auth::user()->level == 8){
             $data   = UsulanKomponen::where('USULAN_STATUS',0)
                                         ->where('USULAN_TAHUN',$tahun)
-                                        ->orderBy('USULAN_ID')                                
-                                        ->get();
+                                        ->orderBy('USULAN_ID')
+                                        ->limit($length)
+                                        ->offset($start);
         }
         //dd($data);
-    	$i 		= 1;
+        
+        $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->get()->count();
+        if($kategori){
+            $data   = $data->where('USULAN_NAMA','ilike','%'.$kategori.'%');
+            $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->get()->count();
+        }
+        $data = $data->get();
+    	$i 		= $start+1;
     	$view 	= array();
 
     	foreach ($data as $data) {
@@ -300,7 +318,9 @@ class usulanController extends Controller
                                      'HARGA'   	=>number_format($data->USULAN_HARGA,2,'.',',').' / '.$data->USULAN_SATUAN));
             $i++;
         }
-        $out = array("aaData"=>$view);      
+        
+        $display = $data->count();
+        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => intval($count),"aaData"=>$view); 
         return Response::JSON($out);
     }
 
@@ -872,6 +892,27 @@ class usulanController extends Controller
         }
         $out = array("aaData"=>$view);      
         return Response::JSON($out);        
+    }
+
+    public function getKomponen(Request $req, $tahun){
+        if($req->term){
+            $komponen   = Komponen::where('KOMPONEN_NAMA','ilike','%'.$req->term.'%')->get();}
+        else {
+            $komponen   = Komponen::all();
+        }
+        $view   = "";$i=0;
+        foreach($komponen as $k){
+            $view[$i]['id']   = $k->KOMPONEN_ID;
+            $view[$i]['label']   = $k->KOMPONEN_NAMA;
+            $view[$i]['value']   = $k->KOMPONEN_NAMA;
+            $view[$i]['spek']   = $k->KOMPONEN_SPESIFIKASI;
+            $view[$i]['satuan']   = $k->KOMPONEN_SATUAN;
+            $view[$i]['harga']   = $k->KOMPONEN_HARGA;
+            //number_format($k->KOMPONEN_HARGA,0,',','.');
+            $i++;
+        }     
+        return Response::JSON($view);  
+
     }
 
     public function getSugest($tahun,$id){
