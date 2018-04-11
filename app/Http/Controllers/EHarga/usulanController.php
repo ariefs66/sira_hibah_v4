@@ -494,7 +494,11 @@ class usulanController extends Controller
 
     public function submitUsulan($tahun){
         $idUsulan   = Input::get('USULAN_ID');
-
+        $cek = UsulanKomponen::where('USULAN_NAMA','ilike',Input::get('USULAN_NAMA'))
+        ->where('USULAN_SPESIFIKASI','ilike',Input::get('USULAN_SPESIFIKASI'))->first();
+        if($cek){
+            return "Anda tidak bisa mengusulkan komponen yang sudah tersedia!";
+        }
         if(empty($idUsulan)){
     	   $usulan 	= new UsulanKomponen;
             $usulan->REKENING_ID        = Input::get('REKENING_ID');
@@ -896,8 +900,8 @@ class usulanController extends Controller
 
     public function getKomponen(Request $req, $tahun){
         if($req->term){
-            $komponen   = Komponen::where('KOMPONEN_NAMA','ilike','%'.$req->term.'%')->get();}
-        else {
+            $komponen   = Komponen::where('KOMPONEN_NAMA','ilike','%'.$req->term.'%')->get();
+        } else {
             $komponen   = Komponen::all();
         }
         $view   = "";$i=0;

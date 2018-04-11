@@ -814,7 +814,7 @@
     $( "#komponen-nama" ).autocomplete({
       source: function( request, response ) {
         $.ajax( {
-          url: "{{ url('/') }}/harga/{{ $tahun }}/usulan/getKomponen",
+          url: "{{ url('/') }}/harga/{{ $tahun }}/usulan/getKomponen/",
           data: {
             term: request.term
           },
@@ -869,6 +869,7 @@
 
   $("#kategori5").change(function(e, params){
     var id  = $('#kategori5').val();
+    /*
     $.ajax({
       type  : "get",
       url   : "{{ url('/') }}/harga/{{ $tahun }}/usulan/getSuggest/"+id,
@@ -876,7 +877,7 @@
         $("#komponen-nama").autocomplete({source: data});
       }
     });
-
+    */
   });
 
   $("#jeniskomponen_").change(function(e, params){
