@@ -20,7 +20,7 @@
             <div class="col-md-12" id="btl">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  
+                  <!-- if((substr(Auth::user()->mod,3,1)==1) and Auth::user()->active == 20) -->
                   <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                     <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Tambah Usulan <i class="fa fa-chevron-down"></i>
                     </button>
@@ -30,7 +30,7 @@
                       <li><a class="open-tambah-rekening">Tambah Rekening</a></li>
                     </ul>
                   </div>
-                 
+                  <!-- endif -->
                   <h5 class="inline font-semibold text-orange m-n">Usulan Komponen</h5>
                   <div class="col-sm-1 pull-right m-t-n-sm">
                     <select class="form-control dtSelect" id="dtSelect">
@@ -346,6 +346,18 @@
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="rekening" required="">
             <option value="">Silahkan Pilih Rekening</option>
+            @foreach($rekening as $rek)
+            <option value="{{ $rek->REKENING_ID }}">{{ $rek->REKENING_KODE }} - {{ $rek->REKENING_NAMA }}</option>
+            @endforeach
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-3">Komponen</label>
+        <div class="col-sm-9">
+          <select ui-jq="chosen" class="w-full" id="komponen" required="">
+            <option value="">Silahkan Input Komponen</option>
             @foreach($rekening as $rek)
             <option value="{{ $rek->REKENING_ID }}">{{ $rek->REKENING_KODE }} - {{ $rek->REKENING_NAMA }}</option>
             @endforeach
@@ -807,6 +819,9 @@
 <script type="text/javascript">
   $(document).ready(function(){
     $("#app").trigger('click');
+    $("#komponen").select2({
+      tags: true
+    });
   });
   $(function(){
     var tour = new Tour({
