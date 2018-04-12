@@ -188,7 +188,7 @@ Periode Pelaksanaan : {{$tahun}}</h4>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
-		<td class="border"></td>
+		<td class="border">{{ number_format($k['REALISASI_TOTAL'],0,',','.') }}</td>
 		<td class="border"></td>
 		<td class="border">{{ number_format($k['KEGIATAN_ANGGARAN'],0,',','.') }}</td>
 		<td class="border">{{ $k['KEGIATAN_T1'] . ' ' . $p['SATUAN'] }}</td>

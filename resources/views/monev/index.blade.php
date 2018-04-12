@@ -300,6 +300,13 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Realisasi</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Masukan Realisasi" id="realisasi" disabled >          
+        </div>
+      </div>
+
       <!--div class="form-group hidden">
         <label for="no_spp" class="col-md-3">Pendukung</label>          
         <div class="col-sm-9">       
@@ -431,6 +438,7 @@
     var KINERJA        = $('#kinerja').val();
     var PENDUKUNG         = $('#pendukung').val();
     var PENGHAMBAT      = $('#penghambat').val();
+    var REALISASI      = $('#realisasi').val();
     if(KINERJA == "" || PENDUKUNG == "" || PENGHAMBAT == ""){
       $.alert('Form harap diisi!');
     }else{
@@ -448,6 +456,7 @@
               'PROGRAM_KODE'        : PROGRAM_KODE, 
               'PROGRAM_NAMA'        : PROGRAM_NAMA, 
               'KEGIATAN_ANGGARAN'   : KEGIATAN_ANGGARAN, 
+              'REALISASI'   : REALISASI, 
               'TARGET'              : TARGET, 
               'KINERJA'             : KINERJA, 
               'PENDUKUNG'           : PENDUKUNG, 
@@ -471,6 +480,7 @@
           $('#pendukung').val("");
           $('#penghambat').val("");
           $('#target').val("");
+          $('#realisasi').val("");
         }
       });
     }
@@ -547,6 +557,7 @@
         $('#kinerja').val(data['KINERJA']);
         $('#pendukung').val(data['KEGIATAN_PENDUKUNG']);
         $('#penghambat').val(data['KEGIATAN_PENGHAMBAT']);
+        $('#realisasi').val(data['REALISASI']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");

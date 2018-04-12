@@ -15,6 +15,7 @@ use App\Model\Program;
 use App\Model\Kegiatan;
 use App\Model\Monev\Monev_Kegiatan;
 use App\Model\Monev\Monev_Program;
+use App\Model\Monev\Monev_Realisasi;
 use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
@@ -239,13 +240,14 @@ class monevController extends Controller
     }
         $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                        ->LeftJoin('BUDGETING.DAT_BL_REALISASI','DAT_BL_REALISASI.BL_ID','=','DAT_BL.BL_ID')
                         ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('SKPD_ID',$skpd)
-                        ->where('BL_ID',$id)
+                        ->where('DAT_BL.BL_ID',$id)
+                        ->select(DB::raw('SUM("DAT_BL_REALISASI"."REALISASI_TOTAL"), "DAT_BL".*, "REF_KEGIATAN".*, "REF_PROGRAM".*'))
                         ->get();
-
 
         $view       = array();
         $no         = 1;
@@ -281,6 +283,7 @@ class monevController extends Controller
                                    'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
                                    'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
+                                   'REALISASI'       => $data->sum,
                                    'TARGET'       => '',
                                    'MODE'       => $mode,
                                    'ID'       => $kegiatanid,
@@ -362,10 +365,22 @@ class monevController extends Controller
       $prog->PROGRAM_INPUT        = 0;
       $prog->SATUAN        = Input::get('SATUAN');
       $prog->save(); 
-      
-      $keg->PROGRAM_ID        = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
+      $program_id = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
+      $keg->PROGRAM_ID        = $program_id;
       $keg->save(); 
-        return 'Berhasil!';
+      $kegiatan_id = Monev_Kegiatan::where('REF_KEGIATAN_ID',Input::get('KEGIATAN_ID'))->where('PROGRAM_ID',$program_id)->value('KEGIATAN_ID');
+      $realisasi = Monev_Realisasi::where('KEGIATAN_ID',$kegiatan_id)->where('PROGRAM_ID',$program_id)->where('SKPD_ID',$skpd)->first();
+      if($realisasi){
+        $realisasi = Monev_Realisasi::find($realisasi->REALISASI_ID);
+      }else{
+        $realisasi = new Monev_Realisasi;
+      }
+        $realisasi->PROGRAM_ID        = $kegiatan_id;
+        $realisasi->KEGIATAN_ID        = $program_id;
+        $realisasi->SKPD_ID        = $skpd;
+        $realisasi->REALISASI_TOTAL        = Input::get('REALISASI');
+        $realisasi->save(); 
+      return 'Berhasil!';
     }
 
       public function getDetail($tahun, $skpd, $mode=1, $id){
@@ -423,7 +438,7 @@ class monevController extends Controller
                 ->where('PROGRAM_TAHUN',$tahun)->get();
         $program = array();
         foreach ($prog as $prog) {
-        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('PROGRAM_ID',$prog->PROGRAM_ID)->get(),
+        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_KEGIATAN.PROGRAM_ID',$prog->PROGRAM_ID)->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->get(),
                                  'PROGRAM_ID'     => $prog->PROGRAM_ID,
                                  'SKPD_ID'     => $prog->SKPD_ID,
                                  'SKPD'     => $prog->SKPD_NAMA,
