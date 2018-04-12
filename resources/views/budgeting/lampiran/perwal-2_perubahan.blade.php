@@ -379,10 +379,8 @@
 			@php $bkp[] = $bk->bl_pagu @endphp
 		@endforeach
 		@php $i=1; @endphp
-		@php $found = false; @endphp
 		@foreach($bl_keg as $bk)
 			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
-			@php $found = true; @endphp
 			<!-- kegiatan  -->
 			<tr>
 				<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.5.2</td>
@@ -405,7 +403,7 @@
 		@php $j=1; @endphp
 
 				@foreach($bl_rek as $br)
-					@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID && $found)
+					@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID)
 					<!-- rekening  -->
 					<tr>
 						<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.{{$br->REKENING_KODE}}</td>
@@ -422,8 +420,6 @@
 						@php $j+=1; $found=false; @endphp
 					@endif
 				@endforeach
-			@if(!$found)
-				@endif	
 			@endif	
 		@endforeach
 	@endforeach
