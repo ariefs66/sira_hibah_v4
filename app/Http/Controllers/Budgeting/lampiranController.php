@@ -8413,8 +8413,8 @@ public function updatePerwal1($tahun,$status){
         ->where('BL_DELETED',0)
         ->where('REF_SKPD.SKPD_ID',$id)
         ->orderBy('KEGIATAN_KODE')
-        ->groupBy("SKPD_KODE", "SUB_NAMA", "SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN.KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA")
-        ->selectRaw('"SKPD_KODE", "SUB_NAMA","SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN"."KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA", SUM("BL_PAGU") AS BL_PAGU ')
+        ->groupBy("SKPD_KODE", "SUB_KODE", "SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN.KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA")
+        ->selectRaw('"SKPD_KODE", "SUB_KODE","SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN"."KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA", SUM("BL_PAGU") AS BL_PAGU ')
         ->get(); 
         $bl_kegp         = BLPerubahan::JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_BL_PERUBAHAN.SKPD_ID')
         ->JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL_PERUBAHAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
@@ -8423,32 +8423,36 @@ public function updatePerwal1($tahun,$status){
         ->where('BL_DELETED',0)
         ->where('REF_SKPD.SKPD_ID',$id)
         ->orderBy('KEGIATAN_KODE')
-        ->groupBy("SKPD_KODE", "SUB_NAMA", "SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN.KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA")
-        ->selectRaw('"SKPD_KODE", "SUB_NAMA","SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN"."KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA", SUM("BL_PAGU") AS BL_PAGU ')
+        ->groupBy("SKPD_KODE", "SUB_KODE", "SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN.KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA")
+        ->selectRaw('"SKPD_KODE", "SUB_KODE","SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN"."KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA", SUM("BL_PAGU") AS BL_PAGU ')
         ->get();
 
         $bl_rek         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+                        ->JOIN('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
                         ->JOIN('BUDGETING.DAT_RINCIAN','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
                         ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('REF_SKPD.SKPD_ID',$id)
-                        ->groupBy("SKPD_KODE", "SKPD_NAMA", "DAT_BL.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
+                        ->groupBy("SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
                         ->orderBy('SKPD_KODE')
-                        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "DAT_BL"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
+                        ->selectRaw('"SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
                         ->get();     
                         
         $bl_rekp         = BLPerubahan::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL_PERUBAHAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+        ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL_PERUBAHAN.KEGIATAN_ID')
+        ->JOIN('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
         ->JOIN('BUDGETING.DAT_RINCIAN_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
         ->JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN_PERUBAHAN.REKENING_ID')
         ->where('BL_TAHUN',$tahun)
         ->where('BL_DELETED',0)
         ->where('REF_SKPD.SKPD_ID',$id)
-        ->groupBy("SKPD_KODE", "SKPD_NAMA", "DAT_BL_PERUBAHAN.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
+        ->groupBy("SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL_PERUBAHAN.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
         ->orderBy('SKPD_KODE')
-        ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "DAT_BL_PERUBAHAN"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
+        ->selectRaw('"SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL_PERUBAHAN"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
         ->get();   
         
     $btl_rek_1   =Rekening::where('REKENING_KODE','like','5.1.1')->where('REKENING_TAHUN',$tahun)->first();
