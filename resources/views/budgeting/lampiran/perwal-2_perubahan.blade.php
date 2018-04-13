@@ -346,22 +346,33 @@
 			$pagu_prog = 0;
 			$pagu_progp = 0;
 		@endphp
+
 		@foreach($bl_keg as $bk)
 			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
+			<!-- kegiatan  -->
+			@php $bkp = 0; $br_murni = 0; @endphp
+			@foreach($bl_rek as $br)
+				@php $brp = 0; @endphp
+				@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID && $bk->SUB_KODE == $br->SUB_KODE)
+					<!-- rekening  -->
+					@php $br_murni += $br->pagu @endphp
+					@foreach($bl_rekp as $brpt)
+						@php 
+						if($bk->KEGIATAN_ID == $brpt->KEGIATAN_ID && $bk->SUB_KODE == $brpt->SUB_KODE && $brpt->REKENING_KODE == $br->REKENING_KODE){
+							$brp += $brpt->pagu;
+						}
+						 @endphp
+					@endforeach
+					@php $bkp += $brp; @endphp
+				@endif
+			@endforeach
 			@php
-				$pagu_prog += $bk->bl_pagu ;
+			$pagu_prog += $br_murni;
+			$pagu_progp += $bkp;
 			@endphp
-			@endif
-		@endforeach	
-		@foreach($bl_kegp as $bk)
-			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
-			@php
-				$pagu_progp += $bk->bl_pagu ;
-			@endphp
-			@endif
-		@endforeach	
-	
-					
+			@endif	
+		@endforeach
+
 	<tr>
 			<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.5.2</td>
 			<td class="border-rincian"> &nbsp; &nbsp; <b>{{$bp->PROGRAM_NAMA}}</b></td>
@@ -377,11 +388,12 @@
 		@foreach($bl_keg as $bk)
 			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
 			<!-- kegiatan  -->
-			@php $bkp = 0; @endphp
+			@php $bkp = 0; $br_murni = 0; @endphp
 			@foreach($bl_rek as $br)
-					@php $brp = 0; @endphp
-					@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID && $bk->SUB_KODE == $br->SUB_KODE)
+				@php $brp = 0; @endphp
+				@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID && $bk->SUB_KODE == $br->SUB_KODE)
 					<!-- rekening  -->
+					@php $br_murni += $br->pagu @endphp
 					@foreach($bl_rekp as $brpt)
 						@php 
 						if($bk->KEGIATAN_ID == $brpt->KEGIATAN_ID && $bk->SUB_KODE == $brpt->SUB_KODE && $brpt->REKENING_KODE == $br->REKENING_KODE){
@@ -390,17 +402,17 @@
 						 @endphp
 					@endforeach
 					@php $bkp += $brp; @endphp
-					@endif
-				@endforeach
+				@endif
+			@endforeach
 			<tr>
 				<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.5.2</td>
 				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$bk->KEGIATAN_NAMA}}</td>
-				<td class="border-rincian kanan total">{{ number_format($bk->bl_pagu,0,',','.') }}</td>
+				<td class="border-rincian kanan total">{{ number_format($br_murni,0,',','.') }}</td>
 				<td class="border-rincian kanan total">{{ number_format($bkp,0,',','.') }}</td>
-				@if($bkp-$bk->bl_pagu<0)
-						<td class="border-rincian kanan total">({{ number_format(abs($bkp-$bk->bl_pagu),0,',','.') }})</td>
+				@if($bkp-$br_murni<0)
+						<td class="border-rincian kanan total">({{ number_format(abs($bkp-$br_murni),0,',','.') }})</td>
 				@else
-						<td class="border-rincian kanan total">{{ number_format($bkp-$bk->bl_pagu,0,',','.') }}</td>
+						<td class="border-rincian kanan total">{{ number_format($bkp-$br_murni,0,',','.') }}</td>
 				@endif
 				<td class="border-rincian kanan total"></td>
 			</tr>
