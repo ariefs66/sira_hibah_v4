@@ -499,6 +499,11 @@ class usulanController extends Controller
         if($cek){
             return "Anda tidak bisa mengusulkan komponen yang sudah tersedia!";
         }
+        $cek = Komponen::where('KOMPONEN_NAMA','ilike',Input::get('USULAN_NAMA'))
+        ->where('KOMPONEN_SPESIFIKASI','ilike',Input::get('USULAN_SPESIFIKASI'))->first();
+        if($cek){
+            return "Anda tidak bisa mengusulkan komponen yang sudah didaftarkan!";
+        }
         if(empty($idUsulan)){
     	   $usulan 	= new UsulanKomponen;
             $usulan->REKENING_ID        = Input::get('REKENING_ID');
