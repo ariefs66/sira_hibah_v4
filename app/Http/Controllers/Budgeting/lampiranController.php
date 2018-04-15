@@ -8382,7 +8382,7 @@ public function updatePerwal1($tahun,$status){
                         ->where('SKPD_ID',$id)
                         ->sum('RINCIAN_TOTAL');
         $bls=$blp-$bl; 
-
+        DB::enableQueryLog();
        $bl_prog         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
                         ->JOIN('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
@@ -8405,7 +8405,10 @@ public function updatePerwal1($tahun,$status){
         ->orderBy('SKPD_KODE')
         ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "REF_PROGRAM"."PROGRAM_ID", "PROGRAM_KODE", "PROGRAM_NAMA" ')
         ->get(); 
+        
+        
         /*kegiatan sesuai pagu                  */
+        
         $bl_keg         = BL::JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_BL.SKPD_ID')
         ->JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
         ->JOIN('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
@@ -8426,7 +8429,6 @@ public function updatePerwal1($tahun,$status){
         ->groupBy("SKPD_KODE", "SUB_KODE", "SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN.KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA")
         ->selectRaw('"SKPD_KODE", "SUB_KODE","SKPD_NAMA", "PROGRAM_ID", "REF_KEGIATAN"."KEGIATAN_ID", "KEGIATAN_KODE", "KEGIATAN_NAMA", SUM("BL_PAGU") AS BL_PAGU ')
         ->get();
-
         $bl_rek         = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
                         ->JOIN('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
@@ -8454,7 +8456,8 @@ public function updatePerwal1($tahun,$status){
         ->orderBy('SKPD_KODE')
         ->selectRaw('"SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL_PERUBAHAN"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
         ->get();   
-        
+        //dd(DB::getQueryLog());
+
     $btl_rek_1   =Rekening::where('REKENING_KODE','like','5.1.1')->where('REKENING_TAHUN',$tahun)->first();
     $btl_rek_2   =Rekening::where('REKENING_KODE','like','5.1.2')->where('REKENING_TAHUN',$tahun)->first();
     $btl_rek_3   =Rekening::where('REKENING_KODE','like','5.1.3')->where('REKENING_TAHUN',$tahun)->first();

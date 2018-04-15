@@ -356,12 +356,12 @@
 			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
 			<!-- kegiatan  -->
 			@php $bkp = 0; $br_murni = 0; @endphp
-			@foreach($bl_rek as $br)
+			@foreach($bl_rekp as $br)
 				@php $brp = 0; @endphp
 				@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID && $bk->SUB_KODE == $br->SUB_KODE)
 					<!-- rekening  -->
 					@php $br_murni += $br->pagu @endphp
-					@foreach($bl_rekp as $brpt)
+					@foreach($bl_rek as $brpt)
 						@php 
 						if($bk->KEGIATAN_ID == $brpt->KEGIATAN_ID && $bk->SUB_KODE == $brpt->SUB_KODE && $brpt->REKENING_KODE == $br->REKENING_KODE){
 							$brp += $brpt->pagu;
@@ -372,8 +372,8 @@
 				@endif
 			@endforeach
 			@php
-			$pagu_prog += $br_murni;
-			$pagu_progp += $bkp;
+			$pagu_prog += $bkp;
+			$pagu_progp += $br_murni;
 			@endphp
 			@endif	
 		@endforeach
@@ -395,12 +395,12 @@
 			@if($bp->PROGRAM_ID == $bk->PROGRAM_ID)
 			<!-- kegiatan  -->
 			@php $bkp = 0; $br_murni = 0; @endphp
-			@foreach($bl_rek as $br)
+			@foreach($bl_rekp as $br)
 				@php $brp = 0; @endphp
 				@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID && $bk->SUB_KODE == $br->SUB_KODE)
 					<!-- rekening  -->
 					@php $br_murni += $br->pagu @endphp
-					@foreach($bl_rekp as $brpt)
+					@foreach($bl_rek as $brpt)
 						@php 
 						if($bk->KEGIATAN_ID == $brpt->KEGIATAN_ID && $bk->SUB_KODE == $brpt->SUB_KODE && $brpt->REKENING_KODE == $br->REKENING_KODE){
 							$brp += $brpt->pagu;
@@ -414,22 +414,22 @@
 			<tr>
 				<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.5.2</td>
 				<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$bk->KEGIATAN_NAMA}}</td>
-				<td class="border-rincian kanan total">{{ number_format($br_murni,0,',','.') }}</td>
 				<td class="border-rincian kanan total">{{ number_format($bkp,0,',','.') }}</td>
-				@if($bkp-$br_murni<0)
-						<td class="border-rincian kanan total">({{ number_format(abs($bkp-$br_murni),0,',','.') }})</td>
+				<td class="border-rincian kanan total">{{ number_format($br_murni,0,',','.') }}</td>
+				@if($br_murni-$bkp<0)
+						<td class="border-rincian kanan total">({{ number_format(abs($br_murni-$bkp),0,',','.') }})</td>
 				@else
-						<td class="border-rincian kanan total">{{ number_format($bkp-$br_murni,0,',','.') }}</td>
+						<td class="border-rincian kanan total">{{ number_format($br_murni-$bkp,0,',','.') }}</td>
 				@endif
 				<td class="border-rincian kanan total"></td>
 			</tr>
 			@endif
 
-				@foreach($bl_rek as $br)
+				@foreach($bl_rekp as $br)
 					@if($bk->KEGIATAN_ID == $br->KEGIATAN_ID && $bk->SUB_KODE == $br->SUB_KODE)
 					<!-- rekening  -->
 					@php $brp = 0; @endphp
-					@foreach($bl_rekp as $brpt)
+					@foreach($bl_rek as $brpt)
 						@php 
 						if($bk->KEGIATAN_ID == $brpt->KEGIATAN_ID && $bk->SUB_KODE == $brpt->SUB_KODE && $brpt->REKENING_KODE == $br->REKENING_KODE){
 							$brp = $brpt->pagu;
@@ -440,12 +440,12 @@
 					<tr>
 						<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.{{$bp->PROGRAM_KODE}}.{{$bk->KEGIATAN_KODE}}.{{$br->REKENING_KODE}}</td>
 						<td class="border-rincian"> &nbsp; &nbsp; &nbsp; &nbsp; {{$br->REKENING_NAMA}}</td>
-						<td class="border-rincian kanan ">{{ number_format($br->pagu,0,',','.') }}</td>
 						<td class="border-rincian kanan ">{{ number_format($brp,0,',','.') }}</td>
-						@if($brp-$br->pagu < 0)
-						 <td class="border-rincian kanan ">({{ number_format(abs($brp-$br->pagu),0,',','.') }})</td>
+						<td class="border-rincian kanan ">{{ number_format($br->pagu,0,',','.') }}</td>
+						@if($br->pagu-$brp < 0)
+						 <td class="border-rincian kanan ">({{ number_format(abs($br->pagu-$brp),0,',','.') }})</td>
 						@else
-						<td class="border-rincian kanan ">{{ number_format($brp-$br->pagu,0,',','.') }}</td>
+						<td class="border-rincian kanan ">{{ number_format($br->pagu-$brp,0,',','.') }}</td>
 						@endif
 						<td class="border-rincian kanan "></td>
 						@php $found=false; @endphp

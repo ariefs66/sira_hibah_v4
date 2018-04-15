@@ -307,19 +307,19 @@
         </div>
       </div>
 
-      <!--div class="form-group hidden">
+      <div class="form-group hidden">
         <label for="no_spp" class="col-md-3">Pendukung</label>          
-        <div class="col-sm-9">       
+        <div class="col-sm-9"> 
+          <input type="hidden" class="form-control" placeholder="Pendukung" id="pendukung" >        
         </div> 
       </div>
 
       <div class="form-group hidden">
         <label for="no_spp" class="col-md-3">Penghambat</label>          
         <div class="col-sm-9">      
+          <input type="hidden" class="form-control" placeholder="Penghambat" id="penghambat" > 
         </div> 
-      </div-->
-          <input type="hidden" class="form-control" placeholder="Pendukung" id="pendukung" >   
-          <input type="hidden" class="form-control" placeholder="Penghambat" id="penghambat" >    
+      </div>    
 
       <hr class="m-t-xl">
       <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
