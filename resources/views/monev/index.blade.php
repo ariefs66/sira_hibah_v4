@@ -307,14 +307,14 @@
         </div>
       </div>
 
-      <div class="form-group hidden">
+      <div class="form-group">
         <label for="no_spp" class="col-md-3">Pendukung</label>          
         <div class="col-sm-9"> 
           <input type="text" class="form-control" placeholder="Pendukung" id="pendukung" >        
         </div> 
       </div>
 
-      <div class="form-group hidden">
+      <div class="form-group">
         <label for="no_spp" class="col-md-3">Penghambat</label>          
         <div class="col-sm-9">      
           <input type="text" class="form-control" placeholder="Penghambat" id="penghambat" > 
