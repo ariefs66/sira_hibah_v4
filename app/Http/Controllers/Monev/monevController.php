@@ -283,7 +283,7 @@ class monevController extends Controller
                                    'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
                                    'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
-                                   'REALISASI'       => $data->sum,
+                                   'REALISASI'       => ($data->sum>0?$data->sum:0),
                                    'TARGET'       => '',
                                    'MODE'       => $mode,
                                    'ID'       => $kegiatanid,
