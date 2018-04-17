@@ -392,6 +392,8 @@ Route::post('/harga/{tahun}/usulan/cancel', 'EHarga\usulanController@cancel');
 Route::post('/harga/{tahun}/usulan/pembahasan/accept', 'EHarga\pembahasanController@acceptpembahasan');
 Route::post('/harga/{tahun}/usulan/pembahasan/decline', 'EHarga\pembahasanController@rejectpembahasan');
 
+//DUPLIKASI
+Route::get('/harga/{tahun}/duplikat', 'EHarga\duplikatController@index');
 //KOMPONEN
 Route::get('/harga/{tahun}/komponen', 'EHarga\komponenController@index');
 Route::get('/harga/{tahun}/_/komponen/getData/{kategori}', 'EHarga\komponenController@getReferensi');
