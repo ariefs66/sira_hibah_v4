@@ -17,6 +17,7 @@ use App\Model\Monev\Monev_Kegiatan;
 use App\Model\Monev\Monev_Program;
 use App\Model\Monev\Monev_Realisasi;
 use App\Model\Monev\Monev_Faktor;
+use App\Model\Monev\Monev_Outcome;
 use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
@@ -276,6 +277,16 @@ class monevController extends Controller
             $pendukung = "";
             $satuan = "";
           }
+          $sasaran="";
+          $monev_outcome  = Monev_Outcome::where('PROGRAM_ID',$data->PROGRAM_ID)->first();
+          if($monev_outcome){
+            $sasaran = $monev_outcome->OUTCOME_TOLAK_UKUR;
+          }else{
+            $monev_outcome  = Outcome::where('PROGRAM_ID',$data->PROGRAM_ID)->get();
+            foreach ($monev_outcome as $monev_outcome) {
+              $sasaran = $monev_outcome->OUTCOME_TOLAK_UKUR ." : ". $monev_outcome->OUTCOME_TARGET . "%\r\n". $sasaran;
+            }
+          }
 
           array_push($view, array( 'KEGIATAN_ID'       => $data->KEGIATAN_ID,
                                    'PROGRAM_ID'       => $data->PROGRAM_ID,
@@ -285,7 +296,7 @@ class monevController extends Controller
                                    'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
                                    'REALISASI'       => ($data->sum>0?$data->sum:0),
-                                   'TARGET'       => '',
+                                   'TARGET'       => $sasaran,
                                    'MODE'       => $mode,
                                    'ID'       => $kegiatanid,
                                    'SKPD_ID'       => $skpd,
@@ -358,6 +369,14 @@ class monevController extends Controller
         $prog->$penghambatp        = Input::get('PENGHAMBAT');
         $prog->PROGRAM_TAHUN        = $tahun;
         $prog->PROGRAM_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
+        $outcome  = Outcome::where('PROGRAM_ID',Input::get('PROGRAM_ID'))->get();
+        foreach ($outcome as $outcome) {
+          $monev_outcome  = new Monev_Outcome;
+          $monev_outcome->PROGRAM_ID;
+          $monev_outcome->OUTCOME_TOLAK_UKUR = $outcome->OUTCOME_TOLAK_UKUR;
+          $monev_outcome->OUTCOME_TARGET = $outcome->OUTCOME_TARGET;
+          $monev_outcome->save();
+        }
       }
       $prog->SKPD_ID        = $skpd;
       $prog->PROGRAM_KODE        = Input::get('PROGRAM_KODE');

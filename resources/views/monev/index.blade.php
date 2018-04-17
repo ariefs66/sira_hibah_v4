@@ -21,7 +21,7 @@
               <div class="panel bg-white">
                 <div class="wrapper-lg">
                   @php $cek=FALSE; @endphp
-                  <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> Tambah Faktor</button>
+                  <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> Tambah Parameter</button>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or $cek)
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @endif
@@ -281,7 +281,7 @@
       <div class="form-group">
         <label class="col-sm-3">Output</label>
         <div class="col-sm-9">
-          <textarea class="w-full" id="target" placeholder="Silahkan Pilih Rekening" disabled>
+          <textarea class="w-full" id="target" placeholder="Tidak ada Outcome Tolak Ukur" disabled>
           </textarea>
         </div>
       </div>
@@ -377,7 +377,7 @@
 </div>   
 
       <hr class="m-t-xl">
-      <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
+      <input type="hidden" name="_token" id="faktortoken" value="{{ csrf_token() }}">      
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanFaktor()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
     </div>
   </form>
@@ -549,6 +549,7 @@
   }  
 
     function simpanFaktor(){
+    var token           = $('#faktortoken').val();  
     var ID     = $('#faktorid').val();
     var SKPD_ID     = $('#faktorskpd').val();
     var PENDUKUNG         = $('#faktorpendukung').val();
@@ -569,7 +570,7 @@
               'PENGHAMBAT'          : PENGHAMBAT, 
               'TRIWULAN'          : TRIWULAN, 
               'RENJA'          : RENJA, 
-              'MODE'          : T},
+              'T'          : T},
         success: function(msg){
           $('.table-pegawai').DataTable().ajax.reload();
           $('.table-subsidi').DataTable().ajax.reload();
