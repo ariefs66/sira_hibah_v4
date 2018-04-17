@@ -20,14 +20,17 @@
             <div class="col-md-12" id="btl">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  
-                  <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah Monev</button>
-                  
+                  @php $cek=FALSE; @endphp
+                  <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> Tambah Faktor</button>
+                  @if(Auth::user()->level == 8 or Auth::user()->level == 9 or $cek)
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  @endif
 @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
                   <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/0"><i class="m-r-xs fa fa-file"></i> Print</a>
 @else
+  @if($cek)
                   <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-file"></i> Print</a>
+  @endif
 @endif
                   <h5 class="inline font-semibold text-orange m-n ">Monev</h5>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
@@ -241,7 +244,6 @@
 </div>
 <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-btl">
-  <a class="close"><i class="icon-bdg_cross"></i></a>
   <form class="form-horizontal">
     <div class="input-wrapper">
       <h5>Edit Data </h5>
@@ -279,9 +281,8 @@
       <div class="form-group">
         <label class="col-sm-3">Output</label>
         <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="target" disabled>
-            <option value="">Silahkan Pilih Rekening</option>
-          </select>
+          <textarea class="w-full" id="target" placeholder="Silahkan Pilih Rekening" disabled>
+          </textarea>
         </div>
       </div>
 
@@ -307,23 +308,77 @@
         </div>
       </div>
 
-      <div class="form-group hidden">
+      <div class="form-group">
         <label for="no_spp" class="col-md-3">Pendukung</label>          
         <div class="col-sm-9"> 
-          <input type="hidden" class="form-control" placeholder="Pendukung" id="pendukung" >        
+          <input type="text" class="form-control" placeholder="Pendukung" id="pendukung" >        
         </div> 
       </div>
 
-      <div class="form-group hidden">
+      <div class="form-group">
         <label for="no_spp" class="col-md-3">Penghambat</label>          
         <div class="col-sm-9">      
-          <input type="hidden" class="form-control" placeholder="Penghambat" id="penghambat" > 
+          <input type="text" class="form-control" placeholder="Penghambat" id="penghambat" > 
         </div> 
       </div>    
 
       <hr class="m-t-xl">
       <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanBTL()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
+    </div>
+  </form>
+</div>
+</div>
+<div class="overlay"></div>
+<div class="bg-white wrapper-lg input-sidebar input-faktor">
+  <form class="form-horizontal">
+    <div class="input-wrapper">
+      <h5>Ringkasan</h5>
+          <input type="hidden" id="faktorid">
+          <input type="hidden" id="faktorskpd">
+          <input type="hidden" id="faktortahun">
+      <div class="form-group">
+        <label for="faktormode" class="col-md-3">Triwulan</label>          
+        <div class="col-sm-9"> 
+          <select ui-jq="chosen" class="w-full" id="faktormode">
+            <option value="1">Triwulan 1</option>
+            <option value="2">Triwulan 2</option>
+            <option value="3">Triwulan 3</option>
+            <option value="4">Triwulan 4</option>
+          </select>
+        </div> 
+      </div>
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Faktor pendorong</label>          
+        <div class="col-sm-9"> 
+          <textarea class="form-control" placeholder="Faktor pendorong keberhasilan kinerja" id="faktorpendukung" ></textarea>        
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Faktor penghambat</label>          
+        <div class="col-sm-9">      
+          <textarea class="form-control" placeholder="Faktor penghambat keberhasilan kinerja" id="faktorpenghambat" ></textarea> 
+        </div> 
+      </div>  
+
+<div class="form-group">
+  <label for="no_spp" class="col-md-3">Tindak Lanjut Triwulan</label>          
+  <div class="col-sm-9">      
+    <textarea class="form-control" placeholder="Tindak Lanjut yang diperlukan dalam triwulan berikutnya" id="faktortriwulan" ></textarea> 
+  </div> 
+</div> 
+
+<div class="form-group">
+  <label for="no_spp" class="col-md-3">Tindak Lanjut Renja Perangkat Daerah</label>          
+  <div class="col-sm-9">      
+    <textarea class="form-control" placeholder="Tindak Lanjut yang diperlukan dalam Renja Perangkat Daerah" id="faktorrenja" ></textarea> 
+  </div> 
+</div>   
+
+      <hr class="m-t-xl">
+      <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
+      <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanFaktor()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
     </div>
   </form>
 </div>
@@ -417,6 +472,13 @@
     });
   });
 
+  $('.open-form-faktor').on('click',function(){
+			$('.overlay').fadeIn('fast',function(){
+				$('.input-faktor').animate({'right':'0'},"linear");	
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+			});	
+		});
+
   function simpanBTL(){
     var id              = $('#id').val();
     var token           = $('#token').val();    
@@ -486,7 +548,74 @@
     }
   }  
 
-  $("#skpd-btl").change(function(e, params){
+    function simpanFaktor(){
+    var ID     = $('#faktorid').val();
+    var SKPD_ID     = $('#faktorskpd').val();
+    var PENDUKUNG         = $('#faktorpendukung').val();
+    var PENGHAMBAT           = $('#faktorpenghambat').val();
+    var TRIWULAN          = $('#faktortriwulan').val();
+    var RENJA             = $('#faktorrenja').val();
+    var T             = $('#faktormode').val();
+    if(SKPD_ID == ""){
+      $.alert('Terjadi Kesalahan!');
+    }else{
+        uri   = "{{ url('/') }}/monev/{{ $tahun }}/faktor/simpan";
+      $.ajax({
+        url: uri,
+        type: "POST",
+        data: {'_token'             : token,
+              'SKPD_ID'             : SKPD_ID, 
+              'PENDUKUNG'           : PENDUKUNG, 
+              'PENGHAMBAT'          : PENGHAMBAT, 
+              'TRIWULAN'          : TRIWULAN, 
+              'RENJA'          : RENJA, 
+              'MODE'          : T},
+        success: function(msg){
+          $('.table-pegawai').DataTable().ajax.reload();
+          $('.table-subsidi').DataTable().ajax.reload();
+          $('.table-hibah').DataTable().ajax.reload();
+          $('.table-bantuan').DataTable().ajax.reload();
+          $('.table-btt').DataTable().ajax.reload();
+          $(".shown").trigger('click');
+          $.alert(msg);
+          $('.input-btl,.input-sidebar').animate({'right':'-1050px'},function(){
+              $('.overlay').fadeOut('fast');
+          });
+          $('#faktorid').val("");
+          $('#faktorskpd').val("");
+          $('#faktorpendukung').val("");
+          $('#faktorpenghambat').val("");
+          $('#faktortriwulan').val("");
+          $('#faktorrenja').val("");
+        }
+      });
+    }
+  }  
+
+  $("#faktormode").change(function(e, params){
+    var id  = $('#faktormode').val();
+    @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+      skpd     = $('#filter-skpd').val();
+    @else
+      skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
+    @endif
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/monev/{{ $tahun }}/faktor/"+skpd+"/"+id,
+      success : function (data) {
+        data = data.aaData[0];
+        $('#faktorid').val(data['FAKTOR_ID']);
+        $('#faktorskpd').val(data['SKPD_ID']);
+        $('#faktortahun').val(data['TAHUN']);
+        $('#faktorpendukung').val(data['PENDUKUNG']);
+        $('#faktorpenghambat').val(data['PENGHAMBAT']);
+        $('#faktortriwulan').val(data['TRIWULAN']);
+        $('#faktorrenja').val(data['RENJA']);
+      }
+    });
+  }); 
+
+    $("#skpd-btl").change(function(e, params){
     var id  = $('#skpd-btl').val();
     $('#subunit-btl').find('option').remove().end().append('<option>Pilih Subunit</option>');
     $.ajax({
@@ -497,6 +626,7 @@
       }
     });
   }); 
+
 
   function hapus(id){
     var token        = $('#token').val();    
