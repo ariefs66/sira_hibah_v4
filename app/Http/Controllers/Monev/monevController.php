@@ -18,6 +18,7 @@ use App\Model\Monev\Monev_Program;
 use App\Model\Monev\Monev_Realisasi;
 use App\Model\Monev\Monev_Faktor;
 use App\Model\Monev\Monev_Outcome;
+use App\Model\Monev\Monev_Output;
 use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
@@ -278,14 +279,13 @@ class monevController extends Controller
             $satuan = "";
           }
           $sasaran="";
-          $monev_outcome  = Monev_Outcome::where('PROGRAM_ID',$data->PROGRAM_ID)->first();
-          if($monev_outcome){
-            $sasaran = $monev_outcome->OUTCOME_TOLAK_UKUR;
+          $monev_output  = Output::where('BL_ID',$id)->get();
+          if($monev_output){
           }else{
-            $monev_outcome  = Outcome::where('PROGRAM_ID',$data->PROGRAM_ID)->get();
-            foreach ($monev_outcome as $monev_outcome) {
-              $sasaran = $monev_outcome->OUTCOME_TOLAK_UKUR ." : ". $monev_outcome->OUTCOME_TARGET . "%\r\n". $sasaran;
-            }
+            $monev_output  = OutputPerubahan::where('BL_ID',$id)->get();
+          }
+          foreach ($monev_output as $monev_output) {
+            $sasaran = $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . "%\r\n". $sasaran;
           }
 
           array_push($view, array( 'KEGIATAN_ID'       => $data->KEGIATAN_ID,
@@ -334,6 +334,10 @@ class monevController extends Controller
           $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
           $keg->USER_CREATED       = Auth::user()->id;
           $keg->TIME_CREATED       = Carbon\Carbon::now();
+          $monev_output  = new Monev_Output;
+          $monev_output->KEGIATAN_ID = Input::get('KEGIATAN_ID');
+          $monev_output->OUTPUT_TOLAK_UKUR = Input::get('TARGET');
+          $monev_output->save();
         }
       
       $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
@@ -372,7 +376,7 @@ class monevController extends Controller
         $outcome  = Outcome::where('PROGRAM_ID',Input::get('PROGRAM_ID'))->get();
         foreach ($outcome as $outcome) {
           $monev_outcome  = new Monev_Outcome;
-          $monev_outcome->PROGRAM_ID;
+          $monev_outcome->PROGRAM_ID = Input::get('PROGRAM_ID');
           $monev_outcome->OUTCOME_TOLAK_UKUR = $outcome->OUTCOME_TOLAK_UKUR;
           $monev_outcome->OUTCOME_TARGET = $outcome->OUTCOME_TARGET;
           $monev_outcome->save();
@@ -395,8 +399,8 @@ class monevController extends Controller
       }else{
         $realisasi = new Monev_Realisasi;
       }
-        $realisasi->PROGRAM_ID        = $kegiatan_id;
-        $realisasi->KEGIATAN_ID        = $program_id;
+        $realisasi->PROGRAM_ID        = $program_id;
+        $realisasi->KEGIATAN_ID        = $kegiatan_id;
         $realisasi->SKPD_ID        = $skpd;
         $realisasi->REALISASI_TOTAL        = Input::get('REALISASI');
         $realisasi->save(); 
