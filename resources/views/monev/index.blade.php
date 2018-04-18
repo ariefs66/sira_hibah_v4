@@ -295,7 +295,7 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Kinerja</label>          
         <div class="col-sm-5">
-          <input type="text" class="form-control" placeholder="Masukan Target Kinerja" id="kinerja" >          
+          <input type="text" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" >          
         </div> 
         <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan">
