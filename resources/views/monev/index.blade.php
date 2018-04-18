@@ -20,7 +20,6 @@
             <div class="col-md-12" id="btl">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  @php $cek=FALSE; @endphp
                   <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> Tambah Parameter</button>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or $cek)
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
@@ -56,25 +55,38 @@
                <!-- Main tab -->
                <div class="nav-tabs-alt tabs-alt-1 b-t four-row" id="tab-jurnal" >
                 <ul class="nav nav-tabs" role="tablist">
-                 <li class="active">
+                @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+                 <li class="{{$triwulan1}}">
                   <a data-target="#tab-1" role="tab" data-toggle="tab">Triwulan 1</a>
                 </li>
-                <li>
+                <li class="{{$triwulan2}}">
                   <a data-target="#tab-2" role="tab" data-toggle="tab">Triwulan 2</a>
                 </li>
-                <li>
+                <li class="{{$triwulan3}}">
                   <a data-target="#tab-3" role="tab" data-toggle="tab">Triwulan 3</a>
                 </li>
-                <li>
+                <li class="{{$triwulan4}}">
                   <a data-target="#tab-4" role="tab" data-toggle="tab">Triwulan 4</a> 
                 </li>
-
+              @else
+              <li class="{{$triwulan1}}">
+                  <a>Triwulan 1</a>
+                </li>
+                <li class="{{$triwulan2}}">
+                  <a>Triwulan 2</a>
+                </li>
+                <li class="{{$triwulan3}}">
+                  <a>Triwulan 3</a>
+                </li>
+                <li class="{{$triwulan4}}">
+                  <a>Triwulan 4</a> 
+                </li>
               </ul>
-
+            @endif
             </div>
             <!-- / main tab -->                  
             <div class="tab-content tab-content-alt-1 bg-white">
-              <div role="tabpanel" class="active tab-pane " id="tab-1">  
+              <div role="tabpanel" class="{{$triwulan1}} tab-pane " id="tab-1">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
                     sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/0',
@@ -112,7 +124,7 @@
                 </table>
               </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="tab-2">  
+            <div role="tabpanel" class="{{$triwulan2}} tab-pane" id="tab-2">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
                     sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/0',
@@ -150,7 +162,7 @@
                 </table>
               </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="tab-3">  
+            <div role="tabpanel" class="{{$triwulan3}} tab-pane" id="tab-3">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
                     sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/0',
@@ -185,16 +197,10 @@
                   </thead>
                   <tbody>
                   </tbody>
-                  <tfoot>
-                      <tr>
-                        <td><b>Total</b></td>
-                        <td><b><text id="foot"></text></b></td>
-                      </tr>
-                    </tfoot>  
                 </table>
               </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="tab-4">  
+            <div role="tabpanel" class="{{$triwulan4}} tab-pane" id="tab-4">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
                     sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/0',
@@ -333,7 +339,7 @@
 <div class="bg-white wrapper-lg input-sidebar input-faktor">
   <form class="form-horizontal">
     <div class="input-wrapper">
-      <h5>Ringkasan</h5>
+      <h5>Paramater Cetak</h5>
           <input type="hidden" id="faktorid">
           <input type="hidden" id="faktorskpd">
           <input type="hidden" id="faktortahun">
@@ -341,6 +347,7 @@
         <label for="faktormode" class="col-md-3">Triwulan</label>          
         <div class="col-sm-9"> 
           <select ui-jq="chosen" class="w-full" id="faktormode">
+            <option value="1">Pilih Triwulan</option>
             <option value="1">Triwulan 1</option>
             <option value="2">Triwulan 2</option>
             <option value="3">Triwulan 3</option>

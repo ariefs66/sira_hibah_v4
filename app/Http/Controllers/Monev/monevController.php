@@ -19,6 +19,7 @@ use App\Model\Monev\Monev_Realisasi;
 use App\Model\Monev\Monev_Faktor;
 use App\Model\Monev\Monev_Outcome;
 use App\Model\Monev\Monev_Output;
+use App\Model\Monev\Monev_Tahapan;
 use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
@@ -35,10 +36,41 @@ class monevController extends Controller
    public function index($tahun){
       $skpd    = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
       $satuan  = Satuan::All();
+      $tahapan    = Monev_Tahapan::where('TAHAPAN_TAHUN',$tahun)->first();
+      if($tahapan){
+        if($tahapan->TAHAPAN_T1==1){
+          $triwulan = 1;
+        }elseif($tahapan->TAHAPAN_T2==1){
+          $triwulan = 2;
+        }elseif($tahapan->TAHAPAN_T3==1){
+          $triwulan = 3;
+        }else{
+          $triwulan = 4;
+        }
+      }else{
+        $triwulan = 0;
+      }
+      $cek    = Monev_Faktor::where('TAHUN',$tahun)
+      ->where('T',$triwulan);
+      if(Auth::user()->level == 8 || Auth::user()->level == 9){
+        $cek = $cek->first();
+      }else{
+        $cek = $cek->where('SKPD_ID',$id)->first();
+      }
+      if($cek){
+        $cek = TRUE;
+      }else {
+        $cek = FALSE;
+      }
 	  return View('monev.index',[
       'tahun'     =>$tahun,
       'skpd'      =>$skpd,
-      'satuan'    =>$satuan
+      'satuan'    =>$satuan,
+      'cek'       =>$cek,
+      'triwulan1' =>($tahapan->TAHAPAN_T1==1?'active':''),
+      'triwulan2' =>($tahapan->TAHAPAN_T2==1?'active':''),
+      'triwulan3' =>($tahapan->TAHAPAN_T3==1?'active':''),
+      'triwulan4' =>($tahapan->TAHAPAN_T4==1?'active':''),
       ]);
 
    }
@@ -475,12 +507,16 @@ class monevController extends Controller
           }else{
             $data       = Monev_Program::where('PROGRAM_TAHUN',$tahun)
             ->where('SKPD_ID',$skpd)
-            ->first();
+            ->get();
             if($data){
-              $pendukung =  "PROGRAM_PENDUKUNG_T".$mode;
-              $pendukung = $data->$pendukung;
-              $penghambat = "PROGRAM_PENGHAMBAT_T".$mode;
-              $penghambat = $data->$penghambat;
+              $cpendukung =  "PROGRAM_PENDUKUNG_T".$mode;
+              $cpenghambat = "PROGRAM_PENGHAMBAT_T".$mode;
+              $pendukung =  "";
+              $penghambat = "";
+              foreach ($data as $data) {
+                $pendukung = $data->$cpendukung . "\r\n". $pendukung;
+                $penghambat = $data->$cpenghambat . "\r\n". $penghambat;
+              }
             }else{
               $pendukung = "";
               $penghambat = "";
