@@ -16,6 +16,10 @@ use App\Model\Kegiatan;
 use App\Model\Monev\Monev_Kegiatan;
 use App\Model\Monev\Monev_Program;
 use App\Model\Monev\Monev_Realisasi;
+use App\Model\Monev\Monev_Faktor;
+use App\Model\Monev\Monev_Outcome;
+use App\Model\Monev\Monev_Output;
+use App\Model\Monev\Monev_Tahapan;
 use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
@@ -32,10 +36,41 @@ class monevController extends Controller
    public function index($tahun){
       $skpd    = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
       $satuan  = Satuan::All();
+      $tahapan    = Monev_Tahapan::where('TAHAPAN_TAHUN',$tahun)->first();
+      if($tahapan){
+        if($tahapan->TAHAPAN_T1==1){
+          $triwulan = 1;
+        }elseif($tahapan->TAHAPAN_T2==1){
+          $triwulan = 2;
+        }elseif($tahapan->TAHAPAN_T3==1){
+          $triwulan = 3;
+        }else{
+          $triwulan = 4;
+        }
+      }else{
+        $triwulan = 0;
+      }
+      $cek    = Monev_Faktor::where('TAHUN',$tahun)
+      ->where('T',$triwulan);
+      if(Auth::user()->level == 8 || Auth::user()->level == 9){
+        $cek = $cek->first();
+      }else{
+        $cek = $cek->where('SKPD_ID',$id)->first();
+      }
+      if($cek){
+        $cek = TRUE;
+      }else {
+        $cek = FALSE;
+      }
 	  return View('monev.index',[
       'tahun'     =>$tahun,
       'skpd'      =>$skpd,
-      'satuan'    =>$satuan
+      'satuan'    =>$satuan,
+      'cek'       =>$cek,
+      'triwulan1' =>($tahapan->TAHAPAN_T1==1?'active':''),
+      'triwulan2' =>($tahapan->TAHAPAN_T2==1?'active':''),
+      'triwulan3' =>($tahapan->TAHAPAN_T3==1?'active':''),
+      'triwulan4' =>($tahapan->TAHAPAN_T4==1?'active':''),
       ]);
 
    }
@@ -275,6 +310,15 @@ class monevController extends Controller
             $pendukung = "";
             $satuan = "";
           }
+          $sasaran="";
+          $monev_output  = Output::where('BL_ID',$id)->get();
+          if($monev_output){
+          }else{
+            $monev_output  = OutputPerubahan::where('BL_ID',$id)->get();
+          }
+          foreach ($monev_output as $monev_output) {
+            $sasaran = $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . "%\r\n". $sasaran;
+          }
 
           array_push($view, array( 'KEGIATAN_ID'       => $data->KEGIATAN_ID,
                                    'PROGRAM_ID'       => $data->PROGRAM_ID,
@@ -283,8 +327,8 @@ class monevController extends Controller
                                    'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
                                    'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
-                                   'REALISASI'       => $data->sum,
-                                   'TARGET'       => '',
+                                   'REALISASI'       => ($data->sum>0?$data->sum:0),
+                                   'TARGET'       => $sasaran,
                                    'MODE'       => $mode,
                                    'ID'       => $kegiatanid,
                                    'SKPD_ID'       => $skpd,
@@ -322,6 +366,10 @@ class monevController extends Controller
           $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
           $keg->USER_CREATED       = Auth::user()->id;
           $keg->TIME_CREATED       = Carbon\Carbon::now();
+          $monev_output  = new Monev_Output;
+          $monev_output->KEGIATAN_ID = Input::get('KEGIATAN_ID');
+          $monev_output->OUTPUT_TOLAK_UKUR = Input::get('TARGET');
+          $monev_output->save();
         }
       
       $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
@@ -357,6 +405,14 @@ class monevController extends Controller
         $prog->$penghambatp        = Input::get('PENGHAMBAT');
         $prog->PROGRAM_TAHUN        = $tahun;
         $prog->PROGRAM_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
+        $outcome  = Outcome::where('PROGRAM_ID',Input::get('PROGRAM_ID'))->get();
+        foreach ($outcome as $outcome) {
+          $monev_outcome  = new Monev_Outcome;
+          $monev_outcome->PROGRAM_ID = Input::get('PROGRAM_ID');
+          $monev_outcome->OUTCOME_TOLAK_UKUR = $outcome->OUTCOME_TOLAK_UKUR;
+          $monev_outcome->OUTCOME_TARGET = $outcome->OUTCOME_TARGET;
+          $monev_outcome->save();
+        }
       }
       $prog->SKPD_ID        = $skpd;
       $prog->PROGRAM_KODE        = Input::get('PROGRAM_KODE');
@@ -375,8 +431,8 @@ class monevController extends Controller
       }else{
         $realisasi = new Monev_Realisasi;
       }
-        $realisasi->PROGRAM_ID        = $kegiatan_id;
-        $realisasi->KEGIATAN_ID        = $program_id;
+        $realisasi->PROGRAM_ID        = $program_id;
+        $realisasi->KEGIATAN_ID        = $kegiatan_id;
         $realisasi->SKPD_ID        = $skpd;
         $realisasi->REALISASI_TOTAL        = Input::get('REALISASI');
         $realisasi->save(); 
@@ -431,6 +487,87 @@ class monevController extends Controller
         $out = array("aaData"=>$view);       
       return Response::JSON($out);
       }   
+
+      public function getFaktor($tahun, $skpd, $mode=1){
+        if(empty($skpd)){
+          $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
+        }
+          $data       = Monev_Faktor::where('TAHUN',$tahun)
+                        ->where('T',$mode)
+                        ->where('SKPD_ID',$skpd)
+                        ->first();
+          $id = "";
+          if($data){
+            $save       = "edit";
+            $id = $data->FAKTOR_ID;
+            $pendukung = $data->PENDUKUNG;
+            $penghambat =  $data->PENGHAMBAT;
+            $triwulan =  $data->TRIWULAN;
+            $renja = $data->RENJA;
+          }else{
+            $data       = Monev_Program::where('PROGRAM_TAHUN',$tahun)
+            ->where('SKPD_ID',$skpd)
+            ->get();
+            if($data){
+              $cpendukung =  "PROGRAM_PENDUKUNG_T".$mode;
+              $cpenghambat = "PROGRAM_PENGHAMBAT_T".$mode;
+              $pendukung =  "";
+              $penghambat = "";
+              foreach ($data as $data) {
+                $pendukung = $data->$cpendukung . "\r\n". $pendukung;
+                $penghambat = $data->$cpenghambat . "\r\n". $penghambat;
+              }
+            }else{
+              $pendukung = "";
+              $penghambat = "";
+            }
+            $triwulan = '';
+            $renja = '';
+            $save       = "save";
+          }
+          $view       = array();
+          array_push($view, array(  'PENGHAMBAT'       => $penghambat,
+                                    'PENDUKUNG'       => $pendukung,
+                                    'TRIWULAN'       => $triwulan,
+                                    'RENJA'       => $renja,
+                                    'MODE'       => $mode,
+                                    'SAVE'       => $save,
+                                    'ID'       => $id,
+                                    'SKPD_ID'       => $skpd,
+                                    'TAHUN'       => $tahun));
+             
+            $out = array("aaData"=>$view);       
+          return Response::JSON($out);
+      }   
+
+      public function simpanFaktor($tahun,$mode=1){
+        $mode = Input::get('T');
+        $pendukung = Input::get('PENDUKUNG');
+        $penghambat = Input::get('PENGHAMBAT');
+        $triwulan = Input::get('TRIWULAN');
+        $renja = Input::get('RENJA');
+        
+        $id = Input::get('FAKTOR_ID');
+        $skpd = Input::get('SKPD_ID');
+        if(empty($skpd)){
+          $skpd = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
+        }
+         if($id){
+            $keg = Monev_Faktor::find($id);
+            }else{
+            $keg = new Monev_Faktor;
+          }
+        
+        $keg->TAHUN        = $tahun;
+        $keg->T        = $mode;
+        $keg->SKPD_ID        = $skpd;
+        $keg->PENDUKUNG        = $pendukung;
+        $keg->PENGHAMBAT        = $penghambat;
+        $keg->TRIWULAN        = $triwulan;
+        $keg->RENJA        = $renja;
+        $keg->save(); 
+        return 'Berhasil!';
+      }
 
       public function cetak($tahun, $skpd){
         $prog = Monev_Program::where('DAT_PROGRAM.SKPD_ID',$skpd)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_PROGRAM.SATUAN')
