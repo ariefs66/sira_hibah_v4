@@ -574,8 +574,42 @@ class monevController extends Controller
         ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID')
                 ->where('PROGRAM_TAHUN',$tahun)->get();
         $program = array();
+        $skpdnama = "Tidak Ada SKPD";
+        $ringkasoutcome = "";
+        $tahapan = 0;
+        $tahapan    = Monev_Tahapan::where('TAHAPAN_TAHUN',$tahun)->first();
+        if($tahapan){
+          if($tahapan->TAHAPAN_T1==1){
+            $tahapan = 1;
+          }elseif($tahapan->TAHAPAN_T2==1){
+            $tahapan = 2;
+          }elseif($tahapan->TAHAPAN_T3==1){
+            $tahapan = 3;
+          }else{
+            $tahapan = 4;
+          }
+        }else{
+          $tahapan = 0;
+        }
+        $faktor = Monev_Faktor::where('TAHUN',$tahun)->where('SKPD_ID',$skpd)
+                ->where('T',$tahapan)->first();
+        if($faktor){
+          $penghambat=$faktor->PENGHAMBAT;
+          $pendukung=$faktor->PENDUKUNG;
+          $triwulan=$faktor->TRIWULAN;
+          $renja=$faktor->RENJA;
+        }else{
+          $penghambat="";
+          $pendukung="";
+          $triwulan="";
+          $renja="";
+        }
         foreach ($prog as $prog) {
-        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_KEGIATAN.PROGRAM_ID',$prog->PROGRAM_ID)->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->get(),
+          $outcome = Monev_Outcome::where('PROGRAM_ID',$prog->REF_PROGRAM_ID)->get();
+          foreach ($outcome as $outcome) {
+            $ringkasoutcome = $outcome->OUTCOME_TOLAK_UKUR ." : ". $outcome->OUTCOME_TARGET . "%\r\n". $ringkasoutcome;
+          }
+        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_KEGIATAN.PROGRAM_ID',$prog->PROGRAM_ID)->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.REF_KEGIATAN_ID')->get(),
                                  'PROGRAM_ID'     => $prog->PROGRAM_ID,
                                  'SKPD_ID'     => $prog->SKPD_ID,
                                  'SKPD'     => $prog->SKPD_NAMA,
@@ -597,14 +631,21 @@ class monevController extends Controller
                                  'PROGRAM_TAHUN'     => $prog->PROGRAM_TAHUN,
                                  'SASARAN_NAMA'     => $prog->SASARAN_NAMA,
                                  'REF_PROGRAM_ID'     => $prog->REF_PROGRAM_ID,
-                                 'SATUAN'    => $prog->SATUAN_NAMA ));
+                                 'SATUAN'    => $prog->SATUAN_NAMA,
+                                 'OUTCOME'   => $ringkasoutcome ));
+                                 $skpdnama     = $prog->SKPD_NAMA;
       }
       $i=1;
 
          return View('monev.pdf',
             [   'tahun'             =>$tahun,
                 'program'           =>$program,
-                'i'                 =>$i
+                'i'                 =>$i,
+                'skpd'              =>$skpdnama,
+                'penghambat'  =>$penghambat,
+                'pendukung'  =>$pendukung,
+                'triwulan'  =>$triwulan,
+                'renja'  =>$renja,
             ]);
               
       }

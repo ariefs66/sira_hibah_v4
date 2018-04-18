@@ -80,7 +80,7 @@
 <div class="cetak">
 
 <h4>Evaluasi Terhadap Hasil Renja Perangkat Daerah Lingkup Kota Bandung<br>
-Renja Perangkat Daerah SKPD A Kota Bandung<br>
+Renja Perangkat Daerah SKPD {{$skpd}} Kota Bandung<br>
 Periode Pelaksanaan : {{$tahun}}</h4>
 <br>
 <br>
@@ -154,53 +154,53 @@ Periode Pelaksanaan : {{$tahun}}</h4>
 	@foreach($program as $p)
 	<tr class="border headrincian">
 		<td class="border">{{ $i++ }}</td>
-		<td class="border">{{ $p['SASARAN_NAMA'] }}</td>
-		<td class="border">{{ $p['PROGRAM_NAMA'] }}</td>
+		<td class="border"><b>{{ $p['SASARAN_NAMA'] }}</b></td>
+		<td class="border kiri"><b>{{ $p['PROGRAM_NAMA'] }}</b></td>
+		<td class="border"><b>{{ $p['OUTCOME'] }}</b></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"><b>{{ number_format($p['PROGRAM_ANGGARAN'],0,',','.') }}</b></td>
+		<td class="border"><b>{{ $p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:'') }}</b></td>
+		<td class="border"></td>
+		<td class="border"><b>{{ $p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:'') }}</b></td>
+		<td class="border"></td>
+		<td class="border"><b>{{ $p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:'') }}</b></td>
+		<td class="border"></td>
+		<td class="border"><b>{{ $p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:'')}}</b></td>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
-		<td class="border">{{ number_format($p['PROGRAM_ANGGARAN'],0,',','.') }}</td>
-		<td class="border">{{ $p['PROGRAM_T1'] . ' ' . $p['SATUAN'] }}</td>
 		<td class="border"></td>
-		<td class="border">{{ $p['PROGRAM_T2'] . ' ' . $p['SATUAN'] }}</td>
-		<td class="border"></td>
-		<td class="border">{{ $p['PROGRAM_T3'] . ' ' . $p['SATUAN'] }}</td>
-		<td class="border"></td>
-		<td class="border">{{ $p['PROGRAM_T4'] . ' ' . $p['SATUAN'] }}</td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border">{{ $p['SKPD']}}</td>
+		<td class="border"><b>{{ $p['SKPD']}}</b></td>
 	</tr>	
 	@foreach($p['KEGIATAN'] as $k)
 	<tr class="border headrincian">
 		<td class="border">{{ $i++ }}</td>
 		<td class="border">{{ $k['SASARAN_NAMA'] }}</td>
-		<td class="border">{{ $k['KEGIATAN_NAMA'] }}</td>
+		<td class="border kiri">&nbsp;&nbsp;{{ $k['KEGIATAN_NAMA'] }}</td>
+		<td class="border">{{ $k['OUTPUT_TOLAK_UKUR'] }}</td>
 		<td class="border"></td>
 		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border"></td>
+		<td class="border">{{ number_format($k['KEGIATAN_ANGGARAN'],0,',','.') }}</td>
+		<td class="border">{{ $k['KEGIATAN_T1'] . ' ' . ($k['KEGIATAN_T1']?$p['SATUAN']:'')}}</td>
+		<td class="border"></td>
+		<td class="border">{{ $k['KEGIATAN_T2'] . ' ' . ($k['KEGIATAN_T2']?$p['SATUAN']:'')}}</td>
+		<td class="border"></td>
+		<td class="border">{{ $k['KEGIATAN_T3'] . ' ' . ($k['KEGIATAN_T3']?$p['SATUAN']:'')}}</td>
+		<td class="border"></td>
+		<td class="border">{{ $k['KEGIATAN_T4'] . ' ' . ($k['KEGIATAN_T4']?$p['SATUAN']:'')}}</td>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border">{{ number_format($k['REALISASI_TOTAL'],0,',','.') }}</td>
-		<td class="border"></td>
-		<td class="border">{{ number_format($k['KEGIATAN_ANGGARAN'],0,',','.') }}</td>
-		<td class="border">{{ $k['KEGIATAN_T1'] . ' ' . $p['SATUAN'] }}</td>
-		<td class="border"></td>
-		<td class="border">{{ $k['KEGIATAN_T2'] . ' ' . $p['SATUAN'] }}</td>
-		<td class="border"></td>
-		<td class="border">{{ $k['KEGIATAN_T3'] . ' ' . $p['SATUAN'] }}</td>
-		<td class="border"></td>
-		<td class="border">{{ $k['KEGIATAN_T4'] . ' ' . $p['SATUAN'] }}</td>
-		<td class="border"></td>
-		<td class="border"></td>
-		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
 		<td class="border"></td>
@@ -240,16 +240,16 @@ Periode Pelaksanaan : {{$tahun}}</h4>
 		<td class="border" colspan="5"></td>
 	</tr>
 	<tr class="border">
-		<td class="border" colspan="25"><b>Faktor pendorong keberhasilan kinerja :</b></td>
+		<td class="border" colspan="25"><b>Faktor pendorong keberhasilan kinerja : {{$pendukung}}</b></td>
 	</tr>
 	<tr class="border">
-		<td class="border" colspan="25"><b>Faktor penghambat pencapaian kinerja :</b></td>
+		<td class="border" colspan="25"><b>Faktor penghambat pencapaian kinerja : {{$penghambat}}</b></td>
 	</tr>
 	<tr class="border">
-		<td class="border" colspan="25"><b>Tindak Lanjut yang diperlukan dalam triwulan berikutnya :</b></td>
+		<td class="border" colspan="25"><b>Tindak Lanjut yang diperlukan dalam triwulan berikutnya : {{$triwulan}}</b></td>
 	</tr>
 	<tr class="border">
-		<td class="border" colspan="25"><b>Tindak Lanjut yang diperlukan dalam Renja Perangkat Daerah :</b></td>
+		<td class="border" colspan="25"><b>Tindak Lanjut yang diperlukan dalam Renja Perangkat Daerah : {{$renja}}</b></td>
 	</tr>	
 	</tbody>	
 </table>
