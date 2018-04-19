@@ -55,6 +55,7 @@ class monevController extends Controller
       if(Auth::user()->level == 8 || Auth::user()->level == 9){
         $cek = $cek->first();
       }else{
+        $id = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
         $cek = $cek->where('SKPD_ID',$id)->first();
       }
       if($cek){
