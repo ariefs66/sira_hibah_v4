@@ -24,13 +24,13 @@
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or $cek)
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @endif
-@if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+<!--if(Auth::user()->level == 8 or Auth::user()->level == 9 )
                   <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/0"><i class="m-r-xs fa fa-file"></i> Print</a>
-@else
+else
   @if($cek)
                   <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-file"></i> Print</a>
   @endif
-@endif
+endif-->
                   <h5 class="inline font-semibold text-orange m-n ">Monev</h5>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
                   <div class="col-sm-4 pull-right m-t-n-sm">
@@ -301,7 +301,7 @@
         <select ui-jq="chosen" class="w-full" id="satuan">
             <option value="">Satuan</option>
             @foreach($satuan as $st)
-            <option value="{{ $st->SATUAN_ID }}">{{ $st->SATUAN_NAMA }}</option>
+            <option value="{{ $st->SATU_ID }}">{{ $st->SATUAN_NAMA }}</option>
             @endforeach
           </select>
         </div>
