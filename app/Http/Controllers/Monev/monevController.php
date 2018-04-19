@@ -319,6 +319,13 @@ class monevController extends Controller
           foreach ($monev_output as $monev_output) {
             $sasaran = $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . "%\r\n". $sasaran;
           }
+          $monev_realisasi  = Monev_Realisasi::where('KEGIATAN_ID',$data->KEGIATAN_ID)->where('PROGRAM_ID',$data->PROGRAM_ID)->first();
+          if($monev_realisasi){
+            $realisasi = 'REALISASI_T'.$mode;
+            $realisasi = $monev_realisasi->$realisasi;
+          }else{
+            $realisasi = ($data->sum>0?$data->sum:0);
+          }
 
           array_push($view, array( 'KEGIATAN_ID'       => $data->KEGIATAN_ID,
                                    'PROGRAM_ID'       => $data->PROGRAM_ID,
@@ -327,7 +334,7 @@ class monevController extends Controller
                                    'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
                                    'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
-                                   'REALISASI'       => ($data->sum>0?$data->sum:0),
+                                   'REALISASI'       => $realisasi,
                                    'TARGET'       => $sasaran,
                                    'MODE'       => $mode,
                                    'ID'       => $kegiatanid,
@@ -431,10 +438,11 @@ class monevController extends Controller
       }else{
         $realisasi = new Monev_Realisasi;
       }
+      $rtriwulan = 'REALISASI_T'.$mode;
         $realisasi->PROGRAM_ID        = $program_id;
         $realisasi->KEGIATAN_ID        = $kegiatan_id;
         $realisasi->SKPD_ID        = $skpd;
-        $realisasi->REALISASI_TOTAL        = Input::get('REALISASI');
+        $realisasi->$rtriwulan        = Input::get('REALISASI');
         $realisasi->save(); 
       return 'Berhasil!';
     }

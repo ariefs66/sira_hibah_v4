@@ -32,9 +32,7 @@ use App\Model\UserBudget;
 
 class ExcelController extends Controller
 {
-    public function getExport(){
-		$tahun = 2018;
-		$skpd    = 1;
+    public function getExport($tahun, $skpd){
 		$prog = Monev_Program::where('DAT_PROGRAM.SKPD_ID',$skpd)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_PROGRAM.SATUAN')
         ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID')
                 ->where('PROGRAM_TAHUN',$tahun)->get();
@@ -112,11 +110,11 @@ class ExcelController extends Controller
 					$sheet->setHeight(($row-1), 50);
 					if($row==17){
 						$sheet->appendRow($row, array(
-							'',$p['SASARAN_NAMA'], ' '.$p['PROGRAM_NAMA'], $p['OUTCOME']
+							'',$p['SASARAN_NAMA'], ' '.$p['PROGRAM_NAMA'], $p['OUTCOME'],'','','','','',$p['PROGRAM_ANGGARAN'],$p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:''),'',$p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:''),'',$p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:''),'',$p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:''),'','','','','','','',$p['SKPD']
 						));
 					}else{
 						$sheet->prependRow($row, array(
-							'',$p['SASARAN_NAMA'], ' '.$p['PROGRAM_NAMA'], $p['OUTCOME']
+							'',$p['SASARAN_NAMA'], ' '.$p['PROGRAM_NAMA'], $p['OUTCOME'],'','','','','',$p['PROGRAM_ANGGARAN'],$p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:''),'',$p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:''),'',$p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:''),'',$p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:''),'','','','','','','',$p['SKPD']
 						));
 					}
 					$sheet->row(($row), function($cells) { $cells->setFont(array(
@@ -132,7 +130,7 @@ class ExcelController extends Controller
 					foreach($p['KEGIATAN'] as $k){
 						$sheet->setHeight(($row-1), 50);
 						$sheet->prependRow($row, array(
-							'',$k['SASARAN_NAMA'], '  '.$k['KEGIATAN_NAMA'], $k['OUTPUT_TOLAK_UKUR'],'','','','','',$k['KEGIATAN_ANGGARAN'],$k['KEGIATAN_T1'] . ' ' . ($k['KEGIATAN_T1']?$p['SATUAN']:''),'',$k['KEGIATAN_T2'] . ' ' . ($k['KEGIATAN_T2']?$p['SATUAN']:''),'',$k['KEGIATAN_T3'] . ' ' . ($k['KEGIATAN_T3']?$p['SATUAN']:''),'',$k['KEGIATAN_T4'] . ' ' . ($k['KEGIATAN_T4']?$p['SATUAN']:'')
+							'',$k['SASARAN_NAMA'], '  '.$k['KEGIATAN_NAMA'], $k['OUTPUT_TOLAK_UKUR'],'','','','','',$k['KEGIATAN_ANGGARAN'],$k['KEGIATAN_T1'] . ' ' . ($k['KEGIATAN_T1']?$p['SATUAN']:''),$k['REALISASI_T1'],$k['KEGIATAN_T2'] . ' ' . ($k['KEGIATAN_T2']?$p['SATUAN']:''),$k['REALISASI_T2'],$k['KEGIATAN_T3'] . ' ' . ($k['KEGIATAN_T3']?$p['SATUAN']:''),$k['REALISASI_T3'],$k['KEGIATAN_T4'] . ' ' . ($k['KEGIATAN_T4']?$p['SATUAN']:''),$k['REALISASI_T4'],'',($k['REALISASI_T1']+$k['REALISASI_T2']+$k['REALISASI_T3']+$k['REALISASI_T4']),'',($k['REALISASI_T1']+$k['REALISASI_T2']+$k['REALISASI_T3']+$k['REALISASI_T4']),'',($k['REALISASI_T1']+$k['REALISASI_T2']+$k['REALISASI_T3']+$k['REALISASI_T4']),$p['SKPD']
 						));
 						$sheet->row(($row), function($cells) { $cells->setFont(array(
 							'family'     => 'Times',
@@ -147,16 +145,16 @@ class ExcelController extends Controller
 					}
 				}
 				$helper = new PHPExcel_Helper_HTML;
-				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".$pendukung."</b>";
+				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br($pendukung)."</b>";
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+2), $richText);
-				$html = "<b>Faktor penghambat pencapain kinerja:<br>".$penghambat."</b>";
+				$html = "<b>Faktor penghambat pencapain kinerja:<br>".nl2br($penghambat)."</b>";
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+3), $richText);
-				$html = "<b>Tindak lanjut yang diperlukan dalam triwulan berikutnya:<br>".$triwulan."</b>";
+				$html = "<b>Tindak lanjut yang diperlukan dalam triwulan berikutnya:<br>".nl2br($triwulan)."</b>";
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+4), $richText);
-				$html = "<b>Tindak lanjut yang diperlukan dalam Renja Perangkat Daerah Kabupaten/Kota berikutnya:<br>".$renja."</b>";
+				$html = "<b>Tindak lanjut yang diperlukan dalam Renja Perangkat Daerah Kabupaten/Kota berikutnya:<br>".nl2br($renja)."</b>";
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+5), $richText);
 				$sheet->setCellValue('W3', ': April  2018');
