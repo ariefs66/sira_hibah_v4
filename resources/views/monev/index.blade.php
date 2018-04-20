@@ -691,7 +691,7 @@ endif-->
         $('#mode').val(data['MODE']);
         $('#satuan').val(data['SATUAN_ID']).trigger("chosen:updated");
         $('#program').append('<option value="'+data['PROGRAM_ID']+'" selected>'+data['PROGRAM_NAMA']+'</option>').trigger("chosen:updated");
-        $('#kegiatan').append('<option value="'+data['KEGIATAN_ID']+'" selected>'+data['KEGIATAN_KODE']+'-'+data['KEGIATAN_NAMA']+'</option>').trigger("chosen:updated");
+        $('#kegiatan').append('<option value="'+data['KEGIATAN_ID']+'" selected>'+data['SUB_KODE']+'-'+data['KEGIATAN_NAMA']+'</option>').trigger("chosen:updated");
         $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
         $('#target').val(data['TARGET']);
         $('#kinerja').val(data['KINERJA']);

@@ -276,13 +276,14 @@ class monevController extends Controller
     }
         $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                        ->leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
                         ->LeftJoin('BUDGETING.DAT_BL_REALISASI','DAT_BL_REALISASI.BL_ID','=','DAT_BL.BL_ID')
-                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL.BL_ID','BL_PAGU')
+                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
-                        ->where('SKPD_ID',$skpd)
+                        ->where('DAT_BL.SKPD_ID',$skpd)
                         ->where('DAT_BL.BL_ID',$id)
-                        ->select(DB::raw('SUM("DAT_BL_REALISASI"."REALISASI_TOTAL"), "DAT_BL".*, "REF_KEGIATAN".*, "REF_PROGRAM".*'))
+                        ->select(DB::raw('SUM("DAT_BL_REALISASI"."REALISASI_TOTAL"), "DAT_BL".*, "REF_SUB_UNIT"."SUB_KODE", "REF_KEGIATAN".*, "REF_PROGRAM".*'))
                         ->get();
 
         $view       = array();
@@ -293,7 +294,7 @@ class monevController extends Controller
             
           $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
           $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->first();
+          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('KEGIATAN_KODE',$data->SUB_KODE)->first();
         
           if($monev_keg){
             $kegiatanid = $monev_keg->KEGIATAN_ID;
@@ -332,6 +333,7 @@ class monevController extends Controller
                                    'PROGRAM_ID'       => $data->PROGRAM_ID,
                                    'PROGRAM_NAMA'       => $data->PROGRAM_NAMA,
                                    'PROGRAM_KODE'       => $data->PROGRAM_KODE,
+                                   'SUB_KODE'       => $data->SUB_KODE,
                                    'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
                                    'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
@@ -466,7 +468,7 @@ class monevController extends Controller
         $akb       = '';
         foreach ($data as $data) {
 
-          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->first();
+          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('KEGIATAN_KODE',$data->SUB_KODE)->first();
         
           if($monev_keg){
             $kegiatanid = $monev_keg->KEGIATAN_ID;
