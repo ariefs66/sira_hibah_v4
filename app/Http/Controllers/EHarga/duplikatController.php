@@ -25,7 +25,7 @@ use App\Model\Rekom;
 use App\Model\DataDukung;
 use App\Model\UsulanSurat;
 
-class usulanController extends Controller
+class duplikatController extends Controller
 {
     public function __construct(){
         $this->middleware('auth');
