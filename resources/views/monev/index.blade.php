@@ -22,15 +22,17 @@
                 <div class="wrapper-lg">
                   <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> Tambah Parameter</button>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or $cek)
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel/1"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  @else
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @endif
-@if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+<!--if(Auth::user()->level == 8 or Auth::user()->level == 9 )
                   <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/0"><i class="m-r-xs fa fa-file"></i> Print</a>
-@else
+else
   @if($cek)
                   <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-file"></i> Print</a>
   @endif
-@endif
+endif-->
                   <h5 class="inline font-semibold text-orange m-n ">Monev</h5>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
                   <div class="col-sm-4 pull-right m-t-n-sm">
@@ -295,7 +297,7 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Kinerja</label>          
         <div class="col-sm-5">
-          <input type="text" class="form-control" placeholder="Masukan Target Kinerja" id="kinerja" >          
+          <input type="text" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" >          
         </div> 
         <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan">
@@ -689,7 +691,7 @@
         $('#mode').val(data['MODE']);
         $('#satuan').val(data['SATUAN_ID']).trigger("chosen:updated");
         $('#program').append('<option value="'+data['PROGRAM_ID']+'" selected>'+data['PROGRAM_NAMA']+'</option>').trigger("chosen:updated");
-        $('#kegiatan').append('<option value="'+data['KEGIATAN_ID']+'" selected>'+data['KEGIATAN_KODE']+'-'+data['KEGIATAN_NAMA']+'</option>').trigger("chosen:updated");
+        $('#kegiatan').append('<option value="'+data['KEGIATAN_ID']+'" selected>'+data['SUB_KODE']+'-'+data['KEGIATAN_NAMA']+'</option>').trigger("chosen:updated");
         $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
         $('#target').val(data['TARGET']);
         $('#kinerja').val(data['KINERJA']);

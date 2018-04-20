@@ -240,16 +240,16 @@ Periode Pelaksanaan : {{$tahun}}</h4>
 		<td class="border" colspan="5"></td>
 	</tr>
 	<tr class="border">
-		<td class="border" colspan="25"><b>Faktor pendorong keberhasilan kinerja : {{$pendukung}}</b></td>
+		<td class="border" colspan="25">Faktor pendorong keberhasilan kinerja : {{$pendukung}}</td>
 	</tr>
 	<tr class="border">
-		<td class="border" colspan="25"><b>Faktor penghambat pencapaian kinerja : {{$penghambat}}</b></td>
+		<td class="border" colspan="25">Faktor penghambat pencapaian kinerja : {{$penghambat}}</td>
 	</tr>
 	<tr class="border">
-		<td class="border" colspan="25"><b>Tindak Lanjut yang diperlukan dalam triwulan berikutnya : {{$triwulan}}</b></td>
+		<td class="border" colspan="25">Tindak Lanjut yang diperlukan dalam triwulan berikutnya : {{$triwulan}}</td>
 	</tr>
 	<tr class="border">
-		<td class="border" colspan="25"><b>Tindak Lanjut yang diperlukan dalam Renja Perangkat Daerah : {{$renja}}</b></td>
+		<td class="border" colspan="25">Tindak Lanjut yang diperlukan dalam Renja Perangkat Daerah : {{$renja}}</td>
 	</tr>	
 	</tbody>	
 </table>
