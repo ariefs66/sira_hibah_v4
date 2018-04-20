@@ -318,8 +318,10 @@ class monevController extends Controller
           }else{
             $monev_output  = OutputPerubahan::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT_PERUBAHAN.SATUAN_ID')->get();
           }
+          $total = 0;
           foreach ($monev_output as $monev_output) {
             $sasaran = $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . " ". $monev_output->SATUAN_NAMA . "\r\n". $sasaran;
+            $total = $total + 1;
           }
           $monev_realisasi  = Monev_Realisasi::where('KEGIATAN_ID',$data->KEGIATAN_ID)->where('PROGRAM_ID',$data->PROGRAM_ID)->first();
           if($monev_realisasi){
@@ -339,6 +341,7 @@ class monevController extends Controller
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
                                    'REALISASI'       => $realisasi,
                                    'TARGET'       => $sasaran,
+                                   'TOTAL'             => $total,
                                    'MODE'       => $mode,
                                    'ID'       => $kegiatanid,
                                    'SKPD_ID'       => $skpd,
@@ -366,34 +369,7 @@ class monevController extends Controller
       if(empty($skpd)){
         $skpd = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
       }
-      $keg = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
-        if($keg){
-          $keg = Monev_Kegiatan::find($keg->KEGIATAN_ID);
-          $keg->USER_UPDATED       = Auth::user()->id;
-          $keg->TIME_UPDATED       = Carbon\Carbon::now();
-        }else{
-          $keg = new Monev_Kegiatan;
-          $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
-          $keg->USER_CREATED       = Auth::user()->id;
-          $keg->TIME_CREATED       = Carbon\Carbon::now();
-          $monev_output  = new Monev_Output;
-          $monev_output->KEGIATAN_ID = Input::get('KEGIATAN_ID');
-          $monev_output->OUTPUT_TOLAK_UKUR = Input::get('TARGET');
-          $monev_output->save();
-        }
-      
-      $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
-      $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
-      $keg->KEGIATAN_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
-      $before = intval($keg->$kinerja);
-      $keg->$kinerja        = Input::get('KINERJA');
-      $keg->KEGIATAN_VALIDASI        = 0;
-      $keg->KEGIATAN_INPUT        = 0;
-      $keg->SKPD_ID        = $skpd;
-      $keg->$pendukung        = Input::get('PENDUKUNG');
-      $keg->$penghambat        = Input::get('PENGHAMBAT');
-      $keg->SATUAN        = Input::get('SATUAN');
-    
+     
       $program = Input::get('PROGRAM_ID');
       $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->first();
       
@@ -401,7 +377,7 @@ class monevController extends Controller
         $prog = Monev_Program::find($prog->PROGRAM_ID);
         $prog->USER_UPDATED       = Auth::user()->id;
         $prog->TIME_UPDATED       = Carbon\Carbon::now();
-        $prog->$kinerjap        = intval($prog->$kinerjap) - $before + intval(Input::get('KINERJA'));
+        $prog->$kinerjap        = intval(Input::get('KINERJA'));
         $prog->$pendukungp        = $prog->$pendukungp . ' ' . Input::get('PENDUKUNG');
         $prog->$penghambatp        = $prog->$penghambatp. ' ' . Input::get('PENGHAMBAT');
         $prog->PROGRAM_ANGGARAN       += intval(Input::get('KEGIATAN_ANGGARAN'));
@@ -429,15 +405,77 @@ class monevController extends Controller
       $prog->PROGRAM_NAMA        = Input::get('PROGRAM_NAMA');
       $prog->PROGRAM_VALIDASI        = 0;
       $prog->PROGRAM_INPUT        = 0;
-      $prog->SATUAN        = Input::get('SATUAN');
+      $prog->SATUAN        = 1;
       $prog->save(); 
       $program_id = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
-      $keg->PROGRAM_ID        = $program_id;
-      $keg->save(); 
+      $total = intval(Input::get('TOTAL'));
+      $k_input = Input::get('KINERJA');
+      $s_input = Input::get('SATUAN');
+      $kinerjas = explode(",", $k_input);
+      $satuans = explode(",", $s_input);
+      $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
+      for ($i = 0; $i < $total; $i++) {
+        if($edit){
+          if($i>0){
+            $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
+          }
+          echo($edit->KEGIATAN_ID);
+          $keg = Monev_Kegiatan::find($edit->KEGIATAN_ID);
+          $keg->USER_UPDATED       = Auth::user()->id;
+          $keg->TIME_UPDATED       = Carbon\Carbon::now();
+        }else{
+          $keg = new Monev_Kegiatan;
+          $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
+          $keg->USER_CREATED       = Auth::user()->id;
+          $keg->TIME_CREATED       = Carbon\Carbon::now();
+          $monev_output  = new Monev_Output;
+          $monev_output->KEGIATAN_ID = Input::get('KEGIATAN_ID');
+          $monev_output->OUTPUT_TOLAK_UKUR = Input::get('TARGET');
+          $monev_output->save();
+        }
+          if(is_array($kinerjas)){
+              if($i < count($kinerjas)){
+                $keg->$kinerja = $kinerjas[$i];
+              }else{
+                $keg->$kinerja = 0;
+              }
+          }
+          if(is_array($satuans)){
+              if( $i <count($satuans)){
+                $keg->SATUAN = $satuans[$i];
+              }else{
+                $keg->SATUAN = 0;
+              }
+          }
+        $keg->PROGRAM_ID        = $program_id;
+        $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
+        $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
+        $keg->KEGIATAN_ANGGARAN        = Input::get('KEGIATAN_ANGGARAN');
+        $keg->KEGIATAN_VALIDASI        = 0;
+        $keg->KEGIATAN_INPUT        = 0;
+        $keg->SKPD_ID        = $skpd;
+        $keg->$pendukung        = Input::get('PENDUKUNG');
+        $keg->$penghambat        = Input::get('PENGHAMBAT');  
+        $keg->save();
+      }
       $kegiatan_id = Monev_Kegiatan::where('REF_KEGIATAN_ID',Input::get('KEGIATAN_ID'))->where('PROGRAM_ID',$program_id)->value('KEGIATAN_ID');
+      $nilai = Input::get('REALISASI');
       $realisasi = Monev_Realisasi::where('KEGIATAN_ID',$kegiatan_id)->where('PROGRAM_ID',$program_id)->where('SKPD_ID',$skpd)->first();
       if($realisasi){
         $realisasi = Monev_Realisasi::find($realisasi->REALISASI_ID);
+        switch ($mode) {
+          case 2:
+              $nilai = $nilai - intval($realisasi->REALISASI_T1);
+              break;
+          case 3:
+              $nilai = $nilai - intval($realisasi->REALISASI_T1)- intval($realisasi->REALISASI_T2);
+              break;
+          case 4:
+              $nilai = $nilai - intval($realisasi->REALISASI_T1)- intval($realisasi->REALISASI_T2)- intval($realisasi->REALISASI_T3);
+              break;
+          default:
+              $nilai = intval(Input::get('REALISASI'));
+      }
       }else{
         $realisasi = new Monev_Realisasi;
       }

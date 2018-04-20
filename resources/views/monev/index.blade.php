@@ -267,6 +267,7 @@ endif-->
           <input type="hidden" id="prog-kode">
           <input type="hidden" id="prog-nama">
           <input type="hidden" id="mode">
+          <input type="hidden" id="total">
           <select ui-jq="chosen" class="w-full" id="program" disabled>
             <option value="">Silahkan Pilih Program</option>
           </select>
@@ -294,19 +295,22 @@ endif-->
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" id="dupe">
         <label for="no_spp" class="col-md-3">Kinerja</label>          
         <div class="col-sm-5">
           <input type="text" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" >          
         </div> 
         <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan">
+        <select id="satuan">
             <option value="">Satuan</option>
             @foreach($satuan as $st)
             <option value="{{ $st->SATUAN_ID }}">{{ $st->SATUAN_NAMA }}</option>
             @endforeach
           </select>
         </div>
+      </div>
+
+      <div id="extra">
       </div>
 
       <div class="form-group">
@@ -504,9 +508,14 @@ endif-->
     var SKPD_ID     = $('#skpd-id').val();
     @endif
     var SATUAN     = $('#satuan').val();
+    var KINERJA        = $('#kinerja').val();
+    var TOTAL        = $('#total').val();
+    for (var i = 1; i < TOTAL; i++) { 
+    SATUAN = SATUAN + ',' +$('#satuan_'+i).val();
+    KINERJA = KINERJA + ',' +$('#kinerja_'+i).val();
+    }
     var KEGIATAN_ANGGARAN     = $('#anggaran').val();
     var TARGET     = $('#target').val();
-    var KINERJA        = $('#kinerja').val();
     var PENDUKUNG         = $('#pendukung').val();
     var PENGHAMBAT      = $('#penghambat').val();
     var REALISASI      = $('#realisasi').val();
@@ -532,6 +541,7 @@ endif-->
               'KINERJA'             : KINERJA, 
               'PENDUKUNG'           : PENDUKUNG, 
               'PENGHAMBAT'          : PENGHAMBAT, 
+              'TOTAL'          : TOTAL, 
               'MODE'          : mode},
         success: function(msg){
           $('.table-pegawai').DataTable().ajax.reload();
@@ -552,6 +562,7 @@ endif-->
           $('#penghambat').val("");
           $('#target').val("");
           $('#realisasi').val("");
+          $('#extra').html("");
         }
       });
     }
@@ -679,6 +690,29 @@ endif-->
       type  : "get",
       url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
       success : function (data) {
+        var counter = 0;
+    function duplicateNode(/*DOMNode*/sourceNode, /*Array*/attributesToBump) {
+        counter++;
+        var out = sourceNode.cloneNode(true);
+        if (out.hasAttribute("id")) { out["id"] = bump(out["id"]); }
+        var nodes = out.getElementsByTagName("*");
+        
+        for (var i = 0, len1 = nodes.length; i < len1; i++) {
+            var node = nodes[i];
+            for (var j = 0, len2 = attributesToBump.length; j < len2; j++) {
+                var attribute = attributesToBump[j];
+                if (node.hasAttribute(attribute)) {
+                    node[attribute] = bump(node[attribute]);
+                }
+            }
+        }
+        
+        function bump(/*String*/str) {
+            return str + "_" + counter;
+        }
+      
+        return out;
+    }
         data = data.aaData[0];
         $('#id').val(data['ID']);
         $('#keg-id').val(data['KEGIATAN_ID']);
@@ -695,6 +729,14 @@ endif-->
         $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
         $('#target').val(data['TARGET']);
         $('#kinerja').val(data['KINERJA']);
+        $('#total').val(data['TOTAL']);
+        total = data['TOTAL']-1;
+        for (i = 0; i < total; i++) { 
+        var sourceNode = document.getElementById("dupe");
+        var node = duplicateNode(sourceNode, ["id", "name", "placeholder"]);
+        var extra = document.getElementById("extra");
+        extra.appendChild(node);
+        }
         $('#pendukung').val(data['KEGIATAN_PENDUKUNG']);
         $('#penghambat').val(data['KEGIATAN_PENGHAMBAT']);
         $('#realisasi').val(data['REALISASI']);
