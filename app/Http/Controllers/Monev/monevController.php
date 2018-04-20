@@ -312,13 +312,13 @@ class monevController extends Controller
             $satuan = "";
           }
           $sasaran="";
-          $monev_output  = Output::where('BL_ID',$id)->get();
+          $monev_output  = Output::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')->get();
           if($monev_output){
           }else{
-            $monev_output  = OutputPerubahan::where('BL_ID',$id)->get();
+            $monev_output  = OutputPerubahan::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT_PERUBAHAN.SATUAN_ID')->get();
           }
           foreach ($monev_output as $monev_output) {
-            $sasaran = $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . "%\r\n". $sasaran;
+            $sasaran = $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . " ". $monev_output->SATUAN_NAMA . "\r\n". $sasaran;
           }
           $monev_realisasi  = Monev_Realisasi::where('KEGIATAN_ID',$data->KEGIATAN_ID)->where('PROGRAM_ID',$data->PROGRAM_ID)->first();
           if($monev_realisasi){
@@ -451,12 +451,13 @@ class monevController extends Controller
       public function getDetail($tahun, $skpd, $mode=1, $id){
 
         $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
-                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
+                        ->Join('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
-                        ->where('SKPD_ID',$skpd)
+                        ->where('DAT_BL.SKPD_ID',$skpd)
                         ->where('PROGRAM_ID',$id)
-                        ->selectRaw(' "KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","DAT_BL"."BL_ID","BL_PAGU" ')
+                        ->selectRaw(' "KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","REF_SUB_UNIT"."SUB_KODE","KEGIATAN_KODE","DAT_BL"."BL_ID","BL_PAGU" ')
                         ->get();
 
         $view       = array();
@@ -486,7 +487,7 @@ class monevController extends Controller
           
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
           array_push($view, array( 'NO'       => $no++,
-                                   'KEGIATAN'     => $data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA,
+                                   'KEGIATAN'     => $data->SUB_KODE.'-'.$data->KEGIATAN_NAMA,
                                    'KEGIATAN_ID'     => $data->KEGIATAN_ID,
                                    'KINERJA'    => $kinerja.' '.$satuan,
                                    'TOTAL'    => number_format($data->BL_PAGU,0,'.',','),
