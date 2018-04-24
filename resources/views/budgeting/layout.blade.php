@@ -172,7 +172,7 @@
               @endif
               <li class="divider"></li>
               <li>
-                <a href="{{ url('/') }}/monev/{{$tahun}}" onclick="$.alert('Ditutup!')">
+                <a href="{{ url('/') }}/monev/{{$tahun}}">
                   <i class="icon-bdg_uikit"></i>
                   <span>Monev</span>
                 </a>

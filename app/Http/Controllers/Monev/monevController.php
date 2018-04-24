@@ -34,7 +34,18 @@ use App\Model\UserBudget;
 class monevController extends Controller
 {
    public function index($tahun){
-      $skpd    = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+      $skpd_      = array(); 
+      $i = 0;
+      foreach($skpd as $s){
+          $skpd_[$i]   = $s->SKPD_ID;
+          $i++;
+      }
+      if(Auth::user()->level == 8 or Auth::user()->level == 9){
+          $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+      }else{
+          $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+      }
       $satuan  = Satuan::All();
       $tahapan    = Monev_Tahapan::where('TAHAPAN_TAHUN',$tahun)->first();
       if($tahapan){
@@ -52,28 +63,51 @@ class monevController extends Controller
       }
       $cek    = Monev_Faktor::where('TAHUN',$tahun)
       ->where('T',$triwulan);
-      if(Auth::user()->level == 8 || Auth::user()->level == 9){
+      if(Auth::user()->level == 8 || Auth::user()->level == 9 || Auth::user()->mod == '01000000000'){
         $cek = $cek->first();
       }else{
         $id = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
         $cek = $cek->where('SKPD_ID',$id)->first();
       }
       if($cek){
+        if($cek->STATUS==2) {
+            if(Auth::user()->level == 8 || Auth::user()->level == 9 || Auth::user()->mod == '01000000000'){
+              $input ='disabled';
+              $validasi ='disabled';
+            }else{
+              $input ='disabled';
+              $validasi ='disabled';
+            }
+        }else{
+          if(Auth::user()->level == 8 || Auth::user()->level == 9 || Auth::user()->mod == '01000000000'){
+            $input ='';
+            $validasi ='disabled';
+          }else{
+            $input ='disabled';
+            $validasi ='';
+          }
+        }
         $cek = TRUE;
+        $input ='disabled';
+        $validasi ='disabled';
       }else {
         $cek = FALSE;
+        $input     ='';
+        $validasi ='';
       }
 	  return View('monev.index',[
       'tahun'     =>$tahun,
       'skpd'      =>$skpd,
       'satuan'    =>$satuan,
+      'input'     =>$input,
+      'validasi'     =>$validasi,
       'cek'       =>$cek,
+      'mode'      =>$triwulan,
       'triwulan1' =>($tahapan->TAHAPAN_T1==1?'active':''),
       'triwulan2' =>($tahapan->TAHAPAN_T2==1?'active':''),
       'triwulan3' =>($tahapan->TAHAPAN_T3==1?'active':''),
       'triwulan4' =>($tahapan->TAHAPAN_T4==1?'active':''),
       ]);
-
    }
 
    public function getTriwulan1($tahun,$filter){
@@ -274,16 +308,16 @@ class monevController extends Controller
     if(empty($skpd)){
       $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
     }
-        $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+        $data       = BLPerubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
-                        ->leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                        ->LeftJoin('BUDGETING.DAT_BL_REALISASI','DAT_BL_REALISASI.BL_ID','=','DAT_BL.BL_ID')
-                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL.BL_ID','BL_PAGU')
+                        ->leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL_PERUBAHAN.SUB_ID')
+                        ->LeftJoin('BUDGETING.DAT_BL_REALISASI','DAT_BL_REALISASI.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID')
+                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_ID','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL_PERUBAHAN.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
-                        ->where('DAT_BL.SKPD_ID',$skpd)
-                        ->where('DAT_BL.BL_ID',$id)
-                        ->select(DB::raw('SUM("DAT_BL_REALISASI"."REALISASI_TOTAL"), "DAT_BL".*, "REF_SUB_UNIT"."SUB_KODE", "REF_KEGIATAN".*, "REF_PROGRAM".*'))
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$skpd)
+                        ->where('DAT_BL_PERUBAHAN.BL_ID',$id)
+                        ->select(DB::raw('SUM("DAT_BL_REALISASI"."REALISASI_TOTAL"), "DAT_BL_PERUBAHAN".*, "REF_SUB_UNIT"."SUB_ID", "REF_KEGIATAN".*, "REF_PROGRAM".*'))
                         ->get();
 
         $view       = array();
@@ -294,7 +328,7 @@ class monevController extends Controller
             
           $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
           $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('KEGIATAN_KODE',$data->SUB_KODE)->first();
+          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('KEGIATAN_KODE',$data->KEGIATAN_KODE)->first();
         
           if($monev_keg){
             $kegiatanid = $monev_keg->KEGIATAN_ID;
@@ -304,7 +338,6 @@ class monevController extends Controller
             $kinerja = $monev_keg->$kinerja;
             $penghambat = $monev_keg->$penghambat;
             $pendukung = $monev_keg->$pendukung;
-            $satuan = $monev_keg->SATUAN;
           }else{
             $kegiatanid = "";
             $kinerja = "";
@@ -313,6 +346,10 @@ class monevController extends Controller
             $satuan = "";
           }
           $sasaran="";
+          $target="";
+          $tolak_ukur="";
+          $satuan="";
+          $satuan_nama="";
           $monev_output  = Output::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')->get();
           if($monev_output){
           }else{
@@ -320,7 +357,11 @@ class monevController extends Controller
           }
           $total = 0;
           foreach ($monev_output as $monev_output) {
-            $sasaran = $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . " ". $monev_output->SATUAN_NAMA . "\r\n". $sasaran;
+            $sasaran = $sasaran . $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . " ". $monev_output->SATUAN_NAMA . "\r\n" ;
+            $target =  $target . $monev_output->OUTPUT_TARGET.",";
+            $tolak_ukur =  $tolak_ukur . $monev_output->OUTPUT_TOLAK_UKUR.",";
+            $satuan =  $satuan . $monev_output->SATUAN_ID.",";
+            $satuan_nama =  $satuan_nama . $monev_output->SATUAN_NAMA.",";
             $total = $total + 1;
           }
           $monev_realisasi  = Monev_Realisasi::where('KEGIATAN_ID',$data->KEGIATAN_ID)->where('PROGRAM_ID',$data->PROGRAM_ID)->first();
@@ -335,12 +376,15 @@ class monevController extends Controller
                                    'PROGRAM_ID'       => $data->PROGRAM_ID,
                                    'PROGRAM_NAMA'       => $data->PROGRAM_NAMA,
                                    'PROGRAM_KODE'       => $data->PROGRAM_KODE,
-                                   'SUB_KODE'       => $data->SUB_KODE,
+                                   'SUB_ID'       => $data->SUB_ID,
                                    'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
                                    'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
                                    'REALISASI'       => $realisasi,
-                                   'TARGET'       => $sasaran,
+                                   'TARGET'       => $target,
+                                   'TOLAK_UKUR'       => $tolak_ukur,
+                                   'SATUAN'       => $satuan_nama,
+                                   'OUTPUT'       => $sasaran,
                                    'TOTAL'             => $total,
                                    'MODE'       => $mode,
                                    'ID'       => $kegiatanid,
@@ -372,7 +416,7 @@ class monevController extends Controller
      
       $program = Input::get('PROGRAM_ID');
       $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->first();
-      
+
       if($prog){
         $prog = Monev_Program::find($prog->PROGRAM_ID);
         $prog->USER_UPDATED       = Auth::user()->id;
@@ -405,14 +449,18 @@ class monevController extends Controller
       $prog->PROGRAM_NAMA        = Input::get('PROGRAM_NAMA');
       $prog->PROGRAM_VALIDASI        = 0;
       $prog->PROGRAM_INPUT        = 0;
-      $prog->SATUAN        = 1;
+      $prog->SATUAN        = 126;
       $prog->save(); 
       $program_id = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
       $total = intval(Input::get('TOTAL'));
       $k_input = Input::get('KINERJA');
       $s_input = Input::get('SATUAN');
+      $t_input = Input::get('TARGET');
+      $o_input = Input::get('OUTPUT');
       $kinerjas = explode(",", $k_input);
       $satuans = explode(",", $s_input);
+      $targets = explode(",", $t_input);
+      $outputs = explode(",", $o_input);
       $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
       for ($i = 0; $i < $total; $i++) {
         if($edit){
@@ -428,10 +476,6 @@ class monevController extends Controller
           $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
           $keg->USER_CREATED       = Auth::user()->id;
           $keg->TIME_CREATED       = Carbon\Carbon::now();
-          $monev_output  = new Monev_Output;
-          $monev_output->KEGIATAN_ID = Input::get('KEGIATAN_ID');
-          $monev_output->OUTPUT_TOLAK_UKUR = Input::get('TARGET');
-          $monev_output->save();
         }
           if(is_array($kinerjas)){
               if($i < count($kinerjas)){
@@ -447,6 +491,29 @@ class monevController extends Controller
                 $keg->SATUAN = 0;
               }
           }
+
+          $monev_output  = Monev_Output::where('REF_KEGIATAN_ID',$id)->where('OUTPUT_SATUAN',$keg->SATUAN)->first();
+          if($monev_output){
+            $monev_output = Monev_Output::find($monev_output->OUTPUT_ID);
+          }else{
+            $monev_output  = new Monev_Output;
+            $monev_output->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
+            $monev_output->OUTPUT_SATUAN = $keg->SATUAN;
+          }
+          if(is_array($outputs)){
+            if( $i <count($outputs)){
+              $monev_output->OUTPUT_TOLAK_UKUR = $outputs[$i];
+            }else{
+              $monev_output->OUTPUT_TOLAK_UKUR = '';
+            }
+        }
+        if(is_array($targets)){
+          if( $i <count($targets)){
+            $monev_output->OUTPUT_TARGET = $targets[$i];
+          }else{
+            $monev_output->OUTPUT_TARGET = 0;
+          }
+      }
         $keg->PROGRAM_ID        = $program_id;
         $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
         $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
@@ -454,10 +521,14 @@ class monevController extends Controller
         $keg->KEGIATAN_VALIDASI        = 0;
         $keg->KEGIATAN_INPUT        = 0;
         $keg->SKPD_ID        = $skpd;
+        $keg->SUB_ID        = Input::get('SUB_ID');
         $keg->$pendukung        = Input::get('PENDUKUNG');
-        $keg->$penghambat        = Input::get('PENGHAMBAT');  
+        $keg->$penghambat        = Input::get('PENGHAMBAT');
         $keg->save();
+
+        $monev_output->save();  
       }
+
       $kegiatan_id = Monev_Kegiatan::where('REF_KEGIATAN_ID',Input::get('KEGIATAN_ID'))->where('PROGRAM_ID',$program_id)->value('KEGIATAN_ID');
       $nilai = Input::get('REALISASI');
       $realisasi = Monev_Realisasi::where('KEGIATAN_ID',$kegiatan_id)->where('PROGRAM_ID',$program_id)->where('SKPD_ID',$skpd)->first();
@@ -485,19 +556,27 @@ class monevController extends Controller
         $realisasi->SKPD_ID        = $skpd;
         $realisasi->$rtriwulan        = Input::get('REALISASI');
         $realisasi->save(); 
+
+        /*
+      $prog = Monev_Program::find($programid);
+*/
       return 'Berhasil!';
     }
 
       public function getDetail($tahun, $skpd, $mode=1, $id){
 
         $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+                        ->leftJoin('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+                        ->leftJoin('REFERENSI.REF_SKPD','DAT_BL.SKPD_ID','=','REF_SKPD.SKPD_ID')
                         ->Join('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
-                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
+                        ->leftJoin('REFERENSI.REF_URUSAN_SKPD','DAT_BL.SKPD_ID','=','REF_URUSAN_SKPD.SKPD_ID')
+                        ->leftJoin('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_URUSAN_SKPD.URUSAN_ID')
+                        ->groupBy('REF_URUSAN.URUSAN_KODE','REF_SKPD.SKPD_KODE','REF_PROGRAM.PROGRAM_KODE','KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','REF_SUB_UNIT.SUB_NAMA','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('DAT_BL.SKPD_ID',$skpd)
-                        ->where('PROGRAM_ID',$id)
-                        ->selectRaw(' "KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","REF_SUB_UNIT"."SUB_KODE","KEGIATAN_KODE","DAT_BL"."BL_ID","BL_PAGU" ')
+                        ->where('REF_KEGIATAN.PROGRAM_ID',$id)
+                        ->selectRaw(' "REF_URUSAN"."URUSAN_KODE","REF_SKPD"."SKPD_KODE","REF_PROGRAM"."PROGRAM_KODE","KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","REF_SUB_UNIT"."SUB_KODE","REF_SUB_UNIT"."SUB_NAMA","KEGIATAN_KODE","DAT_BL"."BL_ID","BL_PAGU" ')
                         ->get();
 
         $view       = array();
@@ -506,7 +585,7 @@ class monevController extends Controller
         $akb       = '';
         foreach ($data as $data) {
 
-          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('KEGIATAN_KODE',$data->SUB_KODE)->first();
+          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_KEGIATAN.SUB_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_KODE',$data->SUB_KODE)->first();
         
           if($monev_keg){
             $kegiatanid = $monev_keg->KEGIATAN_ID;
@@ -527,7 +606,7 @@ class monevController extends Controller
           
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
           array_push($view, array( 'NO'       => $no++,
-                                   'KEGIATAN'     => $data->SUB_KODE.'-'.$data->KEGIATAN_NAMA,
+                                   'KEGIATAN'     => $data->URUSAN_KODE.'.'.$data->SKPD_KODE.'.'.$data->SUB_KODE.'.'.$data->PROGRAM_KODE.'.'.$data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA.'-'.$data->SUB_NAMA,
                                    'KEGIATAN_ID'     => $data->KEGIATAN_ID,
                                    'KINERJA'    => $kinerja.' '.$satuan,
                                    'TOTAL'    => number_format($data->BL_PAGU,0,'.',','),
@@ -547,6 +626,8 @@ class monevController extends Controller
                         ->where('SKPD_ID',$skpd)
                         ->first();
           $id = "";
+          $input =FALSE;
+          $validasi =TRUE;
           if($data){
             $save       = "edit";
             $id = $data->FAKTOR_ID;
@@ -554,6 +635,22 @@ class monevController extends Controller
             $penghambat =  $data->PENGHAMBAT;
             $triwulan =  $data->TRIWULAN;
             $renja = $data->RENJA;
+            $sasaran = $data->SASARAN;
+            if($data->STATUS==2) {
+              $input =TRUE;
+              $validasi =TRUE;
+              $judul = "Validasi";
+          }else{
+            if(Auth::user()->level == 8 || Auth::user()->level == 9 || Auth::user()->mod == '01000000000'){
+              $input =TRUE;
+              $validasi =FALSE;
+              $judul = "Verifikasi";
+            }else{
+              $input =FALSE;
+              $validasi =TRUE;
+              $judul = "Parameter Cetak";
+            }
+          }
           }else{
             $data       = Monev_Program::where('PROGRAM_TAHUN',$tahun)
             ->where('SKPD_ID',$skpd)
@@ -571,9 +668,11 @@ class monevController extends Controller
               $pendukung = "";
               $penghambat = "";
             }
+            $sasaran = "";
             $triwulan = '';
             $renja = '';
             $save       = "save";
+            $judul = "Parameter Cetak";
           }
           $view       = array();
           array_push($view, array(  'PENGHAMBAT'       => $penghambat,
@@ -584,8 +683,11 @@ class monevController extends Controller
                                     'SAVE'       => $save,
                                     'ID'       => $id,
                                     'SKPD_ID'       => $skpd,
-                                    'TAHUN'       => $tahun));
-             
+                                    'TAHUN'       => $tahun,
+                                    'INPUT'     => $input,
+                                    'VALIDASI' => $validasi,
+                                    'SASARAN' => $sasaran,
+                                    'JUDUL'    => $judul));
             $out = array("aaData"=>$view);       
           return Response::JSON($out);
       }   
