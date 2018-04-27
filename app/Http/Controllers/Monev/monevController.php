@@ -424,7 +424,7 @@ class monevController extends Controller
         $prog->$kinerjap        = intval(Input::get('KINERJA'));
         $prog->$pendukungp        = $prog->$pendukungp . ' ' . Input::get('PENDUKUNG');
         $prog->$penghambatp        = $prog->$penghambatp. ' ' . Input::get('PENGHAMBAT');
-        $prog->PROGRAM_ANGGARAN       += intval(Input::get('KEGIATAN_ANGGARAN'));
+        $prog->PROGRAM_ANGGARAN       = intval(Input::get('KEGIATAN_ANGGARAN'));
       }else{
         $prog = new Monev_Program;
         $prog->REF_PROGRAM_ID = Input::get('PROGRAM_ID');
@@ -618,9 +618,14 @@ class monevController extends Controller
       }   
 
       public function getFaktor($tahun, $skpd, $mode=1){
+        
         if(empty($skpd)){
           $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
+          $skpdnama   = SKPD::where('SKPD_ID',Auth::user()->id)->where('SKPD_TAHUN',$tahun)->value('SKPD_NAMA'); 
+        }else{
+          $skpdnama   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_NAMA'); 
         }
+         
           $data       = Monev_Faktor::where('TAHUN',$tahun)
                         ->where('T',$mode)
                         ->where('SKPD_ID',$skpd)
@@ -683,6 +688,7 @@ class monevController extends Controller
                                     'SAVE'       => $save,
                                     'ID'       => $id,
                                     'SKPD_ID'       => $skpd,
+                                    'SKPD_NAMA'       => $skpdnama,
                                     'TAHUN'       => $tahun,
                                     'INPUT'     => $input,
                                     'VALIDASI' => $validasi,
@@ -698,6 +704,7 @@ class monevController extends Controller
         $penghambat = Input::get('PENGHAMBAT');
         $triwulan = Input::get('TRIWULAN');
         $renja = Input::get('RENJA');
+        $sasaran = Input::get('SASARAN');
         
         $id = Input::get('FAKTOR_ID');
         $skpd = Input::get('SKPD_ID');
@@ -717,6 +724,7 @@ class monevController extends Controller
         $keg->PENGHAMBAT        = $penghambat;
         $keg->TRIWULAN        = $triwulan;
         $keg->RENJA        = $renja;
+        $keg->SASARAN        = $sasaran;
         $keg->save(); 
         return 'Berhasil!';
       }
