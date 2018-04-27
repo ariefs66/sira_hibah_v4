@@ -20,21 +20,21 @@
             <div class="col-md-12" id="btl">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> Tambah Parameter</button>
+                  <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> <span>Parameter Cetak</span></button>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or $cek)
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel/1"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/1"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @else
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/excel/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @endif
-<!--if(Auth::user()->level == 8 or Auth::user()->level == 9 )
-                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/0"><i class="m-r-xs fa fa-file"></i> Print</a>
-else
+@if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" target="_blank"  href="{{ url('/') }}/monev/{{$tahun}}/cetak/1"><i class="m-r-xs fa fa-file"></i> Print</a>
+@else
   @if($cek)
-                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-file"></i> Print</a>
+                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-file"></i> Print</a>
   @endif
-endif-->
+@endif
                   <h5 class="inline font-semibold text-orange m-n ">Monev</h5>
-                  @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+                  @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000' )
                   <div class="col-sm-4 pull-right m-t-n-sm">
                    <select ui-jq="chosen" class="form-control" id="filter-skpd">
                      <option value="">- Pilih OPD -</option>
@@ -240,7 +240,6 @@ endif-->
                 </table>
               </div>
             </div>
-            
             </div>
           </div>
         </div> 
@@ -255,10 +254,8 @@ endif-->
   <form class="form-horizontal">
     <div class="input-wrapper">
       <h5>Edit Data </h5>
-      <div class="form-group">
-        <label class="col-sm-3">Program</label>
-        <div class="col-sm-9">
           <input type="hidden" id="id">
+          <input type="hidden" id="sub-id">
           <input type="hidden" id="skpd-id">
           <input type="hidden" id="keg-id">
           <input type="hidden" id="keg-kode">
@@ -267,19 +264,21 @@ endif-->
           <input type="hidden" id="prog-kode">
           <input type="hidden" id="prog-nama">
           <input type="hidden" id="mode">
-          <select ui-jq="chosen" class="w-full" id="program" disabled>
-            <option value="">Silahkan Pilih Program</option>
-          </select>
-        </div>
+          <input type="hidden" id="total">
+      <div class="form-group">
+        <label for="kegiatan" class="col-md-3">Program</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Nama Program" id="program_nama" disabled>          
+          <input type="hidden" class="form-control" placeholder="Nama Program" id="program" disabled>          
+        </div> 
       </div>
       <div class="form-group">
-        <label class="col-sm-3">Kegiatan</label>
+        <label for="kegiatan" class="col-md-3">Kegiatan</label>          
         <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="kegiatan" disabled>
-            <option value="">Silahkan Pilih Kegiatan</option>
-          </select>
-        </div>
-      </div>   
+          <input type="text" class="form-control" placeholder="Nama Kegiatan" id="kegiatan_nama" disabled>          
+          <input type="hidden" class="form-control" placeholder="Nama Kegiatan" id="kegiatan" disabled>          
+        </div> 
+      </div> 
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Anggaran</label>          
         <div class="col-sm-9">
@@ -294,39 +293,40 @@ endif-->
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="no_spp" class="col-md-3">Kinerja</label>          
+      <div class="form-group" id="dupe">
+        <label for="no_spp" class="col-md-3">Realisasi Kinerja</label>          
         <div class="col-sm-5">
-          <input type="text" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" >          
+          <input type="text" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja">          
         </div> 
         <div class="col-sm-4">
-        <select ui-jq="chosen" class="w-full" id="satuan">
-            <option value="">Satuan</option>
-            @foreach($satuan as $st)
-            <option value="{{ $st->SATUAN_ID }}">{{ $st->SATUAN_NAMA }}</option>
-            @endforeach
-          </select>
+          <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" disabled> 
+          <input type="hidden" class="form-control" id="satuan">
+          <input type="hidden" class="form-control" id="output_target">
+          <input type="hidden" class="form-control" id="output">
         </div>
       </div>
 
+      <div id="extra">
+      </div>
+
       <div class="form-group">
-        <label for="no_spp" class="col-md-3">Realisasi</label>          
+        <label for="no_spp" class="col-md-3">Realisasi Anggaran</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Masukan Realisasi" id="realisasi" disabled >          
+          <input type="text" class="form-control" placeholder="Masukan Realisasi Anggaran" id="realisasi" disabled >          
         </div>
       </div>
 
       <div class="form-group">
-        <label for="no_spp" class="col-md-3">Pendukung</label>          
+        <label for="no_spp" class="col-md-3">Faktor Pendukung</label>          
         <div class="col-sm-9"> 
-          <input type="text" class="form-control" placeholder="Pendukung" id="pendukung" >        
+          <input type="text" class="form-control" placeholder="Faktor Pendukung" id="pendukung">        
         </div> 
       </div>
 
       <div class="form-group">
-        <label for="no_spp" class="col-md-3">Penghambat</label>          
+        <label for="no_spp" class="col-md-3">Faktor Penghambat</label>          
         <div class="col-sm-9">      
-          <input type="text" class="form-control" placeholder="Penghambat" id="penghambat" > 
+          <input type="text" class="form-control" placeholder="Faktor Penghambat" id="penghambat"> 
         </div> 
       </div>    
 
@@ -341,53 +341,53 @@ endif-->
 <div class="bg-white wrapper-lg input-sidebar input-faktor">
   <form class="form-horizontal">
     <div class="input-wrapper">
-      <h5>Paramater Cetak</h5>
+      <h5><span class="judul">Parameter Cetak</span></h5>
           <input type="hidden" id="faktorid">
           <input type="hidden" id="faktorskpd">
           <input type="hidden" id="faktortahun">
+          <input type="hidden" id="faktormode" value="{{$mode}}">
+      
       <div class="form-group">
-        <label for="faktormode" class="col-md-3">Triwulan</label>          
+        <label for="faktorsasaran" class="col-md-3">Sasaran</label>          
         <div class="col-sm-9"> 
-          <select ui-jq="chosen" class="w-full" id="faktormode">
-            <option value="1">Pilih Triwulan</option>
-            <option value="1">Triwulan 1</option>
-            <option value="2">Triwulan 2</option>
-            <option value="3">Triwulan 3</option>
-            <option value="4">Triwulan 4</option>
-          </select>
-        </div> 
-      </div>
-      <div class="form-group">
-        <label for="no_spp" class="col-md-3">Faktor pendorong</label>          
-        <div class="col-sm-9"> 
-          <textarea class="form-control" placeholder="Faktor pendorong keberhasilan kinerja" id="faktorpendukung" ></textarea>        
+          <textarea class="form-control" placeholder="Sasaran" id="faktorsasaran" {{$input}} ></textarea>        
         </div> 
       </div>
 
       <div class="form-group">
-        <label for="no_spp" class="col-md-3">Faktor penghambat</label>          
+        <label for="faktorpendukung" class="col-md-3">Faktor pendorong</label>          
+        <div class="col-sm-9"> 
+          <textarea class="form-control" placeholder="Faktor pendorong keberhasilan kinerja" id="faktorpendukung" {{$input}} ></textarea>        
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="faktorpenghambat" class="col-md-3">Faktor penghambat</label>          
         <div class="col-sm-9">      
-          <textarea class="form-control" placeholder="Faktor penghambat keberhasilan kinerja" id="faktorpenghambat" ></textarea> 
+          <textarea class="form-control" placeholder="Faktor penghambat keberhasilan kinerja" id="faktorpenghambat" {{$input}} ></textarea> 
         </div> 
       </div>  
 
 <div class="form-group">
-  <label for="no_spp" class="col-md-3">Tindak Lanjut Triwulan</label>          
+  <label for="faktortriwulan" class="col-md-3">Tindak Lanjut Triwulan</label>          
   <div class="col-sm-9">      
-    <textarea class="form-control" placeholder="Tindak Lanjut yang diperlukan dalam triwulan berikutnya" id="faktortriwulan" ></textarea> 
+    <textarea class="form-control" placeholder="Tindak Lanjut yang diperlukan dalam triwulan berikutnya" id="faktortriwulan" {{$validasi}}></textarea> 
   </div> 
 </div> 
 
 <div class="form-group">
-  <label for="no_spp" class="col-md-3">Tindak Lanjut Renja Perangkat Daerah</label>          
+  <label for="faktorrenja" class="col-md-3">Tindak Lanjut Renja Perangkat Daerah</label>          
   <div class="col-sm-9">      
-    <textarea class="form-control" placeholder="Tindak Lanjut yang diperlukan dalam Renja Perangkat Daerah" id="faktorrenja" ></textarea> 
+    <textarea class="form-control" placeholder="Tindak Lanjut yang diperlukan dalam Renja Perangkat Daerah" id="faktorrenja" {{$validasi}} ></textarea> 
   </div> 
 </div>   
 
       <hr class="m-t-xl">
-      <input type="hidden" name="_token" id="faktortoken" value="{{ csrf_token() }}">      
-      <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanFaktor()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
+      <input type="hidden" name="_token" id="faktortoken" value="{{ csrf_token() }}">
+      @if($validasi)
+      <span>*Jika Belum sesuai, jangan divalidasi</span>
+      @endif      
+      <a id="savefaktor" class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanFaktor()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
     </div>
   </form>
 </div>
@@ -485,6 +485,7 @@ endif-->
 			$('.overlay').fadeIn('fast',function(){
 				$('.input-faktor').animate({'right':'0'},"linear");	
 				$("html, body").animate({ scrollTop: 0 }, "slow");
+        cekFaktor();
 			});	
 		});
 
@@ -493,6 +494,7 @@ endif-->
     var token           = $('#token').val();    
     var mode            = $('#mode').val();
     var KEGIATAN_ID     = $('#keg-id').val();
+    var SUB_ID     = $('#sub-id').val();
     var KEGIATAN_KODE     = $('#keg-kode').val();
     var KEGIATAN_NAMA     = $('#keg-nama').val();
     var PROGRAM_ID     = $('#prog-id').val();
@@ -504,9 +506,17 @@ endif-->
     var SKPD_ID     = $('#skpd-id').val();
     @endif
     var SATUAN     = $('#satuan').val();
-    var KEGIATAN_ANGGARAN     = $('#anggaran').val();
-    var TARGET     = $('#target').val();
     var KINERJA        = $('#kinerja').val();
+    var TOTAL        = $('#total').val();
+    var OUTPUT        = $('#output').val();
+    var TARGET        = $('#output_target').val();
+    for (var i = 1; i < TOTAL; i++) { 
+    SATUAN = SATUAN + ',' +$('#satuan_'+i).val();
+    KINERJA = KINERJA + ',' +$('#kinerja_'+i).val();
+    OUTPUT = OUTPUT + ',' +$('#output_'+i).val();
+    TARGET = TARGET + ',' +$('#output_target_'+i).val();
+    }
+    var KEGIATAN_ANGGARAN     = $('#anggaran').val();
     var PENDUKUNG         = $('#pendukung').val();
     var PENGHAMBAT      = $('#penghambat').val();
     var REALISASI      = $('#realisasi').val();
@@ -519,6 +529,7 @@ endif-->
         type: "POST",
         data: {'_token'             : token,
               'SKPD_ID'             : SKPD_ID, 
+              'SUB_ID'             : SUB_ID, 
               'SATUAN'             : SATUAN, 
               'KEGIATAN_ID'         : KEGIATAN_ID, 
               'KEGIATAN_KODE'       : KEGIATAN_KODE, 
@@ -530,8 +541,10 @@ endif-->
               'REALISASI'   : REALISASI, 
               'TARGET'              : TARGET, 
               'KINERJA'             : KINERJA, 
+              'OUTPUT'             : OUTPUT, 
               'PENDUKUNG'           : PENDUKUNG, 
               'PENGHAMBAT'          : PENGHAMBAT, 
+              'TOTAL'          : TOTAL, 
               'MODE'          : mode},
         success: function(msg){
           $('.table-pegawai').DataTable().ajax.reload();
@@ -552,6 +565,7 @@ endif-->
           $('#penghambat').val("");
           $('#target').val("");
           $('#realisasi').val("");
+          $("#extra").empty();
         }
       });
     }
@@ -565,6 +579,7 @@ endif-->
     var PENGHAMBAT           = $('#faktorpenghambat').val();
     var TRIWULAN          = $('#faktortriwulan').val();
     var RENJA             = $('#faktorrenja').val();
+    var SASARAN             = $('#faktorsasaran').val();
     var T             = $('#faktormode').val();
     if(SKPD_ID == ""){
       $.alert('Terjadi Kesalahan!');
@@ -579,6 +594,7 @@ endif-->
               'PENGHAMBAT'          : PENGHAMBAT, 
               'TRIWULAN'          : TRIWULAN, 
               'RENJA'          : RENJA, 
+              'SASARAN'          : SASARAN, 
               'T'          : T},
         success: function(msg){
           $('.table-pegawai').DataTable().ajax.reload();
@@ -597,14 +613,15 @@ endif-->
           $('#faktorpenghambat').val("");
           $('#faktortriwulan').val("");
           $('#faktorrenja').val("");
+          $('#faktorsasaran').val("");
         }
       });
     }
   }  
 
-  $("#faktormode").change(function(e, params){
+  function cekFaktor(){
     var id  = $('#faktormode').val();
-    @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+    @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000' )
       skpd     = $('#filter-skpd').val();
     @else
       skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
@@ -621,9 +638,21 @@ endif-->
         $('#faktorpenghambat').val(data['PENGHAMBAT']);
         $('#faktortriwulan').val(data['TRIWULAN']);
         $('#faktorrenja').val(data['RENJA']);
+        $('#faktorsasaran').val(data['SASARAN']);
+        $("#faktorpendukung").prop('disabled', data['INPUT']);
+        $("#faktorpenghambat").prop('disabled', data['INPUT']);
+        $("#faktortriwulan").prop('disabled', data['VALIDASI']);
+        $("#faktorrenja").prop('disabled', data['VALIDASI']);
+        $("#faktorsasaran").prop('disabled', data['INPUT']);
+        $(".judul").html(data['JUDUL']+' ' +data['SKPD_NAMA']);
+        if(data['INPUT'] || data['VALIDASI']){
+          $('#savefaktor').show();
+        }else{
+          $('#savefaktor').hide();
+        }
       }
     });
-  }); 
+  } 
 
     $("#skpd-btl").change(function(e, params){
     var id  = $('#skpd-btl').val();
@@ -675,13 +704,38 @@ endif-->
     @else
     skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
     @endif
+    $("#extra").empty();
     $.ajax({
       type  : "get",
       url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
       success : function (data) {
+        var counter = 0;
+    function duplicateNode(/*DOMNode*/sourceNode, /*Array*/attributesToBump) {
+        counter++;
+        var out = sourceNode.cloneNode(true);
+        if (out.hasAttribute("id")) { out["id"] = bump(out["id"]); }
+        var nodes = out.getElementsByTagName("*");
+        
+        for (var i = 0, len1 = nodes.length; i < len1; i++) {
+            var node = nodes[i];
+            for (var j = 0, len2 = attributesToBump.length; j < len2; j++) {
+                var attribute = attributesToBump[j];
+                if (node.hasAttribute(attribute)) {
+                    node[attribute] = bump(node[attribute]);
+                }
+            }
+        }
+        
+        function bump(/*String*/str) {
+            return str + "_" + counter;
+        }
+      
+        return out;
+    }
         data = data.aaData[0];
         $('#id').val(data['ID']);
         $('#keg-id').val(data['KEGIATAN_ID']);
+        $('#sub-id').val(data['SUB_ID']);
         $('#keg-kode').val(data['KEGIATAN_KODE']);
         $('#keg-nama').val(data['KEGIATAN_NAMA']);
         $('#prog-id').val(data['PROGRAM_ID']);
@@ -689,12 +743,33 @@ endif-->
         $('#prog-kode').val(data['PROGRAM_KODE']);
         $('#skpd-id').val(data['SKPD_ID']);
         $('#mode').val(data['MODE']);
-        $('#satuan').val(data['SATUAN_ID']).trigger("chosen:updated");
-        $('#program').append('<option value="'+data['PROGRAM_ID']+'" selected>'+data['PROGRAM_NAMA']+'</option>').trigger("chosen:updated");
-        $('#kegiatan').append('<option value="'+data['KEGIATAN_ID']+'" selected>'+data['SUB_KODE']+'-'+data['KEGIATAN_NAMA']+'</option>').trigger("chosen:updated");
+        $('#program_nama').val(data['PROGRAM_NAMA']);
+        $('#program').val(data['PROGRAM_ID']);
+        $('#kegiatan_nama').val(data['KEGIATAN_NAMA']);
+        $('#kegiatan').val(data['KEGIATAN_ID']);
         $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
-        $('#target').val(data['TARGET']);
+        $('#target').val(data['OUTPUT']);
         $('#kinerja').val(data['KINERJA']);
+        $('#total').val(data['TOTAL']);
+        var target = data['TARGET'].split(",");
+        var satuan = data['SATUAN_ID'].split(",");
+        var satuan_nama = data['SATUAN'].split(",");
+        var output_nama = data['TOLAK_UKUR'].split(",");
+        $('#satuan').val(satuan[0]);
+        $('#satuan_nama').val(satuan_nama[0]);
+        $('#output').val(output_nama[0]);
+        $('#output_target').val(target[0]);
+        var total = data['TOTAL']-1;
+        for (i = 0; i < total; i++) { 
+        var sourceNode = document.getElementById("dupe");
+        var node = duplicateNode(sourceNode, ["id", "name"]);
+        var extra = document.getElementById("extra");
+        extra.appendChild(node);
+        $('#satuan_'+i).val(satuan[i++]);
+        $('#satuan_nama_'+i).val(satuan_nama[i++]);
+        $('#output_'+i).val(output_nama[i++]);
+        $('#output_target_'+i).val(target[i++]);
+        }
         $('#pendukung').val(data['KEGIATAN_PENDUKUNG']);
         $('#penghambat').val(data['KEGIATAN_PENGHAMBAT']);
         $('#realisasi').val(data['REALISASI']);

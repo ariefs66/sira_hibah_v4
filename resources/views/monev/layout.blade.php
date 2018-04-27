@@ -101,7 +101,7 @@
              <div class="m-t-md pull-right" id="pilih_tahun">
                   <select name="year" id="tahun-anggaran" class="form-control transparent-select">
                     {{-- <option value="{{$tahun-1}}">{{$tahun-1}}</option> --}}
-                    {{-- <option value="{{$tahun}}" selected="">{{$tahun}}</option> --}}
+                     <option value="{{$tahun}}" selected="">{{$tahun}}</option> 
                     {{-- <option value="{{$tahun+1}}">{{$tahun+1}}</option> --}}
                   </select>
               </div>
