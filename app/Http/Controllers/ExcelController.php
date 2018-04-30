@@ -179,8 +179,12 @@ class ExcelController extends Controller
         if($row==17){
           $row=19;
         }
-        $hitungt1 = intval($t1) / intval($program);
-				$sheet->setCellValue('K'.($row), $hitungt1.'%');
+        if(intval($program)>0){
+          $hitungt1 = intval($t1) / intval($program);
+        }else{
+          $hitungt1 = intval($t1);
+        }
+        $sheet->setCellValue('K'.($row), $hitungt1.'%');
 				$helper = new PHPExcel_Helper_HTML;
 				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br($pendukung)."</b>";
 				$richText = $helper->toRichTextObject($html);
