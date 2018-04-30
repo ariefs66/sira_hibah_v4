@@ -192,7 +192,7 @@ class ExcelController extends Controller
 				$sheet->setCellValue('Y'.($row+9), '30 April 2018');
 				$sheet->setCellValue('Q'.($row+10), '');
 				$sheet->setCellValue('Q'.($row+16), ''.$idskpd->SKPD_KEPALA);
-				$sheet->setCellValue('Q'.($row+17), ''.$idskpd->SKPD_KEPALA_NIP);
+				$sheet->setCellValue('Q'.($row+17), 'NIP. '.$idskpd->SKPD_KEPALA_NIP);
     		});
     	})->export('xls');
     }
