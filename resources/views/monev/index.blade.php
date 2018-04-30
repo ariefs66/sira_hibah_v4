@@ -332,7 +332,7 @@
 
       <hr class="m-t-xl">
       <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
-      @if($input || \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID') == 26 )
+      @if($validasi || \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID') == 26 )
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanBTL()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
       @endif
     </div>
