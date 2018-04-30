@@ -130,7 +130,7 @@ class ExcelController extends Controller
             $t2 = $t1 + $p['PROGRAM_T2'];
             $t3 = $t1 + $p['PROGRAM_T3'];
             $t4 = $t1 + $p['PROGRAM_T4'];
-            $jumlah=$umlah+1;
+            $jumlah=$jumlah+1;
 					}else{
 						$sheet->prependRow($row, array(
 							'',$p['SASARAN_NAMA'], ' '.$p['PROGRAM_NAMA'], $p['OUTCOME'],'','','','','',$p['PROGRAM_ANGGARAN'],$p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:''),'',$p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:''),'',$p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:''),'',$p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:''),'','','','','','','',$p['SKPD']
@@ -139,7 +139,7 @@ class ExcelController extends Controller
             $t2 = $t1 + $p['PROGRAM_T2'];
             $t3 = $t1 + $p['PROGRAM_T3'];
             $t4 = $t1 + $p['PROGRAM_T4'];
-            $jumlah=$umlah+1;
+            $jumlah=$jumlah+1;
 					}
 					$sheet->row(($row), function($cells) { $cells->setFont(array(
 						'family'     => 'Times',
@@ -179,7 +179,7 @@ class ExcelController extends Controller
         if($row==17){
           $row=19;
         }
-        $hitungt1 = $t1/$program;
+        $hitungt1 = intval($t1) / intval($program);
 				$sheet->setCellValue('K'.($row), $hitungt1.'%');
 				$helper = new PHPExcel_Helper_HTML;
 				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br($pendukung)."</b>";
