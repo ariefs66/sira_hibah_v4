@@ -174,7 +174,7 @@ class ExcelController extends Controller
 					}
         }
         if($row==17){
-          $row=18;
+          $row=19;
         }
 				$sheet->setCellValue('K'.($row), $t1.'%');
 				$helper = new PHPExcel_Helper_HTML;
