@@ -39,6 +39,9 @@ class ExcelController extends Controller
                 ->where('PROGRAM_TAHUN',$tahun)->get();
     if($skpd==0){
       $this->tapdAll($tahun);
+      $idskpd = FALSE;
+    }else{
+      $idskpd         = SKPD::where('SKPD_ID',$skpd)->first();
     }
         $program = array();
         $skpdnama = "Tidak Ada SKPD";
@@ -106,8 +109,8 @@ class ExcelController extends Controller
       }
       $i=1;
 		
-		Excel::load('public/uploads/e81.xls', function($excel) use($program, $tahun, $skpdnama, $sasaran, $pendukung, $penghambat, $triwulan, $renja) {
-    		$excel->sheet('Formulir E.81', function($sheet) use($program, $tahun, $skpdnama, $sasaran, $pendukung, $penghambat, $triwulan, $renja){
+		Excel::load('public/uploads/e81.xls', function($excel) use($program, $idskpd, $tahun, $skpdnama, $sasaran, $pendukung, $penghambat, $triwulan, $renja) {
+    		$excel->sheet('Formulir E.81', function($sheet) use($program, $tahun, $idskpd,  $skpdnama, $sasaran, $pendukung, $penghambat, $triwulan, $renja){
 				$sheet->setCellValue('A7', 'Renja Perangkat Daerah '. $skpdnama .' Kabupaten/kota Bandung');
 				$sheet->setCellValue('A8', 'Periode Pelaksanaan '.$tahun);
 				$sheet->setCellValue('B16', strtoupper($skpdnama));
@@ -348,9 +351,9 @@ class ExcelController extends Controller
         $sheet->setCellValue('W3', ': April  2018');
         $sheet->setCellValue('T'.($row+9), '20 Maret 2018');
         $sheet->setCellValue('Y'.($row+9), '20 Maret 2018');
-        $sheet->setCellValue('Q'.($row+10), '');
+        $sheet->setCellValue('Q'.($row+10), ''+$idskpd->KEPALA);
         $sheet->setCellValue('Q'.($row+16), '');
-        $sheet->setCellValue('Q'.($row+17), '');
+        $sheet->setCellValue('Q'.($row+17), ''+$idskpd->KEPALA_NIP);
           }
 
         });
