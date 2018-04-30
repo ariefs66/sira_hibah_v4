@@ -623,7 +623,7 @@
   	  </td>
 	  @else
 	  <td class="border-rincian">
-	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{ $k->RINCIAN_KOMPONEN }}
+	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{$k->komponen->KOMPONEN_NAMA}} 
 	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
 	  	  	  </td>
 
@@ -656,9 +656,9 @@
 	  <td class="border-rincian tengah">{{ $k->RINCIAN_VOLUME }}</td>
 	  <td class="border-rincian tengah">{{ preg_replace("/[^A-Za-z]/"," ",$k->RINCIAN_KOEFISIEN) }}</td>
 
-	  @if($k->BL_ID == 4327 || $k->BL_ID == 6295)
+	  @if($k->BL_ID == 4327 || $k->BL_ID == 6295 || $k->BL_ID ==6296 || $k->BL_ID==6292 || $k->BL_ID==6546 || $k->BL_ID==6209)
 	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA,0,',','.') }},00</td>
-	  @elseif
+	  @else
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA,0,',','.') }},00</td>
 	  @endif
 
