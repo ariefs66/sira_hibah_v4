@@ -24,11 +24,13 @@
                   <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                     <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Tambah Usulan <i class="fa fa-chevron-down"></i>
                     </button>
+                    @if($tahun>2018)
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                       <li><a class="open-form-btl">Tambah Komponen</a></li>
                       <!-- <li><a class="open-ubah-komponen">Ubah Komponen</a></li> -->
                       <li><a class="open-tambah-rekening">Tambah Rekening</a></li>
                     </ul>
+                    @endif
                   </div>
                   <!-- endif -->
                   <h5 class="inline font-semibold text-orange m-n">Usulan Komponen</h5>
