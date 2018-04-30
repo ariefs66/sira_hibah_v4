@@ -332,7 +332,9 @@
 
       <hr class="m-t-xl">
       <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
+      @if($input)
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanBTL()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
+      @endif
     </div>
   </form>
 </div>

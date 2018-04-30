@@ -188,11 +188,11 @@ class ExcelController extends Controller
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+5), $richText);
 				$sheet->setCellValue('W3', ': April  2018');
-				$sheet->setCellValue('T'.($row+9), '20 Maret 2018');
-				$sheet->setCellValue('Y'.($row+9), '20 Maret 2018');
+				$sheet->setCellValue('T'.($row+9), '30 April 2018');
+				$sheet->setCellValue('Y'.($row+9), '30 April 2018');
 				$sheet->setCellValue('Q'.($row+10), '');
-				$sheet->setCellValue('Q'.($row+16), '');
-				$sheet->setCellValue('Q'.($row+17), '');
+				$sheet->setCellValue('Q'.($row+16), ''.$idskpd->KEPALA);
+				$sheet->setCellValue('Q'.($row+17), ''.$idskpd->KEPALA_NIP);
     		});
     	})->export('xls');
     }
