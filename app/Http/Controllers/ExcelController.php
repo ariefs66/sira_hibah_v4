@@ -172,7 +172,10 @@ class ExcelController extends Controller
 						});
 						$row++;
 					}
-				}
+        }
+        if($row==17){
+          $row=18;
+        }
 				$sheet->setCellValue('K'.($row), $t1.'%');
 				$helper = new PHPExcel_Helper_HTML;
 				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br($pendukung)."</b>";
