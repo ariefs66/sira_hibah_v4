@@ -11,6 +11,7 @@ use Auth;
 use DB;
 use Carbon;
 use App\Model\SKPD;
+use App\Model\Staff;
 use App\Model\Program;
 use App\Model\Kegiatan;
 use App\Model\Monev\Monev_Kegiatan;
@@ -151,6 +152,7 @@ class monevController extends Controller
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
                                    'KINERJA'         =>$monev->value('PROGRAM_T1').' '.$monev->value('SATUAN_NAMA'), 
+                                   'STATUS'         =>'', 
                                    'TOTAL'           =>number_format($data->total,0,'.',',')));
           $no++;
         }
@@ -199,6 +201,7 @@ class monevController extends Controller
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
                                    'KINERJA'         =>$monev->value('PROGRAM_T2').' '.$monev->value('SATUAN_NAMA'), 
+                                   'STATUS'         =>'', 
                                    'TOTAL'           =>number_format($data->total,0,'.',',')));
           $no++;
         }
@@ -247,6 +250,7 @@ class monevController extends Controller
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
                                    'KINERJA'         =>$monev->value('PROGRAM_T2').' '.$monev->value('SATUAN_NAMA'), 
+                                   'STATUS'         =>'', 
                                    'TOTAL'           =>number_format($data->total,0,'.',',')));
           $no++;
         }
@@ -296,6 +300,7 @@ class monevController extends Controller
                                    'OUTCOME'         =>$data->OUTCOME_TOLAK_UKUR, 
                                    'TARGET'          =>$data->OUTCOME_TARGET.' '.$data->SATUAN_NAMA, 
                                    'KINERJA'         =>$monev->value('PROGRAM_T2').' '.$monev->value('SATUAN_NAMA'), 
+                                   'STATUS'         =>'',   
                                    'TOTAL'           =>number_format($data->total,0,'.',',')));
           $no++;
         }
@@ -588,6 +593,7 @@ class monevController extends Controller
           $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_KEGIATAN.SUB_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_KODE',$data->SUB_KODE)->first();
         
           if($monev_keg){
+            $status  = '<span class="text-success"><i class="fa fa-check"> Sudah Diisi</i></span>';
             $kegiatanid = $monev_keg->KEGIATAN_ID;
             $kinerja = 'KEGIATAN_T'.$mode;
             $penghambat = 'KEGIATAN_PENGHAMBAT_T'.$mode;
@@ -597,20 +603,27 @@ class monevController extends Controller
             $pendukung = $monev_keg->$pendukung;
             $satuan = $monev_keg->SATUAN_NAMA;
           }else{
+            $status  = '<span class="text-danger"><i class="fa fa-close"> Belum Diisi</i></span>';
             $kegiatanid = "";
             $kinerja = "";
             $penghambat = "";
             $pendukung = "";
             $satuan = "";
           }
-          
-            $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
-          array_push($view, array( 'NO'       => $no++,
+            $staff      = Staff::where('BL_ID',$data->BL_ID)->get();
+            $mod        = 0;
+            $opsi = '<div class="action visible pull-right"><a onclick="return view(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="fa fa-chevron-down"></i></a></div>';
+            
+            foreach($staff as $s){
+                if($s->USER_ID == Auth::user()->id) $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
+            }
+           array_push($view, array( 'NO'       => $no++,
                                    'KEGIATAN'     => $data->URUSAN_KODE.'.'.$data->SKPD_KODE.'.'.$data->SUB_KODE.'.'.$data->PROGRAM_KODE.'.'.$data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA.'-'.$data->SUB_NAMA,
                                    'KEGIATAN_ID'     => $data->KEGIATAN_ID,
                                    'KINERJA'    => $kinerja.' '.$satuan,
                                    'TOTAL'    => number_format($data->BL_PAGU,0,'.',','),
-                                    'AKSI' => $opsi ));
+                                    'AKSI' => $opsi,
+                                    'STATUS' => $status ));
         }
          
         $out = array("aaData"=>$view);       

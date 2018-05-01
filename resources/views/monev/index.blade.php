@@ -100,7 +100,8 @@
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
                     { mData: 'KINERJA'},
-                    { mData: 'TOTAL'}
+                    { mData: 'TOTAL'},
+                    { mData: 'STATUS' },
                   ]}" class="table table-btl table-striped b-t b-b table-pegawai " id="table-pegawai">
                   <thead>
                     <tr>                   
@@ -112,10 +113,11 @@
                       <th>TARGET </th>
                       <th>KINERJA </th>
                       <th>TOTAL </th>
+                      <th>STATUS </th>
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th colspan="7" class="th_search">
+                      <th colspan="8" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -138,7 +140,8 @@
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
                     { mData: 'KINERJA'},
-                    { mData: 'TOTAL'}
+                    { mData: 'TOTAL'},
+                    { mData: 'STATUS' },
                   ]}" class="table table-btl table-striped b-t b-b table-subsidi" id="table-subsidi">
                  <thead>
                     <tr>                   
@@ -150,10 +153,11 @@
                       <th>TARGET </th>
                       <th>KINERJA </th>
                       <th>TOTAL </th>
+                      <th>STATUS </th>
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th colspan="7" class="th_search">
+                      <th colspan="8" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -176,7 +180,8 @@
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
                     { mData: 'KINERJA'},
-                    { mData: 'TOTAL'}
+                    { mData: 'TOTAL'},
+                    { mData: 'STATUS' },
                   ]}" class="table table-btl table-striped b-t b-b table-hibah" id="table-hibah">
                   <thead>
                     <tr>                   
@@ -188,10 +193,11 @@
                       <th>TARGET </th>
                       <th>KINERJA </th>
                       <th>TOTAL </th>
+                      <th>STATUS </th>
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th colspan="7" class="th_search">
+                      <th colspan="8" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -214,7 +220,8 @@
                     { mData: 'OUTCOME'},
                     { mData: 'TARGET'},
                     { mData: 'KINERJA'},
-                    { mData: 'TOTAL'}
+                    { mData: 'TOTAL'},
+                    { mData: 'STATUS' },
                   ]}" class="table table-btl table-striped b-t b-b table-bantuan" id="table-bantuan">
                  <thead>
                     <tr>                   
@@ -226,10 +233,11 @@
                       <th>TARGET </th>
                       <th>KINERJA </th>
                       <th>TOTAL </th>
+                      <th>STATUS </th>
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th colspan="7" class="th_search">
+                      <th colspan="8" class="th_search">
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -396,12 +404,13 @@
 <div id="table-detail-btl" class="hide bg-white">
   <table ui-jq="dataTable" class="table table-detail-btl-isi table-striped b-t b-b">
     <thead>
-      <tr>
-        <th>No</th>                                    
+      <tr>                                    
+        <th>#</th>                                     
         <th>KEGIATAN</th>                          
         <th>KINERJA</th>                                       
-        <th>TOTAL</th>                                       
-        <th>#</th>                                       
+        <th>TOTAL</th>    
+        <th>STATUS</th>     
+        <th class="hide">No</th>                                    
       </tr> 
       <!-- <tr>
         <th class="hide"></th>                    
@@ -436,17 +445,17 @@
       }else{
         $('.btl-rincian').slideUp('fast').remove(); 
         $(this).addClass('shown');
-        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="6">'+$('#table-detail-btl').html()+'</td></tr>';
+        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="7">'+$('#table-detail-btl').html()+'</td></tr>';
         $(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
         $('.table-detail-btl-isi').DataTable({
           sAjaxSource: "/monev/{{ $tahun }}/getDetail/"+skpd+"/"+mode+"/"+kegiatan,
           aoColumns: [
-          { mData: 'NO' },
+          { mData: 'AKSI' },
           { mData: 'KEGIATAN' },
           { mData: 'KINERJA' },
           { mData: 'TOTAL' },
-          { mData: 'AKSI' }
-          ]
+          { mData: 'STATUS' },
+          { mData: 'NO', sClass:'hide' }]
         });
       }
     }
@@ -797,7 +806,8 @@
           { mData: 'OUTCOME'},
           { mData: 'TARGET'},
           { mData: 'KINERJA'},
-          { mData: 'TOTAL'}],
+          { mData: 'TOTAL'},
+          { mData: 'STATUS'}],
           initComplete:function(setting,json){
             $("#pagu_foot").html(json.pagu_foot);
             $("#rincian_foot").html(json.rincian_foot);
@@ -814,7 +824,8 @@
           { mData: 'OUTCOME'},
           { mData: 'TARGET'},
           { mData: 'KINERJA'},
-          { mData: 'TOTAL'}],
+          { mData: 'TOTAL'},
+          { mData: 'STATUS'}],
           initComplete:function(setting,json){
             $("#pagu_foot").html(json.pagu_foot);
             $("#rincian_foot").html(json.rincian_foot);
@@ -831,7 +842,8 @@
           { mData: 'OUTCOME'},
           { mData: 'TARGET'},
           { mData: 'KINERJA'},
-          { mData: 'TOTAL'}],
+          { mData: 'TOTAL'},
+          { mData: 'STATUS'}],
           initComplete:function(setting,json){
             $("#pagu_foot").html(json.pagu_foot);
             $("#rincian_foot").html(json.rincian_foot);
@@ -848,7 +860,8 @@
           { mData: 'OUTCOME'},
           { mData: 'TARGET'},
           { mData: 'KINERJA'},
-          { mData: 'TOTAL'}],
+          { mData: 'TOTAL'},
+          { mData: 'STATUS'}],
           initComplete:function(setting,json){
             $("#pagu_foot").html(json.pagu_foot);
             $("#rincian_foot").html(json.rincian_foot);

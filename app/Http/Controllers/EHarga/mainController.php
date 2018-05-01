@@ -8,6 +8,6 @@ use App\Http\Controllers\Controller;
 class mainController extends Controller
 {
     public function index($tahun){
-    	return View('eharga.index',['tahun'=>$tahun]);
+    	return View('eharga.index',['tahun'=>2019]);
     }
 }
