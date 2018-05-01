@@ -39,6 +39,9 @@ class ExcelController extends Controller
                 ->where('PROGRAM_TAHUN',$tahun)->get();
     if($skpd==0){
       $this->tapdAll($tahun);
+      $idskpd = FALSE;
+    }else{
+      $idskpd         = SKPD::where('SKPD_ID',$skpd)->first();
     }
         $program = array();
         $skpdnama = "Tidak Ada SKPD";
@@ -78,7 +81,7 @@ class ExcelController extends Controller
           foreach ($outcome as $outcome) {
             $ringkasoutcome = $outcome->OUTCOME_TOLAK_UKUR ." : ". $outcome->OUTCOME_TARGET . "%\r\n". $ringkasoutcome;
           }
-        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_KEGIATAN.PROGRAM_ID',$prog->PROGRAM_ID)->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.OUTPUT_SATUAN')->get(),
+        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_KEGIATAN.PROGRAM_ID',$prog->PROGRAM_ID)->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->get(),
                                  'PROGRAM_ID'     => $prog->PROGRAM_ID,
                                  'SKPD_ID'     => $prog->SKPD_ID,
                                  'SKPD'     => $prog->SKPD_NAMA,
@@ -106,13 +109,14 @@ class ExcelController extends Controller
       }
       $i=1;
 		
-		Excel::load('public/uploads/e81.xls', function($excel) use($program, $tahun, $skpdnama, $sasaran, $pendukung, $penghambat, $triwulan, $renja) {
-    		$excel->sheet('Formulir E.81', function($sheet) use($program, $tahun, $skpdnama, $sasaran, $pendukung, $penghambat, $triwulan, $renja){
+		Excel::load('public/uploads/e81.xls', function($excel) use($program, $idskpd, $tahun, $skpdnama, $sasaran, $pendukung, $penghambat, $triwulan, $renja) {
+    		$excel->sheet('Formulir E.81', function($sheet) use($program, $tahun, $idskpd,  $skpdnama, $sasaran, $pendukung, $penghambat, $triwulan, $renja){
 				$sheet->setCellValue('A7', 'Renja Perangkat Daerah '. $skpdnama .' Kabupaten/kota Bandung');
 				$sheet->setCellValue('A8', 'Periode Pelaksanaan '.$tahun);
 				$sheet->setCellValue('B16', strtoupper($skpdnama));
 				$row = 17;
         $t1 = 0;
+        $jumlah = 0;
         $t2 = 0;
         $t3 = 0;
         $t4 = 0;
@@ -126,6 +130,7 @@ class ExcelController extends Controller
             $t2 = $t1 + $p['PROGRAM_T2'];
             $t3 = $t1 + $p['PROGRAM_T3'];
             $t4 = $t1 + $p['PROGRAM_T4'];
+            $jumlah=$jumlah+1;
 					}else{
 						$sheet->prependRow($row, array(
 							'',$p['SASARAN_NAMA'], ' '.$p['PROGRAM_NAMA'], $p['OUTCOME'],'','','','','',$p['PROGRAM_ANGGARAN'],$p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:''),'',$p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:''),'',$p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:''),'',$p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:''),'','','','','','','',$p['SKPD']
@@ -134,6 +139,7 @@ class ExcelController extends Controller
             $t2 = $t1 + $p['PROGRAM_T2'];
             $t3 = $t1 + $p['PROGRAM_T3'];
             $t4 = $t1 + $p['PROGRAM_T4'];
+            $jumlah=$jumlah+1;
 					}
 					$sheet->row(($row), function($cells) { $cells->setFont(array(
 						'family'     => 'Times',
@@ -169,8 +175,16 @@ class ExcelController extends Controller
 						});
 						$row++;
 					}
-				}
-				$sheet->setCellValue('K'.($row), $t1.'%');
+        }
+        if($row==17){
+          $row=19;
+        }
+        if(intval($program)>0){
+          $hitungt1 = intval($t1) / intval($program);
+        }else{
+          $hitungt1 = intval($t1);
+        }
+        $sheet->setCellValue('K'.($row), $hitungt1.'%');
 				$helper = new PHPExcel_Helper_HTML;
 				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br($pendukung)."</b>";
 				$richText = $helper->toRichTextObject($html);
@@ -185,11 +199,11 @@ class ExcelController extends Controller
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+5), $richText);
 				$sheet->setCellValue('W3', ': April  2018');
-				$sheet->setCellValue('T'.($row+9), '20 Maret 2018');
-				$sheet->setCellValue('Y'.($row+9), '20 Maret 2018');
+				$sheet->setCellValue('T'.($row+9), '30 April 2018');
+				$sheet->setCellValue('Y'.($row+9), '30 April 2018');
 				$sheet->setCellValue('Q'.($row+10), '');
-				$sheet->setCellValue('Q'.($row+16), '');
-				$sheet->setCellValue('Q'.($row+17), '');
+				$sheet->setCellValue('Q'.($row+16), ''.$idskpd->SKPD_KEPALA);
+				$sheet->setCellValue('Q'.($row+17), 'NIP. '.$idskpd->SKPD_KEPALA_NIP);
     		});
     	})->export('xls');
     }
@@ -348,9 +362,9 @@ class ExcelController extends Controller
         $sheet->setCellValue('W3', ': April  2018');
         $sheet->setCellValue('T'.($row+9), '20 Maret 2018');
         $sheet->setCellValue('Y'.($row+9), '20 Maret 2018');
-        $sheet->setCellValue('Q'.($row+10), '');
+        $sheet->setCellValue('Q'.($row+10), ''+$idskpd->KEPALA);
         $sheet->setCellValue('Q'.($row+16), '');
-        $sheet->setCellValue('Q'.($row+17), '');
+        $sheet->setCellValue('Q'.($row+17), ''+$idskpd->KEPALA_NIP);
           }
 
         });

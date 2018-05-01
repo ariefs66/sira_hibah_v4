@@ -20,7 +20,7 @@
             <div class="col-md-12" id="btl">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> <span class="judul">Parameter Cetak</span></button>
+                  <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> <span>Parameter Cetak</span></button>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or $cek)
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/1"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @else
@@ -341,7 +341,7 @@
       <hr class="m-t-xl">
       <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">      
       <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanBTL()"><i class="fa fa-check m-r-xs "></i>Simpan</a>
-    </div>
+      </div>
   </form>
 </div>
 </div>
@@ -630,7 +630,7 @@
 
   function cekFaktor(){
     var id  = $('#faktormode').val();
-    @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+    @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000' )
       skpd     = $('#filter-skpd').val();
     @else
       skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
@@ -647,13 +647,13 @@
         $('#faktorpenghambat').val(data['PENGHAMBAT']);
         $('#faktortriwulan').val(data['TRIWULAN']);
         $('#faktorrenja').val(data['RENJA']);
-        $('#faktorsasaran').val(data['RENJA']);
+        $('#faktorsasaran').val(data['SASARAN']);
         $("#faktorpendukung").prop('disabled', data['INPUT']);
         $("#faktorpenghambat").prop('disabled', data['INPUT']);
         $("#faktortriwulan").prop('disabled', data['VALIDASI']);
         $("#faktorrenja").prop('disabled', data['VALIDASI']);
         $("#faktorsasaran").prop('disabled', data['INPUT']);
-        $(".judul").html(data['JUDUL']);
+        $(".judul").html(data['JUDUL']+' ' +data['SKPD_NAMA']);
         if(data['INPUT'] || data['VALIDASI']){
           $('#savefaktor').show();
         }else{

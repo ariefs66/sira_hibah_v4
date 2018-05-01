@@ -200,21 +200,11 @@ class usulanController extends Controller
                                         ->offset($start);
         }
         //dd($data);
-
-	if(Auth::user()->level==8 || Auth::user()->level==9){
-            $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->get()->count();
-        }else{
-            $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USER_CREATED',Auth::user()->id)->get()->count();    
-        }
-
+        
+        $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->get()->count();
         if($kategori){
             $data   = $data->where('USULAN_NAMA','ilike','%'.$kategori.'%');
-	    if(Auth::user()->level==8 || Auth::user()->level==9){
-                $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->get()->count();
-            }else{
-                $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)
-                        ->where('USER_CREATED',Auth::user()->id)->get()->count();
-            }
+            $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->get()->count();
         }
         $data = $data->get();
     	$i 		= $start+1;
@@ -339,39 +329,34 @@ class usulanController extends Controller
         $data='';
         if(substr(Auth::user()->mod,3,1) == 1){
             $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
-            if($skpd){
-                if($skpd->skpd->SKPD_JENIS == 1){
-                    $pd     = SKPD::where('SKPD_JENIS', 2)->get();
-                    $i = 0;
-                    foreach($pd as $pd){
-                        $id     = $pd->SKPD_ID;
-                        $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
-                                                ->whereHas('user',function($q){
-                                                    $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
-                                                })->value('USER_ID');
-                        $i++;
-                    }
-                    $user[$i] = Auth::user()->id;
-                }elseif($skpd->skpd->SKPD_JENIS == 3){
-                    $pd     = SKPD::where('SKPD_JENIS', 4)->get();
-                    $i = 0;
-                    foreach($pd as $pd){
-                        $id     = $pd->SKPD_ID;
-                        $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
-                                                ->whereHas('user',function($q){
-                                                    $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
-                                                })->value('USER_ID');
-                        $i++;
-                    }
-                    $user[$i] = Auth::user()->id;
+            if($skpd->skpd->SKPD_JENIS == 1){
+                $pd     = SKPD::where('SKPD_JENIS', 2)->get();
+                $i = 0;
+                foreach($pd as $pd){
+                    $id     = $pd->SKPD_ID;
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
+                                            ->whereHas('user',function($q){
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
+                                            })->value('USER_ID');
+                    $i++;
                 }
-                else{
-                    
+                $user[$i] = Auth::user()->id;
+            }elseif($skpd->skpd->SKPD_JENIS == 3){
+                $pd     = SKPD::where('SKPD_JENIS', 4)->get();
+                $i = 0;
+                foreach($pd as $pd){
+                    $id     = $pd->SKPD_ID;
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
+                                            ->whereHas('user',function($q){
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
+                                            })->value('USER_ID');
+                    $i++;
                 }
-            }else{
+                $user[$i] = Auth::user()->id;
+            }
+            else{
                 $user[0]    = Auth::user()->id;
             }
-            
             $data   = UsulanKomponen::whereIn('USER_CREATED',$user)
                                     ->where('USULAN_POSISI',1)
                                     ->where('USULAN_STATUS',0)
@@ -854,39 +839,34 @@ class usulanController extends Controller
 
     public function getSurat($tahun){
             $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
-            if($skpd){
-                if($skpd->skpd->SKPD_JENIS == 1){
-                    $pd     = SKPD::where('SKPD_JENIS', 2)->get();
-                    $i = 0;
-                    foreach($pd as $pd){
-                        $id     = $pd->SKPD_ID;
-                        $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
-                                                ->whereHas('user',function($q){
-                                                    $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
-                                                })->value('USER_ID');
-                        $i++;
-                    }
-                    $user[$i] = Auth::user()->id;
-                }elseif($skpd->skpd->SKPD_JENIS == 3){
-                    $pd     = SKPD::where('SKPD_JENIS', 4)->get();
-                    $i = 0;
-                    foreach($pd as $pd){
-                        $id     = $pd->SKPD_ID;
-                        $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
-                                                ->whereHas('user',function($q){
-                                                    $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
-                                                })->value('USER_ID');
-                        $i++;
-                    }
-                    $user[$i] = Auth::user()->id;
+            if($skpd->skpd->SKPD_JENIS == 1){
+                $pd     = SKPD::where('SKPD_JENIS', 2)->get();
+                $i = 0;
+                foreach($pd as $pd){
+                    $id     = $pd->SKPD_ID;
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
+                                            ->whereHas('user',function($q){
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
+                                            })->value('USER_ID');
+                    $i++;
                 }
-                else{
-                    $user[0]    = Auth::user()->id;
+                $user[$i] = Auth::user()->id;
+            }elseif($skpd->skpd->SKPD_JENIS == 3){
+                $pd     = SKPD::where('SKPD_JENIS', 4)->get();
+                $i = 0;
+                foreach($pd as $pd){
+                    $id     = $pd->SKPD_ID;
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
+                                            ->whereHas('user',function($q){
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
+                                            })->value('USER_ID');
+                    $i++;
                 }
-            }else{
+                $user[$i] = Auth::user()->id;
+            }
+            else{
                 $user[0]    = Auth::user()->id;
             }
-            
         $data       = UsulanKomponen::where('USULAN_POSISI',4)
                                         ->where('SURAT_ID',null)
                                         ->whereIn('USER_CREATED',$user)
