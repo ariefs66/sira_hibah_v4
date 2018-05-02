@@ -585,14 +585,14 @@ class monevController extends Controller
       $prog = Monev_Program::find($program_id);
       
       if($counter>0){
-        $jumlah = (intval($before) / $counter);
-        if(intval($prog->$kinerjap)>0){
-          $prog->$kinerjap        = (intval($prog->$kinerjap) + $jumlah) / 2;
+        $jumlah = (floatval($before) / $counter);
+        if(floatval($prog->$kinerjap)>0){
+          $prog->$kinerjap        = (floatval($prog->$kinerjap) + $jumlah) / 2;
         }else{
-          $prog->$kinerjap        = intval($prog->$kinerjap) + $jumlah;
+          $prog->$kinerjap        = floatval($prog->$kinerjap) + $jumlah;
         }
       }else{
-        $prog->$kinerjap        = intval($before);
+        $prog->$kinerjap        = floatval($before);
       }
       $prog->save();  
       return 'Berhasil!';

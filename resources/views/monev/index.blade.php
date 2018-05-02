@@ -308,7 +308,7 @@
       <div class="form-group" id="dupe">
         <label for="no_spp" class="col-md-3">Realisasi Kinerja</label>          
         <div class="col-sm-5">
-          <input type="number" min="0" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja">          
+          <input type="number" min="0" step="0.01" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja">          
         </div> 
         <div class="col-sm-4">
           <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" disabled> 
@@ -519,13 +519,13 @@
     var SKPD_ID     = $('#skpd-id').val();
     @endif
     var SATUAN     = $('#satuan').val();
-    var KINERJA        = parseInt($('#kinerja').val());
+    var KINERJA        = $('#kinerja').val();
     var TOTAL        = $('#total').val();
     var OUTPUT        = $('#output').val();
     var TARGET        = $('#output_target').val();
     for (var i = 1; i < TOTAL; i++) { 
     SATUAN = SATUAN + ',' +$('#satuan_'+i).val();
-    KINERJA = KINERJA + ',' + parseInt($('#kinerja_'+i).val());
+    KINERJA = KINERJA + ',' + $('#kinerja_'+i).val();
     OUTPUT = OUTPUT + ',' +$('#output_'+i).val();
     TARGET = TARGET + ',' +$('#output_target_'+i).val();
     }
