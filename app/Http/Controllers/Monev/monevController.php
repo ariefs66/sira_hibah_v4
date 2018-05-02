@@ -21,6 +21,7 @@ use App\Model\Monev\Monev_Faktor;
 use App\Model\Monev\Monev_Outcome;
 use App\Model\Monev\Monev_Output;
 use App\Model\Monev\Monev_Tahapan;
+use App\Model\Monev\Monev_Log;
 use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
@@ -509,6 +510,13 @@ class monevController extends Controller
         $keg->$penghambat        = Input::get('PENGHAMBAT');
         $keg->save();
         $kegiatan_id = Monev_Kegiatan::where('REF_KEGIATAN_ID',Input::get('KEGIATAN_ID'))->where('PROGRAM_ID',$program_id)->skip($i)->first()->KEGIATAN_ID;
+        $monev_log  = new Monev_Log;
+        $monev_log->LOG_TIME           = Carbon\Carbon::now();
+        $monev_log->KEGIATAN_ID  = Input::get('KEGIATAN_ID');
+        $monev_log->USER_ID      =Auth::user()->id;
+        $monev_log->LOG_ACTIVITY = 'Menambahkan Kinerja Kegiatan';
+        $monev_log->LOG_DETAIL         = 'KEG#'.$kegiatan_id;
+        $monev_log->save();
         $monev_output  = Monev_Output::where('KEGIATAN_ID',$kegiatan_id)->where('OUTPUT_SATUAN',$keg->SATUAN)->skip($i)->first();
         if($monev_output){
           $monev_output = Monev_Output::find($monev_output->OUTPUT_ID);
