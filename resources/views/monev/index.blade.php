@@ -308,7 +308,7 @@
       <div class="form-group" id="dupe">
         <label for="no_spp" class="col-md-3">Realisasi Kinerja</label>          
         <div class="col-sm-5">
-          <input type="text" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja">          
+          <input type="number" min="0" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja">          
         </div> 
         <div class="col-sm-4">
           <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" disabled> 
@@ -519,13 +519,13 @@
     var SKPD_ID     = $('#skpd-id').val();
     @endif
     var SATUAN     = $('#satuan').val();
-    var KINERJA        = $('#kinerja').val();
+    var KINERJA        = parseInt($('#kinerja').val());
     var TOTAL        = $('#total').val();
     var OUTPUT        = $('#output').val();
     var TARGET        = $('#output_target').val();
     for (var i = 1; i < TOTAL; i++) { 
     SATUAN = SATUAN + ',' +$('#satuan_'+i).val();
-    KINERJA = KINERJA + ',' +$('#kinerja_'+i).val();
+    KINERJA = KINERJA + ',' + parseInt($('#kinerja_'+i).val());
     OUTPUT = OUTPUT + ',' +$('#output_'+i).val();
     TARGET = TARGET + ',' +$('#output_target_'+i).val();
     }
@@ -762,12 +762,13 @@
         $('#kegiatan').val(data['KEGIATAN_ID']);
         $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
         $('#target').val(data['OUTPUT']);
-        $('#kinerja').val(data['KINERJA']);
         $('#total').val(data['TOTAL']);
+        var kinerja = data['KINERJA'].split(",");
         var target = data['TARGET'].split(",");
         var satuan = data['SATUAN_ID'].split(",");
         var satuan_nama = data['SATUAN'].split(",");
         var output_nama = data['TOLAK_UKUR'].split(",");
+        $('#kinerja').val(kinerja[0]);
         $('#satuan').val(satuan[0]);
         $('#satuan_nama').val(satuan_nama[0]);
         $('#output').val(output_nama[0]);
@@ -778,6 +779,7 @@
         var node = duplicateNode(sourceNode, ["id", "name"]);
         var extra = document.getElementById("extra");
         extra.appendChild(node);
+        $('#kinerja_'+i).val(kinerja[i]);
         $('#satuan_'+i).val(satuan[i]);
         $('#satuan_nama_'+i).val(satuan_nama[i]);
         $('#output_'+i).val(output_nama[i]);

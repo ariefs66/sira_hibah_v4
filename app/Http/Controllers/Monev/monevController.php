@@ -344,6 +344,14 @@ class monevController extends Controller
             $kinerja = $monev_keg->$kinerja;
             $penghambat = $monev_keg->$penghambat;
             $pendukung = $monev_keg->$pendukung;
+            $monev_keg2  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('KEGIATAN_KODE',$data->KEGIATAN_KODE)->get();
+            if($monev_keg2){
+              $kinerja = '';
+              $kinerjap='KEGIATAN_T'.$mode;
+              foreach ($monev_keg2 as $monev_keg2) {
+                $kinerja = $monev_keg2->$kinerjap."," . $kinerja;
+              }
+            }
           }else{
             $kegiatanid = "";
             $kinerja = "";
@@ -638,6 +646,9 @@ class monevController extends Controller
             
             foreach($staff as $s){
                 if($s->USER_ID == Auth::user()->id) $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
+            }
+            if(Auth::user()->level == 8 || Auth::user()->level == 9){
+              $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
             }
            array_push($view, array( 'NO'       => $no++,
                                    'KEGIATAN'     => $data->URUSAN_KODE.'.'.$data->SKPD_KODE.'.'.$data->SUB_KODE.'.'.$data->PROGRAM_KODE.'.'.$data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA.'-'.$data->SUB_NAMA,
