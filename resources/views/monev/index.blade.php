@@ -768,16 +768,16 @@
         $('#satuan_nama').val(satuan_nama[0]);
         $('#output').val(output_nama[0]);
         $('#output_target').val(target[0]);
-        var total = data['TOTAL']-1;
-        for (i = 0; i < total; i++) { 
+        var total = data['TOTAL'];
+        for (i = 1; i < total; i++) { 
         var sourceNode = document.getElementById("dupe");
         var node = duplicateNode(sourceNode, ["id", "name"]);
         var extra = document.getElementById("extra");
         extra.appendChild(node);
-        $('#satuan_'+i).val(satuan[i++]);
-        $('#satuan_nama_'+i).val(satuan_nama[i++]);
-        $('#output_'+i).val(output_nama[i++]);
-        $('#output_target_'+i).val(target[i++]);
+        $('#satuan_'+i).val(satuan[i]);
+        $('#satuan_nama_'+i).val(satuan_nama[i]);
+        $('#output_'+i).val(output_nama[i]);
+        $('#output_target_'+i).val(target[i]);
         }
         $('#pendukung').val(data['KEGIATAN_PENDUKUNG']);
         $('#penghambat').val(data['KEGIATAN_PENGHAMBAT']);

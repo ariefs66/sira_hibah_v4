@@ -413,6 +413,7 @@ class monevController extends Controller
       $pendukungp = 'PROGRAM_PENDUKUNG_T'.$mode;
       $penghambatp = 'PROGRAM_PENGHAMBAT_T'.$mode;
       $before = 0;
+      $counter = 0;
       $id = Input::get('KEGIATAN_ID');
       $skpd = Input::get('SKPD_ID');
       if(empty($skpd)){
@@ -435,7 +436,7 @@ class monevController extends Controller
         $prog->REF_PROGRAM_ID = Input::get('PROGRAM_ID');
         $prog->USER_CREATED       = Auth::user()->id;
         $prog->TIME_CREATED       = Carbon\Carbon::now();
-        $prog->$kinerjap        = intval(Input::get('KINERJA'));
+        $prog->$kinerjap        = intval($before);
         $prog->$pendukungp        = Input::get('PENDUKUNG');
         $prog->$penghambatp        = Input::get('PENGHAMBAT');
         $prog->PROGRAM_TAHUN        = $tahun;
@@ -496,29 +497,6 @@ class monevController extends Controller
                 $keg->SATUAN = 0;
               }
           }
-
-          $monev_output  = Monev_Output::where('REF_KEGIATAN_ID',$id)->where('OUTPUT_SATUAN',$keg->SATUAN)->first();
-          if($monev_output){
-            $monev_output = Monev_Output::find($monev_output->OUTPUT_ID);
-          }else{
-            $monev_output  = new Monev_Output;
-            $monev_output->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
-            $monev_output->OUTPUT_SATUAN = $keg->SATUAN;
-          }
-          if(is_array($outputs)){
-            if( $i <count($outputs)){
-              $monev_output->OUTPUT_TOLAK_UKUR = $outputs[$i];
-            }else{
-              $monev_output->OUTPUT_TOLAK_UKUR = '';
-            }
-        }
-        if(is_array($targets)){
-          if( $i <count($targets)){
-            $monev_output->OUTPUT_TARGET = $targets[$i];
-          }else{
-            $monev_output->OUTPUT_TARGET = 0;
-          }
-      }
         $keg->PROGRAM_ID        = $program_id;
         $keg->KEGIATAN_KODE        = Input::get('KEGIATAN_KODE');
         $keg->KEGIATAN_NAMA        = Input::get('KEGIATAN_NAMA');
@@ -530,41 +508,77 @@ class monevController extends Controller
         $keg->$pendukung        = Input::get('PENDUKUNG');
         $keg->$penghambat        = Input::get('PENGHAMBAT');
         $keg->save();
-
-        $monev_output->save();  
+        $kegiatan_id = Monev_Kegiatan::where('REF_KEGIATAN_ID',Input::get('KEGIATAN_ID'))->where('PROGRAM_ID',$program_id)->skip($i)->first()->KEGIATAN_ID;
+        $monev_output  = Monev_Output::where('KEGIATAN_ID',$kegiatan_id)->where('OUTPUT_SATUAN',$keg->SATUAN)->skip($i)->first();
+        if($monev_output){
+          $monev_output = Monev_Output::find($monev_output->OUTPUT_ID);
+        }else{
+          $monev_output  = new Monev_Output;
+          $monev_output->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
+          $monev_output->OUTPUT_SATUAN = $keg->SATUAN;
+        }
+        if(is_array($outputs)){
+          if( $i <count($outputs)){
+            $monev_output->OUTPUT_TOLAK_UKUR = $outputs[$i];
+          }else{
+            $monev_output->OUTPUT_TOLAK_UKUR = '';
+          }
       }
-
-      $kegiatan_id = Monev_Kegiatan::where('REF_KEGIATAN_ID',Input::get('KEGIATAN_ID'))->where('PROGRAM_ID',$program_id)->value('KEGIATAN_ID');
-      $nilai = Input::get('REALISASI');
-      $realisasi = Monev_Realisasi::where('KEGIATAN_ID',$kegiatan_id)->where('PROGRAM_ID',$program_id)->where('SKPD_ID',$skpd)->first();
-      if($realisasi){
-        $realisasi = Monev_Realisasi::find($realisasi->REALISASI_ID);
-        switch ($mode) {
-          case 2:
-              $nilai = $nilai - intval($realisasi->REALISASI_T1);
-              break;
-          case 3:
-              $nilai = $nilai - intval($realisasi->REALISASI_T1)- intval($realisasi->REALISASI_T2);
-              break;
-          case 4:
-              $nilai = $nilai - intval($realisasi->REALISASI_T1)- intval($realisasi->REALISASI_T2)- intval($realisasi->REALISASI_T3);
-              break;
-          default:
-              $nilai = intval(Input::get('REALISASI'));
-      }
-      }else{
-        $realisasi = new Monev_Realisasi;
-      }
-      $rtriwulan = 'REALISASI_T'.$mode;
+      if(is_array($targets)){
+        if( $i <count($targets)){
+          $monev_output->OUTPUT_TARGET = $targets[$i];
+          if($targets[$i]>0){
+            $before = $before + (($kinerjas[$i] / $targets[$i]) * 100);
+          }else{
+            $before = $before;
+          }
+          $counter++;
+        }else{
+          $monev_output->OUTPUT_TARGET = 0;
+        }
+    }
+        $monev_output->KEGIATAN_ID = $kegiatan_id;
+        $monev_output->save(); 
+        $nilai = Input::get('REALISASI');
+        $realisasi = Monev_Realisasi::where('KEGIATAN_ID',$kegiatan_id)->where('PROGRAM_ID',$program_id)->where('SKPD_ID',$skpd)->skip($i)->first();
+        if($realisasi){
+          $realisasi = Monev_Realisasi::find($realisasi->REALISASI_ID);
+          switch ($mode) {
+            case 2:
+                $nilai = $nilai - intval($realisasi->REALISASI_T1);
+                break;
+            case 3:
+                $nilai = $nilai - intval($realisasi->REALISASI_T1)- intval($realisasi->REALISASI_T2);
+                break;
+            case 4:
+                $nilai = $nilai - intval($realisasi->REALISASI_T1)- intval($realisasi->REALISASI_T2)- intval($realisasi->REALISASI_T3);
+                break;
+            default:
+                $nilai = intval(Input::get('REALISASI'));
+        }
+        }else{
+          $realisasi = new Monev_Realisasi;
+        }
+        $rtriwulan = 'REALISASI_T'.$mode;
         $realisasi->PROGRAM_ID        = $program_id;
         $realisasi->KEGIATAN_ID        = $kegiatan_id;
         $realisasi->SKPD_ID        = $skpd;
         $realisasi->$rtriwulan        = Input::get('REALISASI');
-        $realisasi->save(); 
-
-        /*
-      $prog = Monev_Program::find($programid);
-*/
+        $realisasi->save();  
+      }
+      $prog = Monev_Program::find($program_id);
+      
+      if($counter>0){
+        $jumlah = (intval($before) / $counter);
+        if(intval($prog->$kinerjap)>0){
+          $prog->$kinerjap        = (intval($prog->$kinerjap) + $jumlah) / 2;
+        }else{
+          $prog->$kinerjap        = intval($prog->$kinerjap) + $jumlah;
+        }
+      }else{
+        $prog->$kinerjap        = intval($before);
+      }
+      $prog->save();  
       return 'Berhasil!';
     }
 
