@@ -794,6 +794,90 @@
     });   
   } 
 
+  function view(mode=1,id) {
+    @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+    skpd     = $('#filter-skpd').val();
+    @else
+    skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
+    @endif
+    $("#extra").empty();
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
+      success : function (data) {
+        var counter = 0;
+    function duplicateNode(/*DOMNode*/sourceNode, /*Array*/attributesToBump) {
+        counter++;
+        var out = sourceNode.cloneNode(true);
+        if (out.hasAttribute("id")) { out["id"] = bump(out["id"]); }
+        var nodes = out.getElementsByTagName("*");
+        
+        for (var i = 0, len1 = nodes.length; i < len1; i++) {
+            var node = nodes[i];
+            for (var j = 0, len2 = attributesToBump.length; j < len2; j++) {
+                var attribute = attributesToBump[j];
+                if (node.hasAttribute(attribute)) {
+                    node[attribute] = bump(node[attribute]);
+                }
+            }
+        }
+        
+        function bump(/*String*/str) {
+            return str + "_" + counter;
+        }
+      
+        return out;
+    }
+        data = data.aaData[0];
+        $('#id').val(data['ID']);
+        $('#keg-id').val(data['KEGIATAN_ID']);
+        $('#sub-id').val(data['SUB_ID']);
+        $('#keg-kode').val(data['KEGIATAN_KODE']);
+        $('#keg-nama').val(data['KEGIATAN_NAMA']);
+        $('#prog-id').val(data['PROGRAM_ID']);
+        $('#prog-nama').val(data['PROGRAM_NAMA']);
+        $('#prog-kode').val(data['PROGRAM_KODE']);
+        $('#skpd-id').val(data['SKPD_ID']);
+        $('#mode').val(data['MODE']);
+        $('#program_nama').val(data['PROGRAM_NAMA']);
+        $('#program').val(data['PROGRAM_ID']);
+        $('#kegiatan_nama').val(data['KEGIATAN_NAMA']);
+        $('#kegiatan').val(data['KEGIATAN_ID']);
+        $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
+        $('#target').val(data['OUTPUT']);
+        $('#kinerja').val(data['KINERJA']);
+        $('#total').val(data['TOTAL']);
+        var target = data['TARGET'].split(",");
+        var satuan = data['SATUAN_ID'].split(",");
+        var satuan_nama = data['SATUAN'].split(",");
+        var output_nama = data['TOLAK_UKUR'].split(",");
+        $('#satuan').val(satuan[0]);
+        $('#satuan_nama').val(satuan_nama[0]);
+        $('#output').val(output_nama[0]);
+        $('#output_target').val(target[0]);
+        var total = data['TOTAL'];
+        for (i = 1; i < total; i++) { 
+        var sourceNode = document.getElementById("dupe");
+        var node = duplicateNode(sourceNode, ["id", "name"]);
+        var extra = document.getElementById("extra");
+        extra.appendChild(node);
+        $('#satuan_'+i).val(satuan[i]);
+        $('#satuan_nama_'+i).val(satuan_nama[i]);
+        $('#output_'+i).val(output_nama[i]);
+        $('#output_target_'+i).val(target[i]);
+        }
+        $('#pendukung').val(data['KEGIATAN_PENDUKUNG']);
+        $('#penghambat').val(data['KEGIATAN_PENGHAMBAT']);
+        $('#realisasi').val(data['REALISASI']);
+        $('.overlay').fadeIn('fast',function(){
+          $('.input-btl').animate({'right':'0'},"linear");  
+          $("html, body").animate({ scrollTop: 0 }, "slow");
+        }); 
+        $('.btn-success').hide();
+      }
+    });   
+  } 
+
 
   $('#filter-skpd').change(function(e, params){
       var id  = $('#filter-skpd').val();
