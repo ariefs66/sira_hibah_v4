@@ -790,6 +790,7 @@
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
         }); 
+        $('.btn-success').show();
       }
     });   
   } 
