@@ -644,13 +644,16 @@ class monevController extends Controller
             $mod        = 0;
             $opsi = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
             <li><a onclick="return view(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-eye"></i>Lihat</a></li>
-            <li><a onclick="return info(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-square"></i>Info</a></li>';
+            <li><a onclick="return info(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-square"></i>Info</a></li></ul></div>';
             
             foreach($staff as $s){
                 if($s->USER_ID == Auth::user()->id) $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
             }
             if(Auth::user()->level == 8 || Auth::user()->level == 9){
-              $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
+              $opsi = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <li><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-edit"></i>Edit</a></li>
+              <li><a onclick="return view(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-eye"></i>Lihat</a></li>
+              <li><a onclick="return info(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-square"></i>Info</a></li></ul></div>';
             }
            array_push($view, array( 'NO'       => $no++,
                                    'KEGIATAN'     => $data->URUSAN_KODE.'.'.$data->SKPD_KODE.'.'.$data->SUB_KODE.'.'.$data->PROGRAM_KODE.'.'.$data->KEGIATAN_KODE.'-'.$data->KEGIATAN_NAMA.'-'.$data->SUB_NAMA,
