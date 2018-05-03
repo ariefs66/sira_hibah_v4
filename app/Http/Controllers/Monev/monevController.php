@@ -415,6 +415,7 @@ class monevController extends Controller
 
     public function simpanKegiatan($tahun,$mode=1){
       $mode = Input::get('MODE');
+      $acara = "Aksi Tidak Dikenal";
       $kinerja = 'KEGIATAN_T'.$mode;
       $pendukung = 'KEGIATAN_PENDUKUNG_T'.$mode;
       $penghambat = 'KEGIATAN_PENGHAMBAT_T'.$mode;
@@ -482,12 +483,14 @@ class monevController extends Controller
           if($i>0){
             $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
           }
-          echo($edit->KEGIATAN_ID);
+          //echo($edit->KEGIATAN_ID);
+          $acara = 'Mengubah Kinerja Kegiatan';
           $keg = Monev_Kegiatan::find($edit->KEGIATAN_ID);
           $keg->USER_UPDATED       = Auth::user()->id;
           $keg->TIME_UPDATED       = Carbon\Carbon::now();
         }else{
           $keg = new Monev_Kegiatan;
+          $acara = 'Menambahkan Kinerja Kegiatan';
           $keg->REF_KEGIATAN_ID = Input::get('KEGIATAN_ID');
           $keg->USER_CREATED       = Auth::user()->id;
           $keg->TIME_CREATED       = Carbon\Carbon::now();
@@ -522,7 +525,7 @@ class monevController extends Controller
         $monev_log->LOG_TIME           = Carbon\Carbon::now();
         $monev_log->KEGIATAN_ID  = Input::get('KEGIATAN_ID');
         $monev_log->USER_ID      =Auth::user()->id;
-        $monev_log->LOG_ACTIVITY = 'Menambahkan Kinerja Kegiatan';
+        $monev_log->LOG_ACTIVITY = $acara;
         $monev_log->LOG_DETAIL         = 'KEG#'.$kegiatan_id;
         $monev_log->save();
         $monev_output  = Monev_Output::where('KEGIATAN_ID',$kegiatan_id)->where('OUTPUT_SATUAN',$keg->SATUAN)->skip($i)->first();
@@ -653,6 +656,7 @@ class monevController extends Controller
               $opsi = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
               <li><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa mi-edit"></i>Edit</a></li>
               <li><a onclick="return view(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-eye"></i>Lihat</a></li>
+              <li><a onclick="return hapus(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li>
               <li><a onclick="return info(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-square"></i>Info</a></li></ul></div>';
             }
            array_push($view, array( 'NO'       => $no++,
