@@ -651,7 +651,7 @@ class monevController extends Controller
             }
             if(Auth::user()->level == 8 || Auth::user()->level == 9){
               $opsi = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-              <li><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-edit"></i>Edit</a></li>
+              <li><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa mi-edit"></i>Edit</a></li>
               <li><a onclick="return view(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-eye"></i>Lihat</a></li>
               <li><a onclick="return info(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-square"></i>Info</a></li></ul></div>';
             }
