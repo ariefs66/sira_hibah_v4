@@ -894,12 +894,13 @@
         $('#kegiatan').val(data['KEGIATAN_ID']);
         $('#anggaran').val(data['KEGIATAN_ANGGARAN']);
         $('#target').val(data['OUTPUT']);
-        $('#kinerja').val(data['KINERJA']);
         $('#total').val(data['TOTAL']);
+        var kinerja = data['KINERJA'].split(",");
         var target = data['TARGET'].split(",");
         var satuan = data['SATUAN_ID'].split(",");
         var satuan_nama = data['SATUAN'].split(",");
         var output_nama = data['TOLAK_UKUR'].split(",");
+        $('#kinerja').val(kinerja[0]);
         $('#satuan').val(satuan[0]);
         $('#satuan_nama').val(satuan_nama[0]);
         $('#output').val(output_nama[0]);
@@ -910,6 +911,7 @@
         var node = duplicateNode(sourceNode, ["id", "name"]);
         var extra = document.getElementById("extra");
         extra.appendChild(node);
+        $('#kinerja_'+i).val(kinerja[i]);
         $('#satuan_'+i).val(satuan[i]);
         $('#satuan_nama_'+i).val(satuan_nama[i]);
         $('#output_'+i).val(output_nama[i]);
@@ -922,7 +924,7 @@
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
         }); 
-        $('.btn-success').hide();
+        $('.btn-success').show();
       }
     });   
   } 
