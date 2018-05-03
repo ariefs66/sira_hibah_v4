@@ -163,12 +163,12 @@
               </li>
               @endif              
              @if(Auth::user()->level == 8)
-              <li>
+              <!--li>
                 <a href="{{ url('/') }}/asosiasi/{{$tahun}}" onclick="$.alert('Ditutup!')">
                   <i class="icon-bdg_uikit"></i>
                   <span>Asosiasi</span>
                 </a>
-              </li>
+              </li-->
               @endif
               <li class="divider"></li>
               <li>
