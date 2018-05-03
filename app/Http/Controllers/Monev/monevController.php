@@ -413,6 +413,29 @@ class monevController extends Controller
       return Response::JSON($out);
       }   
 
+    public function hapusKegiatan($tahun, $id){
+      $prog = '';
+      $keg = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('TAHUN',$tahun)->get();
+      foreach ($keg as $keg) {
+        $prog = $keg->PROGRAM_ID;
+        $log                = new Monev_Log;
+        $log->LOG_TIME      = Carbon\Carbon::now();
+        $log->USER_ID       = Auth::user()->id;
+        $log->LOG_ACTIVITY  = 'Menghapus Kegiatan';
+        $log->LOG_DETAIL    = 'ARSIP#'.$keg->KEGIATAN_ID.'#'.$keg->PROGRAM_ID.'#'.$keg->KEGIATAN_KODE.'#'.$keg->KEGIATAN_NAMA.'#'.$keg->KEGIATAN_ANGGARAN.'#'.$keg->KEGIATAN_T1.'#'.$keg->KEGIATAN_T2.'#'.$keg->KEGIATAN_T3.'#'.$keg->KEGIATAN_T4.'#'.$keg->USER_CREATED.'#'.$keg->TIME_CREATED.'#'.$keg->USER_UPDATED.'#'.$keg->TIME_UPDATED.'#'.$keg->KEGIATAN_VALIDASI.'#'.$keg->KEGIATAN_INPUT.'#'.$keg->KEGIATAN_PENDUKUNG_T1.'#'.$keg->KEGIATAN_PENGHAMBAT_T1.'#'.$keg->KEGIATAN_PENDUKUNG_T2.'#'.$keg->KEGIATAN_PENGHAMBAT_T2.'#'.$keg->KEGIATAN_PENDUKUNG_T3.'#'.$keg->KEGIATAN_PENGHAMBAT_T3.'#'.$keg->KEGIATAN_PENDUKUNG_T4.'#'.$keg->KEGIATAN_PENGHAMBAT_T4.'#'.$keg->SATUAN.'#'.$keg->SKPD_ID.'#'.$keg->REF_KEGIATAN_ID.'#'.$keg->SUB_ID.'#';
+        $log->save();
+        Monev_Kegiatan::where('REF_KEGIATAN_ID',$keg->REF_KEGIATAN_ID)->where('SKPD_ID',$keg->SKPD_ID)->where('SUB_ID',$keg->SUB_ID)->delete();
+        Monev_Output::where('KEGIATAN_ID',$keg->KEGIATAN_ID)->delete();
+        Monev_Realisasi::where('KEGIATAN_ID',$keg->KEGIATAN_ID)->delete();
+      }
+      $prog = Monev_Program::where('PROGRAM_ID',$prog)->where('TAHUN',$tahun)->first();
+      if($prog){
+        Monev_Outcome::where('PROGRAM_ID',$prog->REF_PROGRAM_ID)->delete();
+        Monev_Program::where('PROGRAM_ID',$prog->PROGRAM_ID)->delete();
+      }
+      return "Hapus Berhasil!";
+  }
+
     public function simpanKegiatan($tahun,$mode=1){
       $mode = Input::get('MODE');
       $acara = "Aksi Tidak Dikenal";

@@ -929,6 +929,14 @@
     });   
   } 
 
+  function hapus(tahun,id) {
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/monev/{{ $tahun }}/hapus/"+id,
+      success : function (data) {
+      }
+    });   
+  } 
 
   $('#filter-skpd').change(function(e, params){
       var id  = $('#filter-skpd').val();

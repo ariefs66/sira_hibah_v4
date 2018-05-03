@@ -583,5 +583,6 @@ Route::get('/monev/{tahun}/getDetail/{skpd}/{mode}/{id}', 'Monev\monevController
 Route::get('/monev/{tahun}/getData/{skpd}/{mode}/{id}', 'Monev\monevController@getData');
 Route::get('/monev/{tahun}/faktor/{skpd}/{mode}', 'Monev\monevController@getFaktor');
 Route::get('/monev/{tahun}/cetak/{skpd}', 'Monev\monevController@cetak');
+Route::post('/monev/{tahun}/hapus/{id}', 'Monev\monevController@hapusKegiatan');
 Route::post('/monev/{tahun}/kegiatan/simpan/{mode}', 'Monev\monevController@simpanKegiatan');
 Route::post('/monev/{tahun}/faktor/simpan', 'Monev\monevController@simpanFaktor');
