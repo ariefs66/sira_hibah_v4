@@ -428,6 +428,35 @@
     </tbody>
   </table>
 </div>
+
+<div class="info modal fade" id="info" tabindex="-1" role="dialog">
+    <div class="modal-dialog" style="width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h5 class="inline font-semibold text-orange m-n text16 ">Info Kegiatan</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-2">Dibuat Oleh</div>
+                    <div class="col-sm-4">: <span id="creator"></span></div>
+                    <div class="col-sm-2">Staff 1</div>
+                    <div class="col-sm-4">: <span id="staff1"></span></div>
+                    <div class="col-sm-2">Waktu di buat</div>
+                    <div class="col-sm-4">: <span id="created"></span></div>
+                    <div class="col-sm-2">Staff 2</div>
+                    <div class="col-sm-4">: <span id="staff2"></span></div>
+                    <div class="col-sm-2">Update terakhir</div>
+                    <div class="col-sm-4">: <span id="updated"></span></div>
+                </div>
+                <div class="wrapper-lg">
+                    <div class="streamline b-l b-grey m-l-lg m-b padder-v" id="timeline-log"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('plugin')
@@ -711,6 +740,21 @@
     });
   }
   
+  function info(mode=1,id){
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/main/{{ $tahun }}/pergeseran/belanja-langsung/log/"+id,
+      success : function (data) {
+         // $('#creator').text(data['header']['creator']);
+          $('#staff1').text(data['header']['staff1']);
+          $('#staff2').text(data['header']['staff2']);
+          $('#created').text(data['header']['created']);
+          $('#updated').text(data['header']['updated']);
+          $('#info').modal('show');
+      }
+    });
+  }
+
   function ubah(mode=1,id) {
     @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
     skpd     = $('#filter-skpd').val();

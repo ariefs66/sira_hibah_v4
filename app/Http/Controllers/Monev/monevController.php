@@ -642,7 +642,9 @@ class monevController extends Controller
           }
             $staff      = Staff::where('BL_ID',$data->BL_ID)->get();
             $mod        = 0;
-            $opsi = '<div class="action visible pull-right"><a onclick="return view(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="fa fa-chevron-down"></i></a></div>';
+            $opsi = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <li><a onclick="return view(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-eye"></i>Lihat</a></li>
+            <li><a onclick="return info(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-square"></i>Info</a></li>';
             
             foreach($staff as $s){
                 if($s->USER_ID == Auth::user()->id) $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
