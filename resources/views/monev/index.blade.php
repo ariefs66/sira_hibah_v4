@@ -449,9 +449,11 @@
                     <div class="col-sm-2">Update terakhir</div>
                     <div class="col-sm-4">: <span id="updated"></span></div>
                 </div>
+                @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 2  )
                 <div class="wrapper-lg">
                     <div class="streamline b-l b-grey m-l-lg m-b padder-v" id="timeline-log"></div>
                 </div>
+                @endif
             </div>
         </div>
     </div>
