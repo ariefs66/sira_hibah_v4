@@ -25,11 +25,15 @@ class skpdController extends Controller
     public function getData($tahun,$status){
     	$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->orderBy('TAHAPAN_ID','desc')->first();
-        if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
-            $thp    = 1;
-        }else{
-            $thp    = 0;
-        }
+		if(!empty($tahapan)){
+			if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
+				$thp    = 1;
+			}else{
+				$thp    = 0;
+			}
+		}else {
+			$thp    = 0;
+		}
 
         $data 			= SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
     	$no 			= 1;
@@ -91,9 +95,12 @@ class skpdController extends Controller
     public function submitAdd($tahun,$status){
     	$skpd 		= new SKPD;
 
+		if(!empty(Input::get('tahun'))){
+			$tahun = Input::get('tahun');
+		}
     	$cekKode 	= SKPD::where('SKPD_KODE',Input::get('kode_skpd'))
-    						->where('SKPD_TAHUN',Input::get('tahun'))
-    						->value('SKPD_KODE');
+    						->where('SKPD_TAHUN',$tahun)
+							->value('SKPD_KODE');
     	if(empty($cekKode)){
 	    	$skpd->SKPD_KODE			= Input::get('kode_skpd');
 	    	$skpd->SKPD_NAMA			= Input::get('nama_skpd');
@@ -105,7 +112,27 @@ class skpdController extends Controller
             $skpd->SKPD_JABATAN         = Input::get('pangkat');
             $skpd->SKPD_ALAMAT          = Input::get('alamat');
 	    	$skpd->SKPD_PAGU 		 	= Input::get('pagu');
-	    	$skpd->save();
+			$skpd->save();
+			if(Input::get('kepala_nip') !== "-"){
+				$user = new User();
+				$user->name = Input::get('kepala_skpd');
+				$user->email = Input::get('kepala_nip');
+				$user->password =  bcrypt('kolaka');
+				$user->login = 0;
+				$user->active = 0;
+				$user->app = 3;
+				$user->level = 2;
+				$user->mod = '10000000000';
+				$user->login = 0;
+				$user->save();
+				$user_id = $user->id;
+				$budget = new UserBudget();
+				$budget->id = UserBudget::max('id') + 1;
+				$budget->USER_ID = User::max('id');
+				$budget->SKPD_ID= SKPD::max('SKPD_ID');
+				$budget->TAHUN = $tahun;				
+				$budget->save();
+			}
 	    	return '1';
     	}else{
 	    	return '0';
@@ -114,52 +141,56 @@ class skpdController extends Controller
     }
 
     public function submitEdit(){
-    	$cekKode 	= SKPD::where('SKPD_KODE',Input::get('kode_skpd'))
-    						->where('SKPD_TAHUN',Input::get('tahun'))
-    						->value('SKPD_KODE');
-    	if(empty($cekKode) || $cekKode == Input::get('kode_skpd')){  
-		$nip_lama = SKPD::where('SKPD_ID',Input::get('id_skpd'))->value('SKPD_KEPALA_NIP');
-		$nip_bendahara = SKPD::where('SKPD_ID',Input::get('id_skpd'))->value('SKPD_BENDAHARA_NIP');
-		$kepala_baru = Input::get('kepala_skpd');
-		$bendahara_baru = Input::get('bendahara_skpd');
-		if(!empty($nip_lama)&&Input::get('kepala_nip') !== "-"){
-			$kepala_asal = User::where('email',$nip_lama);
-			if(!empty($kepala_asal)){
-				$kepala_baru = User::where('email',Input::get('kepala_nip'));
-				if(!empty($kepala_baru)){
-					UserBudget::where('USER_ID',$kepala_asal->value('id'))->where('SKPD_ID',Input::get('id_skpd'))->update(['USER_ID'=>$kepala_baru->value('id')]);
-					$kepala_baru = $kepala_baru->value('name');
-				}
-			}
-		}
-		if(!empty($nip_bendahara)&&Input::get('bendahara_nip') !== "-"){
-			$bendahara_asal = User::where('email',$nip_bendahara);
-			if(!empty($bendahara_asal)){
-				$bendahara_baru = User::where('email',Input::get('bendahara_nip'));
-				if(!empty($bendahara_baru)){
-					UserBudget::where('USER_ID',$bendahara_asal->value('id'))->where('SKPD_ID',Input::get('id_skpd'))->update(['USER_ID'=>$bendahara_baru->value('id')]);
-					$bendahara_baru = $bendahara_baru->value('name');
-				}
-			}
-		}
-		if(empty($kepala_baru)){
+		$kode = SKPD::where('SKPD_KODE',Input::get('kode_skpd'))->where('SKPD_TAHUN',Input::get('tahun'));
+    	$cekKode = $kode->value('SKPD_KODE');
+		$tahun = $kode->value('SKPD_TAHUN');
+		$cekID = $kode->value('SKPD_ID');
+    	if(empty($cekKode) || $cekID == Input::get('id_skpd') ){ 
+			$nip_lama = SKPD::where('SKPD_ID',Input::get('id_skpd'))->value('SKPD_KEPALA_NIP');
+			$tahun_lama = SKPD::where('SKPD_ID',Input::get('id_skpd'))->value('SKPD_TAHUN');
+			$nip_bendahara = SKPD::where('SKPD_ID',Input::get('id_skpd'))->value('SKPD_BENDAHARA_NIP');
 			$kepala_baru = Input::get('kepala_skpd');
-		}
-		if(empty($bendahara_baru)){
 			$bendahara_baru = Input::get('bendahara_skpd');
-		}
-		SKPD::where('SKPD_ID',Input::get('id_skpd'))
-		->update(['SKPD_KODE'			=>Input::get('kode_skpd'),
-				  'SKPD_NAMA'  			=>Input::get('nama_skpd'),
-				  'SKPD_KEPALA_NIP' 	=>Input::get('kepala_nip'),
-				  'SKPD_KEPALA'         =>$kepala_baru,
-				  'SKPD_JABATAN'        =>Input::get('pangkat'),
-				  'SKPD_ALAMAT' 		=>Input::get('alamat'),
-				  'SKPD_BENDAHARA_NIP' 	=>Input::get('bendahara_nip'),
-				  'SKPD_BENDAHARA'      =>$bendahara_baru,
-				  'SKPD_PAGU' 		    =>Input::get('pagu'),
-				  'SKPD_TAHUN'			=>Input::get('tahun')]);
-    		return '1';
+			if(!empty($nip_lama)&&Input::get('kepala_nip') !== "-"){
+				$kepala_asal = User::where('email',$nip_lama);
+				if(!empty($kepala_asal)){
+					$kepala_baru = User::where('email',Input::get('kepala_nip'));
+					if(!empty($kepala_baru)){
+						UserBudget::where('USER_ID',$kepala_baru->value('id'))->where('TAHUN',$tahun_lama)->delete();
+						UserBudget::where('USER_ID',$kepala_asal->value('id'))->where('SKPD_ID',Input::get('id_skpd'))->where('TAHUN',$tahun_lama)->update(['USER_ID'=>$kepala_baru->value('id'),'TAHUN'=>Input::get('tahun')]);
+						User::where('email',Input::get('kepala_nip'))->update(['level'=>2,'mod'=>'00000000000']);
+						$kepala_baru = $kepala_baru->value('name');
+					}
+				}
+			}
+			if(!empty($nip_bendahara)&&Input::get('bendahara_nip') !== "-"){
+				$bendahara_asal = User::where('email',$nip_bendahara);
+				if(!empty($bendahara_asal)){
+					$bendahara_baru = User::where('email',Input::get('bendahara_nip'));
+					if(!empty($bendahara_baru)){
+						UserBudget::where('USER_ID',$bendahara_asal->value('id'))->where('SKPD_ID',Input::get('id_skpd'))->where('TAHUN',$tahun_lama)->update(['USER_ID'=>$bendahara_baru->value('id'),'TAHUN'=>Input::get('tahun')]);
+						$bendahara_baru = $bendahara_baru->value('name');
+					}
+				}
+			}
+			if(empty($kepala_baru)){
+				$kepala_baru = Input::get('kepala_skpd');
+			}
+			if(empty($bendahara_baru)){
+				$bendahara_baru = Input::get('bendahara_skpd');
+			}
+			SKPD::where('SKPD_ID',Input::get('id_skpd'))
+			->update(['SKPD_KODE'			=>Input::get('kode_skpd'),
+					'SKPD_NAMA'  			=>Input::get('nama_skpd'),
+					'SKPD_KEPALA_NIP' 	=>Input::get('kepala_nip'),
+					'SKPD_KEPALA'         =>$kepala_baru,
+					'SKPD_JABATAN'        =>Input::get('pangkat'),
+					'SKPD_ALAMAT' 		=>Input::get('alamat'),
+					'SKPD_BENDAHARA_NIP' 	=>Input::get('bendahara_nip'),
+					'SKPD_BENDAHARA'      =>$bendahara_baru,
+					'SKPD_PAGU' 		    =>Input::get('pagu'),
+					'SKPD_TAHUN'			=>Input::get('tahun')]);
+			return '1';
     	}else{
 	    	return '0';
     	}
