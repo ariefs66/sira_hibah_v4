@@ -638,12 +638,12 @@ class monevController extends Controller
                         ->Join('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
                         ->leftJoin('REFERENSI.REF_URUSAN_SKPD','DAT_BL.SKPD_ID','=','REF_URUSAN_SKPD.SKPD_ID')
                         ->leftJoin('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_URUSAN_SKPD.URUSAN_ID')
-                        ->groupBy('REF_URUSAN.URUSAN_KODE','REF_SKPD.SKPD_KODE','REF_PROGRAM.PROGRAM_KODE','KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','REF_SUB_UNIT.SUB_NAMA','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
+                        ->groupBy('REF_URUSAN.URUSAN_KODE','REF_SKPD.SKPD_KODE','REF_PROGRAM.PROGRAM_KODE','KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','REF_SUB_UNIT.SUB_NAMA','REF_SUB_UNIT.SUB_ID','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
                         ->where('DAT_BL.SKPD_ID',$skpd)
                         ->where('REF_KEGIATAN.PROGRAM_ID',$id)
-                        ->selectRaw(' "REF_URUSAN"."URUSAN_KODE","REF_SKPD"."SKPD_KODE","REF_PROGRAM"."PROGRAM_KODE","KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","REF_SUB_UNIT"."SUB_KODE","REF_SUB_UNIT"."SUB_NAMA","KEGIATAN_KODE","DAT_BL"."BL_ID","BL_PAGU" ')
+                        ->selectRaw(' "REF_URUSAN"."URUSAN_KODE","REF_SKPD"."SKPD_KODE","REF_PROGRAM"."PROGRAM_KODE","KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","REF_SUB_UNIT"."SUB_KODE","REF_SUB_UNIT"."SUB_NAMA","REF_SUB_UNIT"."SUB_ID","KEGIATAN_KODE","DAT_BL"."BL_ID","BL_PAGU" ')
                         ->get();
 
         $view       = array();
@@ -652,7 +652,7 @@ class monevController extends Controller
         $akb       = '';
         foreach ($data as $data) {
 
-          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_KEGIATAN.SUB_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_KODE',$data->SUB_KODE)->first();
+          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_KEGIATAN.SUB_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$skpd)->first();
         
           if($monev_keg){
             $status  = '<span class="text-success"><i class="fa fa-check"> Sudah Diisi</i></span>';
