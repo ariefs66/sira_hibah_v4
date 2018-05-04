@@ -35,6 +35,9 @@ use App\Model\UserBudget;
 
 class monevController extends Controller
 {
+   public function __construct(){
+    $this->middleware('auth');
+  }
    public function index($tahun){
       $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
       $skpd_      = array(); 
