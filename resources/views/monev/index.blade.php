@@ -549,14 +549,29 @@
     @endif
     var SATUAN     = $('#satuan').val();
     var KINERJA        = $('#kinerja').val();
+    if(isNaN(KINERJA)){
+      KINERJA = 0;
+    }
     var TOTAL        = $('#total').val();
     var OUTPUT        = $('#output').val();
     var TARGET        = $('#output_target').val();
+    if(isNaN(TARGET)){
+      TARGET = 0;
+    }
     for (var i = 1; i < TOTAL; i++) { 
-    SATUAN = SATUAN + ',' +$('#satuan_'+i).val();
-    KINERJA = KINERJA + ',' + $('#kinerja_'+i).val();
-    OUTPUT = OUTPUT + ',' +$('#output_'+i).val();
-    TARGET = TARGET + ',' +$('#output_target_'+i).val();
+      SATUAN = SATUAN + ',' +$('#satuan_'+i).val();
+      if(isNaN($('#kinerja_'+i).val())){
+        KINERJA = KINERJA + ',' + 0;
+      }else{
+        KINERJA = KINERJA + ',' + $('#kinerja_'+i).val();
+      }
+      OUTPUT = OUTPUT + ',' +$('#output_'+i).val();
+      TARGET = TARGET + ',' +$('#output_target_'+i).val();
+      if(isNaN($('#output_target_'+i).val())){
+        TARGET = TARGET + ',' +0;
+      }else{
+        TARGET = TARGET + ',' +$('#output_target_'+i).val();
+      }
     }
     var KEGIATAN_ANGGARAN     = $('#anggaran').val();
     var PENDUKUNG         = $('#pendukung').val();
