@@ -316,14 +316,17 @@ class monevController extends Controller
     }
         $data       = BLPerubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
+                        ->leftJoin('REFERENSI.REF_SKPD','DAT_BL_PERUBAHAN.SKPD_ID','=','REF_SKPD.SKPD_ID')
                         ->leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL_PERUBAHAN.SUB_ID')
+                        ->leftJoin('REFERENSI.REF_URUSAN_SKPD','DAT_BL_PERUBAHAN.SKPD_ID','=','REF_URUSAN_SKPD.SKPD_ID')
+                        ->leftJoin('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_URUSAN_SKPD.URUSAN_ID')
                         ->LeftJoin('BUDGETING.DAT_BL_REALISASI','DAT_BL_REALISASI.BL_ID','=','DAT_BL_PERUBAHAN.BL_ID')
-                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_ID','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL_PERUBAHAN.BL_ID','BL_PAGU')
+                        ->groupBy('KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SKPD.SKPD_ID','REF_SUB_UNIT.SUB_ID','REF_URUSAN.URUSAN_KODE','KEGIATAN_KODE','REF_PROGRAM.PROGRAM_ID','DAT_BL_PERUBAHAN.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
-                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$skpd)
+                        ->where('REF_SUB_UNIT.SKPD_ID',$skpd)
                         ->where('DAT_BL_PERUBAHAN.BL_ID',$id)
-                        ->select(DB::raw('SUM("DAT_BL_REALISASI"."REALISASI_TOTAL"), "DAT_BL_PERUBAHAN".*, "REF_SUB_UNIT"."SUB_ID", "REF_KEGIATAN".*, "REF_PROGRAM".*'))
+                        ->select(DB::raw('SUM("DAT_BL_REALISASI"."REALISASI_TOTAL"), "DAT_BL_PERUBAHAN".*, "REF_URUSAN"."URUSAN_KODE", "REF_SUB_UNIT"."SUB_KODE", "REF_SUB_UNIT"."SUB_NAMA", "REF_SKPD"."SKPD_KODE", "REF_KEGIATAN".*, "REF_PROGRAM".*'))
                         ->get();
 
         $view       = array();
@@ -388,11 +391,11 @@ class monevController extends Controller
 
           array_push($view, array( 'KEGIATAN_ID'       => $data->KEGIATAN_ID,
                                    'PROGRAM_ID'       => $data->PROGRAM_ID,
-                                   'PROGRAM_NAMA'       => $data->PROGRAM_NAMA,
+                                   'PROGRAM_NAMA'       => $data->URUSAN_KODE.'.'.$data->SKPD_KODE.'.'.$data->SUB_KODE.'.'.$data->PROGRAM_KODE.' - '.$data->PROGRAM_NAMA,
                                    'PROGRAM_KODE'       => $data->PROGRAM_KODE,
                                    'SUB_ID'       => $data->SUB_ID,
                                    'KEGIATAN_KODE'       => $data->KEGIATAN_KODE,
-                                   'KEGIATAN_NAMA'       => $data->KEGIATAN_NAMA,
+                                   'KEGIATAN_NAMA'       => $data->URUSAN_KODE.'.'.$data->SKPD_KODE.'.'.$data->SUB_KODE.'.'.$data->PROGRAM_KODE.'.'.$data->KEGIATAN_KODE.' - '.$data->KEGIATAN_NAMA.' - '.$data->SUB_NAMA,
                                    'KEGIATAN_ANGGARAN'       => $data->BL_PAGU,
                                    'REALISASI'       => $realisasi,
                                    'TARGET'       => $target,
