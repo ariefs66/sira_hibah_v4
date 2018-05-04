@@ -652,7 +652,7 @@ class monevController extends Controller
         $akb       = '';
         foreach ($data as $data) {
 
-          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_KEGIATAN.SUB_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('REF_SUB_UNIT.SUB_ID',$data->SUB_ID)->where('SKPD_ID',$skpd)->first();
+          $monev_keg  = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_KEGIATAN.SUB_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('REF_SUB_UNIT.SUB_ID',$data->SUB_ID)->where('DAT_KEGIATAN.SKPD_ID',$skpd)->first();
         
           if($monev_keg){
             $status  = '<span class="text-success"><i class="fa fa-check"> Sudah Diisi</i></span>';
