@@ -24,9 +24,9 @@
                   <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> <span>Parameter Cetak</span></button>
                   @endif
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 and $cek)
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/1"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel"  target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/1"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @elseif(Auth::user()->level == 2 and $cek)
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @endif
 @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
                   <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" target="_blank"  href="{{ url('/') }}/monev/{{$tahun}}/cetak/1"><i class="m-r-xs fa fa-file"></i> Print</a>
@@ -931,6 +931,7 @@
   $('#filter-skpd').change(function(e, params){
       var id  = $('#filter-skpd').val();
       $("#print").attr("href", "{{ url('/') }}/monev/{{$tahun}}/cetak/"+id);
+      $("#excel").attr("href", "{{ url('/') }}/monev/{{$tahun}}/excel/"+id);
       $.fn.dataTable.ext.errMode = 'none';
       $('#table-pegawai').DataTable().destroy();
       $('#table-pegawai').DataTable({
