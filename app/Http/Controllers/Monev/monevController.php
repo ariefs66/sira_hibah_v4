@@ -420,8 +420,8 @@ class monevController extends Controller
       }   
 
     public function hapusKegiatan($tahun, $id){
-      $prog = '';
-      $keg = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('TAHUN',$tahun)->get();
+      $prog = 0;
+      $keg = Monev_Kegiatan::where('REF_KEGIATAN_ID',Input::get('KEGIATAN_ID'))->where('SUB_ID',$id)->where('SKPD_ID',Input::get('SKPD_ID'))->get();
       foreach ($keg as $keg) {
         $prog = $keg->PROGRAM_ID;
         $log                = new Monev_Log;
@@ -434,10 +434,12 @@ class monevController extends Controller
         Monev_Output::where('KEGIATAN_ID',$keg->KEGIATAN_ID)->delete();
         Monev_Realisasi::where('KEGIATAN_ID',$keg->KEGIATAN_ID)->delete();
       }
-      $prog = Monev_Program::where('PROGRAM_ID',$prog)->where('TAHUN',$tahun)->first();
+      $prog = Monev_Program::where('PROGRAM_ID',$prog)->where('PROGRAM_TAHUN',$tahun)->first();
       if($prog){
-        Monev_Outcome::where('PROGRAM_ID',$prog->REF_PROGRAM_ID)->delete();
-        Monev_Program::where('PROGRAM_ID',$prog->PROGRAM_ID)->delete();
+        //Monev_Outcome::where('PROGRAM_ID',$prog->REF_PROGRAM_ID)->delete();
+        Monev_Program::where('PROGRAM_ID',$prog->PROGRAM_ID)->update(['PROGRAM_T1'=>0,'PROGRAM_T2'=>0,'PROGRAM_T3'=>0,'PROGRAM_T4'=>0]);
+      }else{
+        return "Hapus Gagal!";
       }
       return "Hapus Berhasil!";
   }
@@ -685,7 +687,7 @@ class monevController extends Controller
               $opsi = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
               <li><a onclick="return ubah(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa mi-edit"></i>Edit</a></li>
               <li><a onclick="return view(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-eye"></i>Lihat</a></li>
-              <li><a onclick="return hapus(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li>
+              <li><a onclick="return hapus(\''.$skpd.'\',\''.$data->SUB_ID.'\',\''.$data->KEGIATAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li>
               <li><a onclick="return info(\''.$mode.'\',\''.$data->BL_ID.'\')"><i class="fa fa-pencil-square"></i>Info</a></li></ul></div>';
             }
            array_push($view, array( 'NO'       => $no++,

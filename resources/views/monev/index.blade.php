@@ -711,7 +711,7 @@
   }); 
 
 
-  function hapus(id){
+  function hapus(skpd,sub,id){
     var token        = $('#token').val();    
     $.confirm({
         title: 'Hapus Data!',
@@ -721,10 +721,11 @@
                 btnClass: 'btn-danger',
                 action: function(){
                   $.ajax({
-                      url: "{{ url('/') }}/main/{{ $tahun }}/belanja-tidak-langsung/hapus",
+                      url: "{{ url('/') }}/monev/{{ $tahun }}/hapus/"+sub,
                       type: "POST",
                       data: {'_token'      : token,
-                            'BTL_ID'       : id},
+                            'KEGIATAN_ID'       : id,
+                            'SKPD_ID'       : skpd},
                       success: function(msg){
                           $.alert(msg);
                           $('.table-pegawai').DataTable().ajax.reload();
@@ -925,15 +926,6 @@
           $("html, body").animate({ scrollTop: 0 }, "slow");
         }); 
         $('.btn-success').show();
-      }
-    });   
-  } 
-
-  function hapus(tahun,id) {
-    $.ajax({
-      type  : "get",
-      url   : "{{ url('/') }}/monev/{{ $tahun }}/hapus/"+id,
-      success : function (data) {
       }
     });   
   } 
