@@ -306,7 +306,7 @@
       <div class="form-group" id="dupe">
         <label for="no_spp" class="col-md-3">Realisasi Kinerja</label>          
         <div class="col-sm-5">
-          <input type="number" required="true" min="0" step="0.01" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja">          
+          <input type="number" required="true" min="0" step="0.01" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" value="0">          
         </div> 
         <div class="col-sm-4">
           <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" disabled> 
