@@ -620,7 +620,7 @@
           $('#pendukung').val("");
           $('#penghambat').val("");
           $('#target').val("");
-          $('#realisasi').val("");
+          $('#realisasi').val(0);
           $("#extra").empty();
         }
       });
@@ -777,6 +777,7 @@
     skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
     @endif
     $("#extra").empty();
+    $("#kinerja").val(0);
     $.ajax({
       type  : "get",
       url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
@@ -865,6 +866,7 @@
     skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
     @endif
     $("#extra").empty();
+    $("#kinerja").val(0);
     $.ajax({
       type  : "get",
       url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
