@@ -828,7 +828,8 @@
         var satuan = data['SATUAN_ID'].split(",");
         var satuan_nama = data['SATUAN'].split(",");
         var output_nama = data['TOLAK_UKUR'].split(",");
-        $('#kinerja').val(kinerja[0]);
+        if(kinerja[0]){
+        $('#kinerja').val(kinerja[0]);}
         $('#satuan').val(satuan[0]);
         $('#satuan_nama').val(satuan_nama[0]);
         $('#output').val(output_nama[0]);
@@ -839,7 +840,8 @@
         var node = duplicateNode(sourceNode, ["id", "name"]);
         var extra = document.getElementById("extra");
         extra.appendChild(node);
-        $('#kinerja_'+i).val(kinerja[i]);
+        if(kinerja[i]){
+        $('#kinerja_'+i).val(kinerja[i]);}
         $('#satuan_'+i).val(satuan[i]);
         $('#satuan_nama_'+i).val(satuan_nama[i]);
         $('#output_'+i).val(output_nama[i]);
