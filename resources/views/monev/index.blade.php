@@ -554,7 +554,7 @@
     }
     var TOTAL        = $('#total').val();
     var OUTPUT        = $('#output').val();
-    var TARGET        = $('#output_target').val();
+    var TARGET        = parseFloat($('#output_target').val().replace('.',''));
     if(isNaN(TARGET)){
       TARGET = 0;
     }
@@ -566,11 +566,10 @@
         KINERJA = KINERJA + ',' + $('#kinerja_'+i).val();
       }
       OUTPUT = OUTPUT + ',' +$('#output_'+i).val();
-      TARGET = TARGET + ',' +$('#output_target_'+i).val();
       if(isNaN($('#output_target_'+i).val())){
         TARGET = TARGET + ',' +0;
       }else{
-        TARGET = TARGET + ',' +$('#output_target_'+i).val();
+        TARGET = TARGET + ',' +parseFloat($('#output_target_'+i).val().replace('.',''));
       }
     }
     var KEGIATAN_ANGGARAN     = $('#anggaran').val();
