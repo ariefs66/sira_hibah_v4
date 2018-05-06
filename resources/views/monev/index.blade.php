@@ -306,13 +306,13 @@
       <div class="form-group" id="dupe">
         <label for="no_spp" class="col-md-3">Realisasi Kinerja</label>          
         <div class="col-sm-5">
-          <input type="number" required="true" min="0" step="0.01" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" value="0">          
+          <input type="number" required="true" min="0" step="0.01" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" value="0"></input>       
         </div> 
         <div class="col-sm-4">
-          <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" disabled> 
-          <input type="hidden" class="form-control" id="satuan">
-          <input type="hidden" class="form-control" id="output_target">
-          <input type="hidden" class="form-control" id="output">
+          <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" disabled></input> 
+          <input type="hidden" class="form-control" id="satuan"></input>
+          <input type="hidden" class="form-control" id="output_target"></input>
+          <input type="hidden" class="form-control" id="output"></input>
         </div>
       </div>
 
