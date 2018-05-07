@@ -81,7 +81,7 @@ sudo apt-get install unixodbc-dev-utf16 #this step is optional but recommended*
 	public function index($tahun, Request $req){ // cek total belanja simda yang kode tidak sama dgn nol
 		$total 	= DB::connection('sqlsrv')->select('SELECT SUM(Total) as Total FROM Ta_Belanja_Rinc_Sub WHERE Kd_Prog != 0');
 		if($req->aksi=="Belanja"){		
-			$Kd_Urusan = $req->urusan;
+			$Kd_Urusan = "1";
 			$Kd_Bidang = "4";
 			$Kd_Unit = "1";
 			$Kd_Sub = "2";
@@ -92,7 +92,22 @@ sudo apt-get install unixodbc-dev-utf16 #this step is optional but recommended*
 			$Kd_Rek_2 = "2";
 			$Kd_Rek_3 = "2";
 			$Kd_Rek_4 = "11";
-			$Kd_Rek_5 = "1";
+			$Kd_Rek_5 = "2";
+			$No_Rinc = "1";
+			$Keterangan = "Belanja Makanan dan Minuman Rapat";
+			$No_ID1 = "19";
+			$No_ID2 = "20";
+			$Sat_1 = "Dus";
+			$Nilai_11 = "150";
+			$Nilai_12 = "1000";
+			$Jml_Satuan1 = "150";
+			$Jml_Satuan2 = "1000";
+			$Nilai_Rp1 = "35000";
+			$Nilai_Rp2 = "17000";
+			$Total1 = "5250000";
+			$Total2 = "17000000";
+			$Keterangan1 = "Nasi Dus";
+			$Keterangan2 = "Snack";
 
 			$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Belanja')
 			->where('Tahun',$tahun)
@@ -109,7 +124,6 @@ sudo apt-get install unixodbc-dev-utf16 #this step is optional but recommended*
 			->where('Kd_Rek_4',$Kd_Rek_4)
 			->where('Kd_Rek_5',$Kd_Rek_5)
 			->count();
-
 			if($cek){
 				if($req->hapus==TRUE){
 					$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Belanja')
@@ -129,7 +143,7 @@ sudo apt-get install unixodbc-dev-utf16 #this step is optional but recommended*
 					->delete();
 					return "Data Dihapus";
 				}	
-				return "Data SUdah Ada";
+				return "Data Sudah Ada";
 			}else{
 				$value 	= array('Tahun' 			=> $tahun,
 				'Kd_Urusan' 		=> $Kd_Urusan,
@@ -144,10 +158,77 @@ sudo apt-get install unixodbc-dev-utf16 #this step is optional but recommended*
 				'Kd_Rek_3'			=> $Kd_Rek_3,
 				'Kd_Rek_4'			=> $Kd_Rek_4,
 				'Kd_Rek_5'			=> $Kd_Rek_5);
+				$value2 	= array('Tahun' 			=> $tahun,
+				'Kd_Urusan' 		=> $Kd_Urusan,
+				'Kd_Bidang' 		=> $Kd_Bidang,
+				'Kd_Unit'			=> $Kd_Unit,
+				'Kd_Sub'			=> $Kd_Sub,
+				'Kd_Prog'			=> $Kd_Prog,
+				'ID_Prog'			=> $ID_Prog,
+				'Kd_Keg'			=> $Kd_Keg,
+				'Kd_Rek_1'			=> $Kd_Rek_1,
+				'Kd_Rek_2'			=> $Kd_Rek_2,
+				'Kd_Rek_3'			=> $Kd_Rek_3,
+				'Kd_Rek_4'			=> $Kd_Rek_4,
+				'Kd_Rek_5'			=> $Kd_Rek_5,
+				'No_Rinc'			=> $No_Rinc,
+				'Keterangan'		=> $Keterangan);
+				$value3 	= array('Tahun' 			=> $tahun,
+				'Kd_Urusan' 		=> $Kd_Urusan,
+				'Kd_Bidang' 		=> $Kd_Bidang,
+				'Kd_Unit'			=> $Kd_Unit,
+				'Kd_Sub'			=> $Kd_Sub,
+				'Kd_Prog'			=> $Kd_Prog,
+				'ID_Prog'			=> $ID_Prog,
+				'Kd_Keg'			=> $Kd_Keg,
+				'Kd_Rek_1'			=> $Kd_Rek_1,
+				'Kd_Rek_2'			=> $Kd_Rek_2,
+				'Kd_Rek_3'			=> $Kd_Rek_3,
+				'Kd_Rek_4'			=> $Kd_Rek_4,
+				'Kd_Rek_5'			=> $Kd_Rek_5,
+				'No_Rinc'			=> $No_Rinc,
+				'No_ID'				=> $No_ID1,
+				'Sat_1'				=> $Sat_1,
+				'Nilai_1'			=> $Nilai_11,
+				'Nilai_2'			=> 0,
+				'Nilai_3'			=> 0,
+				'Satuan123'			=> $Sat_1,
+				'Jml_Satuan'		=> $Jml_Satuan1,
+				'Nilai_Rp'			=> $Nilai_Rp1,
+				'Total'				=> $Total1,
+				'Keterangan'		=> $Keterangan1
+			);
+			$value4 	= array('Tahun' 			=> $tahun,
+				'Kd_Urusan' 		=> $Kd_Urusan,
+				'Kd_Bidang' 		=> $Kd_Bidang,
+				'Kd_Unit'			=> $Kd_Unit,
+				'Kd_Sub'			=> $Kd_Sub,
+				'Kd_Prog'			=> $Kd_Prog,
+				'ID_Prog'			=> $ID_Prog,
+				'Kd_Keg'			=> $Kd_Keg,
+				'Kd_Rek_1'			=> $Kd_Rek_1,
+				'Kd_Rek_2'			=> $Kd_Rek_2,
+				'Kd_Rek_3'			=> $Kd_Rek_3,
+				'Kd_Rek_4'			=> $Kd_Rek_4,
+				'Kd_Rek_5'			=> $Kd_Rek_5,
+				'No_Rinc'			=> $No_Rinc,
+				'No_ID'				=> $No_ID2,
+				'Sat_1'				=> $Sat_1,
+				'Nilai_1'			=> $Nilai_12,
+				'Nilai_2'			=> 0,
+				'Nilai_3'			=> 0,
+				'Satuan123'			=> $Sat_1,
+				'Jml_Satuan'		=> $Jml_Satuan2,
+				'Nilai_Rp'			=> $Nilai_Rp2,
+				'Total'				=> $Total2,
+				'Keterangan'		=> $Keterangan2
+			);
 		DB::connection('sqlsrv')->table('dbo.Ta_Belanja')->insert($value);
+		DB::connection('sqlsrv')->table('dbo.Ta_Belanja_Rinc')->insert($value2);
+		DB::connection('sqlsrv')->table('dbo.Ta_Belanja_Rinc_Sub')->insert($value3);
+		DB::connection('sqlsrv')->table('dbo.Ta_Belanja_Rinc_Sub')->insert($value4);
 		return "Berhasil";
 			}
-
 		}
 		
 		print_r($total);exit();

