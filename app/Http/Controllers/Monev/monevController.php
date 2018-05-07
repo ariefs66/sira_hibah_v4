@@ -584,11 +584,11 @@ class monevController extends Controller
       $satuans = explode(",", $s_input);
       $targets = explode(",", $t_input);
       $outputs = explode(",", $o_input);
-      $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
+      $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->where('SUB_ID',Input::get('SUB_ID'))->first();
       for ($i = 0; $i < $total; $i++) {
         if($edit){
           if($i>0){
-            $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
+            $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->where('SUB_ID',Input::get('SUB_ID'))->first();
           }
           //echo($edit->KEGIATAN_ID);
           $acara = 'Mengubah Kinerja Kegiatan';
