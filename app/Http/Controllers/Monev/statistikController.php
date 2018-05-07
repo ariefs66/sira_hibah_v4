@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use View;
 use Excel;
 use App\Model\BLPerubahan;
+use App\Model\SKPD;
 Use App\Model\Monev\Monev_Faktor;
 Use App\Model\Monev\Monev_Kegiatan;
 Use App\Model\Monev\Monev_Log;
@@ -20,7 +21,7 @@ class statistikController extends Controller
     public function index($tahun){
     	$program 		= 0;
         $monev_program 	= 0;
-        $skpd = Monev_Program::select('SKPD_ID')->distinct()->orderBy('SKPD_ID')->get();
+        $skpd = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
         $view       = array();
         foreach ($skpd as $skpd) {
             $total       = BLPerubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
@@ -36,7 +37,7 @@ class statistikController extends Controller
           $monev        = Monev_Program::where('DAT_PROGRAM.SKPD_ID',$skpd->SKPD_ID)->where('PROGRAM_TAHUN',$tahun)
           ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID');
           array_push($view, array( 'KODE'       =>$skpd->SKPD_ID,
-                                   'NAMA'     =>$monev->value('SKPD_NAMA'),
+                                   'NAMA'     =>$skpd->SKPD_NAMA,
                                    'TOTAL'    =>$total,
                                    'ISI'      =>$monev->count()));
             $program+=$total;
