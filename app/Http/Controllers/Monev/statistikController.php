@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Monev;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
 use View;
 use Excel;
 use App\Model\BLPerubahan;
 use App\Model\SKPD;
+use App\Model\UserBudget;
 Use App\Model\Monev\Monev_Faktor;
 Use App\Model\Monev\Monev_Kegiatan;
 Use App\Model\Monev\Monev_Log;
@@ -21,7 +23,18 @@ class statistikController extends Controller
     public function index($tahun){
     	$program 		= 0;
         $monev_program 	= 0;
-        $skpd = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        $skpd_      = array(); 
+        $i = 0;
+        foreach($skpd as $s){
+            $skpd_[$i]   = $s->SKPD_ID;
+            $i++;
+        }
+        if(Auth::user()->level == 8 or Auth::user()->level == 9){
+            $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+        }else{
+            $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+        }
         $view       = array();
         foreach ($skpd as $skpd) {
             $total       = BLPerubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')

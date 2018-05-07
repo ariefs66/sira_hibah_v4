@@ -195,7 +195,7 @@
                   <span class="font-semibold">Dashboard</span>
                 </a>                
               </li>
-              @if(Auth::user()->level == 8 or Auth::user()->level == 9)
+              @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000')
               <li >
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="fa fa-laptop"></i>

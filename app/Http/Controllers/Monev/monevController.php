@@ -416,7 +416,7 @@ class monevController extends Controller
             
           $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
           $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$data->SKPD_ID)->where('KEGIATAN_KODE',$data->KEGIATAN_KODE)->first();
+          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$data->SKPD_ID)->first();
         
           if($monev_keg){
             $kegiatanid = $monev_keg->KEGIATAN_ID;
