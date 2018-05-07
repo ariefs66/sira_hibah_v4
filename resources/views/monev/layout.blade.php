@@ -211,11 +211,13 @@
                        <span>Ringkasan</span>
                     </a>
                   </li> 
+                  @if(Auth::user()->level == 8 or Auth::user()->level == 9)
                   <li>
                     <a href="{{ url('/') }}/monev/sinkronisasi/{{ $tahun }}/" class="padding-l-r-lg ">
                        <span >Detail</span>
                     </a>
                   </li>                 
+                  @endif
                   </ul>
               </li>     
               @endif
