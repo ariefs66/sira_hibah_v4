@@ -22,7 +22,6 @@ use App\Model\Monev\Monev_Outcome;
 use App\Model\Monev\Monev_Output;
 use App\Model\Monev\Monev_Tahapan;
 use App\Model\Monev\Monev_Log;
-use App\Model\BL;
 use App\Model\BLPerubahan;
 use App\Model\Rekening;
 use App\Model\Output;
@@ -193,7 +192,7 @@ class monevController extends Controller
 
    public function getTriwulan1($tahun,$filter){
           if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
-            $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+            $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','REF_OUTCOME.SATUAN_ID')
@@ -205,7 +204,7 @@ class monevController extends Controller
                         ->get();
           }else{
             $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
-            $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+            $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','REF_OUTCOME.SATUAN_ID')
@@ -243,7 +242,7 @@ class monevController extends Controller
 
    public function getTriwulan2($tahun, $filter){
           if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){  
-            $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+            $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','REF_OUTCOME.SATUAN_ID')
@@ -255,7 +254,7 @@ class monevController extends Controller
                         ->get();
           }else{
             $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
-            $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+            $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','REF_OUTCOME.SATUAN_ID')
@@ -292,7 +291,7 @@ class monevController extends Controller
       
    public function getTriwulan3($tahun, $filter){
         if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
-            $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+            $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','REF_OUTCOME.SATUAN_ID')
@@ -304,7 +303,7 @@ class monevController extends Controller
                         ->get();
           }else{
             $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
-            $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+            $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','REF_OUTCOME.SATUAN_ID')
@@ -342,7 +341,7 @@ class monevController extends Controller
 
       public function getTriwulan4($tahun, $filter){
         if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
-            $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+            $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','REF_OUTCOME.SATUAN_ID')
@@ -354,7 +353,7 @@ class monevController extends Controller
                         ->get();
           }else{
             $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
-            $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+            $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','REF_OUTCOME.SATUAN_ID')
@@ -446,11 +445,11 @@ class monevController extends Controller
           $tolak_ukur="";
           $satuan="";
           $satuan_nama="";
-          $monev_output  = Output::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')->get();
-          if($monev_output){
-          }else{
+          //$monev_output  = Output::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')->get();
+          //if($monev_output){
+          //}else{
             $monev_output  = OutputPerubahan::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT_PERUBAHAN.SATUAN_ID')->get();
-          }
+          //}
           $total = 0;
           foreach ($monev_output as $monev_output) {
             $sasaran = $sasaran . $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . " ". $monev_output->SATUAN_NAMA . "\r\n" ;
@@ -710,16 +709,16 @@ class monevController extends Controller
 
       public function getDetail($tahun, $skpd, $mode=1, $id){
 
-        $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
+        $data       = BL_Perubahan::Join('REFERENSI.REF_KEGIATAN','DAT_BL_PERUBAHAN.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->leftJoin('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
-                        ->leftJoin('REFERENSI.REF_SKPD','DAT_BL.SKPD_ID','=','REF_SKPD.SKPD_ID')
-                        ->Join('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
-                        ->leftJoin('REFERENSI.REF_URUSAN_SKPD','DAT_BL.SKPD_ID','=','REF_URUSAN_SKPD.SKPD_ID')
+                        ->leftJoin('REFERENSI.REF_SKPD','DAT_BL_PERUBAHAN.SKPD_ID','=','REF_SKPD.SKPD_ID')
+                        ->Join('REFERENSI.REF_SUB_UNIT','DAT_BL_PERUBAHAN.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+                        ->leftJoin('REFERENSI.REF_URUSAN_SKPD','DAT_BL_PERUBAHAN.SKPD_ID','=','REF_URUSAN_SKPD.SKPD_ID')
                         ->leftJoin('REFERENSI.REF_URUSAN','REF_URUSAN.URUSAN_ID','=','REF_URUSAN_SKPD.URUSAN_ID')
-                        ->groupBy('REF_URUSAN.URUSAN_KODE','REF_SKPD.SKPD_KODE','REF_PROGRAM.PROGRAM_KODE','KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','REF_SUB_UNIT.SUB_NAMA','REF_SUB_UNIT.SUB_ID','KEGIATAN_KODE','DAT_BL.BL_ID','BL_PAGU')
+                        ->groupBy('REF_URUSAN.URUSAN_KODE','REF_SKPD.SKPD_KODE','REF_PROGRAM.PROGRAM_KODE','KEGIATAN_NAMA','REF_KEGIATAN.KEGIATAN_ID','REF_SUB_UNIT.SUB_KODE','REF_SUB_UNIT.SUB_NAMA','REF_SUB_UNIT.SUB_ID','KEGIATAN_KODE','DAT_BL_PERUBAHAN.BL_ID','BL_PAGU')
                         ->where('BL_TAHUN',$tahun)
                         ->where('BL_DELETED',0)
-                        ->where('DAT_BL.SKPD_ID',$skpd)
+                        ->where('DAT_BL_PERUBAHAN.SKPD_ID',$skpd)
                         ->where('REF_KEGIATAN.PROGRAM_ID',$id)
                         ->selectRaw(' "REF_URUSAN"."URUSAN_KODE","REF_SKPD"."SKPD_KODE","REF_PROGRAM"."PROGRAM_KODE","KEGIATAN_NAMA","REF_KEGIATAN"."KEGIATAN_ID","REF_SUB_UNIT"."SUB_KODE","REF_SUB_UNIT"."SUB_NAMA","REF_SUB_UNIT"."SUB_ID","KEGIATAN_KODE","DAT_BL"."BL_ID","BL_PAGU" ')
                         ->get();
