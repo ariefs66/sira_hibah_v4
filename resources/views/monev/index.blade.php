@@ -463,7 +463,7 @@
 <script>
   $('.table-btl').on('click', '.table-btl > tbody > tr ', function () {
     if($("tr").hasClass('btl-rincian') == false){
-      @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
+      @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000' )
       skpd     = $('#filter-skpd').val();
     @else
       skpd     = @php echo \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID'); @endphp;
