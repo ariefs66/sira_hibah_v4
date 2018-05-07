@@ -426,7 +426,7 @@ class monevController extends Controller
             $kinerja = $monev_keg->$kinerja;
             $penghambat = $monev_keg->$penghambat;
             $pendukung = $monev_keg->$pendukung;
-            $monev_keg2  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$data->SKPD_ID)->where('KEGIATAN_KODE',$data->KEGIATAN_KODE)->orderBy('KEGIATAN_ID','DESC')->get();
+            $monev_keg2  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$data->SKPD_ID)->orderBy('KEGIATAN_ID','DESC')->get();
             if($monev_keg2){
               $kinerja = '';
               $kinerjap='KEGIATAN_T'.$mode;
