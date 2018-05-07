@@ -192,7 +192,7 @@ class monevController extends Controller
  }
 
    public function getTriwulan1($tahun,$filter){
-          if(Auth::user()->level == 8){
+          if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
@@ -242,7 +242,7 @@ class monevController extends Controller
       }
 
    public function getTriwulan2($tahun, $filter){
-          if(Auth::user()->level == 8){  
+          if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){  
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
@@ -291,7 +291,7 @@ class monevController extends Controller
       }
       
    public function getTriwulan3($tahun, $filter){
-        if(Auth::user()->level == 8){
+        if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
@@ -341,7 +341,7 @@ class monevController extends Controller
       
 
       public function getTriwulan4($tahun, $filter){
-        if(Auth::user()->level == 8){
+        if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
