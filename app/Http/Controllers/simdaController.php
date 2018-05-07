@@ -40,8 +40,7 @@ php7.0-xml
 	/* Cara install file yang dibutuhkan ekstensi sql server
 sudo su
 curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list >
-/etc/apt/sources.list.d/mssql-release.list
+curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
 exit
 sudo apt-get update
 sudo ACCEPT_EULA=Y apt-get install msodbcsql mssql-tools
@@ -51,8 +50,7 @@ echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 source ~/.bashrc
 	*/
 	/* Cara menambahkan konfigurasi ekstensi Sql Server
-sudo pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e
-"s|.*:\s*||"` system
+sudo pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system
 sudo pecl install sqlsrv
 sudo pecl install pdo_sqlsrv
 	*/
@@ -80,12 +78,84 @@ sudo ACCEPT_EULA=Y apt-get install msodbcsql=13.0.1.0-1 mssql-tools
 sudo apt-get install unixodbc-dev-utf16 #this step is optional but recommended*
 	*/
 
-	public function index($tahun){ // cek total belanja simda yang kode tidak sama dgn nol
+	public function index($tahun, Request $req){ // cek total belanja simda yang kode tidak sama dgn nol
 		$total 	= DB::connection('sqlsrv')->select('SELECT SUM(Total) as Total FROM Ta_Belanja_Rinc_Sub WHERE Kd_Prog != 0');
-		//print_r($total);exit();
+		if($req->aksi=="Belanja"){		
+			$Kd_Urusan = $req->urusan;
+			$Kd_Bidang = "4";
+			$Kd_Unit = "1";
+			$Kd_Sub = "2";
+			$Kd_Prog = "1";
+			$ID_Prog = "104";
+			$Kd_Keg= "17";
+			$Kd_Rek_1 = "5";
+			$Kd_Rek_2 = "2";
+			$Kd_Rek_3 = "2";
+			$Kd_Rek_4 = "11";
+			$Kd_Rek_5 = "1";
+
+			$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Belanja')
+			->where('Tahun',$tahun)
+			->where('Kd_Urusan',$Kd_Urusan)
+			->where('Kd_Bidang',$Kd_Bidang)
+			->where('Kd_Unit',$Kd_Unit)
+			->where('Kd_Sub',$Kd_Sub)
+			->where('Kd_Prog',$Kd_Prog)
+			->where('ID_Prog',$ID_Prog)
+			->where('Kd_Keg',$Kd_Keg)
+			->where('Kd_Rek_1',$Kd_Rek_1)
+			->where('Kd_Rek_2',$Kd_Rek_2)
+			->where('Kd_Rek_3',$Kd_Rek_3)
+			->where('Kd_Rek_4',$Kd_Rek_4)
+			->where('Kd_Rek_5',$Kd_Rek_5)
+			->count();
+
+			if($cek){
+				if($req->hapus==TRUE){
+					$cek 		= DB::connection('sqlsrv')->table('dbo.Ta_Belanja')
+					->where('Tahun',$tahun)
+					->where('Kd_Urusan',$Kd_Urusan)
+					->where('Kd_Bidang',$Kd_Bidang)
+					->where('Kd_Unit',$Kd_Unit)
+					->where('Kd_Sub',$Kd_Sub)
+					->where('Kd_Prog',$Kd_Prog)
+					->where('ID_Prog',$ID_Prog)
+					->where('Kd_Keg',$Kd_Keg)
+					->where('Kd_Rek_1',$Kd_Rek_1)
+					->where('Kd_Rek_2',$Kd_Rek_2)
+					->where('Kd_Rek_3',$Kd_Rek_3)
+					->where('Kd_Rek_4',$Kd_Rek_4)
+					->where('Kd_Rek_5',$Kd_Rek_5)
+					->delete();
+					return "Data Dihapus";
+				}	
+				return "Data SUdah Ada";
+			}else{
+				$value 	= array('Tahun' 			=> $tahun,
+				'Kd_Urusan' 		=> $Kd_Urusan,
+				'Kd_Bidang' 		=> $Kd_Bidang,
+				'Kd_Unit'			=> $Kd_Unit,
+				'Kd_Sub'			=> $Kd_Sub,
+				'Kd_Prog'			=> $Kd_Prog,
+				'ID_Prog'			=> $ID_Prog,
+				'Kd_Keg'			=> $Kd_Keg,
+				'Kd_Rek_1'			=> $Kd_Rek_1,
+				'Kd_Rek_2'			=> $Kd_Rek_2,
+				'Kd_Rek_3'			=> $Kd_Rek_3,
+				'Kd_Rek_4'			=> $Kd_Rek_4,
+				'Kd_Rek_5'			=> $Kd_Rek_5);
+		DB::connection('sqlsrv')->table('dbo.Ta_Belanja')->insert($value);
+		return "Berhasil";
+			}
+
+		}
+		
+		print_r($total);exit();
 		$data  	= array('tahun'=>$tahun);
 		return view('tosimda',$data);
 	}
+
+
 
 	public function trfSubUnit($tahun){ // transfer sub unit 
 		$data 	= Subunit::whereHas('skpd',function($skpd) use ($tahun){
