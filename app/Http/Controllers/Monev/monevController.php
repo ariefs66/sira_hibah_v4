@@ -538,7 +538,7 @@ class monevController extends Controller
       }
      
       $program = Input::get('PROGRAM_ID');
-      $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->first();
+      $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->where('SUB_ID',Input::get('SUB_ID'))->first();
 
       if($prog){
         $prog = Monev_Program::find($prog->PROGRAM_ID);
@@ -573,6 +573,7 @@ class monevController extends Controller
       $prog->PROGRAM_VALIDASI        = 0;
       $prog->PROGRAM_INPUT        = 0;
       $prog->SATUAN        = 126;
+      $prog->SUB_ID        = Input::get('SUB_ID');
       $prog->save(); 
       $program_id = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
       $total = intval(Input::get('TOTAL'));
@@ -820,7 +821,7 @@ class monevController extends Controller
           }
           }else{
             $data       = Monev_Program::where('PROGRAM_TAHUN',$tahun)
-            ->where('SKPD_ID',$skpd)
+            ->where('SKPD_ID',$skpd)->where('SUB_ID',$skpd)
             ->get();
             if($data){
               $cpendukung =  "PROGRAM_PENDUKUNG_T".$mode;
