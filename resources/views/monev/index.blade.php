@@ -645,6 +645,7 @@
         url: uri,
         type: "POST",
         data: {'_token'             : token,
+              'FAKTOR_ID'             : ID, 
               'SKPD_ID'             : SKPD_ID, 
               'PENDUKUNG'           : PENDUKUNG, 
               'PENGHAMBAT'          : PENGHAMBAT, 
@@ -687,7 +688,7 @@
       url   : "{{ url('/') }}/monev/{{ $tahun }}/faktor/"+skpd+"/"+id,
       success : function (data) {
         data = data.aaData[0];
-        $('#faktorid').val(data['FAKTOR_ID']);
+        $('#faktorid').val(data['ID']);
         $('#faktorskpd').val(data['SKPD_ID']);
         $('#faktortahun').val(data['TAHUN']);
         $('#faktorpendukung').val(data['PENDUKUNG']);
