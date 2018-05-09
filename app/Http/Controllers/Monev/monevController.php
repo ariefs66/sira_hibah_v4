@@ -829,7 +829,7 @@ class monevController extends Controller
           }
           }else{
             $data       = Monev_Program::where('PROGRAM_TAHUN',$tahun)
-            ->where('SKPD_ID',$skpd)
+            ->where('SKPD_ID',$skpd);
             if($sub_id){
               $data       = $data->where('SUB_ID',$sub_id);}
             $data       = $data->get();
