@@ -12,6 +12,7 @@ use DB;
 use Carbon;
 use App\Model\SKPD;
 use App\Model\Staff;
+use App\Model\Subunit;
 use App\Model\Program;
 use App\Model\Kegiatan;
 use App\Model\Monev\Monev_Kegiatan;
@@ -785,10 +786,17 @@ class monevController extends Controller
         if(empty($skpd)){
           $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
           $skpdnama   = SKPD::where('SKPD_ID',Auth::user()->id)->where('SKPD_TAHUN',$tahun)->value('SKPD_NAMA'); 
+          
         }else{
           $skpdnama   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_NAMA'); 
         }
-         
+        $sub_id = Subunit::where('SKPD_ID',$skpd)->count();
+        if($sub_id==1){
+          $sub_id = Subunit::where('SKPD_ID',$skpd)->value('SUB_ID');
+        }else{
+          $sub_id = '%';
+        }
+
           $data       = Monev_Faktor::where('TAHUN',$tahun)
                         ->where('T',$mode)
                         ->where('SKPD_ID',$skpd)
@@ -821,7 +829,7 @@ class monevController extends Controller
           }
           }else{
             $data       = Monev_Program::where('PROGRAM_TAHUN',$tahun)
-            ->where('SKPD_ID',$skpd)->where('SUB_ID',$skpd)
+            ->where('SKPD_ID',$skpd)->where('SUB_ID','ILIKE',$sub_id)
             ->get();
             if($data){
               $cpendukung =  "PROGRAM_PENDUKUNG_T".$mode;
