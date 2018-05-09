@@ -148,7 +148,7 @@ class editorController extends Controller
             } else {
                 $sub_id = false;
             }
-            $monev = Monev_Program::where('REF_PROGRAM_ID', $data->PROGRAM_ID)->where('PROGRAM_TAHUN', $tahun);
+            $monev = Monev_Program::where('REF_PROGRAM_ID', $data->PROGRAM_ID)->where('PROGRAM_TAHUN', $tahun)->where('SKPD_ID', $skpd);
             if ($sub_id) {
                 $monev = $monev->where('SUB_ID', $tahun);
             }
