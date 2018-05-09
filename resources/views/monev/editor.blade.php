@@ -107,7 +107,7 @@
                   ]}" class="table table-btl table-striped b-t b-b table-pegawai " id="table-pegawai">
                   <thead>
                     <tr>                   
-                      <th>No </th>
+                      <th># </th>
                       <th class="hide">ID </th>
                       <th class="hide">MODE </th>
                       <th>PROGRAM </th>
@@ -278,27 +278,27 @@
       <div class="form-group">
         <label for="kegiatan" class="col-md-3">Program</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Nama Program" id="program_nama" disabled>          
-          <input type="hidden" class="form-control" placeholder="Nama Program" id="program" disabled>          
+          <input type="text" class="form-control" placeholder="Nama Program" id="program_nama" >          
+          <input type="hidden" class="form-control" placeholder="Nama Program" id="program" >          
         </div> 
       </div>
       <div class="form-group">
         <label for="kegiatan" class="col-md-3">Kegiatan</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Nama Kegiatan" id="kegiatan_nama" disabled>          
-          <input type="hidden" class="form-control" placeholder="Nama Kegiatan" id="kegiatan" disabled>          
+          <input type="text" class="form-control" placeholder="Nama Kegiatan" id="kegiatan_nama" >          
+          <input type="hidden" class="form-control" placeholder="Nama Kegiatan" id="kegiatan" >          
         </div> 
       </div> 
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Anggaran</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Total Anggaran" id="anggaran" disabled>          
+          <input type="text" class="form-control" placeholder="Total Anggaran" id="anggaran" >          
         </div> 
       </div>
       <div class="form-group">
         <label class="col-sm-3">Output</label>
         <div class="col-sm-9">
-          <textarea class="w-full" id="target" placeholder="Tidak ada Outcome Tolak Ukur" disabled>
+          <textarea class="w-full" id="target" placeholder="Tidak ada Outcome Tolak Ukur" >
           </textarea>
         </div>
       </div>
@@ -309,7 +309,7 @@
           <input type="number" required="true" min="0" step="0.01" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" value="0"></input>       
         </div> 
         <div class="col-sm-4">
-          <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" disabled></input> 
+          <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" ></input> 
           <input type="hidden" class="form-control" id="satuan"></input>
           <input type="hidden" class="form-control" id="output_target"></input>
           <input type="hidden" class="form-control" id="output"></input>
@@ -322,7 +322,7 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Realisasi Anggaran</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Masukan Realisasi Anggaran" id="realisasi" disabled >          
+          <input type="text" class="form-control" placeholder="Masukan Realisasi Anggaran" id="realisasi"  >          
         </div>
       </div>
 
@@ -695,11 +695,11 @@
         $('#faktortriwulan').val(data['TRIWULAN']);
         $('#faktorrenja').val(data['RENJA']);
         $('#faktorsasaran').val(data['SASARAN']);
-        $("#faktorpendukung").prop('disabled', data['INPUT']);
-        $("#faktorpenghambat").prop('disabled', data['INPUT']);
-        $("#faktortriwulan").prop('disabled', data['VALIDASI']);
-        $("#faktorrenja").prop('disabled', data['VALIDASI']);
-        $("#faktorsasaran").prop('disabled', data['INPUT']);
+        $("#faktorpendukung").prop('', data['INPUT']);
+        $("#faktorpenghambat").prop('', data['INPUT']);
+        $("#faktortriwulan").prop('', data['VALIDASI']);
+        $("#faktorrenja").prop('', data['VALIDASI']);
+        $("#faktorsasaran").prop('', data['INPUT']);
         $(".judul").html(data['JUDUL']+' ' +data['SKPD_NAMA']);
         if(data['INPUT'] || data['VALIDASI']){
           $('#savefaktor').show();
