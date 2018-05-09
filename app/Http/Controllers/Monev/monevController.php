@@ -794,7 +794,7 @@ class monevController extends Controller
         if($sub_id==1){
           $sub_id = Subunit::where('SKPD_ID',$skpd)->value('SUB_ID');
         }else{
-          $sub_id = '%';
+          $sub_id = FALSE;
         }
 
           $data       = Monev_Faktor::where('TAHUN',$tahun)
@@ -829,8 +829,10 @@ class monevController extends Controller
           }
           }else{
             $data       = Monev_Program::where('PROGRAM_TAHUN',$tahun)
-            ->where('SKPD_ID',$skpd)->where('SUB_ID','ILIKE',$sub_id)
-            ->get();
+            ->where('SKPD_ID',$skpd)
+            if($sub_id){
+              $data       = $data->where('SUB_ID',$sub_id);}
+            $data       = $data->get();
             if($data){
               $cpendukung =  "PROGRAM_PENDUKUNG_T".$mode;
               $cpenghambat = "PROGRAM_PENGHAMBAT_T".$mode;
