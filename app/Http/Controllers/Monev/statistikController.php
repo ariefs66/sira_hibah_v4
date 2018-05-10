@@ -53,7 +53,7 @@ class statistikController extends Controller
           array_push($view, array( 'KODE'       =>$skpd->SKPD_ID,
                                    'NAMA'     =>$skpd->SKPD_NAMA,
                                    'TOTAL'    =>$total,
-                                   'ISI'      =>$monev->unique("PROGRAM_KODE")->count()));
+                                   'ISI'      =>$monev->distinct()->count()));
             $program+=$total;
             $monev_program+=$monev->count();
         }
