@@ -50,15 +50,10 @@ class statistikController extends Controller
                         ->get()->count();
           $monev        = Monev_Program::where('DAT_PROGRAM.SKPD_ID',$skpd->SKPD_ID)->where('PROGRAM_TAHUN',$tahun)
           ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID');
-          $sub_id = Subunit::where('SKPD_ID', $skpd->SKPD_ID)->count();
-            if ($sub_id == 1) {
-                $sub_id = Subunit::where('SKPD_ID', $skpd->SKPD_ID)->value('SUB_ID');
-                $monev = $monev->where('SUB_ID', $sub_id);
-            }
           array_push($view, array( 'KODE'       =>$skpd->SKPD_ID,
                                    'NAMA'     =>$skpd->SKPD_NAMA,
                                    'TOTAL'    =>$total,
-                                   'ISI'      =>$monev->count()));
+                                   'ISI'      =>$monev->unique("PROGRAM_KODE")->count()));
             $program+=$total;
             $monev_program+=$monev->count();
         }
