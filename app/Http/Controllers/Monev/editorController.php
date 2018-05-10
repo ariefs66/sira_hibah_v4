@@ -150,7 +150,7 @@ class editorController extends Controller
             }
             $monev = Monev_Program::where('REF_PROGRAM_ID', $data->PROGRAM_ID)->where('PROGRAM_TAHUN', $tahun)->where('SKPD_ID', $skpd);
             if ($sub_id) {
-                $monev = $monev->where('SUB_ID', $tahun);
+                $monev = $monev->where('SUB_ID', $sub_id);
             }
             $monev = $monev->leftJoin('REFERENSI.REF_SATUAN', 'REF_SATUAN.SATUAN_ID', '=', 'DAT_PROGRAM.SATUAN');
             if ($monev->count()) {
@@ -160,11 +160,13 @@ class editorController extends Controller
             }
 
             $opsi = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-				<li><a onclick="return tambah(\'' . $data->SUB_ID . '\',\'' . $data->PROGRAM_ID . '\')"><i class="fa mi-edit"></i>Buat</a></li >
-					<li><a onclick=""><i class="fa fa-refresh"></i>Sinkronisasi Kinerja</a></li></ul ></div > ';
+				<li><a onclick="return tambah(\'' . $sub_id . '\',\'' . $data->PROGRAM_ID . '\')"><i class="fa mi-edit"></i>Buat</a></li >
+                <li><a onclick=""><i class="fa fa-refresh"></i>Sinkronisasi Kegiatan</a></li>
+                <li><a onclick=""><i class="fa fa-refresh"></i>Sinkronisasi Kinerja</a></li>
+                <li><a onclick=""><i class="fa fa-refresh"></i>Sinkronisasi Realisasi</a></li></ul ></div > ';
 
             array_push($view, array('ID' => $opsi,
-                'PROGRAM_ID' => $monev->value('PROGRAM_ID'),
+                'PROGRAM_ID' => ($monev->value('PROGRAM_ID')>0 ? $monev->value('PROGRAM_ID') : 0),
                 'MODE' => 1,
                 'PROGRAM' => $data->PROGRAM_KODE . '-' . $data->PROGRAM_NAMA,
                 'PROGRAM_KODE' => $data->PROGRAM_KODE,
@@ -402,10 +404,7 @@ class editorController extends Controller
         $opsi = '';
         $akb = '';
         foreach ($data as $data) {
-
-            $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\'' . $data->BL_ID . '\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
-            $akb = '<div class="action visible pull-right"><a href="/main/' . $tahun . '/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-           
+    
             if($monev_keg) {
                 $kegiatanid = $monev_keg->KEGIATAN_ID;
                 $kinerja = 'KEGIATAN_T' . $mode;
@@ -507,6 +506,65 @@ class editorController extends Controller
             return "Hapus Gagal!";
         }
         return "Hapus Berhasil!";
+    }
+
+    public function simpanProgram($tahun, $mode = 1)
+    {
+        $mode = Input::get('MODE');
+        $program = Input::get('PROGRAM_ID');
+        $prog = Program::where('REF_PROGRAM_ID', $program)->where('PROGRAM_TAHUN', $tahun)->first();
+
+        if ($prog) {
+            $prog = Monev_Program::find($prog->PROGRAM_ID);
+            $prog->USER_UPDATED = Auth::user()->id;
+            $prog->TIME_UPDATED = Carbon\Carbon::now();
+            $prog->$kinerjap = intval(Input::get('KINERJA'));
+            $prog->$pendukungp = $prog->$pendukungp . ' ' . Input::get('PENDUKUNG');
+            $prog->$penghambatp = $prog->$penghambatp . ' ' . Input::get('PENGHAMBAT');
+            $prog->PROGRAM_ANGGARAN = intval(Input::get('KEGIATAN_ANGGARAN'));
+        } else {
+            $prog = new Monev_Program;
+            $prog->REF_PROGRAM_ID = Input::get('PROGRAM_ID');
+            $prog->USER_CREATED = Auth::user()->id;
+            $prog->TIME_CREATED = Carbon\Carbon::now();
+            $prog->$kinerjap = intval($before);
+            $prog->$pendukungp = Input::get('PENDUKUNG');
+            $prog->$penghambatp = Input::get('PENGHAMBAT');
+            $prog->PROGRAM_TAHUN = $tahun;
+            $prog->PROGRAM_ANGGARAN = Input::get('KEGIATAN_ANGGARAN');
+            $outcome = Outcome::where('PROGRAM_ID', Input::get('PROGRAM_ID'))->get();
+            foreach ($outcome as $outcome) {
+                $monev_outcome = new Monev_Outcome;
+                $monev_outcome->PROGRAM_ID = Input::get('PROGRAM_ID');
+                $monev_outcome->OUTCOME_TOLAK_UKUR = $outcome->OUTCOME_TOLAK_UKUR;
+                $monev_outcome->OUTCOME_TARGET = $outcome->OUTCOME_TARGET;
+                $monev_outcome->save();
+            }
+        }
+        $prog->SKPD_ID = $skpd;
+        $prog->PROGRAM_KODE = Input::get('PROGRAM_KODE');
+        $prog->PROGRAM_NAMA = Input::get('PROGRAM_NAMA');
+        $prog->PROGRAM_VALIDASI = 0;
+        $prog->PROGRAM_INPUT = 0;
+        $prog->SATUAN = 126;
+        $prog->SUB_ID = Input::get('SUB_ID');
+        $prog->save();
+        $program_id = Monev_Program::where('REF_PROGRAM_ID', Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN', $tahun)->value('PROGRAM_ID');
+        
+        $prog = Monev_Program::find($program_id);
+
+        if ($counter > 0) {
+            $jumlah = (floatval($before) / $counter);
+            if (floatval($prog->$kinerjap) > 0) {
+                $prog->$kinerjap = (floatval($prog->$kinerjap) + $jumlah) / 2;
+            } else {
+                $prog->$kinerjap = floatval($prog->$kinerjap) + $jumlah;
+            }
+        } else {
+            $prog->$kinerjap = floatval($before);
+        }
+        $prog->save();
+        return 'Berhasil!';
     }
 
     public function simpanKegiatan($tahun, $mode = 1)
@@ -684,7 +742,7 @@ class editorController extends Controller
             $realisasi->save();
         }
         $prog = Monev_Program::find($program_id);
-
+        
         if ($counter > 0) {
             $jumlah = (floatval($before) / $counter);
             if (floatval($prog->$kinerjap) > 0) {
@@ -699,13 +757,17 @@ class editorController extends Controller
         return 'Berhasil!';
     }
 
-    public function getDetail($tahun, $skpd, $mode = 1, $id)
+    public function getDetail($tahun, $skpd, $mode = 1, $id=0)
     {
-
-        $data = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_KEGIATAN.SUB_ID')
+        if($id==0){
+            $data = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_KEGIATAN.SUB_ID')
             ->leftJoin('REFERENSI.REF_SATUAN', 'REF_SATUAN.SATUAN_ID', '=', 'DAT_KEGIATAN.SATUAN')
-            ->where('SKPD_ID', $id)->where('REF_KEGIATAN_ID',$id)->where('SUB_ID',$id)
-            ->orwhere('PROGRAM_ID', $id)->get();
+            ->where('DAT_KEGIATAN.KEGIATAN_ID', $id)->where('DAT_KEGIATAN.SKPD_ID', $skpd)->where('DAT_KEGIATAN.SUB_ID', $id)->get();
+        }else{
+            $data = Monev_Kegiatan::leftJoin('REFERENSI.REF_SUB_UNIT', 'REF_SUB_UNIT.SUB_ID', '=', 'DAT_KEGIATAN.SUB_ID')
+            ->leftJoin('REFERENSI.REF_SATUAN', 'REF_SATUAN.SATUAN_ID', '=', 'DAT_KEGIATAN.SATUAN')
+            ->where('PROGRAM_ID', $id)->get();
+        }
 
         $view = array();
         $no = 1;
@@ -733,7 +795,7 @@ class editorController extends Controller
             $opsi = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
               <li><a onclick="return ubah(\'' . $mode . '\',\'' . $data->KEGIATAN_ID . '\')"><i class="fa mi-edit"></i>Edit</a></li>
               <li><a onclick="return hapus(\'' . $skpd . '\',\'' . $data->KEGIATAN_ID . '\')"><i class="fa fa-close"></i>Hapus</a></li>
-              <li><a onclick="return info(\'' . $mode . '\',\'' . $data->KEGIATAN_ID . '\')"><i class="fa fa-pencil-square"></i>Info</a></li></ul></div>';
+              <li><a onclick="return info(\'' . $mode . '\',\'' . $data->KEGIATAN_ID . '\')"><i class="fa fa-refresh"></i>Sinkronisasi</a></li></ul></div>';
             array_push($view, array('NO' => $no++,
                 'KEGIATAN' => $data->KEGIATAN_NAMA,
                 'KEGIATAN_ID' => $data->KEGIATAN_ID,
