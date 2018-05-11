@@ -179,8 +179,8 @@ class ExcelController extends Controller
         if($row==17){
           $row=19;
         }
-        if(intval($program)>0){
-          $hitungt1 = intval($t1) / intval($program);
+        if(intval($jumlah)>0){
+          $hitungt1 = intval($t1) / intval($jumlah);
         }else{
           $hitungt1 = intval($t1);
         }
