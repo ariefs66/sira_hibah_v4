@@ -186,10 +186,10 @@ class ExcelController extends Controller
         }
         $sheet->setCellValue('K'.($row), number_format($hitungt1,0,'.',',').'%');
 				$helper = new PHPExcel_Helper_HTML;
-				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br($pendukung)."</b>";
+				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br(str_limit($pendukung, 300))."</b>";
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+2), $richText);
-				$html = "<b>Faktor penghambat pencapain kinerja:<br>".nl2br($penghambat)."</b>";
+				$html = "<b>Faktor penghambat pencapain kinerja:<br>".nl2br(str_limit($penghambat,300))."</b>";
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+3), $richText);
 				$html = "<b>Tindak lanjut yang diperlukan dalam triwulan berikutnya:<br>".nl2br($triwulan)."</b>";
