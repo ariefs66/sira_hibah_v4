@@ -51,6 +51,7 @@ use App\Model\Realisasi;
 use App\Model\RincianLog;
 use App\Model\AKB_BL;
 use App\Model\AKB_BL_Perubahan;
+use App\Model\Rekgiat;
 
 class blController extends Controller
 {
@@ -82,12 +83,13 @@ class blController extends Controller
         $bl         = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
         $skpd_      = $this->getSKPD($tahun);
 
-        $user       = User::whereHas('userbudget', function($q) use ($skpd_){
+        $user       = User::whereHas('userbudget', function($q) use ($skpd_,$tahun){
                             $q->where('SKPD_ID',$skpd_);
+                            $q->where('TAHUN',$tahun);
                         })->where('app',3)->where('level',1)->get();
 
-        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
-        $skpd_      = array(); 
+        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->get();
+        $skpd_      = array();
         $i = 0;
         foreach($skpd as $s){
             $skpd_[$i]   = $s->SKPD_ID;
@@ -315,10 +317,11 @@ class blController extends Controller
             $JB_523 = $JB_523_murni - $JB_523;  
         }                                
                                                              
-        
+        $rekening = Rekgiat::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','REF_REKGIAT.REKENING_ID')
+                    ->where('KEGIATAN_ID',$bl->KEGIATAN_ID)->orderBy('REKENING_KODE')->get();
 
         if($status == 'murni')
-        return View('budgeting.belanja-langsung.detail',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r]);
+        return View('budgeting.belanja-langsung.detail',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r, 'rekening'=>$rekening]);
         else
         return View('budgeting.belanja-langsung.detail_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'JB_521'=>$JB_521,'JB_522'=>$JB_522,'JB_523'=>$JB_523]);
     }
@@ -1189,14 +1192,14 @@ class blController extends Controller
     //ADD
     public function add($tahun,$status){
         $skpd           = $this->getSKPD($tahun);
-        $subunit        = Subunit::where('SKPD_ID',$skpd)->orderBy('SUB_ID')->get();
-        $program        = Progunit::where('SKPD_ID',$skpd)->orderBy('PROGRAM_ID')->get();
+        $subunit        = Subunit::where('SKPD_ID',$skpd)->where('SUB_TAHUN',$tahun)->orderBy('SUB_KODE')->get();
+        $program        = Progunit::join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','DAT_PROGUNIT.PROGRAM_ID')->where('SKPD_ID',$skpd)->where('TAHUN',$tahun)->orderBy('PROGRAM_KODE')->get();
         $jenis          = JenisGiat::all();
         $sumber         = SumberDana::all();
         $pagu           = Pagu::all();
-        $sasaran        = Sasaran::all();
-        $lokasi         = Lokasi::all();
-        $tag            = Tag::all();
+        $sasaran        = Sasaran::all(); 
+        $lokasi         = Lokasi::where('LOKASI_TAHUN',$tahun)->get(); //tahun
+        $tag            = Tag::where('TAG_TAHUN',$tahun)->get();   //tahun
         $satuan         = Satuan::all();
 
         $bulan          = array('',
@@ -1250,9 +1253,17 @@ class blController extends Controller
         if($status == 'murni') $s = 1;
         else $s = 2;
 
+        $skpd           = $this->getSKPD($tahun);
+
         if($status == 'murni'){
+           // $keg_id      = BL::where('BL_TAHUN',$tahun)->where('KEGIATAN_ID',Input::get('kegiatan'))->where('SUB_ID',Input::get('sub_id'))->where('SKPD_ID',$skpd)->get();
+
+            //dd($keg_id);
+
+            $get_id      = BL::max('BL_ID');
             $bl                     = new BL;
             $bl->BL_TAHUN           = $tahun;
+            $bl->BL_ID              = ($get_id+1);
             $bl->KEGIATAN_ID        = Input::get('kegiatan');
             $bl->JENIS_ID           = Input::get('jenis-kegiatan');
             $bl->SUMBER_ID          = Input::get('sumber-dana');
@@ -1262,6 +1273,7 @@ class blController extends Controller
             $bl->SASARAN_ID         = Input::get('sasaran');
             $bl->LOKASI_ID          = Input::get('lokasi');
             $bl->SUB_ID             = Input::get('sub_id');
+            $bl->SKPD_ID            = $skpd;
             $bl->BL_TAG             = $tag_;
             $bl->BL_STATUS          = $s;
             $bl->BL_VALIDASI        = '0';
@@ -2080,8 +2092,8 @@ class blController extends Controller
     //EDIT
     public function edit($tahun,$status,$id){
         $skpd           = $this->getSKPD($tahun);
-        $subunit        = Subunit::where('SKPD_ID',$skpd)->orderBy('SUB_ID')->get();         
-        $program        = Progunit::where('SKPD_ID',$skpd)->orderBy('PROGRAM_ID')->get();
+        $subunit        = Subunit::where('SKPD_ID',$skpd)->where('SUB_TAHUN',$tahun)->orderBy('SUB_ID')->get();         
+        $program        = Progunit::where('SKPD_ID',$skpd)->where('TAHUN',$tahun)->orderBy('PROGRAM_ID')->get();
         $jenis          = JenisGiat::all();
         $sumber         = SumberDana::all();
         $pagu           = Pagu::all();
@@ -3272,11 +3284,11 @@ class blController extends Controller
             $program->PROGRAM_KODE == '06' ||
             ($program->urusan->URUSAN_KODE == '4.05' && $program->PROGRAM_KODE == '28') ||
             ($program->urusan->URUSAN_KODE == '2.07' && $program->PROGRAM_KODE == '22')) {
-            $data =  Kegiatan::where('PROGRAM_ID',$id)->get();
+            $data =  Kegiatan::where('PROGRAM_ID',$id)->orderBy('KEGIATAN_KODE')->get();
         }else{
             $data =  Kegiatan::whereHas('kegunit',function($q) use ($skpd){
                 $q->where('SKPD_ID',$skpd);
-            })->where('PROGRAM_ID',$id)->get();            
+            })->where('PROGRAM_ID',$id)->orderBy('KEGIATAN_KODE')->get();            
         }
         $view = "";
         foreach ($data as $data) {
@@ -3356,8 +3368,18 @@ class blController extends Controller
         //         $x->where('KOMPONEN_KODE','like',$id.'%');
         //     }); 
         // })->where('REKENING_TAHUN',$tahun)->where('REKENING_KUNCI',0)->orderBy('REKENING_KODE')->get();  
-        // ->where('REKENING_TAHUN',$tahun)      
-        $data       = Rekening::where('REKENING_KODE','like','5%')->where('REKENING_TAHUN',$tahun)->whereRaw('LENGTH("REKENING_KODE") = 11')->where('REKENING_KUNCI',0)->get();
+        // ->where('REKENING_TAHUN',$tahun) 
+        $bl   = BL::where('BL_ID',$id)->first();  
+        $data = Rekgiat::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','REF_REKGIAT.REKENING_ID')
+                    ->where('KEGIATAN_ID',$bl->KEGIATAN_ID)
+                    ->where('REKENING_KUNCI',0)
+                    ->where('REKENING_TAHUN',$tahun)
+                    ->whereRaw('LENGTH("REKENING_KODE") = 11')
+                    ->orderBy('REKENING_KODE')
+                    ->get();
+
+        /*tanpa nomenklatur*/            
+        /*$data       = Rekening::where('REKENING_KODE','like','5%')->where('REKENING_TAHUN',$tahun)->whereRaw('LENGTH("REKENING_KODE") = 11')->where('REKENING_KUNCI',0)->get();*/
         $view       = "";
         foreach($data as $d){
             //if($d->REKENING_KUNCI == 0){
@@ -3425,7 +3447,31 @@ class blController extends Controller
         //print_r(substr(Auth::user()->mod,1,1));exit;
         //print_r(Auth::user()->level);exit;
 
-        if((Auth::user()->level == 1 and substr(Auth::user()->mod,1,1) == 0) or Auth::user()->level == 2){
+        if(Auth::user()->level == 1 and substr(Auth::user()->mod,1,1) == 0){
+
+            $skpd       = $this->getSKPD($tahun);
+            $data       = BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
+                           ->where('SKPD_ID',$skpd)
+                           ->where('BL_TAHUN',$tahun)
+                           ->where('BL_DELETED',0)
+                           ->where('USER_ID',Auth::user()->id)->get();
+
+            $pagu_foot       = BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
+                               ->where('SKPD_ID',$skpd)
+                               ->where('BL_TAHUN',$tahun)
+                               ->where('BL_DELETED',0)
+                               ->where('USER_ID',Auth::user()->id)
+                               ->sum('BL_PAGU');
+
+            $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                                    ->join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
+                                    ->where('DAT_BL.BL_TAHUN',$tahun)
+                                    ->where('DAT_BL.BL_DELETED',0)
+                                    ->WHERE('SKPD_ID',$skpd)
+                                    ->where('USER_ID',Auth::user()->id)->sum('DAT_RINCIAN.RINCIAN_TOTAL');                      
+        }
+        elseif(Auth::user()->level == 2){
+            
             $skpd       = $this->getSKPD($tahun);
             $data       = BL::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
@@ -3473,12 +3519,19 @@ class blController extends Controller
             }
             // print_r($skpd_);exit();
             if($filter == 0){
+                
                 $data       = BL::whereHas('subunit',function($q) use ($skpd_){
                                         $q->whereIn('SKPD_ID',$skpd_);
-                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
+                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)
+                                ->get();
+                
+
+
                 $pagu_foot    = 0;
                 $rincian_foot = 0;
             }else{
+
+
                 $data       = BL::whereHas('subunit',function($q) use ($filter){
                                         $q->where('SKPD_ID',$filter);
                                 })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();   
@@ -3568,7 +3621,12 @@ class blController extends Controller
 
             if((Auth::user()->level == 2 and $data->kunci->KUNCI_GIAT == 0) or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
                 //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
-                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';
+                
+                /* menu indikator*/
+                /*$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';*/
+                
+                /*tanpa menu indikator*/
+                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li>';
             }
 
             if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){
@@ -3594,10 +3652,14 @@ class blController extends Controller
             
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                $no        .= '
+                /*$no        .= '
                 <li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
                 <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
                 <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
+                <li class="divider"></li>
+                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';*/
+                $no        .= '
+                <li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }else{
@@ -3855,8 +3917,8 @@ class blController extends Controller
     }
 
     public function getLog($tahun,$status,$id){
-        if($status == 'murni') $bl         = BL::where('BL_ID',$id)->first();
-        else $bl         = BLPerubahan::where('BL_ID',$id)->first();
+        if($status == 'murni') $bl         = BL::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
+        else $bl         = BLPerubahan::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
 
         $staff      = Staff::whereHas('user', function($q){
                         $q->where('level','1');
@@ -3868,8 +3930,11 @@ class blController extends Controller
         if(!empty($staff[0])) $staff1 = $staff[0]->user->email.' - '.$staff[0]->user->name;
         if(!empty($staff[1])) $staff2 = $staff[1]->user->email.' - '.$staff[1]->user->name;
 
-        if($status == 'murni') $log        = Log::where('LOG_DETAIL','BL#'.$id)->orWhere('LOG_DETAIL','like','BL#'.$id.'#%')->orderBy('LOG_ID')->get();
-        else $log        = Log::where('LOG_DETAIL','BLPERUBAHAN#'.$id)->orWhere('LOG_DETAIL','like','BL#'.$id.'#%')->orderBy('LOG_ID')->get();
+        if($status == 'murni'){ $log        = Log::where('LOG_DETAIL','BL#'.$id)->orWhere('LOG_DETAIL','like','BL#'.$id.'#%')->where('LOG_TIME','>','2018-05-01 01:01:01')->orderBy('LOG_ID')->get();
+        }
+        else{ 
+            $log        = Log::where('LOG_DETAIL','BLPERUBAHAN#'.$id)->orWhere('LOG_DETAIL','like','BL#'.$id.'#%')->whereDate('LOG_TIME','>','2018-05-01 01:01:01')->orderBy('LOG_ID')->get();
+        }
         $timeline   = '';
 
         foreach ($log as $l) {

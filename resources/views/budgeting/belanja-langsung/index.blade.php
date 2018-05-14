@@ -48,9 +48,6 @@
                  </div>
                  @endif
                </div>   
-
-
-
                
 
                 <div role="tabpanel" class="active tab-pane" id="tab-1">
@@ -399,9 +396,12 @@ function setStaff(){
   staff2      = $('#staff-2').val(); 
   idstaff1    = $('#id-staff1').val(); 
   idstaff2    = $('#id-staff2').val(); 
-  if(staff1 == '') $.alert('Harap isi staff miniman satu staff!');
+  if(staff1 == '') {
+    $.alert('Harap isi staff miniman satu staff!');
+  }
   if(staff1 == staff2){
-     $.alert('Staf tidak boleh sama!'); 
+     $.alert('Staf tidak boleh sama!');
+     $('#staff-2').find('option').remove().end().append('<option>Pilih Staff</option>');
   }else{
     $.ajax({
         url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/setStaff",
@@ -533,6 +533,7 @@ function setStaff(){
     });
     $('#modal-pagu').modal('show');    
   }
+  
   function simpanpagu(){
     var token        = $('#token').val();    
     var id           = $('#id-bl').val();    

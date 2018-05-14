@@ -42,6 +42,7 @@
                                     sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/urusan/getData',
                                     aoColumns: [
                                     { mData: 'no',class:'text-center' },
+                                    { mData: 'URUSAN_TAHUN' },
                                     { mData: 'URUSAN_KODE' },
                                     { mData: 'URUSAN_NAMA' },
                                     { mData: 'aksi' }
@@ -49,12 +50,13 @@
                                     <thead>
                                       <tr>
                                         <th>No</th>
+                                        <th>Tahun Urusan</th>
                                         <th>Kode Urusan</th>
                                         <th>Nama Urusan</th>
                                         <th>Aksi</th>
                                       </tr>
                                       <tr>
-                                        <th colspan="4" class="th_search">
+                                        <th colspan="5" class="th_search">
                                             <i class="icon-bdg_search"></i>
                                             <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Urusan" aria-controls="DataTables_Table_0">
                                         </th>

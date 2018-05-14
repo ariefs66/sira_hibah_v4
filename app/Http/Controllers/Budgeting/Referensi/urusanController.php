@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Budgeting\Referensi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Model\Urusan;
+use App\Model\UrusanKategori1;
 use View;
 use Carbon;
 use Response;
@@ -17,7 +18,7 @@ class urusanController extends Controller
     }
 
     public function getData($tahun){
-    	$data 			= Urusan::where('URUSAN_TAHUN',$tahun)->orderBy('URUSAN_KODE')->get();
+    	$data 			= UrusanKategori1::where('URUSAN_KAT1_TAHUN',$tahun)->orderBy('URUSAN_KAT1_KODE')->get();
     	$no 			= 1;
     	$aksi 			= '';
     	$view 			= array();
@@ -28,8 +29,9 @@ class urusanController extends Controller
                 $aksi="";
             }
     		array_push($view, array( 'no'			=>$no,
-                                     'URUSAN_KODE'  =>$data->URUSAN_KODE,
-                                     'URUSAN_NAMA'	=>$data->URUSAN_NAMA,
+                                     'URUSAN_TAHUN'  =>$data->URUSAN_KAT1_TAHUN,
+                                     'URUSAN_KODE'  =>'0'.$data->URUSAN_KAT1_KODE,
+                                     'URUSAN_NAMA'	=>$data->URUSAN_KAT1_NAMA,
                                      'aksi'			=>$aksi));
     		$no++;
     	}

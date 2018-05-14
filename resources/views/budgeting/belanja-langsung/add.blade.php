@@ -168,7 +168,7 @@
                         <hr class="m-t-xl">
                         <div class="form-group">
                           <div class="col-md-12">
-                           <a class="btn input-xl m-t-md btn-danger pull-right"><i class="fa fa-close m-r-xs"></i>Batal</a>
+                           <a class="btn input-xl m-t-md btn-danger pull-right" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung"><i class="fa fa-close m-r-xs"></i>Batal</a>
                            <button class="btn input-xl m-t-md btn-success pull-right m-r-md" type="submit"><i class="fa fa-check m-r-xs"></i>Simpan</button>
                          </div>
                        </div>

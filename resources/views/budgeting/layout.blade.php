@@ -262,11 +262,17 @@
                     </a>
                   </li>
                   @endif
+                  
                   <li>
+                    @if(Auth::user()->level == 2 or Auth::user()->level == 8)
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung" class="padding-l-r-lg ">
+                    @else  
+                    <a onclick="$.alert('Masih Ditutup')" class="padding-l-r-lg ">  
+                    @endif
                        <span >Belanja Tidak Langsung</span>
                     </a>
                   </li>
+                  
                   @if(Auth::user()->level == 2 or Auth::user()->level == 8)
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/arsip/belanja-langsung" class="padding-l-r-lg ">     
@@ -321,7 +327,7 @@
                 </a>                
               </li>
               @endif
-              @if(Auth::user()->level != 0)
+              @if(Auth::user()->level != 0 && Auth::user()->level != 1)
               <li >
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="icon-bdg_setting3"></i>
@@ -345,8 +351,23 @@
                     </a>
                   </li>
                   <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/fungsi" class="padding-l-r-lg ">               
+                       <span >Fungsi</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/bidang" class="padding-l-r-lg ">               
+                       <span >Bidang</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/skpd" class="padding-l-r-lg ">            
                        <span >Perangkat Daerah</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/subunit" class="padding-l-r-lg ">            
+                       <span >Sub Unit</span>
                     </a>
                   </li>
                   @endif

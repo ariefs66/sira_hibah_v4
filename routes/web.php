@@ -286,6 +286,7 @@ Route::post('/main/{tahun}/{status}/pengaturan/tahapan/add/submit', 'Budgeting\t
 Route::post('/main/{tahun}/{status}/pengaturan/subtahapan/add/submit', 'Budgeting\tahapanController@submitSubTahapan');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/edit/submit', 'Budgeting\tahapanController@submitEdit');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/tutup', 'Budgeting\tahapanController@tutupTahapan');
+
 //URUSAN
 Route::get('/main/{tahun}/{status}/pengaturan/urusan', 'Budgeting\Referensi\urusanController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/urusan/getData', 'Budgeting\Referensi\urusanController@getData');
@@ -293,6 +294,23 @@ Route::get('/main/{tahun}/{status}/pengaturan/urusan/getData/{id}', 'Budgeting\R
 Route::post('/main/{tahun}/{status}/pengaturan/urusan/delete', 'Budgeting\Referensi\urusanController@delete');
 Route::post('/main/{tahun}/{status}/pengaturan/urusan/add/submit', 'Budgeting\Referensi\urusanController@submitAdd');
 Route::post('/main/{tahun}/{status}/pengaturan/urusan/edit/submit', 'Budgeting\Referensi\urusanController@submitEdit');
+
+//FUNGSI urusan
+Route::get('/main/{tahun}/{status}/pengaturan/fungsi', 'Budgeting\Referensi\fungsiController@index');
+Route::get('/main/{tahun}/{status}/pengaturan/fungsi/getData', 'Budgeting\Referensi\fungsiController@getData');
+Route::get('/main/{tahun}/{status}/pengaturan/fungsi/getData/{id}', 'Budgeting\Referensi\fungsiController@getDetail');
+Route::post('/main/{tahun}/{status}/pengaturan/fungsi/delete', 'Budgeting\Referensi\fungsiController@delete');
+Route::post('/main/{tahun}/{status}/pengaturan/fungsi/add/submit', 'Budgeting\Referensi\fungsiController@submitAdd');
+Route::post('/main/{tahun}/{status}/pengaturan/fungsi/edit/submit', 'Budgeting\Referensi\fungsiController@submitEdit');
+
+//BIDANG
+Route::get('/main/{tahun}/{status}/pengaturan/bidang', 'Budgeting\Referensi\bidangController@index');
+Route::get('/main/{tahun}/{status}/pengaturan/bidang/getData', 'Budgeting\Referensi\bidangController@getData');
+Route::get('/main/{tahun}/{status}/pengaturan/bidang/getData/{id}', 'Budgeting\Referensi\bidangController@getDetail');
+Route::post('/main/{tahun}/{status}/pengaturan/bidang/delete', 'Budgeting\Referensi\bidangController@delete');
+Route::post('/main/{tahun}/{status}/pengaturan/bidang/add/submit', 'Budgeting\Referensi\bidangController@submitAdd');
+Route::post('/main/{tahun}/{status}/pengaturan/bidang/edit/submit', 'Budgeting\Referensi\bidangController@submitEdit');
+
 //SKPD
 Route::get('/main/{tahun}/{status}/pengaturan/skpd', 'Budgeting\Referensi\skpdController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/skpd/getData', 'Budgeting\Referensi\skpdController@getData');
@@ -300,6 +318,16 @@ Route::get('/main/{tahun}/{status}/pengaturan/skpd/getData/{id}', 'Budgeting\Ref
 Route::post('/main/{tahun}/{status}/pengaturan/skpd/delete', 'Budgeting\Referensi\skpdController@delete');
 Route::post('/main/{tahun}/{status}/pengaturan/skpd/add/submit', 'Budgeting\Referensi\skpdController@submitAdd');
 Route::post('/main/{tahun}/{status}/pengaturan/skpd/edit/submit', 'Budgeting\Referensi\skpdController@submitEdit');
+
+//SUB UNIT
+Route::get('/main/{tahun}/{status}/pengaturan/subunit', 'Budgeting\Referensi\subunitController@index');
+Route::get('/main/{tahun}/{status}/pengaturan/subunit/getData', 'Budgeting\Referensi\subunitController@getData');
+Route::get('/main/{tahun}/{status}/pengaturan/subunit/getData/{id}', 'Budgeting\Referensi\subunitController@getDetail');
+Route::post('/main/{tahun}/{status}/pengaturan/subunit/delete', 'Budgeting\Referensi\subunitController@delete');
+Route::post('/main/{tahun}/{status}/pengaturan/subunit/add/submit', 'Budgeting\Referensi\subunitController@submitAdd');
+Route::post('/main/{tahun}/{status}/pengaturan/subunit/edit/submit', 'Budgeting\Referensi\subunitController@submitEdit');
+
+
 //PROGRAM
 Route::get('/main/{tahun}/{status}/pengaturan/program', 'Budgeting\Referensi\programController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/program/getData', 'Budgeting\Referensi\programController@getData');

@@ -47,6 +47,7 @@
                     @endif
                   </ul>
                 </div>
+<!--
                 <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                   <button class="btn btn-info dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak DPA <i class="fa fa-chevron-down"></i>
                   </button>
@@ -60,6 +61,7 @@
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.2</a></li>
                   </ul>
                 </div>
+              -->
               </div>
               <div class="tab-content tab-content-alt-1 bg-white">
                 <div class="bg-white wrapper-lg">
@@ -179,7 +181,7 @@
                 <h5 class="inline font-semibold text-orange m-n">Pagu &nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>Rincian : <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}</span></h5>
 
                 @if($bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 
-                and Auth::user()->active == 3) 
+                and Auth::user()->active == 1) 
                 <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
                 @elseif($thp == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
@@ -487,8 +489,11 @@
       <div class="form-group">
         <label class="col-sm-3">Rekening</label>
         <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="rekening-belanja" required="">
+          <!--  TANPA NOMENKLATUR -->
+            <select ui-jq="chosen" class="w-full" id="rekening-belanja" required="">
+          <!-- <select ui-jq="chosen" class="w-full" required=""> -->
             <option value="">Silahkan Pilih Rekening</option>
+            
           </select>
         </div>
       </div>
@@ -748,7 +753,10 @@
   });
 
   $("#kategori-belanja").change(function(e, params){
+    /*tanpa nomenklatur*/
     var id  = $('#kategori-belanja').val();
+    /*nomenklatur*/
+    var id  = {{$bl->BL_ID}};
     $('#rekening-belanja').find('option').remove().end().append('<option>Pilih Rekening</option>');
     $.ajax({
       type  : "get",
@@ -1060,7 +1068,7 @@
     token  = $('#token').val();
     paket  = $('#paket-nama').val();
     bl_id  = {{ $BL_ID }};
-    alert(bl_id);
+    //alert(bl_id);
     $.ajax({
         url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanpaket",
         type: "POST",

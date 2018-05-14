@@ -320,17 +320,26 @@ class dashboardController extends Controller
     		$staff 	= Staff::where('USER_ID',Auth::user()->id)
                             ->whereHas('bl',function($q) use($tahun){
                                 $q->where('BL_TAHUN',$tahun);
+                                $q->where('BL_DELETED',0);
                             })->get();
+
+            /*$staff  =       BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
+                           ->where('SKPD_ID',$skpd)
+                           ->where('BL_TAHUN',$tahun)
+                           ->where('BL_DELETED',0)
+                           ->where('USER_ID',Auth::user()->id)->get();  */     
+                            //dd($staff);
+
     	}elseif($level == 2){
             if($status=="murni"){
                 $staff  = BL::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
-                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI','0')->get();
+                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI','0')->where('BL_DELETED',0)->get();
             }
             else{
                 $staff  = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
-                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI','0')->get();
+                        })->where('BL_TAHUN',$tahun)->where('BL_VALIDASI','0')->where('BL_DELETED',0)->get();
             }
     	}
         // dd($staff);exit();
