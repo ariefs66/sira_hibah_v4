@@ -12,6 +12,7 @@ use DB;
 use Carbon;
 use App\Model\SKPD;
 use App\Model\Staff;
+use App\Model\Subunit;
 use App\Model\Program;
 use App\Model\Kegiatan;
 use App\Model\Monev\Monev_Kegiatan;
@@ -116,7 +117,7 @@ class monevController extends Controller
    }
 
    public function getTriwulan1($tahun,$filter){
-          if(Auth::user()->level == 8){
+          if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
@@ -166,7 +167,7 @@ class monevController extends Controller
       }
 
    public function getTriwulan2($tahun, $filter){
-          if(Auth::user()->level == 8){  
+          if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){  
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
@@ -215,7 +216,7 @@ class monevController extends Controller
       }
       
    public function getTriwulan3($tahun, $filter){
-        if(Auth::user()->level == 8){
+        if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
@@ -265,7 +266,7 @@ class monevController extends Controller
       
 
       public function getTriwulan4($tahun, $filter){
-        if(Auth::user()->level == 8){
+        if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
                         ->Join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','REF_KEGIATAN.PROGRAM_ID')
                         ->leftJoin('REFERENSI.REF_OUTCOME','REF_PROGRAM.PROGRAM_ID','=','REF_OUTCOME.PROGRAM_ID')
@@ -340,7 +341,7 @@ class monevController extends Controller
             
           $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BL_ID.'\')" class="action-edit open-form-btl"><i class="mi-edit"></i></a></div>';
           $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/belanja-tidak-langsung/akb/" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$data->SKPD_ID)->where('KEGIATAN_KODE',$data->KEGIATAN_KODE)->first();
+          $monev_keg  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$data->SKPD_ID)->first();
         
           if($monev_keg){
             $kegiatanid = $monev_keg->KEGIATAN_ID;
@@ -350,7 +351,7 @@ class monevController extends Controller
             $kinerja = $monev_keg->$kinerja;
             $penghambat = $monev_keg->$penghambat;
             $pendukung = $monev_keg->$pendukung;
-            $monev_keg2  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$data->SKPD_ID)->where('KEGIATAN_KODE',$data->KEGIATAN_KODE)->orderBy('KEGIATAN_ID','DESC')->get();
+            $monev_keg2  = Monev_Kegiatan::where('REF_KEGIATAN_ID',$data->KEGIATAN_ID)->where('SUB_ID',$data->SUB_ID)->where('SKPD_ID',$data->SKPD_ID)->orderBy('KEGIATAN_ID','DESC')->get();
             if($monev_keg2){
               $kinerja = '';
               $kinerjap='KEGIATAN_T'.$mode;
@@ -370,11 +371,11 @@ class monevController extends Controller
           $tolak_ukur="";
           $satuan="";
           $satuan_nama="";
-          $monev_output  = Output::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')->get();
-          if($monev_output){
-          }else{
+          //$monev_output  = Output::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT.SATUAN_ID')->get();
+          //if($monev_output){
+          //}else{
             $monev_output  = OutputPerubahan::where('BL_ID',$id)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_OUTPUT_PERUBAHAN.SATUAN_ID')->get();
-          }
+          //}
           $total = 0;
           foreach ($monev_output as $monev_output) {
             $sasaran = $sasaran . $monev_output->OUTPUT_TOLAK_UKUR ." : ". $monev_output->OUTPUT_TARGET . " ". $monev_output->SATUAN_NAMA . "\r\n" ;
@@ -462,7 +463,7 @@ class monevController extends Controller
       }
      
       $program = Input::get('PROGRAM_ID');
-      $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->first();
+      $prog = Monev_Program::where('REF_PROGRAM_ID',$program)->where('PROGRAM_TAHUN',$tahun)->where('SUB_ID',Input::get('SUB_ID'))->first();
 
       if($prog){
         $prog = Monev_Program::find($prog->PROGRAM_ID);
@@ -497,6 +498,7 @@ class monevController extends Controller
       $prog->PROGRAM_VALIDASI        = 0;
       $prog->PROGRAM_INPUT        = 0;
       $prog->SATUAN        = 126;
+      $prog->SUB_ID        = Input::get('SUB_ID');
       $prog->save(); 
       $program_id = Monev_Program::where('REF_PROGRAM_ID',Input::get('PROGRAM_ID'))->where('PROGRAM_TAHUN',$tahun)->value('PROGRAM_ID');
       $total = intval(Input::get('TOTAL'));
@@ -508,11 +510,11 @@ class monevController extends Controller
       $satuans = explode(",", $s_input);
       $targets = explode(",", $t_input);
       $outputs = explode(",", $o_input);
-      $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
+      $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->where('SUB_ID',Input::get('SUB_ID'))->first();
       for ($i = 0; $i < $total; $i++) {
         if($edit){
           if($i>0){
-            $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->first();
+            $edit = Monev_Kegiatan::where('REF_KEGIATAN_ID',$id)->where('SKPD_ID',$skpd)->where('SUB_ID',Input::get('SUB_ID'))->first();
           }
           //echo($edit->KEGIATAN_ID);
           $acara = 'Mengubah Kinerja Kegiatan';
@@ -708,10 +710,17 @@ class monevController extends Controller
         if(empty($skpd)){
           $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');  
           $skpdnama   = SKPD::where('SKPD_ID',Auth::user()->id)->where('SKPD_TAHUN',$tahun)->value('SKPD_NAMA'); 
+          
         }else{
           $skpdnama   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_NAMA'); 
         }
-         
+        $sub_id = Subunit::where('SKPD_ID',$skpd)->count();
+        if($sub_id==1){
+          $sub_id = Subunit::where('SKPD_ID',$skpd)->value('SUB_ID');
+        }else{
+          $sub_id = FALSE;
+        }
+
           $data       = Monev_Faktor::where('TAHUN',$tahun)
                         ->where('T',$mode)
                         ->where('SKPD_ID',$skpd)
@@ -744,8 +753,10 @@ class monevController extends Controller
           }
           }else{
             $data       = Monev_Program::where('PROGRAM_TAHUN',$tahun)
-            ->where('SKPD_ID',$skpd)
-            ->get();
+            ->where('SKPD_ID',$skpd);
+            if($sub_id){
+              $data       = $data->where('SUB_ID',$sub_id);}
+            $data       = $data->get();
             if($data){
               $cpendukung =  "PROGRAM_PENDUKUNG_T".$mode;
               $cpenghambat = "PROGRAM_PENGHAMBAT_T".$mode;
@@ -895,4 +906,5 @@ class monevController extends Controller
             ]);
               
       }
+
 }

@@ -190,11 +190,37 @@
           <nav ui-nav class="navi white-navi clearfix">
             <ul class="nav">
               <li>
-                <a href="{{ url('/') }}/asosiasi/{{ $tahun }}/" class="auto padding-l-r-lg">                  
+                <a href="{{ url('/') }}/monev/{{ $tahun }}/" class="auto padding-l-r-lg">                  
                   <i class="icon-bdg_dashboard"></i>
                   <span class="font-semibold">Dashboard</span>
                 </a>                
               </li>
+              @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000')
+              <li >
+                <a href="#" class="auto padding-l-r-lg parent">                  
+                  <i class="fa fa-laptop"></i>
+                  <span class="pull-right text-heading">
+                    <i class="text8 icon-bdg_arrow1 text"></i>
+                    <i class="text8 icon-bdg_arrow2 text-active"></i>
+                  </span>
+                  <span class="font-semibold">Monitoring</span>
+                </a>   
+                 <ul class="nav nav-sub dk">                  
+                  <li>
+                    <a href="{{ url('/') }}/monev/monitoring/{{ $tahun }}/" class="padding-l-r-lg ">
+                       <span>Ringkasan</span>
+                    </a>
+                  </li> 
+                  @if(Auth::user()->level == 8 or Auth::user()->level == 9)
+                  <li>
+                    <a href="{{ url('/') }}/monev/sinkronisasi/{{ $tahun }}/" class="padding-l-r-lg ">
+                       <span >Detail</span>
+                    </a>
+                  </li>                 
+                  @endif
+                  </ul>
+              </li>     
+              @endif
               <!-- <li >
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="fa fa-laptop"></i>

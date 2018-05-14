@@ -603,6 +603,7 @@ Route::get('/main/{tahun}/{status}/rekapBelanja', 'Budgeting\lampiranController@
 //MONEV
 Route::get('/monev/{tahun}/excel/{skpd}', 'ExcelController@getExport');
 Route::get('/monev/{tahun}', 'Monev\monevController@index');
+Route::get('/monev/monitoring/{tahun}', 'Monev\statistikController@index');
 Route::get('/monev/{tahun}/getTriwulan1/{filter}', 'Monev\monevController@getTriwulan1');
 Route::get('/monev/{tahun}/getTriwulan2/{filter}', 'Monev\monevController@getTriwulan2');
 Route::get('/monev/{tahun}/getTriwulan3/{filter}', 'Monev\monevController@getTriwulan3');
@@ -614,3 +615,15 @@ Route::get('/monev/{tahun}/cetak/{skpd}', 'Monev\monevController@cetak');
 Route::post('/monev/{tahun}/hapus/{id}', 'Monev\monevController@hapusKegiatan');
 Route::post('/monev/{tahun}/kegiatan/simpan/{mode}', 'Monev\monevController@simpanKegiatan');
 Route::post('/monev/{tahun}/faktor/simpan', 'Monev\monevController@simpanFaktor');
+Route::get('/monev/sinkronisasi/{tahun}', 'Monev\editorController@index');
+Route::get('/monev/sinkronisasi/{tahun}/getTriwulan1/{filter}', 'Monev\editorController@getTriwulan1');
+Route::get('/monev/sinkronisasi/{tahun}/getTriwulan2/{filter}', 'Monev\editorController@getTriwulan2');
+Route::get('/monev/sinkronisasi/{tahun}/getTriwulan3/{filter}', 'Monev\editorController@getTriwulan3');
+Route::get('/monev/sinkronisasi/{tahun}/getTriwulan4/{filter}', 'Monev\editorController@getTriwulan4');
+Route::get('/monev/sinkronisasi/{tahun}/getDetail/{skpd}/{mode}/{id}', 'Monev\editorController@getDetail');
+Route::get('/monev/sinkronisasi/{tahun}/getData/{skpd}/{mode}/{id}', 'Monev\editorController@getData');
+Route::get('/monev/sinkronisasi/{tahun}/faktor/{skpd}/{mode}', 'Monev\editorController@getFaktor');
+Route::get('/monev/sinkronisasi/{tahun}/cetak/{skpd}', 'Monev\editorController@cetak');
+Route::post('/monev/sinkronisasi/{tahun}/hapus/{id}', 'Monev\editorController@hapusKegiatan');
+Route::post('/monev/sinkronisasi/{tahun}/kegiatan/simpan/{mode}', 'Monev\editorController@simpanKegiatan');
+Route::post('/monev/sinkronisasi/{tahun}/faktor/simpan', 'Monev\editorController@simpanFaktor');

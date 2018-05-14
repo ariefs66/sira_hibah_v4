@@ -24,22 +24,22 @@
                   <button class="pull-right btn m-t-n-sm btn-success open-form-faktor"><i class="m-r-xs fa fa-plus"></i> <span>Parameter Cetak</span></button>
                   @endif
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 and $cek)
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel"  target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/0"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel"  target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/1"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @elseif(Auth::user()->level == 2 and $cek)
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/excel/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-download"></i> Download</a>
                   @endif
 @if(Auth::user()->level == 8 or Auth::user()->level == 9 )
-                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" target="_blank"  href="{{ url('/') }}/monev/{{$tahun}}/cetak/0"><i class="m-r-xs fa fa-file"></i> Print</a>
+                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" target="_blank"  href="{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/cetak/1"><i class="m-r-xs fa fa-file"></i> Print</a>
 @else
   @if($cek)
-                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" target="_blank" href="{{ url('/') }}/monev/{{$tahun}}/cetak/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-file"></i> Print</a>
+                  <a id="print" class="pull-right btn btn-danger m-t-n-sm m-r-sm" target="_blank" href="{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/cetak/{{ \App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID')}}"><i class="m-r-xs fa fa-file"></i> Print</a>
   @endif
 @endif
                   <h5 class="inline font-semibold text-orange m-n ">Monev</h5>
                   @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000' )
                   <div class="col-sm-4 pull-right m-t-n-sm">
                    <select ui-jq="chosen" class="form-control" id="filter-skpd">
-                     <option value="0">- Pilih OPD -</option>
+                     <option value="">- Pilih OPD -</option>
                      @foreach($skpd as $pd)
                      <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
                      @endforeach
@@ -93,7 +93,7 @@
               <div role="tabpanel" class="{{$triwulan1}} tab-pane " id="tab-1">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/0',
+                    sAjaxSource: '{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/getTriwulan1/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -107,7 +107,7 @@
                   ]}" class="table table-btl table-striped b-t b-b table-pegawai " id="table-pegawai">
                   <thead>
                     <tr>                   
-                      <th>No </th>
+                      <th># </th>
                       <th class="hide">ID </th>
                       <th class="hide">MODE </th>
                       <th>PROGRAM </th>
@@ -133,7 +133,7 @@
             <div role="tabpanel" class="{{$triwulan2}} tab-pane" id="tab-2">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/0',
+                    sAjaxSource: '{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/getTriwulan2/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -173,7 +173,7 @@
             <div role="tabpanel" class="{{$triwulan3}} tab-pane" id="tab-3">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/0',
+                    sAjaxSource: '{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/getTriwulan3/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -213,7 +213,7 @@
             <div role="tabpanel" class="{{$triwulan4}} tab-pane" id="tab-4">  
                 <div class="table-responsive dataTables_wrapper table-btl">
                  <table ui-jq="dataTable" ui-options="{
-                    sAjaxSource: '{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/0',
+                    sAjaxSource: '{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/getTriwulan4/0',
                     aoColumns: [
                     { mData: 'ID'},
                     { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -278,27 +278,27 @@
       <div class="form-group">
         <label for="kegiatan" class="col-md-3">Program</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Nama Program" id="program_nama" disabled>          
-          <input type="hidden" class="form-control" placeholder="Nama Program" id="program" disabled>          
+          <input type="text" class="form-control" placeholder="Nama Program" id="program_nama" >          
+          <input type="hidden" class="form-control" placeholder="Nama Program" id="program" >          
         </div> 
       </div>
       <div class="form-group">
         <label for="kegiatan" class="col-md-3">Kegiatan</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Nama Kegiatan" id="kegiatan_nama" disabled>          
-          <input type="hidden" class="form-control" placeholder="Nama Kegiatan" id="kegiatan" disabled>          
+          <input type="text" class="form-control" placeholder="Nama Kegiatan" id="kegiatan_nama" >          
+          <input type="hidden" class="form-control" placeholder="Nama Kegiatan" id="kegiatan" >          
         </div> 
       </div> 
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Anggaran</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Total Anggaran" id="anggaran" disabled>          
+          <input type="text" class="form-control" placeholder="Total Anggaran" id="anggaran" >          
         </div> 
       </div>
       <div class="form-group">
         <label class="col-sm-3">Output</label>
         <div class="col-sm-9">
-          <textarea class="w-full" id="target" placeholder="Tidak ada Outcome Tolak Ukur" disabled>
+          <textarea class="w-full" id="target" placeholder="Tidak ada Outcome Tolak Ukur" >
           </textarea>
         </div>
       </div>
@@ -309,7 +309,7 @@
           <input type="number" required="true" min="0" step="0.01" class="form-control" placeholder="Masukan Realisasi Kinerja" id="kinerja" value="0"></input>       
         </div> 
         <div class="col-sm-4">
-          <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" disabled></input> 
+          <input type="text" class="form-control" placeholder="Satuan" id="satuan_nama" ></input> 
           <input type="hidden" class="form-control" id="satuan"></input>
           <input type="hidden" class="form-control" id="output_target"></input>
           <input type="hidden" class="form-control" id="output"></input>
@@ -322,7 +322,7 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Realisasi Anggaran</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Masukan Realisasi Anggaran" id="realisasi" disabled >          
+          <input type="text" class="form-control" placeholder="Masukan Realisasi Anggaran" id="realisasi"  >          
         </div>
       </div>
 
@@ -481,7 +481,7 @@
         btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="7">'+$('#table-detail-btl').html()+'</td></tr>';
         $(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
         $('.table-detail-btl-isi').DataTable({
-          sAjaxSource: "/monev/{{ $tahun }}/getDetail/"+skpd+"/"+mode+"/"+kegiatan,
+          sAjaxSource: "/monev/sinkronisasi/{{ $tahun }}/getDetail/"+skpd+"/"+mode+"/"+kegiatan,
           aoColumns: [
           { mData: 'AKSI' },
           { mData: 'KEGIATAN' },
@@ -579,7 +579,7 @@
     if(KINERJA == "" || PENDUKUNG == "" || PENGHAMBAT == ""){
       $.alert('Form harap diisi!');
     }else{
-        uri   = "{{ url('/') }}/monev/{{ $tahun }}/kegiatan/simpan/"+mode;
+        uri   = "{{ url('/') }}/monev/sinkronisasi/{{ $tahun }}/kegiatan/simpan/"+mode;
       $.ajax({
         url: uri,
         type: "POST",
@@ -640,12 +640,11 @@
     if(SKPD_ID == ""){
       $.alert('Terjadi Kesalahan!');
     }else{
-        uri   = "{{ url('/') }}/monev/{{ $tahun }}/faktor/simpan";
+        uri   = "{{ url('/') }}/monev/sinkronisasi/{{ $tahun }}/faktor/simpan";
       $.ajax({
         url: uri,
         type: "POST",
         data: {'_token'             : token,
-              'FAKTOR_ID'             : ID, 
               'SKPD_ID'             : SKPD_ID, 
               'PENDUKUNG'           : PENDUKUNG, 
               'PENGHAMBAT'          : PENGHAMBAT, 
@@ -685,10 +684,10 @@
     @endif
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/monev/{{ $tahun }}/faktor/"+skpd+"/"+id,
+      url   : "{{ url('/') }}/monev/sinkronisasi/{{ $tahun }}/faktor/"+skpd+"/"+id,
       success : function (data) {
         data = data.aaData[0];
-        $('#faktorid').val(data['ID']);
+        $('#faktorid').val(data['FAKTOR_ID']);
         $('#faktorskpd').val(data['SKPD_ID']);
         $('#faktortahun').val(data['TAHUN']);
         $('#faktorpendukung').val(data['PENDUKUNG']);
@@ -696,11 +695,11 @@
         $('#faktortriwulan').val(data['TRIWULAN']);
         $('#faktorrenja').val(data['RENJA']);
         $('#faktorsasaran').val(data['SASARAN']);
-        $("#faktorpendukung").prop('disabled', data['INPUT']);
-        $("#faktorpenghambat").prop('disabled', data['INPUT']);
-        $("#faktortriwulan").prop('disabled', data['VALIDASI']);
-        $("#faktorrenja").prop('disabled', data['VALIDASI']);
-        $("#faktorsasaran").prop('disabled', data['INPUT']);
+        $("#faktorpendukung").prop('', data['INPUT']);
+        $("#faktorpenghambat").prop('', data['INPUT']);
+        $("#faktortriwulan").prop('', data['VALIDASI']);
+        $("#faktorrenja").prop('', data['VALIDASI']);
+        $("#faktorsasaran").prop('', data['INPUT']);
         $(".judul").html(data['JUDUL']+' ' +data['SKPD_NAMA']);
         if(data['INPUT'] || data['VALIDASI']){
           $('#savefaktor').show();
@@ -734,7 +733,7 @@
                 btnClass: 'btn-danger',
                 action: function(){
                   $.ajax({
-                      url: "{{ url('/') }}/monev/{{ $tahun }}/hapus/"+sub,
+                      url: "{{ url('/') }}/monev/sinkronisasi/{{ $tahun }}/hapus/"+sub,
                       type: "POST",
                       data: {'_token'      : token,
                             'KEGIATAN_ID'       : id,
@@ -781,7 +780,7 @@
     $("#kinerja").val(0);
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
+      url   : "{{ url('/') }}/monev/sinkronisasi/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
       success : function (data) {
         var counter = 0;
     function duplicateNode(/*DOMNode*/sourceNode, /*Array*/attributesToBump) {
@@ -870,7 +869,7 @@
     $("#kinerja").val(0);
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/monev/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
+      url   : "{{ url('/') }}/monev/sinkronisasi/{{ $tahun }}/getData/"+skpd+"/"+mode+"/"+id,
       success : function (data) {
         var counter = 0;
     function duplicateNode(/*DOMNode*/sourceNode, /*Array*/attributesToBump) {
@@ -954,7 +953,7 @@
       $.fn.dataTable.ext.errMode = 'none';
       $('#table-pegawai').DataTable().destroy();
       $('#table-pegawai').DataTable({
-        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan1/"+id,
+        sAjaxSource: "{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/getTriwulan1/"+id,
         aoColumns: [
           { mData: 'ID'},
           { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -972,7 +971,7 @@
       });  
       $('#table-subsidi').DataTable().destroy();
       $('#table-subsidi').DataTable({
-        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan2/"+id,
+        sAjaxSource: "{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/getTriwulan2/"+id,
         aoColumns: [
           { mData: 'ID'},
           { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -990,7 +989,7 @@
       }); 
       $('#table-hibah').DataTable().destroy();
       $('#table-hibah').DataTable({
-        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan3/"+id,
+        sAjaxSource: "{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/getTriwulan3/"+id,
         aoColumns: [
           { mData: 'ID'},
           { mData: 'PROGRAM_ID', sClass:'hide'},
@@ -1008,7 +1007,7 @@
       }); 
       $('#table-bantuan').DataTable().destroy();
       $('#table-bantuan').DataTable({
-        sAjaxSource: "{{ url('/') }}/monev/{{$tahun}}/getTriwulan4/"+id,
+        sAjaxSource: "{{ url('/') }}/monev/sinkronisasi/{{$tahun}}/getTriwulan4/"+id,
         aoColumns: [
           { mData: 'ID'},
           { mData: 'PROGRAM_ID', sClass:'hide'},

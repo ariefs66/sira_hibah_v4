@@ -38,8 +38,7 @@ class ExcelController extends Controller
         ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID')
                 ->where('PROGRAM_TAHUN',$tahun)->get();
     if($skpd==0){
-      $this->tapdAll($tahun);
-      $idskpd = FALSE;
+      return $this->tapdAll($tahun);
     }else{
       $idskpd         = SKPD::where('SKPD_ID',$skpd)->first();
     }
@@ -81,7 +80,7 @@ class ExcelController extends Controller
           foreach ($outcome as $outcome) {
             $ringkasoutcome = $outcome->OUTCOME_TOLAK_UKUR ." : ". $outcome->OUTCOME_TARGET . "%\r\n". $ringkasoutcome;
           }
-        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_KEGIATAN.PROGRAM_ID',$prog->PROGRAM_ID)->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->get(),
+        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_PROGRAM.REF_PROGRAM_ID',$prog->REF_PROGRAM_ID)->where('DAT_KEGIATAN.SKPD_ID',$prog->SKPD_ID)->where('DAT_KEGIATAN.SUB_ID',$prog->SUB_ID)->leftJoin('MONEV.DAT_PROGRAM','DAT_PROGRAM.PROGRAM_ID','=','DAT_KEGIATAN.PROGRAM_ID')->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->get(),
                                  'PROGRAM_ID'     => $prog->PROGRAM_ID,
                                  'SKPD_ID'     => $prog->SKPD_ID,
                                  'SKPD'     => $prog->SKPD_NAMA,
@@ -179,17 +178,17 @@ class ExcelController extends Controller
         if($row==17){
           $row=19;
         }
-        if(intval($program)>0){
-          $hitungt1 = intval($t1) / intval($program);
+        if(intval($jumlah)>0){
+          $hitungt1 = intval($t1) / intval($jumlah);
         }else{
           $hitungt1 = intval($t1);
         }
-        $sheet->setCellValue('K'.($row), $hitungt1.'%');
+        $sheet->setCellValue('K'.($row), number_format($hitungt1,0,'.',',').'%');
 				$helper = new PHPExcel_Helper_HTML;
-				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br($pendukung)."</b>";
+				$html = "<b>Faktor pendorong keberhasilan kinerja:<br>".nl2br(str_limit($pendukung, 300))."</b>";
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+2), $richText);
-				$html = "<b>Faktor penghambat pencapain kinerja:<br>".nl2br($penghambat)."</b>";
+				$html = "<b>Faktor penghambat pencapain kinerja:<br>".nl2br(str_limit($penghambat,300))."</b>";
 				$richText = $helper->toRichTextObject($html);
 				$sheet->setCellValue('A'.($row+3), $richText);
 				$html = "<b>Tindak lanjut yang diperlukan dalam triwulan berikutnya:<br>".nl2br($triwulan)."</b>";
@@ -209,7 +208,7 @@ class ExcelController extends Controller
     }
 
     public function tapdAll($tahun){
-      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+      $skpd       = Monev_Faktor::select('SKPD_ID')->where('TAHUN',$tahun)->groupBy('SKPD_ID')->get();
       Excel::load('public/uploads/e81.xls', function($excel) use($tahun, $skpd) {
         $excel->sheet('Formulir E.81', function($sheet) use($tahun, $skpd){
         $sheet->setCellValue('A7', 'Renja Perangkat Daerah '.' Kabupaten/kota Bandung');
@@ -242,7 +241,7 @@ class ExcelController extends Controller
           }else{
             $tahapan = 0;
           }
-          $faktor = Monev_Faktor::where('TAHUN',$tahun)->where('SKPD_ID',$skpd)
+          $faktor = Monev_Faktor::where('TAHUN',$tahun)->where('SKPD_ID',$s->SKPD_ID)
                   ->where('T',$tahapan)->first();
           if($faktor){
             $penghambat=$faktor->PENGHAMBAT;
@@ -362,9 +361,9 @@ class ExcelController extends Controller
         $sheet->setCellValue('W3', ': April  2018');
         $sheet->setCellValue('T'.($row+9), '20 Maret 2018');
         $sheet->setCellValue('Y'.($row+9), '20 Maret 2018');
-        $sheet->setCellValue('Q'.($row+10), ''+$idskpd->KEPALA);
+        $sheet->setCellValue('Q'.($row+10), '');
         $sheet->setCellValue('Q'.($row+16), '');
-        $sheet->setCellValue('Q'.($row+17), ''+$idskpd->KEPALA_NIP);
+        $sheet->setCellValue('Q'.($row+17), '');
           }
 
         });
