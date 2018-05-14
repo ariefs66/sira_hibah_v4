@@ -38,8 +38,7 @@ class ExcelController extends Controller
         ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID')
                 ->where('PROGRAM_TAHUN',$tahun)->get();
     if($skpd==0){
-      $this->tapdAll($tahun);
-      $idskpd = FALSE;
+      return $this->tapdAll($tahun);
     }else{
       $idskpd         = SKPD::where('SKPD_ID',$skpd)->first();
     }
@@ -209,7 +208,7 @@ class ExcelController extends Controller
     }
 
     public function tapdAll($tahun){
-      $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+      $skpd       = Monev_Faktor::select('SKPD_ID')->where('TAHUN',$tahun)->groupBy('SKPD_ID')->get();
       Excel::load('public/uploads/e81.xls', function($excel) use($tahun, $skpd) {
         $excel->sheet('Formulir E.81', function($sheet) use($tahun, $skpd){
         $sheet->setCellValue('A7', 'Renja Perangkat Daerah '.' Kabupaten/kota Bandung');
@@ -242,7 +241,7 @@ class ExcelController extends Controller
           }else{
             $tahapan = 0;
           }
-          $faktor = Monev_Faktor::where('TAHUN',$tahun)->where('SKPD_ID',$skpd)
+          $faktor = Monev_Faktor::where('TAHUN',$tahun)->where('SKPD_ID',$s->SKPD_ID)
                   ->where('T',$tahapan)->first();
           if($faktor){
             $penghambat=$faktor->PENGHAMBAT;
@@ -362,9 +361,9 @@ class ExcelController extends Controller
         $sheet->setCellValue('W3', ': April  2018');
         $sheet->setCellValue('T'.($row+9), '20 Maret 2018');
         $sheet->setCellValue('Y'.($row+9), '20 Maret 2018');
-        $sheet->setCellValue('Q'.($row+10), ''+$idskpd->KEPALA);
+        $sheet->setCellValue('Q'.($row+10), '');
         $sheet->setCellValue('Q'.($row+16), '');
-        $sheet->setCellValue('Q'.($row+17), ''+$idskpd->KEPALA_NIP);
+        $sheet->setCellValue('Q'.($row+17), '');
           }
 
         });
