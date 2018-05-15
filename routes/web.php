@@ -192,6 +192,11 @@ Route::post('/main/{tahun}/{status}/arsip/belanja-langsung/delete', 'Budgeting\a
 //BL-ARSIP-API
 Route::get('/main/{tahun}/{status}/arsip/belanja-langsung/getData', 'Budgeting\arsipBLController@getData');
 //------------------------------------------------------------------------------------------------------------------------
+
+//PROGRAM PRIORITAS
+Route::get('/main/{tahun}/{status}/program-prioritas', 'Budgeting\programPrioritasController@index');
+
+
 //PENDAPATAN
 Route::get('/main/{tahun}/{status}/pendapatan/', 'Budgeting\pendapatanController@index');
 Route::get('/main/{tahun}/{status}/pendapatan/edit/{id}', 'Budgeting\pendapatanController@getId');
