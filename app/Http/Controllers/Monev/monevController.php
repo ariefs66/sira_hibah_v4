@@ -116,6 +116,83 @@ class monevController extends Controller
       ]);
    }
 
+   public function update($tahun){
+    $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+    $skpd_      = array(); 
+    $i = 0;
+    foreach($skpd as $s){
+        $skpd_[$i]   = $s->SKPD_ID;
+        $i++;
+    }
+    if(Auth::user()->level == 8 or Auth::user()->level == 9){
+        $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+    }else{
+        $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+    }
+    $satuan  = Satuan::All();
+    $tahapan    = Monev_Tahapan::where('TAHAPAN_TAHUN',$tahun)->first();
+    if($tahapan){
+      if($tahapan->TAHAPAN_T1==1){
+        $triwulan = 1;
+      }elseif($tahapan->TAHAPAN_T2==1){
+        $triwulan = 2;
+      }elseif($tahapan->TAHAPAN_T3==1){
+        $triwulan = 3;
+      }else{
+        $triwulan = 4;
+      }
+    }else{
+      $triwulan = 0;
+    }
+    $cek    = Monev_Faktor::where('TAHUN',$tahun)
+    ->where('T',$triwulan);
+    if(Auth::user()->level == 8 || Auth::user()->level == 9 || Auth::user()->mod == '01000000000'){
+      $cek = $cek->first();
+    }else{
+      $id = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
+      $cek = $cek->where('SKPD_ID',$id)->first();
+    }
+    if($cek){
+      if($cek->STATUS==2) {
+          if(Auth::user()->level == 8 || Auth::user()->level == 9 || Auth::user()->mod == '01000000000'){
+            $input ='disabled';
+            $validasi ='disabled';
+          }else{
+            $input ='disabled';
+            $validasi ='disabled';
+          }
+      }else{
+        if(Auth::user()->level == 8 || Auth::user()->level == 9 || Auth::user()->mod == '01000000000'){
+          $input ='';
+          $validasi ='disabled';
+        }else{
+          $input ='disabled';
+          $validasi ='';
+        }
+      }
+      $cek = TRUE;
+      $input ='disabled';
+      $validasi ='disabled';
+    }else {
+      $cek = FALSE;
+      $input     ='';
+      $validasi ='';
+    }
+  return View('monev.edit',[
+    'tahun'     =>$tahun,
+    'skpd'      =>$skpd,
+    'satuan'    =>$satuan,
+    'input'     =>$input,
+    'validasi'     =>$validasi,
+    'cek'       =>$cek,
+    'mode'      =>$triwulan,
+    'triwulan1' =>($tahapan->TAHAPAN_T1==1?'active':''),
+    'triwulan2' =>($tahapan->TAHAPAN_T2==1?'active':''),
+    'triwulan3' =>($tahapan->TAHAPAN_T3==1?'active':''),
+    'triwulan4' =>($tahapan->TAHAPAN_T4==1?'active':''),
+    ]);
+ }
+
    public function getTriwulan1($tahun,$filter){
           if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->mod == '01000000000'){
             $data       = BL::Join('REFERENSI.REF_KEGIATAN','DAT_BL.KEGIATAN_ID','=','REF_KEGIATAN.KEGIATAN_ID')
