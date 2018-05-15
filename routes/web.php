@@ -90,6 +90,12 @@ Route::get('/main/{tahun}/{status}/belanja-langsung/staff/{id}', 'Budgeting\blCo
 Route::get('/main/{tahun}/{status}/belanja-langsung/log/{id}', 'Budgeting\blController@getLog');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rekening-musrenbang/{id}', 'Budgeting\blController@getRekMusren');
 Route::get('/main/{tahun}/{status}/belanja-langsung/getpagu/{id}', 'Budgeting\blController@getPagu');
+Route::get('/main/{tahun}/{status}/belanja-langsung/propri/skpd', 'Budgeting\programPrioritasController@getProgramSKPD');
+Route::get('/main/{tahun}/{status}/belanja-langsung/propri/getDetail/{id}', 'Budgeting\programPrioritasController@getDetail');
+Route::get('/main/{tahun}/{status}/belanja-langsung/propri/edit/{skpd}/{id}', 'Budgeting\programPrioritasController@getEdit');
+Route::post('/main/{tahun}/{status}/belanja-langsung/propri/simpan', 'Budgeting\programPrioritasController@submitAdd');
+Route::post('/main/{tahun}/{status}/belanja-langsung/propri/ubah', 'Budgeting\programPrioritasController@submitEdit');
+Route::post('/main/{tahun}/{status}/belanja-langsung/propri/hapus', 'Budgeting\programPrioritasController@delete');
 //BL-LAMPIRAN
 Route::get('/main/{tahun}/{status}/belanja-langsung/rka/{id}', 'Budgeting\lampiranController@rka');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rka/sebelum/{id}', 'Budgeting\lampiranController@rkaSebelum');
