@@ -1072,7 +1072,7 @@
 		<td class="border kanan">{{ number_format($akb_bl->tri1,0,',','.') }}</td>
 		<td class="border kanan">{{ number_format($akb_bl->tri2,0,',','.') }}</td>
 		<td class="border kanan">{{ number_format($akb_bl->tri3,0,',','.') }}</td>
-		<td class="border kanan">{{ number_format($akb_bl->tri4,0,',','.') }}</td>
+		<td class="border kanan">{{ number_format($bl_p-($akb_bl->tri1+$akb_bl->tri2+$akb_bl->tri3),0,',','.') }}</td>
 		<!-- <td class="border kanan">{{ number_format($akb_bl->tri1+$akb_bl->tri2+$akb_bl->tri3+$akb_bl->tri4,0,',','.') }}</td> -->
 		<td class="border kanan">{{ number_format($bl_p,0,',','.') }}</td>
 	</tr>

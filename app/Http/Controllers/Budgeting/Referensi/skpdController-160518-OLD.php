@@ -156,7 +156,9 @@ class skpdController extends Controller
 				if(!empty($kepala_asal)){
 					$kepala_baru = User::where('email',Input::get('kepala_nip'));
 					if(!empty($kepala_baru)){
+						UserBudget::where('USER_ID',$kepala_baru->value('id'))->where('TAHUN',$tahun_lama)->delete();
 						UserBudget::where('USER_ID',$kepala_asal->value('id'))->where('SKPD_ID',Input::get('id_skpd'))->where('TAHUN',$tahun_lama)->update(['USER_ID'=>$kepala_baru->value('id'),'TAHUN'=>Input::get('tahun')]);
+						User::where('email',Input::get('kepala_nip'))->update(['level'=>2,'mod'=>'00000000000']);
 						$kepala_baru = $kepala_baru->value('name');
 					}
 				}
