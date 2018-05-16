@@ -10,6 +10,7 @@ use Response;
 use Auth;
 use Carbon;
 use App\Model\SKPD;
+use App\Model\Propri;
 use App\Model\Program;
 use App\Model\Kegiatan;
 use App\Model\JenisGiat;
@@ -1374,6 +1375,13 @@ class blController extends Controller
                                 $r->where('SKPD_ID',$skpd);
                             });
                         })->sum('RINCIAN_TOTAL');
+                        
+        $program    = BL::where('BL_ID',Input::get('BL_ID'))->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')->first();
+        $totalBLProg    = Propri::where('PROGRAM_ID',$program->PROGRAM_ID)->where('PROPRI_TAHUN',$tahun)->where('SKPD_ID',$skpd)->value('PROPRI_PAGU');
+        
+        if($totalBL > $totalBLProg){
+            return "Melebihi Pagu";
+        }
         
         $hargakomponen  = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');                          
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
@@ -1434,10 +1442,34 @@ class blController extends Controller
                     $rincian_log->USER_ID                       = Auth::user()->id;
                     $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
                     $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
+                    $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
                     $rincian_log->RINCIAN_TAHUN                 = $tahun;
                     $rincian_log->RINCIAN_STATUS                = 1; //add = 1
                     $rincian_log->RINCIAN_TANGGAL               = Carbon\Carbon::now();
                     $rincian_log->save();
+
+                    $rincian_rkp    = new RekapRincian;
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                        $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+                    }else{
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                        $rincian_rkp->RINCIAN_TOTAL             = round($total);
+                    }
+                    $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
 
                 }else{
                     return 0;
@@ -1498,10 +1530,35 @@ class blController extends Controller
                     $rincian_log->USER_ID                       = Auth::user()->id;
                     $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
                     $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
+                    $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
                     $rincian_log->RINCIAN_TAHUN                 = $tahun;
                     $rincian_log->RINCIAN_STATUS                = 1; //add = 1
                     $rincian_log->RINCIAN_TANGGAL               = Carbon\Carbon::now();
                     $rincian_log->save();
+
+                    $rincian_rkp    = new RekapRincian;
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                        $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+                    }else{
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                        $rincian_rkp->RINCIAN_TOTAL             = round($total);
+                    }
+                    $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
+
 
                 }else{
                     return 0;
@@ -1566,10 +1623,34 @@ class blController extends Controller
                     $rincian_log->USER_ID                       = Auth::user()->id;
                     $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
                     $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
+                    $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
                     $rincian_log->RINCIAN_TAHUN                 = $tahun;
                     $rincian_log->RINCIAN_STATUS                = 1; //add = 1
                     $rincian_log->RINCIAN_TANGGAL               = Carbon\Carbon::now();
                     $rincian_log->save();
+
+                    $rincian_rkp    = new RekapRincian;
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                        $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+                    }else{
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                        $rincian_rkp->RINCIAN_TOTAL             = round($total);
+                    }
+                    $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
 
                 }else{
                     return 0;
@@ -1631,10 +1712,35 @@ class blController extends Controller
                     $rincian_log->USER_ID                       = Auth::user()->id;
                     $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
                     $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
+                    $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
                     $rincian_log->RINCIAN_TAHUN                 = $tahun;
                     $rincian_log->RINCIAN_STATUS                = 1; //add = 1
                     $rincian_log->RINCIAN_TANGGAL               = Carbon\Carbon::now();
                     $rincian_log->save();
+
+                    
+                    $rincian_rkp    = new RekapRincian;
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                        $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+                    }else{
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                        $rincian_rkp->RINCIAN_TOTAL             = round($total);
+                    }
+                    $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
 
                 }else{
                     return 0;
@@ -1699,6 +1805,31 @@ class blController extends Controller
             $rincian_log->RINCIAN_STATUS                = 1; //add = 1
             $rincian_log->RINCIAN_TANGGAL               = Carbon\Carbon::now();
             $rincian_log->save();
+
+            
+                    
+            $rincian_rkp    = new RekapRincian;
+            $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+            $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+            $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+            $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+            $rincian_rkp->RINCIAN_VOLUME                = $vol;
+            $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+            $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+            $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+            if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
+                $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+            }else{
+                $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                $rincian_rkp->RINCIAN_TOTAL             = round($total);
+            }
+            $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+            $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+            $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+            $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+            $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+            $rincian_rkp->save();
         }
 
     }
@@ -2451,6 +2582,9 @@ class blController extends Controller
     public function submitRincianEditMurni($tahun,$status){
 
         $tahapan = Tahapan::where('TAHAPAN_SELESAI',0)->first();
+        if(!$tahapan){
+            return "Tahapan Tidak Ditemukan";
+        }
 
         $rincian = Rincian::find(Input::get('RINCIAN_ID'));
 
@@ -2473,8 +2607,8 @@ class blController extends Controller
         $rincian_log->RINCIAN_TAHUN                 = $tahun;
         $rincian_log->RINCIAN_STATUS                = 2; //EDIT = 2
         $rincian_log->RINCIAN_TANGGAL               = Carbon\Carbon::now(); //EDIT = 2
+        $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
         $rincian_log->save();                
-
 
         $koef       = Input::get('VOL1').' '.Input::get('SAT1');
         $vol        = Input::get('VOL1');
@@ -2510,6 +2644,13 @@ class blController extends Controller
                                 $r->where('SKPD_ID',$skpd);
                             });
                         })->where('BL_ID','!=',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
+
+        $program    = BL::where('BL_ID',Input::get('BL_ID'))->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')->first();
+        $totalBLProg    = Propri::where('PROGRAM_ID',$program->PROGRAM_ID)->where('PROPRI_TAHUN',$tahun)->where('SKPD_ID',$skpd)->value('PROPRI_PAGU');
+        
+        if($totalBL > $totalBLProg){
+            return "Melebihi Pagu";
+        }
         // print_r($total);exit();
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
@@ -2528,6 +2669,29 @@ class blController extends Controller
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                             'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
                             ]);
+
+                    $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+                    if($rincian_rkp){
+                    $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+                    }else{
+                        $rincian_rkp    = new RekapRincian;
+                    }
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+                    $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+                    $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
+
                     // BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
                     $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
 
@@ -2560,6 +2724,29 @@ class blController extends Controller
                     // BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
                     $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
 
+                    $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+                    if($rincian_rkp){
+                    $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+                    }else{
+                        $rincian_rkp    = new RekapRincian;
+                    }
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+                    $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+                    $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
+
+
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
@@ -2589,6 +2776,29 @@ class blController extends Controller
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                             'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
                             ]);
+
+                            $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+                            if($rincian_rkp){
+                            $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+                            }else{
+                                $rincian_rkp    = new RekapRincian;
+                            }
+                            $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                            $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                            $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                            $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                            $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                            $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                            $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                            $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                            $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+                            $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+                            $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                            $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+                            $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                            $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                            $rincian_rkp->save();
+
                     BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
                     $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
 
@@ -2619,6 +2829,29 @@ class blController extends Controller
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                             'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
                             ]);
+
+                            $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+                            if($rincian_rkp){
+                            $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+                            }else{
+                                $rincian_rkp    = new RekapRincian;
+                            }
+                            $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                            $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                            $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                            $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                            $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                            $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                            $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                            $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                            $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+                            $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+                            $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                            $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+                            $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                            $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                            $rincian_rkp->save();
+        
                     // BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
                     $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
 
@@ -2648,6 +2881,31 @@ class blController extends Controller
                     'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                     'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
                     ]);
+
+
+                    $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+                    if($rincian_rkp){
+                    $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+                    }else{
+                        $rincian_rkp    = new RekapRincian;
+                    }
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+                    $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+                    $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
+
+            
             // BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
             $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
 
@@ -3930,10 +4188,16 @@ class blController extends Controller
         if(!empty($staff[0])) $staff1 = $staff[0]->user->email.' - '.$staff[0]->user->name;
         if(!empty($staff[1])) $staff2 = $staff[1]->user->email.' - '.$staff[1]->user->name;
 
-        if($status == 'murni'){ $log        = Log::where('LOG_DETAIL','BL#'.$id)->orWhere('LOG_DETAIL','like','BL#'.$id.'#%')->where('LOG_TIME','>','2018-05-01 01:01:01')->orderBy('LOG_ID')->get();
+        if($status == 'murni'){ $log        = Log::where(function ($query) use ($id) {
+                $query->where('LOG_DETAIL','BL#'.$id)
+                      ->orWhere('LOG_DETAIL','like','BL#'.$id.'#%');
+            })->where('LOG_TIME','>','2018-05-01 01:01:01')->orderBy('LOG_ID')->get();
         }
         else{ 
-            $log        = Log::where('LOG_DETAIL','BLPERUBAHAN#'.$id)->orWhere('LOG_DETAIL','like','BL#'.$id.'#%')->whereDate('LOG_TIME','>','2018-05-01 01:01:01')->orderBy('LOG_ID')->get();
+            $log        = Log::where(function ($query) use ($id) {
+                $query->where('LOG_DETAIL','BLPERUBAHAN#'.$id)
+                      ->orWhere('LOG_DETAIL','like','BL#'.$id.'#%');
+            })->whereDate('LOG_TIME','>','2018-05-01 01:01:01')->orderBy('LOG_ID')->get();
         }
         $timeline   = '';
 
@@ -4092,7 +4356,7 @@ class blController extends Controller
     }
 
     public function getpagurincian($tahun,$status,$id){
-        $blpagu         = BL::where('BL_ID',$id)->value('BL_PAGU');
+        $blpagu         = BL::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->value('BL_PAGU');
         $rincian_total   = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
 
         $id        = $this->getSKPD($tahun);

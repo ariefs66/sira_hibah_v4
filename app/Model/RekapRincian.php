@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class RekapRincian extends Model
 {
 	protected $table		= 'BUDGETING.RKP_RINCIAN';
-    protected $primaryKey 	= 'RINCIAN_ID';
+    protected $primaryKey 	= 'REKAP_ID';
     public $timestamps 		= false;
     public $incrementing 	= false;
 
