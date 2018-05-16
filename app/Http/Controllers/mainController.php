@@ -18,7 +18,7 @@ class mainController extends Controller
     }
 
 	public function index(){
-		$tahun 	= Carbon\Carbon::now()->format('Y');
+		$tahun 	= Carbon\Carbon::now()->format('Y')+1;
 		if(Auth::user()->app == 3) {
 			if(substr(Auth::user()->mod, 4,1) == 1 || substr(Auth::user()->mod, 5,1) == 1 || substr(Auth::user()->mod, 6,1) == 1){
 				return Redirect('harga/'.$tahun);		
