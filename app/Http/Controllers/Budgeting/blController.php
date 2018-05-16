@@ -1378,8 +1378,13 @@ class blController extends Controller
                         
         $program    = BL::where('BL_ID',Input::get('BL_ID'))->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')->first();
         $totalBLProg    = Propri::where('PROGRAM_ID',$program->PROGRAM_ID)->where('PROPRI_TAHUN',$tahun)->where('SKPD_ID',$skpd)->value('PROPRI_PAGU');
-        
-        if($totalBL > $totalBLProg){
+        //Mode cek program prioritas
+        $total_murni = Rincian::join('BUDGETING.DAT_BL','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID')
+        ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+        ->where('DAT_BL.SKPD_ID',$skpd)->where('REF_KEGIATAN.PROGRAM_ID',$program->PROGRAM_ID)
+        ->sum('RINCIAN_TOTAL');
+
+        if($total_murni > $totalBLProg){
             return "Melebihi Pagu";
         }
         
@@ -2647,8 +2652,13 @@ class blController extends Controller
 
         $program    = BL::where('BL_ID',Input::get('BL_ID'))->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')->first();
         $totalBLProg    = Propri::where('PROGRAM_ID',$program->PROGRAM_ID)->where('PROPRI_TAHUN',$tahun)->where('SKPD_ID',$skpd)->value('PROPRI_PAGU');
-        
-        if($totalBL > $totalBLProg){
+        //Mode cek program prioritas
+        $total_murni = Rincian::join('BUDGETING.DAT_BL','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID')
+        ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+        ->where('DAT_BL.SKPD_ID',$skpd)->where('REF_KEGIATAN.PROGRAM_ID',$program->PROGRAM_ID)
+        ->sum('RINCIAN_TOTAL');
+
+        if($total_murni > $totalBLProg){
             return "Melebihi Pagu";
         }
         // print_r($total);exit();
