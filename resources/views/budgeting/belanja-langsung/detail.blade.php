@@ -909,6 +909,8 @@
           success: function(msg){
             if(msg == 0){
               $.alert('Lebih Dari Pagu');
+            }else if(msg == 115){
+              $.alert('Melebihi Dari Pagu Prioritas');
             }else if(msg == 99){
               $.alert('Volume Tidak Bisa Ditambahkan');
             }else if(msg == 98){

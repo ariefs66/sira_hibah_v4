@@ -1385,7 +1385,7 @@ class blController extends Controller
         ->sum('RINCIAN_TOTAL');
 
         if($total_murni > $totalBLProg){
-            return "Melebihi Pagu";
+            return 115;
         }
         
         $hargakomponen  = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');                          
@@ -2659,7 +2659,7 @@ class blController extends Controller
         ->sum('RINCIAN_TOTAL');
 
         if($total_murni > $totalBLProg){
-            return "Melebihi Pagu";
+            return 115;
         }
         // print_r($total);exit();
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
