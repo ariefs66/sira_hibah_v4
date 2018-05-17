@@ -1382,6 +1382,7 @@ class blController extends Controller
         $total_murni = Rincian::join('BUDGETING.DAT_BL','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID')
         ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
         ->where('DAT_BL.SKPD_ID',$skpd)->where('REF_KEGIATAN.PROGRAM_ID',$program->PROGRAM_ID)
+        ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
         ->sum('RINCIAN_TOTAL');
 
         if($total_murni > $totalBLProg){
@@ -4198,10 +4199,12 @@ class blController extends Controller
         if(!empty($staff[0])) $staff1 = $staff[0]->user->email.' - '.$staff[0]->user->name;
         if(!empty($staff[1])) $staff2 = $staff[1]->user->email.' - '.$staff[1]->user->name;
 
-        if($status == 'murni'){ $log        = Log::where(function ($query) use ($id) {
+        if($status == 'murni'){ 
+            $log        = Log::where(function ($query) use ($id) {
                 $query->where('LOG_DETAIL','BL#'.$id)
                       ->orWhere('LOG_DETAIL','like','BL#'.$id.'#%');
             })->where('LOG_TIME','>','2018-05-01 01:01:01')->orderBy('LOG_ID')->get();
+            /*$log        = Log::where('LOG_DETAIL','BL#'.$id)->orWhere('LOG_DETAIL','like','BL#'.$id.'#%')->orderBy('LOG_ID')->get();*/
         }
         else{ 
             $log        = Log::where(function ($query) use ($id) {

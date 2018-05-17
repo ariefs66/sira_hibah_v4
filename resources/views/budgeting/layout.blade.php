@@ -208,13 +208,21 @@
                   <span class="font-semibold">Dashboard</span>
                 </a>                
               </li>
+
+         <!-- user aktif -->     
+          @if(Auth::user()->level == 10 or Auth::user()->active == 1)
+
+
               @if(Auth::user()->level == 8 or Auth::user()->level == 0 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
-             <!--  <li>
+
+              @if($status == 'murni')
+              <li>
                 <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/ringkasan" class="auto padding-l-r-lg">                  
                   <i class="fa fa-quote-right"></i>
                   <span class="font-semibold">Ringkasan</span>
                 </a>                
-              </li> -->
+              </li>  
+              @else
               <li>
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="fa fa-quote-right"></i>
@@ -238,6 +246,8 @@
                 </ul>
               </li>
               @endif
+              @endif
+
               <li >
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="icon-bdg_uikit"></i>
@@ -861,6 +871,12 @@
               </li>
               
               @endif
+
+        <!-- aktif fitur     -->
+          @endif
+
+
+
             </ul>
           </nav>
           <!-- nav -->

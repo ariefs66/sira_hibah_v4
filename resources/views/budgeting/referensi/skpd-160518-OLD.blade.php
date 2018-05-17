@@ -157,12 +157,7 @@
             </div> 
           </div>
 
-          <div class="form-group">
-            <label for="nama_urusan" class="col-md-3">TAHUN</label>
-            <div class="col-sm-9">
-             <input type="text" class="form-control" placeholder="Masukan Tahun SKPD" name="tahun" id="tahun" value="{{$tahun}}" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
-            </div> 
-          </div>
+         
 
           <hr class="m-t-xl">
          <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanSKPD()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
@@ -185,7 +180,6 @@
     var alamat          = $('#alamat').val();
     var pagu            = $('#pagu').val();
     var id_skpd         = $('#id_skpd').val();
-    var tahun         = $('#tahun').val();
     //var pagu            = $('.pagu').val();
     var token           = $('#token').val();
 
@@ -209,7 +203,7 @@
               'bendahara_nip'   : bendahara_nip, 
               'bendahara_skpd'  : bendahara_skpd, 
               'pagu'            : pagu,
-              'tahun'           : tahun,
+              'tahun'           : '{{$tahun}}', 
               'id_skpd'         : id_skpd},
         success: function(msg){
             if(msg == 1){
@@ -223,7 +217,6 @@
               $('#bendahara_nip').val('');
               $('#bendahara_skpd').val('');
               $('#pagu').val('');
-              $('#tahun').val('');
               $('.table').DataTable().ajax.reload();              
               $.alert({
                 title:'Info',
@@ -288,7 +281,6 @@
         $('#alamat').val(msg[0]['SKPD_ALAMAT']);
         $('#id_skpd').val(msg[0]['SKPD_ID']);
         $('#pagu').val(msg[0]['SKPD_PAGU']);
-        $('#tahun').val(msg[0]['SKPD_TAHUN']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
