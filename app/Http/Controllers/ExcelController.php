@@ -123,7 +123,7 @@ class ExcelController extends Controller
 					$sheet->setHeight(($row-1), 50);
 					if($row==17){
 						$sheet->appendRow($row, array(
-							'',$sasaran, ' '.$p['PROGRAM_NAMA'], $p['OUTCOME'],'','','','','',$p['PROGRAM_ANGGARAN'],$p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:''),'',$p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:''),'',$p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:''),'',$p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:''),'','','','','','','',$p['SKPD']
+							'',$sasaran, ' '.$p['PROGRAM_NAMA'], $p['OUTCOME'],'','','','','','',$p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:''),'',$p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:''),'',$p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:''),'',$p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:''),'','','','','','','',$p['SKPD']
             ));
             $t1 = $t1 + $p['PROGRAM_T1'];
             $t2 = $t1 + $p['PROGRAM_T2'];
@@ -132,7 +132,7 @@ class ExcelController extends Controller
             $jumlah=$jumlah+1;
 					}else{
 						$sheet->prependRow($row, array(
-							'',$p['SASARAN_NAMA'], ' '.$p['PROGRAM_NAMA'], $p['OUTCOME'],'','','','','',$p['PROGRAM_ANGGARAN'],$p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:''),'',$p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:''),'',$p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:''),'',$p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:''),'','','','','','','',$p['SKPD']
+							'',$p['SASARAN_NAMA'], ' '.$p['PROGRAM_NAMA'], $p['OUTCOME'],'','','','','','',$p['PROGRAM_T1'] . ' ' . ($p['PROGRAM_T1']?$p['SATUAN']:''),'',$p['PROGRAM_T2'] . ' ' . ($p['PROGRAM_T2']?$p['SATUAN']:''),'',$p['PROGRAM_T3'] . ' ' . ($p['PROGRAM_T3']?$p['SATUAN']:''),'',$p['PROGRAM_T4'] . ' ' . ($p['PROGRAM_T4']?$p['SATUAN']:''),'','','','','','','',$p['SKPD']
 						));
             $t1 = $t1 + $p['PROGRAM_T1'];
             $t2 = $t1 + $p['PROGRAM_T2'];
