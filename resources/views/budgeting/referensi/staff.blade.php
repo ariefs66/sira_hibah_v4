@@ -211,6 +211,7 @@
     var nama        = $('#nama_staff').val();
     var id          = $('#id_user').val();
     var token       = $('#token').val();
+    var skpd        = {{$skpd}};
     if(nip == "" || nama == ""){
       $.alert('Form harap diisi!');
     }else{
@@ -222,6 +223,7 @@
         data: {'_token'       : token,
               'NIP'           : nip, 
               'NAMA'          : nama, 
+              'SKPD'          : skpd, 
               'ID'            : id},
         success: function(msg){
               $.alert(msg);

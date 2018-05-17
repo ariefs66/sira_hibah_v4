@@ -32,7 +32,7 @@ class staffController extends Controller
                $userMonev = User::where('id',$d->USER_ID)->first();
             }
         }
-		return view('budgeting.referensi.staff',['tahun'=>$tahun,'status'=>$status,'userharga'=>$userHarga,'usermonev'=>$userMonev]);
+		return view('budgeting.referensi.staff',['tahun'=>$tahun,'status'=>$status,'userharga'=>$userHarga,'usermonev'=>$userMonev,'skpd'=>$skpd ]);
 	}
 
     public function getData($tahun){
@@ -128,7 +128,8 @@ class staffController extends Controller
             $user->level        = 1;
             $user->mod          = '00000000000';
             $user->save();
-            $id     = User::where('email',Input::get('NIP'))->value('id');
+
+            $id    = User::where('email',Input::get('NIP'))->value('id');
             //$skpd   = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
             $skpd   = $this->getSKPD($tahun);
 
