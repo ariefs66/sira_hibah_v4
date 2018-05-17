@@ -219,7 +219,7 @@
                             </select>
                           </div>
                           <div class="col-sm-1">
-                            <a class="btn btn-success" id="tambah-output" onclick="return simpanCapaian()"><i class="fa fa-plus"></i></a>
+                            <!-- <a class="btn btn-success" id="tambah-output" onclick="return simpanCapaian()"> --><i class="fa fa-plus"></i></a>
                           </div>
                         </div>
                         </div>

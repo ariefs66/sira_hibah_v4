@@ -282,7 +282,7 @@
                   @endif
                   
                   <li>
-                    @if(Auth::user()->level == 2 or Auth::user()->level == 8)
+                    @if(Auth::user()->level == 8)
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung" class="padding-l-r-lg ">
                     @else  
                     <a onclick="$.alert('Masih Ditutup')" class="padding-l-r-lg ">  
@@ -462,7 +462,7 @@
                   </li>                 
                   </ul>
               </li>              
-              @if(Auth::user()->level == 8 or Auth::user()->level == 2)
+              @if(Auth::user()->level == 8)
               <li>
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="fa fa-folder-o"></i>

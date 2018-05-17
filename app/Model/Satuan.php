@@ -23,4 +23,7 @@ class Satuan extends Model
     public function impact(){
         return $this->hasMany('App\Model\Impact');
     }
+    public function outputMaster(){
+        return $this->hasMany('App\Model\OutputMaster');
+    }
 }

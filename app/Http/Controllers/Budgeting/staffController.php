@@ -134,6 +134,7 @@ class staffController extends Controller
             $skpd   = $this->getSKPD($tahun);
 
             $ub     = new UserBudget;
+            //$ub->id             = $skpd;
             $ub->SKPD_ID        = $skpd;
             $ub->USER_ID        = $id;
             $ub->TAHUN          = $tahun;

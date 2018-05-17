@@ -28,8 +28,11 @@
                 <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung : {{ $bl->kegiatan->KEGIATAN_NAMA }}</h5>
                 @if($log_r == 1)
                 <!-- <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/log/{{ $bl->BL_ID }}" class="btn btn-danger pull-right m-t-n-sm" target="_blank"><i class="fa fa-download"></i> Log RKA</a> &nbsp;
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/sebelum/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> RKA  -->Sebelum</a>
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/sebelum/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> RKA  </a>-->
                 @endif
+
+
+                <!-- RKA
                 <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                   <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
                   </button>
@@ -46,7 +49,7 @@
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 3.2</a></li>
                     @endif
                   </ul>
-                </div>
+                </div> -->
 <!--
                 <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                   <button class="btn btn-info dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak DPA <i class="fa fa-chevron-down"></i>
@@ -179,6 +182,7 @@
               <div class="wrapper-lg">
                 <!-- <h5 class="inline font-semibold text-orange m-n ">Rincian</h5> -->
                 <h5 class="inline font-semibold text-orange m-n">Pagu &nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>Rincian : <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}</span></h5>
+
 
                 @if($bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 
                 and Auth::user()->active == 1) 
@@ -540,7 +544,7 @@
     <div class="form-group" id="koef1">
       <label for="no_spp" class="col-md-3">Koefisien</label>          
       <div class="col-sm-5">
-        <input type="number" id="vol1" class="form-control" placeholder="Masukan Jumlah" required="">      
+        <input type="number" id="vol1" class="form-control" min="0" placeholder="Masukan Jumlah" required="">      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-1">
@@ -553,7 +557,7 @@
     <div class="form-group" id="koef2">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol2" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="number" id="vol2" min="0" class="form-control" placeholder="Masukan Jumlah" >      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-2">
@@ -567,7 +571,7 @@
     <div class="form-group" id="koef3">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol3" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="number" id="vol3" min="0" class="form-control" placeholder="Masukan Jumlah" >      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-3">
@@ -581,7 +585,7 @@
     <div class="form-group" id="koef4">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="number" id="vol4" class="form-control" placeholder="Masukan Jumlah" >      
+        <input type="number" id="vol4" min="0" class="form-control" placeholder="Masukan Jumlah" >      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-4">

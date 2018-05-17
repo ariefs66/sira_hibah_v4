@@ -53,6 +53,7 @@ use App\Model\RincianLog;
 use App\Model\AKB_BL;
 use App\Model\AKB_BL_Perubahan;
 use App\Model\Rekgiat;
+use App\Model\OutputMaster;
 
 class blController extends Controller
 {
@@ -257,7 +258,13 @@ class blController extends Controller
         $program    = Kegiatan::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->value('PROGRAM_ID');
         $outcome    = Outcome::where('PROGRAM_ID',$program)->get();
         $impact     = Impact::where('PROGRAM_ID',$program)->get();
-        $output     = Output::where('BL_ID',$id)->get();
+
+        if($tahun=='2018'){
+           $output     = Output::where('BL_ID',$id)->get();     
+        }else{
+           $output     = OutputMaster::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->get();
+        }
+        
 
         $JB_521_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')
                         ->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
@@ -461,7 +468,7 @@ class blController extends Controller
         $i         = 1;
         $pajak      = '';
         foreach ($data as $data) {
-            if((($data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8 )and Auth::user()->active == 1) {
+            if((($data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8 )and Auth::user()->active == 1) { //Auth::user()->email == '196202041986031016'
                 if($data->REKENING_ID == 0 or empty($data->subrincian)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -1375,19 +1382,28 @@ class blController extends Controller
                                 $r->where('SKPD_ID',$skpd);
                             });
                         })->sum('RINCIAN_TOTAL');
-                        
-        $program    = BL::where('BL_ID',Input::get('BL_ID'))->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')->first();
-        $totalBLProg    = Propri::where('PROGRAM_ID',$program->PROGRAM_ID)->where('PROPRI_TAHUN',$tahun)->where('SKPD_ID',$skpd)->value('PROPRI_PAGU');
-        //Mode cek program prioritas
-        $total_murni = Rincian::join('BUDGETING.DAT_BL','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID')
-        ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
-        ->where('DAT_BL.SKPD_ID',$skpd)->where('REF_KEGIATAN.PROGRAM_ID',$program->PROGRAM_ID)
-        ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
-        ->sum('RINCIAN_TOTAL');
 
-        if($total_murni > $totalBLProg){
-            return 115;
+        if($tahun != '2018'){
+
+            $program    = BL::where('BL_ID',Input::get('BL_ID'))->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')->first();
+            $totalBLProg    = Propri::where('PROGRAM_ID',$program->PROGRAM_ID)->where('PROPRI_TAHUN',$tahun)->where('SKPD_ID',$skpd)->value('PROPRI_PAGU');
+            
+            //Mode cek program prioritas
+            $total_murni = Rincian::join('BUDGETING.DAT_BL','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID')
+            ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+            ->where('DAT_BL.SKPD_ID',$skpd)->where('REF_KEGIATAN.PROGRAM_ID',$program->PROGRAM_ID)
+            ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
+            ->sum('RINCIAN_TOTAL');
+
+            if($totalBLProg != ''){
+               if($total_murni > $totalBLProg){
+                    return 115;
+                } 
+            }
+
         }
+                        
+        
         
         $hargakomponen  = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');                          
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
@@ -2651,17 +2667,28 @@ class blController extends Controller
                             });
                         })->where('BL_ID','!=',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
 
-        $program    = BL::where('BL_ID',Input::get('BL_ID'))->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')->first();
-        $totalBLProg    = Propri::where('PROGRAM_ID',$program->PROGRAM_ID)->where('PROPRI_TAHUN',$tahun)->where('SKPD_ID',$skpd)->value('PROPRI_PAGU');
-        //Mode cek program prioritas
-        $total_murni = Rincian::join('BUDGETING.DAT_BL','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID')
-        ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
-        ->where('DAT_BL.SKPD_ID',$skpd)->where('REF_KEGIATAN.PROGRAM_ID',$program->PROGRAM_ID)
-        ->sum('RINCIAN_TOTAL');
+        
+        if($tahun != '2018'){
 
-        if($total_murni > $totalBLProg){
-            return 115;
+            $program    = BL::where('BL_ID',Input::get('BL_ID'))->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')->first();
+            $totalBLProg    = Propri::where('PROGRAM_ID',$program->PROGRAM_ID)->where('PROPRI_TAHUN',$tahun)->where('SKPD_ID',$skpd)->value('PROPRI_PAGU');
+            
+            //Mode cek program prioritas
+            $total_murni = Rincian::join('BUDGETING.DAT_BL','DAT_RINCIAN.BL_ID','=','DAT_BL.BL_ID')
+            ->join('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+            ->where('DAT_BL.SKPD_ID',$skpd)->where('REF_KEGIATAN.PROGRAM_ID',$program->PROGRAM_ID)
+            ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
+            ->sum('RINCIAN_TOTAL');
+
+            if($totalBLProg != ''){
+               if($total_murni > $totalBLProg){
+                    return 115;
+                } 
+            }
+
         }
+
+
         // print_r($total);exit();
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5'){
@@ -3878,7 +3905,7 @@ class blController extends Controller
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
                 }                
             }else{
-                if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9) and Auth::user()->level == 10){
+                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
                     /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
                     <i></i></label>';*/
                     $rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
@@ -3904,7 +3931,7 @@ class blController extends Controller
 
             //HAPUS BL
             //<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
-            if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8) && Auth::user()->active == 13) {
+           if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8) && Auth::user()->active == 13) {
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
@@ -3927,8 +3954,10 @@ class blController extends Controller
                 <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';*/
+
+                /* <li>
+                <a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li> */
                 $no        .= '
-                <li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
             }else{

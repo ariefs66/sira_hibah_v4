@@ -127,7 +127,7 @@ class programPrioritasController extends Controller
                                    'KODE'     => $data->PROGRAM_KODE,
                                    'NAMA'   => $data->PROGRAM_NAMA,
                                    'ID'    => $data->PROGRAM_ID,
-                                   'PAGU'    => $pagu->value('PROPRI_PAGU'),
+                                   'PAGU'    => number_format($pagu->value('PROPRI_PAGU'),0,'.',','),
                                    'KUNCI'    => $pagu->value('PROPRI_KUNCI')));
         }
       }
