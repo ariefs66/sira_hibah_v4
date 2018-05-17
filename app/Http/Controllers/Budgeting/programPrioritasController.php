@@ -86,7 +86,7 @@ class programPrioritasController extends Controller
     }
 
    	public function getProgramSKPD($tahun,$status){
-        $data      = DB::table('BUDGETING.DAT_BL')
+      $data      = DB::table('BUDGETING.DAT_BL')
                   ->where('BUDGETING.DAT_BL.BL_TAHUN',$tahun)
                   ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','BUDGETING.DAT_BL.SKPD_ID')
                   ->select('REF_SKPD.SKPD_KODE', 'REF_SKPD.SKPD_NAMA', 'REF_SKPD.SKPD_ID');
@@ -98,10 +98,9 @@ class programPrioritasController extends Controller
             $skpd_[$i]   = $s->SKPD_ID;
             $i++;
           }
-          $data       = $data->whereIn('REF_SKPD.SKPD_ID',$skpd_);
+          $data       = $data->whereIn('REFERENSI.REF_SKPD.SKPD_ID',$skpd_);
         }
         $data = $data->distinct()->get();
-       
         $view       = array();
         $totPeg      = 0;
         foreach ($data as $data) {
