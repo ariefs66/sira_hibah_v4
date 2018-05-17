@@ -260,7 +260,7 @@
 
                  <ul class="nav nav-sub dk"> 
 
-                  @if( $tahun =='2019' && Auth::user()->level == 8)               
+                  @if( $tahun =='2019' && Auth::user()->level == 8  && Auth::user()->mod == '01000000000')               
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/program-prioritas" class="padding-l-r-lg ">                      
                        <span >Program Prioritas</span>

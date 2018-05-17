@@ -98,7 +98,7 @@ class programPrioritasController extends Controller
             $skpd_[$i]   = $s->SKPD_ID;
             $i++;
           }
-          $data       = $data->whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+          $data       = $data->whereIn('REF_SKPD.SKPD_ID',$skpd_);
         }
         $data = $data->distinct()->get();
        
