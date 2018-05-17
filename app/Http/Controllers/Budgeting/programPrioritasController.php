@@ -86,11 +86,22 @@ class programPrioritasController extends Controller
     }
 
    	public function getProgramSKPD($tahun,$status){
-      
-            $data      = DB::table('BUDGETING.DAT_BL')
-                      ->where('BUDGETING.DAT_BL.BL_TAHUN',$tahun)
-                      ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','BUDGETING.DAT_BL.SKPD_ID')
-                      ->select('REF_SKPD.SKPD_KODE', 'REF_SKPD.SKPD_NAMA', 'REF_SKPD.SKPD_ID')->distinct()->get();
+        $data      = DB::table('BUDGETING.DAT_BL')
+                  ->where('BUDGETING.DAT_BL.BL_TAHUN',$tahun)
+                  ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','BUDGETING.DAT_BL.SKPD_ID')
+                  ->select('REF_SKPD.SKPD_KODE', 'REF_SKPD.SKPD_NAMA', 'REF_SKPD.SKPD_ID');
+        if(Auth::user()->mod== '01000000000'){
+          $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+          $skpd_      = array(); 
+          $i = 0;
+          foreach($skpd as $s){
+            $skpd_[$i]   = $s->SKPD_ID;
+            $i++;
+          }
+          $data       = $data->whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID')->get();
+        }
+        $data = $data->distinct()->get();
+       
         $view       = array();
         $totPeg      = 0;
         foreach ($data as $data) {
