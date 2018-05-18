@@ -907,6 +907,11 @@ class monevController extends Controller
         $prog = Monev_Program::where('DAT_PROGRAM.SKPD_ID',$skpd)->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_PROGRAM.SATUAN')
         ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID')
                 ->where('PROGRAM_TAHUN',$tahun)->get();
+    if($skpd==0){
+      return $this->tapdAll($tahun);
+    }else{
+      $idskpd         = SKPD::where('SKPD_ID',$skpd)->first();
+    }
         $program = array();
         $skpdnama = "Tidak Ada SKPD";
         $ringkasoutcome = "";
@@ -932,18 +937,20 @@ class monevController extends Controller
           $pendukung=$faktor->PENDUKUNG;
           $triwulan=$faktor->TRIWULAN;
           $renja=$faktor->RENJA;
+          $sasaran=$faktor->SASARAN;
         }else{
           $penghambat="";
           $pendukung="";
           $triwulan="";
           $renja="";
+          $sasaran="";
         }
         foreach ($prog as $prog) {
           $outcome = Monev_Outcome::where('PROGRAM_ID',$prog->REF_PROGRAM_ID)->get();
           foreach ($outcome as $outcome) {
             $ringkasoutcome = $outcome->OUTCOME_TOLAK_UKUR ." : ". $outcome->OUTCOME_TARGET . "%\r\n". $ringkasoutcome;
           }
-        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_KEGIATAN.PROGRAM_ID',$prog->PROGRAM_ID)->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.REF_KEGIATAN_ID')->get(),
+        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_PROGRAM.REF_PROGRAM_ID',$prog->REF_PROGRAM_ID)->where('DAT_KEGIATAN.SKPD_ID',$prog->SKPD_ID)->leftJoin('MONEV.DAT_PROGRAM','DAT_PROGRAM.PROGRAM_ID','=','DAT_KEGIATAN.PROGRAM_ID')->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->orderBy('DAT_KEGIATAN.KEGIATAN_NAMA')->get(),
                                  'PROGRAM_ID'     => $prog->PROGRAM_ID,
                                  'SKPD_ID'     => $prog->SKPD_ID,
                                  'SKPD'     => $prog->SKPD_NAMA,
