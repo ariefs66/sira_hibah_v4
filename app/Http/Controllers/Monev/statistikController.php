@@ -53,9 +53,9 @@ class statistikController extends Controller
           array_push($view, array( 'KODE'       =>$skpd->SKPD_ID,
                                    'NAMA'     =>$skpd->SKPD_NAMA,
                                    'TOTAL'    =>$total,
-                                   'ISI'      =>$monev->distinct()->get(['PROGRAM_KODE'])->count()));
+                                   'ISI'      =>$monev->distinct()->get(['PROGRAM_NAMA'])->count()));
             $program+=$total;
-            $monev_program+=$monev->distinct()->get(['PROGRAM_KODE'])->count();
+            $monev_program+=$monev->distinct()->get(['PROGRAM_NAMA'])->count();
         }
 
     	$data 	= [ 'tahun'		=>$tahun,
