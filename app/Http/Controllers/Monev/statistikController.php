@@ -55,7 +55,7 @@ class statistikController extends Controller
                                    'TOTAL'    =>$total,
                                    'ISI'      =>$monev->distinct()->get(['PROGRAM_KODE'])->count()));
             $program+=$total;
-            $monev_program+=$monev->count();
+            $monev_program+=$monev->distinct()->get(['PROGRAM_KODE'])->count();
         }
 
     	$data 	= [ 'tahun'		=>$tahun,
