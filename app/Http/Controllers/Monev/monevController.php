@@ -908,7 +908,6 @@ class monevController extends Controller
         ->leftJoin('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','DAT_PROGRAM.SKPD_ID')
                 ->where('PROGRAM_TAHUN',$tahun)->get();
     if($skpd==0){
-      return $this->tapdAll($tahun);
     }else{
       $idskpd         = SKPD::where('SKPD_ID',$skpd)->first();
     }
