@@ -80,7 +80,7 @@ class ExcelController extends Controller
           foreach ($outcome as $outcome) {
             $ringkasoutcome = $outcome->OUTCOME_TOLAK_UKUR ." : ". $outcome->OUTCOME_TARGET . "%\r\n". $ringkasoutcome;
           }
-        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_PROGRAM.REF_PROGRAM_ID',$prog->REF_PROGRAM_ID)->where('DAT_KEGIATAN.SKPD_ID',$prog->SKPD_ID)->leftJoin('MONEV.DAT_PROGRAM','DAT_PROGRAM.PROGRAM_ID','=','DAT_KEGIATAN.PROGRAM_ID')->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->orderBy('DAT_KEGIATAN.KEGIATAN_NAMA')->get(),
+        array_push($program, array( 'KEGIATAN'     => Monev_Kegiatan::where('DAT_PROGRAM.REF_PROGRAM_ID',$prog->REF_PROGRAM_ID)->where('DAT_KEGIATAN.SKPD_ID',$prog->SKPD_ID)->leftJoin('MONEV.DAT_PROGRAM','DAT_PROGRAM.PROGRAM_ID','=','DAT_KEGIATAN.PROGRAM_ID')->leftJoin('MONEV.DAT_REALISASI','DAT_REALISASI.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('MONEV.DAT_OUTPUT','DAT_OUTPUT.KEGIATAN_ID','=','DAT_KEGIATAN.KEGIATAN_ID')->leftJoin('REFERENSI.REF_SATUAN','REF_SATUAN.SATUAN_ID','=','DAT_KEGIATAN.SATUAN')->get(),
                                  'PROGRAM_ID'     => $prog->PROGRAM_ID,
                                  'SKPD_ID'     => $prog->SKPD_ID,
                                  'SKPD'     => $prog->SKPD_NAMA,
