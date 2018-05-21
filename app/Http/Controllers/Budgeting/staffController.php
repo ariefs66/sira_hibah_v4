@@ -130,11 +130,13 @@ class staffController extends Controller
             $user->save();
 
             $id    = User::where('email',Input::get('NIP'))->value('id');
-            //$skpd   = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+
             $skpd   = $this->getSKPD($tahun);
 
+            $get_id      = User::max('id');
+
             $ub     = new UserBudget;
-            //$ub->id             = $skpd;
+            $ub->id             = $get_id;
             $ub->SKPD_ID        = $skpd;
             $ub->USER_ID        = $id;
             $ub->TAHUN          = $tahun;

@@ -181,7 +181,10 @@
             <div class="panel bg-white">
               <div class="wrapper-lg">
                 <!-- <h5 class="inline font-semibold text-orange m-n ">Rincian</h5> -->
-                <h5 class="inline font-semibold text-orange m-n">Pagu &nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>Rincian : <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}</span></h5>
+                <h5 class="inline font-semibold text-orange m-n">
+                  Pagu OPD : <span style="color: #000" id="rincian-pagu">{{ number_format($paguOPD,0,'.',',') }}</span><br>                  
+                  Pagu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>
+                  Rincian &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}</span></h5>
 
 
                 @if($bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 
@@ -530,7 +533,7 @@
     <div class="form-group hide" id="harga-free">
       <label for="no_spp" class="col-md-3">Harga</label>          
       <div class="col-sm-9">
-        <input type="number" id="harga-free-input" class="form-control" placeholder="Masukan Harga" >          
+        <input type="number" id="harga-free-input" class="form-control" min="0" placeholder="Masukan Harga" >          
       </div> 
     </div>
 
@@ -790,9 +793,9 @@
 
   $("#jenis-pekerjaan").change(function(e, params){
     var id  = $('#jenis-pekerjaan').val();
-    if(id == '4' || id == '5'){
+    if(id == '4' || id == '5' || id == '6' || id == '7'){
       $('#nama-komponen').attr('readonly',false);
-      $('#ket-belanja').attr('readonly',true);
+      $('#ket-belanja').attr('readonly',false);
       $('#harga-free').removeClass('hide');
       $('#pilih-komponen').addClass('hide');
     };
@@ -875,7 +878,7 @@
     var HARGA           = $('#harga-free-input').val();
     if($('#pajak').is(':checked')) RINCIAN_PAJAK = 10;
     else RINCIAN_PAJAK = 0;
-    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5'){
+    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7'){
       KOMPONEN_ID   = '0';
     }
     console.log(KOMPONEN_ID);
@@ -883,7 +886,7 @@
       if(REKENING_ID == "" || SUBRINCIAN_ID == ""){
       $.alert('Form harap diisi!');
     }else{
-      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5') && (HARGA == "" || KOMPONEN_NAMA == "")){
+      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7') && (HARGA == "" || KOMPONEN_NAMA == "")){
         $.alert('Form harap diisi!');
       }else{
         if($('#id-rincian').val() == "") url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/simpan";
@@ -920,7 +923,7 @@
             }else if(msg == 98){
               $.alert('Rekening Kurang Dari Realisasi');
             }else if(msg != 0){
-              if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5') location.reload();
+              if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7') location.reload();
               $('.input-rincian,.input-sidebar').animate({'right':'-1050px'},function(){
                 $('.overlay').fadeOut('fast');
               });

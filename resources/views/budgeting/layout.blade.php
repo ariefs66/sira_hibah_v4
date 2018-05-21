@@ -169,7 +169,7 @@
                   <span>Asosiasi</span>
                 </a>
               </li-->
-              @endif
+              
               <li class="divider"></li>
               <li>
                 <a href="{{ url('/') }}/monev/{{$tahun}}">
@@ -177,6 +177,7 @@
                   <span>Monev</span>
                 </a>
               </li>
+            @endif
               <li class="divider"></li>
               <li>
                 <a href="/keluar/{{ Auth::user()->id }}">
