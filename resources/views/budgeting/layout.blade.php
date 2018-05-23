@@ -392,6 +392,11 @@
                   @endif
                   @if(Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1)            
                   <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur" class="padding-l-r-lg ">              
+                       <span >Nomenklatur Program & Kegiatan</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program" class="padding-l-r-lg ">              
                        <span >Program & Kegiatan Urusan</span>
                     </a>

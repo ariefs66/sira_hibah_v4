@@ -338,6 +338,12 @@ Route::post('/main/{tahun}/{status}/pengaturan/subunit/delete', 'Budgeting\Refer
 Route::post('/main/{tahun}/{status}/pengaturan/subunit/add/submit', 'Budgeting\Referensi\subunitController@submitAdd');
 Route::post('/main/{tahun}/{status}/pengaturan/subunit/edit/submit', 'Budgeting\Referensi\subunitController@submitEdit');
 
+//NOMENKLATUR
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur', 'Budgeting\Referensi\nomenklaturController@index');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData', 'Budgeting\Referensi\nomenklaturController@getData');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData/{id}', 'Budgeting\Referensi\nomenklaturController@getDetail');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getDataDetail/{id}', 'Budgeting\Referensi\nomenklaturController@getDataDetail');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getCapaianKegiatan/{id}', 'Budgeting\Referensi\nomenklaturController@getCapaianKegiatan');
 
 //PROGRAM
 Route::get('/main/{tahun}/{status}/pengaturan/program', 'Budgeting\Referensi\programController@index');

@@ -1,5 +1,22 @@
-test
+TODO:
+Nomenklatur program kegiatan===
+daftar skpd
+lihat detaiil rekening dari tabel ref_rekening
+save rekening ke ref_giat
+hapus rekening kegiatan
+tambah komponen rincian
+tambah > jumlah outputna
+===============================
 
+
+Done:
 Setting User
 Aktivasi User
 Ganti SKPD / Pindah SKPD
+Nomenklatur program kegiatan===
+detail > detail program outcome
+edit program > ref_program
+hapus program
+kegiatan > detail kegiatan
+edit kegiatan
+===============================
