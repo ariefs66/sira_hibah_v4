@@ -259,6 +259,90 @@
     </div>
   </div>
 </div>
+<div class="set-output modal fade " id="set-output-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white modal-lg">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <h5 class="inline font-semibold text-orange m-n text16 ">Set Output</h5>
+      </div>
+      <div class="wrapper-lg m-t-n-md">
+          <div class="form-group m-t-n-md">
+            <div class="col-sm-5 no-padder">
+              <input type="text" class="form-control" placeholder="Tolak Ukur" id="tolak-ukur-output">
+              <input type="hidden" class="form-control" id="id-output">
+              <input type="hidden" class="form-control" id="id-kegiatan">
+            </div> 
+            <div class="col-sm-2 no-padder">
+              <input type="text" class="form-control" placeholder="Target" id="target-output">
+            </div> 
+            <div class="col-sm-2 no-padder">
+              <select class="w-full" id="satuan-output">
+                <option value="0">Satuan</option>
+                @foreach($satuan as $sat)
+                <option value="{{ $sat->SATUAN_ID }}">{{ $sat->SATUAN_NAMA }}</option>
+                @endforeach
+              </select>
+            </div>
+            <button class="btn btn-success col-sm-1" onclick="return simpanOutput()"><i class="fa fa-plus"></i></button>            
+          </div>
+      </div>      
+      <div class="table-responsive">
+        <table class="table table-popup table-striped b-t b-b table-output" id="table-output">
+          <thead>
+            <tr>
+              <th width="1%">Indikator</th>
+              <th>Tolak Ukur</th>
+              <th width="10%">Target</th>                          
+              <th width="1%">#</th>                          
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="set-rekgiat modal fade " id="set-rekgiat-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white modal-lg">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <h5 class="inline font-semibold text-orange m-n text16 ">Set Rekening Kegiatan</h5>
+      </div>
+      <div class="wrapper-lg m-t-n-md">
+          <div class="form-group m-t-n-md">
+            <div class="col-sm-11 no-padder">
+              <label for="nama_urusan" class="col-sm-1">Rekening</label>          
+              <div class="col-sm-10">
+                <select ui-jq="chosen" class="w-full" id="id-rekening" name="rekening">
+                  @foreach($rekening as $r)
+                    <option value="{{ $r->REKENING_ID }}">{{ $r->REKENING_KODE.' - '.$r->REKENING_NAMA }}</option>
+                  @endforeach
+                </select>
+              </div> 
+              <button class="btn btn-success col-sm-1" onclick="return simpanRekGiat()"><i class="fa fa-plus"></i></button>            
+              <input type="hidden" class="form-control" id="id-rekgiat">
+              <input type="hidden" class="form-control" id="kegiatan-id">
+            </div> 
+          </div>
+      </div>      
+      <div class="table-responsive">
+        <table class="table table-popup table-striped b-t b-b table-rekgiat" id="table-rekgiat">
+          <thead>
+            <tr>
+              <th width="1%">Kode Rekening</th>
+              <th>Nama Rekening</th>
+              <th width="10%">Kunci</th>                          
+              <th width="1%">#</th>                          
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('plugin')
@@ -279,6 +363,22 @@
         $('#program_').append(data).trigger('chosen:updated');
       }
     });
+  });
+  $('#filter-skpd').change(function(e, params){
+      var id  = $('#filter-skpd').val();
+      if(id>1){
+        id = "skpd="+id;
+      }
+      $.fn.dataTable.ext.errMode = 'none';
+      $('.table-program-head').DataTable().destroy();
+      $('.table-program-head').DataTable({
+        sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/getData?'+id,
+        aoColumns: [
+        { mData: 'id_program',class:'hide' },
+        { mData: 'URUSAN' },
+        { mData: 'PROGRAM' },
+        { mData: 'OPSI' }]
+      });
   });
 
 	$('.table-program-nomenklatur').on('click', '.table-program-head > tbody > tr > td:nth-child(3) ', function () {
@@ -568,21 +668,98 @@
         }
     });
   }
+  function simpanOutput(){
+    id          = $('#id-output').val();
+    idkegiatan  = $('#id-kegiatan').val();
+    tolakukur   = $('#tolak-ukur-output').val();
+    target      = $('#target-output').val();
+    satuan      = $('#satuan-output').val();
+    token       = $('#token').val();
+    if(id){
+        uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/editOutput"; 
+    }else{
+        uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/submitOutput"; 
+    }
+    if(!idkegiatan){
+      $.alert("Terjadi Kesalahan!");
+      $('#set-output-modal').modal('close');
+      return 0;
+    }
+    $.ajax({
+        url: uri,
+        type: "POST",
+        data: {'_token'         : token,
+              'id'              : id,
+              'idkegiatan'     : idkegiatan,
+              'tolakukur'       : tolakukur, 
+              'target'          : target, 
+              'satuan'          : satuan},
+        success: function(msg){
+          $.alert(msg);
+          $('#id-output').val(null);
+          $('#tolak-ukur-output').val(null);
+          $('#target-output').val(null);
+          $('#satuan-output').val(0);
+          $('#table-output').DataTable().ajax.reload();
+        }
+    });
+  }
+  function simpanRekGiat(){
+    id          = $('#id-rekgiat').val();
+    idkegiatan  = $('#kegiatan-id').val();
+    rekening   = $('#id-rekening').val();
+    token       = $('#token').val();
+    if(id){
+        uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/editRekGiat"; 
+    }else{
+        uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/submitRekGiat"; 
+    }
+    if(!idkegiatan){
+      $.alert("Terjadi Kesalahan!");
+      $('#set-rekgiat-modal').modal('close');
+      return 0;
+    }
+    $.ajax({
+        url: uri,
+        type: "POST",
+        data: {'_token'         : token,
+              'id'              : id,
+              'idkegiatan'     : idkegiatan,
+              'idrekening'       : rekening},
+        success: function(msg){
+          $.alert(msg);
+          $('#id-rekgiat').val(null);
+          $('#id-rekening').val(null);
+          $('#table-rekgiat').DataTable().ajax.reload();
+        }
+    });
+  }
+function showRekeningGiat(id){
+    $('#kegiatan-id').val(id);
+    $('#table-rekgiat').DataTable().destroy();
+    $('#table-rekgiat').DataTable({
+      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getRekGiat/"+id,
+      aoColumns: [
+      { mData: 'REKENING_KODE' },
+      { mData: 'REKENING_NAMA' },
+      { mData: 'REKENING_KUNCI' },
+      { mData: 'AKSI' }]
+    });
+    $('#set-rekgiat-modal').modal('show');
+  }
 
   function showIndikatorGiat(id){
-    $('#id-capaian').val(id);
-    $('#indikator-capaian').addClass('hide');
-    $('#tipe-capaian').val('1');    
-    $('#table-capaian').DataTable().destroy();
-    $('#table-capaian').DataTable({
-      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getCapaianKegiatan/"+id,
+    $('#id-kegiatan').val(id);
+    $('#table-output').DataTable().destroy();
+    $('#table-output').DataTable({
+      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/"+id,
       aoColumns: [
       { mData: 'INDIKATOR' },
       { mData: 'TOLAK_UKUR' },
       { mData: 'TARGET' },
       { mData: 'AKSI' }]
     });
-    $('#set-capaian-modal').modal('show');
+    $('#set-output-modal').modal('show');
   }
 
   function hapusOutcome(id){
@@ -644,25 +821,48 @@
     function hapusOutput(id){
       token       = $('#token').val();
       $.ajax({
-          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/hapusOutput",
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/hapusOutput",
           type: "POST",
           data: {'_token'         : token,
                 'id'              : id},
           success: function(msg){
             $.alert(msg);
-            $('#table-capaian').DataTable().ajax.reload();
+            $('#table-output').DataTable().ajax.reload();
           }
       }); 
     }   
     function editOutput(id){
       $.ajax({
-          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/output/"+id,
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/detailOutput/"+id,
           type: "GET",
           success: function(msg){
-            $('#tolak-ukur').val(msg['OUTPUT_TOLAK_UKUR']);
-            $('#target-capaian').val(msg['OUTPUT_TARGET']);
-            $('#satuan-capaian').val(msg['SATUAN_ID']);
-            $('#id-indikator').val(msg['OUTPUT_ID']);
+            $('#tolak-ukur-output').val(msg['OUTPUT_TOLAK_UKUR']);
+            $('#target-output').val(msg['OUTPUT_TARGET']);
+            $('#satuan-output').val(msg['SATUAN_ID']);
+            $('#id-output').val(msg['OUTPUT_ID']);
+          }
+      }); 
+    }
+    function hapusRekGiat(id){
+      token       = $('#token').val();
+      $.ajax({
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/hapusRekGiat",
+          type: "POST",
+          data: {'_token'         : token,
+                'id'              : id},
+          success: function(msg){
+            $.alert(msg);
+            $('#table-rekgiat').DataTable().ajax.reload();
+          }
+      }); 
+    }   
+    function editRekGiat(id){
+      $.ajax({
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/detailRekGiat/"+id,
+          type: "GET",
+          success: function(msg){
+            $('#id-rekening').val(msg['REKENING_ID']).trigger("chosen:updated");
+            $('#id-rekgiat').val(msg['REKGIAT_ID']);
           }
       }); 
     }

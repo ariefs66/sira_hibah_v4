@@ -167,21 +167,29 @@
   function loadTable(kategori){
     $('#table-komponen').DataTable().destroy();
     $('#table-komponen').DataTable({
-      sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/referensi/komponen/getData/"+kategori,
+      processing: true,
+      serverSide: true,
+      sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/_/referensi/komponen/getData/"+kategori,
       aoColumns: [
         { mData: 'NO'},
         { mData: 'KOMPONEN_NAMA' },
         { mData: 'KOMPONEN_SPESIFIKASI' },
         { mData: 'KOMPONEN_SATUAN' },
         { mData: 'KOMPONEN_HARGA',class:'text-right' },
+        @if(substr(Auth::user()->mod,4,1)==1)      
+        { mData: 'KUNCI' },
+        @endif
         { mData: 'AKSI' }]
     });
+    $.fn.dataTable.ext.errMode = 'none';
   }
 
   function getrekening(komponen){
     $('#table-modal').DataTable().destroy();
     $('#table-modal').DataTable({
-      sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/referensi/komponen/getrekening/"+komponen,
+      processing: true,
+      serverSide: true,
+      sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/_/referensi/komponen/getrekening/"+komponen,
       aoColumns: [
         { mData: 'NO'},
         { mData: 'REKENING_KODE' },
@@ -194,7 +202,9 @@
   function getuser(komponen) {
     $('#table-modal').DataTable().destroy();
     $('#table-modal').DataTable({
-      sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/referensi/komponen/getuser/"+komponen,
+      processing: true,
+      serverSide: true,
+      sAjaxSource: "{{ url('/') }}/main/{{$tahun}}/_/referensi/komponen/getuser/"+komponen,
       aoColumns: [
         { mData: 'NO'},
         { mData: 'SKPD_KODE' },

@@ -52,10 +52,12 @@ class kegiatanController extends Controller
 
     public function getDetail($tahun,$status,$id){
     	$data 			= Kegiatan::where('KEGIATAN_ID',$id)->get();
-        $skpd           = Kegunit::where('KEGIATAN_ID',$id)->get();
+        $skpd           = Kegunit::where('KEGIATAN_ID',$id)->where('TAHUN',$tahun)->get();
         $view           = "";
         foreach($skpd as $s){
-            $view .= "<option value='".$s->SKPD_ID."' selected>".$s->skpd->SKPD_NAMA."</option>";
+            if($s->skpd){
+                $view .= "<option value='".$s->SKPD_ID."' selected>".$s->skpd->SKPD_NAMA."</option>";
+            }
         }
     	return ['data'=>$data,'skpd'=>$view];
     }

@@ -343,7 +343,15 @@ Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur', 'Budgeting\Referensi
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData', 'Budgeting\Referensi\nomenklaturController@getData');
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData/{id}', 'Budgeting\Referensi\nomenklaturController@getDetail');
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getDataDetail/{id}', 'Budgeting\Referensi\nomenklaturController@getDataDetail');
-Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getCapaianKegiatan/{id}', 'Budgeting\Referensi\nomenklaturController@getCapaianKegiatan');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getOutput/{id}', 'Budgeting\Referensi\nomenklaturController@getOutput');
+Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/submitOutput', 'Budgeting\Referensi\nomenklaturController@submitOutput');
+Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/editOutput', 'Budgeting\Referensi\nomenklaturController@editOutput');
+Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/hapusOutput', 'Budgeting\Referensi\nomenklaturController@hapusOutput');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getRekGiat/{id}', 'Budgeting\Referensi\nomenklaturController@getRekGiat');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/detailRekGiat/{id}', 'Budgeting\Referensi\nomenklaturController@detailRekGiat');
+Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/submitRekGiat', 'Budgeting\Referensi\nomenklaturController@submitRekGiat');
+Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/editRekGiat', 'Budgeting\Referensi\nomenklaturController@editRekGiat');
+Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/hapusRekGiat', 'Budgeting\Referensi\nomenklaturController@hapusRekGiat');
 
 //PROGRAM
 Route::get('/main/{tahun}/{status}/pengaturan/program', 'Budgeting\Referensi\programController@index');

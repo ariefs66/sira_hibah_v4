@@ -35,8 +35,11 @@ class komponenController extends Controller
     }
 
     public function referensi($tahun,$status){
-        $data   = ['tahun'  =>$tahun,
-                   'status' =>$status];
+        $rekening   = Rekening::where('REKENING_KODE','like','5%')
+                            ->whereRaw('LENGTH("REKENING_KODE") = 11')
+                            ->get();
+        $satuan     = Satuan::all();
+    	$data 	= ['tahun'	=>$tahun,'rekening'=>$rekening,'satuan'=>$satuan,'status'=>$status];
         return View('budgeting.referensi.komponen',$data);
     }
 
@@ -59,14 +62,23 @@ class komponenController extends Controller
         {
             $kondisi = 'KOMPONEN_KODE';
         }
-    	$data 	= Komponen::where($kondisi,'ILIKE',strtolower($kategori).'%')
+        if($req->sSearch == ""){
+            $data 	= Komponen::where('KOMPONEN_TAHUN',$tahun)
+            ->limit($length)
+            ->offset($start)
+            ->orderBy('KOMPONEN_KODE')
+            ->get();
+            $count = Komponen::where('KOMPONEN_TAHUN',$tahun)->get()->count();
+        }else{
+            $data 	= Komponen::where($kondisi,'ILIKE','%'.strtolower($kategori).'%')
                             ->where('KOMPONEN_TAHUN',$tahun)
                             ->limit($length)
 							->offset($start)
 					    	->orderBy('KOMPONEN_KODE')
                             ->get();
-        $display = $data->count();
-        $count = Komponen::where($kondisi,'like',$kategori.'%')->where('KOMPONEN_TAHUN',$tahun)->get()->count();
+            $count = Komponen::where($kondisi,'ILIKE','%'.strtolower($kategori).'%')->where('KOMPONEN_TAHUN',$tahun)->get()->count();
+        }
+    	$display = $data->count();
         
     	$i = $start+1;
         $view = array();
