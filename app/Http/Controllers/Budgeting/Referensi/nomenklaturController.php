@@ -30,7 +30,7 @@ class nomenklaturController extends Controller
 	public function index($tahun,$status){
 		$urusan 	= Urusan::where('URUSAN_TAHUN',$tahun)->get();
 		$skpd 		= SKPD::where('SKPD_TAHUN',$tahun)->get();
-		$rekening 	= Rekening::where('REKENING_TAHUN',$tahun)->get();
+		$rekening 	= Rekening::where('REKENING_TAHUN',$tahun)->where('REKENING_KODE','like','5.2%')->get();
         $satuan     = Satuan::orderBy('SATUAN_NAMA')->get();
     	return View('budgeting.referensi.nomenklatur',['tahun'=>$tahun,'status'=>$status,'rekening'=>$rekening,'urusan'=>$urusan,'skpd'=>$skpd,'satuan'=>$satuan]);
     }
