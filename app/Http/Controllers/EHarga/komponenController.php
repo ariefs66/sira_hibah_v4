@@ -58,6 +58,9 @@ class komponenController extends Controller
         $length = ($req->iDisplayLength == "")? 10 : $req->iDisplayLength;
         $kategori = ($req->sSearch == "")? $kategori : urldecode($req->sSearch);
         $kondisi = 'KOMPONEN_NAMA';
+        $sort = 'mDataProp_'.$req->iSortCol_0;
+        $order = ($req->$sort == "" || $req->iSortCol_0 == '0') ? 'KOMPONEN_KODE' : $req->$sort;
+        $sort = ($req->sSortDir_0 == "") ? 'asc' : $req->sSortDir_0;
         if (preg_match('/[.].*[0-9]|[0-9].*[.]/', $kategori))
         {
             $kondisi = 'KOMPONEN_KODE';
@@ -66,7 +69,7 @@ class komponenController extends Controller
             $data 	= Komponen::where('KOMPONEN_TAHUN',$tahun)
             ->limit($length)
             ->offset($start)
-            ->orderBy('KOMPONEN_KODE')
+            ->orderBy($order, $sort)
             ->get();
             $count = Komponen::where('KOMPONEN_TAHUN',$tahun)->get()->count();
         }else{
@@ -74,7 +77,7 @@ class komponenController extends Controller
                             ->where('KOMPONEN_TAHUN',$tahun)
                             ->limit($length)
 							->offset($start)
-					    	->orderBy('KOMPONEN_KODE')
+                            ->orderBy($order, $sort)
                             ->get();
             $count = Komponen::where($kondisi,'ILIKE','%'.strtolower($kategori).'%')->where('KOMPONEN_TAHUN',$tahun)->get()->count();
         }
