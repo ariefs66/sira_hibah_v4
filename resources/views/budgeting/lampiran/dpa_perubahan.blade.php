@@ -719,13 +719,13 @@
 	</tr>
 	<tr>
 		<td class="tengah" width="15%">Triwulan IV</td>
-		<td class="kiri" width="25%">Rp. {{ number_format($akb_bl->tri4,0,',','.') }}</td>
+		<td class="kiri" width="25%">Rp. {{ number_format($total-($akb_bl->tri1+$akb_bl->tri2+$akb_bl->tri3),0,',','.') }}</td>
 		<td width="20%"> </td>
 		<td></td>
 	</tr>
 	<tr>
 		<td class="kanan" width="15%"><b>Jumlah</b></td>
-		<td class="kiri" width="25%"><b>Rp. {{ number_format($akb_bl->tri1+$akb_bl->tri2+$akb_bl->tri3+$akb_bl->tri4,0,',','.') }}</b></td>
+		<td class="kiri" width="25%"><b>Rp. {{ number_format($total,0,',','.') }}</b></td>
 		<td width="20%"> </td>
 		<td></td>
 	</tr>
