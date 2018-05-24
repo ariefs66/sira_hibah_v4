@@ -211,7 +211,7 @@
     var nama        = $('#nama_staff').val();
     var id          = $('#id_user').val();
     var token       = $('#token').val();
-    var skpd        = {{$skpd}};
+    var skpd        = @php echo '"'.$skpd.'";'; @endphp
     if(nip == "" || nama == ""){
       $.alert('Form harap diisi!');
     }else{

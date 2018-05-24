@@ -345,8 +345,8 @@ class staffController extends Controller
     }
 
     public function aktivasiUser($tahun){
-        $user_id = UserBudget::where('id',Input::get('id'))->where('TAHUN',$tahun)->pluck('SKPD_ID');
-        $user_id = UserBudget::where('SKPD_ID',$user_id)->pluck('id');
+        $user_id = UserBudget::where('USER_ID',Input::get('id'))->where('TAHUN',$tahun)->pluck('SKPD_ID');
+        $user_id = UserBudget::where('SKPD_ID',$user_id)->pluck('USER_ID');
         foreach ($user_id as $id) {
             User::where('id',$id)->update(['active'=>1]);
         }
@@ -354,8 +354,8 @@ class staffController extends Controller
     }
 
     public function nonAktivasiUser($tahun){
-        $user_id = UserBudget::where('id',Input::get('id'))->where('TAHUN',$tahun)->pluck('SKPD_ID');
-        $user_id = UserBudget::where('SKPD_ID',$user_id)->pluck('id');
+        $user_id = UserBudget::where('USER_ID',Input::get('id'))->where('TAHUN',$tahun)->pluck('SKPD_ID');
+        $user_id = UserBudget::where('SKPD_ID',$user_id)->pluck('USER_ID');
         foreach ($user_id as $id) {
             User::where('id',$id)->update(['active'=>0]);
         }
