@@ -100,6 +100,7 @@ class komponenController extends Controller
                                 <a onclick="return getuser(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Pengguna"><i class="icon-bdg_people"></i></a>
                                 <a onclick="return ubah(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Ubah"><i class="mi-edit"></i></a>
                                 <a onclick="return tambahrekening(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Tambah Rekening"><i class="icon-bdg_setting2"></i></a>
+                                <a onclick="return hapus(\''.$data->KOMPONEN_ID.'\')" data-toggle="tooltip" title="Hapus"><i class="mi-trash"></i></a>
                             </div>';
             if($data->KOMPONEN_KUNCI == 1) 
                     $kunci = '<label class="i-switch bg-success m-t-xs m-r"><input type="checkbox" onchange="return buka(\''.$data->KOMPONEN_ID.'\')" id="buka-'.$data->BL_ID.'"><i></i></label>';
