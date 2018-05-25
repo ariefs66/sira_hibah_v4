@@ -134,13 +134,23 @@ class komponenController extends Controller
     	$data 	= Rekom::where('KOMPONEN_ID',$komponen)->get();
     	$i = 1;
         $view = array();
+        $aksi = '';
+        $count 	=  $data->count();
+        $display = $data->count();
         foreach ($data as $data) {
+            if(substr(Auth::user()->mod,4,1) == 1 or substr(Auth::user()->mod,6,1) == 1){
+                $aksi = '<div class="action visible">
+                <a onclick="return hapusRekening(\''.$data->REKOM_ID.'\')" data-toggle="tooltip" title="Hapus"><i class="mi-trash"></i></a>
+            </div>';
+            }
             array_push($view, array( 'NO'       			=>$i,
                                      'REKENING_KODE'       	=>$data->rekening->REKENING_KODE,
-                                     'REKENING_NAMA' 		=>$data->rekening->REKENING_NAMA));
+                                     'REKENING_NAMA' 		=>$data->rekening->REKENING_NAMA,
+                                     'AKSI'                 =>$aksi));
             $i++;
         }
-        $out = array("aaData"=>$view);      
+        $out = array("iTotalRecords" 		=> intval($display),
+        "iTotalDisplayRecords"  => intval($count),"aaData"=>$view);      
         return Response::JSON($out);
     }
 
@@ -162,6 +172,11 @@ class komponenController extends Controller
 
     public function delete($tahun){
         Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->delete();
+        return 'Berhasil dihapus!';
+    }
+
+    public function deleteRekening($tahun){
+        Rekom::where('REKOM_ID',Input::get('REKOM_ID'))->delete();
         return 'Berhasil dihapus!';
     }
 

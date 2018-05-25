@@ -128,7 +128,8 @@
             <tr>
               <th>No</th>
               <th>Kode</th>
-              <th>Nama</th>                          
+              <th>Nama</th>  
+              <th>#</th>                         
             </tr>
           </thead>
           <tbody>
@@ -469,7 +470,8 @@
       aoColumns: [
         { mData: 'NO'},
         { mData: 'REKENING_KODE' },
-        { mData: 'REKENING_NAMA' }]
+        { mData: 'REKENING_NAMA' },
+        { mData: 'AKSI' }]
     });
     $('#judul-modal').text('Daftar Rekening');
     $('#modal').modal('show');
@@ -540,6 +542,33 @@
                     'KOMPONEN_ID'     : id},
               success: function(msg){
                 $('#table-komponen').DataTable().ajax.reload();
+                $.alert('Hapus Berhasil!');
+              }
+            });
+          }
+        },
+        Tidak: function () {
+        }
+      }
+    });
+  }
+
+    function hapusRekening(id){
+    var token        = $('#token').val();    
+    $.confirm({
+      title: 'Hapus Data!',
+      content: 'Yakin hapus data rekening komponen?',
+      buttons: {
+        Ya: {
+          btnClass: 'btn-danger',
+          action: function(){
+            $.ajax({
+              url: "{{ url('/') }}/harga/{{$tahun}}/komponen/rekening/hapus",              
+              type: "POST",
+              data: {'_token'         : token,
+                    'REKOM_ID'     : id},
+              success: function(msg){
+                $('#table-modal').DataTable().ajax.reload();
                 $.alert('Hapus Berhasil!');
               }
             });

@@ -455,6 +455,7 @@ Route::get('/harga/{tahun}/komponen/detail/{id}', 'EHarga\komponenController@det
 Route::get('/harga/{tahun}/komponen/detail-rekom/{id}', 'EHarga\komponenController@detailrekom');
 Route::post('/harga/{tahun}/komponen/kunci/{kunci}', 'EHarga\komponenController@kunci');
 Route::post('/harga/{tahun}/komponen/hapus', 'EHarga\komponenController@delete');
+Route::post('/harga/{tahun}/komponen/rekening/hapus', 'EHarga\komponenController@deleteRekening');
 Route::post('/harga/{tahun}/komponen/submit', 'EHarga\komponenController@submit');
 Route::post('/harga/{tahun}/komponen/uploadHSPK', 'EHarga\komponenController@uploadHSPK');
 Route::post('/harga/{tahun}/komponen/uploadASB', 'EHarga\komponenController@uploadASB');
