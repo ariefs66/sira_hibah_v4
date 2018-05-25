@@ -35,7 +35,7 @@ class komponenController extends Controller
     }
 
     public function referensi($tahun,$status){
-        $rekening   = Rekening::where('REKENING_KODE','like','5%')
+        $rekening   = Rekening::where('REKENING_KODE','like','5%')->where('REKENING_TAHUN',$tahun)
                             ->whereRaw('LENGTH("REKENING_KODE") = 11')
                             ->get();
         $satuan     = Satuan::all();
@@ -44,7 +44,7 @@ class komponenController extends Controller
     }
 
     public function index($tahun){
-        $rekening   = Rekening::where('REKENING_KODE','like','5%')
+        $rekening   = Rekening::where('REKENING_KODE','like','5%')->where('REKENING_TAHUN',$tahun)
                             ->whereRaw('LENGTH("REKENING_KODE") = 11')
                             ->get();
         $satuan     = Satuan::all();
