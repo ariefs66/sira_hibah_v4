@@ -1102,7 +1102,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>Plh. SEKRETARIS DAERAH<br>Menyetujui</td>
+		<td>Menyetujui<br>Plh. SEKRETARIS DAERAH</td>
 	</tr>
 	<tr>
 		<td></td>

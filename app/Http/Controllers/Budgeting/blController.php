@@ -1004,7 +1004,7 @@ class blController extends Controller
 
             $getAkb = AKB_BL_Perubahan::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
 
-            if(( $data->bl->kunci->KUNCI_RINCIAN == 1  and Auth::user()->active == 5) or Auth::user()->level == 8 ){
+            if(( $data->bl->kunci->KUNCI_RINCIAN == 1  and Auth::user()->active == 1  and Auth::user()->level == 2) or Auth::user()->level == 8 ){
                 if(empty($getAkb) ){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -4112,9 +4112,10 @@ class blController extends Controller
                 }             
             }
 
-            if((Auth::user()->level == 2 and $data->kunci->KUNCI_GIAT == 0) or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
+            if(($thp == 1 && Auth::user()->level == 2 and $data->kunci->KUNCI_GIAT == 0) or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
                 //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
-                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';
+                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li>
+                <li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';
             }
 
             if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){
@@ -4123,19 +4124,21 @@ class blController extends Controller
 
             //HAPUS BL
             //<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
-            if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8 or Auth::user()->level == 2){
+            if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8) and $thp == 1){
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
-            //if(Auth::user()->active == 5){
+            if(Auth::user()->level == 2 && Auth::user()->active==1){
                 $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>';
-            //}
+            }
+
+            if($tahapan->TAHAPAN_NAMA != "APBD" && Auth::user()->active==1){
+                $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>';
+            }
 
             if(($data->BL_VALIDASI == 0 && Auth::user()->active==1 ) || Auth::user()->level==8){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
-                <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
-                <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>                
+                $no        .= '<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>                
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>'; 
                 /*<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>*/
@@ -4143,14 +4146,11 @@ class blController extends Controller
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>'; */
             }else{
                 $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
-                <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
-                <li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
+                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
                 <li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
                /*$no        .= '<li class="divider"></li>
                 <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';*/
-
             }
             if(empty($data->rincian)) $totalRincian = 0;
             else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,'.',',');
