@@ -87,7 +87,7 @@ class programController extends Controller
     }
 
     public function submitAdd(){
-    	$program 	= new program;
+    	$program 	= new Program;
     	$urusan 	= Urusan::where('URUSAN_TAHUN',Input::get('tahun'))
     						->where('URUSAN_ID',Input::get('urusan'))
     						->value('URUSAN_KODE');
@@ -114,20 +114,22 @@ class programController extends Controller
                             ->value('PROGRAM_NAMA');
 
     	if(empty($cekKode)){
+            $idprogram = Program::max('PROGRAM_ID') + 1;
+            $program->PROGRAM_ID          = $idprogram;
             $program->PROGRAM_TAHUN       = Input::get('tahun');
             $program->URUSAN_ID           = Input::get('urusan');
             $program->PROGRAM_KODE        = $kode;
-	    	$program->PROGRAM_NAMA        = Input::get('nama_program');
+            $program->PROGRAM_NAMA        = Input::get('nama_program');
+            if(Input::get('prioritas_program')){
+                $program->PROGRAM_PRIORITAS        = Input::get('prioritas_program');
+            }
             $program->save();
-
-            $idprogram  = Program::where('PROGRAM_TAHUN',Input::get('tahun'))
-                                    ->where('URUSAN_ID',Input::get('urusan'))
-                                    ->where('PROGRAM_KODE',$kode)
-                                    ->value('PROGRAM_ID');
             $skpd       = Input::get('skpd');
             foreach($skpd as $s){
-                $pd     = new Progunit;
+                $pd                 = new Progunit;
+                $pd->PROGUNIT_ID    = Progunit::max('PROGUNIT_ID') + 1;
                 $pd->PROGRAM_ID     = $idprogram;
+                $pd->TAHUN          = Input::get('tahun');
                 $pd->SKPD_ID        = $s;
                 $pd->save();
             }
@@ -138,7 +140,6 @@ class programController extends Controller
     }
 
     public function submitEdit(){
-    	$program   = new Program;
         $cek        = Program::where('PROGRAM_ID',Input::get('id_program'))->get();
         $no         = Program::where('PROGRAM_TAHUN',Input::get('tahun'))
                             ->where('URUSAN_ID',Input::get('urusan')) 
@@ -162,17 +163,29 @@ class programController extends Controller
                             ->where('PROGRAM_TAHUN',Input::get('tahun'))
                             ->where('URUSAN_ID',Input::get('urusan'))
     						->value('PROGRAM_NAMA');
-        if(empty($cekKode) || $cekKode != Input::get('nama_program')){                          
-        Program::where('PROGRAM_ID',Input::get('id_program'))
+        if(empty($cekKode) || $cekKode != Input::get('nama_program')){  
+            if(Input::get('prioritas_program')){
+                Program::where('PROGRAM_ID',Input::get('id_program'))
+                ->update(['PROGRAM_TAHUN'       =>Input::get('tahun'),
+                          'PROGRAM_KODE'        =>$kode,
+                          'URUSAN_ID'           =>Input::get('urusan'),
+                          'PROGRAM_PRIORITAS'   =>Input::get('prioritas_program'),
+                          'PROGRAM_NAMA'        =>Input::get('nama_program')]);
+            } else {
+                Program::where('PROGRAM_ID',Input::get('id_program'))
                 ->update(['PROGRAM_TAHUN'       =>Input::get('tahun'),
                           'PROGRAM_KODE'        =>$kode,
                           'URUSAN_ID'           =>Input::get('urusan'),
                           'PROGRAM_NAMA'        =>Input::get('nama_program')]);
+            }           
+        
         Progunit::where('PROGRAM_ID',Input::get('id_program'))->delete();
             $skpd       = Input::get('skpd');
             foreach($skpd as $s){
-                $pd     = new Progunit;
+                $pd                 = new Progunit;
+                $pd->PROGUNIT_ID    = Progunit::max('PROGUNIT_ID') + 1;
                 $pd->PROGRAM_ID     = Input::get('id_program');
+                $pd->TAHUN          = Input::get('tahun');
                 $pd->SKPD_ID        = $s;
                 $pd->save();
             }
@@ -182,7 +195,9 @@ class programController extends Controller
             Progunit::where('PROGRAM_ID',Input::get('id_program'))->delete();
             foreach($skpd as $s){
                 $pd     = new Progunit;
+                $pd->PROGUNIT_ID    = Progunit::max('PROGUNIT_ID') + 1;
                 $pd->PROGRAM_ID     = Input::get('id_program');
+                $pd->TAHUN          = Input::get('tahun');
                 $pd->SKPD_ID        = $s;
                 $pd->save();
             }

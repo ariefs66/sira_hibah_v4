@@ -98,7 +98,7 @@
 <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-btl">
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
-    <form id="form-urusan" class="form-horizontal">
+    <form id="form-program" class="form-horizontal">
       <div class="input-wrapper">
         <h5 id="judul-form">Tambah Program</h5>
           <div class="form-group">
@@ -116,9 +116,33 @@
           </div>
 
           <div class="form-group">
+            <label for="nama_program" class="col-md-3">Tahun Program</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Masukan Tahun Program" name="tahun_program" id="tahun_program" value="{{$tahun}}" disabled> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_program" class="col-md-3">Kode Program</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Kode Program Otomatis Melanjutkan Kode Terakhir" name="kode_program" id="kode_program" value="" disabled> 
+            </div> 
+          </div>
+
+          <div class="form-group">
             <label for="nama_program" class="col-md-3">Nama Program</label>          
             <div class="col-sm-9">
               <input type="text" class="form-control" placeholder="Masukan Nama Program" name="nama_program" id="nama_program" value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_program" class="col-md-3">Program Prioritas</label>          
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="prioritas_program" name="prioritas_program">
+                    <option value="0">Tidak</option>
+                    <option value="1">Ya</option>
+              </select>
             </div> 
           </div>
 
@@ -143,7 +167,7 @@
 <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-kegitan">
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
-    <form id="form-urusan" class="form-horizontal">
+    <form id="form-kegiatan" class="form-horizontal">
       <div class="input-wrapper">
         <h5 id="judul-form_">Tambah Kegiatan</h5>
           <div class="form-group">
@@ -168,9 +192,43 @@
           </div>
 
           <div class="form-group">
-            <label for="nama_program" class="col-md-3">Nama Kegiatan</label>          
+            <label for="tahun_kegiatan" class="col-md-3">Tahun Kegiatan</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Masukan Tahun Kegiatan" name="tahun_kegiatan" id="tahun_kegiatan" value="{{$tahun}}" disabled> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="kode_kegiatan" class="col-md-3">Kode Kegiatan</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Kode Program Otomatis Melanjutkan Kode Terakhir" name="kode_kegiatan" id="kode_kegiatan" value="" disabled> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_kegiatan" class="col-md-3">Nama Kegiatan</label>          
             <div class="col-sm-9">
               <input type="text" class="form-control" placeholder="Masukan Nama Kegiatan" name="nama_kegiatan" id="nama_kegiatan" value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="kunci_kegiatan" class="col-md-3">Kunci Kegiatan</label>          
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="kunci_kegiatan" name="kunci_kegiatan">
+                    <option value="0">Tidak</option>
+                    <option value="1">Ya</option>
+              </select>
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="prioritas_kegiatan" class="col-md-3">Program Kegiatan</label>          
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="prioritas_kegiatan" name="prioritas_kegiatan">
+                    <option value="0">Tidak</option>
+                    <option value="1">Ya</option>
+              </select>
             </div> 
           </div>
 
@@ -423,7 +481,7 @@
     }else{
       if(id_program == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/add/submit";
       else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/edit/submit";
-      console.log(uri);
+      //console.log(uri);
       $.ajax({
         url: uri,
         type: "POST",
@@ -466,7 +524,7 @@
     var kegiatan      = $('#nama_kegiatan').val();
     var id_giat       = $('#id_giat').val();
     var token         = $('#token').val();
-    console.log(skpd);
+    //console.log(skpd);
     if(skpd == "0" || kegiatan == "" || program == "0" ){
       $.alert('Form harap dilengkapi!');
     }else{
@@ -571,7 +629,10 @@
         $('select#skpd').append(msg['skpd']).trigger("chosen:updated");
         $('select#urusan').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
         $('#id_program').val(msg['data'][0]['PROGRAM_ID']);
+        $('#tahun_program').val(msg['data'][0]['PROGRAM_TAHUN']);
+        $('#kode_program').val(msg['data'][0]['PROGRAM_KODE']);
         $('#nama_program').val(msg['data'][0]['PROGRAM_NAMA']);
+        $('#prioritas_program').val(msg['data'][0]['PROGRAM_PRIORITAS']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -588,7 +649,10 @@
         $('select#skpd_').append(msg['skpd']).trigger("chosen:updated");
         $('select#program_').val(msg['data'][0]['PROGRAM_ID']).trigger("chosen:updated");
         $('#id_giat').val(msg['data'][0]['KEGIATAN_ID']);
+        $('#kode_kegiatan').val(msg['data'][0]['KEGIATAN_KODE']);
         $('#nama_kegiatan').val(msg['data'][0]['KEGIATAN_NAMA']);
+        $('#kunci_kegiatan').val(msg['data'][0]['KEGIATAN_NAMA']);
+        $('#prioritas_kegiatan').val(msg['data'][0]['KEGIATAN_PRIORITAS']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-kegitan').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -602,13 +666,28 @@
       $('select#skpd').val('').trigger("chosen:updated");
       $('select#skpd_').val('').trigger("chosen:updated");
       $('#nama_program').val('');
+      $('#kode_program').val('');
+      $('#prioritas_program').val('');
       $('#id_program').val('');
+      $('#nama_kegiatan').val('');
+      $('#kode_kegiatan').val('');
+      $('#kunci_kegiatan').val('');
+      $('#prioritas_kegiatan').val('');
+      $('#id_giat').val('');
   }); 
   $('.overlay').click(function(){
       $('select#urusan').val('0').trigger("chosen:updated");
+      $('select#skpd').val('').trigger("chosen:updated");
       $('select#skpd_').val('').trigger("chosen:updated");
       $('#nama_program').val('');
+      $('#kode_program').val('');
+      $('#prioritas_program').val('');
       $('#id_program').val('');
+      $('#nama_kegiatan').val('');
+      $('#kode_kegiatan').val('');
+      $('#kunci_kegiatan').val('');
+      $('#prioritas_kegiatan').val('');
+      $('#id_giat').val('');
   }); 
 
   function showCapaian(id){

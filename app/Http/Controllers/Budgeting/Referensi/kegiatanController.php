@@ -81,25 +81,34 @@ class kegiatanController extends Controller
     		}else{
     			$kode 	= $no;
     		}
-    	}
-
+        }
+            $idgiat                         = Kegiatan::max('KEGIATAN_ID') + 1;
+            $kegiatan->KEGIATAN_ID          = $idgiat;
             $kegiatan->KEGIATAN_TAHUN       = Input::get('tahun');
             $kegiatan->PROGRAM_ID           = Input::get('program');
             $kegiatan->KEGIATAN_KODE        = $kode;
 	    	$kegiatan->KEGIATAN_NAMA        = Input::get('kegiatan');
+            if(Input::get('kunci_kegiatan')){
+                $kegiatan->KEGIATAN_KUNCI        = Input::get('kunci_kegiatan');
+            }
+            if(Input::get('prioritas_kegiatan')){
+                $kegiatan->KEGIATAN_PRIORITAS        = Input::get('prioritas_kegiatan');
+            }
             $kegiatan->save();
 
             /*$idgiat  	= Kegiatan::where('KEGIATAN_TAHUN',Input::get('tahun'))
                                     ->where('PROGRAM_ID',Input::get('program'))
                                     ->where('KEGIATAN_KODE',$kode)
             
-                                    ->value('KEGIATAN_ID');*/
+                                    ->value('KEGIATAN_ID');
             $idgiat = Kegiatan::where('KEGIATAN_TAHUN',Input::get('tahun'))
-                            ->max('KEGIATAN_ID');
+                            ->max('KEGIATAN_ID');*/
 
             $skpd       = Input::get('skpd');
             foreach($skpd as $s){
                 $kg     = new Kegunit;
+                $kg->KEGUNIT_ID     = Kegunit::max('KEGUNIT_ID') + 1;
+                $kg->TAHUN          = Input::get('tahun');
                 $kg->KEGIATAN_ID    = $idgiat;
                 $kg->SKPD_ID        = $s;
                 $kg->save();
@@ -108,7 +117,6 @@ class kegiatanController extends Controller
     }
 
     public function submitEdit(){
-    	$kegiatan   = new Kegiatan;
         $cek        = Kegiatan::where('KEGIATAN_ID',Input::get('id_giat'))->first();
         $no         = Kegiatan::where('KEGIATAN_TAHUN',Input::get('tahun'))
                             ->where('PROGRAM_ID',Input::get('program')) 
@@ -129,19 +137,30 @@ class kegiatanController extends Controller
                 $kode   = $no;
             }
         }
-
-        Kegiatan::where('KEGIATAN_ID',Input::get('id_giat'))
-                ->update(['KEGIATAN_TAHUN'       =>Input::get('tahun'),
-                          'KEGIATAN_KODE'        =>$kode,
-                          'PROGRAM_ID'           =>Input::get('program'),
-                          'KEGIATAN_NAMA'        =>Input::get('kegiatan')]);
+        if(Input::get('kunci_kegiatan') && Input::get('prioritas_kegiatan') ){
+            Kegiatan::where('KEGIATAN_ID',Input::get('id_giat'))
+            ->update(['KEGIATAN_TAHUN'       =>Input::get('tahun'),
+                      'KEGIATAN_KODE'        =>$kode,
+                      'PROGRAM_ID'           =>Input::get('program'),
+                      'KEGIATAN_NAMA'        =>Input::get('kegiatan'),
+                      'KEGIATAN_KUNCI'        =>Input::get('kunci_kegiatan'),
+                      'KEGIATAN_PRIORITAS'        =>Input::get('prioritas_kegiatan')]);
+        } else {
+            Kegiatan::where('KEGIATAN_ID',Input::get('id_giat'))
+            ->update(['KEGIATAN_TAHUN'       =>Input::get('tahun'),
+                        'KEGIATAN_KODE'        =>$kode,
+                        'PROGRAM_ID'           =>Input::get('program'),
+                        'KEGIATAN_NAMA'        =>Input::get('kegiatan')]);
+        }
         Kegunit::where('KEGIATAN_ID',Input::get('id_giat'))->delete();
             $skpd       = Input::get('skpd');
             if($skpd){
                 foreach($skpd as $s){
-                    $pd     = new Kegunit;
-                    $pd->KEGIATAN_ID     = Input::get('id_giat');
-                    $pd->SKPD_ID        = $s;
+                    $pd                = new Kegunit;
+                    $pd->KEGUNIT_ID    = Kegunit::max('KEGUNIT_ID') + 1;
+                    $pd->KEGIATAN_ID   = Input::get('id_giat');
+                    $pd->TAHUN         = Input::get('tahun');
+                    $pd->SKPD_ID       = $s;
                     $pd->save();
                 }
             }
