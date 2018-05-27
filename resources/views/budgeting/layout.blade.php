@@ -357,8 +357,8 @@
                 </a>                
               </li>
                <li >
-                <!-- <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/usulan" class="auto padding-l-r-lg">   -->                
-                  <a onclick="$.alert('Masih Ditutup')" class="padding-l-r-lg ">                  
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/usulan" class="auto padding-l-r-lg">                
+                  <!-- <a onclick="$.alert('Masih Ditutup')" class="padding-l-r-lg ">           -->          
                   <i class="icon-bdg_table"></i>
                   <span class="font-semibold">Musrenbang & Reses</span>
                 </a>                
