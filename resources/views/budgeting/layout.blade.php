@@ -249,6 +249,7 @@
               @endif
               @endif
   
+              @if(Auth::user()->level == 8)
               <li >
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="icon-bdg_uikit"></i>
@@ -258,9 +259,7 @@
                   </span>
                   <span class="font-semibold">Nomenklatur</span>
                 </a>                
-
                  <ul class="nav nav-sub dk"> 
-                  @if(Auth::user()->level == 8)
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/adum" class="padding-l-r-lg ">              
                        <span >Program & Kegiatan Adum</span>
@@ -270,10 +269,10 @@
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur" class="padding-l-r-lg ">              
                        <span >Program & Kegiatan Urusan</span>
                     </a>
-                  </li>
-                  @endif              
+                  </li>            
                   </ul>
               </li>
+              @endif  
 
               <li >
                 <a href="#" class="auto padding-l-r-lg parent">                  

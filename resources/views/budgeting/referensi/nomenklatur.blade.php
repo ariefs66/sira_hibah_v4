@@ -647,11 +647,15 @@
       type: "GET",
       success: function(msg){
         $('select#skpd_').append(msg['skpd']).trigger("chosen:updated");
-        $('select#program_').val(msg['data'][0]['PROGRAM_ID']).trigger("chosen:updated");
+        $('select#urusan_').val(msg['urusan']).trigger("chosen:updated").trigger("change");
         $('#id_giat').val(msg['data'][0]['KEGIATAN_ID']);
         $('#kode_kegiatan').val(msg['data'][0]['KEGIATAN_KODE']);
         $('#nama_kegiatan').val(msg['data'][0]['KEGIATAN_NAMA']);
         $('#kunci_kegiatan').val(msg['data'][0]['KEGIATAN_NAMA']);
+        $('select#program_').val(msg['data'][0]['PROGRAM_ID']).trigger("chosen:updated");
+        $("select#program_ option").eq(1).prop('selected', true).trigger('change');
+        alert($('select#program_').val());
+        alert((msg['data'][0]['PROGRAM_ID']));
         $('#prioritas_kegiatan').val(msg['data'][0]['KEGIATAN_PRIORITAS']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-kegitan').animate({'right':'0'},"linear");  
@@ -677,8 +681,10 @@
   }); 
   $('.overlay').click(function(){
       $('select#urusan').val('0').trigger("chosen:updated");
+      $('select#urusan_').val('0').trigger("chosen:updated");
       $('select#skpd').val('').trigger("chosen:updated");
       $('select#skpd_').val('').trigger("chosen:updated");
+      $('select#program_').val('').trigger("chosen:updated");
       $('#nama_program').val('');
       $('#kode_program').val('');
       $('#prioritas_program').val('');

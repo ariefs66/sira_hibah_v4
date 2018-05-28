@@ -45,7 +45,7 @@ class kegiatanController extends Controller
     	$data 	= Program::where('URUSAN_ID',$id)->get();
     	$view   = "";
         foreach($data as $d){
-            $view .= "<option value='".$d->PROGRAM_ID."' selected>".$d->PROGRAM_KODE." - ".$d->PROGRAM_NAMA."</option>";
+            $view .= "<option value='".$d->PROGRAM_ID."'>".$d->PROGRAM_KODE." - ".$d->PROGRAM_NAMA."</option>";
         }
         return $view;
     }
@@ -54,12 +54,16 @@ class kegiatanController extends Controller
     	$data 			= Kegiatan::where('KEGIATAN_ID',$id)->get();
         $skpd           = Kegunit::where('KEGIATAN_ID',$id)->where('TAHUN',$tahun)->get();
         $view           = "";
+        $urusan         = "";
+        foreach($data as $d){
+            $urusan = Program::where('PROGRAM_ID',$d->PROGRAM_ID)->value('URUSAN_ID');
+        }
         foreach($skpd as $s){
             if($s->skpd){
                 $view .= "<option value='".$s->SKPD_ID."' selected>".$s->skpd->SKPD_NAMA."</option>";
             }
         }
-    	return ['data'=>$data,'skpd'=>$view];
+    	return ['data'=>$data,'skpd'=>$view,'urusan'=>$urusan];
     }
 
     public function submitAdd(){
