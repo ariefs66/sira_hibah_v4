@@ -43,8 +43,7 @@
                      @foreach($skpd as $pd)
                      <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
                      @endforeach
-                   </select>
-                   
+                   </select><br>
                  </div>
                  @endif
                </div>   

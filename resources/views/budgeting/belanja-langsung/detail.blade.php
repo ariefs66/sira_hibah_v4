@@ -196,6 +196,7 @@
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> User Tidak Aktif!</h5>
                 @endif
 
+
                 @if(Auth::user()->level == 8)
                 <a class="pull-right btn m-t-n-sm btn-warning" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/detail/arsip/{{$BL_ID}}" target="_blank"><i class="fa fa-archive"></i></a>
                 @endif

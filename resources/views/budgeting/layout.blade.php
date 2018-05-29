@@ -211,8 +211,7 @@
               </li>
 
          <!-- user aktif -->     
-          @if(Auth::user()->level == 10 or Auth::user()->active == 1)
-
+          @if(Auth::user()->level == 8 or Auth::user()->active == 1)
 
               @if(Auth::user()->level == 8 or Auth::user()->level == 0 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
 
@@ -272,7 +271,7 @@
                   </li>            
                   </ul>
               </li>
-              @endif  
+                  @endif  
 
               <li >
                 <a href="#" class="auto padding-l-r-lg parent">                  

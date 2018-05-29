@@ -61,14 +61,23 @@
 <body onload="return download()">
 <button id="btnExport">Export to xls</button>
 <div class="cetak" id="table_wrapper">
-<h4>Rumusan Rencana Program dan Kegiatan Perangkat Daerah Tahun {{ $tahun }}<br>dan Perkiraan Maju Tahun {{ $tahun+1 }}</h4>
 <table class="header">
 	<tr class="noborder">
-		<td class="noborder">Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
-		<td class="kanan noborder">Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }}</td>
+		<td colspan=10 class="noborder"><h4 align="center">Rumusan Rencana Program dan Kegiatan Perangkat Daerah Tahun {{ $tahun }}<br>dan Perkiraan Maju Tahun {{ $tahun+1 }}</h4></td>
 	</tr>
 </table>
-<table class="detail">
+<table class="header">
+	<tr class="noborder">
+		<td class="noborder">Nama Perangkat Daerah : </td>
+		<td colspan=3 class="noborder">{{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</td>
+		<td colspan=6></td>
+	</tr><tr class="noborder">
+		<td class="noborder">Total Pagu : </td>
+		<td colspan=3 class="noborder kanan">{{ number_format($pagu->sum('BL_PAGU'),0,',','.') }}</td>
+		<td colspan=6></td>
+	</tr>
+</table>
+<table class="detail" border='1px'> 
 	<tbody>
 	<tr class="tengah header">
 		<td rowspan="2" colspan="4">Kode</td>
@@ -84,7 +93,7 @@
 		<td>Pagu Indikatif</td>
 	</tr>
 	<tr class="tengah header">
-		<td class="tengah" colspan="4">(1)</td>
+		<td class="tengah" colspan="4">1</td>
 		<td class="tengah">2</td>
 		<td class="tengah">3</td>
 		<td class="tengah">4</td>
@@ -161,25 +170,49 @@
 		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
 		<td style="padding-left: 15px"><i>{{ $pp->kegiatan->KEGIATAN_NAMA }}</i></td>
 		<td>
+			@if($tahun>2018)
+			@if(count($pp->kegiatan->bl[0]->outputMaster) != '0')
+			@foreach($pp->kegiatan->bl[0]->outputMaster as $out)
+				&nbsp;<i>- {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
+			@endforeach
+			@endif
+			@else
 			@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				&nbsp;<i>- {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
 			@endforeach
 			@endif
+			@endif
 		</td>
 		<td>
+			@if($tahun>2018)
+			@if(count($pp->kegiatan->bl[0]->outputMaster) != '0')
+			@foreach($pp->kegiatan->bl[0]->outputMaster as $out)
+				&nbsp;<i>- {{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
+			@endforeach
+			@endif
+			@else
 			@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				&nbsp;<i>- {{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
 			@endforeach
 			@endif
+			@endif
 		</td>
 		<td class="kanan"><i>{{ number_format($pp->pagu,0,',','.') }}</i></td>
 		<td>
+			@if($tahun>2018)
+			@if(count($pp->kegiatan->bl[0]->outputMaster) != '0')
+			@foreach($pp->kegiatan->bl[0]->outputMaster as $out)
+				&nbsp;<i>{{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
+			@endforeach
+			@endif
+			@else
 			@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				&nbsp;<i>{{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
 			@endforeach
+			@endif
 			@endif
 		</td>
 		<td class="kanan"><i>{{ number_format($pp->pagu*1.1,0,',','.') }}</i></td>
@@ -200,9 +233,17 @@
 		    var data_type = 'data:application/vnd.ms-excel';
 		    var table_div = document.getElementById('table_wrapper');
 		    var table_html = table_div.outerHTML.replace(/ /g, '%20');
+			var header = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+			header = header + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+			header = header + '<x:Name>Error Messages</x:Name>';
+
+			header = header + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+			header = header + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+			var footer = '</body></html>';
+
 
 		    var a = document.createElement('a');
-		    a.href = data_type + ', ' + table_html;
+		    a.href = data_type + ', ' + header + table_html +footer;
 		    a.download = 'RKPD {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}.xls';
 		    a.click();
 		  });
