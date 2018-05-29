@@ -62,9 +62,6 @@ class BL extends Model
     public function output(){
         return $this->hasMany('App\Model\Output','BL_ID');
     }
-    public function outputMaster(){
-        return $this->hasMany('App\Model\OutputMaster','KEGIATAN_ID');
-    }
     public function pagurincian(){
         return $this->hasMany('App\Model\PaguRincian','BL_ID');
     }
