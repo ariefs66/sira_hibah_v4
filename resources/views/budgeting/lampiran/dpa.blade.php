@@ -283,6 +283,18 @@
 		<td>Dana yang dibutuhkan</td>
 		<td>Rp. {{ number_format($totalbl,0,',','.') }},00</td>
 	</tr>
+	@if($tahun>2018)
+	@php $output = \App\Model\OutputMaster::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->get(); @endphp
+	@if(count($output) != '0')
+	@foreach($output as $out)
+	<tr>
+		<td>Keluaran</td>
+		<td>{{ $out->OUTPUT_TOLAK_UKUR }}</td>
+		<td>{{ $out->OUTPUT_TARGET }} {{ $out->satuan->SATUAN_NAMA }}</td>
+	</tr>
+	@endforeach	
+	@endif
+	@else
 	@if($bl->output)
 	@foreach($bl->output as $out)
 	<tr>
@@ -291,6 +303,7 @@
 		<td>{{ $out->OUTPUT_TARGET }} {{ $out->satuan->SATUAN_NAMA }}</td>
 	</tr>
 	@endforeach	
+	@endif
 	@endif
 	@if($bl->kegiatan->program->impact)
 	@foreach($bl->kegiatan->program->impact as $im)
