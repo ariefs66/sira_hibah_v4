@@ -205,7 +205,7 @@
                           <div class="col-sm-6">
                             <input type="text" class="form-control" name="keluaran" placeholder="Keluaran" id="tolak-ukur">
                             <input type="hidden" class="form-control" name="id" placeholder="Keluaran" id="id-indikator">
-                            <input type="hidden" class="form-control" name="id-bl" placeholder="Keluaran" id="id-bl" value="{{$id}}">
+                            <input type="hidden" class="form-control" name="id-bl" placeholder="Keluaran" id="id-bl" value="{{($tahun>2018?$bl->KEGIATAN_ID : $id) }}">
                           </div>
                           <div class="col-sm-2">
                             <input type="text" class="form-control" name="target-keluaran" placeholder="Target" id="target-capaian">
@@ -227,7 +227,7 @@
                         <div class="table-responsive dataTables_wrapper">
                           <table ui-jq="dataTable" ui-options="{
                                 @if($tahun>2018)
-                                sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/{{ $id }}',
+                                sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/{{($tahun>2018?$bl->KEGIATAN_ID : $id) }}',
                                 aoColumns: [
                                   { mData: 'INDIKATOR' },
                                   { mData: 'TOLAK_UKUR' },
