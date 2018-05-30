@@ -259,11 +259,11 @@ class blController extends Controller
         $outcome    = Outcome::where('PROGRAM_ID',$program)->get();
         $impact     = Impact::where('PROGRAM_ID',$program)->get();
 
-       // if($tahun=='2018'){
-           $output     = Output::where('BL_ID',$id)->get();     
-        //}else{
-          // $output     = OutputMaster::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->get();
-        //}
+       if($tahun>2018){
+            $output     = OutputMaster::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->get();
+        }else{
+            $output     = Output::where('BL_ID',$id)->get();     
+        }
         
 
         $JB_521_murni = Rincian::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_RINCIAN.REKENING_ID')

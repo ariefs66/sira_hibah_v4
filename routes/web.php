@@ -344,6 +344,7 @@ Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData', 'Budgeting\R
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData/{id}', 'Budgeting\Referensi\nomenklaturController@getDetail');
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getDataDetail/{id}', 'Budgeting\Referensi\nomenklaturController@getDataDetail');
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getOutput/{id}', 'Budgeting\Referensi\nomenklaturController@getOutput');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/detailOutput/{id}', 'Budgeting\Referensi\nomenklaturController@detailOutput');
 Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/submitOutput', 'Budgeting\Referensi\nomenklaturController@submitOutput');
 Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/editOutput', 'Budgeting\Referensi\nomenklaturController@editOutput');
 Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/hapusOutput', 'Budgeting\Referensi\nomenklaturController@hapusOutput');

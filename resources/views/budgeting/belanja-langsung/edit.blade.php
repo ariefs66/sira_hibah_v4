@@ -219,19 +219,28 @@
                             </select>
                           </div>
                           <div class="col-sm-1">
-                            <!-- <a class="btn btn-success" id="tambah-output" onclick="return simpanCapaian()"> --><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-success" id="tambah-output" onclick="return simpanCapaian()"><i class="fa fa-plus"></i></a>
                           </div>
                         </div>
                         </div>
                         <hr class="m-t-xl">
                         <div class="table-responsive dataTables_wrapper">
                           <table ui-jq="dataTable" ui-options="{
+                                @if($tahun>2018)
+                                sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/{{ $id }}',
+                                aoColumns: [
+                                  { mData: 'INDIKATOR' },
+                                  { mData: 'TOLAK_UKUR' },
+                                  { mData: 'TARGET',class:'text-right' },
+                                  { mData: 'AKSI',class:'text-right' }]
+                                @else
                                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/capaianedit/{{ $id }}',
                                 aoColumns: [
                                   { mData: 'INDIKATOR' },
                                   { mData: 'TOLAK_UKUR' },
                                   { mData: 'TARGET',class:'text-right' },
                                   { mData: 'OPSI',class:'text-right' }]
+                                @endif
                               }" class="table table-striped b-t b-b"  id="tabel-indikator">
                             <thead>
                               <tr>
@@ -300,17 +309,31 @@
     var id  = $('#kegiatan').val();
     $('#tabel-indikator').DataTable().destroy();
     $('#tabel-indikator').DataTable({
+        @if($tahun>2018)
+      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/"+id,
+      aoColumns: [
+        { mData: 'INDIKATOR' },
+        { mData: 'TOLAK_UKUR' },
+        { mData: 'TARGET',class:'text-right' },
+        { mData: 'AKSI',class:'text-right' }]
+        @else
       sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/capaian/"+id,
       aoColumns: [
         { mData: 'INDIKATOR' },
         { mData: 'TOLAK_UKUR' },
-        { mData: 'TARGET',class:'text-right' }]
+        { mData: 'TARGET',class:'text-right' },
+        { mData: 'OPSI',class:'text-right' }]
+        @endif
     });
   }); 
   function hapusOutput(id){
       token       = $('#tokenoutput').val();
       $.ajax({
+        @if($tahun>2018)
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/hapusOutput",
+        @else
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/hapusOutput",
+        @endif
           type: "POST",
           data: {'_token'         : token,
                 'id'              : id},
@@ -322,7 +345,11 @@
     }   
     function editOutput(id){
       $.ajax({
+        @if($tahun>2018)
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/detailOutput/"+id,
+        @else
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/output/"+id,
+        @endif
           type: "GET",
           success: function(msg){
             $('#tolak-ukur').val(msg['OUTPUT_TOLAK_UKUR']);
@@ -334,6 +361,41 @@
     }
 
     function simpanCapaian(){
+    @if($tahun>2018)
+    id          = $('#id-indikator').val();
+    idkegiatan  = $('#id-bl').val();
+    tolakukur   = $('#tolak-ukur').val();
+    target      = $('#target-capaian').val();
+    satuan      = $('#satuan-capaian').val();
+    token       = $('#token').val();
+    if(id){
+        uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/editOutput"; 
+    }else{
+        uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/submitOutput"; 
+    }
+    if(!idkegiatan){
+      $.alert("Terjadi Kesalahan!");
+      return 0;
+    }
+    $.ajax({
+        url: uri,
+        type: "POST",
+        data: {'_token'         : token,
+              'id'              : id,
+              'idkegiatan'     : idkegiatan,
+              'tolakukur'       : tolakukur, 
+              'target'          : target, 
+              'satuan'          : satuan},
+        success: function(msg){
+          $.alert(msg);
+          $('#id-indikator').val(null);
+          $('#tolak-ukur').val(null);
+          $('#target-capaian').val(null);
+          $('#satuan-capaian').val(0);
+          $('#tabel-indikator').DataTable().ajax.reload();
+        }
+    });
+    @else
     id          = $('#id-bl').val();
     tipe        = $('#indikator-capaian').val();
     tolakukur   = $('#tolak-ukur').val();
@@ -366,12 +428,17 @@
           $('#tabel-indikator').DataTable().ajax.reload();
         }
     });
+    @endif
   }
 
   function hapusOutput(id){
       token       = $('#token').val();
       $.ajax({
+    @if($tahun>2018)
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/hapusOutput",
+    @else
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/hapusOutput",
+    @endif
           type: "POST",
           data: {'_token'         : token,
                 'id'              : id},
