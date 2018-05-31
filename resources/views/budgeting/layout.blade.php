@@ -156,6 +156,19 @@
                 </a>
               </li>
               <li>
+                <a href="{{ url('/') }}/harga/{{$tahun}}/usulan">
+                  <i class="icon-bdg_uikit"></i>
+                  <span>EHarga</span>
+                </a>
+              </li>
+              @else
+              <li>
+                <a href="{{ url('/') }}/main/{{$tahun}}/murni/">
+                  <i class="icon-bdg_uikit"></i>
+                  <span>PlanningBudgeting</span>
+                </a>
+              </li>
+              <li>
                 <a onclick="$.alert('Ditutup!')">
                   <i class="icon-bdg_uikit"></i>
                   <span>EHarga</span>

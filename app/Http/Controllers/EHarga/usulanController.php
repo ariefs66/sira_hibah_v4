@@ -337,6 +337,7 @@ class usulanController extends Controller
     public function getValid($tahun){
         //GET USULAN STAFF
         $data='';
+        $user=array();
         if(substr(Auth::user()->mod,3,1) == 1){
             $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             if($skpd){
