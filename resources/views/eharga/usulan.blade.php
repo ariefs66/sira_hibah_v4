@@ -94,7 +94,7 @@
                        serverSide: true,
                        sAjaxSource: '{{ url('/') }}/harga/{{$tahun}}/usulan/getData',
                        aoColumns: [
-                       { mData: 'ID',class:'hide'}, 
+                       { mData: 'ID',class:'hide', bSortable: 'false'}, 
                        { mData: 'CB',class:'text-center'},
                        { mData: 'PD'},
                        { mData: 'TIPE'},
@@ -104,7 +104,7 @@
                        { mData: 'HARGAAWAL',class:'text-right'},
                        { mData: 'HARGA',class:'text-right'},
                        { mData: 'DD'},
-                       { mData: 'OPSI'}
+                       { mData: 'OPSI', bSortable: 'false'}
                        ]}" class="table table-striped b-t b-b table-usulan" id="table-usulan">
                        <thead>
                         <tr>
