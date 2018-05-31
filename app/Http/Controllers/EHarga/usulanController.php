@@ -203,8 +203,22 @@ class usulanController extends Controller
 
 	if(Auth::user()->level==8 || Auth::user()->level==9){
             $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->get()->count();
-        }else{
-            $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USER_CREATED',Auth::user()->id)->get()->count();    
+        }else{ 
+            if(substr(Auth::user()->mod,3,1) == 1){
+                $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',0)->get()->count();
+            }
+            elseif(substr(Auth::user()->mod,6,1) == 1){
+                $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',2)->where('USER_POST',null)->get()->count();
+            }
+            elseif(substr(Auth::user()->mod,4,1) == 1){
+                $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',2)->where('USER_POST',Auth::user()->id)->get()->count();
+            }elseif(substr(Auth::user()->mod,5,1) == 1){
+                $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',5)->get()->count();
+            }elseif(substr(Auth::user()->mod,0,1) == 1){
+                $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',4)->get()->count();
+            }else{
+                $count = UsulanKomponen::where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USER_CREATED',Auth::user()->id)->get()->count();    
+            }
         }
 
         if($kategori){
@@ -212,8 +226,21 @@ class usulanController extends Controller
 	    if(Auth::user()->level==8 || Auth::user()->level==9){
                 $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->get()->count();
             }else{
-                $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)
-                        ->where('USER_CREATED',Auth::user()->id)->get()->count();
+                if(substr(Auth::user()->mod,3,1) == 1){
+                    $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',0)->get()->count();
+                }
+                elseif(substr(Auth::user()->mod,6,1) == 1){
+                    $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',2)->where('USER_POST',null)->get()->count();
+                }
+                elseif(substr(Auth::user()->mod,4,1) == 1){
+                    $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',2)->where('USER_POST',Auth::user()->id)->get()->count();
+                }elseif(substr(Auth::user()->mod,5,1) == 1){
+                    $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',5)->get()->count();
+                }elseif(substr(Auth::user()->mod,0,1) == 1){
+                    $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USULAN_POSISI',4)->get()->count();
+                }else{
+                    $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USER_CREATED',Auth::user()->id)->get()->count();    
+                }
             }
         }
         $data = $data->get();
