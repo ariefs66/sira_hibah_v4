@@ -95,7 +95,7 @@
                        sAjaxSource: '{{ url('/') }}/harga/{{$tahun}}/usulan/getData',
                        aoColumns: [
                        { mData: 'ID',class:'hide'}, 
-                       { mData: 'CB',class:'text-center', bSortable: 'false'},
+                       { mData: 'CB',class:'text-center', bSortable: false},
                        { mData: 'PD'},
                        { mData: 'TIPE'},
                        { mData: 'KATEGORI'},
@@ -104,7 +104,7 @@
                        { mData: 'HARGAAWAL',class:'text-right'},
                        { mData: 'HARGA',class:'text-right'},
                        { mData: 'DD'},
-                       { mData: 'OPSI', bSortable: 'false'}
+                       { mData: 'OPSI', bSortable: false}
                        ]}" class="table table-striped b-t b-b table-usulan" id="table-usulan">
                        <thead>
                         <tr>
