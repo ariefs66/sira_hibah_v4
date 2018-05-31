@@ -94,8 +94,8 @@
                        serverSide: true,
                        sAjaxSource: '{{ url('/') }}/harga/{{$tahun}}/usulan/getData',
                        aoColumns: [
-                       { mData: 'ID',class:'hide', bSortable: 'false'}, 
-                       { mData: 'CB',class:'text-center'},
+                       { mData: 'ID',class:'hide'}, 
+                       { mData: 'CB',class:'text-center', bSortable: 'false'},
                        { mData: 'PD'},
                        { mData: 'TIPE'},
                        { mData: 'KATEGORI'},
