@@ -198,12 +198,14 @@
                 </a>                
               </li>
               @if(Auth::user()->app != 4)
+              @if(Auth::user()->level == 8)
               <li>
                 <a href="{{ url('/') }}/harga/{{ $tahun }}/duplikat" class="auto padding-l-r-lg">                  
                   <i class="icon-bdg_table"></i>
                   <span class="font-semibold">Duplikasi</span>
                 </a>                
               </li>
+              @endif
               <li>
                 <a href="{{ url('/') }}/harga/{{ $tahun }}/usulan" class="auto padding-l-r-lg">                  
                   <i class="icon-bdg_table"></i>
