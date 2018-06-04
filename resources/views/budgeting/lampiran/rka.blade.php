@@ -149,7 +149,7 @@
 	@if($bl->kegiatan->program->outcome)
 	@foreach($bl->kegiatan->program->outcome as $oc)
 	<tr>
-		<td>Capaian Program</td>
+		<td>Capaian Program </td>
 		<td>{{ $oc->OUTCOME_TOLAK_UKUR }}</td>
 		<td>{{ $oc->OUTCOME_TARGET }} {{ $oc->satuan->SATUAN_NAMA }}</td>
 	</tr>
