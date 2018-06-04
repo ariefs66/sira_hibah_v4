@@ -258,8 +258,8 @@ class blController extends Controller
         $program    = Kegiatan::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->value('PROGRAM_ID');
         $outcome    = Outcome::where('PROGRAM_ID',$program)->get();
         $impact     = Impact::where('PROGRAM_ID',$program)->get();
-
-       if($tahun>2018){
+        $referensi  = FALSE;
+       if($tahun>2018 && $referensi){
             $output     = OutputMaster::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->get();
         }else{
             $output     = Output::where('BL_ID',$id)->get();     

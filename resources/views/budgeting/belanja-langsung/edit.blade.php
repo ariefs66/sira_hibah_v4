@@ -204,8 +204,8 @@
                           <label class="col-sm-1">Output</label>
                           <div class="col-sm-6">
                             <input type="text" class="form-control" name="keluaran" placeholder="Keluaran" id="tolak-ukur">
-                            <input type="hidden" class="form-control" name="id" placeholder="Keluaran" id="id-indikator">
-                            <input type="hidden" class="form-control" name="id-bl" placeholder="Keluaran" id="id-bl" value="{{($tahun>2018?$bl->KEGIATAN_ID : $id) }}">
+                            <input type="hidden" class="form-control" name="id" placeholder="Keluaran" id="id-indikator"> @php $referensi = FALSE; @endphp
+                            <input type="hidden" class="form-control" name="id-bl" placeholder="Keluaran" id="id-bl" value="{{($tahun>2018&&$referensi?$bl->KEGIATAN_ID : $id) }}">
                           </div>
                           <div class="col-sm-2">
                             <input type="text" class="form-control" name="target-keluaran" placeholder="Target" id="target-capaian">
@@ -226,7 +226,7 @@
                         <hr class="m-t-xl">
                         <div class="table-responsive dataTables_wrapper">
                           <table ui-jq="dataTable" ui-options="{
-                                @if($tahun>2018)
+                                @if($tahun>2018&&$referensi)
                                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/{{($tahun>2018?$bl->KEGIATAN_ID : $id) }}',
                                 aoColumns: [
                                   { mData: 'INDIKATOR' },
@@ -309,7 +309,7 @@
     var id  = $('#kegiatan').val();
     $('#tabel-indikator').DataTable().destroy();
     $('#tabel-indikator').DataTable({
-        @if($tahun>2018)
+        @if($tahun>2018&&$referensi)
       sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/"+id,
       aoColumns: [
         { mData: 'INDIKATOR' },
@@ -329,7 +329,7 @@
   function hapusOutput(id){
       token       = $('#tokenoutput').val();
       $.ajax({
-        @if($tahun>2018)
+        @if($tahun>2018&&$referensi)
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/hapusOutput",
         @else
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/hapusOutput",
@@ -345,7 +345,7 @@
     }   
     function editOutput(id){
       $.ajax({
-        @if($tahun>2018)
+        @if($tahun>2018&&$referensi)
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/detailOutput/"+id,
         @else
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/output/"+id,
@@ -361,7 +361,7 @@
     }
 
     function simpanCapaian(){
-    @if($tahun>2018)
+    @if($tahun>2018&&$referensi)
     id          = $('#id-indikator').val();
     idkegiatan  = $('#id-bl').val();
     tolakukur   = $('#tolak-ukur').val();
@@ -434,7 +434,7 @@
   function hapusOutput(id){
       token       = $('#token').val();
       $.ajax({
-    @if($tahun>2018)
+    @if($tahun>2018&&$referensi)
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/hapusOutput",
     @else
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/hapusOutput",
