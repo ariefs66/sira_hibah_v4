@@ -135,6 +135,34 @@
 		<td width="1%"><b>{{ $p->PROGRAM_KODE }}</b></td>
 		<td width="1%"><b></b></td>
 		<td width="29%">&nbsp;&nbsp;<b>{{ $p->PROGRAM_NAMA }}</b></td>
+		@php $impact = \App\Model\Outcome::where('PROGRAM_ID',$p->PROGRAM_ID)->get(); $referensi = TRUE; @endphp
+	@if($tahun>2018 && $referensi)
+		@if(count($impact) != '0')
+		<td width="24%">
+		@foreach($impact as $o)
+			<b>- {{ $o->OUTCOME_TOLAK_UKUR }}<br></b>
+		@endforeach
+		</td>
+		<td width="10%">
+		@foreach($impact as $o)
+			<b>{{ $o->OUTCOME_TARGET }} {{ $o->satuan->SATUAN_NAMA }}<br></b>
+		@endforeach			
+		</td>
+		@else
+		<td width="24%"><b>-</b></td>
+		<td width="10%"><b>-</b></td>
+		@endif
+		<td width="10%" class="kanan"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
+		@if(count($impact) != '0')
+		<td width="10%">
+				@foreach($impact as $o)
+					<b>{{ $o->OUTCOME_TARGET }} {{ $o->satuan->SATUAN_NAMA }}<br></b>
+				@endforeach
+		</td>
+		@else
+		<td width="10%"><b>-</b></td>
+		@endif
+	@else
 		@if(count($p->impact) != '0')
 		<td width="24%">
 		@foreach($p->impact as $o)
@@ -160,6 +188,7 @@
 		@else
 		<td width="10%"><b>-</b></td>
 		@endif
+	@endif
 		<td width="10%" class="kanan"><b>{{ number_format($paguprogram[$i]->sum('pagu')*1.1,0,',','.') }}</b></td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
