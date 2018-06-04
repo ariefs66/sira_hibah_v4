@@ -160,8 +160,8 @@
 		<td>Dana yang dibutuhkan</td>
 		<td>Rp. {{ number_format($totalbl,0,',','.') }},00</td>
 	</tr>
-	@if($tahun>2018)
-	@php $output = \App\Model\OutputMaster::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->get(); @endphp
+	@php $output = \App\Model\OutputMaster::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->get(); $referensi = FALSE; @endphp
+	@if($tahun>2018 && $referensi)
 	@if(count($output) != '0')
 	@foreach($output as $out)
 	<tr>

@@ -3924,10 +3924,10 @@ class blController extends Controller
                 //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
                 
                 /* menu indikator*/
-                /*$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';*/
+                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';
                 
                 /*tanpa menu indikator*/
-                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li>';
+                //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li>';
             }
 
             if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){

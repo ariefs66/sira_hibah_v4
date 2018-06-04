@@ -829,8 +829,8 @@
       maxShowItems: 5,
       select: function( event, ui ) {
         $( "#spesifikasi" ).val(ui.item.spek);
-        //$( "#satuan" ).val(ui.item.satuan).trigger('chosen:updated');
-        //$( "#harga" ).val(ui.item.harga);
+        $( "#satuan" ).val(ui.item.satuan).trigger('chosen:updated');
+        $( "#harga" ).val(ui.item.harga);
       }
     });
   } );

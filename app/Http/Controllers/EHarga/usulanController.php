@@ -957,7 +957,7 @@ class usulanController extends Controller
         } else {
             $komponen   = Komponen::all();
         }
-        $view   = "";$i=0;
+        $view   = array();$i=0;
         foreach($komponen as $k){
             $view[$i]['id']   = $k->KOMPONEN_ID;
             $view[$i]['label']   = $k->KOMPONEN_NAMA;

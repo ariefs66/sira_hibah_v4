@@ -172,25 +172,50 @@
 		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
 		<td style="padding-left: 15px"><i>{{ $pp->kegiatan->KEGIATAN_NAMA }}</i></td>
 		<td>
+		@php $output = \App\Model\OutputMaster::where('KEGIATAN_ID',$pp->kegiatan->bl[0]->KEGIATAN_ID)->get(); $referensi = FALSE; @endphp
+			@if($tahun>2018 && $referensi)
+			@if(count($output) != '0')
+			@foreach($output as $out)
+				&nbsp;<i>- {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
+			@endforeach
+			@endif
+			@else
 			@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				&nbsp;<i>- {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
 			@endforeach
 			@endif
+			@endif
 		</td>
 		<td>
+			@if($tahun>2018 && $referensi)
+			@if(count($output) != '0')
+			@foreach($output as $out)
+				&nbsp;<i>- {{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
+			@endforeach
+			@endif
+			@else
 			@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				&nbsp;<i>- {{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
 			@endforeach
 			@endif
+			@endif
 		</td>
 		<td class="kanan"><i>{{ number_format($pp->pagu,0,',','.') }}</i></td>
 		<td>
+			@if($tahun>2018 && $referensi)
+			@if(count($output) != '0')
+			@foreach($output as $out)
+				&nbsp;<i>{{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
+			@endforeach
+			@endif
+			@else
 			@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				&nbsp;<i>{{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
 			@endforeach
+			@endif
 			@endif
 		</td>
 		<td class="kanan"><i>{{ number_format($pp->pagu*1.1,0,',','.') }}</i></td>
