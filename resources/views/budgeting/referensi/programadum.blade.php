@@ -192,7 +192,7 @@
                 @endforeach
               </select>
             </div>
-            <button class="btn btn-success col-sm-1" onclick="return simpanCapaian()"><i class="fa fa-plus"></i></button>            
+          <!--  <button class="btn btn-success col-sm-1" onclick="return simpanCapaian()"><i class="fa fa-plus"></i></button>   -->         
           </div>
       </div>      
       <div class="table-responsive">

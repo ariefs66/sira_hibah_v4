@@ -55,7 +55,7 @@ class arsipBLController extends Controller
     }
 
     public function getData($tahun,$status){
-        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
         $data       = BL::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',1)->get();
@@ -68,10 +68,13 @@ class arsipBLController extends Controller
         $rincian    = '';
         $validasi   = '';
         foreach ($data as $data) {
-        	$aksi 	= '<div class="action visible pull-right">
-        				<a onclick="return restore(\''.$data->BL_ID.'\')"><i class="fa fa-retweet"></i></a>
-        				<a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash"></i></a>
-        			   </div>';
+              /*$aksi 	= '<div class="action visible pull-right">
+        				<a onclick="return restore(\''.$data->BL_ID.'\')" title="Kembalikan Belanja?"><i class="fa fa-retweet" ></i></a>
+        				<a onclick="return hapus(\''.$data->BL_ID.'\')" title="Hapus Belanja Secara Permanen?"><i class="mi-trash"></i></a>
+        			   </div>';*/
+            $aksi   = '<div class="action visible pull-right">
+                        <a onclick="return restore(\''.$data->BL_ID.'\')" title="Kembalikan Belanja?"><i class="fa fa-retweet" ></i></a>
+                       </div>';  
             if(empty($data->rincian)) $totalRincian = 0;
             else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,',','.');
             array_push($view, array( 'NO'             =>$i,
