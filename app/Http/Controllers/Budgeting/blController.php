@@ -3647,7 +3647,7 @@ class blController extends Controller
                                      'TARGET'           =>$data->OUTCOME_TARGET." ".$data->satuan->SATUAN_NAMA));
         }
         foreach ($output as $data) {
-            $aksi       = '<div class="action visible pull-right"><a onclick="return hapusOutput(\''.$data->OUTPUT_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            $aksi       = '<div class="action visible pull-right"><a onclick="return editOutput(\''.$data->OUTPUT_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusOutput(\''.$data->OUTPUT_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             array_push($view, array( 'INDIKATOR'        =>'Output / Keluaran',
                                      'TOLAK_UKUR'       =>$data->OUTPUT_TOLAK_UKUR,
                                      'OPSI'             =>$aksi,
