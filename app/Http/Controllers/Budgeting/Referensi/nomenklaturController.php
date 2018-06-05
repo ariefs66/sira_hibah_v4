@@ -30,21 +30,19 @@ class nomenklaturController extends Controller
 
 	public function index($tahun,$status){
 		$urusan 	= Urusan::where('URUSAN_TAHUN',$tahun)->get();
-
-                 $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
-                 $skpd_      = array(); 
-                 $i = 0;
-                  foreach($skpd as $s){
-                    $skpd_[$i]   = $s->SKPD_ID;
-                    $i++;
-                  }
-
-                if(Auth::user()->level == 8){
-                     $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();    
-                }elseif(Auth::user()->mod == '01000000000'){
-                    $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
-                    //$skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();     
-               }
+        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->get();
+        $skpd_      = array(); 
+        $i = 0;
+        foreach($skpd as $s){
+        $skpd_[$i]   = $s->SKPD_ID;
+        $i++;
+        }
+        if(Auth::user()->level == 8){
+            $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();    
+        }else{
+            //Auth::user()->mod == '01000000000'
+            $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
+        }
 		$rekening 	= Rekening::where('REKENING_TAHUN',$tahun)->where('REKENING_KODE','like','5.2%')->get();
         $satuan     = Satuan::orderBy('SATUAN_NAMA')->get();
     	return View('budgeting.referensi.nomenklatur',['tahun'=>$tahun,'status'=>$status,'rekening'=>$rekening,'urusan'=>$urusan,'skpd'=>$skpd,'satuan'=>$satuan]);

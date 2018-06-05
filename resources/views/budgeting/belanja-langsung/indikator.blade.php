@@ -148,9 +148,12 @@
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/output/"+id,
           type: "GET",
           success: function(msg){
+            $('#tambah-output').removeClass('btn-success').addClass('btn-warning').html('<i class="icon-edit"></i>');
             $('#tolak-ukur').val(msg['OUTPUT_TOLAK_UKUR']);
+            $('#tolak-ukur').hide();
             $('#target-capaian').val(msg['OUTPUT_TARGET']);
             $('#satuan-capaian').val(msg['SATUAN_ID']);
+            $('#satuan-capaian').hide();
             $('#id-indikator').val(msg['OUTPUT_ID']);
           }
       }); 
@@ -182,6 +185,7 @@
               'satuan'          : satuan},
         success: function(msg){
           $.alert(msg);
+          $('#tambah-output').removeClass('btn-warning').addClass('btn-success').html('<i class="fa fa-plus"></i>');
           $('#id-indikator').val(null);
           $('#tolak-ukur').val(null);
           $('#target-capaian').val(null);
@@ -201,6 +205,7 @@
           success: function(msg){
             $.alert(msg);
             $('#tabel-indikator').DataTable().ajax.reload();
+            $('#tambah-output').removeClass('btn-warning').addClass('btn-success').html('<i class="fa fa-plus"></i>');
           }
       }); 
     }
