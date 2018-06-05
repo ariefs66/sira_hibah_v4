@@ -148,7 +148,7 @@
           url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/output/"+id,
           type: "GET",
           success: function(msg){
-            $('#tambah-output').removeClass('btn-success').addClass('btn-warning').html('<i class="icon-edit"></i>');
+            $('#tambah-output').removeClass('btn-success').addClass('btn-warning').html('<i class="mi-edit"></i>');
             $('#tolak-ukur').val(msg['OUTPUT_TOLAK_UKUR']);
             $('#tolak-ukur').hide();
             $('#target-capaian').val(msg['OUTPUT_TARGET']);
