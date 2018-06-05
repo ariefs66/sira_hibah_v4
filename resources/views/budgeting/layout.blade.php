@@ -261,7 +261,7 @@
               @endif
               @endif
   
-              @if(Auth::user()->level == 8)
+@if(Auth::user()->level == 8 or Auth::user()->mod =='01000000000')
               <li >
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="icon-bdg_uikit"></i>
@@ -272,11 +272,11 @@
                   <span class="font-semibold">Nomenklatur</span>
                 </a>                
                  <ul class="nav nav-sub dk"> 
-                  <li>
+                 <!-- <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/adum" class="padding-l-r-lg ">              
                        <span >Program & Kegiatan Adum</span>
                     </a>
-                  </li>
+                  </li>-->
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur" class="padding-l-r-lg ">              
                        <span >Program & Kegiatan Urusan</span>
