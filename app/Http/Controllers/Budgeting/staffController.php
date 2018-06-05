@@ -221,11 +221,11 @@ class staffController extends Controller
     }
 
     public function penyeliaGetData($tahun){
-        if(Auth::user()->email=='TAPD'){
+        if(Auth::user()->level==8){
             $data   = User::where('users.mod','01000000000')
                               ->get();
         }else                      
-            if(Auth::user()->email=='TAPD2'){
+            if(Auth::user()->level==9){
             $data   = User::where('users.mod','10001000000')
                               ->get();
         } 
@@ -285,6 +285,8 @@ class staffController extends Controller
         $cek    = User::where('email',Input::get('NIP'))->value('id');
         if(empty($cek)){
             $user   = new User;
+            $get_id  = User::max('id');
+            $user->id           = $get_id+1;
             $user->email        = Input::get('NIP');
             $user->name         = Input::get('NAMA');
             $user->password     = '$2y$10$oDOpQp8JIQkStQxRKP/uPuLOg8qYYBRWyblH95odj0.ngqlF93ysS';
@@ -292,9 +294,9 @@ class staffController extends Controller
             $user->active       = 0;
             $user->app          = 3;
             $user->level        = 1;
-            if(Auth::user()->email=='TAPD'){
+            if(Auth::user()->level==8){
                 $user->mod          = '01000000000';
-            }else if(Auth::user()->email=='TAPD2'){
+            }else if(Auth::user()->level==9){
                 $user->mod          = '10001000000';
             }
             $user->save();
@@ -304,6 +306,8 @@ class staffController extends Controller
             $skpd       = Input::get('SKPD');
             foreach($skpd as $s){
                 $ub     = new UserBudget;
+                $_id       = UserBudget::max('id');
+                $ub->id             = $_id+1;
                 $ub->SKPD_ID        = $s;
                 $ub->USER_ID        = $id;
                 $ub->TAHUN          = $tahun;
@@ -340,7 +344,7 @@ class staffController extends Controller
         foreach ($user_id as $user_id) {
             UserBudget::where('id',Input::get('id'))->where('TAHUN',$tahun)->delete();
         }
-        User::where('id',Input::get('id'))->delete();
+       // User::where('id',Input::get('id'))->delete();
         return 'Berhasil!';
     }
 
