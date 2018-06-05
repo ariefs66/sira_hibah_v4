@@ -191,11 +191,14 @@ class kegiatanController extends Controller
     }
 
     public function submitCapaian($tahun,$status){
-        if($status=="pergeseran"){
+        if($status=="pergeseran" || $status=="perubahan"){
             $o  = new OutputPerubahan;
+            $get_id = OutputPerubahan::max('OUTPUT_ID');
         }else{
             $o  = new Output;
+            $get_id  = Output::max('OUTPUT_ID');
         }
+        $o->OUTPUT_ID           = $get_id+1;
         $o->BL_ID               = Input::get('id');
         $o->OUTPUT_TOLAK_UKUR   = Input::get('tolakukur');
         $o->OUTPUT_TARGET       = Input::get('target');
