@@ -200,7 +200,7 @@
 		<td style="padding-left: 15px"><i>{{ $pp->kegiatan->KEGIATAN_NAMA }}</i></td>
 		<td>
 			@php /*$output = \App\Model\OutputMaster::where('KEGIATAN_ID',$pp->kegiatan->bl[0]->KEGIATAN_ID)->get();*/
-			$output = \App\Model\Output::where('BL_ID',$pp->BL_ID)->get(); $referensi = TRUE; @endphp
+			$output = \App\Model\Output::where('BL_ID',$pp->kegiatan->bl[0]->BL_ID)->get(); $referensi = FALSE; @endphp
 			@if($tahun>2018 && $referensi)
 			@if(count($output) != '0')
 			@foreach($output as $out)
