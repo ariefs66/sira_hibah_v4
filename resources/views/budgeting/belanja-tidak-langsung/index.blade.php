@@ -21,10 +21,10 @@
             <div class="col-md-12" id="btl">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  @if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1)
+                  @if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1 or Auth::user()->level == 2)
                   <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Tidak Langsung</button>
                   @endif
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekapbtl"><i class="m-r-xs fa fa-download"></i> Download</a>
+<!--                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekapbtl"><i class="m-r-xs fa fa-download"></i> Download</a> -->
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Tidak Langsung</h5>
                   <div class="col-sm-1 pull-right m-t-n-sm">
                    <select class="form-control dtSelect" id="dtSelect">
@@ -263,9 +263,13 @@
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="skpd-btl">
             <option value="">Silahkan Pilih SKPD</option>
+            @if(Auth::user()->level == 9) 
             @foreach($skpd as $s)
             <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
             @endforeach
+            @else
+            <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
+            @endif
           </select>
         </div>
       </div>   
@@ -296,14 +300,12 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Koefisien</label>          
         <div class="col-sm-5">
-          <input type="text" class="form-control" placeholder="Masukan Jumlah" id="volume-btl">      
+          <input type="number" value="1" min="0" class="form-control" placeholder="Masukan Jumlah" id="volume-btl">      
         </div> 
         <div class="col-sm-4">
           <select ui-jq="chosen" class="w-full" id="satuan-btl">
             <option value="">Satuan</option>
-            @foreach($satuan as $sat)
-            <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
-            @endforeach
+            <option value="{{ $satuan->SATUAN_NAMA }}">{{ $satuan->SATUAN_NAMA }}</option>
           </select>    
         </div>
       </div>
@@ -311,7 +313,7 @@
       <div class="form-group">
         <label for="no_spp" class="col-md-3">Anggaran</label>          
         <div class="col-sm-9">
-          <input type="text" class="form-control" placeholder="Masukan Anggaran" id="total-btl" >          
+          <input type="number" min="0" class="form-control" placeholder="Masukan Anggaran" id="total-btl" >          
         </div> 
       </div>
 

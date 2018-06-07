@@ -320,7 +320,7 @@
                   @endif
                   
                   <li>
-                    @if(Auth::user()->level == 8)
+                    @if(Auth::user()->level == 8 || Auth::user()->level == 2)
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung" class="padding-l-r-lg ">
                     @else  
                     <a onclick="$.alert('Masih Ditutup')" class="padding-l-r-lg ">  

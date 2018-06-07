@@ -26,7 +26,7 @@
                       or substr(Auth::user()->mod,0,1) == 1) and Auth::user()->active==1)
                   <button class="pull-right btn m-t-n-sm btn-success open-form-pendapatan"><i class="m-r-xs fa fa-plus"></i> Tambah Pendapatan</button>
                   @endif
-                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekappendapatan"><i class="m-r-xs fa fa-download"></i> Download</a>
+                  <!--<a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekappendapatan"><i class="m-r-xs fa fa-download"></i> Download</a> -->
                   <h5 class="inline font-semibold text-orange m-n ">Pendapatan</h5>
                   <div class="col-sm-1 pull-right m-t-n-sm">
                    <select class="form-control">

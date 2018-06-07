@@ -38,8 +38,14 @@ use App\Model\AKB_BTL_Perubahan;
 class btlController extends Controller
 {
     public function index($tahun, $status){
+        if(Auth::user()->level==9){
         $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();
-      	$satuan 	= Satuan::all();
+      }else{
+        $skpd_id    = $this->getSKPD($tahun);
+        $skpd       = SKPD::where('SKPD_ID',$skpd_id)->first();
+      }      
+       $satuan 	= Satuan::where('SATUAN_NAMA','like','Tahun')->first();
+//      	$satuan 	= Satuan::all();
         if($status=="murni"){
           return View('budgeting.belanja-tidak-langsung.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'satuan'=>$satuan]);
         }
@@ -592,8 +598,9 @@ class btlController extends Controller
             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
           }elseif(Auth::user()->level == 2){
-            $opsi = '-';
-            $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
+             $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            /*$akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';*/
+            $akb = '-';
           }
           array_push($view, array( 'NO'       => $no++,
                                    'AKSI'     => $opsi,
