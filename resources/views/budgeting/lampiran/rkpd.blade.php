@@ -138,18 +138,16 @@
 				<tr>
 				@endif
 					<td>{{ $o->OUTCOME_TOLAK_UKUR }}</td>
-					<td>{{ $o->OUTCOME_TARGET }} {{ $o->satuan->SATUAN_NAMA }}</td>
 				</tr>
 				<?php $index++ ?>
-			{{-- <b>- {{ $o->OUTCOME_TOLAK_UKUR }}<br></b> --}}
 		@endforeach
 			</table>
 		</td>
-		{{-- <td width="10%">
+		<td width="10%">
 		@foreach($impact as $o)
-			<b><br></b>
+			<b>{{ $o->OUTCOME_TARGET }} {{ $o->satuan->SATUAN_NAMA }}<br></b>
 		@endforeach			
-		</td> --}}
+		</td>
 		@else
 		<td width="24%"><b>-</b></td>
 		<td width="10%"><b>-</b></td>
@@ -272,3 +270,4 @@
 <script type="text/javascript">
 </script>
 </html>
+

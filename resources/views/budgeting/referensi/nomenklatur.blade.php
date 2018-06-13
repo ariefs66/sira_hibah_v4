@@ -32,17 +32,20 @@
                       </ul>
                     </div>
                     @endif
-                    @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
-                  <div class="col-sm-4 pull-right m-t-n-sm">
+
+                    <div class="col-sm-4 pull-right m-t-n-sm">
                    <select ui-jq="chosen" class="form-control" id="filter-skpd">
                      <option value="">- Pilih OPD -</option>
-                     @foreach($skpd as $pd)
-                     <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
-                     @endforeach
+                     @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
+                       @foreach($skpd as $pd)
+                       <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
+                       @endforeach
+                     @elseif(Auth::user()->level == 2)
+                        <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
+                     @endif
                    </select>
-                   
                  </div>
-                 @endif
+
                     <h5 class="inline font-semibold text-orange m-n ">Nomenklatur Tahun {{ $tahun }}</h5>
           					<div class="col-sm-1 pull-right m-t-n-sm">
                     	<select class="form-control dtSelect" id="dtSelect">
@@ -150,9 +153,13 @@
             <label for="nama_urusan" class="col-md-3">Perangkat Daerah</label>          
             <div class="col-sm-9">
               <select ui-jq="chosen" class="w-full" id="skpd" name="skpd" multiple="">
-                @foreach($skpd as $s)
-                  <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
-                @endforeach
+              @if(Auth::user()->level == 2)
+                  <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
+                @else
+                  @foreach($skpd as $s)
+                    <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
+                  @endforeach
+                @endif 
               </select>
             </div> 
           </div>
@@ -236,9 +243,13 @@
             <label for="nama_urusan" class="col-md-3">Perangkat Daerah</label>          
             <div class="col-sm-9">
               <select ui-jq="chosen" class="w-full" id="skpd_" name="skpd_" multiple="">
-                @foreach($skpd as $s)
-                  <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
-                @endforeach
+                 @if(Auth::user()->level == 2)
+                  <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
+                @else
+                  @foreach($skpd as $s)
+                    <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
+                  @endforeach
+                @endif 
               </select>
             </div> 
           </div>

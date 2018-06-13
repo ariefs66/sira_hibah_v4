@@ -37,11 +37,14 @@ class nomenklaturController extends Controller
         $skpd_[$i]   = $s->SKPD_ID;
         $i++;
         }
+
         if(Auth::user()->level == 8){
             $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();    
-        }else{
-            //Auth::user()->mod == '01000000000'
+        }elseif(Auth::user()->mod == '01000000000'){
             $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
+        }else{            
+            $skpdz       = $this->getSKPD($tahun);   
+            $skpd       = SKPD::where('SKPD_ID',$skpdz)->first(); 
         }
 		$rekening 	= Rekening::where('REKENING_TAHUN',$tahun)->where('REKENING_KODE','like','5.2%')->get();
         $satuan     = Satuan::orderBy('SATUAN_NAMA')->get();
@@ -62,7 +65,11 @@ class nomenklaturController extends Controller
         $aksi           = '';
     	$view 			= array();
     	foreach ($data as $data) {
-            $aksi       = '<div class="action visible pull-right"><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Program" onclick="return ubahProgram(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Program" onclick="return hapusProgram(\''.$data->PROGRAM_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            if(Auth::user()->level == 8){
+                $aksi       = '<div class="action visible pull-right"><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Program" onclick="return ubahProgram(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Program" onclick="return hapusProgram(\''.$data->PROGRAM_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            }else{
+                 $aksi       = '<div class="action visible pull-right"><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a></div>';
+            }
     		array_push($view, array( 'id_program'		=>$data->PROGRAM_ID,
                                      'OPSI'				=>$aksi,
                                      'URUSAN'  			=>$data->urusan->URUSAN_KODE." - ".$data->urusan->URUSAN_NAMA,
@@ -83,7 +90,11 @@ class nomenklaturController extends Controller
     	$aksi 			= '';
     	$view 			= array();
     	foreach ($data as $data) {
-            $aksi 		= '<div class="action visible pull-right"><a onclick="return showRekeningGiat(\''.$data->KEGIATAN_ID.'\')" title="Cek Rekening" class="action-edit"><i class="icon-bdg_form"></i></a><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Kegiatan" onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Kegiatan" onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+                if(Auth::user()->level == 8){
+                $aksi       = '<div class="action visible pull-right"><a onclick="return showRekeningGiat(\''.$data->KEGIATAN_ID.'\')" title="Cek Rekening" class="action-edit"><i class="icon-bdg_form"></i></a><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Kegiatan" onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Kegiatan" onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            }else{
+                $aksi       = '-';
+            }
     		array_push($view, array( 'KEGIATAN_ID' 		=>$data->KEGIATAN_ID,
     								 'KEGIATAN_KODE'  	=>$data->KEGIATAN_KODE,
                                      'KEGIATAN_NAMA'	=>$data->KEGIATAN_NAMA,

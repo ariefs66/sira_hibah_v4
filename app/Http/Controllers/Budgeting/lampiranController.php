@@ -7421,8 +7421,9 @@ public function updatePerwal1($tahun,$status){
                         );
             return View('budgeting.lampiran.perwal-1',$data);
         }else{
-
-            $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+		$btlfull = DB::select('SELECT r."REKENING_KODE", r."REKENING_NAMA", SUM("BTL_TOTAL") AS pagu, (SELECT SUM("BTL_TOTAL") AS pagu FROM "BUDGETING"."DAT_BTL" INNER JOIN "REFERENSI"."REF_REKENING" ON "REF_REKENING"."REKENING_ID" = "DAT_BTL"."REKENING_ID" WHERE "BTL_TAHUN" = ? AND "REF_REKENING"."REKENING_KODE" = r."REKENING_KODE") AS pagu_murni from "BUDGETING"."DAT_BTL_PERUBAHAN" INNER JOIN "REFERENSI"."REF_REKENING" r on r."REKENING_ID" = "DAT_BTL_PERUBAHAN"."REKENING_ID" WHERE "BTL_TAHUN" = ? AND "REKENING_KODE" LIKE \'5.1%\' GROUP BY r."REKENING_KODE", r."REKENING_NAMA" UNION SELECT q."REKENING_KODE", q."REKENING_NAMA", (SELECT SUM("BTL_TOTAL") AS pagu FROM "BUDGETING"."DAT_BTL_PERUBAHAN" WHERE "BTL_TAHUN" = ?), (SELECT SUM("BTL_TOTAL") AS pagu FROM "BUDGETING"."DAT_BTL" WHERE "BTL_TAHUN" = ?) FROM "REFERENSI"."REF_REKENING" q WHERE "REKENING_KODE" LIKE \'5.1%\' AND "REKENING_KODE" LIKE \'_._\' AND "REKENING_TAHUN"='.$tahun.' UNION SELECT q."REKENING_KODE", q."REKENING_NAMA", COALESCE((SELECT SUM("BTL_TOTAL") AS pagu FROM "BUDGETING"."DAT_BTL_PERUBAHAN" INNER JOIN "REFERENSI"."REF_REKENING" r ON r."REKENING_ID" = "DAT_BTL_PERUBAHAN"."REKENING_ID" WHERE "BTL_TAHUN" = ? AND r."REKENING_KODE" like q."REKENING_KODE"||\'%\'),\'0\'), COALESCE((SELECT SUM("BTL_TOTAL") AS pagu FROM "BUDGETING"."DAT_BTL" INNER JOIN "REFERENSI"."REF_REKENING" r ON r."REKENING_ID" = "DAT_BTL"."REKENING_ID" WHERE "BTL_TAHUN" = ? AND r."REKENING_KODE" like q."REKENING_KODE"||\'%\'),\'0\') FROM "REFERENSI"."REF_REKENING" q WHERE "REKENING_KODE" LIKE \'5.1%\' AND "REKENING_KODE" LIKE \'_._._\' AND "REKENING_TAHUN"=? UNION SELECT q."REKENING_KODE", q."REKENING_NAMA", COALESCE((SELECT SUM("BTL_TOTAL") AS pagu FROM "BUDGETING"."DAT_BTL_PERUBAHAN" INNER JOIN "REFERENSI"."REF_REKENING" r ON r."REKENING_ID" = "DAT_BTL_PERUBAHAN"."REKENING_ID" WHERE "BTL_TAHUN" = ? AND r."REKENING_KODE" like q."REKENING_KODE"||\'%\'),\'0\'), COALESCE((SELECT SUM("BTL_TOTAL") AS pagu FROM "BUDGETING"."DAT_BTL" INNER JOIN "REFERENSI"."REF_REKENING" r ON r."REKENING_ID" = "DAT_BTL"."REKENING_ID" WHERE "BTL_TAHUN" = ? AND r."REKENING_KODE" like q."REKENING_KODE"||\'%\'),\'0\') FROM "REFERENSI"."REF_REKENING" q WHERE "REKENING_KODE" LIKE \'5.1%\' AND "REKENING_KODE" LIKE \'_._._.__\' AND "REKENING_TAHUN"=? ORDER BY "REKENING_KODE", "REKENING_NAMA"', [$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun]);
+		$blfull = DB::select('SELECT r."REKENING_KODE", r."REKENING_NAMA", SUM("RINCIAN_TOTAL") as pagu, COALESCE((select sum("RINCIAN_TOTAL") as pagu from "BUDGETING"."DAT_RINCIAN" inner join "REFERENSI"."REF_REKENING" on "REF_REKENING"."REKENING_ID" = "DAT_RINCIAN"."REKENING_ID" where "REKENING_KODE" like r."REKENING_KODE" and exists (select * from "BUDGETING"."DAT_BL" where "BUDGETING"."DAT_RINCIAN"."BL_ID" = "BUDGETING"."DAT_BL"."BL_ID" and "BL_VALIDASI" = 1 and "BL_DELETED" = 0 and "BL_TAHUN" = ?)),\'0\') as pagu_murni from "BUDGETING"."DAT_RINCIAN_PERUBAHAN" inner join "REFERENSI"."REF_REKENING" r on r."REKENING_ID" = "DAT_RINCIAN_PERUBAHAN"."REKENING_ID" where r."REKENING_KODE" like \'5.2%\' and exists (select * from "BUDGETING"."DAT_BL_PERUBAHAN" where "BUDGETING"."DAT_RINCIAN_PERUBAHAN"."BL_ID" = "BUDGETING"."DAT_BL_PERUBAHAN"."BL_ID" and "BL_VALIDASI" = 1 and "BL_DELETED" = 0 and "BL_TAHUN" = ?) group by r."REKENING_KODE", r."REKENING_NAMA" UNION SELECT q."REKENING_KODE", q."REKENING_NAMA", COALESCE((select sum("RINCIAN_TOTAL") as pagu from "BUDGETING"."DAT_RINCIAN_PERUBAHAN" inner join "REFERENSI"."REF_REKENING" r on r."REKENING_ID" = "DAT_RINCIAN_PERUBAHAN"."REKENING_ID" where r."REKENING_KODE" like q."REKENING_KODE"||\'%\' and exists (select * from "BUDGETING"."DAT_BL_PERUBAHAN" where "BUDGETING"."DAT_RINCIAN_PERUBAHAN"."BL_ID" = "BUDGETING"."DAT_BL_PERUBAHAN"."BL_ID" and "BL_VALIDASI" = 1 and "BL_DELETED" = 0 and "BL_TAHUN" = ?)),\'0\'), COALESCE((select sum("RINCIAN_TOTAL") as pagu from "BUDGETING"."DAT_RINCIAN" inner join "REFERENSI"."REF_REKENING" r on r."REKENING_ID" = "DAT_RINCIAN"."REKENING_ID" where r."REKENING_KODE" like q."REKENING_KODE"||\'%\' and exists (select * from "BUDGETING"."DAT_BL" where "BUDGETING"."DAT_RINCIAN"."BL_ID" = "BUDGETING"."DAT_BL"."BL_ID" and "BL_VALIDASI" = 1 and "BL_DELETED" = 0 and "BL_TAHUN" = ?)),\'0\') FROM "REFERENSI"."REF_REKENING" q WHERE q."REKENING_KODE" LIKE \'5.2%\' AND q."REKENING_KODE" LIKE \'_._\' AND q."REKENING_TAHUN"=? UNION SELECT q."REKENING_KODE", q."REKENING_NAMA", COALESCE((select sum("RINCIAN_TOTAL") as pagu from "BUDGETING"."DAT_RINCIAN_PERUBAHAN" inner join "REFERENSI"."REF_REKENING" r on r."REKENING_ID" = "DAT_RINCIAN_PERUBAHAN"."REKENING_ID" where r."REKENING_KODE" like q."REKENING_KODE"||\'%\' and exists (select * from "BUDGETING"."DAT_BL_PERUBAHAN" where "BUDGETING"."DAT_RINCIAN_PERUBAHAN"."BL_ID" = "BUDGETING"."DAT_BL_PERUBAHAN"."BL_ID" and "BL_VALIDASI" = 1 and "BL_DELETED" = 0 and "BL_TAHUN" = ?)),\'0\'), COALESCE((select sum("RINCIAN_TOTAL") as pagu from "BUDGETING"."DAT_RINCIAN" inner join "REFERENSI"."REF_REKENING" r on r."REKENING_ID" = "DAT_RINCIAN"."REKENING_ID" where r."REKENING_KODE" like q."REKENING_KODE"||\'%\' and exists (select * from "BUDGETING"."DAT_BL" where "BUDGETING"."DAT_RINCIAN"."BL_ID" = "BUDGETING"."DAT_BL"."BL_ID" and "BL_VALIDASI" = 1 and "BL_DELETED" = 0 and "BL_TAHUN" = ?)),\'0\') FROM "REFERENSI"."REF_REKENING" q WHERE q."REKENING_KODE" LIKE \'5.2%\' AND q."REKENING_KODE" LIKE \'_._._\' AND q."REKENING_TAHUN"=? UNION SELECT q."REKENING_KODE", q."REKENING_NAMA", COALESCE((select sum("RINCIAN_TOTAL") as pagu from "BUDGETING"."DAT_RINCIAN_PERUBAHAN" inner join "REFERENSI"."REF_REKENING" r on r."REKENING_ID" = "DAT_RINCIAN_PERUBAHAN"."REKENING_ID" where r."REKENING_KODE" like q."REKENING_KODE"||\'%\' and exists (select * from "BUDGETING"."DAT_BL_PERUBAHAN" where "BUDGETING"."DAT_RINCIAN_PERUBAHAN"."BL_ID" = "BUDGETING"."DAT_BL_PERUBAHAN"."BL_ID" and "BL_VALIDASI" = 1 and "BL_DELETED" = 0 and "BL_TAHUN" = ?)),\'0\'), COALESCE((select sum("RINCIAN_TOTAL") as pagu from "BUDGETING"."DAT_RINCIAN" inner join "REFERENSI"."REF_REKENING" r on r."REKENING_ID" = "DAT_RINCIAN"."REKENING_ID" where r."REKENING_KODE" like q."REKENING_KODE"||\'%\' and exists (select * from "BUDGETING"."DAT_BL" where "BUDGETING"."DAT_RINCIAN"."BL_ID" = "BUDGETING"."DAT_BL"."BL_ID" and "BL_VALIDASI" = 1 and "BL_DELETED" = 0 and "BL_TAHUN" = ?)),\'0\') FROM "REFERENSI"."REF_REKENING" q WHERE q."REKENING_KODE" LIKE \'5.2%\' AND q."REKENING_KODE" LIKE \'_._._.__\' AND q."REKENING_TAHUN"=? ORDER BY "REKENING_KODE", "REKENING_NAMA";', [$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun,$tahun]);
+$bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
             ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL_PERUBAHAN.SUB_ID')
             //->where('SKPD_ID',$s)
             ->whereHas('rekening',function($q){$q->where('REKENING_KODE','like','5.2.1%');})
@@ -7920,13 +7921,13 @@ public function updatePerwal1($tahun,$status){
                                     ->WHERE('BL_TAHUN',$tahun)                               
                                     ->WHERE('BL_DELETED',0)                               
                                     ->WHERE('BL_VALIDASI',1)
-                                    ->sum('RINCIAN_TOTAL');
+                                    ->sum('RINCIAN_TOTAL'); //7.239.813.537.305
 
                $jumBelanja = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
                                     ->WHERE('BL_TAHUN',$tahun)                               
                                     ->WHERE('BL_DELETED',0)                               
                                     ->WHERE('BL_VALIDASI',1)
-                                    ->sum('RINCIAN_TOTAL');                               
+                                    ->sum('RINCIAN_TOTAL'); //7.418.332.448.642 //Selisih 178.518.911.337                      
 
                 $jumBTL_murni = BTL::where('BTL_TAHUN',$tahun)
                                     ->sum('BTL_TOTAL');                                
@@ -7935,26 +7936,26 @@ public function updatePerwal1($tahun,$status){
                                     ->sum('BTL_TOTAL');                                
 
                         //dd($dakNonFisik_detail_murni);                                             
-                                                 
-
+                $jumBelanja_murni = $jumBelanja_murni + $jumBTL_murni;
+                $jumBelanja = $jumBelanja + $jumBTL;
                           
             $header=array('5.1.1.02','5.1.1.03','5.1.1.05','5.1.1.06');
             $value=array_fill(0, 4, 0);
-            $headBelanjaPegawai= Rekening::whereIn('REKENING_KODE', $header)->pluck('REKENING_NAMA')->toArray();
+            $headBelanjaPegawai= Rekening::whereIn('REKENING_KODE', $header)->orderBy('REKENING_KODE','desc')->pluck('REKENING_NAMA')->toArray();
             $murniBelanjaPegawai= $value;
             $perubahanBelanjaPegawai= $value;
             $selisihBelanjaPegawai= $value;
 
             $header=array('5.1.4.05','5.1.4.06');
-            $headBelanjaHibah= Rekening::whereIn('REKENING_KODE', $header)->pluck('REKENING_NAMA')->toArray();
-            $murniBelanjaHibah= array(192544137970,221963696500);
-            $perubahanBelanjaHibah= array(219131937970,221963696500);
-            $selisihBelanjaHibah= array(26587800000,0);
+            $headBelanjaHibah= Rekening::whereIn('REKENING_KODE', $header)->orderBy('REKENING_KODE','desc')->pluck('REKENING_NAMA')->toArray();
+            $murniBelanjaHibah= array(0,0);
+            $perubahanBelanjaHibah= array(0,0);
+            $selisihBelanjaHibah= array(0,0);
             
             $header=array('5.1.7.01');
-            $headBelanjaBanprov= Rekening::whereIn('REKENING_KODE', $header)->pluck('REKENING_NAMA')->toArray();
-            $murniBelanjaBanprov= array(1000000000);
-            $perubahanBelanjaBanprov= array(1000000000);
+            $headBelanjaBanprov= Rekening::whereIn('REKENING_KODE', $header)->orderBy('REKENING_KODE','desc')->pluck('REKENING_NAMA')->toArray();
+            $murniBelanjaBanprov= array(0);
+            $perubahanBelanjaBanprov= array(0);
             $selisihBelanjaBanprov= array(0);
 
             $header=array('5.2.1.01','5.2.1.02','5.2.1.03','5.2.1.05','5.2.1.07');
@@ -8031,7 +8032,9 @@ public function updatePerwal1($tahun,$status){
             $selisihBelanjaModal= $value;
 
             $data       = array('tahun'         =>$tahun,
-                        'jumBTL_murni'      =>$jumBTL_murni,
+                        'btlfull'           =>$btlfull,
+                        'blfull'           =>$blfull,
+			'jumBTL_murni'      =>$jumBTL_murni,
                         'jumBTL'            =>$jumBTL,
                         'jumBelanja_murni'      =>$jumBelanja_murni,
                         'jumBelanja'            =>$jumBelanja,
@@ -8333,7 +8336,6 @@ public function updatePerwal1($tahun,$status){
                         'selisihBelanjaModal'   => $selisihBelanjaModal
                         );
             return View('budgeting.lampiran.perwal-1_perubahan',$data);
-
         }
         
         
