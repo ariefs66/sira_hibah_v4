@@ -597,6 +597,12 @@ Route::get('/main/{tahun}/{status}/api/sirupProgram', 'apiController@apiSirupPro
 Route::get('/main/{tahun}/{status}/api/sirupPenyedia', 'apiController@apiSirupPenyedia');
 Route::get('/main/{tahun}/{status}/api/sirupSwakelola', 'apiController@apiSirupSwakelola');
 
+//sira api
+Route::get('/main/{tahun}/{status}/api/siraBL', 'apiController@apiSiraBL');
+Route::get('/main/{tahun}/{status}/api/siraBTL', 'apiController@apiSiraBTL');
+Route::get('/main/{tahun}/{status}/api/siraPendapatan', 'apiController@apiSiraPendapatan');
+Route::get('/main/{tahun}/{status}/api/siraPembiayaan', 'apiController@apiSiraPembiayaan');
+
 //monev api
 Route::get('/main/{tahun}/api/monev/{kode}', 'apiController@apiMonevProgram');
 Route::get('/main/{tahun}/api/monev/{kode}/{kode_p}', 'apiController@apiMonevKegiatan');
