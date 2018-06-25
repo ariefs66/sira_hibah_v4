@@ -81,7 +81,13 @@ class apiController extends Controller
     }
 
 	public function apiSiraBL($tahun,$status, Request $req){
-        $skpd = ($req->SKPD == "")? 0 : $req->SKPD;        
+	$skpd = ($req->SKPD == "")? 0 : $req->SKPD;
+        if($skpd>0){
+            $skpd = SKPD::where('SKPD_KODE', $req->SKPD)->where('SKPD_TAHUN', $tahun)->value('SKPD_ID');
+            if(!$skpd){
+                return "SKPD Tidak Valid!";
+            }
+        }
         $filter = "";
         $pagu_foot    = 0;
         $rincian_foot = 0;
@@ -179,7 +185,13 @@ class apiController extends Controller
     }
 
 	public function apiSiraBTL($tahun,$status, Request $req){
-        $skpd = ($req->SKPD == "")? 0 : $req->SKPD;
+	$skpd = ($req->SKPD == "")? 0 : $req->SKPD;
+        if($skpd>0){
+            $skpd = SKPD::where('SKPD_KODE', $req->SKPD)->where('SKPD_TAHUN', $tahun)->value('SKPD_ID');
+            if(!$skpd){
+                return "SKPD Tidak Valid!";
+            }
+        }
         $id = ($req->ID == "")? "" : $req->ID;
         if($status=="murni"){
             if($skpd>0){
