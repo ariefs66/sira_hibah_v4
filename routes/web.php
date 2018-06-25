@@ -353,7 +353,7 @@ Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/detailRekGiat/{id}', '
 Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/submitRekGiat', 'Budgeting\Referensi\nomenklaturController@submitRekGiat');
 Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/editRekGiat', 'Budgeting\Referensi\nomenklaturController@editRekGiat');
 Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/hapusRekGiat', 'Budgeting\Referensi\nomenklaturController@hapusRekGiat');
-
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/rekap/{skpd}', 'Budgeting\Referensi\nomenklaturController@rekapNomenklatur');
 //PROGRAM
 Route::get('/main/{tahun}/{status}/pengaturan/program', 'Budgeting\Referensi\programController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/program/getData', 'Budgeting\Referensi\programController@getData');

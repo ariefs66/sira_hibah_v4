@@ -55,7 +55,7 @@
                             <option value="100">100</option>
                         </select>
                     </div>                    
-<a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel" target="_blank" href="{{ url('/') }}/main/{{$tahun}}/nomenklatur/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
+                <a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel" target="_blank" href="{{ url('/') }}/main/{{$tahun}}/nomenklatur/rekap/0"><i class="m-r-xs fa fa-download"></i> Download</a>
   
                   </div>           
                   <div class="tab-content tab-content-alt-1 bg-white">
