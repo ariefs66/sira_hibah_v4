@@ -62,10 +62,15 @@ class btlController extends Controller
         $btl->REKENING_ID     = Input::get('REKENING_ID');
         $btl->BTL_NAMA      = Input::get('BTL_NAMA');
         $btl->BTL_KETERANGAN  = Input::get('BTL_NAMA');
-        $btl->BTL_TOTAL     = Input::get('BTL_TOTAL');
+        $btl->BTL_TOTAL     = Input::get('BTL_VOL') * Input::get('BTL_TOTAL');
         $btl->BTL_VOLUME    = Input::get('BTL_VOL');
         $btl->BTL_DASHUK    = Input::get('BTL_DASHUK');
-        $btl->BTL_KOEFISIEN   = Input::get('BTL_VOLUME').' '.Input::get('BTL_SATUAN');
+        $btl->BTL_KOEFISIEN   = Input::get('BTL_VOL').' '.Input::get('BTL_SATUAN');
+        $btl->SKPD_ID        = Input::get('SKPD');
+        $btl->BTL_PAJAK      = 0;
+        $btl->TIME_CREATED   = Carbon\Carbon::now();
+        $btl->USER_CREATED   = Auth::user()->id;
+        $btl->IP_CREATED     = $_SERVER['REMOTE_ADDR'];
         $btl->save();
 
           $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
@@ -81,10 +86,15 @@ class btlController extends Controller
         $btl->REKENING_ID     = Input::get('REKENING_ID');
         $btl->BTL_NAMA      = Input::get('BTL_NAMA');
         $btl->BTL_KETERANGAN  = Input::get('BTL_NAMA');
-        $btl->BTL_TOTAL     = Input::get('BTL_TOTAL');
+        $btl->BTL_TOTAL     = Input::get('BTL_VOL') * Input::get('BTL_TOTAL');
         $btl->BTL_DASHUK    = Input::get('BTL_DASHUK');
         $btl->BTL_VOLUME    = Input::get('BTL_VOL');
-        $btl->BTL_KOEFISIEN   = Input::get('BTL_VOLUME').' '.Input::get('BTL_SATUAN');
+        $btl->BTL_KOEFISIEN   = Input::get('BTL_VOL').' '.Input::get('BTL_SATUAN');
+        $btl->SKPD_ID        = Input::get('SKPD');
+        $btl->BTL_PAJAK      = 0;
+        $btl->TIME_CREATED   = Carbon\Carbon::now();
+        $btl->USER_CREATED   = Auth::user()->id;
+        $btl->IP_CREATED     = $_SERVER['REMOTE_ADDR'];
         $btl->save();
 
           $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
@@ -103,6 +113,7 @@ class btlController extends Controller
     }
 
     public function submitEdit($tahun,$status){
+      
       if($status=="murni"){
         BTL::where('BTL_ID',Input::get('BTL_ID'))->update([
             'SUB_ID'          => Input::get('SUB_ID'),
@@ -110,11 +121,13 @@ class btlController extends Controller
             'BTL_KETERANGAN'  => Input::get('BTL_NAMA'),
             'REKENING_ID'     => Input::get('REKENING_ID'),
             'BTL_VOLUME'      => Input::get('BTL_VOL'),
-            'BTL_KOEFISIEN'   => Input::get('BTL_VOLUME').' '.Input::get('BTL_SATUAN'),
-            'BTL_TOTAL'       => Input::get('BTL_TOTAL'),
+            'BTL_KOEFISIEN'   => Input::get('BTL_VOL').' '.Input::get('BTL_SATUAN'),
+            'BTL_TOTAL'       => Input::get('BTL_VOL') * Input::get('BTL_TOTAL'),
             'BTL_DASHUK'       => Input::get('BTL_DASHUK'),
+            'SKPD_ID'       => Input::get('SKPD'),
             'TIME_UPDATED'    => Carbon\Carbon::now(),
-            'USER_UPDATED'    => Auth::user()->id
+            'USER_UPDATED'    => Auth::user()->id,
+            'IP_UPDATED'    => $_SERVER['REMOTE_ADDR']
           ]);
 
         $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
@@ -127,11 +140,13 @@ class btlController extends Controller
             'BTL_KETERANGAN'  => Input::get('BTL_NAMA'),
             'REKENING_ID'     => Input::get('REKENING_ID'),
             'BTL_VOLUME'      => Input::get('BTL_VOL'),
-            'BTL_KOEFISIEN'   => Input::get('BTL_VOLUME').' '.Input::get('BTL_SATUAN'),
-            'BTL_TOTAL'       => Input::get('BTL_TOTAL'),
+            'BTL_KOEFISIEN'   => Input::get('BTL_VOL').' '.Input::get('BTL_SATUAN'),
+            'BTL_TOTAL'       => Input::get('BTL_VOL') * Input::get('BTL_TOTAL'),
             'BTL_DASHUK'       => Input::get('BTL_DASHUK'),
+            'SKPD_ID'       => Input::get('SKPD'),
             'TIME_UPDATED'    => Carbon\Carbon::now(),
-            'USER_UPDATED'    => Auth::user()->id
+            'USER_UPDATED'    => Auth::user()->id,
+            'IP_UPDATED'    => $_SERVER['REMOTE_ADDR']
           ]);
 
         $datarek    = Rekening::where('REKENING_ID',Input::get('REKENING_ID'))->first();
@@ -154,7 +169,12 @@ class btlController extends Controller
       }
       else{
         $databtl     = BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->first();
-        BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->update(array('BTL_TOTAL'=>0,'BTL_VOLUME'=>0,'BTL_KOEFISIEN'=>NULL,'BTL_PAJAK'=>0));
+        $murni     = BTL::where('BTL_ID',Input::get('BTL_ID'))->count();
+        if($murni>0){
+          BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->update(array('BTL_TOTAL'=>0,'BTL_VOLUME'=>0,'BTL_KOEFISIEN'=>NULL,'BTL_PAJAK'=>0));
+        } else {
+          BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->delete();
+        }
       }
         $log        = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
@@ -218,6 +238,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.1',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
 
           $totPeg += $data->total;
@@ -258,6 +279,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.1',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
           $totPeg += $data->total;
@@ -299,6 +321,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.3',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
         }
       }
@@ -334,6 +357,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.3',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
@@ -375,6 +399,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.4',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
         }
       }
@@ -410,6 +435,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.4',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
@@ -451,6 +477,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.7',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
         }
       }
@@ -486,6 +513,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.7',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
@@ -525,6 +553,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.8',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
         }
       }
@@ -560,6 +589,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.8',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
@@ -617,9 +647,9 @@ class btlController extends Controller
               ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$skpd)
               ->where('DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun);
 
-        $data       = $data->groupBy('REF_REKENING.REKENING_KODE','DAT_BTL.BTL_ID','DAT_BTL.BTL_NAMA')
-                      ->select('REF_REKENING.REKENING_KODE','DAT_BTL.BTL_ID',
-                      'DAT_BTL.BTL_NAMA', DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
+        $data       = $data->groupBy('REF_REKENING.REKENING_KODE','DAT_BTL_PERUBAHAN.BTL_ID','DAT_BTL_PERUBAHAN.BTL_NAMA')
+                      ->select('REF_REKENING.REKENING_KODE','DAT_BTL_PERUBAHAN.BTL_ID',
+                      'DAT_BTL_PERUBAHAN.BTL_NAMA', DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
                       ->get();   
             
         $view       = array();
@@ -1106,3 +1136,4 @@ class btlController extends Controller
     }
 
 }
+

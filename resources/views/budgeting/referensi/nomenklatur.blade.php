@@ -353,12 +353,17 @@
                 @endforeach
               </select>
             </div>
+            @if(substr(Auth::user()->mod,1,1) == 1)
             <div class="col-sm-2 no-padder">
               <input type="text" readonly class="form-control" placeholder="Status" id="status-output">
             </div> 
             <div class="col-sm-2 no-padder">
               <input type="text" readonly class="form-control" placeholder="Catatan" id="catatan-output">
-            </div> 
+            </div>
+            @else
+            <input type="hidden" class="form-control" id="status-output">
+            <input type="hidden" class="form-control" id="catatan-output">
+            @endif
             <button class="btn btn-success col-sm-1" onclick="return simpanOutput()"><i class="fa fa-plus"></i></button>            
           </div>
       </div>      
@@ -971,5 +976,6 @@ function showRekeningGiat(id){
     }
 </script>
 @endsection
+
 
 

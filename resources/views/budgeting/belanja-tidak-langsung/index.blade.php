@@ -26,6 +26,11 @@
                   @endif
 <!--                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekapbtl"><i class="m-r-xs fa fa-download"></i> Download</a> -->
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Tidak Langsung</h5>
+                  @if(Auth::user()->level == 2 or Auth::user()->level == 1)
+                  <h5 class="inline font-semibold text-info m-n ">
+                 Pagu OPD : {{ number_format(0,0,'.',',') }}
+                  </h5>
+                  @endif  
                   <div class="col-sm-1 pull-right m-t-n-sm">
                    <select class="form-control dtSelect" id="dtSelect">
                             <option value="10">10</option>
@@ -69,6 +74,9 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-pegawai " id="table-pegawai">
                   <thead>
                     <tr>
@@ -77,11 +85,18 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>
                       <th class="hide"></th>
+                      @if(Auth::user()->level == 9)
+                      <th colspan="4" class="th_search">
+                      @else
                       <th colspan="3" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -102,6 +117,9 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-subsidi" id="table-subsidi">
                   <thead>
                     <tr>
@@ -110,11 +128,18 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th class="hide"></th>                    
+                      <th class="hide"></th>              
+                      @if(Auth::user()->level == 9)
+                      <th colspan="4" class="th_search">
+                      @else
                       <th colspan="3" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-subsidi form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -135,6 +160,9 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-hibah" id="table-hibah">
                   <thead>
                     <tr>
@@ -143,11 +171,18 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th class="hide"></th>                    
+                      <th class="hide"></th>              
+                      @if(Auth::user()->level == 9)
+                      <th colspan="4" class="th_search">
+                      @else
                       <th colspan="3" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-hibah form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -174,6 +209,9 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-bantuan" id="table-bantuan">
                   <thead>
                     <tr>
@@ -182,11 +220,18 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th class="hide"></th>                    
+                      <th class="hide"></th>              
+                      @if(Auth::user()->level == 9)
+                      <th colspan="4" class="th_search">
+                      @else
                       <th colspan="3" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-bantuan form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -207,6 +252,9 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-btt" id="table-btt">
                   <thead>
                     <tr>
@@ -215,11 +263,18 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th class="hide"></th>                    
+                      <th class="hide"></th>                  
+                      @if(Auth::user()->level == 9)
+                      <th colspan="4" class="th_search">
+                      @else
                       <th colspan="3" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-btt form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -418,6 +473,7 @@
   function simpanBTL(){
     var id              = $('#jenis-btl').val();
     var token           = $('#token').val();    
+    var SKPD          = $('#skpd-btl').val();
     var SUB_ID          = $('#subunit-btl').val();
     var REKENING_ID     = $('#rekening-btl').val();
     var BTL_NAMA        = $('#keterangan-btl').val();
@@ -426,7 +482,7 @@
     var BTL_TOTAL       = $('#total-btl').val();
     var BTL_DASHUK       = $('#dashuk').val();
     var BTL_ID          = $('#id-btl').val();
-    if(SUB_ID == "" || BTL_NAMA == "" || BTL_VOL == "" || BTL_SATUAN == "" || BTL_TOTAL == ""){
+    if(SKPD == "" || SUB_ID == "" || BTL_NAMA == "" || BTL_VOL == "" || BTL_SATUAN == "" || BTL_TOTAL == ""){
       $.alert('Form harap diisi!');
     }else{
       if(BTL_ID == ""){
@@ -439,6 +495,7 @@
         type: "POST",
         data: {'_token'         : token,
               'BTL_ID'          : BTL_ID, 
+              'SKPD'          : SKPD, 
               'SUB_ID'          : SUB_ID, 
               'REKENING_ID'     : REKENING_ID,
               'BTL_NAMA'        : BTL_NAMA, 
@@ -529,6 +586,7 @@
         $('#volume-btl').val(data['BTL_VOLUME']);
         $('#total-btl').val(data['BTL_TOTAL']);
         $('#dashuk').val(data['BTL_DASHUK']);
+        $('#satuan-btl').val('Tahun').trigger("chosen:updated");
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -538,3 +596,4 @@
   } 
 </script>
 @endsection
+

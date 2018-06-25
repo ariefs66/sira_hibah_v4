@@ -70,6 +70,9 @@
                     { mData: 'NAMA'},
                     { mData: 'TOTAL_MURNI'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-pegawai " id="table-pegawai">
                   <thead>
                     <tr>
@@ -78,6 +81,9 @@
                       <th rowspan="2" style="text-align: center;">Kode Perangkat Daerah</th>
                       <th rowspan="2" style="text-align: center;">Nama Perangkat Daerah</th>
                       <th colspan="2" style="text-align: center;">Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th style="text-align: center;">Sebelum</th>
@@ -85,8 +91,12 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>
-                      <th class="hide"></th>
+                      <th class="hide"></th>              
+                      @if(Auth::user()->level == 9)
+                      <th colspan="5" class="th_search">
+                      @else
                       <th colspan="4" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-pegawai form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -108,6 +118,9 @@
                     { mData: 'NAMA'},
                     { mData: 'TOTAL_MURNI'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-subsidi" id="table-subsidi">
                   <thead>
                     <tr>
@@ -116,6 +129,9 @@
                       <th rowspan="2" style="text-align: center;">Kode Perangkat Daerah</th>
                       <th rowspan="2" style="text-align: center;">Nama Perangkat Daerah</th>
                       <th colspan="2" style="text-align: center;">Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th style="text-align: center;">Sebelum</th>
@@ -123,8 +139,12 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th class="hide"></th>                    
+                      <th class="hide"></th>                              
+                      @if(Auth::user()->level == 9)
+                      <th colspan="5" class="th_search">
+                      @else
                       <th colspan="4" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-subsidi form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -146,6 +166,9 @@
                     { mData: 'NAMA'},
                     { mData: 'TOTAL_MURNI'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-hibah" id="table-hibah">
                   <thead>
                     <tr>
@@ -154,6 +177,9 @@
                       <th rowspan="2" style="text-align: center;">Kode Perangkat Daerah</th>
                       <th rowspan="2" style="text-align: center;">Nama Perangkat Daerah</th>
                       <th colspan="2" style="text-align: center;">Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th style="text-align: center;">Sebelum</th>
@@ -161,8 +187,12 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th class="hide"></th>                    
+                      <th class="hide"></th>                              
+                      @if(Auth::user()->level == 9)
+                      <th colspan="5" class="th_search">
+                      @else
                       <th colspan="4" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-hibah form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -184,6 +214,9 @@
                     { mData: 'NAMA'},
                     { mData: 'TOTAL_MURNI'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-bantuan" id="table-bantuan">
                   <thead>
                     <tr>
@@ -192,6 +225,9 @@
                       <th rowspan="2" style="text-align: center;">Kode Perangkat Daerah</th>
                       <th rowspan="2" style="text-align: center;">Nama Perangkat Daerah</th>
                       <th colspan="2" style="text-align: center;">Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th style="text-align: center;">Sebelum</th>
@@ -199,8 +235,12 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th class="hide"></th>                    
+                      <th class="hide"></th>                            
+                      @if(Auth::user()->level == 9)
+                      <th colspan="5" class="th_search">
+                      @else
                       <th colspan="4" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-bantuan form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -222,6 +262,9 @@
                     { mData: 'NAMA'},
                     { mData: 'TOTAL_MURNI'},
                     { mData: 'TOTAL'}
+                    @if(Auth::user()->level == 9)
+                    ,{ mData: 'AKSI'}
+                    @endif
                   ]}" class="table table-btl table-striped b-t b-b table-btt" id="table-btt">
                   <thead>
                     <tr>
@@ -230,6 +273,9 @@
                       <th rowspan="2" style="text-align: center;">Kode Perangkat Daerah</th>
                       <th rowspan="2" style="text-align: center;">Nama Perangkat Daerah</th>
                       <th colspan="2" style="text-align: center;">Anggaran</th>
+                      @if(Auth::user()->level == 9)
+                      <th>#</th>
+                      @endif
                     </tr>
                     <tr>
                       <th style="text-align: center;">Sebelum</th>
@@ -237,8 +283,12 @@
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
-                      <th class="hide"></th>                    
+                      <th class="hide"></th>                  
+                      @if(Auth::user()->level == 9)
+                      <th colspan="5" class="th_search">
+                      @else
                       <th colspan="4" class="th_search">
+                      @endif
                         <i class="icon-bdg_search"></i>
                         <input type="search" class="cari-btt form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                       </th>
@@ -331,6 +381,13 @@
         <label for="no_spp" class="col-md-3">Anggaran</label>          
         <div class="col-sm-9">
           <input type="text" class="form-control" placeholder="Masukan Anggaran" id="total-btl" >          
+        </div> 
+      </div>
+
+      <div class="form-group">
+        <label for="no_spp" class="col-md-3">Dasar Hukum</label>          
+        <div class="col-sm-9">
+          <input type="text" class="form-control" placeholder="Dasar Hukum" id="dashuk" >          
         </div> 
       </div>
 
@@ -432,6 +489,7 @@
   function simpanBTL(){
     var id              = $('#jenis-btl').val();
     var token           = $('#token').val();    
+    var SKPD          = $('#skpd-btl').val();
     var SUB_ID          = $('#subunit-btl').val();
     var REKENING_ID     = $('#rekening-btl').val();
     var BTL_NAMA        = $('#keterangan-btl').val();
@@ -439,7 +497,8 @@
     var BTL_SATUAN      = $('#satuan-btl').val();
     var BTL_TOTAL       = $('#total-btl').val();
     var BTL_ID          = $('#id-btl').val();
-    if(SUB_ID == "" || BTL_NAMA == "" || BTL_VOL == "" || BTL_SATUAN == "" || BTL_TOTAL == ""){
+    var BTL_DASHUK       = $('#dashuk').val();
+    if(SKPD == "" || SUB_ID == "" || BTL_NAMA == "" || BTL_VOL == "" || BTL_SATUAN == "" || BTL_TOTAL == ""){
       $.alert('Form harap diisi!');
     }else{
       if(BTL_ID == ""){
@@ -453,10 +512,12 @@
         data: {'_token'         : token,
               'BTL_ID'          : BTL_ID, 
               'SUB_ID'          : SUB_ID, 
+              'SKPD'          : SKPD, 
               'REKENING_ID'     : REKENING_ID,
               'BTL_NAMA'        : BTL_NAMA, 
               'BTL_VOL'         : BTL_VOL, 
               'BTL_SATUAN'      : BTL_SATUAN, 
+              'BTL_DASHUK'      : BTL_DASHUK, 
               'BTL_TOTAL'       : BTL_TOTAL},
         success: function(msg){
           $('.table-pegawai').DataTable().ajax.reload();
@@ -477,6 +538,7 @@
           $('#volume-btl').val("");
           $('#satuan-btl').val("").trigger("chosen:updated");
           $('#total-btl').val("");
+          $('#dashuk').val("");
           $('#id-btl').val("");
         }
       });
@@ -540,6 +602,8 @@
         $('#keterangan-btl').val(data['BTL_KETERANGAN']);
         $('#volume-btl').val(data['BTL_VOLUME']);
         $('#total-btl').val(data['BTL_TOTAL']);
+        $('#dashuk').val(data['BTL_DASHUK']);
+        $('#satuan-btl').val('Tahun').trigger("chosen:updated");
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");

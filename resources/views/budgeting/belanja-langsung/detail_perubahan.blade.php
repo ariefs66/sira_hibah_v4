@@ -1034,7 +1034,10 @@
         $('#ket-belanja').val(data['DATA']['RINCIAN_KETERANGAN']);
         $('#jenis-pekerjaan').val(data['DATA']['PEKERJAAN_ID']).trigger('chosen:updated');
         id_komponen   = data['KOMPONEN_KODE'].substring(0,1);
-        $('#id-komponen').val(data['DATA']['KOMPONEN_ID']);
+        if(id_komponen < 1){
+          id_komponen = 1;
+        }
+	$('#id-komponen').val(data['DATA']['KOMPONEN_ID']);
         $('#id-rincian').val(data['DATA']['RINCIAN_ID']);
         $('#kategori-belanja').val(id_komponen).trigger('chosen:updated');
         $('#rekening-belanja').find('option').remove().end().append('<option value="'+data['DATA']['REKENING_ID']+'">'+data['REKENING_NAMA']+'</option>').trigger('chosen:updated');

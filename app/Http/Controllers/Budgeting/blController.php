@@ -1094,6 +1094,11 @@ class blController extends Controller
         }else{
             $pekerjaan=$data->pekerjaan->PEKERJAAN_NAMA;
         }
+	
+        $satuan_kesatu = explode(' ',$koef[0])[1];
+        if (strlen($satuan_kesatu) < 1){
+            $satuan_kesatu = "Tahun";
+        }
 
         $out    = [ 'DATA'          => $data,
                     'REKENING_KODE' => $data->rekening->REKENING_KODE,
@@ -1101,7 +1106,7 @@ class blController extends Controller
                     'KOMPONEN_KODE' => $data->komponen->KOMPONEN_KODE,
                     'KOMPONEN_NAMA' => $data->komponen->KOMPONEN_NAMA,
                     'VOL1'          => explode(' ',$koef[0])[0],
-                    'SATUAN1'       => explode(' ',$koef[0])[1],
+                    'SATUAN1'       => $satuan_kesatu,
                     'VOL2'          => $v1,
                     'SATUAN2'       => $k1,
                     'VOL3'          => $v2,
