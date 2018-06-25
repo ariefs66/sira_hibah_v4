@@ -92,6 +92,8 @@ class nomenklaturController extends Controller
     	foreach ($data as $data) {
                 if(Auth::user()->level == 8){
                 $aksi       = '<div class="action visible pull-right"><a onclick="return showRekeningGiat(\''.$data->KEGIATAN_ID.'\')" title="Cek Rekening" class="action-edit"><i class="icon-bdg_form"></i></a><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Kegiatan" onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Kegiatan" onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+           }elseif(Auth::user()->level == 9){
+                $aksi       = '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a></div>';
             }else{
                 $aksi       = '-';
             }

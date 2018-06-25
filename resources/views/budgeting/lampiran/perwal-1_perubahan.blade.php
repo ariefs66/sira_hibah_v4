@@ -1378,7 +1378,7 @@
 	@elseif(strlen($btl->REKENING_KODE)<9)
 	@php $style = ''; $styleClose = ''; $styleNumber = 'garis' @endphp
 	@else
-	@php $style = '&nbsp; &nbsp; &nbsp; '; $styleClose = ''; $styleNumber = '' @endphp
+	@php $style = ''; $styleClose = ''; $styleNumber = '' @endphp
 	@endif
 	<tr>
 		<td class="border-rincian">{!! $style.$btl->REKENING_KODE.$styleClose !!}</td>
@@ -1405,7 +1405,7 @@
 	@endif
 	<tr>
 		<td class="border-rincian">{!! $style.$bl->REKENING_KODE.$styleClose !!}</td>
-		<td class="border-rincian">{!! $style.str_pad($input, 10)$bl->REKENING_NAMA.$styleClose !!}</td>
+		<td class="border-rincian">{!! $style.$bl->REKENING_NAMA.$styleClose !!}</td>
 		<td class="border-rincian kanan {{$styleNumber}}">{!! $style.number_format($bl->pagu_murni,0,',','.').$styleClose !!}</td>
 		<td class="border-rincian kanan {{$styleNumber}}">{!! $style.number_format($bl->pagu,0,',','.').$styleClose !!}</td>
 		@if($bl->pagu-$bl->pagu_murni < 0)
@@ -1549,5 +1549,6 @@
 </div>
 </body>
 </html>
+
 
 

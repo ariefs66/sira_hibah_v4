@@ -45,7 +45,7 @@
                      @endif
                    </select>
                  </div>
-
+  
                     <h5 class="inline font-semibold text-orange m-n ">Nomenklatur Tahun {{ $tahun }}</h5>
           					<div class="col-sm-1 pull-right m-t-n-sm">
                     	<select class="form-control dtSelect" id="dtSelect">
@@ -55,6 +55,8 @@
                             <option value="100">100</option>
                         </select>
                     </div>                    
+<a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel" target="_blank" href="{{ url('/') }}/main/{{$tahun}}/nomenklatur/excel"><i class="m-r-xs fa fa-download"></i> Download</a>
+  
                   </div>           
                   <div class="tab-content tab-content-alt-1 bg-white">
                         <div role="tabpanel" class="active tab-pane" id="tab-1">  
