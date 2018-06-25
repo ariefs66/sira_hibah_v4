@@ -61,22 +61,22 @@ class mainController extends Controller
 	public function getTABudgeting($tahun,$status){
 		$data  		= TahunAnggaran::all();
 		$view 		= '';
-		
+$view 	.= '<option value="'.$tahun.'/'.$status.'" id="o'.$tahun.$status.'" selected>'.$tahun.'-'.$status.'</option>';
 		
 		foreach($data as $data){
-			 
+				
 			if($data->TAHUN == '2018' && $data->STATUS == 'pergeseran'){
-					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'" selected>'.$data->TAHUN.'-'.$data->STATUS.'</option>';
-}
-			 if($data->TAHUN == '2019'){
-				//if($tahun == $data->TAHUN and $status == $data->STATUS){
-					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'" selected>'.$data->TAHUN.'-'.$data->STATUS.'</option>';
-				//}
-				/*
-				else{
+				if($tahun == '2018' && $status == 'pergeseran'){
+				} else {
 					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
 				}
-                        //*/}
+			}
+			 if($data->TAHUN == '2019'){
+				if($tahun == '2019' && $status == 'murni'){
+				} else {
+					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
+				}
+            }
 		}
 		return $view;
 	}

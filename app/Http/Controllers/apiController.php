@@ -80,9 +80,8 @@ class apiController extends Controller
         return Response::JSON($data);
     }
 
-
-
-    public function apiSiraBL($tahun,$status){
+	public function apiSiraBL($tahun,$status, Request $req){
+        $skpd = ($req->SKPD == "")? 0 : $req->SKPD;        
         $filter = "";
         $pagu_foot    = 0;
         $rincian_foot = 0;
@@ -98,21 +97,28 @@ class apiController extends Controller
             $thp = 0;
         }
         
-            $skpd       = $this->getSKPD($tahun);
+        if($skpd>0){
             $data       = BL::whereHas('subunit',function($q) use ($skpd){
-                                $q->where('SKPD_ID',$skpd);
+                            $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
 
             $pagu_foot       = BL::whereHas('subunit',function($q) use ($skpd){
-                                        $q->where('SKPD_ID',$skpd);
-                                })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
+                                    $q->where('SKPD_ID',$skpd);
+                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
 
             $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                                    ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                                    ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
-                                    ->WHERE('REF_SUB_UNIT.SKPD_ID',$skpd)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
+                                ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                                ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
+                                ->WHERE('REF_SUB_UNIT.SKPD_ID',$skpd)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
+        } else {
+            $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->get();
 
+            $pagu_foot       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
 
+            $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
+                                ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
+                                ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)->where('BL_VALIDASI',1)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
+        }
 
         $view       = array();
         $i          = 1;
@@ -142,109 +148,21 @@ class apiController extends Controller
             }
 			
             if($data->kunci->KUNCI_GIAT == 0 and $thp == 1){
-                if(Auth::user()->level == 8){
-                    $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
-                }else{
                     $kunci     = '<span class="text-success"><i class="fa fa-unlock kunci-giat"></i></span>';
-                }
-                //if(Auth::user()->level == 4){
-                //$no        .='<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/ubah/'.$data->BL_ID.'"><i class="fa fa-pencil-square"></i> Ubah</a></li>';
-                //}
             }else{
-                if(Auth::user()->level == 8){
-                    $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
-                }else{
                     $kunci      = '<span class="text-danger"><i class="fa fa-lock kunci-giat"></i></span>';
-                }             
-                //if(Auth::user()->level == 4){
-                //    $no        .='<li><a><i class="fa fa-pencil-square"></i> Ubah <i class="fa fa-lock"></i></a></li>';   
-                //}
             }
 
             //kunci rincian
             if ($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1 ) {
-                //if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
-                    /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
-                    <i></i></label>';*/
-                    $rincian    ='<label class="i-switch bg-danger m-t-xs m-r">
-                    <input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'"><i></i></label>';
-                }else{
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
-                }                
             }else{
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
-                    /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
-                    <i></i></label>';*/
-                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
-                    <input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked="checked"><i></i></label>';
-                }else{
                     $rincian    = '<span class="text-danger"><i class="fa fa-lock kunci-rincian"></i></span>';
-                }             
             }
 
-            if((Auth::user()->level ==2 and $data->kunci->KUNCI_GIAT == 0) or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
-                //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
-                
-                /* menu indikator*/
-                $no            .= '<li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';
-                
-                /*tanpa menu indikator*/
-                //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li>';
-            }
-
-            if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){
-               /* $no            .= '<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
-<li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';*/
-                $no            .= '<li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
-            }
-
-            //HAPUS BL
-            //<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
-           if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8) && Auth::user()->active == 1) {
-                $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
-            }
-
-            if(Auth::user()->active == 1){
-                $tahunnow   = Carbon\Carbon::now()->format('Y');
-                if($tahun < $tahunnow+1 and Auth::user()->level == 2){
-                    $no   .= '<li><a onclick="return trftoperubahan(\''.$data->BL_ID.'\')"><i class="fa fa-repeat"></i> Perubahan</a></li>';
-                }
-            }
-
-            if(Auth::user()->active == 5){
-                $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>';
-            }
-
-            if($data->BL_VALIDASI == 0){
-                $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                if(Auth::user()->level == 8 || Auth::user()->level == 12){
-                    $no  .= '<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>';
-                }
-            }elseif($data->BL_VALIDASI == 1){
-                /*$no  .= '<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>';*/
-                $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
-            }
-
-            //rka
-            if($tahapan->TAHAPAN_NAMA == 'RKPD' || $tahapan->TAHAPAN_NAMA == 'RKUA/PPAS' || $tahapan->TAHAPAN_NAMA == 'KUA/PPAS' || $tahapan->TAHAPAN_NAMA == 'RAPBD'){
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>';
-            }
-
-            //dpa
-            if($tahapan->TAHAPAN_NAMA == 'APBD'){
-                $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>';
-            }
-            
-            //info    
-            $no        .= '<li class="divider"></li>
-                           <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li>';
-
-            $no     .= '</ul></div>';
             if(empty($data->rincian)) $totalRincian = 0;
             else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,'.',',');
-            array_push($view, array( 'NO'             =>$no,
-                                     'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
+            array_push($view, array( 'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
                                      'PAGU'           =>number_format($data->BL_PAGU,0,'.',','),
                                      'RINCIAN'        =>$totalRincian,
                                      'STATUS'         =>$kunci.' Kegiatan<br>'.$rincian.' Rincian<br>'.$validasi.' Validasi'));
@@ -260,29 +178,26 @@ class apiController extends Controller
         return $view;
     }
 
-	public function apiSiraBTL($tahun,$status){
-        $skpd = 0;
-        $id = 0;
+	public function apiSiraBTL($tahun,$status, Request $req){
+        $skpd = ($req->SKPD == "")? 0 : $req->SKPD;
+        $id = ($req->ID == "")? "" : $req->ID;
         if($status=="murni"){
-          $data   = BTL::whereHas('rekening', function($q) use ($id){
-                $q->where('REKENING_KODE','like',$id.'%');  
-              })->whereHas('subunit',function($x) use($skpd){
-                $x->where('SKPD_ID',$skpd);
-              })->where('BTL_TAHUN',$tahun)->get();
+            if($skpd>0){
+                $data   = BTL::whereHas('rekening', function($q) use ($id){
+                    $q->where('REKENING_KODE','like',$id.'%');  
+                  })->where('BTL_TAHUN',$tahun)->get();
+            }else{
+                $data   = BTL::whereHas('rekening', function($q) use ($id){
+                    $q->where('REKENING_KODE','like',$id.'%');  
+                  })->where('BTL_TAHUN',$tahun)->get();
+            }
           $view       = array();
           $no         = 1;
           $opsi       = '';
           $akb       = '';
           foreach ($data as $data) {
-            if(Auth::user()->level == 9 or Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
-              $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
-               $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-            }elseif(Auth::user()->level == 2){
-               $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
                $akb = '-';
-            }
             array_push($view, array( 'NO'       => $no++,
-                                     'AKSI'     => $opsi,
                                      'AKB'     => $akb,
                                      'REKENING'   => $data->rekening->REKENING_KODE,
                                      'RINCIAN'    => $data->BTL_NAMA,
@@ -290,12 +205,18 @@ class apiController extends Controller
           }
         }
         else{
-          $data   = BTLPerubahan::leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
+            if($skpd>0){
+                $data   = BTLPerubahan::leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
                 ->leftJoin('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
                 ->where('REKENING_KODE','like',$id.'%')
-                ->where('DAT_BTL_PERUBAHAN.SKPD_ID',$skpd)
                 ->where('DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun);
-  
+            }else{
+                $data   = BTLPerubahan::leftJoin('BUDGETING.DAT_BTL','BUDGETING.DAT_BTL.BTL_ID','=','BUDGETING.DAT_BTL_PERUBAHAN.BTL_ID')
+                ->leftJoin('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL_PERUBAHAN.REKENING_ID')
+                ->where('REKENING_KODE','like',$id.'%')
+                ->where('DAT_BTL_PERUBAHAN.BTL_TAHUN',$tahun);
+            }
+
           $data       = $data->groupBy('REF_REKENING.REKENING_KODE','DAT_BTL.BTL_ID','DAT_BTL.BTL_NAMA')
                         ->select('REF_REKENING.REKENING_KODE','DAT_BTL.BTL_ID',
                         'DAT_BTL.BTL_NAMA', DB::raw('SUM("BUDGETING"."DAT_BTL_PERUBAHAN"."BTL_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_BTL"."BTL_TOTAL") AS TOTAL_MURNI'))
@@ -305,17 +226,9 @@ class apiController extends Controller
           $no         = 1;
           $opsi       = '';
           foreach ($data as $data) {
-            if(Auth::user()->level == 9 or Auth::user()->level == 8 or substr(Auth::user()->mod,0,1) == 1){
-              $opsi = '<div class="action visible pull-right"><a onclick="return ubah(\''.$data->BTL_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapus(\''.$data->BTL_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
-              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-            }elseif(Auth::user()->level == 2){
   
               $opsi = '-';
-              $akb = '<div class="action visible pull-right"><a href="/main/'.$tahun.'/'.$status.'/belanja-tidak-langsung/akb/'.$skpd.'" class="action-edit" target="_blank"><i class="mi-edit"></i></a></div>';
-            }
             array_push($view, array( 'NO'             => $no++,
-                                     'AKSI'           => $opsi,
-                                     'AKB'            => $akb,
                                      'REKENING'       => $data->REKENING_KODE,
                                      'RINCIAN'        => $data->BTL_NAMA,
                                      'TOTAL'          => number_format($data->total,0,'.',','),
@@ -326,57 +239,6 @@ class apiController extends Controller
           $out = array("aaData"=>$view);    	
           return Response::JSON($out);
          }
-  
-         public function apiSiraPendapatan($tahun,$status){
-            if($status=='murni'){
-              $data       = DB::table('BUDGETING.DAT_PENDAPATAN')
-                    ->where('BUDGETING.DAT_PENDAPATAN.PENDAPATAN_TAHUN',$tahun)
-                    ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_PENDAPATAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                    ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_PENDAPATAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                    ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                    ->groupBy('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA')
-                    ->select('REFERENSI.REF_SKPD.SKPD_ID','SKPD_KODE','SKPD_NAMA',DB::raw('SUM("PENDAPATAN_TOTAL") AS TOTAL'))
-                    ->get();
-              $view       = array();
-              foreach ($data as $data) {
-      
-                array_push($view, array( 'ID'     =>$data->SKPD_ID,
-                             'KODE'     =>$data->SKPD_KODE,
-                             'NAMA'     =>$data->SKPD_NAMA,
-                             'TOTAL'    =>number_format($data->total,0,'.',','),
-                             'OPSI'    => '-'
-                      ));
-              }
-              $out = array("aaData"=>$view);      
-              return Response::JSON($out);
-            }else{
-              $data = DB::table('BUDGETING.DAT_PENDAPATAN_PERUBAHAN')
-                    ->where('BUDGETING.DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_TAHUN',$tahun)
-                    ->leftJoin('BUDGETING.DAT_PENDAPATAN','BUDGETING.DAT_PENDAPATAN.PENDAPATAN_ID','=','BUDGETING.DAT_PENDAPATAN_PERUBAHAN.PENDAPATAN_ID')
-                    ->leftJoin('REFERENSI.REF_REKENING','BUDGETING.DAT_PENDAPATAN_PERUBAHAN.REKENING_ID','=','REFERENSI.REF_REKENING.REKENING_ID')
-                    ->leftJoin('REFERENSI.REF_SUB_UNIT','BUDGETING.DAT_PENDAPATAN_PERUBAHAN.SUB_ID','=','REFERENSI.REF_SUB_UNIT.SUB_ID')
-                    ->leftJoin('REFERENSI.REF_SKPD','REFERENSI.REF_SKPD.SKPD_ID','=','REFERENSI.REF_SUB_UNIT.SKPD_ID')
-                    ->groupBy('REFERENSI.REF_SKPD.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA')
-                    ->select('REFERENSI.REF_SKPD.SKPD_ID','REFERENSI.REF_SKPD.SKPD_KODE','REFERENSI.REF_SKPD.SKPD_NAMA',DB::raw('SUM("BUDGETING"."DAT_PENDAPATAN_PERUBAHAN"."PENDAPATAN_TOTAL") AS TOTAL'),DB::raw('SUM("BUDGETING"."DAT_PENDAPATAN"."PENDAPATAN_TOTAL") AS TOTAL_MURNI'))
-                    ->get();
-              $view       = array();
-              foreach ($data as $data) {
-                  $selisih = ($data->total_murni-$data->total > 0 ? 'Rp. '.number_format(abs($data->total_murni-$data->total),0,'.',',') : '(Rp. '.number_format(abs($data->total_murni-$data->total),0,'.',',').')');
-                  $selisih = ($data->total_murni-$data->total == 0 ? 'Rp. 0' : $selisih);    
-                  array_push($view, array( 'ID'     =>$data->SKPD_ID,
-                             'KODE'     =>$data->SKPD_KODE,
-                             'NAMA'     =>$data->SKPD_NAMA,
-                             'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',','),
-                             'TOTAL'    =>number_format($data->total,0,'.',','),
-                             'SELISIH'    =>$selisih,
-                             'OPSI'    => '-'
-                           ));
-              }
-              $out = array("aaData"=>$view);      
-              return Response::JSON($out);
-            }
-        
-        }
 
     public function apiSiraPembiayaan($tahun,$status){
         $data = Pembiayaan::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PEMBIAYAAN.REKENING_ID')

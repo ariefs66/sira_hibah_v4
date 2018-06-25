@@ -42,7 +42,7 @@ class btlController extends Controller
         $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();
       }else{
         $skpd_id    = $this->getSKPD($tahun);
-        $skpd       = SKPD::where('SKPD_ID',$skpd_id)->first();
+        $skpd       = SKPD::where('SKPD_ID',$skpd_id)->get();
       }      
        $satuan 	= Satuan::where('SATUAN_NAMA','like','Tahun')->get();
       //$satuan 	= Satuan::all();

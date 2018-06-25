@@ -263,13 +263,9 @@
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="skpd-btl">
             <option value="">Silahkan Pilih SKPD</option>
-            @if(Auth::user()->level == 9) 
             @foreach($skpd as $s)
             <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
             @endforeach
-            @else
-            <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
-            @endif
           </select>
         </div>
       </div>   
@@ -305,7 +301,9 @@
         <div class="col-sm-4">
           <select ui-jq="chosen" class="w-full" id="satuan-btl">
             <option value="">Satuan</option>
-            <option value="{{ $satuan->SATUAN_NAMA }}">{{ $satuan->SATUAN_NAMA }}</option>
+            @foreach($satuan as $sat)
+            <option value="{{ $sat->SATUAN_NAMA }}">{{ $sat->SATUAN_NAMA }}</option>
+            @endforeach
           </select>    
         </div>
       </div>
