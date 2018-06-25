@@ -38,14 +38,14 @@ use App\Model\AKB_BTL_Perubahan;
 class btlController extends Controller
 {
     public function index($tahun, $status){
-        if(Auth::user()->level==9){
+        if(Auth::user()->level==9  || Auth::user()->level==8){
         $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();
       }else{
         $skpd_id    = $this->getSKPD($tahun);
         $skpd       = SKPD::where('SKPD_ID',$skpd_id)->first();
       }      
-       $satuan 	= Satuan::where('SATUAN_NAMA','like','Tahun')->first();
-//      	$satuan 	= Satuan::all();
+       $satuan 	= Satuan::where('SATUAN_NAMA','like','Tahun')->get();
+      //$satuan 	= Satuan::all();
         if($status=="murni"){
           return View('budgeting.belanja-tidak-langsung.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'satuan'=>$satuan]);
         }

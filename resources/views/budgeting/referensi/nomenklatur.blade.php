@@ -143,8 +143,9 @@
             <label for="nama_program" class="col-md-3">Program Prioritas</label>          
             <div class="col-sm-9">
               <select ui-jq="chosen" class="w-full" id="prioritas_program" name="prioritas_program">
-                    <option value="0">Tidak</option>
-                    <option value="1">Ya</option>
+               @for ($i = 1; $i <= 100; $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+              @endfor
               </select>
             </div> 
           </div>
@@ -352,6 +353,12 @@
                 @endforeach
               </select>
             </div>
+            <div class="col-sm-2 no-padder">
+              <input type="text" readonly class="form-control" placeholder="Status" id="status-output">
+            </div> 
+            <div class="col-sm-2 no-padder">
+              <input type="text" readonly class="form-control" placeholder="Catatan" id="catatan-output">
+            </div> 
             <button class="btn btn-success col-sm-1" onclick="return simpanOutput()"><i class="fa fa-plus"></i></button>            
           </div>
       </div>      
