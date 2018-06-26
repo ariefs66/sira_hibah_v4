@@ -179,6 +179,65 @@
  </div>
 
 <div class="overlay"></div>
+<div class="bg-white wrapper-lg input-sidebar input-prioritas">
+<a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
+    <form id="form-prioritas" class="form-horizontal">
+      <div class="input-wrapper">
+        <h5 id="judul-prioritas">Tambah Program</h5>
+          <div class="form-group">
+            <label for="kode_urusan" class="col-md-3">Urusan</label>          
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="urusan_prioritas" name="urusan_prioritas">
+                  <option value="0">Silahkan Pilih Urusan</option>
+                  @foreach($urusan as $u)
+                  <option value="{{$u->URUSAN_ID}}">{{ $u->URUSAN_KODE }} - {{ $u->URUSAN_NAMA }}</option>
+                  @endforeach
+              </select>            
+              <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
+              <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">          
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_program_prioritas" class="col-md-3">Tahun Program</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="{{$tahun}}" disabled> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_program_prioritas" class="col-md-3">Kode Program</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" readonly placeholder="Kode Program Otomatis Melanjutkan Kode Terakhir" name="kode_program_prioritas" id="kode_program_prioritas" value="" disabled> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_program" class="col-md-3">Nama Program</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" readonly placeholder="Masukan Nama Program" name="nama_program" id="nama_program_prioritas" value=""> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_program" class="col-md-3">Program Prioritas</label>          
+            <div class="col-sm-9">
+              <select ui-jq="chosen" class="w-full" id="prioritas_program_prioritas" name="prioritas_program_prioritas">
+               @for ($i = 1; $i <= 100; $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+              @endfor
+              </select>
+            </div> 
+          </div>
+
+          <hr class="m-t-xl">
+         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPrioritas()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+      </div>
+    </form>
+  </div>
+ </div>
+
+<div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-kegitan">
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
     <form id="form-kegiatan" class="form-horizontal">
@@ -582,6 +641,45 @@
         });
     }
   }
+  function simpanPrioritas(){
+    var id_program    = $('#id_program_prioritas').val();
+    var prioritas    = $('#program_prioritas').val();
+    var token         = $('#token').val();
+    if(id_program == "" || prioritas == "" ){
+      $.alert('Form harap dilengkapi!');
+    }else{
+      uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/prioritas/submit";
+      $.ajax({
+        url: uri,
+        type: "POST",
+        data: {'_token'         : token,
+              'id_program'      : id_program, 
+              'prioritas_program'    : prioritas_program},
+        success: function(msg){
+            if(msg == 1){
+              $('#urusan_prioritas select').val('0').trigger("chosen:updated");
+              $('#nama_program_prioritas').val('');
+              $('#id_program_prioritas').val('');
+              $('.table-program-head').DataTable().ajax.reload();              
+              $.alert({
+                title:'Info',
+                content: 'Data berhasil disimpan',
+                autoClose: 'ok|1000',
+                buttons: {
+                    ok: function () {
+                      $('.input-spp,.input-spp-langsung,.input-sidebar').animate({'right':'-1050px'},function(){
+                        $('.overlay').fadeOut('fast');
+                      });                      
+                    }
+                }
+              });
+            }else{
+              $.alert('Data telah tersedia!');
+            }
+          }
+        });
+    }
+  }
 
   function simpanKegiatan(){
     var skpd          = $('#skpd_').val();
@@ -700,6 +798,25 @@
         $('#prioritas_program').val(msg['data'][0]['PROGRAM_PRIORITAS']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
+          $("html, body").animate({ scrollTop: 0 }, "slow");
+        });
+      }
+    });    
+  }
+  function ubahPrioritas(id) {
+    $('#judul-form').text('Ubah Prioritas Program');        
+    $.ajax({
+      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
+      type: "GET",
+      success: function(msg){
+        $('select#urusan').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
+        $('#id_program').val(msg['data'][0]['PROGRAM_ID']);
+        $('#tahun_program').val(msg['data'][0]['PROGRAM_TAHUN']);
+        $('#kode_program').val(msg['data'][0]['PROGRAM_KODE']);
+        $('#nama_program').val(msg['data'][0]['PROGRAM_NAMA']);
+        $('#prioritas_program').val(msg['data'][0]['PROGRAM_PRIORITAS']);
+        $('.overlay').fadeIn('fast',function(){
+          $('.input-prioritas').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
         });
       }

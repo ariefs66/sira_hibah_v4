@@ -71,7 +71,11 @@ class nomenklaturController extends Controller
             if(Auth::user()->level == 8){
                 $aksi       = '<div class="action visible pull-right"><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Program" onclick="return ubahProgram(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Program" onclick="return hapusProgram(\''.$data->PROGRAM_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             }else{
-                 $aksi       = '<div class="action visible pull-right"><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a></div>';
+                 $aksi       = '<div class="action visible pull-right"><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a>';
+                 if(Auth::user()->level ==1 or Auth::user()->level == 2){
+                  $aksi     .= '<a title="Ubah Prioritas" onclick="return ubahPrioritas(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a>';
+                 }
+                 $aksi .= '</div>';
             }
     		array_push($view, array( 'id_program'		=>$data->PROGRAM_ID,
                                      'OPSI'				=>$aksi,
@@ -228,6 +232,12 @@ class nomenklaturController extends Controller
         return 'Berhasil!';
     }
 
+    public function submitPrioritas($tahun,$status){
+        Program::where('PROGRAM_ID',Input::get('id_program'))
+        ->update(['PROGRAM_PRIORITAS'   =>Input::get('prioritas_program')]);        
+        return '1';
+    }
+    
     public function rekapNomenklatur($tahun,$status,$skpd){
 
         if($status == 'murni'){
