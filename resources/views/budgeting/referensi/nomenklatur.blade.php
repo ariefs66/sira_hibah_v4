@@ -355,27 +355,39 @@
                 @endforeach
               </select>
             </div>
-            @if(substr(Auth::user()->mod,1,1) == 1)
-            <div class="col-sm-2 no-padder">
-              <input type="text" readonly class="form-control" placeholder="Status" id="status-output">
+            <button class="btn btn-success col-sm-1" onclick="return simpanOutput()"><i class="fa fa-plus"></i></button>            
+          </div>
+      </div>     
+      
+      <div class="wrapper-lg m-t-n-md">
+      <div class="form-group m-t-n-md">
+          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8 or Auth::user()->level == 9)
+            <div class="col-sm-4 no-padder">
+              <select class="w-full" id="status-output">
+                <option value="">Status</option>
+                <option value="0">Diajukan</option>
+                <option value="1">Disetujui</option>
+                <option value="2">Ditolak</option>
+              </select>
             </div> 
-            <div class="col-sm-2 no-padder">
-              <input type="text" readonly class="form-control" placeholder="Catatan" id="catatan-output">
+            <div class="col-sm-4 no-padder">
+              <input type="text" class="form-control" placeholder="Catatan" id="catatan-output">
             </div>
             @else
             <input type="hidden" class="form-control" id="status-output">
             <input type="hidden" class="form-control" id="catatan-output">
             @endif
-            <button class="btn btn-success col-sm-1" onclick="return simpanOutput()"><i class="fa fa-plus"></i></button>            
-          </div>
-      </div>      
+          </div> 
+      </div>     
       <div class="table-responsive">
         <table class="table table-popup table-striped b-t b-b table-output" id="table-output">
           <thead>
             <tr>
               <th width="1%">Indikator</th>
               <th>Tolak Ukur</th>
-              <th width="10%">Target</th>                          
+              <th width="10%">Target</th>  
+              <th width="10%">Status</th> 
+              <th width="10%">Catatan</th>                         
               <th width="1%">#</th>                          
             </tr>
           </thead>
@@ -784,6 +796,8 @@
     tolakukur   = $('#tolak-ukur-output').val();
     target      = $('#target-output').val();
     satuan      = $('#satuan-output').val();
+    status      = $('#status-output').val();
+    catatan      = $('#catatan-output').val();
     token       = $('#token').val();
     if(id){
         uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/editOutput"; 
@@ -803,12 +817,16 @@
               'idkegiatan'     : idkegiatan,
               'tolakukur'       : tolakukur, 
               'target'          : target, 
+              'status'          : status, 
+              'catatan'          : catatan, 
               'satuan'          : satuan},
         success: function(msg){
           $.alert(msg);
           $('#id-output').val(null);
           $('#tolak-ukur-output').val(null);
           $('#target-output').val(null);
+          $('#status-output').val("").trigger("chosen:updated");
+          $('#catatan-output').val(null);
           $('#satuan-output').val(0);
           $('#table-output').DataTable().ajax.reload();
         }
@@ -867,6 +885,8 @@ function showRekeningGiat(id){
       { mData: 'INDIKATOR' },
       { mData: 'TOLAK_UKUR' },
       { mData: 'TARGET' },
+      { mData: 'STATUS' },
+      { mData: 'CATATAN' },
       { mData: 'AKSI' }]
     });
     $('#set-output-modal').modal('show');
@@ -950,6 +970,8 @@ function showRekeningGiat(id){
             $('#target-output').val(msg['OUTPUT_TARGET']);
             $('#satuan-output').val(msg['SATUAN_ID']);
             $('#id-output').val(msg['OUTPUT_ID']);
+            $('#status-output').val(msg['STATUS']).trigger("chosen:updated");
+            $('#catatan-output').val(msg['CATATAN']);
           }
       }); 
     }
@@ -978,6 +1000,7 @@ function showRekeningGiat(id){
     }
 </script>
 @endsection
+
 
 
 

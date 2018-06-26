@@ -18,6 +18,7 @@ use App\Model\Impact;
 use App\Model\UserBudget;
 use View;
 use Carbon;
+use Excel;
 use Response;
 use Auth;
 use DB;
@@ -164,10 +165,20 @@ class nomenklaturController extends Controller
         $dataCapaian       = OutputMaster::where('KEGIATAN_ID',$id)->get();
         $view               = array();
         foreach ($dataCapaian as $dc) {
+            $status = $dc->STATUS;
+            switch($status){
+                case 1: $status = "Diajukan"; break;
+                case 1: $status = "Disetujui"; break;
+                case 2: $status = "Ditolak"; break;
+                default: $status = "-";
+            }
+            $catatan = (strlen($dc->CATATAN) > 0 ? $dc->CATATAN : "-");
             $aksi       = '<div class="action visible pull-right"><a onclick="return editOutput(\''.$dc->OUTPUT_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusOutput(\''.$dc->OUTPUT_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             array_push($view, array( 'INDIKATOR'        =>'Keluaran',
                                      'TOLAK_UKUR'       =>$dc->OUTPUT_TOLAK_UKUR,
                                      'TARGET'           =>$dc->OUTPUT_TARGET.' '.$dc->satuan->SATUAN_NAMA,
+                                     'STATUS'           =>$status,
+                                     'CATATAN'           =>$catatan,
                                      'AKSI'             =>$aksi));
         }
         $out = array("aaData"=>$view);      
@@ -180,11 +191,22 @@ class nomenklaturController extends Controller
     }
 
     public function editOutput($tahun,$status){
-        OutputMaster::where('OUTPUT_ID',Input::get('id'))->update([
+        
+        if(Auth::user()->level == 8 or Auth::user()->level == 9){
+            OutputMaster::where('OUTPUT_ID',Input::get('id'))->update([
+                'OUTPUT_TOLAK_UKUR'    => Input::get('tolakukur'),
+                'OUTPUT_TARGET'        => Input::get('target'),
+                'SATUAN_ID'            => Input::get('satuan'),
+                'STATUS'            => Input::get('status'),
+                'CATATAN'            => Input::get('catatan')
+                ]);
+        } else {
+            OutputMaster::where('OUTPUT_ID',Input::get('id'))->update([
                 'OUTPUT_TOLAK_UKUR'    => Input::get('tolakukur'),
                 'OUTPUT_TARGET'        => Input::get('target'),
                 'SATUAN_ID'            => Input::get('satuan')
                 ]);
+        }
         return 'Berhasil!';
     }
 
@@ -207,41 +229,49 @@ class nomenklaturController extends Controller
     public function rekapNomenklatur($tahun,$status,$skpd){
 
         if($status == 'murni'){
-            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","KEGIATAN_KODE", "KEGIATAN_NAMA"
-                                    from "BUDGETING"."DAT_BL" bl
-                                    inner JOIN "BUDGETING"."DAT_RINCIAN" rincian
-                                    on bl."BL_ID" = rincian."BL_ID"
-                                    inner JOIN "REFERENSI"."REF_KEGIATAN" keg
-                                    on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
-                                    inner join "REFERENSI"."REF_PROGRAM" prog
-                                    on keg."PROGRAM_ID" = prog."PROGRAM_ID"
-                                    inner join "REFERENSI"."REF_URUSAN" ur 
-                                    on prog."URUSAN_ID" = ur."URUSAN_ID"
-                                    inner join "REFERENSI"."REF_SUB_UNIT" sub
-                                    on bl."SUB_ID" = sub."SUB_ID"
-                                    inner join "REFERENSI"."REF_SKPD" skpd
-                                    on sub."SKPD_ID" = skpd."SKPD_ID"
-                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
-                                    GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE","KEGIATAN_NAMA", bl."BL_PAGU"
-                                    ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
+            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","OUTCOME_TOLAK_UKUR","OUTCOME_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=oc."SATUAN_ID") AS OUTCOME_TARGET, "KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET
+            from "BUDGETING"."DAT_BL" bl
+            inner JOIN "BUDGETING"."DAT_RINCIAN" rincian
+            on bl."BL_ID" = rincian."BL_ID"
+            inner JOIN "REFERENSI"."REF_KEGIATAN" keg
+            on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
+            inner join "REFERENSI"."REF_PROGRAM" prog
+            on keg."PROGRAM_ID" = prog."PROGRAM_ID"
+            inner join "REFERENSI"."REF_URUSAN" ur 
+            on prog."URUSAN_ID" = ur."URUSAN_ID"
+            inner join "REFERENSI"."REF_SUB_UNIT" sub
+            on bl."SUB_ID" = sub."SUB_ID"
+            inner join "REFERENSI"."REF_SKPD" skpd
+            on sub."SKPD_ID" = skpd."SKPD_ID"
+            left join "REFERENSI"."REF_OUTCOME" oc
+            on oc."PROGRAM_ID" = prog."PROGRAM_ID"
+            left join "REFERENSI"."REF_OUTPUT" op
+            on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
+            WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
+            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "OUTCOME_ID", "KEGIATAN_KODE","KEGIATAN_NAMA", "OUTPUT_ID"
+            ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
         }else {
-            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","KEGIATAN_KODE", "KEGIATAN_NAMA"
-                                    from "BUDGETING"."DAT_BL_PERUBAHAN" bl
-                                    inner JOIN "BUDGETING"."DAT_RINCIAN_PERUBAHAN" rincian
-                                    on bl."BL_ID" = rincian."BL_ID"
-                                    inner JOIN "REFERENSI"."REF_KEGIATAN" keg
-                                    on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
-                                    inner join "REFERENSI"."REF_PROGRAM" prog
-                                    on keg."PROGRAM_ID" = prog."PROGRAM_ID"
-                                    inner join "REFERENSI"."REF_URUSAN" ur 
-                                    on prog."URUSAN_ID" = ur."URUSAN_ID"
-                                    inner join "REFERENSI"."REF_SUB_UNIT" sub
-                                    on bl."SUB_ID" = sub."SUB_ID"
-                                    inner join "REFERENSI"."REF_SKPD" skpd
-                                    on sub."SKPD_ID" = skpd."SKPD_ID"
-                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
-                                    GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "KEGIATAN_KODE","KEGIATAN_NAMA", bl."BL_PAGU"
-                                    ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
+            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","OUTCOME_TOLAK_UKUR","OUTCOME_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=oc."SATUAN_ID") AS OUTCOME_TARGET,"KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET
+            from "BUDGETING"."DAT_BL_PERUBAHAN" bl
+            inner JOIN "BUDGETING"."DAT_RINCIAN_PERUBAHAN" rincian
+            on bl."BL_ID" = rincian."BL_ID"
+            inner JOIN "REFERENSI"."REF_KEGIATAN" keg
+            on bl."KEGIATAN_ID" = keg."KEGIATAN_ID"
+            inner join "REFERENSI"."REF_PROGRAM" prog
+            on keg."PROGRAM_ID" = prog."PROGRAM_ID"
+            inner join "REFERENSI"."REF_URUSAN" ur 
+            on prog."URUSAN_ID" = ur."URUSAN_ID"
+            inner join "REFERENSI"."REF_SUB_UNIT" sub
+            on bl."SUB_ID" = sub."SUB_ID"
+            inner join "REFERENSI"."REF_SKPD" skpd
+            on sub."SKPD_ID" = skpd."SKPD_ID"
+left join "REFERENSI"."REF_OUTCOME" oc
+on oc."PROGRAM_ID" = prog."PROGRAM_ID"
+left join "REFERENSI"."REF_OUTPUT" op
+on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
+            WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
+            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "OUTCOME_ID", "KEGIATAN_KODE","KEGIATAN_NAMA", "OUTPUT_ID"
+            ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
         }
             $data = array_map(function ($value) {
                     return (array)$value;
@@ -255,3 +285,4 @@ class nomenklaturController extends Controller
     }
 
 }
+
