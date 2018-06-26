@@ -703,7 +703,7 @@
 		<td class="tengah" width="15%">Triwulan I</td>
 		<td class="kiri" width="25%">Rp. {{ number_format($akb_bl->tri1,0,',','.') }}</td>
 		<td width="20%"> </td>
-		<td>Bandung, 31 Mei 2018</td>
+		<td>Bandung, 20 Maret 2018</td>
 	</tr>
 	<tr>
 		<td class="tengah" width="15%">Triwulan II</td>
@@ -734,8 +734,8 @@
 		<td class="kiri" width="15%"> </td>
 		<td class="kiri" width="25%"> </td>
 		<td width="20%"> <br><br><br><br><br><br></td>
-		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. DADANG SUPRIATNA, MH <br><br></span>  NIP. 19610308 199103 1 009  </td>
-		<!--<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. R Budhi Rukmana, M.AP <br><br> </span> NIP. 19690712 198910 1 001  </td>-->
+		<!--td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. DADANG SUPRIATNA, MH <br><br></span>  NIP. 19610308 199103 1 009  </td-->
+		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. R Budhi Rukmana, M.AP <br><br> </span> NIP. 19690712 198910 1 001  </td>
 	</tr>
 </table>
 </div>
