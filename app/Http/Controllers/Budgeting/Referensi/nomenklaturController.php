@@ -58,10 +58,12 @@ class nomenklaturController extends Controller
             $data 			= Program::where('PROGRAM_TAHUN',$tahun)->wherein('PROGRAM_ID',$skpd)
             ->orderBy('URUSAN_ID','PROGRAM_KODE')
             ->get();
-        } else {
+        } elseif(Auth::user()->level == 8 or Auth::user()->level == 9) {
             $data 			= Program::where('PROGRAM_TAHUN',$tahun)
     							->orderBy('URUSAN_ID','PROGRAM_KODE')
     							->get();
+        } else {
+            $data = array();
         }
         $aksi           = '';
     	$view 			= array();
@@ -93,7 +95,7 @@ class nomenklaturController extends Controller
     	foreach ($data as $data) {
                 if(Auth::user()->level == 8){
                 $aksi       = '<div class="action visible pull-right"><a onclick="return showRekeningGiat(\''.$data->KEGIATAN_ID.'\')" title="Cek Rekening" class="action-edit"><i class="icon-bdg_form"></i></a><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Kegiatan" onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Kegiatan" onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
-           }elseif(Auth::user()->level == 9){
+           }elseif(Auth::user()->level == 9 || Auth::user()->level == 1 || Auth::user()->level == 2){
                 $aksi       = '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a></div>';
             }else{
                 $aksi       = '-';
@@ -167,7 +169,7 @@ class nomenklaturController extends Controller
         foreach ($dataCapaian as $dc) {
             $status = $dc->STATUS;
             switch($status){
-                case 1: $status = "Diajukan"; break;
+                case 0: $status = "Diajukan"; break;
                 case 1: $status = "Disetujui"; break;
                 case 2: $status = "Ditolak"; break;
                 default: $status = "-";
@@ -285,4 +287,5 @@ on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
     }
 
 }
+
 

@@ -37,9 +37,11 @@
                    <select ui-jq="chosen" class="form-control" id="filter-skpd">
                      <option value="">- Pilih OPD -</option>
                      @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
+                       @if(!empty($skpd))
                        @foreach($skpd as $pd)
                        <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
                        @endforeach
+                       @endif
                      @elseif(Auth::user()->level == 2)
                         <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
                      @endif
@@ -55,7 +57,7 @@
                             <option value="100">100</option>
                         </select>
                     </div>                    
-                <a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel" target="_blank" href="{{ url('/') }}/main/{{$tahun}}/nomenklatur/rekap/0"><i class="m-r-xs fa fa-download"></i> Download</a>
+                <a class="pull-right btn btn-info m-t-n-sm m-r-sm" id="excel" target="_blank" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/nomenklatur/rekap/0"><i class="m-r-xs fa fa-download"></i> Download</a>
   
                   </div>           
                   <div class="tab-content tab-content-alt-1 bg-white">
@@ -159,9 +161,11 @@
               @if(Auth::user()->level == 2)
                   <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
                 @else
+                  @if(!empty($skpd))
                   @foreach($skpd as $s)
                     <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
                   @endforeach
+                  @endif 
                 @endif 
               </select>
             </div> 
@@ -249,9 +253,11 @@
                  @if(Auth::user()->level == 2)
                   <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
                 @else
+                  @if(!empty($skpd))
                   @foreach($skpd as $s)
                     <option value="{{ $s->SKPD_ID }}">{{ $s->SKPD_NAMA }}</option>
                   @endforeach
+                  @endif 
                 @endif 
               </select>
             </div> 
@@ -314,13 +320,35 @@
             <button class="btn btn-success col-sm-1" onclick="return simpanCapaian()"><i class="fa fa-plus"></i></button>            
           </div>
       </div>      
+      <div class="wrapper-lg m-t-n-md">
+        <div class="form-group m-t-n-md">
+          @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8 or Auth::user()->level == 9)
+            <div class="col-sm-4 no-padder">
+              <select class="w-full" id="status-capaian">
+                <option value="">Status</option>
+                <option value="0">Diajukan</option>
+                <option value="1">Disetujui</option>
+                <option value="2">Ditolak</option>
+              </select>
+            </div> 
+            <div class="col-sm-4 no-padder">
+              <input type="text" class="form-control" placeholder="Catatan" id="catatan-capaian">
+            </div>
+            @else
+            <input type="hidden" class="form-control" id="status-capaian">
+            <input type="hidden" class="form-control" id="catatan-capaian">
+          @endif
+        </div> 
+      </div>   
       <div class="table-responsive">
         <table class="table table-popup table-striped b-t b-b table-capaian" id="table-capaian">
           <thead>
             <tr>
               <th width="1%">Indikator</th>
               <th>Tolak Ukur</th>
-              <th width="10%">Target</th>                          
+              <th width="10%">Target</th>    
+              <th width="10%">Status</th> 
+              <th width="10%">Catatan</th>                       
               <th width="1%">#</th>                          
             </tr>
           </thead>
@@ -360,7 +388,7 @@
       </div>     
       
       <div class="wrapper-lg m-t-n-md">
-      <div class="form-group m-t-n-md">
+        <div class="form-group m-t-n-md">
           @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8 or Auth::user()->level == 9)
             <div class="col-sm-4 no-padder">
               <select class="w-full" id="status-output">
@@ -376,8 +404,8 @@
             @else
             <input type="hidden" class="form-control" id="status-output">
             <input type="hidden" class="form-control" id="catatan-output">
-            @endif
-          </div> 
+          @endif
+        </div> 
       </div>     
       <div class="table-responsive">
         <table class="table table-popup table-striped b-t b-b table-output" id="table-output">
@@ -744,6 +772,8 @@
       { mData: 'INDIKATOR' },
       { mData: 'TOLAK_UKUR' },
       { mData: 'TARGET' },
+      { mData: 'STATUS' },
+      { mData: 'CATATAN' },
       { mData: 'AKSI' }]
     });
     $('#set-capaian-modal').modal('show');
@@ -757,6 +787,8 @@
     token       = $('#token').val();
     type        = $('#tipe-capaian').val();
     idindikator = $('#id-indikator').val();
+    status      = $('#status-capaian').val();
+    catatan      = $('#catatan-capaian').val();
     if(idindikator){
         uri = "{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/program/editCapaian"; 
     }else{
@@ -770,7 +802,9 @@
               'idindikator'     : idindikator, 
               'tipe'            : tipe,
               'tolakukur'       : tolakukur, 
-              'target'          : target, 
+              'target'          : target,  
+              'status'          : status,  
+              'catatan'         : catatan, 
               'satuan'          : satuan},
         success: function(msg){
           $.alert(msg);
@@ -944,6 +978,8 @@ function showRekeningGiat(id){
             $('#target-capaian').val(msg['IMPACT_TARGET']);
             $('#satuan-capaian').val(msg['SATUAN_ID']);
             $('#id-indikator').val(msg['IMPACT_ID']);
+            $('#status-capaian').val(msg['STATUS']).trigger("chosen:updated");
+            $('#catatan-capaian').val(msg['CATATAN']);
           }
       }); 
     }
@@ -1000,6 +1036,7 @@ function showRekeningGiat(id){
     }
 </script>
 @endsection
+
 
 
 

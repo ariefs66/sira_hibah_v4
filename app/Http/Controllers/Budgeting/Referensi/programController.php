@@ -216,9 +216,19 @@ class programController extends Controller
         $view               = array();
         foreach ($dataCapaian as $dc) {
             $aksi       = '<div class="action visible pull-right"><a onclick="return editOutcome(\''.$dc->OUTCOME_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusOutcome(\''.$dc->OUTCOME_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+            $status = $dc->STATUS;
+            switch($status){
+                case 0: $status = "Diajukan"; break;
+                case 1: $status = "Disetujui"; break;
+                case 2: $status = "Ditolak"; break;
+                default: $status = "-";
+            }
+            $catatan = (strlen($dc->CATATAN) > 0 ? $dc->CATATAN : "-");
             array_push($view, array( 'INDIKATOR'        =>'Capaian',
                                      'TOLAK_UKUR'       =>$dc->OUTCOME_TOLAK_UKUR,
                                      'TARGET'           =>$dc->OUTCOME_TARGET.' '.$dc->satuan->SATUAN_NAMA,
+                                     'STATUS'           =>$status,
+                                     'CATATAN'          =>$catatan,
                                      'AKSI'             =>$aksi));
         }
         foreach ($dataHasil as $dh) {
@@ -226,6 +236,8 @@ class programController extends Controller
             array_push($view, array( 'INDIKATOR'        =>'Hasil',
                                      'TOLAK_UKUR'       =>$dh->IMPACT_TOLAK_UKUR,
                                      'TARGET'           =>$dh->IMPACT_TARGET.' '.$dh->satuan->SATUAN_NAMA,
+                                     'STATUS'           =>'',
+                                     'CATATAN'          =>'',
                                      'AKSI'             =>$aksi));
         }
         $out = array("aaData"=>$view);      
@@ -239,6 +251,7 @@ class programController extends Controller
             $o->OUTCOME_TOLAK_UKUR  = Input::get('tolakukur');
             $o->OUTCOME_TARGET      = Input::get('target');
             $o->SATUAN_ID           = Input::get('satuan');
+            $o->STATUS           = 0;
             $o->save();
         }else{
             $o  = new Impact;
@@ -271,11 +284,22 @@ class programController extends Controller
 
     public function editCapaian($tahun,$status){
         if(Input::get('tipe') == 'CAPAIAN'){
+            if(strlen(Input::get('status')) > 0){
             Outcome::where('OUTCOME_ID',Input::get('idindikator'))->update([
                 'OUTCOME_TOLAK_UKUR'    => Input::get('tolakukur'),
                 'OUTCOME_TARGET'        => Input::get('target'),
-                'SATUAN_ID'             => Input::get('satuan')
+                'SATUAN_ID'             => Input::get('satuan'),
+                'STATUS'                => Input::get('status'),
+                'CATATAN'               => Input::get('catatan'),
                 ]);
+            }else{
+            Outcome::where('OUTCOME_ID',Input::get('idindikator'))->update([
+                'OUTCOME_TOLAK_UKUR'    => Input::get('tolakukur'),
+                'OUTCOME_TARGET'        => Input::get('target'),
+                'SATUAN_ID'             => Input::get('satuan'),
+                'STATUS'                => 0
+                ]);
+            }
         }else{
             Impact::where('IMPACT_ID',Input::get('idindikator'))->update([
                 'IMPACT_TOLAK_UKUR'    => Input::get('tolakukur'),
@@ -286,3 +310,4 @@ class programController extends Controller
         return 'Berhasil!';
     }
 }
+
