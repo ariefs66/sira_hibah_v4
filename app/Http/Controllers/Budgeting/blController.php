@@ -3676,14 +3676,18 @@ class blController extends Controller
         //     }); 
         // })->where('REKENING_TAHUN',$tahun)->where('REKENING_KUNCI',0)->orderBy('REKENING_KODE')->get();  
         // ->where('REKENING_TAHUN',$tahun) 
-        $bl   = BL::where('BL_ID',$id)->first();  
-        $data = Rekgiat::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','REF_REKGIAT.REKENING_ID')
+        if($tahun=='2018'){
+            $data       = Rekening::where('REKENING_KODE','like','5.2.%')->where('REKENING_TAHUN',$tahun)->whereRaw('LENGTH("REKENING_KODE") = 11')->where('REKENING_KUNCI',0)->get();
+        }else{
+            $bl   = BL::where('BL_ID',$id)->first();  
+            $data = Rekgiat::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','REF_REKGIAT.REKENING_ID')
                     ->where('KEGIATAN_ID',$bl->KEGIATAN_ID)
                     ->where('REKENING_KUNCI',0)
                     ->where('REKENING_TAHUN',$tahun)
                     ->whereRaw('LENGTH("REKENING_KODE") = 11')
                     ->orderBy('REKENING_KODE')
-                    ->get();
+                    ->get();    
+        }       
 
         /*tanpa nomenklatur*/            
         /*$data       = Rekening::where('REKENING_KODE','like','5%')->where('REKENING_TAHUN',$tahun)->whereRaw('LENGTH("REKENING_KODE") = 11')->where('REKENING_KUNCI',0)->get();*/

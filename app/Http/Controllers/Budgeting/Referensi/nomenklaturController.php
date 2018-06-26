@@ -241,7 +241,16 @@ class nomenklaturController extends Controller
     public function rekapNomenklatur($tahun,$status,$skpd){
 
         if($status == 'murni'){
-            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","OUTCOME_TOLAK_UKUR","OUTCOME_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=oc."SATUAN_ID") AS OUTCOME_TARGET, "KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET
+            $data   = DB::select('select ur."URUSAN_KODE",ur."URUSAN_NAMA","SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_PRIORITAS","PROGRAM_KODE","PROGRAM_NAMA","OUTCOME_TOLAK_UKUR","OUTCOME_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=oc."SATUAN_ID") AS OUTCOME_TARGET, 
+            CASE WHEN oc."STATUS"=1 THEN \'Disetujui\'
+            WHEN oc."STATUS"=2 THEN \'Ditolak\'
+            ELSE \'Diajukan\'
+            END AS STATUS_OUTCOME, oc."CATATAN", "KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET,
+            CASE WHEN op."STATUS"=1 THEN \'Disetujui\'
+            WHEN op."STATUS"=2 THEN \'Ditolak\'
+            WHEN op."STATUS"=0 THEN \'Diajukan\'
+            ELSE \'\'
+            END AS STATUS_OUTPUT
             from "BUDGETING"."DAT_BL" bl
             inner JOIN "BUDGETING"."DAT_RINCIAN" rincian
             on bl."BL_ID" = rincian."BL_ID"
@@ -260,10 +269,17 @@ class nomenklaturController extends Controller
             left join "REFERENSI"."REF_OUTPUT" op
             on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
             WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
-            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "OUTCOME_ID", "KEGIATAN_KODE","KEGIATAN_NAMA", "OUTPUT_ID"
+            GROUP BY SKPD,ur."URUSAN_KODE",ur."URUSAN_NAMA",prog."PROGRAM_ID", "OUTCOME_ID", keg."KEGIATAN_ID", "OUTPUT_ID"
             ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
         }else {
-            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_KODE", "PROGRAM_NAMA","OUTCOME_TOLAK_UKUR","OUTCOME_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=oc."SATUAN_ID") AS OUTCOME_TARGET,"KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET
+            $data   = DB::select('select ur."URUSAN_KODE",ur."URUSAN_NAMA","SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_PRIORITAS","PROGRAM_KODE", "PROGRAM_NAMA","OUTCOME_TOLAK_UKUR","OUTCOME_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=oc."SATUAN_ID") AS OUTCOME_TARGET,CASE WHEN oc."STATUS"=1 THEN \'Disetujui\'
+            WHEN oc."STATUS"=2 THEN \'Ditolak\'
+            ELSE \'Diajukan\'
+            END AS STATUS_OUTCOME,"KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET, CASE WHEN op."STATUS"=1 THEN \'Disetujui\'
+            WHEN op."STATUS"=2 THEN \'Ditolak\'
+            WHEN op."STATUS"=0 THEN \'Diajukan\'
+            ELSE \'\'
+            END AS STATUS_OUTPUT
             from "BUDGETING"."DAT_BL_PERUBAHAN" bl
             inner JOIN "BUDGETING"."DAT_RINCIAN_PERUBAHAN" rincian
             on bl."BL_ID" = rincian."BL_ID"
@@ -282,7 +298,7 @@ on oc."PROGRAM_ID" = prog."PROGRAM_ID"
 left join "REFERENSI"."REF_OUTPUT" op
 on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
             WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
-            GROUP BY SKPD, "PROGRAM_KODE", "PROGRAM_NAMA", "OUTCOME_ID", "KEGIATAN_KODE","KEGIATAN_NAMA", "OUTPUT_ID"
+            GROUP BY SKPD,ur."URUSAN_KODE",ur."URUSAN_NAMA",,prog."PROGRAM_ID", "OUTCOME_ID", keg."KEGIATAN_ID", "OUTPUT_ID"
             ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
         }
             $data = array_map(function ($value) {
@@ -297,5 +313,6 @@ on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
     }
 
 }
+
 
 
