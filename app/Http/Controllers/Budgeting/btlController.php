@@ -164,8 +164,10 @@ class btlController extends Controller
 
     public function delete($tahun,$status){
       if($status=="murni"){
+        /*$databtl     = BTL::where('BTL_ID',Input::get('BTL_ID'))->first();
+        BTL::where('BTL_ID',Input::get('BTL_ID'))->delete();*/
         $databtl     = BTL::where('BTL_ID',Input::get('BTL_ID'))->first();
-        BTL::where('BTL_ID',Input::get('BTL_ID'))->delete();
+        BTL::where('BTL_ID',Input::get('BTL_ID'))->update(array('BTL_DELETED'=>1));
       }
       else{
         $databtl     = BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->first();
