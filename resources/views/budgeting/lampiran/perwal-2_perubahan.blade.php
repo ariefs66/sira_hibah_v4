@@ -270,23 +270,37 @@
 		<td class="border-rincian kanan total"></td>
 	</tr>
 	@endif
-	@php $btlp = array(count($btl1_1p)); $i=0; @endphp
-	@foreach($btl1_1p as $btl)
+	@php $btlp = array(count($btl1_1)); $i=0; @endphp
+	@foreach($btl1_1 as $btl)
 	@php	$btlp[] = $btl->pagu; @endphp
 	@endforeach
 	@php $i=1; @endphp
-	@foreach($btl1_1 as $btl)
-	@if($btlp[$i]>0 || $btl->pagu>0)
+	@foreach($btl1_1p as $btl)
+	@if($i>count($btlp))
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.00.00.
 			{{$btl->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; &nbsp; {{$btl->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		<td class="border-rincian kanan">{{ number_format($btlp[$i],0,',','.') }}</td>
-		@if($btlp[$i]-$btl->pagu<0)
-		<td class="border-rincian kanan">({{ number_format(abs($btlp[$i]-$btl->pagu),0,',','.') }})</td>
+		@if($btl->pagu<0)
+		<td class="border-rincian kanan">({{ number_format(abs($btl->pagu),0,',','.') }})</td>
 		@else
-		<td class="border-rincian kanan">{{ number_format($btlp[$i]-$btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		@endif
+		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
+	</tr>
+	@elseif( $i < count($btlp) && ($btlp[$i]>0 || $btl->pagu>0))
+	<tr>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.00.00.
+			{{$btl->REKENING_KODE}}</td>
+		<td class="border-rincian">&nbsp; &nbsp; &nbsp; &nbsp; {{$btl->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan">{{ number_format($btlp[$i],0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		@if($btl->pagu-$btlp[$i]<0)
+		<td class="border-rincian kanan">({{ number_format(abs($btl->pagu-$btlp[$i]),0,',','.') }})</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format($btl->pagu-$btlp[$i],0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
@@ -309,12 +323,26 @@
 	</tr>
 	@endif
 	@php $btl1_2pp = array(count($btl1_2p)); $i=0; @endphp
-	@foreach($btl1_2p as $btl)
+	@foreach($btl1_2 as $btl)
 	@php	$btl1_2pp[] = $btl->pagu; @endphp
 	@endforeach
 	@php $i=1; @endphp
-	@foreach($btl1_2 as $btl)
-	@if($btl1_2pp[$i]>0 || $btl->pagu>0)
+	@foreach($btl1_2p as $btl)
+	@if($i>count($btl1_2pp))
+	<tr>
+		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.00.00.
+			{{$btl->REKENING_KODE}}</td>
+		<td class="border-rincian">&nbsp; &nbsp; &nbsp; &nbsp; {{$btl->REKENING_NAMA}}</td>
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		@if($btl->pagu<0)
+		<td class="border-rincian kanan">({{ number_format(abs($btl->pagu),0,',','.') }})</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		@endif
+		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
+	</tr>
+	@elseif($i < count($btl1_2pp) && ($btl1_2pp[$i]>0 || $btl->pagu>0))
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.00.00.
 			{{$btl->REKENING_KODE}}</td>

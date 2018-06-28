@@ -7106,48 +7106,56 @@ public function updatePerwal1($tahun,$status){
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like',$rek1->REKENING_KODE.'%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get(); 
          $btl2       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like',$rek2->REKENING_KODE.'%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get(); 
          $btl3       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get();                               
          $btl4       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get(); 
           $btl5       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like',$rek5->REKENING_KODE.'%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get(); 
           $btl6       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like',$rek6->REKENING_KODE.'%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get(); 
           $btl7       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like',$rek7->REKENING_KODE.'%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get(); 
           $btl8       = BTL::JOIN('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_BTL.REKENING_ID')
                         ->where('BTL_TAHUN',$tahun)
                         ->where('REKENING_KODE','like',$rek8->REKENING_KODE.'%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu ')
                         ->get(); 
 
@@ -7160,69 +7168,85 @@ public function updatePerwal1($tahun,$status){
         $pendapatan1 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
         $pendapatan2 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.02%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
         $pendapatan3 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.03%')
+                        ->orderBy("REKENING_KODE")
                         ->get();
         $pendapatan4 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.04%')
+                        ->orderBy("REKENING_KODE")
                         ->get();
         $pendapatan5 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.05%')
+                        ->orderBy("REKENING_KODE")
                         ->get();
         $pendapatan6 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.07%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
         $pendapatan7 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.08%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
         $pendapatan8 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.11%')
+                        ->orderBy("REKENING_KODE")
                         ->get();  
         $pendapatan9 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.1.12%')
+                        ->orderBy("REKENING_KODE")
                         ->get();
          //pajak retribusi               
          $pendapatan10 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.2.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get();  
           $pendapatan11 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.2.02%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
           $pendapatan12 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.2.03%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
         //Hasil Pengelolaan Kekayaan Daerah yang Dipisahkan
           $pendapatan13 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.3.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
          // Lain-lain Pendapatan Asli Daerah yang Sah
           $pendapatan14 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.4.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
            $pendapatan15 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.4.02%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
            $pendapatan16 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.4.11%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
            $pendapatan17 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
@@ -7231,42 +7255,51 @@ public function updatePerwal1($tahun,$status){
            $pendapatan18 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.1.4.16%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
 
             $pendapatan19 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.1.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get();    
             $pendapatan20 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.1.02%')
+                        ->orderBy("REKENING_KODE")
                         ->get();  
             $pendapatan21 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.2.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
 
             $pendapatan22 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
 
             $pendapatan223 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.2.3.02%')
+                        ->orderBy("REKENING_KODE")
                         ->get();              
 
             $pendapatan23 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.3.1.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get(); 
             $pendapatan24 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.3.3.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get();  
             $pendapatan25 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
                         ->where('PENDAPATAN_TAHUN',$tahun)
                         ->where('REKENING_KODE','like', '4.3.5.01%')
+                        ->orderBy("REKENING_KODE")
                         ->get();     
 
             $totpad = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','DAT_PENDAPATAN.REKENING_ID')
@@ -7482,7 +7515,7 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
                         ->where('BL_DELETED',0)
                         ->where('REF_SKPD.SKPD_ID',$id)
                         ->groupBy("SKPD_KODE", "SKPD_NAMA", "DAT_BL_PERUBAHAN.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy('SKPD_KODE')
+                        ->orderBy('SKPD_KODE', 'REKENING_KODE')
                         ->selectRaw('"SKPD_KODE", "SKPD_NAMA", "DAT_BL_PERUBAHAN"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
                         ->get();                 
 
@@ -8441,7 +8474,7 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
                         ->where('BL_DELETED',0)
                         ->where('REF_SKPD.SKPD_ID',$id)
                         ->groupBy("SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
-                        ->orderBy('SKPD_KODE')
+                        ->orderBy('SKPD_KODE', "REKENING_KODE")
                         ->selectRaw('"SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
                         ->get();     
                         
@@ -8455,7 +8488,7 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
         ->where('BL_DELETED',0)
         ->where('REF_SKPD.SKPD_ID',$id)
         ->groupBy("SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL_PERUBAHAN.KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA")
-        ->orderBy('SKPD_KODE')
+        ->orderBy('SKPD_KODE', "REKENING_KODE")
         ->selectRaw('"SKPD_KODE", "SUB_KODE","SKPD_NAMA", "DAT_BL_PERUBAHAN"."KEGIATAN_ID", "REKENING_KODE", "REKENING_NAMA", SUM("RINCIAN_TOTAL") AS pagu')
         ->get();   
         //dd(DB::getQueryLog());
@@ -8480,6 +8513,7 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
                         ->where('REF_SKPD.SKPD_ID',$id)
                         ->where('REKENING_KODE','like','5.1.1.01%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
                         ->get();
         
@@ -8490,6 +8524,7 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
         ->where('REF_SKPD.SKPD_ID',$id)
         ->where('REKENING_KODE','like','5.1.1.01%')
         ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+        ->orderBy("REKENING_KODE")
         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
         ->get();
         $btl1_2       = BTL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BTL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
@@ -8499,6 +8534,7 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
                         ->where('REF_SKPD.SKPD_ID',$id)
                         ->where('REKENING_KODE','like','5.1.1.02%')
                         ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+                        ->orderBy("REKENING_KODE")
                         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
                         ->get();  
                         
@@ -8509,6 +8545,7 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
         ->where('REF_SKPD.SKPD_ID',$id)
         ->where('REKENING_KODE','like','5.1.1.02%')
         ->groupBy("REKENING_KODE", "REKENING_NAMA", "BTL_DASHUK")
+        ->orderBy("REKENING_KODE")
         ->selectRaw('"REKENING_KODE", "REKENING_NAMA", sum("BTL_TOTAL") as pagu, "BTL_DASHUK" ')
         ->get(); 
 
@@ -8957,3 +8994,4 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
     }
     
 }
+
