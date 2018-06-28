@@ -474,7 +474,7 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td><!-- Bandung, 16 {{ $bln }} {{ $thn }} --></td>
+		<td>Bandung, 30 Mei <!--{{ $bln }}--> {{ $thn }}</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -496,3 +496,4 @@
 </div>
 </body>
 </html>
+

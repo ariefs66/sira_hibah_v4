@@ -3965,7 +3965,7 @@ class blController extends Controller
 
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                if(Auth::user()->level == 8 || Auth::user()->level == 12){
+                if(Auth::user()->level == 8 || Auth::user()->level == 2){
                     $no  .= '<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>';
                 }
             }elseif($data->BL_VALIDASI == 1){

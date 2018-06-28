@@ -328,22 +328,26 @@
 				{{ trim(number_format( $per, 2, ',', ' '),"-") }} %
 			</td>
 		</tr>
-			@foreach($btl1 as $btll1)
 			@foreach($btl1_p as $btll1_p)
-			@if($btll1_p->BTL_NAMA == $btll1->BTL_NAMA)	
+			@php $volume = '-'; $koef = '-'; $total = 0; @endphp
+			@foreach($btl1 as $btll1)
+			@if($btll1_p->BTL_ID == $btll1->BTL_ID)
+			@php $volume = $btll1->BTL_VOLUME; $koef = $btll1->BTL_KOEFISIEN; $total = $btll1->BTL_TOTAL; @endphp
+			@endif		
+			@endforeach	
 			<tr>
-				<td class="border-rincian kiri "> {{$btll1->rekening->REKENING_KODE}} </td>
-				<td class="border-rincian "> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll1->BTL_NAMA}} </td>
-				<td class="border-rincian tengah ">   {{$btll1->BTL_VOLUME}} </td>
-				<td class="border-rincian tengah "> {{$btll1->BTL_KOEFISIEN}} </td>
-				<td class="border-rincian kanan "> {{ number_format($btll1->BTL_TOTAL,0,',','.') }} </td>
-				<td class="border-rincian kanan border"> {{ number_format($btll1->BTL_TOTAL,0,',','.') }}</td>
+				<td class="border-rincian kiri "> {{$btll1_p->rekening->REKENING_KODE}} </td>
+				<td class="border-rincian "> &nbsp; &nbsp; &nbsp; &nbsp;{{$btll1_p->BTL_NAMA}} </td>
+				<td class="border-rincian tengah ">   {{$volume}} </td>
+				<td class="border-rincian tengah "> {{$koef}} </td>
+				<td class="border-rincian kanan "> {{ number_format($total,0,',','.') }} </td>
+				<td class="border-rincian kanan border"> {{ number_format($total,0,',','.') }}</td>
 				<td class="border-rincian tengah ">   {{$btll1_p->BTL_VOLUME}} </td>
 				<td class="border-rincian tengah "> {{$btll1_p->BTL_KOEFISIEN}} </td>
 				<td class="border-rincian kanan "> {{ number_format($btll1_p->BTL_TOTAL,0,',','.') }} </td>
 				<td class="border-rincian kanan border"> {{ number_format($btll1_p->BTL_TOTAL,0,',','.') }}</td>
 				<td class="border-rincian kanan border"> 
-					@php $slh1 = $btll1_p->BTL_TOTAL-$btll1->BTL_TOTAL @endphp
+					@php $slh1 = $btll1_p->BTL_TOTAL-$total @endphp
 					@if($slh1 < 0)
 						({{ trim(number_format($slh1,0,',','.'),"-") }})
 					@else
@@ -351,16 +355,14 @@
 					@endif
 				</td>
 				<td class="border-rincian kanan border"> 
-					@if($btll1->BTL_TOTAL != 0)
-					@php $per = ($slh1 * 100)/$btll1->BTL_TOTAL @endphp
+					@if($total != 0)
+					@php $per = ($slh1 * 100)/$total @endphp
 					{{ trim(number_format( $per,2,',','.'),"-") }} %
 					@else
 						-
 					@endif
 				</td>
 			</tr>
-			@endif	
-			@endforeach	
 			@endforeach	
 	@endif		
 
@@ -664,13 +666,15 @@
 		<td class="tengah">Triwulan I</td>
 		<td class="kiri">Rp. {{ number_format($akb_btl->tri1,0,',','.') }}</td>
 		<td width="50%"> </td>
-		<td>Bandung, 20 Maret 2018</td>
+		<!--td>Bandung, 20 Maret 2018</td-->
+		<td>Bandung, 31 Mei 2018</td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan II</td>
 		<td class="kiri">Rp. {{ number_format($akb_btl->tri2,0,',','.') }} </td>
 		<td width="50%"> </td>
-		<td><b>Plh. Pejabat Pengelola Keuangan Daerah</b></td>
+		<!--td><b>Plh. Pejabat Pengelola Keuangan Daerah</b></td-->
+		<td><b>Pejabat Pengelola Keuangan Daerah</b></td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan III</td>
@@ -704,12 +708,13 @@
 		<td class="kiri"> </td>
 		<td class="kiri"> </td>
 		<td width="50%"> <br><br><br><br><br><br></td>
-		<!-- <td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. DADANG SUPRIATNA, MH <br>
-			<br> </span> NIP. 19610308 199103 1 009</td> -->
-		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. R Budhi Rukmana, M.AP <br><br> </span> NIP. 19690712 198910 1 001  </td>
+		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. DADANG SUPRIATNA, MH <br>
+			<br> </span> NIP. 19610308 199103 1 009</td>
+		<!--td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. R Budhi Rukmana, M.AP <br><br> </span> NIP. 19690712 198910 1 001  </td-->
 	
 	</tr>
 </table>
 </div>
 </body>
 </html>
+
