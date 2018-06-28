@@ -125,7 +125,7 @@
 		<td width="1%"><b>{{ $p->PROGRAM_KODE }}</b></td>
 		<td width="1%"><b></b></td>
 		<td width="29%">&nbsp;&nbsp;<b>{{ $p->PROGRAM_NAMA }}</b></td>
-		@php $impact = \App\Model\Outcome::where('PROGRAM_ID',$p->PROGRAM_ID)->get(); $referensi = TRUE; @endphp
+		@php $impact = \App\Model\Outcome::where('PROGRAM_ID',$p->PROGRAM_ID)->get(); $referensi = FALSE; @endphp
 	@if($tahun>2018 && $referensi)
 		@if(count($impact) != '0')
 		<td width="24%" style="padding: 0">
