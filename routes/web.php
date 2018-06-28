@@ -354,6 +354,8 @@ Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/submitRekGiat', 'Budg
 Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/editRekGiat', 'Budgeting\Referensi\nomenklaturController@editRekGiat');
 Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/hapusRekGiat', 'Budgeting\Referensi\nomenklaturController@hapusRekGiat');
 Route::get('/main/{tahun}/{status}/nomenklatur/rekap/{skpd}', 'Budgeting\Referensi\nomenklaturController@rekapNomenklatur');
+Route::post('/main/{tahun}/{status}/pengaturan/nomenklatur/submitPrioritas', 'Budgeting\Referensi\nomenklaturController@submitPrioritas');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getPrioritas/{id}', 'Budgeting\Referensi\nomenklaturController@getPrioritas');
 //PROGRAM
 Route::get('/main/{tahun}/{status}/pengaturan/program', 'Budgeting\Referensi\programController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/program/getData', 'Budgeting\Referensi\programController@getData');
@@ -661,3 +663,4 @@ Route::get('/monev/sinkronisasi/{tahun}/cetak/{skpd}', 'Monev\editorController@c
 Route::post('/monev/sinkronisasi/{tahun}/hapus/{id}', 'Monev\editorController@hapusKegiatan');
 Route::post('/monev/sinkronisasi/{tahun}/kegiatan/simpan/{mode}', 'Monev\editorController@simpanKegiatan');
 Route::post('/monev/sinkronisasi/{tahun}/faktor/simpan', 'Monev\editorController@simpanFaktor');
+

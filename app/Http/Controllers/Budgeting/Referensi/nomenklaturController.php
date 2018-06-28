@@ -69,11 +69,11 @@ class nomenklaturController extends Controller
     	$view 			= array();
     	foreach ($data as $data) {
             if(Auth::user()->level == 8){
-                $aksi       = '<div class="action visible pull-right"><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Program" onclick="return ubahProgram(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Program" onclick="return hapusProgram(\''.$data->PROGRAM_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+                $aksi       = '<div class="action visible pull-right"><a title="Ubah Prioritas" onclick="return ubahPrioritas(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Program" onclick="return ubahProgram(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Program" onclick="return hapusProgram(\''.$data->PROGRAM_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             }else{
                  $aksi       = '<div class="action visible pull-right"><a title="Ubah Capaian" onclick="return showCapaian(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-eye"></i></a>';
                  if(Auth::user()->level ==1 or Auth::user()->level == 2){
-                  $aksi     .= '<a title="Ubah Prioritas" onclick="return ubahPrioritas(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="mi-edit"></i></a>';
+                  $aksi     .= '<a title="Ubah Prioritas" onclick="return ubahPrioritas(\''.$data->PROGRAM_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
                  }
                  $aksi .= '</div>';
             }
@@ -232,6 +232,23 @@ class nomenklaturController extends Controller
         return 'Berhasil!';
     }
 
+    public function getPrioritas($tahun,$status,$id){
+        $urusan = Program::where('PROGRAM_ID',$id)->first();
+        $count = Program::where('URUSAN_ID',$urusan->URUSAN_ID)->where('PROGRAM_TAHUN',$tahun)->count();
+        $view = "<option value='".$urusan->PROGRAM_PRIORITAS."' selected>".$urusan->PROGRAM_PRIORITAS."</option>";
+        $list = Program::where('URUSAN_ID',$urusan->URUSAN_ID)->distinct()->select('PROGRAM_PRIORITAS')->get();
+        for($i = 1;$i<=($count);$i++)
+        {
+            foreach($list as $l){
+                if($i==$l->PROGRAM_PRIORITAS){
+                    continue 2;
+                }
+            } 
+            $view .= "<option value='".$i."'>".$i."</option>";
+        }
+        return ['data'=>$view];
+    }
+
     public function submitPrioritas($tahun,$status){
         Program::where('PROGRAM_ID',Input::get('id_program'))
         ->update(['PROGRAM_PRIORITAS'   =>Input::get('prioritas_program')]);        
@@ -313,6 +330,7 @@ on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
     }
 
 }
+
 
 
 

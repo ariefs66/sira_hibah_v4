@@ -183,24 +183,23 @@
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
     <form id="form-prioritas" class="form-horizontal">
       <div class="input-wrapper">
-        <h5 id="judul-prioritas">Tambah Program</h5>
+        <h5 id="judul-prioritas">Ubah Program Prioritas</h5>
           <div class="form-group">
-            <label for="kode_urusan" class="col-md-3">Urusan</label>          
+          <label for="kode_urusan_prioritas" class="col-md-3">Urusan Program</label>          
             <div class="col-sm-9">
-              <select ui-jq="chosen" class="w-full" id="urusan_prioritas" name="urusan_prioritas">
+            <select disabled ui-jq="chosen" class="w-full" id="urusan_prioritas" name="urusan_prioritas">
                   <option value="0">Silahkan Pilih Urusan</option>
                   @foreach($urusan as $u)
                   <option value="{{$u->URUSAN_ID}}">{{ $u->URUSAN_KODE }} - {{ $u->URUSAN_NAMA }}</option>
                   @endforeach
-              </select>            
-              <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
-              <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">          
-            </div> 
+              </select>
+              </div>  
           </div>
 
           <div class="form-group">
             <label for="nama_program_prioritas" class="col-md-3">Tahun Program</label>          
-            <div class="col-sm-9">
+            <div class="col-sm-9">        
+              <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">        
               <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="{{$tahun}}" disabled> 
             </div> 
           </div>
@@ -223,9 +222,7 @@
             <label for="nama_program" class="col-md-3">Program Prioritas</label>          
             <div class="col-sm-9">
               <select ui-jq="chosen" class="w-full" id="prioritas_program_prioritas" name="prioritas_program_prioritas">
-               @for ($i = 1; $i <= 100; $i++)
-                    <option value="{{ $i }}">{{ $i }}</option>
-              @endfor
+              <option value="0">Silahkan Pilih Program Prioritas</option>
               </select>
             </div> 
           </div>
@@ -643,23 +640,26 @@
   }
   function simpanPrioritas(){
     var id_program    = $('#id_program_prioritas').val();
-    var prioritas    = $('#program_prioritas').val();
+    var prioritas    = $('#prioritas_program_prioritas').val();
     var token         = $('#token').val();
     if(id_program == "" || prioritas == "" ){
       $.alert('Form harap dilengkapi!');
     }else{
-      uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/prioritas/submit";
+      uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/submitPrioritas";
       $.ajax({
         url: uri,
         type: "POST",
         data: {'_token'         : token,
               'id_program'      : id_program, 
-              'prioritas_program'    : prioritas_program},
+              'prioritas_program'    : prioritas},
         success: function(msg){
             if(msg == 1){
-              $('#urusan_prioritas select').val('0').trigger("chosen:updated");
-              $('#nama_program_prioritas').val('');
+              $('select#urusan_prioritas').val('0').trigger("chosen:updated");
+              $('select#prioritas_program_prioritas').val('0').trigger("chosen:updated");
               $('#id_program_prioritas').val('');
+              $('#tahun_program_prioritas').val('');
+              $('#kode_program_prioritas').val('');
+              $('#nama_program_prioritas').val('');
               $('.table-program-head').DataTable().ajax.reload();              
               $.alert({
                 title:'Info',
@@ -804,17 +804,23 @@
     });    
   }
   function ubahPrioritas(id) {
-    $('#judul-form').text('Ubah Prioritas Program');        
+    $('#judul-prioritas').text('Ubah Prioritas Program');        
     $.ajax({
       url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
       type: "GET",
       success: function(msg){
-        $('select#urusan').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
-        $('#id_program').val(msg['data'][0]['PROGRAM_ID']);
-        $('#tahun_program').val(msg['data'][0]['PROGRAM_TAHUN']);
-        $('#kode_program').val(msg['data'][0]['PROGRAM_KODE']);
-        $('#nama_program').val(msg['data'][0]['PROGRAM_NAMA']);
-        $('#prioritas_program').val(msg['data'][0]['PROGRAM_PRIORITAS']);
+        $('select#urusan_prioritas').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
+        $('#id_program_prioritas').val(msg['data'][0]['PROGRAM_ID']);
+        $('#tahun_program_prioritas').val(msg['data'][0]['PROGRAM_TAHUN']);
+        $('#kode_program_prioritas').val(msg['data'][0]['PROGRAM_KODE']);
+        $('#nama_program_prioritas').val(msg['data'][0]['PROGRAM_NAMA']);
+        $.ajax({
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getPrioritas/"+msg['data'][0]['PROGRAM_ID'],
+          type: "GET",
+          success: function(data){
+            $('#prioritas_program_prioritas').find('option').remove().end().append(data['data']).trigger('chosen:updated');
+          }
+        });    
         $('.overlay').fadeIn('fast',function(){
           $('.input-prioritas').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -1153,6 +1159,7 @@ function showRekeningGiat(id){
     }
 </script>
 @endsection
+
 
 
 
