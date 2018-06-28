@@ -21,6 +21,7 @@ use App\Model\Tag;
 use App\Model\Lokasi;
 use App\Model\Satuan;
 use App\Model\BTL;
+use App\Model\RkpBTL;
 use App\Model\BTLPerubahan;
 use App\Model\Indikator;
 use App\Model\Kunci;
@@ -103,6 +104,34 @@ class btlController extends Controller
                                   ->where('BTL_NAMA',Input::get('BTL_NAMA'))
                                   ->first();
       }
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->orderBy('TAHAPAN_ID','desc')->first();
+        
+        $rbtl = RkpBTL::where('BTL_ID',$databtl->BTL_ID)->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+        if($rbtl){
+        $rbtl = RkpBTL::find($rbtl->RKP_BTL_ID);
+        }else{
+            $rbtl    = new RkpBTL;
+            $rbtl->RKP_BTL_ID    = RkpBTL::max('RKP_BTL_ID') + 1;
+        }
+        $rbtl->BTL_TAHUN     = $tahun;
+        $rbtl->SUB_ID        = Input::get('SUB_ID');
+        $rbtl->REKENING_ID   = Input::get('REKENING_ID');
+        $rbtl->BTL_NAMA      = Input::get('BTL_NAMA');
+        $rbtl->BTL_KETERANGAN = Input::get('BTL_NAMA');
+        $rbtl->BTL_TOTAL     = Input::get('BTL_VOL') * Input::get('BTL_TOTAL');
+        $rbtl->BTL_VOLUME    = Input::get('BTL_VOL');
+        $rbtl->BTL_DASHUK    = Input::get('BTL_DASHUK');
+        $rbtl->BTL_KOEFISIEN = Input::get('BTL_VOL').' '.Input::get('BTL_SATUAN');
+        $rbtl->SKPD_ID       = Input::get('SKPD');
+        $rbtl->BTL_PAJAK     = 0;
+        $rbtl->TIME_CREATED  = Carbon\Carbon::now();
+        $rbtl->USER_CREATED  = Auth::user()->id;
+        $rbtl->IP_CREATED    = $_SERVER['REMOTE_ADDR'];
+        $rbtl->TAHAPAN_ID    = $tahapan->TAHAPAN_ID;
+        $rbtl->BTL_ID        = $databtl->BTL_ID;
+        $rbtl->BTL_DELETED   = 0;
+        $rbtl->save();
+
         $log        = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
         $log->USER_ID                           = Auth::user()->id;
@@ -153,6 +182,34 @@ class btlController extends Controller
         $databtl    = BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->first();
       }
       
+        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->orderBy('TAHAPAN_ID','desc')->first();
+          
+        $rbtl = RkpBTL::where('BTL_ID',$databtl->BTL_ID)->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+        if($rbtl){
+        $rbtl = RkpBTL::find($rbtl->RKP_BTL_ID);
+        }else{
+            $rbtl    = new RkpBTL;
+            $rbtl->RKP_BTL_ID    = RkpBTL::max('RKP_BTL_ID') + 1;
+        }
+        $rbtl->BTL_TAHUN     = $tahun;
+        $rbtl->SUB_ID        = Input::get('SUB_ID');
+        $rbtl->REKENING_ID   = Input::get('REKENING_ID');
+        $rbtl->BTL_NAMA      = Input::get('BTL_NAMA');
+        $rbtl->BTL_KETERANGAN = Input::get('BTL_NAMA');
+        $rbtl->BTL_TOTAL     = Input::get('BTL_VOL') * Input::get('BTL_TOTAL');
+        $rbtl->BTL_VOLUME    = Input::get('BTL_VOL');
+        $rbtl->BTL_DASHUK    = Input::get('BTL_DASHUK');
+        $rbtl->BTL_KOEFISIEN = Input::get('BTL_VOL').' '.Input::get('BTL_SATUAN');
+        $rbtl->SKPD_ID       = Input::get('SKPD');
+        $rbtl->BTL_PAJAK     = 0;
+        $rbtl->TIME_UPDATED  = Carbon\Carbon::now();
+        $rbtl->USER_UPDATED  = Auth::user()->id;
+        $rbtl->IP_UPDATED    = $_SERVER['REMOTE_ADDR'];
+        $rbtl->TAHAPAN_ID    = $tahapan->TAHAPAN_ID;
+        $rbtl->BTL_ID        = $databtl->BTL_ID;
+        $rbtl->BTL_DELETED   = 0;
+        $rbtl->save();
+
         $log              = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
         $log->USER_ID                           = Auth::user()->id;
@@ -165,9 +222,9 @@ class btlController extends Controller
     public function delete($tahun,$status){
       if($status=="murni"){
         /*$databtl     = BTL::where('BTL_ID',Input::get('BTL_ID'))->first();
-        BTL::where('BTL_ID',Input::get('BTL_ID'))->delete();*/
+        BTL::where('BTL_ID',Input::get('BTL_ID'))->update(array('BTL_DELETED'=>1));*/
         $databtl     = BTL::where('BTL_ID',Input::get('BTL_ID'))->first();
-        BTL::where('BTL_ID',Input::get('BTL_ID'))->update(array('BTL_DELETED'=>1));
+        BTL::where('BTL_ID',Input::get('BTL_ID'))->delete();
       }
       else{
         $databtl     = BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->first();
@@ -177,6 +234,13 @@ class btlController extends Controller
         } else {
           BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->delete();
         }
+      }
+      $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->orderBy('TAHAPAN_ID','desc')->first();
+      $rbtl = RkpBTL::where('BTL_ID',$databtl->BTL_ID)->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+      if($rbtl){
+        $rbtl = RkpBTL::find($rbtl->RKP_BTL_ID);
+        $rbtl->BTL_DELETED   = 1;
+        $rbtl->save();
       }
         $log        = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
@@ -1138,4 +1202,5 @@ class btlController extends Controller
     }
 
 }
+
 
