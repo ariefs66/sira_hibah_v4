@@ -564,6 +564,24 @@ class apiController extends Controller
         return Response::JSON($view);
     }
 
+    public function apiAnggaran($tahun, $status, Request $req){
+        $kode = ($req->kode == "")? "" : $req->kode;
+        $view           = array();
+        if($tahun="2018" && $status="pergeseran" && $kode=="4.05.36.01.002"){
+            array_push($view, array( 
+                'KODE_REKENING'           =>'4.05.36.01.002',
+                'URAIAN'           => 'Kegiatan Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik',
+                'ANGGARAN'          => '63.212.400'                                 
+            ));
+        }else{
+            array_push($view, array( 
+                'KODE_REKENING'   => '-',
+                'URAIAN'          => '-',
+                'ANGGARAN'        => '-'                                     
+            )); 
+        }
+        return Response::JSON($view);
+    }
 
     public function apiMonevKegiatan($tahun,$kode, $kode_p){
       //if($status == 'murni'){
