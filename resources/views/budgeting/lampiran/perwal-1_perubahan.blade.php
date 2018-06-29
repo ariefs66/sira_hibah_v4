@@ -1220,7 +1220,7 @@
 		<td class="border-rincian kanan garis">{{ number_format($totP19,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP19p,0,',','.') }}</td>
 		@if ($totP19s<0)
-		<td class="border-rincian kanan garis">{{ number_format(abs($totP19s),0,',','.') }}</td>
+		<td class="border-rincian kanan garis">({{ number_format(abs($totP19s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP19s,0,',','.') }}</td>
 		@endif
@@ -1302,7 +1302,7 @@
 		<td class="border-rincian kanan">{{ number_format($pendapatan20s,0,',','.') }}</td>
 		@endif
 		@if ($pen->PENDAPATAN_TOTAL>0)
-		<td class="border-rincian kanan">({{ number_format(abs($pendapatan20s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }})</td>
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan20s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format(0,2,',','.') }}</td>
 		@endif
@@ -1588,14 +1588,14 @@
 			<td class="border-rincian kanan garis">{{ number_format($totP24,0,',','.') }}</td>
 			<td class="border-rincian kanan garis">{{ number_format($totP24p,0,',','.') }}</td>
 			@if ($totP24s<0)
-		<td class="border-rincian kanan garis"><b>({{ number_format(abs($totP24s),0,',','.') }})</b></td>
+		<td class="border-rincian kanan garis">({{ number_format(abs($totP24s),0,',','.') }})</td>
 		@else
-		<td class="border-rincian kanan garis"><b>{{ number_format($totP24s,0,',','.') }}</b></td>
+		<td class="border-rincian kanan garis">{{ number_format($totP24s,0,',','.') }}</td>
 		@endif
 		@if ($totP24>0)
-		<td class="border-rincian kanan garis"><b>{{ number_format(abs($totP24s)/$totP24*100,2,',','.') }}</b></td>
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP24s)/$totP24*100,2,',','.') }}</td>
 		@else
-		<td class="border-rincian kanan garis"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
 		@endif
 			<td class="border-rincian kanan"></td>
 		</tr>	
@@ -1629,14 +1629,14 @@
 			<td class="border-rincian kanan garis">{{ number_format($banprov_murni,0,',','.') }}</td>
 			<td class="border-rincian kanan garis">{{ number_format($banprov,0,',','.') }}</td>
 			@if ($banprov-$banprov_murni < 0)
-		<td class="border-rincian kanan garis"><b>({{ number_format(abs($banprov-$banprov_murni),0,',','.') }})</b></td>
+		<td class="border-rincian kanan garis">({{ number_format(abs($banprov-$banprov_murni),0,',','.') }})</td>
 		@else
-		<td class="border-rincian kanan garis"><b>{{ number_format($banprov-$banprov_murni,0,',','.') }}</b></td>
+		<td class="border-rincian kanan garis">{{ number_format($banprov-$banprov_murni,0,',','.') }}</td>
 		@endif
 		@if ($banprov_murni > 0)
-		<td class="border-rincian kanan garis"><b>{{ number_format(abs($banprov-$banprov_murni)/$banprov_murni*100,2,',','.') }}</b></td>
+		<td class="border-rincian kanan garis">{{ number_format(abs($banprov-$banprov_murni)/$banprov_murni*100,2,',','.') }}</td>
 		@else
-		<td class="border-rincian kanan garis"><b>{{ number_format(0,2,',','.') }}</b></td>
+		<td class="border-rincian kanan garis">{{ number_format(0,2,',','.') }}</td>
 		@endif
 			<td class="border-rincian kanan"></td>
 		</tr>	
@@ -1679,7 +1679,7 @@
 		@else
 		<td class="border-rincian kanan total"><b><br>{{ number_format(0,0,',','.') }}</b></td>
 		@endif
-		<td class="border-rincian kanan total"><br></td>
+		<td class="border-rincian kanan"><br></td>
 	</tr>
 	@foreach($btlfull as $btl)
 	@if($btl->pagu > 0 || $btl->pagu_murni > 0)
