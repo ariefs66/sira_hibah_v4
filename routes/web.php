@@ -169,11 +169,13 @@ Route::get('/main/{tahun}/{status}/lampiran/akb/pendapatan/{id}', 'Budgeting\lam
 Route::get('/main/{tahun}/{status}/lampiran/akb/pembiayaan/{id}', 'Budgeting\lampiranController@akbPembiayaan');
 //------------------------------------------------------------------------------------------------------------------------
 //BTL
+
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/', 'Budgeting\btlController@index');
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/subunit/{id}', 'Budgeting\pendapatanController@getsubunit');
 Route::post('/main/{tahun}/{status}/belanja-tidak-langsung/simpan', 'Budgeting\btlController@submitAdd');
 Route::post('/main/{tahun}/{status}/belanja-tidak-langsung/ubah', 'Budgeting\btlController@submitEdit');
 Route::post('/main/{tahun}/{status}/belanja-tidak-langsung/hapus', 'Budgeting\btlController@delete');
+Route::post('/main/{tahun}/{status}/belanja-tidak-langsung/setpagu', 'Budgeting\btlController@setPagu');
 //BTL-API
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/edit/{id}', 'Budgeting\btlController@getId');
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/pegawai', 'Budgeting\btlController@getPegawai');
@@ -186,6 +188,7 @@ Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/getDetail/{skpd}/{id}'
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/akb/{id}', 'Budgeting\btlController@showAKB');
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/data/akb/{id}', 'Budgeting\btlController@showDataAKB');
 Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/akb/detail/{btl_id}/{rek_id}', 'Budgeting\btlController@detailAKB');
+Route::get('/main/{tahun}/{status}/belanja-tidak-langsung/getpagu/{skpd}', 'Budgeting\btlController@getPagu');
 
 //simpan BTL 
 Route::post('/main/{tahun}/{status}/belanja-tidak-langsung/akb/ubah', 'Budgeting\btlController@submitAKBEdit');

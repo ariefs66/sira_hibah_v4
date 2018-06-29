@@ -1084,6 +1084,13 @@ class btlController extends Controller
         return $out;
     }
 
+    public function getPagu($tahun, $status, $skpd){
+      return BTLPagu::where('SKPD_ID',$skpd)->first();
+  }
+
+  public function setPagu($tahun, $status){
+            return 'Berhasil!';
+  }
 
      public function submitAKBEdit($tahun,$status){
         if($status == 'murni') {
