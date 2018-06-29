@@ -567,18 +567,42 @@ class apiController extends Controller
     public function apiAnggaran($tahun, $status, Request $req){
         $kode = ($req->kode == "")? "" : $req->kode;
         $view           = array();
-        if($tahun="2018" && $status="pergeseran" && $kode=="4.05.36.01.002"){
+        if(strlen($kode)>0){
+            $data = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+            ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+            ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+            ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+            ->JOIN('REFERENSI.REF_URUSAN','REF_PROGRAM.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+            ->where('BL_TAHUN',$tahun)
+            ->where('BL_DELETED',0)
+            ->where('BL_VALIDASI',1)
+            ->whereRaw("\"SKPD_KODE\"||'.'||\"PROGRAM_KODE\"||'.'||\"KEGIATAN_KODE\" LIKE ?", [$kode])
+            ->groupBy("REF_PROGRAM.PROGRAM_ID","SKPD_KODE","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
+            ->orderBy('KEGIATAN_KODE')
+            ->selectRaw('"PROGRAM_KODE","SKPD_KODE","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA", SUM("BL_PAGU") AS pagu')
+            ->get();
+        } else {
+            $data = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+            ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+            ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+            ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+            ->JOIN('REFERENSI.REF_URUSAN','REF_PROGRAM.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+            ->where('BL_TAHUN',$tahun)
+            ->where('BL_DELETED',0)
+            ->where('BL_VALIDASI',1)
+            ->groupBy("REF_PROGRAM.PROGRAM_ID","SKPD_KODE","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
+            ->orderBy('KEGIATAN_KODE')
+            ->selectRaw('"PROGRAM_KODE","SKPD_KODE","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA", SUM("BL_PAGU") AS pagu')
+            ->get();
+        }
+
+        foreach ($data as $data) {
             array_push($view, array( 
-                'KODE_REKENING'           =>'4.05.36.01.002',
-                'URAIAN'           => 'Kegiatan Penyediaan Jasa Komunikasi, Sumber Daya Air dan Listrik',
-                'ANGGARAN'          => '63.212.400'                                 
+                'KODE_REKENING'           =>$data->SKPD_KODE.'.'.$data->PROGRAM_KODE.'.'.$data->KEGIATAN_KODE,
+                'URAIAN'           => $data->KEGIATAN_NAMA,
+                'ANGGARAN'          => $data->pagu                                 
             ));
-        }else{
-            array_push($view, array( 
-                'KODE_REKENING'   => '-',
-                'URAIAN'          => '-',
-                'ANGGARAN'        => '-'                                     
-            )); 
+        
         }
         return Response::JSON($view);
     }
@@ -619,3 +643,4 @@ class apiController extends Controller
 
 
 }
+
