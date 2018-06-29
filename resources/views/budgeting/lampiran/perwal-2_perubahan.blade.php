@@ -94,7 +94,7 @@
 		</td>	
 		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>PENJABARAN PERUBAHAN APBD</h3>
+			<h3>PERUBAHAN PENJABARAN APBD</h3>
 			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
 	</tr>
@@ -109,8 +109,8 @@
 	<tr class="border headrincian">
 		<td class="border tengah" >KODE <br> REKENING </td>
 		<td class="border tengah" >URAIAN</td>
-		<td class="border tengah" >MURNI</td>
-		<td class="border tengah" >{{strtoupper($status)}}</td>
+		<td class="border tengah" >SEBELUM PERUBAHAN</td>
+		<td class="border tengah" >SETELAH PERUBAHAN</td>
 		<td class="border tengah" >SELISIH</td>
 		<td class="border tengah" >DASAR HUKUM</td>
 	</tr>		

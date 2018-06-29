@@ -79,9 +79,9 @@
 <body onload="window.print()">
 <div class="cetak">
 	<div style="margin-left: 330px;">
-	<h5>LAMPIRAN Ia &nbsp; &nbsp; &nbsp; Peraturan Wali Kota Bandung</h5>
+	<h5>LAMPIRAN I &nbsp; &nbsp; &nbsp; Rancangan Peraturan Wali Kota Bandung</h5>
 	<h5>NOMOR : 756 Tahun 2018</h5>
-	<h5>TANGGAL : 30 Mei 2018 </h5>
+	<h5>TANGGAL : 30 Mei 2018</h5>
 	</div>
 	<br>
 	
@@ -95,7 +95,7 @@
 		</td>	
 		<td>
 			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>RINGKASAN PERUBAHAN PENJABARAN APBD BERDASARKAN RINCIAN OBYEK PENDAPATAN, BELANJA DAN PEMBIAYAAN</h3>
+			<h3>RINGKASAN APBD BERDASARKAN RINCIAN OBYEK PENDAPATAN, BELANJA DAN PEMBIAYAAN</h3>
 			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
 	</tr>
@@ -109,6 +109,7 @@
 		<td class="border tengah" >MURNI</td>
 		<td class="border tengah" >{{strtoupper($status)}}</td>
 		<td class="border tengah" >SELISIH</td>
+		<td class="border tengah" >PERSENTASE</td>
 		<td class="border tengah" >DASAR HUKUM</td>
 	</tr>		
 	<tr class="border headrincian">
@@ -116,12 +117,14 @@
 		<td class="border">2</td>
 		<td class="border">3</td>
 		<td class="border">4</td>
-		<td class="border">5</td>
+		<td class="border">5 = 4 - 3</td>
 		<td class="border">6</td>
+		<td class="border">7</td>
 	</tr>
 	<tr style="font-size: 5px;">
 		<td class="border-rincian">&nbsp;</td>
 		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
@@ -147,6 +150,11 @@
 		@else
 		<td class="border-rincian kanan border"><b>{{ number_format($tots,0,',','.') }}</b></td>
 		@endif
+		@if ($tot>0)
+		<td class="border-rincian kanan border"><b>{{ number_format(abs($tots)/$tot*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
 
@@ -160,6 +168,11 @@
 		@else
 		<td class="border-rincian kanan border"><b>{{ number_format($totpads,0,',','.') }}</b></td>
 		@endif
+		@if ($totpad>0)
+		<td class="border-rincian kanan border"><b>{{ number_format(abs($totpads)/$totpad*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan"><b></b></td>
 	</tr>	
 
@@ -172,6 +185,11 @@
 		<td class="border-rincian kanan border"><b>({{ number_format(abs($totpad1s),0,',','.') }})</b></td>
 		@else
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad1s,0,',','.') }}</b></td>
+		@endif
+		@if ($totpad1>0)
+		<td class="border-rincian kanan border"><b>{{ number_format(abs($totpad1s)/$totpad1*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
@@ -194,6 +212,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP1s,0,',','.') }}</td>
 		@endif
+		@if ($totP1>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP1s)/$totP1*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
@@ -213,6 +236,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan1s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan1s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan1s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -240,6 +268,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP2s,0,',','.') }}</td>
 		@endif
+		@if ($totP2>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP2s)/$totP2*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
@@ -259,6 +292,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan2s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan2s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan2s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -285,6 +323,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP3s,0,',','.') }}</td>
 		@endif
+		@if ($totP3>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP3s)/$totP3*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan3_totalp = array(count($pendapatan3p)); $i=0; @endphp
@@ -302,6 +345,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan3s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan3s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan3s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -328,6 +376,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP4s,0,',','.') }}</td>
 		@endif
+		@if ($totP4>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP4s)/$totP4*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan4_totalp = array(count($pendapatan4p)); $i=0; @endphp
@@ -345,6 +398,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan4s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan4s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan4s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -371,6 +429,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP5s,0,',','.') }}</td>
 		@endif
+		@if ($totP5>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP5s)/$totP5*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan5_totalp = array(count($pendapatan5p)); $i=0; @endphp
@@ -388,6 +451,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan5s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan5s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan5s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -414,6 +482,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP6s,0,',','.') }}</td>
 		@endif
+		@if ($totP6>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP6s)/$totP6*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan6_totalp = array(count($pendapatan6p)); $i=0; @endphp
@@ -431,6 +504,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan6s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan6s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan6s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -458,6 +536,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP7s,0,',','.') }}</td>
 		@endif
+		@if ($totP7>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP7s)/$totP7*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan7_totalp = array(count($pendapatan7p)); $i=0; @endphp
@@ -475,6 +558,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan7s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan7s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan7s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -501,6 +589,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP8s,0,',','.') }}</td>
 		@endif
+		@if ($totP8>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP8s)/$totP8*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan8_totalp = array(count($pendapatan8p)); $i=0; @endphp
@@ -518,6 +611,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan8s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan8s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan8s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -544,6 +642,11 @@
 		@else
 		<td class="border-rincian kanan">{{ number_format($totP9s,0,',','.') }}</td>
 		@endif
+		@if ($totP9>0)
+		<td class="border-rincian kanan">{{ number_format(abs($totP9s)/$totP9*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan9_totalp = array(count($pendapatan9p)); $i=0; @endphp
@@ -562,6 +665,11 @@
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan9s,0,',','.') }}</td>
 		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan9s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
 	@php $i+=1;@endphp
@@ -574,6 +682,7 @@
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad2,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format(0,2,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>
     @php $totP10=0 @endphp	
@@ -596,6 +705,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP10s,0,',','.') }}</td>
 		@endif
+		@if ($totP10>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP10s)/$totP10*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan10_totalp = array(count($pendapatan10p)); $i=0; @endphp
@@ -611,6 +725,11 @@
 		<td class="border-rincian kanan">{{ number_format($pendapatan10_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan10s<0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan10s),0,',','.') }})</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format($pendapatan10s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan10s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan10s,0,',','.') }}</td>
 		@endif
@@ -639,6 +758,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP11s,0,',','.') }}</td>
 		@endif
+		@if ($totP11>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP11s)/$totP11*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan11_totalp = array(count($pendapatan11p)); $i=0; @endphp
@@ -656,6 +780,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan11s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan11s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan11s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -682,6 +811,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP12s,0,',','.') }}</td>
 		@endif
+		@if ($totP12>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP12s)/$totP12*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan12_totalp = array(count($pendapatan12p)); $i=0; @endphp
@@ -700,6 +834,11 @@
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan12s,0,',','.') }}</td>
 		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan12s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
 	@php $i+=1;@endphp
@@ -714,6 +853,11 @@
 		<td class="border-rincian kanan border"><b>({{ number_format(abs($totpad3s),0,',','.') }})</b></td>
 		@else
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad3s,0,',','.') }}</b></td>
+		@endif
+		@if ($totpad3>0)
+		<td class="border-rincian kanan border"><b>{{ number_format(abs($totpad3s)/$totpad3*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
@@ -737,6 +881,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP13s,0,',','.') }}</td>
 		@endif
+		@if ($totP13>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP13s)/$totP13*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan13_totalp = array(count($pendapatan13p)); $i=0; @endphp
@@ -755,6 +904,11 @@
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan13s,0,',','.') }}</td>
 		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan13s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
 	@php $i+=1;@endphp
@@ -770,6 +924,11 @@
 		<td class="border-rincian kanan border"><b>({{ number_format(abs($totpad4s),0,',','.') }})</b></td>
 		@else
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad4s,0,',','.') }}</b></td>
+		@endif
+		@if ($totpad4>0)
+		<td class="border-rincian kanan border"><b>{{ number_format(abs($totpad4s)/$totpad4*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan border"><b>{{ number_format(0,2,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
@@ -799,6 +958,11 @@
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan14s,0,',','.') }}</td>
 		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan14s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,2,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
 	@php $i+=1;@endphp
@@ -824,6 +988,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP15s,0,',','.') }}</td>
 		@endif
+		@if ($totP15>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP15s)/$totP15*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,2,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan15_totalp = array(count($pendapatan15p)); $i=0; @endphp
@@ -841,6 +1010,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan15s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan15s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan15s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,2,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -867,6 +1041,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP16s,0,',','.') }}</td>
 		@endif
+		@if ($totP16>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP16s)/$totP16*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,2,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan16_totalp = array(count($pendapatan16p)); $i=0; @endphp
@@ -884,6 +1063,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan16s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan16s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan16s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,2,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -910,6 +1094,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP17s,0,',','.') }}</td>
 		@endif
+		@if ($totP17>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP17s)/$totP17*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan17_totalp = array(count($pendapatan17p)); $i=0; @endphp
@@ -927,6 +1116,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan17s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan17s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan17s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -953,6 +1147,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP18s,0,',','.') }}</td>
 		@endif
+		@if ($totP18>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP18s)/$totP18*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
@@ -965,6 +1164,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($totP18s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($totP18s,0,',','.') }}</td>
+		@endif
+		@if ($totP18>0)
+		<td class="border-rincian kanan">{{ number_format(abs($totP18s)/$totP18*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> </td>
 	</tr>
@@ -979,6 +1183,11 @@
 		@else
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad5s,0,',','.') }}</b></td>
 		@endif
+		@if ($totpad5 > 0)
+		<td class="border-rincian kanan border"><b>{{ number_format(abs($totpad5s)/$totpad5*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan border"><b>{{ number_format(0,2,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
@@ -988,6 +1197,11 @@
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad6,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad6p,0,',','.') }}</b></td>
 		<td class="border-rincian kanan border"><b>{{ number_format($totpad6p-$totpad6,0,',','.') }}</b></td>
+		@if ($totpad6 > 0)
+		<td class="border-rincian kanan border"><b>{{ number_format(abs($totpad6p-$totpad6)/$totpad6*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan border"><b>{{ number_format(0,2,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	<tr>
     @php $totP19=0 @endphp	
@@ -1006,9 +1220,14 @@
 		<td class="border-rincian kanan garis">{{ number_format($totP19,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($totP19p,0,',','.') }}</td>
 		@if ($totP19s<0)
-		<td class="border-rincian kanan garis">({{ number_format(abs($totP19s),0,',','.') }})</td>
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP19s),0,',','.') }}</td>
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP19s,0,',','.') }}</td>
+		@endif
+		@if ($totP19>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP19s)/$totP19*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,2,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
@@ -1027,6 +1246,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan19s),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan19s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan19s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,2,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -1053,6 +1277,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP20s,0,',','.') }}</td>
 		@endif
+		@if ($totP20>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP20s)/$totP20*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,2,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan20_totalp = array(count($pendapatan20p)); $i=0; @endphp
@@ -1061,6 +1290,7 @@
 	@endforeach
 	@php $i=1;@endphp
 	@foreach($pendapatan20 as $pen)
+	@if($pen->PENDAPATAN_TOTAL>0 || $pendapatan20_totalp[$i] > 0 )
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
@@ -1071,16 +1301,23 @@
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan20s,0,',','.') }}</td>
 		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">({{ number_format(abs($pendapatan20s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }})</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,2,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
+	@endif
 	@php $i+=1;@endphp
 	@endforeach
 	<tr>
 		<td class="border-rincian">4.2.2</td>
 		<td class="border-rincian"><b>&nbsp; &nbsp; Dana Alokasi Umum</b></td>
-		<td class="border-rincian kanan total"><b>1.643.076.905.000}</b></td>
+		<td class="border-rincian kanan total"><b>1.643.076.905.000</b></td>
 		<td class="border-rincian kanan total"><b>1.643.076.905.000</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format($totpad7s,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($totpad7s/1643076905000*100,2,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	<tr>
     @php $totP21=0 @endphp	
@@ -1103,6 +1340,11 @@
 		@else
 		<td class="border-rincian kanan garis">{{ number_format($totP21s,0,',','.') }}</td>
 		@endif
+		@if ($totP21>0)
+		<td class="border-rincian kanan garis">{{ number_format(abs($totP21s)/$totP21*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan garis">{{ number_format(0,2,',','.') }}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	@php $pendapatan21_totalp = array(count($pendapatan21p)); $i=0; @endphp
@@ -1117,9 +1359,14 @@
 		<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan">{{ number_format($pendapatan21_totalp[$i],0,',','.') }}</td>
 		@if ($pendapatan21s<0)
-		<td class="border-rincian kanan">({{ number_format(abs($pendapatan21s),0,',','.') }})</td>
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan21s),0,',','.') }}</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan21s,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL>0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan21s)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,2,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -1141,6 +1388,7 @@
 		<td class="border-rincian kanan border"><b>359.111.975.000</b></td>
 		<td class="border-rincian kanan border"><b>493.647.642.000</b></td>
 		<td class="border-rincian kanan border"><b>134.535.667.000</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format(134535667000/493647642000*100,2,',','.') }}</b></td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
 	<tr>
@@ -1149,6 +1397,7 @@
 		<td class="border-rincian kanan garis">{{ number_format($dakFisik_murni,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($dakFisik,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($dakFisik-$dakFisik_murni,0,',','.') }}</td>
+		<td class="border-rincian kanan garis">{{ number_format(($dakFisik-$dakFisik_murni)/$dakFisik*100,2,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
@@ -1164,6 +1413,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL > 0)
+		<td class="border-rincian kanan">{{ number_format(abs($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -1184,12 +1438,13 @@
 		<td class="border-rincian kanan garis">{{ number_format($dakNonFisik_murni,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($dakNonFisik,0,',','.') }}</td>
 		<td class="border-rincian kanan garis">{{ number_format($dakNonFisik-$dakNonFisik_murni,0,',','.') }}</td>
+		<td class="border-rincian kanan garis">{{ number_format(($dakNonFisik-$dakNonFisik_murni)/$dakNonFisik*100,2,',','.') }}</td>
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
 	@foreach($dakNonFisik_detail as $pen)
 	@foreach($dakNonFisik_detail_murni as $pen_m)
-	@if($pen_m->PENDAPATAN_ID==$pen->PENDAPATAN_ID)
+	@if($pen_m->PENDAPATAN_ID==$pen->PENDAPATAN_ID && ($pen_m->PENDAPATAN_TOTAL > 0 || $pen->PENDAPATAN_TOTAL > 0))
 	<tr>
 		<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
 		<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
@@ -1199,6 +1454,11 @@
 		<td class="border-rincian kanan">({{ number_format(abs($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL > 0)
+		<td class="border-rincian kanan">{{ number_format(abs($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL,2,',','.') }}</td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -1217,6 +1477,11 @@
 		@else
 		<td class="border-rincian kanan"><b>{{number_format($totpad9s,0,',','.') }}</b></td>
 		@endif
+		@if ($totpad9>0)
+		<td class="border-rincian kanan"><b>{{ number_format(abs($totpad9s)/$totpad9*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan"><b>{{number_format(0,0,',','.') }}</b></td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>	
 
@@ -1229,6 +1494,11 @@
 		<td class="border-rincian kanan"><b>({{ number_format(abs($totpad10s),0,',','.') }})</b></td>
 		@else
 		<td class="border-rincian kanan"><b>{{number_format($totpad10s,0,',','.') }}</b></td>
+		@endif
+		@if ($totpad10>0)
+		<td class="border-rincian kanan"><b>{{ number_format(abs($totpad10s)/$totpad10*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan"><b>{{number_format(0,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	<tr>
@@ -1253,6 +1523,11 @@
 		@else
 			<td class="border-rincian kanan garis">{{ number_format($totP23p-$totP23,0,',','.') }}</td>
 		@endif
+		@if ($totP23>0)
+			<td class="border-rincian kanan garis">{{ number_format(abs($totP23p-$totP23)/$totP23*100,2,',','.') }}</td>
+		@else
+			<td class="border-rincian kanan garis">{{ number_format(0,0,',','.') }}</td>
+		@endif
 			<td class="border-rincian kanan"></td>
 		</tr>	
 		@foreach($pendapatan23 as $pen)
@@ -1265,6 +1540,11 @@
 		<td class="border-rincian kanan"><b>({{ number_format(abs($pendapatan23_totalp[$i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</b></td>
 		@else
 		<td class="border-rincian kanan"><b>{{ number_format($pendapatan23_totalp[$i]-$pen->PENDAPATAN_TOTAL,0,',','.') }}</b></td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL)
+		<td class="border-rincian kanan"><b>{{ number_format(abs($pendapatan23_totalp[$i]-$pen->PENDAPATAN_TOTAL)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan"><b>{{ number_format(0,0,',','.') }}</b></td>
 		@endif
 			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
@@ -1281,6 +1561,11 @@
 		<td class="border-rincian kanan"><b>({{ number_format(abs(0),0,',','.') }})</b></td>
 		@else
 		<td class="border-rincian kanan"><b>{{ number_format(0,0,',','.') }}</b></td>
+		@endif
+		@if ($totpad11>0)
+		<td class="border-rincian kanan"><b>{{ number_format(abs(0),2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan"><b>{{ number_format(0,2,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan"> {{ $pen->PENDAPATAN_DASHUK }}</td>
 	</tr>
@@ -1307,19 +1592,29 @@
 		@else
 		<td class="border-rincian kanan garis"><b>{{ number_format($totP24s,0,',','.') }}</b></td>
 		@endif
+		@if ($totP24>0)
+		<td class="border-rincian kanan garis"><b>{{ number_format(abs($totP24s)/$totP24*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan garis"><b>{{ number_format(0,0,',','.') }}</b></td>
+		@endif
 			<td class="border-rincian kanan"></td>
 		</tr>	
 		@php $i=1; @endphp
 		@foreach($pendapatan24 as $pen)
 		<tr>
 			<td class="border-rincian">{{$pen->REKENING_KODE}}</td>
-			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</b></td>
+			<td class="border-rincian">&nbsp; &nbsp; &nbsp; {{$pen->REKENING_NAMA}}</td>
 			<td class="border-rincian kanan ">{{ number_format($pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
 			<td class="border-rincian kanan ">{{ number_format($pendapatan24_totalp[$i],0,',','.') }}</td>
 			@if ($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL < 0)
 		<td class="border-rincian kanan">({{ number_format(abs($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL),0,',','.') }})</td>
 		@else
 		<td class="border-rincian kanan">{{ number_format($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL,0,',','.') }}</td>
+		@endif
+		@if ($pen->PENDAPATAN_TOTAL > 0)
+		<td class="border-rincian kanan">{{ number_format(abs($pendapatan24_totalp[$i]-$pen->PENDAPATAN_TOTAL)/$pen->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,0,',','.') }}</td>
 		@endif
 			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
@@ -1338,6 +1633,11 @@
 		@else
 		<td class="border-rincian kanan garis"><b>{{ number_format($banprov-$banprov_murni,0,',','.') }}</b></td>
 		@endif
+		@if ($banprov_murni > 0)
+		<td class="border-rincian kanan garis"><b>{{ number_format(abs($banprov-$banprov_murni)/$banprov_murni*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan garis"><b>{{ number_format(0,2,',','.') }}</b></td>
+		@endif
 			<td class="border-rincian kanan"></td>
 		</tr>	
 		
@@ -1354,6 +1654,11 @@
 		@else
 		<td class="border-rincian kanan">{{ number_format($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL,0,',','.') }}</td>
 		@endif
+		@if($pen_m->PENDAPATAN_TOTAL > 0)
+		<td class="border-rincian kanan">{{ number_format(abs($pen->PENDAPATAN_TOTAL-$pen_m->PENDAPATAN_TOTAL)/$pen_m->PENDAPATAN_TOTAL*100,2,',','.') }}</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format(0,2,',','.') }}</td>
+		@endif
 			<td class="border-rincian kanan">{{ $pen->PENDAPATAN_DASHUK }}</td>
 		</tr>	
 		@endif
@@ -1368,6 +1673,11 @@
 		<td class="border-rincian kanan total"><b><br>({{ number_format(abs($jumBelanja-$jumBelanja_murni),0,',','.') }})</b></td>
 		@else
 		<td class="border-rincian kanan total"><b><br>{{ number_format($jumBelanja-$jumBelanja_murni,0,',','.') }}</b></td>
+		@endif
+		@if($jumBelanja_murni > 0)
+		<td class="border-rincian kanan total"><b><br>{{ number_format(abs($jumBelanja-$jumBelanja_murni)/$jumBelanja_murni*100,2,',','.') }}</b></td>
+		@else
+		<td class="border-rincian kanan total"><b><br>{{ number_format(0,0,',','.') }}</b></td>
 		@endif
 		<td class="border-rincian kanan total"><br></td>
 	</tr>
@@ -1389,6 +1699,11 @@
 		<td class="border-rincian kanan {{$styleNumber}}">({!! $style.number_format(abs($btl->pagu-$btl->pagu_murni),0,',','.').$styleClose !!})</td>
 		@else
 		<td class="border-rincian kanan {{$styleNumber}}">{!! $style.number_format($btl->pagu-$btl->pagu_murni,0,',','.').$styleClose !!}</td>
+		@endif
+		@if($btl->pagu_murni>0)
+		<td class="border-rincian kanan {{$styleNumber}}">{!! $style.number_format(abs($btl->pagu-$btl->pagu_murni)/$btl->pagu_murni*100,2,',','.').$styleClose !!}</td>
+		@else
+		<td class="border-rincian kanan {{$styleNumber}}">{!! $style.number_format(0,2,',','.').$styleClose !!}</td>
 		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
@@ -1413,6 +1728,11 @@
 		@else
 		<td class="border-rincian kanan {{$styleNumber}}">{!! $style.number_format($bl->pagu-$bl->pagu_murni,0,',','.').$styleClose !!}</td>
 		@endif
+		@if($bl->pagu_murni>0)
+		<td class="border-rincian kanan {{$styleNumber}}">{!! $style.number_format(abs($bl->pagu-$bl->pagu_murni)/$bl->pagu_murni*100,2,',','.').$styleClose !!}</td>
+		@else
+		<td class="border-rincian kanan {{$styleNumber}}">{!! $style.number_format(0,2,',','.').$styleClose !!}</td>
+		@endif
 		<td class="border-rincian kanan"></td>
 	</tr>
 	@endif
@@ -1424,6 +1744,7 @@
 		<td class="border-rincian kanan total"><b>(415.333.370.810)</b></td>
 		<td class="border-rincian kanan total"><b>(415.333.370.810)</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(0,2,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 
@@ -1434,6 +1755,7 @@
 		<td class="border-rincian kanan total"><b>787.195.062.912</b></td>
 		<td class="border-rincian kanan total"><b>787.195.062.912</b></td>
 		<td class="border-rincian kanan total"><b>0</b></td>
+		<td class="border-rincian kanan total"><b>0.00</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 	<tr>
@@ -1442,6 +1764,7 @@
 		<td class="border-rincian kanan total"><b>787.195.062.912</b></td>
 		<td class="border-rincian kanan total"><b>787.195.062.912</b></td>
 		<td class="border-rincian kanan total"><b>0</b></td>
+		<td class="border-rincian kanan total"><b>0.00</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@foreach($pmb1 as $pm1)
@@ -1452,6 +1775,7 @@
 		<td class="border-rincian kanan total">{{ number_format($pm1->PEMBIAYAAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan total">{{ number_format($pm1->PEMBIAYAAN_TOTAL,0,',','.') }}</td>
 		<td class="border-rincian kanan total">0</td>
+		<td class="border-rincian kanan total">0.00</td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@endif
@@ -1463,6 +1787,7 @@
 		<td class="border-rincian kanan total"><b>220.000.000.000</b></td>
 		<td class="border-rincian kanan total"><b>220.000.000.000</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(0,2,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@php $pmb2pz = array(count($pmb2p)); @endphp
@@ -1482,6 +1807,11 @@
 		@else
 		<td class="border-rincian kanan total"> {{ number_format($pmb2pz[$i]-$pm2->PEMBIAYAAN_TOTAL,0,',','.') }} </td>
 		@endif
+		@if($pm2->PEMBIAYAAN_TOTAL<0)
+		<td class="border-rincian kanan total"> {{ number_format(abs($pmb2pz[$i]-$pm2->PEMBIAYAAN_TOTAL)/$pm2->PEMBIAYAAN_TOTAL*100,2,',','.') }} </td>
+		@else
+		<td class="border-rincian kanan total"> {{ number_format(0,2,',','.') }} </td>
+		@endif
 		<td class="border-rincian kanan "></td>
 	</tr>
 	@endif
@@ -1494,12 +1824,14 @@
 		<td class="border-rincian kanan total"><b>567.195.062.912</b></td>
 		<td class="border-rincian kanan total"><b>567.195.062.912</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(0,2,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"> </td>
+		<td class="border-rincian kanan total"></td>
 		<td class="border-rincian kanan total"></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
@@ -1515,6 +1847,9 @@
 		<td class="border-rincian kanan total"><b>
 		(77.197.296.962)
 		</b></td>
+		<td class="border-rincian kanan total"><b>
+		{{number_format(77197296962/151861692102*100,2,',','.')}}
+		</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 
@@ -1527,7 +1862,7 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, 30 Mei <!--{{ $bln }}--> {{ $thn }}</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -1549,6 +1884,7 @@
 </div>
 </body>
 </html>
+
 
 
 

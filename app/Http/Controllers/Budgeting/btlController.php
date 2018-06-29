@@ -304,7 +304,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.1',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
 
           $totPeg += $data->total;
@@ -345,7 +345,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.1',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
           $totPeg += $data->total;
@@ -386,8 +386,7 @@ class btlController extends Controller
           array_push($view, array('ID'      =>$data->SKPD_ID,
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
-                                  'REK'     =>'5.1.3',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'REK'     =>'5.1.3',                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
         }
       }
@@ -423,7 +422,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.3',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
@@ -465,7 +464,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.4',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
         }
       }
@@ -501,7 +500,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.4',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
@@ -543,7 +542,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.7',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
         }
       }
@@ -579,7 +578,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.7',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
@@ -619,7 +618,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.8',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',',')));
         }
       }
@@ -655,7 +654,7 @@ class btlController extends Controller
                                   'KODE'    =>$data->SKPD_KODE,
                                   'NAMA'    =>$data->SKPD_NAMA,
                                   'REK'     =>'5.1.8',
-                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusPagu(\''.$data->SKPD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>',
+                                  'AKSI'    => '<div class="action visible pull-right"><a onclick="return setPagu(\''.$data->SKPD_ID.'\')" class="action-edit"><i class="mi-edit"></i></a></div>',
                                   'TOTAL'   =>number_format($data->total,0,'.',','),
                                   'TOTAL_MURNI'   =>number_format($data->total_murni,0,'.',',')));
         }
@@ -1202,5 +1201,6 @@ class btlController extends Controller
     }
 
 }
+
 
 

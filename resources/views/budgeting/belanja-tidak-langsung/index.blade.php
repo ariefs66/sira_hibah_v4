@@ -21,7 +21,7 @@
             <div class="col-md-12" id="btl">
               <div class="panel bg-white">
                 <div class="wrapper-lg">
-                  @if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1 or Auth::user()->level == 2)
+                  @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 2)
                   <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Tidak Langsung</button>
                   @endif
 <!--                  <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekapbtl"><i class="m-r-xs fa fa-download"></i> Download</a> -->
@@ -74,7 +74,7 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
-                    @if(Auth::user()->level == 9)
+                    @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                     ,{ mData: 'AKSI'}
                     @endif
                   ]}" class="table table-btl table-striped b-t b-b table-pegawai " id="table-pegawai">
@@ -85,14 +85,14 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th>#</th>
                       @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>
                       <th class="hide"></th>
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th colspan="4" class="th_search">
                       @else
                       <th colspan="3" class="th_search">
@@ -117,7 +117,7 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
-                    @if(Auth::user()->level == 9)
+                    @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                     ,{ mData: 'AKSI'}
                     @endif
                   ]}" class="table table-btl table-striped b-t b-b table-subsidi" id="table-subsidi">
@@ -128,14 +128,14 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th>#</th>
                       @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
                       <th class="hide"></th>              
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th colspan="4" class="th_search">
                       @else
                       <th colspan="3" class="th_search">
@@ -160,7 +160,7 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
-                    @if(Auth::user()->level == 9)
+                    @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                     ,{ mData: 'AKSI'}
                     @endif
                   ]}" class="table table-btl table-striped b-t b-b table-hibah" id="table-hibah">
@@ -171,14 +171,14 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th>#</th>
                       @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
                       <th class="hide"></th>              
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th colspan="4" class="th_search">
                       @else
                       <th colspan="3" class="th_search">
@@ -209,7 +209,7 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
-                    @if(Auth::user()->level == 9)
+                    @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                     ,{ mData: 'AKSI'}
                     @endif
                   ]}" class="table table-btl table-striped b-t b-b table-bantuan" id="table-bantuan">
@@ -220,14 +220,14 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th>#</th>
                       @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
                       <th class="hide"></th>              
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th colspan="4" class="th_search">
                       @else
                       <th colspan="3" class="th_search">
@@ -252,7 +252,7 @@
                     { mData: 'KODE'},
                     { mData: 'NAMA'},
                     { mData: 'TOTAL'}
-                    @if(Auth::user()->level == 9)
+                    @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                     ,{ mData: 'AKSI'}
                     @endif
                   ]}" class="table table-btl table-striped b-t b-b table-btt" id="table-btt">
@@ -263,14 +263,14 @@
                       <th>Kode Perangkat Daerah</th>
                       <th>Nama Perangkat Daerah</th>
                       <th>Anggaran</th>
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th>#</th>
                       @endif
                     </tr>
                     <tr>
                       <th class="hide"></th>                    
                       <th class="hide"></th>                  
-                      @if(Auth::user()->level == 9)
+                      @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
                       <th colspan="4" class="th_search">
                       @else
                       <th colspan="3" class="th_search">
@@ -293,6 +293,23 @@
 </div>
 </div>
 </div>
+
+<div class="modal fade" id="modal-pagu" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <h5 class="inline font-semibold text-orange m-n text16 ">Set Pagu</h5>
+        <hr>
+        
+        <input type="text" id="pagu" class="form-control">
+        <textarea class="form-control m-t-sm" placeholder="Catatan" id="pagu_catatan"></textarea>
+        <input type="hidden" id="id-bl" class="form-control">
+        <button class="btn btn-warning m-t-md" onclick="return simpanpagu()">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-btl">
   <a class="close"><i class="icon-bdg_cross"></i></a>
@@ -424,7 +441,12 @@
       }else{
         $('.btl-rincian').slideUp('fast').remove(); 
         $(this).addClass('shown');
+        
+        @if(Auth::user()->level == 9 or substr(Auth::user()->mod,1,1) == 1)
+        btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="4">'+$('#table-detail-btl').html()+'</td></tr>';
+        @else
         btl_detail = '<tr class="btl-rincian"><td style="padding:0!important;" colspan="3">'+$('#table-detail-btl').html()+'</td></tr>';
+        @endif
         $(btl_detail).insertAfter('.table-btl .table tbody tr.shown');
         $('.table-detail-btl-isi').DataTable({
           sAjaxSource: "/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/getDetail/"+skpd+"/"+rek,
@@ -572,6 +594,39 @@
     });
   }
 
+function setPagu(id){
+    $('#id-bl').val(id);
+    $.ajax({
+        type  : "get",
+        url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/getpagu/"+id,
+        success : function (data) {
+          $('#pagu').val(data['BL_PAGU']);
+          $('#pagu_catatan').val(data['BL_PAGU_CATATAN']);
+        }
+    });
+    $('#modal-pagu').modal('show');    
+  }
+  
+  function simpanpagu(){
+    var token        = $('#token').val();    
+    var id           = $('#id-bl').val();    
+    var pagu         = $('#pagu').val();    
+    var catatan       = $('#pagu_catatan').val();    
+    $.ajax({
+      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-tidak-langsung/setpagu",
+      type: "POST",
+      data: {'_token'         : token,
+             'BL_PAGU'        : pagu,
+             'BL_PAGU_CATATAN': catatan,
+             'BL_ID'          : id},
+      success: function(msg){
+        $('#table-index').DataTable().ajax.reload();
+        $('#modal-pagu').modal('hide');                          
+        $.alert(msg);
+      }
+    });  
+  }
+
   function ubah(id) {
     $.ajax({
       type  : "get",
@@ -596,4 +651,5 @@
   } 
 </script>
 @endsection
+
 
