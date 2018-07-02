@@ -184,7 +184,9 @@ class nomenklaturController extends Controller
                                      'TOLAK_UKUR'       =>$dc->OUTPUT_TOLAK_UKUR,
                                      'TARGET'           =>$dc->OUTPUT_TARGET.' '.$dc->satuan->SATUAN_NAMA,
                                      'STATUS'           =>$status,
-                                     'CATATAN'           =>$catatan,
+                                     'OUTPUT_STATUS'    =>$dc->OUTPUT_STATUS,
+                                     'LOKASI'           =>$dc->OUTPUT_LOKASI,
+                                     'CATATAN'          =>$catatan,
                                      'AKSI'             =>$aksi));
         }
         $out = array("aaData"=>$view);      
@@ -204,12 +206,16 @@ class nomenklaturController extends Controller
                 'OUTPUT_TARGET'        => Input::get('target'),
                 'SATUAN_ID'            => Input::get('satuan'),
                 'STATUS'            => Input::get('status'),
+                'OUTPUT_STATUS'            => Input::get('output_status'),
+                'OUTPUT_LOKASI'            => Input::get('lokasi'),
                 'CATATAN'            => Input::get('catatan')
                 ]);
         } else {
             OutputMaster::where('OUTPUT_ID',Input::get('id'))->update([
                 'OUTPUT_TOLAK_UKUR'    => Input::get('tolakukur'),
                 'OUTPUT_TARGET'        => Input::get('target'),
+                'OUTPUT_STATUS'        => Input::get('output_status'),
+                'OUTPUT_LOKASI'        => Input::get('lokasi'),
                 'SATUAN_ID'            => Input::get('satuan')
                 ]);
         }
@@ -222,6 +228,8 @@ class nomenklaturController extends Controller
         $o->KEGIATAN_ID         = Input::get('idkegiatan');
         $o->OUTPUT_TOLAK_UKUR   = Input::get('tolakukur');
         $o->OUTPUT_TARGET       = Input::get('target');
+        $o->OUTPUT_STATUS       = Input::get('output_status');
+        $o->OUTPUT_LOKASI       = Input::get('lokasi');
         $o->SATUAN_ID           = Input::get('satuan');
         $o->save();            
         return 'Berhasil!';
@@ -262,7 +270,7 @@ class nomenklaturController extends Controller
             CASE WHEN oc."STATUS"=1 THEN \'Disetujui\'
             WHEN oc."STATUS"=2 THEN \'Ditolak\'
             ELSE \'Diajukan\'
-            END AS STATUS_OUTCOME, oc."CATATAN", "KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET,
+            END AS STATUS_OUTCOME, oc."CATATAN", "KEGIATAN_KODE", "KEGIATAN_NAMA","OUTPUT_STATUS", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET,"OUTPUT_LOKASI",
             CASE WHEN op."STATUS"=1 THEN \'Disetujui\'
             WHEN op."STATUS"=2 THEN \'Ditolak\'
             WHEN op."STATUS"=0 THEN \'Diajukan\'
@@ -289,10 +297,10 @@ class nomenklaturController extends Controller
             GROUP BY SKPD,ur."URUSAN_KODE",ur."URUSAN_NAMA",prog."PROGRAM_ID", "OUTCOME_ID", keg."KEGIATAN_ID", "OUTPUT_ID"
             ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
         }else {
-            $data   = DB::select('select ur."URUSAN_KODE",ur."URUSAN_NAMA","SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_PRIORITAS","PROGRAM_KODE", "PROGRAM_NAMA","OUTCOME_TOLAK_UKUR","OUTCOME_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=oc."SATUAN_ID") AS OUTCOME_TARGET,CASE WHEN oc."STATUS"=1 THEN \'Disetujui\'
+            $data   = DB::select('select ur."URUSAN_KODE",ur."URUSAN_NAMA","SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, "PROGRAM_PRIORITAS","PROGRAM_KODE", "PROGRAM_NAMA","OUTPUT_STATUS","OUTCOME_TOLAK_UKUR","OUTCOME_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=oc."SATUAN_ID") AS OUTCOME_TARGET,CASE WHEN oc."STATUS"=1 THEN \'Disetujui\'
             WHEN oc."STATUS"=2 THEN \'Ditolak\'
             ELSE \'Diajukan\'
-            END AS STATUS_OUTCOME,"KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET, CASE WHEN op."STATUS"=1 THEN \'Disetujui\'
+            END AS STATUS_OUTCOME,"KEGIATAN_KODE", "KEGIATAN_NAMA", "OUTPUT_TOLAK_UKUR", "OUTPUT_TARGET"||\' \'||( SELECT "SATUAN_NAMA" FROM "REFERENSI"."REF_SATUAN" st WHERE st."SATUAN_ID"=op."SATUAN_ID") AS OUTPUT_TARGET,"OUTPUT_LOKASI", CASE WHEN op."STATUS"=1 THEN \'Disetujui\'
             WHEN op."STATUS"=2 THEN \'Ditolak\'
             WHEN op."STATUS"=0 THEN \'Diajukan\'
             ELSE \'\'
@@ -310,10 +318,10 @@ class nomenklaturController extends Controller
             on bl."SUB_ID" = sub."SUB_ID"
             inner join "REFERENSI"."REF_SKPD" skpd
             on sub."SKPD_ID" = skpd."SKPD_ID"
-left join "REFERENSI"."REF_OUTCOME" oc
-on oc."PROGRAM_ID" = prog."PROGRAM_ID"
-left join "REFERENSI"."REF_OUTPUT" op
-on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
+            left join "REFERENSI"."REF_OUTCOME" oc
+            on oc."PROGRAM_ID" = prog."PROGRAM_ID"
+            left join "REFERENSI"."REF_OUTPUT" op
+            on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
             WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
             GROUP BY SKPD,ur."URUSAN_KODE",ur."URUSAN_NAMA",,prog."PROGRAM_ID", "OUTCOME_ID", keg."KEGIATAN_ID", "OUTPUT_ID"
             ORDER BY SKPD, "PROGRAM_KODE", "KEGIATAN_KODE"');
@@ -330,6 +338,7 @@ on op."KEGIATAN_ID" = keg."KEGIATAN_ID"
     }
 
 }
+
 
 
 

@@ -443,6 +443,23 @@
           </div>
       </div>     
       
+
+      <div class="wrapper-lg m-t-n-md">
+        <div class="form-group m-t-n-md">
+            <div class="col-sm-4 no-padder">
+              <select class="w-full" id="output-status">
+                <option value="">Status Output</option>
+                <option value="B">Baru</option>
+                <option value="L">Lama</option>
+                <option value="R">Revisi</option>
+              </select>
+            </div> 
+            <div class="col-sm-4 no-padder">
+              <input type="text" class="form-control" placeholder="lokasi" id="lokasi-output">
+            </div>
+         </div> 
+      </div>     
+
       <div class="wrapper-lg m-t-n-md">
         <div class="form-group m-t-n-md">
           @if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8 or Auth::user()->level == 9)
@@ -471,6 +488,8 @@
               <th>Tolak Ukur</th>
               <th width="10%">Target</th>  
               <th width="10%">Status</th> 
+              <th width="10%">Status Output</th> 
+              <th width="10%">Lokasi</th> 
               <th width="10%">Catatan</th>                         
               <th width="1%">#</th>                          
             </tr>
@@ -954,6 +973,8 @@
     target      = $('#target-output').val();
     satuan      = $('#satuan-output').val();
     status      = $('#status-output').val();
+    output_status      = $('#output-status').val();
+    lokasi      = $('#lokasi-output').val();
     catatan      = $('#catatan-output').val();
     token       = $('#token').val();
     if(id){
@@ -975,6 +996,8 @@
               'tolakukur'       : tolakukur, 
               'target'          : target, 
               'status'          : status, 
+              'output_status'   : output_status, 
+              'lokasi'          : lokasi, 
               'catatan'          : catatan, 
               'satuan'          : satuan},
         success: function(msg){
@@ -983,6 +1006,8 @@
           $('#tolak-ukur-output').val(null);
           $('#target-output').val(null);
           $('#status-output').val("").trigger("chosen:updated");
+          $('#output-status').val("").trigger("chosen:updated");
+          $('#lokasi-output').val(null);
           $('#catatan-output').val(null);
           $('#satuan-output').val(0);
           $('#table-output').DataTable().ajax.reload();
@@ -1043,6 +1068,8 @@ function showRekeningGiat(id){
       { mData: 'TOLAK_UKUR' },
       { mData: 'TARGET' },
       { mData: 'STATUS' },
+      { mData: 'OUTPUT_STATUS' },
+      { mData: 'LOKASI' },
       { mData: 'CATATAN' },
       { mData: 'AKSI' }]
     });
@@ -1128,6 +1155,8 @@ function showRekeningGiat(id){
             $('#tolak-ukur-output').val(msg['OUTPUT_TOLAK_UKUR']);
             $('#target-output').val(msg['OUTPUT_TARGET']);
             $('#satuan-output').val(msg['SATUAN_ID']);
+            $('#output-satuan').val(msg['OUTPUT_STATUS']);
+            $('#lokasi-output').val(msg['OUTPUT_LOKASI']);
             $('#id-output').val(msg['OUTPUT_ID']);
             $('#status-output').val(msg['STATUS']).trigger("chosen:updated");
             $('#catatan-output').val(msg['CATATAN']);
@@ -1159,6 +1188,7 @@ function showRekeningGiat(id){
     }
 </script>
 @endsection
+
 
 
 
