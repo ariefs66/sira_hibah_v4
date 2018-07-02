@@ -42,14 +42,16 @@ class btlController extends Controller
     public function index($tahun, $status){
         if(Auth::user()->level==9  || Auth::user()->level==8){
         $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();
+        $pagu=0;
       }else{
         $skpd_id    = $this->getSKPD($tahun);
         $skpd       = SKPD::where('SKPD_ID',$skpd_id)->get();
+       $pagu       =BTLPagu::where('SKPD_ID',$skpd_id)->value('BTL_PAGU');
       }      
        $satuan 	= Satuan::where('SATUAN_NAMA','like','Tahun')->get();
       //$satuan 	= Satuan::all();
         if($status=="murni"){
-          return View('budgeting.belanja-tidak-langsung.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'satuan'=>$satuan]);
+          return View('budgeting.belanja-tidak-langsung.index',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'satuan'=>$satuan,'pagu'=>$pagu]);
         }
         else{
           return View('budgeting.belanja-tidak-langsung.index_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$skpd,'satuan'=>$satuan]);

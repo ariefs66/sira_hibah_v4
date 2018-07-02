@@ -31,7 +31,7 @@
                   <h5 class="inline font-semibold text-orange m-n ">Belanja Tidak Langsung</h5>
                   @if((Auth::user()->level == 2 or Auth::user()->level == 1) and substr(Auth::user()->mod,0,1) == 0)
                   <h5 class="inline font-semibold text-info m-n ">
-                 Pagu OPD : {{ number_format(0,0,'.',',') }}
+                 Pagu OPD : {{ number_format($pagu,0,'.',',') }}
                   </h5>
                   @endif  
                   <div class="col-sm-1 pull-right m-t-n-sm">
