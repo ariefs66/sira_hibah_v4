@@ -1498,7 +1498,7 @@ class blController extends Controller
                     $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
                     $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
-                    $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+                    $rincian_rkp->RINCIAN_ID                    = Rincian::max('RINCIAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
                     $rincian_rkp->save();
 
@@ -1586,7 +1586,7 @@ class blController extends Controller
                     $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
                     $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
-                    $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+                    $rincian_rkp->RINCIAN_ID                    = Rincian::max('RINCIAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
                     $rincian_rkp->save();
 
@@ -1679,7 +1679,7 @@ class blController extends Controller
                     $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
                     $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
-                    $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+                    $rincian_rkp->RINCIAN_ID                    = Rincian::max('RINCIAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
                     $rincian_rkp->save();
 
@@ -1770,7 +1770,7 @@ class blController extends Controller
                     $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
                     $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
-                    $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+                    $rincian_rkp->RINCIAN_ID                    = Rincian::max('RINCIAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
                     $rincian_rkp->save();
 
@@ -1831,7 +1831,7 @@ class blController extends Controller
             $rincian_log->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
 
             $rincian_log->USER_ID                       = Auth::user()->id;
-            $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+            $rincian_log->RINCIAN_ID                    = Rincian::max('RINCIAN_ID');
             $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
             $rincian_log->RINCIAN_TAHUN                 = $tahun;
             $rincian_log->RINCIAN_STATUS                = 1; //add = 1
@@ -1859,7 +1859,7 @@ class blController extends Controller
             $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
             $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
             $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
-            $rincian_rkp->RINCIAN_ID                    = $rincian->RINCIAN_ID;
+            $rincian_rkp->RINCIAN_ID                    = Rincian::max('RINCIAN_ID');
             $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
             $rincian_rkp->save();
         }
@@ -1961,7 +1961,6 @@ class blController extends Controller
                     $rincian->RINCIAN_KOMPONEN                  = Input::get('KOMPONEN_NAMA');                    
                     $rincian->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
                     $rincian->save();
-
                     // BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
                     $totalrincian   = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
 
@@ -1972,6 +1971,30 @@ class blController extends Controller
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
+
+                    $rincian_rkp    = new RekapRincian;
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7'){
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                        $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+                    }else{
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                        $rincian_rkp->RINCIAN_TOTAL             = round($total);
+                    }
+                    $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = RincianPerubahan::max('RINCIAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
+
                     return number_format($totalrincian,0,'.',',');
                 }else{
                     return 0;
@@ -2011,6 +2034,30 @@ class blController extends Controller
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
+
+                    $rincian_rkp    = new RekapRincian;
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7'){
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                        $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+                    }else{
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                        $rincian_rkp->RINCIAN_TOTAL             = round($total);
+                    }
+                    $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = RincianPerubahan::max('RINCIAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
+
                     return number_format($totalrincian,0,'.',',');
                 }else{
                     return 0;
@@ -2054,6 +2101,30 @@ class blController extends Controller
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
+
+                    $rincian_rkp    = new RekapRincian;
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7'){
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                        $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+                    }else{
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                        $rincian_rkp->RINCIAN_TOTAL             = round($total);
+                    }
+                    $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = RincianPerubahan::max('RINCIAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
+
                     return number_format($totalrincian,0,'.',',');
                 }else{
                     return 0;
@@ -2092,6 +2163,29 @@ class blController extends Controller
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
+
+                    $rincian_rkp    = new RekapRincian;
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7'){
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                        $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+                    }else{
+                        $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                        $rincian_rkp->RINCIAN_TOTAL             = round($total);
+                    }
+                    $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = RincianPerubahan::max('RINCIAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
                     return number_format($totalrincian,0,'.',',');
                 }else{
                     return 0;
@@ -2129,6 +2223,30 @@ class blController extends Controller
             $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
             $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
             $log->save();        
+
+            $rincian_rkp    = new RekapRincian;
+            $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+            $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+            $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+            $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+            $rincian_rkp->RINCIAN_VOLUME                = $vol;
+            $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+            $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+            $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+            if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7'){
+                $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
+                $rincian_rkp->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
+            }else{
+                $rincian_rkp->RINCIAN_KETERANGAN        = Input::get('RINCIAN_KET');
+                $rincian_rkp->RINCIAN_TOTAL             = round($total);
+            }
+            $rincian_rkp->RINCIAN_HARGA                 = $hargakomponen;
+            $rincian_rkp->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
+            $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+            $rincian_rkp->RINCIAN_ID                    = RincianPerubahan::max('RINCIAN_ID');
+            $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+            $rincian_rkp->save();
+
             return number_format($totalrincian,0,'.',',');
         }
     }
@@ -2986,6 +3104,7 @@ class blController extends Controller
             $vol    = $vol * Input::get('VOL4');
         }
 
+        $rincian = RincianPerubahan::find(Input::get('RINCIAN_ID'));
         $rinciannow     = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->value('RINCIAN_VOLUME');
         // if($rinciannow < $vol and Input::get('BL_ID') != 5718){
         //     return 99;
@@ -3092,7 +3211,28 @@ class blController extends Controller
                     $log->USER_ID                           = Auth::user()->id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
-                    $log->save();        
+                    $log->save();     
+                    $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+                    if($rincian_rkp){
+                    $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+                    }else{
+                        $rincian_rkp    = new RekapRincian;
+                    }
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+                    $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+                    $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();   
                     return number_format($totalrincian,0,'.',',');                    
                 }else{
                     return 0;
@@ -3122,6 +3262,27 @@ class blController extends Controller
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
+                    $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+                    if($rincian_rkp){
+                    $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+                    }else{
+                        $rincian_rkp    = new RekapRincian;
+                    }
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+                    $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+                    $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
                     return number_format($totalrincian,0,'.',',');
                 }else{
                     return 0;
@@ -3183,6 +3344,27 @@ class blController extends Controller
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
+                    $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+                    if($rincian_rkp){
+                    $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+                    }else{
+                        $rincian_rkp    = new RekapRincian;
+                    }
+                    $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+                    $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+                    $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+                    $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+                    $rincian_rkp->RINCIAN_VOLUME                = $vol;
+                    $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+                    $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+                    $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+                    $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+                    $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+                    $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+                    $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+                    $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+                    $rincian_rkp->save();
                     return number_format($totalrincian,0,'.',',');
                 }else{
                     return 0;
@@ -3212,6 +3394,27 @@ class blController extends Controller
             $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
             $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
             $log->save();        
+            $rincian_rkp = RekapRincian::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->where('TAHAPAN_ID',$tahapan->TAHAPAN_ID)->first();
+            if($rincian_rkp){
+            $rincian_rkp = RekapRincian::find($rincian_rkp->REKAP_ID);
+            }else{
+                $rincian_rkp    = new RekapRincian;
+            }
+            $rincian_rkp->BL_ID                         = Input::get('BL_ID');
+            $rincian_rkp->REKENING_ID                   = Input::get('REKENING_ID');
+            $rincian_rkp->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
+            $rincian_rkp->RINCIAN_PAJAK                 = Input::get('RINCIAN_PAJAK');
+            $rincian_rkp->RINCIAN_VOLUME                = $vol;
+            $rincian_rkp->RINCIAN_KOEFISIEN             = $koef;
+            $rincian_rkp->RINCIAN_TOTAL                 = round($total);
+            $rincian_rkp->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
+            $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
+            $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
+            $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+            $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
+            $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
+            $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
+            $rincian_rkp->save();
             return number_format($totalrincian,0,'.',',');
             // return $this->setpaguBL(Input::get('BL_ID'));
         }
