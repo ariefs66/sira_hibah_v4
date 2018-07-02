@@ -57,7 +57,13 @@ class btlController extends Controller
     }
 
     public function submitAdd($tahun,$status){
+      $pagu = BTLPagu::where('SKPD_ID',Input::get('SKPD'))->where('PAGU_TAHUN', $tahun)->sum('BTL_PAGU');
       if($status=="murni"){
+        $sum = BTL::where('SKPD_ID',Input::get('SKPD'))->where('BTL_TAHUN', $tahun)->sum('BTL_TOTAL');
+        $sum = $sum + (Input::get('BTL_VOL') * Input::get('BTL_TOTAL'));
+        if($sum > $pagu){
+          return 'Melebihi Pagu!';
+        }
         $btl    = new BTL;
         $btl->BTL_TAHUN     = $tahun;
         $btl->SUB_ID        = Input::get('SUB_ID');
@@ -82,6 +88,11 @@ class btlController extends Controller
                                   ->first();
       }
       else{
+        $sum = BTLPerubahan::where('SKPD_ID',Input::get('SKPD'))->where('BTL_TAHUN', $tahun)->sum('BTL_TOTAL');
+        $sum = $sum + (Input::get('BTL_VOL') * Input::get('BTL_TOTAL'));
+        if($sum > $pagu){
+          return 'Melebihi Pagu!';
+        }
         $btl    = new BTLPerubahan;
         $btl->BTL_TAHUN     = $tahun;
         $btl->SUB_ID        = Input::get('SUB_ID');
@@ -143,8 +154,13 @@ class btlController extends Controller
     }
 
     public function submitEdit($tahun,$status){
-      
+      $pagu = BTLPagu::where('SKPD_ID',Input::get('SKPD'))->where('PAGU_TAHUN', $tahun)->sum('BTL_PAGU');
       if($status=="murni"){
+        $sum = BTL::where('SKPD_ID',Input::get('SKPD'))->where('BTL_TAHUN', $tahun)->sum('BTL_TOTAL');
+        $sum = $sum + (Input::get('BTL_VOL') * Input::get('BTL_TOTAL'));
+        if($sum > $pagu){
+          return 'Melebihi Pagu!';
+        }
         BTL::where('BTL_ID',Input::get('BTL_ID'))->update([
             'SUB_ID'          => Input::get('SUB_ID'),
             'BTL_NAMA'        => Input::get('BTL_NAMA'),
@@ -164,6 +180,11 @@ class btlController extends Controller
         $databtl    = BTL::where('BTL_ID',Input::get('BTL_ID'))->first();
       }
       else{
+        $sum = BTLPerubahan::where('SKPD_ID',Input::get('SKPD'))->where('BTL_TAHUN', $tahun)->sum('BTL_TOTAL');
+        $sum = $sum + (Input::get('BTL_VOL') * Input::get('BTL_TOTAL'));
+        if($sum > $pagu){
+          return 'Melebihi Pagu!';
+        }
         BTLPerubahan::where('BTL_ID',Input::get('BTL_ID'))->update([
             'SUB_ID'          => Input::get('SUB_ID'),
             'BTL_NAMA'        => Input::get('BTL_NAMA'),
@@ -1222,6 +1243,7 @@ class btlController extends Controller
     }
 
 }
+
 
 
 
