@@ -21,6 +21,7 @@ use App\Model\Tag;
 use App\Model\Lokasi;
 use App\Model\Satuan;
 use App\Model\BTL;
+use App\Model\BTLPagu;
 use App\Model\RkpBTL;
 use App\Model\BTLPerubahan;
 use App\Model\Indikator;
@@ -1089,7 +1090,20 @@ class btlController extends Controller
   }
 
   public function setPagu($tahun, $status){
-            return 'Berhasil!';
+    $pagu = BTLPagu::where('SKPD_ID',Input::get('skpd'))->where('PAGU_TAHUN',$tahun)->first();
+    if($pagu){
+    $pagu = BTLPagu::find($pagu->PAGU_ID);
+    }else{
+        $pagu    = new BTLPagu;
+        $pagu->PAGU_ID    = BTLPagu::max('PAGU_ID') + 1;
+    }
+    $pagu->PAGU_TAHUN    = $tahun;
+    $pagu->SKPD_ID       = Input::get('skpd');
+    $pagu->BTL_PAGU      = Input::get('pagu');
+    $pagu->BTL_KUNCI     = Input::get('kunci');
+    $pagu->BTL_CATATAN   = Input::get('catatan');
+    $pagu->save();
+    return 'Berhasil!';
   }
 
      public function submitAKBEdit($tahun,$status){

@@ -500,7 +500,7 @@
                   </li>                 
                   </ul>
               </li>              
-              @if(Auth::user()->level == 8)
+              @if(Auth::user()->level == 8 || Auth::user()->level == 2)
               <li>
                 <a href="#" class="auto padding-l-r-lg parent">                  
                   <i class="fa fa-folder-o"></i>
