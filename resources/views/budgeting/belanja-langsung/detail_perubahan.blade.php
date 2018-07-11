@@ -845,11 +845,16 @@
 
   $("#jenis-pekerjaan").change(function(e, params){
     var id  = $('#jenis-pekerjaan').val();
-    if(id == '4' || id == '5' || id == '6'){
+    if(id == '4' || id == '5' || id == '6' || id == '7' || id == '8'){
       $('#nama-komponen').attr('readonly',false);
       $('#ket-belanja').attr('readonly',true);
       $('#harga-free').removeClass('hide');
       $('#pilih-komponen').addClass('hide');
+    }else{
+      $('#nama-komponen').attr('readonly',true);
+      $('#ket-belanja').attr('readonly',false);
+      $('#harga-free').addClass('hide');
+      $('#pilih-komponen').removeClass('hide');
     };
   });
 
@@ -937,7 +942,7 @@
     var HARGA           = $('#harga-free-input').val();
     if($('#pajak').is(':checked')) RINCIAN_PAJAK = 10;
     else RINCIAN_PAJAK = 0;
-    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6'){
+    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8' ){
       KOMPONEN_ID   = '0';
     }
     console.log(KOMPONEN_ID);
@@ -947,7 +952,7 @@
       //if(REKENING_ID == "" || VOL1 == "" || SUBRINCIAN_ID == ""){
       $.alert('Form harap diisi!');
     }else{
-      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6') && (HARGA == "" || KOMPONEN_NAMA == "")){
+      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8') && (HARGA == "" || KOMPONEN_NAMA == "")){
       //if(HARGA == "" || KOMPONEN_NAMA == "") {
         $.alert('Form harap diisi-!');
       }else{
@@ -985,7 +990,7 @@
             }else if(msg == 101){
               $.alert('Total Rincian Melebihi Total Per Jenis Belanja');
             }else if(msg != 0){
-              if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5') location.reload();
+              if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8') location.reload();
               $('.input-rincian,.input-sidebar').animate({'right':'-1050px'},function(){
                 $('.overlay').fadeOut('fast');
               });

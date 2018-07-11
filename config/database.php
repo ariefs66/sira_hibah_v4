@@ -93,14 +93,18 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => '139.59.218.189',
+            'host' => '202.154.25.35',
+            //'host' => '139.59.218.189',
             //'host' => 'simda.bandung.go.id',
             'port' => '1433',
-            'database' => 'simda',
+            'database' => 'apbd_2018',
+            //'database' => 'simda',
             //'database' => 'sira_pergeseran',
-            'username' => 'sa',
+            'username' => 'ebudget',
+            //'username' => 'sa',
             //'username' => 'sira',
-            'password' => 'simd@2018',
+            'password' => 'ebudget',
+            //'password' => 'simd@2018',
             //'password' => 'simd@2018',
         ],
 
