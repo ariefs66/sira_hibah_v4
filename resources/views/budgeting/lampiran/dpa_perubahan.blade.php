@@ -623,7 +623,8 @@
   	  </td>
 	  @else
 	  <td class="border-rincian">
-	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{$k->komponen->KOMPONEN_NAMA}} 
+	  	<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{$k->komponen->KOMPONEN_NAMA}}--> 
+	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{$k->RINCIAN_KOMPONEN}} 
 	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
 	  	  	  </td>
 
