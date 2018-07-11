@@ -24,7 +24,7 @@
                   @if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1)
                   <button class="pull-right btn m-t-n-sm btn-success open-form-btl"><i class="m-r-xs fa fa-plus"></i> Tambah Belanja Tidak Langsung</button>
                   @endif
-		 @if(Auth::user()->level == 9 or substr(Auth::user()->mod,0,1) == 1 or Auth::user()->level == 2)
+		 @if(Auth::user()->level == 9)
                   <button class="pull-right btn m-t-n-sm btn-warning" onclick="$('#modal-pagu').modal('show');"><i class="m-r-xs fa fa-plus"></i> Set Pagu</button>
                   @endif
                   <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekapbtl"><i class="m-r-xs fa fa-download"></i> Download</a>

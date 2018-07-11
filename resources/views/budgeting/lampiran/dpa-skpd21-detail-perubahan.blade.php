@@ -663,18 +663,24 @@
 </table>
 <table class="ttd">
 	<tr>
-		<td class="tengah">Triwulan I</td>
-		<td class="kiri">Rp. {{ number_format($akb_btl->tri1,0,',','.') }}</td>
+		<td class="tengah"></td>
+		<td class="kiri"></td>
 		<td width="50%"> </td>
 		<!--td>Bandung, 20 Maret 2018</td-->
-		<td>Bandung, 31 Mei 2018</td>
+		<td>Bandung, 31 Mei 2018<br>Mengesahkan</td>
 	</tr>
+	<tr>
+                <td class="tengah">Triwulan I</td>
+                <td class="kiri">Rp. {{ number_format($akb_btl->tri1,0,',','.') }}</td>
+                <td width="50%"> </td>
+                <td><b>Pejabat Pengelola Keuangan Daerah</b></td>
+        </tr>
 	<tr>
 		<td class="tengah">Triwulan II</td>
 		<td class="kiri">Rp. {{ number_format($akb_btl->tri2,0,',','.') }} </td>
 		<td width="50%"> </td>
 		<!--td><b>Plh. Pejabat Pengelola Keuangan Daerah</b></td-->
-		<td><b>Pejabat Pengelola Keuangan Daerah</b></td>
+		<td></td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan III</td>

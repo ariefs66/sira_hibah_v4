@@ -284,6 +284,12 @@
                   </li>            
                   </ul>
               </li>
+<li>
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur" class="auto padding-l-r-lg">                  
+                  <i class="icon-bdg_dashboard"></i>
+                  <span class="font-semibold">Verifikasi</span>
+                </a>                
+              </li>
                   @endif  
 
               <li >

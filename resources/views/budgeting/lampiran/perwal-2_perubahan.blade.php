@@ -93,9 +93,9 @@
 			<img src="{{ url('/') }}/assets/img/bandung.png" width="80px" style="margin:3px">
 		</td>	
 		<td>
-			<h4>PEMERINTAH KOTA BANDUNG</h4>
-			<h3>PERUBAHAN PENJABARAN APBD</h3>
-			<h5>TAHUN ANGGARAN {{ $tahun }}</h5>
+			<h4 style="margin-left:-1100px">PEMERINTAH KOTA BANDUNG</h4>
+			<h3 style="margin-left:-1100px">PERUBAHAN PENJABARAN APBD</h3>
+			<h5 style="margin-left:-1100px">TAHUN ANGGARAN {{ $tahun }}</h5>
 		</td>
 	</tr>
 	<tr> <td colspan="2"></td> </tr>
@@ -276,7 +276,7 @@
 	@endforeach
 	@php $i=1; @endphp
 	@foreach($btl1_1p as $btl)
-	@if($i>count($btlp))
+	@if($i>=count($btlp))
 	<tr>
 		<td class="border-rincian">{{$urusan->URUSAN_KODE}}.{{$skpd->SKPD_KODE}}.00.00.
 			{{$btl->REKENING_KODE}}</td>

@@ -87,6 +87,8 @@
                     <div class="table-responsive dataTables_wrapper table-usulan">
                       <table ui-jq="dataTable" ui-options="{
                       sAjaxSource: '{{ url('/') }}/harga/{{$tahun}}/monitor/getData',
+		      pagination: true,
+		      serverside: true,
                       aoColumns: [
                       { mData: 'NO',class:'text-center'},
                       { mData: 'PD'},
@@ -149,6 +151,8 @@
     posisi  = $('#posisi').val();
     $('#table-usulan').DataTable().destroy();
     $('#table-usulan').DataTable({
+      pagination: true,
+      serverside: true,
       sAjaxSource: "{{ url('/') }}/harga/{{$tahun}}/monitor/getData/"+tipe+"/"+jenis+"/"+opd+"/"+posisi,
       aoColumns: [
         { mData: 'NO',class:'text-center'},

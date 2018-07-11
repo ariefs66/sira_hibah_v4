@@ -137,7 +137,9 @@ class monitorUsulanController extends Controller
                                      'HARGA'   	=>number_format($data->USULAN_HARGA,2,'.',',')));
             $i++;
         }
-        $out = array("aaData"=>$view);      
+        
+        $display = $data->count(); 
+        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => 10,"aaData"=>$view); 
         return Response::JSON($out);
     }
 
