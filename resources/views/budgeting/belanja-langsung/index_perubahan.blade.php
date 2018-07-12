@@ -101,10 +101,12 @@
                     </tbody>  
                     <tfoot>
                       <tr>
-                        <td colspan="2"> </td>
-                        <td colspan="2"><b>Total Pagu Murni : Rp. <text id="pagu_murni"></text> </b></td>
-                        <td colspan="2"><b>Total Pagu @if($status=='pergeseran') Pergeseran @else Perubahan @endif : Rp. <text id="pagu_perubahan"></text> </b></td>
-                        <td><b>Selisih : Rp. <text id="pagu_selisih"></text> </b></td>
+                        <td class="text text-right" colspan="2"><b>Total</td>
+                        <td class="text text-right"><b>Rp. <text id="pagu_murni"></text> </b></td>
+                        <td class="text text-right"><b>Rp. <text id="pagu_realisasi"></text> </b></td>
+                        <td class="text text-right"><b>Rp. <text id="pagu_perubahan"></text> </b></td>
+                        <td class="text text-right"><b>Rp. <text id="pagu_rincian"></text> </b></td>
+                        <td class="text text-right"><b>Rp. <text id="pagu_selisih"></text> </b></td>
                         <td></td>
                       </tr>  
                     </tfoot>                                
@@ -440,9 +442,19 @@ function setStaff(){
           { mData: 'RINCIAN_SESUDAH' },
           { mData: 'SELISIH' },
           { mData: 'STATUS' }],
+          aoColumnDefs: [ {
+            aTargets: [6],
+            fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+              if ( sData != '0' ) {
+                $(nTd).css( 'color', 'red' )
+              }
+            }
+          } ],
           initComplete:function(setting,json){
             $("#pagu_murni").html(json.pagu_murni);
+            $("#pagu_realisasi").html(json.pagu_realisasi);
             $("#pagu_perubahan").html(json.pagu_perubahan);
+            $("#pagu_rincian").html(json.pagu_rincian);
             $("#pagu_selisih").html(json.pagu_selisih);
         }
       });  

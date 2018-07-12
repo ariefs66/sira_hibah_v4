@@ -223,7 +223,7 @@
                         </tbody>  
                     <tfoot>
                       <tr>
-                        <td class="text text-right"colspan="2"> <b>TOTAL</b></td>
+                        <td class="text text-right" colspan="2"> <b>TOTAL</b></td>
                         <td class="text text-right"><b>Rp. <text id="sebelum"></text></b></td>                                      
                         <td class="text text-right"><b>Rp. <text id="sesudah"></text></b></td>                                      
                         <td class="text text-right"><b>Rp. <text id="realisasi"></text></b></td>                                      

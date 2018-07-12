@@ -1106,7 +1106,7 @@ class blController extends Controller
                     'REKENING_KODE' => $data->rekening->REKENING_KODE,
                     'REKENING_NAMA' => $data->rekening->REKENING_NAMA,
                     'KOMPONEN_KODE' => $data->komponen->KOMPONEN_KODE,
-                    'KOMPONEN_NAMA' => $data->komponen->KOMPONEN_NAMA,
+                    'KOMPONEN_NAMA' => explode('#',$data->RINCIAN_KETERANGAN)[0],
                     'VOL1'          => explode(' ',$koef[0])[0],
                     'SATUAN1'       => $satuan_kesatu,
                     'VOL2'          => $v1,
@@ -4333,6 +4333,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
         $kunci      = '';
         $rincian    = '';
         $validasi   = '';
+        $total_realisasi = 0;
         foreach ($data as $data) {
             $urgensi    = Urgensi::where('BL_ID',$data->BL_ID)->first();
           /*  if((Auth::user()->level == 1 or Auth::user()->level == 2) and (
@@ -4441,11 +4442,14 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                                      'RINCIAN_SESUDAH'        =>$totalRincian,
                                      'SELISIH'        =>number_format($data->BL_PAGU-$data->rincian->sum('RINCIAN_TOTAL'),0,'.',','),
                                      'STATUS'         =>$kunci.' Kegiatan<br>'.$rincian.' Rincian<br>'.$validasi.' Validasi'));
+            $total_realisasi += $realisasi;
             $i++;
         }
         $out = array("aaData"=>$view,
                     "pagu_murni"=>number_format($pagu_murni,0,'.',','),
+                    "pagu_realisasi"=>number_format($total_realisasi,0,'.',','),
                     "pagu_perubahan"=>number_format($pagu_perubahan,0,'.',','),
+                    "pagu_rincian"=>number_format($rincian_total_perubahan,0,'.',','),
                     "pagu_selisih"=>number_format($pagu_selisih,0,'.',','),
                     );      
         return Response::JSON($out);
