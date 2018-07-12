@@ -4722,26 +4722,38 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                         ->selectRaw('SUM("RINCIAN_TOTAL") as total')
                         ->get();
         $view   = array();
+        $total   = array('SEBELUM' => 0,'SESUDAH' => 0,'REALISASI' => 0);
         foreach($data as $data){
             $sebelum    = Rincian::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->sum('RINCIAN_TOTAL');
             $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->sum('REALISASI_TOTAL');
             array_push($view, array('KODE'      => $data->rekening->REKENING_KODE,
                                     'URAIAN'    => $data->rekening->REKENING_NAMA,
+                                    'CLASS'   => ($realisasi>$data->total?1:0),
                                     'SEBELUM'   => number_format($sebelum,0,'.',','),
                                     'REALISASI' => number_format($realisasi,0,'.',','),
                                     'SELISIH'   => number_format($data->total - $realisasi,0,'.',','),
                                     'SESUDAH'   => number_format($data->total,0,'.',',')));
+            $total['SEBELUM'] = $total['SEBELUM'] + $sebelum;
+            $total['SESUDAH'] = $total['SESUDAH'] + $data->total;
+            $total['REALISASI'] = $total['REALISASI'] + $realisasi;
         }
         foreach($data_ as $data_){
             $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data_->REKENING_ID)->sum('REALISASI_TOTAL');            
             array_push($view, array('KODE'      => $data_->rekening->REKENING_KODE,
                                     'URAIAN'    => $data_->rekening->REKENING_NAMA,
+                                    'CLASS'   => ($realisasi>$data->total?1:0),
                                     'SEBELUM'   => number_format($data_->total,0,'.',','),
                                     'REALISASI' => number_format($realisasi,0,'.',','),
                                     'SELISIH'   => number_format(0 - $realisasi,0,'.',','),                                    
                                     'SESUDAH'   => number_format(0,0,'.',',')));
+            $total['SEBELUM'] = $total['SEBELUM'] + $data_->total;
+            $total['REALISASI'] = $total['REALISASI'] + $realisasi;
         }
-        $out = array("aaData"=>$view);      
+        $out = array("aaData"=>$view,
+        "sebelum"=>number_format($total['SEBELUM'],0,'.',','),
+        "sesudah"=>number_format($total['SESUDAH'],0,'.',','),
+        "realisasi"=>number_format($total['REALISASI'],0,'.',','),     
+        "selisih"=>number_format($total['SESUDAH']-$total['REALISASI'],0,'.',','));      
         return Response::JSON($out);
     }
 

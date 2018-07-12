@@ -185,7 +185,22 @@
                            { mData: 'SEBELUM',class:'text text-right' },
                            { mData: 'SESUDAH',class:'text text-right' },
                            { mData: 'REALISASI',class:'text text-right' },
-                           { mData: 'SELISIH',class:'text text-right' }]
+                           { mData: 'SELISIH',class:'text text-right' },
+                           { mData: 'CLASS',class:'hide' }],
+                           aoColumnDefs: [ {
+                              aTargets: [6],
+                              fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                                if ( sData == '1' ) {
+                                  $(nTd).siblings('td').css( 'background-color', 'yellow' )
+                                }
+                              }
+                            } ],
+                          initComplete:function(setting,json){
+                              $('#sebelum').html(json.sebelum);
+                              $('#sesudah').html(json.sesudah);
+                              $('#realisasi').html(json.realisasi);
+                              $('#selisih').html(json.selisih);
+                          }
                          }" class="table table-jurnal table-striped b-t b-b" id="table-rekening">
                          <thead>
                           <tr>
@@ -194,17 +209,27 @@
                             <th class="text text-center">Murni<br>(3)</th>                                      
                             <th class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif<br>(4)</th>                                      
                             <th class="text text-center">REALISASI<br>(5)</th>                                      
-                            <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>                                      
+                            <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>    
+                            <th class="hide">Warna<br>(0)</th>                                  
                           </tr>
                           <tr>
-                            <th colspan="6" class="th_search">
+                            <th colspan="7" class="th_search">
                               <i class="icon-bdg_search"></i>
                               <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                             </th>
                           </tr>
                         </thead>
                         <tbody>
-                        </tbody>                                    
+                        </tbody>  
+                    <tfoot>
+                      <tr>
+                        <td class="text text-right"colspan="2"> <b>TOTAL</b></td>
+                        <td class="text text-right"><b>Rp. <text id="sebelum"></text></b></td>                                      
+                        <td class="text text-right"><b>Rp. <text id="sesudah"></text></b></td>                                      
+                        <td class="text text-right"><b>Rp. <text id="realisasi"></text></b></td>                                      
+                        <td class="text text-right"><b>Rp. <text id="selisih"></text></b></td>
+                      </tr>  
+                    </tfoot>                                    
                       </table>
                     </div>
                   </div>
