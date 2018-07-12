@@ -185,7 +185,22 @@
                            { mData: 'SEBELUM',class:'text text-right' },
                            { mData: 'SESUDAH',class:'text text-right' },
                            { mData: 'REALISASI',class:'text text-right' },
-                           { mData: 'SELISIH',class:'text text-right' }]
+                           { mData: 'SELISIH',class:'text text-right' },
+                           { mData: 'CLASS',class:'hide' }],
+                           aoColumnDefs: [ {
+                              aTargets: [6],
+                              fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                                if ( sData == '1' ) {
+                                  $(nTd).siblings('td').css( 'background-color', 'yellow' )
+                                }
+                              }
+                            } ],
+                          initComplete:function(setting,json){
+                              $('#sebelum').html(json.sebelum);
+                              $('#sesudah').html(json.sesudah);
+                              $('#realisasi').html(json.realisasi);
+                              $('#selisih').html(json.selisih);
+                          }
                          }" class="table table-jurnal table-striped b-t b-b" id="table-rekening">
                          <thead>
                           <tr>
@@ -194,17 +209,27 @@
                             <th class="text text-center">Murni<br>(3)</th>                                      
                             <th class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif<br>(4)</th>                                      
                             <th class="text text-center">REALISASI<br>(5)</th>                                      
-                            <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>                                      
+                            <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>    
+                            <th class="hide">Warna<br>(0)</th>                                  
                           </tr>
                           <tr>
-                            <th colspan="6" class="th_search">
+                            <th colspan="7" class="th_search">
                               <i class="icon-bdg_search"></i>
                               <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                             </th>
                           </tr>
                         </thead>
                         <tbody>
-                        </tbody>                                    
+                        </tbody>  
+                    <tfoot>
+                      <tr>
+                        <td class="text text-right"colspan="2"> <b>TOTAL</b></td>
+                        <td class="text text-right"><b>Rp. <text id="sebelum"></text></b></td>                                      
+                        <td class="text text-right"><b>Rp. <text id="sesudah"></text></b></td>                                      
+                        <td class="text text-right"><b>Rp. <text id="realisasi"></text></b></td>                                      
+                        <td class="text text-right"><b>Rp. <text id="selisih"></text></b></td>
+                      </tr>  
+                    </tfoot>                                    
                       </table>
                     </div>
                   </div>
@@ -845,11 +870,16 @@
 
   $("#jenis-pekerjaan").change(function(e, params){
     var id  = $('#jenis-pekerjaan').val();
-    if(id == '4' || id == '5' || id == '6'){
+    if(id == '4' || id == '5' || id == '6' || id == '7' || id == '8'){
       $('#nama-komponen').attr('readonly',false);
       $('#ket-belanja').attr('readonly',true);
       $('#harga-free').removeClass('hide');
       $('#pilih-komponen').addClass('hide');
+    }else{
+      $('#nama-komponen').attr('readonly',true);
+      $('#ket-belanja').attr('readonly',false);
+      $('#harga-free').addClass('hide');
+      $('#pilih-komponen').removeClass('hide');
     };
   });
 
@@ -937,7 +967,7 @@
     var HARGA           = $('#harga-free-input').val();
     if($('#pajak').is(':checked')) RINCIAN_PAJAK = 10;
     else RINCIAN_PAJAK = 0;
-    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6'){
+    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8' ){
       KOMPONEN_ID   = '0';
     }
     console.log(KOMPONEN_ID);
@@ -947,7 +977,7 @@
       //if(REKENING_ID == "" || VOL1 == "" || SUBRINCIAN_ID == ""){
       $.alert('Form harap diisi!');
     }else{
-      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6') && (HARGA == "" || KOMPONEN_NAMA == "")){
+      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8') && (HARGA == "" || KOMPONEN_NAMA == "")){
       //if(HARGA == "" || KOMPONEN_NAMA == "") {
         $.alert('Form harap diisi-!');
       }else{
@@ -985,7 +1015,7 @@
             }else if(msg == 101){
               $.alert('Total Rincian Melebihi Total Per Jenis Belanja');
             }else if(msg != 0){
-              if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5') location.reload();
+              if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8') location.reload();
               $('.input-rincian,.input-sidebar').animate({'right':'-1050px'},function(){
                 $('.overlay').fadeOut('fast');
               });
