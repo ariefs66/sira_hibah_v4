@@ -48,6 +48,9 @@ Route::get('/main/{tahun}/{status}/belanja-langsung/akb/detail/{bl_id}/{rek_id}'
 Route::get('/main/{tahun}/{status}/belanja-langsung/akb/add/{id}/', 'Budgeting\blController@submitAKBadd');
 
 
+Route::get('/main/{tahun}/{status}/belanja-langsung/log', 'Budgeting\logController@index');
+Route::get('/main/{tahun}/{status}/belanja-langsung/log/getMurni/{filter}', 'Budgeting\blController@getMurni');
+
 //BL-POST
 Route::post('/main/{tahun}/{status}/belanja-langsung/hapus', 'Budgeting\blController@deleteBL');
 Route::post('/main/{tahun}/{status}/belanja-langsung/detail/simpan', 'Budgeting\blController@submitDetail');
