@@ -1067,6 +1067,18 @@
         if(id_komponen < 1){
           id_komponen = 1;
         }
+        var id  = $('#jenis-pekerjaan').val();
+    if(id == '4' || id == '5' || id == '6' || id == '7' || id == '8'){
+      $('#nama-komponen').attr('readonly',false);
+      $('#ket-belanja').attr('readonly',true);
+      $('#harga-free').removeClass('hide');
+      $('#pilih-komponen').addClass('hide');
+    }else{
+      $('#nama-komponen').attr('readonly',true);
+      $('#ket-belanja').attr('readonly',false);
+      $('#harga-free').addClass('hide');
+      $('#pilih-komponen').removeClass('hide');
+    };
 	$('#id-komponen').val(data['DATA']['KOMPONEN_ID']);
         $('#id-rincian').val(data['DATA']['RINCIAN_ID']);
         $('#kategori-belanja').val(id_komponen).trigger('chosen:updated');
