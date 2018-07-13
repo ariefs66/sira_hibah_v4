@@ -3207,6 +3207,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                             'RINCIAN_PAJAK'                 => Input::get('RINCIAN_PAJAK'),
                             'RINCIAN_VOLUME'                => $vol,
                             'RINCIAN_KOEFISIEN'             => $koef,
+                            'RINCIAN_HARGA'                 => $harga,
                             'RINCIAN_TOTAL'                 => round($total),
                             'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
@@ -3239,6 +3240,9 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
                     $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
                     $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    if(Input::get('PEKERJAAN_ID')>5){
+                        $rincian_rkp->RINCIAN_HARGA                 = $harga;
+                    }
                     $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -3258,6 +3262,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                             'RINCIAN_VOLUME'                => $vol,
                             'RINCIAN_KOEFISIEN'             => $koef,
                             'RINCIAN_TOTAL'                 => round($total),
+                            'RINCIAN_HARGA'                 => $harga,
                             'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                             'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
@@ -3289,6 +3294,9 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
                     $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
                     $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    if(Input::get('PEKERJAAN_ID')>5){
+                        $rincian_rkp->RINCIAN_HARGA                 = $harga;
+                    }
                     $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -3310,6 +3318,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                             'RINCIAN_PAJAK'                 => Input::get('RINCIAN_PAJAK'),
                             'RINCIAN_VOLUME'                => $vol,
                             'RINCIAN_KOEFISIEN'             => $koef,
+                            'RINCIAN_HARGA'                 => $harga,
                             'RINCIAN_TOTAL'                 => round($total),
                             'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
@@ -3339,6 +3348,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                             'RINCIAN_PAJAK'                 => Input::get('RINCIAN_PAJAK'),
                             'RINCIAN_VOLUME'                => $vol,
                             'RINCIAN_KOEFISIEN'             => $koef,
+                            'RINCIAN_HARGA'                 => $harga,
                             'RINCIAN_TOTAL'                 => round($total),
                             'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
@@ -3371,6 +3381,9 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
                     $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
                     $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+                    if(Input::get('PEKERJAAN_ID')>5){
+                        $rincian_rkp->RINCIAN_HARGA                 = $harga;
+                    }
                     $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -3390,6 +3403,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     'RINCIAN_VOLUME'                => $vol,
                     'RINCIAN_KOEFISIEN'             => $koef,
                     'RINCIAN_TOTAL'                 => $total,
+                    'RINCIAN_HARGA'                 => $harga,
                     'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                     'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                     'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
@@ -3421,6 +3435,9 @@ $rincian->RINCIAN_ID              = ($get_id+1);
             $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
             $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
             $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
+            if(Input::get('PEKERJAAN_ID')>5){
+                $rincian_rkp->RINCIAN_HARGA                 = $harga;
+            }
             $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
             $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
             $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
