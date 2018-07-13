@@ -969,6 +969,7 @@
     else RINCIAN_PAJAK = 0;
     if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8' ){
       KOMPONEN_ID   = '0';
+      RINCIAN_KET = KOMPONEN_NAMA + '#'+ HARGA;
     }
     console.log(KOMPONEN_ID);
     //if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SAT1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
