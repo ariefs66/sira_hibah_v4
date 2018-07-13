@@ -1106,7 +1106,7 @@ class blController extends Controller
                     'REKENING_KODE' => $data->rekening->REKENING_KODE,
                     'REKENING_NAMA' => $data->rekening->REKENING_NAMA,
                     'KOMPONEN_KODE' => $data->komponen->KOMPONEN_KODE,
-                    'KOMPONEN_NAMA' => explode('#',$data->RINCIAN_KETERANGAN)[0],
+                    'KOMPONEN_NAMA' => ($data->pekerjaan->PEKERJAAN_ID>5?explode('#',$data->RINCIAN_KETERANGAN)[0]:$data->komponen->KOMPONEN_NAMA),
                     'VOL1'          => explode(' ',$koef[0])[0],
                     'SATUAN1'       => $satuan_kesatu,
                     'VOL2'          => $v1,

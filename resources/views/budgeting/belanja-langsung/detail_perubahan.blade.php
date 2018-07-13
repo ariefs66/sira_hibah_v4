@@ -1072,6 +1072,8 @@
       $('#nama-komponen').attr('readonly',false);
       $('#ket-belanja').attr('readonly',true);
       $('#harga-free').removeClass('hide');
+      result = $('#ket-belanja').val().split('#');
+      $('#harga-free-input').val(result[1]);
       $('#pilih-komponen').addClass('hide');
     }else{
       $('#nama-komponen').attr('readonly',true);
