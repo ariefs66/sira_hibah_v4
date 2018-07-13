@@ -3119,6 +3119,9 @@ $rincian->RINCIAN_ID              = ($get_id+1);
         $harga = 0;
         if(Input::get('KOMPONEN_ID') == 0) $harga = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->value('RINCIAN_HARGA');
         else $harga      = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');
+        if($harga == 0 && Input::get('PEKERJAAN_ID') > 4){
+            $harga = Input::get('HARGA');
+        }
         $total      = ( $harga * $vol ) + (( Input::get('RINCIAN_PAJAK')*($harga*$vol))/100);
         
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
