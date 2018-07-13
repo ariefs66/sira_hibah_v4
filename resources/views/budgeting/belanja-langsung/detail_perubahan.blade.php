@@ -1012,7 +1012,8 @@
             }else if(msg == 99){
               $.alert('Volume Tidak Bisa Ditambahkan');
             }else if(msg == 98){
-              $.alert('Rekening Kurang Dari Realisasi');
+              $total = 0;
+              $.alert('Anggaran Kurang dr realisasi Rp.'+total);
             }else if(msg == 101){
               $.alert('Total Rincian Melebihi Total Per Jenis Belanja');
             }else if(msg != 0){
