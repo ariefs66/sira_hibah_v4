@@ -223,7 +223,7 @@
                         </tbody>  
                     <tfoot>
                       <tr>
-                        <td class="text text-right"colspan="2"> <b>TOTAL</b></td>
+                        <td class="text text-right" colspan="2"> <b>TOTAL</b></td>
                         <td class="text text-right"><b>Rp. <text id="sebelum"></text></b></td>                                      
                         <td class="text text-right"><b>Rp. <text id="sesudah"></text></b></td>                                      
                         <td class="text text-right"><b>Rp. <text id="realisasi"></text></b></td>                                      
@@ -969,6 +969,7 @@
     else RINCIAN_PAJAK = 0;
     if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8' ){
       KOMPONEN_ID   = '0';
+      RINCIAN_KET = KOMPONEN_NAMA + '#'+ HARGA;
     }
     console.log(KOMPONEN_ID);
     //if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SAT1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
@@ -1067,6 +1068,20 @@
         if(id_komponen < 1){
           id_komponen = 1;
         }
+        var id  = $('#jenis-pekerjaan').val();
+    if(id == '4' || id == '5' || id == '6' || id == '7' || id == '8'){
+      $('#nama-komponen').attr('readonly',false);
+      $('#ket-belanja').attr('readonly',true);
+      $('#harga-free').removeClass('hide');
+      result = $('#ket-belanja').val().split('#');
+      $('#harga-free-input').val(result[1]);
+      $('#pilih-komponen').addClass('hide');
+    }else{
+      $('#nama-komponen').attr('readonly',true);
+      $('#ket-belanja').attr('readonly',false);
+      $('#harga-free').addClass('hide');
+      $('#pilih-komponen').removeClass('hide');
+    };
 	$('#id-komponen').val(data['DATA']['KOMPONEN_ID']);
         $('#id-rincian').val(data['DATA']['RINCIAN_ID']);
         $('#kategori-belanja').val(id_komponen).trigger('chosen:updated');

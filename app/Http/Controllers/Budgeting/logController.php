@@ -55,7 +55,7 @@ use App\Model\AKB_BL_Perubahan;
 use App\Model\Rekgiat;
 use App\Model\OutputMaster;
 
-class blController extends Controller
+class logController extends Controller
 {
 	public function __construct(){
         $this->middleware('auth');
@@ -63,8 +63,7 @@ class blController extends Controller
     //SHOW
     public function index($tahun,$status){
 
-        if($status == 'murni') return $this->showMurni($tahun,$status);
-        else return $this->showPerubahan($tahun,$status);
+        return $this->showPerubahan($tahun,$status);
     }
 
     public function showMurni($tahun,$status){
@@ -180,7 +179,7 @@ class blController extends Controller
 
        // $kunci = Kunciperubahan::
 
-        return View('budgeting.belanja-langsung.index_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
+        return View('budgeting.belanja-langsung.log_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
     }
 
     public function showDetail($tahun,$status,$id){
@@ -1106,7 +1105,7 @@ class blController extends Controller
                     'REKENING_KODE' => $data->rekening->REKENING_KODE,
                     'REKENING_NAMA' => $data->rekening->REKENING_NAMA,
                     'KOMPONEN_KODE' => $data->komponen->KOMPONEN_KODE,
-                    'KOMPONEN_NAMA' => ($data->pekerjaan->PEKERJAAN_ID>5?explode('#',$data->RINCIAN_KETERANGAN)[0]:$data->komponen->KOMPONEN_NAMA),
+                    'KOMPONEN_NAMA' => $data->komponen->KOMPONEN_NAMA,
                     'VOL1'          => explode(' ',$koef[0])[0],
                     'SATUAN1'       => $satuan_kesatu,
                     'VOL2'          => $v1,
@@ -1936,7 +1935,7 @@ class blController extends Controller
         }
         
 
-        $get_id      = RincianPerubahan::max('RINCIAN_ID');
+$get_id      = RincianPerubahan::max('RINCIAN_ID');
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7' || Input::get('PEKERJAAN_ID') == '8'){
@@ -1953,9 +1952,7 @@ class blController extends Controller
                     $rincian->RINCIAN_VOLUME                = $vol;
                     $rincian->RINCIAN_KOEFISIEN             = $koef;
                     $rincian->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
-
                     if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7' || Input::get('PEKERJAAN_ID') == '8'){
-
                         $rincian->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
                         $rincian->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                     }else{
@@ -2018,9 +2015,7 @@ class blController extends Controller
                     $rincian->RINCIAN_VOLUME                = $vol;
                     $rincian->RINCIAN_KOEFISIEN             = $koef;
                     $rincian->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
-
                     if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '7' || Input::get('PEKERJAAN_ID') == '8'){
-
                         $rincian->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
                         $rincian->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                     }else{
@@ -2072,9 +2067,7 @@ class blController extends Controller
                 }
             }
         }elseif($tahapan->TAHAPAN_KUNCI_OPD == 1){
-
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7' || Input::get('PEKERJAAN_ID') == '8'){
-
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
 
                if($total+$nowOPD <= $totalOPD){
@@ -2090,9 +2083,7 @@ class blController extends Controller
                     $rincian->RINCIAN_VOLUME                = $vol;
                     $rincian->RINCIAN_KOEFISIEN             = $koef;
                     $rincian->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
-
                     if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7' || Input::get('PEKERJAAN_ID') == '8'){
-
                         $rincian->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
                         $rincian->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                     }else{
@@ -2155,7 +2146,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian->RINCIAN_VOLUME                = $vol;
                     $rincian->RINCIAN_KOEFISIEN             = $koef;
                     $rincian->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
-
                     if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7' || Input::get('PEKERJAAN_ID') == '8'){
                         $rincian->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
                         $rincian->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
@@ -2217,9 +2207,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
             $rincian->RINCIAN_VOLUME                = $vol;
             $rincian->RINCIAN_KOEFISIEN             = $koef;
             $rincian->SUBRINCIAN_ID                 = Input::get('SUBRINCIAN_ID');
-
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7' || Input::get('PEKERJAAN_ID') == '8'){
-
                 $rincian->RINCIAN_KETERANGAN        = Input::get('KOMPONEN_NAMA')."#".Input::get('HARGA');
                 $rincian->RINCIAN_TOTAL             = ( Input::get('HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
             }else{
@@ -3130,9 +3118,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
         $harga = 0;
         if(Input::get('KOMPONEN_ID') == 0) $harga = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->value('RINCIAN_HARGA');
         else $harga      = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');
-        if($harga == 0 && Input::get('PEKERJAAN_ID') > 4){
-            $harga = Input::get('HARGA');
-        }
         $total      = ( $harga * $vol ) + (( Input::get('RINCIAN_PAJAK')*($harga*$vol))/100);
         
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
@@ -3207,9 +3192,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
 
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
-
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6'|| Input::get('PEKERJAAN_ID') == '7'|| Input::get('PEKERJAAN_ID') == '8'){
-
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                 if($total <= $totalBL){
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
@@ -3220,7 +3203,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                             'RINCIAN_PAJAK'                 => Input::get('RINCIAN_PAJAK'),
                             'RINCIAN_VOLUME'                => $vol,
                             'RINCIAN_KOEFISIEN'             => $koef,
-                            'RINCIAN_HARGA'                 => $harga,
                             'RINCIAN_TOTAL'                 => round($total),
                             'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
@@ -3253,9 +3235,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
                     $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
                     $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
-                    if(Input::get('PEKERJAAN_ID')>5){
-                        $rincian_rkp->RINCIAN_HARGA                 = $harga;
-                    }
                     $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -3275,7 +3254,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                             'RINCIAN_VOLUME'                => $vol,
                             'RINCIAN_KOEFISIEN'             => $koef,
                             'RINCIAN_TOTAL'                 => round($total),
-                            'RINCIAN_HARGA'                 => $harga,
                             'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                             'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
@@ -3307,9 +3285,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
                     $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
                     $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
-                    if(Input::get('PEKERJAAN_ID')>5){
-                        $rincian_rkp->RINCIAN_HARGA                 = $harga;
-                    }
                     $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -3321,7 +3296,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
             }
         }elseif($tahapan->TAHAPAN_KUNCI_OPD == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6'|| Input::get('PEKERJAAN_ID') == '7'|| Input::get('PEKERJAAN_ID') == '8'){
-
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                 if($total+$nowOPD <= $totalOPD){
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
@@ -3332,7 +3306,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                             'RINCIAN_PAJAK'                 => Input::get('RINCIAN_PAJAK'),
                             'RINCIAN_VOLUME'                => $vol,
                             'RINCIAN_KOEFISIEN'             => $koef,
-                            'RINCIAN_HARGA'                 => $harga,
                             'RINCIAN_TOTAL'                 => round($total),
                             'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
@@ -3362,7 +3335,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                             'RINCIAN_PAJAK'                 => Input::get('RINCIAN_PAJAK'),
                             'RINCIAN_VOLUME'                => $vol,
                             'RINCIAN_KOEFISIEN'             => $koef,
-                            'RINCIAN_HARGA'                 => $harga,
                             'RINCIAN_TOTAL'                 => round($total),
                             'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                             'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
@@ -3395,9 +3367,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
                     $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
                     $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
-                    if(Input::get('PEKERJAAN_ID')>5){
-                        $rincian_rkp->RINCIAN_HARGA                 = $harga;
-                    }
                     $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
                     $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
                     $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -3417,7 +3386,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     'RINCIAN_VOLUME'                => $vol,
                     'RINCIAN_KOEFISIEN'             => $koef,
                     'RINCIAN_TOTAL'                 => $total,
-                    'RINCIAN_HARGA'                 => $harga,
                     'SUBRINCIAN_ID'                 => Input::get('SUBRINCIAN_ID'),
                     'RINCIAN_KETERANGAN'            => Input::get('RINCIAN_KET'),
                     'PEKERJAAN_ID'                  => Input::get('PEKERJAAN_ID')
@@ -3449,9 +3417,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
             $rincian_rkp->RINCIAN_ID                    = Input::get('RINCIAN_ID');
             $rincian_rkp->RINCIAN_KETERANGAN            = Input::get('RINCIAN_KET');
             $rincian_rkp->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
-            if(Input::get('PEKERJAAN_ID')>5){
-                $rincian_rkp->RINCIAN_HARGA                 = $harga;
-            }
             $rincian_rkp->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
             $rincian_rkp->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
             $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -4021,8 +3986,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
     }    
 
     public function getMurni($tahun,$status,$filter){        
-        if($status == 'murni') return $this->getDataMurni($tahun,$status,$filter);
-        else return $this->getDataPerubahan($tahun,$status,$filter);
+        return $this->getDataPerubahan($tahun,$status,$filter);
     }
 
     public function getDataMurni($tahun,$status,$filter){
@@ -4367,7 +4331,6 @@ $rincian->RINCIAN_ID              = ($get_id+1);
         $kunci      = '';
         $rincian    = '';
         $validasi   = '';
-        $total_realisasi = 0;
         foreach ($data as $data) {
             $urgensi    = Urgensi::where('BL_ID',$data->BL_ID)->first();
           /*  if((Auth::user()->level == 1 or Auth::user()->level == 2) and (
@@ -4476,14 +4439,11 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                                      'RINCIAN_SESUDAH'        =>$totalRincian,
                                      'SELISIH'        =>number_format($data->BL_PAGU-$data->rincian->sum('RINCIAN_TOTAL'),0,'.',','),
                                      'STATUS'         =>$kunci.' Kegiatan<br>'.$rincian.' Rincian<br>'.$validasi.' Validasi'));
-            $total_realisasi += $realisasi;
             $i++;
         }
         $out = array("aaData"=>$view,
                     "pagu_murni"=>number_format($pagu_murni,0,'.',','),
-                    "pagu_realisasi"=>number_format($total_realisasi,0,'.',','),
                     "pagu_perubahan"=>number_format($pagu_perubahan,0,'.',','),
-                    "pagu_rincian"=>number_format($rincian_total_perubahan,0,'.',','),
                     "pagu_selisih"=>number_format($pagu_selisih,0,'.',','),
                     );      
         return Response::JSON($out);

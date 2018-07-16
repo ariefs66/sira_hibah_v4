@@ -57,7 +57,7 @@
                 <div role="tabpanel" class="active tab-pane" id="tab-1">
                   <div class="table-responsive dataTables_wrapper">
                    <table ui-jq="dataTable" ui-options="{
-                        sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/getMurni/0',
+                        sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/log/getMurni/0',
                         aoColumns: [
                           { mData: 'NO',class:'text-center' },
                           { mData: 'KEGIATAN' },
@@ -101,12 +101,10 @@
                     </tbody>  
                     <tfoot>
                       <tr>
-                        <td class="text text-right" colspan="2"><b>Total</td>
-                        <td class="text text-right"><b>Rp. <text id="pagu_murni"></text> </b></td>
-                        <td class="text text-right"><b>Rp. <text id="pagu_realisasi"></text> </b></td>
-                        <td class="text text-right"><b>Rp. <text id="pagu_perubahan"></text> </b></td>
-                        <td class="text text-right"><b>Rp. <text id="pagu_rincian"></text> </b></td>
-                        <td class="text text-right"><b>Rp. <text id="pagu_selisih"></text> </b></td>
+                        <td colspan="2"> </td>
+                        <td colspan="2"><b>Total Pagu Murni : Rp. <text id="pagu_murni"></text> </b></td>
+                        <td colspan="2"><b>Total Pagu @if($status=='pergeseran') Pergeseran @else Perubahan @endif : Rp. <text id="pagu_perubahan"></text> </b></td>
+                        <td><b>Selisih : Rp. <text id="pagu_selisih"></text> </b></td>
                         <td></td>
                       </tr>  
                     </tfoot>                                
@@ -432,7 +430,7 @@ function setStaff(){
       var id  = $('#filter-skpd').val();
       $('#table-index').DataTable().destroy();
       $('#table-index').DataTable({
-        sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/getMurni/"+id,
+        sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/log/getMurni/"+id,
         aoColumns: [
           { mData: 'NO',class:'text-center' },
           { mData: 'KEGIATAN' },
@@ -442,19 +440,9 @@ function setStaff(){
           { mData: 'RINCIAN_SESUDAH' },
           { mData: 'SELISIH' },
           { mData: 'STATUS' }],
-          aoColumnDefs: [ {
-            aTargets: [6],
-            fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
-              if ( sData != '0' ) {
-                $(nTd).css( 'color', 'red' )
-              }
-            }
-          } ],
           initComplete:function(setting,json){
             $("#pagu_murni").html(json.pagu_murni);
-            $("#pagu_realisasi").html(json.pagu_realisasi);
             $("#pagu_perubahan").html(json.pagu_perubahan);
-            $("#pagu_rincian").html(json.pagu_rincian);
             $("#pagu_selisih").html(json.pagu_selisih);
         }
       });  

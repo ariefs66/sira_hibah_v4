@@ -92,9 +92,9 @@ class btlController extends Controller
       else{
         $sum = BTLPerubahan::where('SKPD_ID',Input::get('SKPD'))->where('BTL_TAHUN', $tahun)->sum('BTL_TOTAL');
         $sum = $sum + (Input::get('BTL_VOL') * Input::get('BTL_TOTAL'));
-        if($sum > $pagu){
+        /*if($sum > $pagu){
           return 'Melebihi Pagu!';
-        }
+        }*/
         $btl    = new BTLPerubahan;
         $btl->BTL_TAHUN     = $tahun;
         $btl->SUB_ID        = Input::get('SUB_ID');

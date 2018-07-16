@@ -71,6 +71,12 @@ $view 	.= '<option value="'.$tahun.'/'.$status.'" id="o'.$tahun.$status.'" selec
 					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
 				}
 			}
+			if($data->TAHUN == '2018' && $data->STATUS == 'perubahan'){
+				if($tahun == '2018' && $status == 'perubahan'){
+				} else {
+					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
+				}
+			}
 			 if($data->TAHUN == '2019'){
 				if($tahun == '2019' && $status == 'murni'){
 				} else {
