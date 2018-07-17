@@ -1756,8 +1756,21 @@
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"> <b>Surpluss / (Defisit)</b></td>
-		<td class="border-rincian kanan total"><b>{{number_format(abs($surplus_murni),0,',','.')}}</b></td>
-		<td class="border-rincian kanan total"><b>{{number_format(abs($surplus_perubahan),0,',','.')}}</b></td>
+		<td class="border-rincian kanan total"><b>
+		@if($surplus_murni < 0)	
+		({{number_format(abs($surplus_murni),0,',','.')}})
+		@else
+		{{number_format($surplus_murni,0,',','.')}}
+		@endif
+	    </b></td>
+		<td class="border-rincian kanan total"><b>
+		@if($surplus_perubahan < 0)	
+		({{number_format(abs($surplus_perubahan),0,',','.')}})
+		@else
+		{{number_format($surplus_perubahan,0,',','.')}}
+		@endif	
+		
+	    </b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(abs($surplus_perubahan-$surplus_murni),0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(abs($surplus_perubahan-$surplus_murni*100/$surplus_murni),2,',','.') }}%</b></td>
 		<td class="border-rincian kanan "></td>
