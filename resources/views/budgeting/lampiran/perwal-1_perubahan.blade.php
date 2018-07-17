@@ -139,7 +139,10 @@
 	@foreach($pendapatanp as $pen)
 		@php $totp += $pen->PENDAPATAN_TOTAL; @endphp
 	@endforeach
-	@php $tots=$totp-$tot; @endphp
+	@php $tots=$totp-$tot;
+	$total_pendapatan_kota_murni =  $tot;
+	$total_pendapatan_kota_perubahan =  $totp;
+	@endphp
 	<tr>
 		<td class="border-rincian"><b>4</b></td>
 		<td class="border-rincian"><b>PENDAPATAN</b></td>
@@ -1664,6 +1667,12 @@
 		@endif
 		@endforeach
 		@endforeach
+
+		@php 
+			$total_belanja_kota_murni 	  = $jumBelanja_murni;
+			$total_belanja_kota_perubahan = $jumBelanja;
+		@endphp
+
 		<tr>
 		<td class="border-rincian"><b><br>5</b></td>
 		<td class="border-rincian"><b><br>BELANJA</b></td>
@@ -1738,31 +1747,84 @@
 	@endif
 	@endforeach
 
+
+	@php 
+		$surplus_murni     = $total_pendapatan_kota_murni - $total_belanja_kota_murni;
+		$surplus_perubahan = $total_pendapatan_kota_perubahan - $total_belanja_kota_perubahan;
+	@endphp
+
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"> <b>Surpluss / (Defisit)</b></td>
-		<td class="border-rincian kanan total"><b>(415.333.370.810)</b></td>
-		<td class="border-rincian kanan total"><b>(415.333.370.810)</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,2,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>
+		@if($surplus_murni < 0)	
+		({{number_format(abs($surplus_murni),0,',','.')}})
+		@else
+		{{number_format($surplus_murni,0,',','.')}}
+		@endif
+	    </b></td>
+		
+		<td class="border-rincian kanan total"><b>
+		@if($surplus_perubahan < 0)	
+		({{number_format(abs($surplus_perubahan),0,',','.')}})
+		@else
+		{{number_format($surplus_perubahan,0,',','.')}}
+		@endif		
+	    </b></td>
+
+		<td class="border-rincian kanan total"><b>
+		@if($surplus_perubahan-$surplus_murni < 0)	
+		({{number_format(abs($surplus_perubahan-$surplus_murni),0,',','.')}})
+		@else
+		{{number_format($surplus_perubahan-$surplus_murni,0,',','.')}}
+		@endif
+		</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(abs(($surplus_perubahan-$surplus_murni)*100/$surplus_murni),2,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
+
+	<!-- pembiayaan murni -->
+	@php $total_pembiayaan1=0; @endphp
+	@foreach($pmb1 as $pm1)
+		@php $total_pembiayaan1 = $pm1->PEMBIAYAAN_TOTAL; @endphp
+	@endforeach	
+
+	@php $total_pembiayaan2=0; @endphp
+	@foreach($pmb2 as $pm2)
+		@php $total_pembiayaan2 = $pm2->PEMBIAYAAN_TOTAL; @endphp
+	@endforeach	
+
+	@php $total_pembiayaan = $total_pembiayaan1-$total_pembiayaan2; @endphp
+
+
+	<!-- pembiayaan perubahan -->
+	@php $total_pembiayaan1_p=0; @endphp 
+	@foreach($pmb1p as $pm1)
+		@php $total_pembiayaan1_p = $pm1->PEMBIAYAAN_TOTAL; @endphp
+	@endforeach	
+
+	@php $total_pembiayaan2_p=0; @endphp
+	@foreach($pmb2p as $pm2)
+		@php $total_pembiayaan2_p = $pm2->PEMBIAYAAN_TOTAL; @endphp
+	@endforeach	
+
+	@php $total_pembiayaan_p = $total_pembiayaan1_p-$total_pembiayaan2_p; @endphp
 
 
 	<tr>
 		<td class="border-rincian">6</td>
 		<td class="border-rincian"> <b>PEMBIAYAAN DAERAH</b></td>
-		<td class="border-rincian kanan total"><b>787.195.062.912</b></td>
-		<td class="border-rincian kanan total"><b>787.195.062.912</b></td>
-		<td class="border-rincian kanan total"><b>0</b></td>
-		<td class="border-rincian kanan total"><b>0.00</b></td>
+		<td class="border-rincian kanan total"><b></b></td>
+		<td class="border-rincian kanan total"><b></b></td>
+		<td class="border-rincian kanan total"><b></b></td>
+		<td class="border-rincian kanan total"><b></b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 	<tr>
 		<td class="border-rincian">6.1</td>
 		<td class="border-rincian"> <b>&nbsp;PENERIMAAN PEMBIAYAAN DAERAH</b></td>
-		<td class="border-rincian kanan total"><b>787.195.062.912</b></td>
-		<td class="border-rincian kanan total"><b>787.195.062.912</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($total_pembiayaan1,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($total_pembiayaan1_p,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>0</b></td>
 		<td class="border-rincian kanan total"><b>0.00</b></td>
 		<td class="border-rincian kanan "></td>
@@ -1773,7 +1835,10 @@
 		<td class="border-rincian">{{$pm1->rekening->REKENING_KODE}}</td>
 		<td class="border-rincian"> &nbsp; &nbsp; &nbsp; {{$pm1->rekening->REKENING_NAMA}}</td>
 		<td class="border-rincian kanan total">{{ number_format($pm1->PEMBIAYAAN_TOTAL,0,',','.') }}</td>
-		<td class="border-rincian kanan total">{{ number_format($pm1->PEMBIAYAAN_TOTAL,0,',','.') }}</td>
+		<td class="border-rincian kanan total">
+			<!-- masih yang murni -->
+			{{ number_format($pm1->PEMBIAYAAN_TOTAL,0,',','.') }}
+		</td>
 		<td class="border-rincian kanan total">0</td>
 		<td class="border-rincian kanan total">0.00</td>
 		<td class="border-rincian kanan "></td>
@@ -1784,8 +1849,10 @@
 	<tr>
 		<td class="border-rincian">6.2</td>
 		<td class="border-rincian"> <b>&nbsp;PENGELUARAN PEMBIAYAAN DAERAH</b></td>
-		<td class="border-rincian kanan total"><b>220.000.000.000</b></td>
-		<td class="border-rincian kanan total"><b>220.000.000.000</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($total_pembiayaan2,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>
+		{{ number_format($total_pembiayaan2_p,0,',','.') }}
+		</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(0,2,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
@@ -1821,10 +1888,11 @@
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"> <b>PEMBIAYAAN NETTO</b></td>
-		<td class="border-rincian kanan total"><b>567.195.062.912</b></td>
-		<td class="border-rincian kanan total"><b>567.195.062.912</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,2,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($total_pembiayaan,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($total_pembiayaan_p,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format($total_pembiayaan_p-$total_pembiayaan,0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(
+		($total_pembiayaan_p-$total_pembiayaan)*100/$total_pembiayaan,2,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 
@@ -1835,20 +1903,41 @@
 		<td class="border-rincian kanan total"></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
+	@php 
+		$netto_murni     = $surplus_murni+$total_pembiayaan; 
+		$netto_perubahan = $surplus_perubahan+$total_pembiayaan_p; 
+	@endphp
 	<tr>
 		<td class="border-rincian"></td> 
 		<td class="border-rincian kanan"> <b>SISA LEBIH PEMBIAYAAN ANGGARAN TAHUN BERKENAAN</b></td>
 		<td class="border-rincian kanan total"><b>
-		151.861.692.102
+		@if($netto_murni < 0)	
+		({{number_format(abs($netto_murni),0,',','.')}})
+		@else
+		{{number_format($netto_murni,0,',','.')}}
+		@endif
 		</b></td>
 		<td class="border-rincian kanan total"><b>
-		74.664.395.140,0
+		@if($netto_perubahan < 0)	
+		({{number_format(abs($netto_perubahan),0,',','.')}})
+		@else
+		{{number_format($netto_perubahan,0,',','.')}}
+		@endif
 		</b></td>
 		<td class="border-rincian kanan total"><b>
-		(77.197.296.962)
+		@if($netto_perubahan-$netto_murni < 0)	
+		({{number_format(abs($netto_perubahan-$netto_murni),0,',','.')}})
+		@else
+		{{number_format($netto_perubahan,0,',','.')}}
+		@endif
 		</b></td>
 		<td class="border-rincian kanan total"><b>
-		{{number_format(77197296962/151861692102*100,2,',','.')}}
+		@php $netto_selisih = ($netto_perubahan-$netto_murni)*100/$netto_murni; @endphp
+		@if($netto_selisih < 0)	
+		({{number_format(abs($netto_selisih),0,',','.')}})
+		@else
+		{{number_format($netto_selisih,0,',','.')}}
+		@endif
 		</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
