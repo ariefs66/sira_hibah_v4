@@ -139,7 +139,10 @@
 	@foreach($pendapatanp as $pen)
 		@php $totp += $pen->PENDAPATAN_TOTAL; @endphp
 	@endforeach
-	@php $tots=$totp-$tot; @endphp
+	@php $tots=$totp-$tot;
+	$total_pendapatan_kota_murni =  $tot;
+	$total_pendapatan_kota_perubahan =  $totp;
+	@endphp
 	<tr>
 		<td class="border-rincian"><b>4</b></td>
 		<td class="border-rincian"><b>PENDAPATAN</b></td>
@@ -1664,6 +1667,12 @@
 		@endif
 		@endforeach
 		@endforeach
+
+		@php 
+			$total_belanja_kota_murni 	  = $jumBelanja_murni;
+			$total_belanja_kota_perubahan = $jumBelanja;
+		@endphp
+
 		<tr>
 		<td class="border-rincian"><b><br>5</b></td>
 		<td class="border-rincian"><b><br>BELANJA</b></td>
@@ -1741,13 +1750,12 @@
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"> <b>Surpluss / (Defisit)</b></td>
-		<td class="border-rincian kanan total"><b>(415.333.370.810)</b></td>
-		<td class="border-rincian kanan total"><b>(415.333.370.810)</b></td>
+		<td class="border-rincian kanan total"><b>{{number_format($total_pendapatan_kota_murni - $total_belanja_kota_murni,0,',','.')}}</b></td>
+		<td class="border-rincian kanan total"><b>{{number_format($total_pendapatan_kota_perubahan - $total_belanja_kota_perubahan,0,',','.')}}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
 		<td class="border-rincian kanan total"><b>{{ number_format(0,2,',','.') }}</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
-
 
 	<tr>
 		<td class="border-rincian">6</td>
