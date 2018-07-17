@@ -1747,13 +1747,19 @@
 	@endif
 	@endforeach
 
+
+	@php 
+		$surplus_murni     = $total_pendapatan_kota_murni - $total_belanja_kota_murni;
+		$surplus_perubahan = $total_pendapatan_kota_perubahan - $total_belanja_kota_perubahan;
+	@endphp
+
 	<tr>
 		<td class="border-rincian"></td>
 		<td class="border-rincian kanan"> <b>Surpluss / (Defisit)</b></td>
-		<td class="border-rincian kanan total"><b>{{number_format($total_pendapatan_kota_murni - $total_belanja_kota_murni,0,',','.')}}</b></td>
-		<td class="border-rincian kanan total"><b>{{number_format($total_pendapatan_kota_perubahan - $total_belanja_kota_perubahan,0,',','.')}}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,0,',','.') }}</b></td>
-		<td class="border-rincian kanan total"><b>{{ number_format(0,2,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{number_format(abs($surplus_murni),0,',','.')}}</b></td>
+		<td class="border-rincian kanan total"><b>{{number_format(abs($surplus_perubahan),0,',','.')}}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(abs($surplus_perubahan-$surplus_murni),0,',','.') }}</b></td>
+		<td class="border-rincian kanan total"><b>{{ number_format(abs($surplus_perubahan-$surplus_murni*100/$surplus_murni),2,',','.') }}%</b></td>
 		<td class="border-rincian kanan "></td>
 	</tr>
 
