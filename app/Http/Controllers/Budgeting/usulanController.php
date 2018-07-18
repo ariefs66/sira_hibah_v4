@@ -37,6 +37,7 @@ class usulanController extends Controller
         $idgiat         = Kamus::where('KAMUS_SKPD',$skpd)->select('KAMUS_KEGIATAN')->get()->toArray();
         $kegiatan       = Kegiatan::whereIn('KEGIATAN_ID',$idgiat)->get(); 
     	return View('budgeting.usulan.index',compact('tahun','status','kamus','kegiatan','skpd'));
+        //test usulan
     }
 
     public function getMusrenbang($tahun,$status){
