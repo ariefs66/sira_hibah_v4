@@ -626,7 +626,7 @@ class blController extends Controller
             if($data->subrincian) $sub = $data->subrincian->SUBRINCIAN_NAMA;
             else $sub = '-';
             
-            if($data->PEKERJAAN_ID == '4' || $data->PEKERJAAN_ID == '5' || $data->PEKERJAAN_ID == '6'){
+            if($data->PEKERJAAN_ID == '4' || $data->PEKERJAAN_ID == '5' || $data->PEKERJAAN_ID == '6' || $data->PEKERJAAN_ID == '7' || $data->PEKERJAAN_ID == '8'){
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.explode("#", $data->RINCIAN_KETERANGAN)[0].'</p>';
                 $hargakomponen  = '<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
                 
