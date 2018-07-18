@@ -59,7 +59,7 @@ class mainController extends Controller
 	}
 
 	public function getTABudgeting($tahun,$status){
-		$data  		= TahunAnggaran::all()->orderBy('TAHUN');
+		$data  		= TahunAnggaran::orderBy('TAHUN')->get();
 		$view 		= '';
 $view 	.= '<option value="'.$tahun.'/'.$status.'" id="o'.$tahun.$status.'" selected>'.$tahun.'-'.$status.'</option>';
 		
