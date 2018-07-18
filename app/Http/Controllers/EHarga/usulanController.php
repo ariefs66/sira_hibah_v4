@@ -243,6 +243,7 @@ class usulanController extends Controller
                 }
             }
         }
+	$display = $data->get()->count();
         $data = $data->get();
     	$i 		= $start+1;
     	$view 	= array();
@@ -356,8 +357,7 @@ class usulanController extends Controller
             $i++;
         }
         
-        $display = $data->count();
-        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => intval($count),"aaData"=>$view); 
+        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => intval($display),"aaData"=>$view); 
         return Response::JSON($out);
     }
 
