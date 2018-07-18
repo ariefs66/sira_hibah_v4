@@ -468,8 +468,34 @@
 				<td class="kanan border-rincian "> 0 %</td>
 			</tr>
 			@endif
+
+			@foreach($pendapatan131 as $pen131)
+			 	@if($pen131->REKENING_KODE == $pen13->REKENING_KODE )
+				<tr>
+				<td class="border-rincian kiri "></td>
+				<td class="border-rincian "> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  - {{$pen131->PENDAPATAN_NAMA}} </td>
+				<td class="border-rincian tengah ">{{$vol}}</td>
+				<td class="border-rincian tengah">{{$satuan}}</td>
+				<td class="border-rincian kanan">{{ number_format($pen131->PENDAPATAN_TOTAL,0,',','.') }}</td>
+				<td class="kanan border-rincian "> {{ number_format($pen131->PENDAPATAN_TOTAL,0,',','.') }} </td>
+				<td class="border-rincian tengah ">{{$vol}}</td>
+				<td class="border-rincian tengah">{{$satuan}}</td>
+				<td class="border-rincian kanan">{{ number_format($pen131->PENDAPATAN_TOTAL,0,',','.') }}</td>
+				<td class="kanan border-rincian "> {{ number_format($pen131->PENDAPATAN_TOTAL,0,',','.') }} </td>
+				<td class="kanan border-rincian "> {{ number_format(0,0,',','.') }} </td>
+				<td class="kanan border-rincian "> 0 %</td>
+				</tr>
+				@endif
+				
+			@endforeach
+			@break
+			
 		@endforeach
 		@endforeach
+
+
+		
+
 		<tr>
 			<td class="border-rincian kiri ">4.1.4</td>
 			<td class="border-rincian "> &nbsp; &nbsp; &nbsp; Lain-lain Pendapatan Asli Daerah yang Sah </td>

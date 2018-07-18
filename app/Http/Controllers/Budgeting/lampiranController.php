@@ -5536,6 +5536,29 @@ class lampiranController extends Controller
                         ->selectRaw(' "REKENING_KODE", "REKENING_NAMA", sum("PENDAPATAN_TOTAL") as total ')
                         ->get(); 
 
+        $pendapatan131 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('REKENING_KODE','like','4.1.3.01.01%')         
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)
+                        ->orderBy("PENDAPATAN_ID",'desc')
+                        ->get(); 
+
+        $pendapatan133 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('REKENING_KODE','like','4.1.3.01.03%')         
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)
+                        ->orderBy("PENDAPATAN_ID",'desc')
+                        ->get();
+
+        $pendapatan134 = Pendapatan::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','DAT_PENDAPATAN.REKENING_ID')
+                        ->where('REKENING_KODE','like','4.1.3.01.04%')         
+                        ->where('PENDAPATAN_TAHUN',$tahun)
+                        ->where('DAT_PENDAPATAN.SKPD_ID',$s)
+                        ->orderBy("PENDAPATAN_ID",'desc')
+                        ->get();                                 
+
+
+
         /*pergeseran atau perubahan*/     
         $pendapatan_p = PendapatanPerubahan::where('PENDAPATAN_TAHUN',$tahun)
                         ->where('DAT_PENDAPATAN_PERUBAHAN.SKPD_ID',$s)->sum('PENDAPATAN_TOTAL');
@@ -5661,7 +5684,7 @@ class lampiranController extends Controller
                 'pendapatan'=>$pendapatan,'pendapatan1'=>$pendapatan1,'pendapatan11'=>$pendapatan11,'pendapatan12'=>$pendapatan12,'pendapatan13'=>$pendapatan13,'pendapatan14'=>$pendapatan14,'pendapatan2'=>$pendapatan2,'pendapatan21'=>$pendapatan21,'pendapatan22'=>$pendapatan22,'pendapatan23'=>$pendapatan23,'pendapatan3'=>$pendapatan3,'pendapatan31'=>$pendapatan31,'pendapatan33'=>$pendapatan33,'pendapatan34'=>$pendapatan34,'pendapatan35'=>$pendapatan35,
                 'pendapatan_p'=>$pendapatan_p,'pendapatan1_p'=>$pendapatan1_p,'pendapatan11_p'=>$pendapatan11_p,'pendapatan12_p'=>$pendapatan12_p,'pendapatan13_p'=>$pendapatan13_p,'pendapatan14_p'=>$pendapatan14_p,'pendapatan2_p'=>$pendapatan2_p,'pendapatan21_p'=>$pendapatan21_p,'pendapatan22_p'=>$pendapatan22_p,'pendapatan23_p'=>$pendapatan23_p,'pendapatan3_p'=>$pendapatan3_p,'pendapatan31_p'=>$pendapatan31_p,'pendapatan33_p'=>$pendapatan33_p,'pendapatan34_p'=>$pendapatan34_p,'pendapatan35_p'=>$pendapatan35_p,
                  'vol'=>$vol,'satuan'=>$satuan,
-                    'rek'=>$rek,'urusan'=>$urusan ]);
+                    'rek'=>$rek,'urusan'=>$urusan, 'pendapatan131'=>$pendapatan131, 'pendapatan133'=>$pendapatan133,'pendapatan134'=>$pendapatan134 ]);
     }
 
 
