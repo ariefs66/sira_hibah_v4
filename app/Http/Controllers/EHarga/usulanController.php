@@ -245,7 +245,8 @@ class usulanController extends Controller
         }
 	$display = $data->get()->count();
         $data = $data->get();
-    	$i 		= $start+1;
+    	$display = $data->count();
+        $i 		= $start+1;
     	$view 	= array();
 
     	foreach ($data as $data) {
@@ -321,7 +322,8 @@ class usulanController extends Controller
                 $opsi   .= '<a onclick="return detail(\''.$data->USULAN_ID.'\')"><i class="mi-edit"></i></a>
                                 <a onclick="return showSuggest(\''.$data->USULAN_ID.'\')"><i class="icon-bdg_announce"></i></a>
                             </div>';
-            }elseif(Auth::user()->level == 2 or substr(Auth::user()->mod,0,1) == 1 or substr(Auth::user()->mod,5,1) == 1){
+            }elseif(Auth::user()->level == 2 or substr(Auth::user()->mod,0,1) == 1 ){
+                //or substr(Auth::user()->mod,5,1) == 1
                 $opsi   = '<div class="action visible">
                                 <a onclick="return tolak(\''.$data->USULAN_ID.'\')"><i class="glyphicon glyphicon-remove"></i></a>
                                 <a onclick="return acc(\''.$data->USULAN_ID.'\')"><i class="glyphicon glyphicon-ok"></i></a>
@@ -366,46 +368,48 @@ class usulanController extends Controller
         $data='';
         $user=array();
         if(substr(Auth::user()->mod,3,1) == 1){
-            $skpd   = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
-            if($skpd){
-                if($skpd->skpd->SKPD_JENIS == 1){
-                    $pd     = SKPD::where('SKPD_JENIS', 2)->get();
-                    $i = 0;
-                    foreach($pd as $pd){
-                        $id     = $pd->SKPD_ID;
-                        $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
-                                                ->whereHas('user',function($q){
-                                                    $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
-                                                })->value('USER_ID');
-                        $i++;
-                    }
-                    $user[$i] = Auth::user()->id;
-                }elseif($skpd->skpd->SKPD_JENIS == 3){
-                    $pd     = SKPD::where('SKPD_JENIS', 4)->get();
-                    $i = 0;
-                    foreach($pd as $pd){
-                        $id     = $pd->SKPD_ID;
-                        $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
-                                                ->whereHas('user',function($q){
-                                                    $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
-                                                })->value('USER_ID');
-                        $i++;
-                    }
-                    $user[$i] = Auth::user()->id;
+            $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
+            $datauser  = UserBudget::whereHas('user',function($q){
+                            $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
+                        })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
+            if($skpd->skpd->SKPD_JENIS == 1){
+                $pd     = SKPD::where('SKPD_JENIS', 2)->get();
+                $i = 0;
+                foreach($pd as $pd){
+                    $id     = $pd->SKPD_ID;
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
+                                            ->whereHas('user',function($q){
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
+                                            })->value('USER_ID');
+                    $i++;
                 }
-                else{
-                    
+                $user[$i] = $datauser;
+            }elseif($skpd->skpd->SKPD_JENIS == 3){
+                $pd     = SKPD::where('SKPD_JENIS', 4)->get();
+                $i = 0;
+                foreach($pd as $pd){
+                    $id     = $pd->SKPD_ID;
+                    $user[$i]   = UserBudget::where('SKPD_ID',$id)->where('TAHUN',$tahun)
+                                            ->whereHas('user',function($q){
+                                                $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
+                                            })->value('USER_ID');
+                    $i++;
                 }
+                $user[$i] = $datauser;
+            }elseif($skpd->skpd->SKPD_JENIS == 2){
+                $user[0]    = null; 
             }else{
-                $user[0]    = Auth::user()->id;
+                $user[0]    = $datauser;
             }
-            
-            $data   = UsulanKomponen::whereIn('USER_CREATED',$user)
+            \DB::enableQueryLog();
+            $data   = UsulanKomponen::whereIn('USER_CREATED',[80])
                                     ->where('USULAN_POSISI',1)
                                     ->where('USULAN_STATUS',0)
                                     ->where('USULAN_TAHUN',$tahun)
                                     ->orderBy('USULAN_ID')                                
                                     ->get();
+            //var_dump($user);
+              //                      dd(\DB::getQueryLog());
         }
         elseif(substr(Auth::user()->mod,4,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',7)
@@ -452,6 +456,7 @@ class usulanController extends Controller
        // dd($data);
         $i      = 1;
         $view   = array();
+        $display = $data->count();
         foreach ($data as $data) {
             if(substr(Auth::user()->mod, 3,1) == 1){
                 $opsi   = '<div class="action visible">
@@ -499,7 +504,7 @@ class usulanController extends Controller
                                      'HARGA'    =>number_format($data->USULAN_HARGA,0,'.',',').' / '.$data->USULAN_SATUAN));
             $i++;
         }
-        $out = array("aaData"=>$view);      
+        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => intval($display),"aaData"=>$view);
         return Response::JSON($out);
     }
 
