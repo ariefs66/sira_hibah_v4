@@ -671,20 +671,56 @@
     </div>          
     <hr class="m-t-xl">
     <div class="form-group" id="koef4">
-      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian SKPD</label>          
-      <div class="col-sm-3">
-        <input type="text" id="rincian-skpd" class="form-control" readonly="">      
-        <input type="hidden" id="rincian-skpd_" class="form-control" readonly="">      
-      </div> 
       <label for="no_spp" class="col-md-1">Pagu SKPD</label>          
       <div class="col-sm-3">
         <input type="text" id="pagu-skpd" class="form-control" readonly="">      
         <input type="hidden" id="pagu-skpd_" class="form-control" readonly="">      
       </div>
-      <label for="no_spp" class="col-md-1">Sisa Anggaran</label>          
+      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian SKPD</label>          
+      <div class="col-sm-3">
+        <input type="text" id="rincian-skpd" class="form-control" readonly="">      
+        <input type="hidden" id="rincian-skpd_" class="form-control" readonly="">      
+      </div> 
+      <label for="no_spp" class="col-md-1">Selisih</label>          
       <div class="col-sm-3">
         <input type="text" id="sisa-skpd" class="form-control" readonly="">      
         <input type="hidden" id="sisa-skpd_" class="form-control" readonly="">      
+      </div> 
+    </div>
+    <hr class="m-t-xl">
+    <div class="form-group" id="koef5">
+      <label for="no_spp" class="col-md-1">Pagu Kegiatan</label>          
+      <div class="col-sm-3">
+        <input type="text" id="pagu-kegiatan" class="form-control" readonly="">      
+        <input type="hidden" id="pagu-kegiatan_" class="form-control" readonly="">      
+      </div>
+      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian Kegiatan</label>          
+      <div class="col-sm-3">
+        <input type="text" id="rincian-kegiatan" class="form-control" readonly="">      
+        <input type="hidden" id="rincian-kegiatan_" class="form-control" readonly="">      
+      </div> 
+      <label for="no_spp" class="col-md-1">Selisih</label>          
+      <div class="col-sm-3">
+        <input type="text" id="sisa-kegiatan" class="form-control" readonly="">      
+        <input type="hidden" id="sisa-kegiatan_" class="form-control" readonly="">      
+      </div> 
+    </div>
+    <hr class="m-t-xl">
+    <div class="form-group" id="koef6">
+      <label for="no_spp" class="col-md-1">Total Rekening</label>          
+      <div class="col-sm-3">
+        <input type="text" id="pagu-realisasi" class="form-control" readonly="">      
+        <input type="hidden" id="pagu-realisasi_" class="form-control" readonly="">      
+      </div>
+      <label for="no_spp" class="col-md-1 m-t-n-xxl">Total Realisasi</label>          
+      <div class="col-sm-3">
+        <input type="text" id="rincian-realisasi" class="form-control" readonly="">      
+        <input type="hidden" id="rincian-realisasi_" class="form-control" readonly="">      
+      </div> 
+      <label for="no_spp" class="col-md-1">Selisih</label>          
+      <div class="col-sm-3">
+        <input type="text" id="sisa-realisasi" class="form-control" readonly="">      
+        <input type="hidden" id="sisa-realisasi_" class="form-control" readonly="">      
       </div> 
     </div>
     <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Simpan Rincian</a>
@@ -1102,6 +1138,7 @@
     });
     $('.overlay').fadeIn('fast',function(){
       $('.input-rincian').animate({'right':'0'},"linear");  
+        interval = setInterval(function(){getpagu();}, 1000);
       $("html, body").animate({ scrollTop: 0 }, "slow");
     });
 
@@ -1299,8 +1336,14 @@
           if(vol3 == "") vol3 = 0;
           if(vol4 == "") vol4 = 0;
           if(harga == "") harga = 0;
-          rincian   = msg['rincian'];
-          pagu      = msg['pagu'];
+          rincian   = msg['skpdtotal'];
+          pagu      = msg['skpdpagu'];
+          kegpagu   = msg['kegpagu'];
+          kegtotal      = msg['kegtotal'];
+          kegsisa      = msg['kegsisa'];
+          rekpagu   = msg['rekpagu'];
+          rekrl      = msg['rektotal'];
+          reksisa      = msg['reksisa'];
           total1     = parseInt(vol1) * parseInt(harga);
           total2     = parseInt(vol2) * parseInt(harga);
           total3     = parseInt(vol3) * parseInt(harga);
@@ -1308,15 +1351,27 @@
           total      = total1 + total2 + total3 + total4;
           anggaran  = parseInt(rincian)+ parseInt(total);
           sisa      = parseInt(pagu) - parseInt(anggaran);
-          console.log(rincian);
-          console.log(total);
-          console.log(pagu);
+          //console.log(rincian);
+          //console.log(total);
+          //console.log(pagu);
           $('#rincian-skpd').val(anggaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
           $('#pagu-skpd').val(pagu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
           $('#sisa-skpd').val(sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
           $('#rincian-skpd_').val(anggaran);
           $('#pagu-skpd_').val(pagu);
-          $('#sisa-skpd_').val(sisa);          
+          $('#sisa-skpd_').val(sisa); 
+          $('#rincian-kegiatan').val(kegtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          $('#pagu-kegiatan').val(kegpagu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          $('#sisa-kegiatan').val(kegsisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          $('#rincian-kegiatan_').val(kegtotal);
+          $('#pagu-kegiatan_').val(kegpagu);
+          $('#sisa-kegiatan_').val(kegsisa);
+          $('#rincian-realisasi').val(rekrl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          $('#pagu-realisasi').val(rekpagu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          $('#sisa-realisasi').val(reksisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          $('#rincian-realisasi_').val(rekrl);
+          $('#pagu-realisasi_').val(rekpagu);
+          $('#sisa-realisasi_').val(reksisa); 
         }     
       });
   }
