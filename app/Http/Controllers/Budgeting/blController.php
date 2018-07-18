@@ -1005,7 +1005,7 @@ class blController extends Controller
 
             $getAkb = AKB_BL_Perubahan::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
 
-            if(( $data->bl->kunci->KUNCI_RINCIAN == 1  and Auth::user()->active == 1  and Auth::user()->level == 2) or Auth::user()->level == 8 ){
+            if(( $data->bl->kunci->KUNCI_RINCIAN == 1  and Auth::user()->active == 10  and Auth::user()->level == 2) or Auth::user()->level == 8 ){
                 if(empty($getAkb) ){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
