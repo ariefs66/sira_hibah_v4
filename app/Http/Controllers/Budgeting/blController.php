@@ -4795,26 +4795,40 @@ $rincian->RINCIAN_ID              = ($get_id+1);
         foreach($data as $data){
             $sebelum    = Rincian::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->sum('RINCIAN_TOTAL');
             $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->sum('REALISASI_TOTAL');
+
+            $aksi = '<div class="action visible pull-right">
+            <a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->REKENING_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
+            $aksi       .= '
+            <a onclick="return showKomponen(\''.$data->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
+
             array_push($view, array('KODE'      => $data->rekening->REKENING_KODE,
                                     'URAIAN'    => $data->rekening->REKENING_NAMA,
                                     'CLASS'   => ($realisasi>$data->total?1:0),
                                     'SEBELUM'   => number_format($sebelum,0,'.',','),
                                     'REALISASI' => number_format($realisasi,0,'.',','),
                                     'SELISIH'   => number_format($data->total - $realisasi,0,'.',','),
-                                    'SESUDAH'   => number_format($data->total,0,'.',',')));
+                                    'SESUDAH'   => number_format($data->total,0,'.',','),
+                                    'RIVIEW'   => $aksi
+                                ));
             $total['SEBELUM'] = $total['SEBELUM'] + $sebelum;
             $total['SESUDAH'] = $total['SESUDAH'] + $data->total;
             $total['REALISASI'] = $total['REALISASI'] + $realisasi;
         }
         foreach($data_ as $data_){
-            $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data_->REKENING_ID)->sum('REALISASI_TOTAL');            
+            $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data_->REKENING_ID)->sum('REALISASI_TOTAL');
+            
+            $aksi = '<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->REKENING_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
+            $aksi       .= '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
+
             array_push($view, array('KODE'      => $data_->rekening->REKENING_KODE,
                                     'URAIAN'    => $data_->rekening->REKENING_NAMA,
                                     'CLASS'   => ($realisasi>$data->total?1:0),
                                     'SEBELUM'   => number_format($data_->total,0,'.',','),
                                     'REALISASI' => number_format($realisasi,0,'.',','),
                                     'SELISIH'   => number_format(0 - $realisasi,0,'.',','),                                    
-                                    'SESUDAH'   => number_format(0,0,'.',',')));
+                                    'SESUDAH'   => number_format(0,0,'.',','),
+                                    'RIVIEW'   => $aksi
+                                ));
             $total['SEBELUM'] = $total['SEBELUM'] + $data_->total;
             $total['REALISASI'] = $total['REALISASI'] + $realisasi;
         }

@@ -186,6 +186,7 @@
                            { mData: 'SESUDAH',class:'text text-right' },
                            { mData: 'REALISASI',class:'text text-right' },
                            { mData: 'SELISIH',class:'text text-right' },
+                           { mData: 'RIVIEW',class:'text text-right' },
                            { mData: 'CLASS',class:'hide' }],
                            aoColumnDefs: [ {
                               aTargets: [6],
@@ -210,10 +211,11 @@
                             <th class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif<br>(4)</th>                                      
                             <th class="text text-center">REALISASI<br>(5)</th>                                      
                             <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>    
+                            <th class="text text-center">Riview<br></th>    
                             <th class="hide">Warna<br>(0)</th>                                  
                           </tr>
                           <tr>
-                            <th colspan="7" class="th_search">
+                            <th colspan="8" class="th_search">
                               <i class="icon-bdg_search"></i>
                               <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                             </th>
@@ -839,6 +841,72 @@
 </div>
 <!--END EDIT MUSRENBANG-->
 
+
+<div class="overlay"></div>
+<div class="bg-white wrapper-lg input-sidebar input-riview">
+<a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
+    <form id="form-prioritas" class="form-horizontal">
+      <div class="input-wrapper">
+        <h5 id="judul-prioritas">Masukan Riview</h5>
+          
+
+          <div class="form-group">
+            <label for="nama_program_prioritas" class="col-md-3">Tahun Program</label>          
+            <div class="col-sm-9">        
+              <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">        
+              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="{{$tahun}}" disabled> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_program_prioritas" class="col-md-3">Kode Program</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" readonly placeholder="Kode Program Otomatis Melanjutkan Kode Terakhir" name="kode_program_prioritas" id="kode_program_prioritas" value="" disabled> 
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="nama_program" class="col-md-3">Nama Program</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" readonly placeholder="Masukan Nama Program" name="nama_program" id="nama_program_prioritas" value=""> 
+            </div> 
+          </div>
+
+          <hr class="m-t-xl">
+         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPrioritas()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+      </div>
+    </form>
+  </div>
+ </div>
+
+ <div class="set-output modal fade " id="set-output-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white modal-lg">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <h5 class="inline font-semibold text-orange m-n text16 ">Daftar Komponen</h5>
+      </div>        
+      <div class="table-responsive">
+        <table class="table table-popup table-striped b-t b-b table-output" id="table-output">
+          <thead>
+            <tr>
+              <th width="1%">Rekening</th>
+              <th>Komponen</th>
+              <th width="10%">Paket Pekerjaan</th>  
+              <th width="10%">Volume</th> 
+              <th width="10%">Harga</th> 
+              <th width="10%">Pajak</th> 
+              <th width="10%">Total</th>                         
+              <th width="1%">#</th>                          
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 @endsection
@@ -1414,5 +1482,50 @@
     $('#rincian-skpd').val(anggaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     $('#sisa-skpd').val(sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")); 
   }
+
+  function inputRiview(id) {
+    $('#judul-prioritas').text('Form Keterangan Riviewer');        
+    $.ajax({
+      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
+      type: "GET",
+      success: function(msg){
+        /*$('select#urusan_prioritas').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
+        $('#id_program_prioritas').val(msg['data'][0]['PROGRAM_ID']);
+        $('#tahun_program_prioritas').val(msg['data'][0]['PROGRAM_TAHUN']);
+        $('#kode_program_prioritas').val(msg['data'][0]['PROGRAM_KODE']);
+        $('#nama_program_prioritas').val(msg['data'][0]['PROGRAM_NAMA']);
+        $.ajax({
+          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getPrioritas/"+msg['data'][0]['PROGRAM_ID'],
+          type: "GET",
+          success: function(data){
+            $('#prioritas_program_prioritas').find('option').remove().end().append(data['data']).trigger('chosen:updated');
+          }
+        });   */ 
+        $('.overlay').fadeIn('fast',function(){
+          $('.input-riview').animate({'right':'0'},"linear");  
+          $("html, body").animate({ scrollTop: 0 }, "slow");
+        });
+      }
+    });    
+  }
+
+  function showKomponen(id){
+    $('#id-kegiatan').val(id);
+    $('#table-output').DataTable().destroy();
+    $('#table-output').DataTable({
+      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/"+id,
+      aoColumns: [
+      { mData: 'INDIKATOR' },
+      { mData: 'TOLAK_UKUR' },
+      { mData: 'TARGET' },
+      { mData: 'STATUS' },
+      { mData: 'OUTPUT_STATUS' },
+      { mData: 'LOKASI' },
+      { mData: 'CATATAN' },
+      { mData: 'AKSI' }]
+    });
+    $('#set-output-modal').modal('show');
+  }
+
 </script>
 @endsection
