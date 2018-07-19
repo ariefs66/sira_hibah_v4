@@ -153,6 +153,9 @@ class usulanController extends Controller
                                     ->offset($start);
         }elseif(Auth::user()->level == 2){
             $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
+            $user      = UserBudget::where('SKPD_ID',$skpd->SKPD_ID)->pluck('USER_ID')->toArray();
+            //var_dump($user);
+            /*
             $datauser  = UserBudget::whereHas('user',function($q){
                             $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
@@ -181,10 +184,19 @@ class usulanController extends Controller
                 }
                 $user[$i] = $datauser;
             }elseif($skpd->skpd->SKPD_JENIS == 2){
-                $user[0]    = null; 
+                $skpd_      = $this->getSKPD($tahun);
+                $user       = User::whereHas('userbudget', function($q) use ($skpd_,$tahun){
+                                    $q->where('SKPD_ID',$skpd_);
+                                    $q->where('TAHUN',$tahun);
+                                })->where('level',1)->get();
             }else{
-                $user[0]    = $datauser;
+                $skpd_      = $this->getSKPD($tahun);
+                $user       = User::whereHas('userbudget', function($q) use ($skpd_,$tahun){
+                                    $q->where('SKPD_ID',$skpd_);
+                                    $q->where('TAHUN',$tahun);
+                                })->where('level',1)->get();
             }
+            */
                 $data   = UsulanKomponen::whereIn('USER_CREATED',$user)
                                         ->where('USULAN_POSISI',3)
                                         ->where('USULAN_STATUS',0)
