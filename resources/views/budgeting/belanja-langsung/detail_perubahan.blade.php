@@ -211,7 +211,7 @@
                             <th class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif<br>(4)</th>                                      
                             <th class="text text-center">REALISASI<br>(5)</th>                                      
                             <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>    
-                            <th class="text text-center">Riview<br></th>    
+                            <th class="text text-center">Aksi<br></th>    
                             <th class="hide">Warna<br>(0)</th>                                  
                           </tr>
                           <tr>
@@ -847,28 +847,32 @@
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
     <form id="form-prioritas" class="form-horizontal">
       <div class="input-wrapper">
-        <h5 id="judul-prioritas">Masukan Riview</h5>
+        <h5 id="judul-prioritas">Masukan Asistensi</h5>
           
-
+         
           <div class="form-group">
-            <label for="nama_program_prioritas" class="col-md-3">Tahun Program</label>          
+            <label for="nama_program_prioritas" class="col-md-3">Rekening</label>          
             <div class="col-sm-9">        
               <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">        
-              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="{{$tahun}}" disabled> 
+              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="" disabled> 
             </div> 
           </div>
 
           <div class="form-group">
-            <label for="nama_program_prioritas" class="col-md-3">Kode Program</label>          
+            <label for="nama_program_prioritas" class="col-md-3">Anggaran</label>          
             <div class="col-sm-9">
-              <input type="text" class="form-control" readonly placeholder="Kode Program Otomatis Melanjutkan Kode Terakhir" name="kode_program_prioritas" id="kode_program_prioritas" value="" disabled> 
+              <input type="text" class="form-control" readonly placeholder="Anngaran Rekening" name="kode_program_prioritas" id="kode_program_prioritas" value="" disabled> 
             </div> 
           </div>
 
-          <div class="form-group">
-            <label for="nama_program" class="col-md-3">Nama Program</label>          
+           <div class="form-group">
+            <label for="nama_program" class="col-md-3">Komentar</label>          
             <div class="col-sm-9">
-              <input type="text" class="form-control" readonly placeholder="Masukan Nama Program" name="nama_program" id="nama_program_prioritas" value=""> 
+              <select ui-jq="chosen" class="w-full" id="prioritas_program" name="prioritas_program">
+                    <option value="1">Tinjau ulang / rasionalisasi</option>
+                    <option value="2">Formulasikan kembali</option>
+                    <option value="3">lainya</option>
+              </select>
             </div> 
           </div>
 
@@ -1484,7 +1488,7 @@
   }
 
   function inputRiview(id) {
-    $('#judul-prioritas').text('Form Keterangan Riviewer');        
+    $('#judul-prioritas').text('Form Keterangan Asistensi');        
     $.ajax({
       url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
       type: "GET",
