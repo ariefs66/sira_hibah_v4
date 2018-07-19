@@ -668,9 +668,10 @@
 	  @elseif($k->BL_ID==3754)
 	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA/10,0,',','.') }},00 </td>
 	  @else
-	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA/10,0,',','.') }},00 </td>
+	  <!-- <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA/10,0,',','.') }},00 </td> -->
+	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA/10,0,',','.') }},00 </td>
 	  @endif
-	  <td class="border-rincian kanan">- </td>
+	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td>
 	  <!-- <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td> -->
 
 	  @if(empty($k->RINCIAN_VOLUME_MURNI))
