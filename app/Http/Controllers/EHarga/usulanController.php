@@ -418,7 +418,7 @@ class usulanController extends Controller
             }
             \DB::enableQueryLog();
             */
-            $data   = UsulanKomponen::whereIn('USER_CREATED',[80])
+            $data   = UsulanKomponen::whereIn('USER_CREATED',$user)
                                     ->where('USULAN_POSISI',1)
                                     ->where('USULAN_STATUS',0)
                                     ->where('USULAN_TAHUN',$tahun)
