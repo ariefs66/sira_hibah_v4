@@ -381,6 +381,9 @@ class usulanController extends Controller
         $user=array();
         if(substr(Auth::user()->mod,3,1) == 1){
             $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
+            $user      = UserBudget::where('SKPD_ID',$skpd->SKPD_ID)->pluck('USER_ID')->toArray();
+            /*
+            $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
                             $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
@@ -414,6 +417,7 @@ class usulanController extends Controller
                 $user[0]    = $datauser;
             }
             \DB::enableQueryLog();
+            */
             $data   = UsulanKomponen::whereIn('USER_CREATED',[80])
                                     ->where('USULAN_POSISI',1)
                                     ->where('USULAN_STATUS',0)
