@@ -4796,10 +4796,13 @@ $rincian->RINCIAN_ID              = ($get_id+1);
             $sebelum    = Rincian::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->sum('RINCIAN_TOTAL');
             $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->sum('REALISASI_TOTAL');
 
-            $aksi = '<div class="action visible pull-right">
-            <a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->REKENING_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
-            $aksi       .= '
-            <a onclick="return showKomponen(\''.$data->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
+            //jika kode skpd 4.02.01 (bpka) dan 4.05.02 (sekda tp bagian orpad dan balap)
+
+            $aksi = '<div class="action visible pull-right">';
+           // $aksi .='<span class="text-danger"><i class="fa fa-close"></i></span>';
+            $aksi .='<span class="text-success"><i class="fa fa-check"></i></span>';
+            $aksi .='<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->REKENING_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
+            $aksi       .= '<a onclick="return showKomponen(\''.$data->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
 
             array_push($view, array('KODE'      => $data->rekening->REKENING_KODE,
                                     'URAIAN'    => $data->rekening->REKENING_NAMA,
