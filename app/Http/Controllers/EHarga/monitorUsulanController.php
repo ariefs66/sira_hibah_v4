@@ -144,7 +144,8 @@ class monitorUsulanController extends Controller
     }
 
     public function getFilter($tahun,$tipe,$jenis,$opd,$posisi){
-    	if(substr(Auth::user()->mod,3,1) == 1){
+        
+        if(substr(Auth::user()->mod,3,1) == 1){
         	$data 	= UsulanKomponen::where('USER_CREATED',Auth::user()->id)
                                     ->where('USULAN_TAHUN',$tahun)
                                     ->orderBy('USULAN_ID');
@@ -159,11 +160,10 @@ class monitorUsulanController extends Controller
             } 
         	$data = $data->get();
         }elseif(Auth::user()->level == 2){
-            $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->first();
-            $datauser  = UserBudget::whereHas('user',function($q){
-                            $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
-                        })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
-            if($skpd->skpd->SKPD_JENIS == 1){
+            
+            $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
+            $user  = UserBudget::where('SKPD_ID',$skpd->SKPD_ID)->pluck('USER_ID')->toArray();
+            /*if($skpd->skpd->SKPD_JENIS == 1){
                 $pd     = SKPD::where('SKPD_JENIS', 2)->get();
                 $i = 0;
                 foreach($pd as $pd){
@@ -191,7 +191,7 @@ class monitorUsulanController extends Controller
                 $user[0]    = null; 
             }else{
                 $user[0]    = $datauser;
-            }
+            }*/
             $data   = UsulanKomponen::whereIn('USER_CREATED',$user)
                                     ->where('USULAN_TAHUN',$tahun)
                                     ->orderBy('USULAN_ID');
