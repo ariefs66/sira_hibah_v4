@@ -42,7 +42,7 @@ class monitorUsulanController extends Controller
                                     ->where('USULAN_TAHUN',$tahun)
                                     ->orderBy('USULAN_ID')->get();
         }elseif(Auth::user()->level == 2){
-            $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->first();
+            $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $datauser  = UserBudget::whereHas('user',function($q){
                             $q->whereRaw('substring("mod" from 4 for 1) = \'1\'');
                         })->where('SKPD_ID',$skpd->SKPD_ID)->value('USER_ID');
@@ -79,10 +79,10 @@ class monitorUsulanController extends Controller
                                     ->where('USULAN_TAHUN',$tahun)
                                     ->orderBy('USULAN_ID')->get();
         }elseif(substr(Auth::user()->mod,4,1) == 1){
-            /*$data   = UsulanKomponen::where('USER_POST',Auth::user()->id) 
+            $data   = UsulanKomponen::where('USER_POST',Auth::user()->id) 
                                     ->where('USULAN_TAHUN',$tahun)                                               
                                     ->orderBy('USULAN_ID')
-                                    ->get();*/
+                                    ->get();
             if(Auth::user()->level == 1){
                 $data   = UsulanKomponen::where('USER_POST',Auth::user()->id) 
                                     ->where('USULAN_TAHUN',$tahun)                                               

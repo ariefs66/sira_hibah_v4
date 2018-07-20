@@ -336,10 +336,15 @@ class usulanController extends Controller
                             </div>';
             }elseif(Auth::user()->level == 2 or substr(Auth::user()->mod,0,1) == 1 ){
                 //or substr(Auth::user()->mod,5,1) == 1
-                $opsi   = '<div class="action visible">
-                                <a onclick="return tolak(\''.$data->USULAN_ID.'\')"><i class="glyphicon glyphicon-remove"></i></a>
-                                <a onclick="return acc(\''.$data->USULAN_ID.'\')"><i class="glyphicon glyphicon-ok"></i></a>
-                            </div>';
+                if(Auth::user()->level == 1 and Auth::user()->mod != "10000100000"){
+                    $opsi   = '';
+                } else {
+                    $opsi   = '<div class="action visible">
+                                    <a onclick="return tolak(\''.$data->USULAN_ID.'\')"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <a onclick="return acc(\''.$data->USULAN_ID.'\')"><i class="glyphicon glyphicon-ok"></i></a>
+                                </div>';
+                }
+                
             }elseif(substr(Auth::user()->mod,6,1) == 1){
                 $opsi   = '-';
             }
