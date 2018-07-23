@@ -352,17 +352,23 @@
 		@foreach($btl1_2pp_kd as $new =>$key)
 		@if($key==$btl->REKENING_KODE)
 		<td class="border-rincian kanan">{{ number_format($btl1_2pp[$new],0,',','.')}}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
+		@if($btl->pagu-$btl1_2pp[$new]<0)
+		<td class="border-rincian kanan">({{ number_format(abs($btl->pagu-$btl1_2pp[$new]),0,',','.') }})</td>
+		@else
+		<td class="border-rincian kanan">{{ number_format($btl->pagu-$btl1_2pp[$new],0,',','.') }}</td>
+		@endif
 		@php $break; $rek++; @endphp
 		@endif
 		@endforeach
 		@if($rek==0)
 		<td class="border-rincian kanan">0</td>
-		@endif
 		<td class="border-rincian kanan">{{ number_format($btl->pagu,0,',','.') }}</td>
-		@if($btl1_2pp[$i]-$btl->pagu<0)
-		<td class="border-rincian kanan">({{ number_format(abs($btl1_2pp[$i]-$btl->pagu),0,',','.') }})</td>
+		@if($btl->pagu-0<0)
+		<td class="border-rincian kanan">({{ number_format(abs($btl->pagu-0),0,',','.') }})</td>
 		@else
-		<td class="border-rincian kanan">{{ number_format($btl1_2pp[$i]-$btl->pagu,0,',','.') }}</td>
+		<td class="border-rincian kanan">{{ number_format($btl->pagu-0,0,',','.') }}</td>
+		@endif
 		@endif
 		<td class="border-rincian kanan">{{$btl->BTL_DASHUK}}</td>
 	</tr>
