@@ -95,6 +95,9 @@ class monitorUsulanController extends Controller
         }else{
             $data   = UsulanKomponen::where('USULAN_TAHUN',$tahun)->orderBy('USULAN_ID')->get();
         }
+        
+        $count = $data->count(); 
+        $display = $data->count(); 
 		
     	$i 		= 1;
     	$view 	= array();
@@ -138,8 +141,7 @@ class monitorUsulanController extends Controller
             $i++;
         }
         
-        $display = $data->count(); 
-        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => 10,"aaData"=>$view); 
+        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => $count,"aaData"=>$view); 
         return Response::JSON($out);
     }
 

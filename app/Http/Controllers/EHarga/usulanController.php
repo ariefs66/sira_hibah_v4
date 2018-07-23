@@ -115,42 +115,32 @@ class usulanController extends Controller
                                     ->where('USULAN_TAHUN',$tahun)
                                     ->where('USULAN_POSISI',0)
                                     ->where('USULAN_STATUS',0)
-                                    ->orderBy('USULAN_ID')
-                                    ->limit($length)
-                                    ->offset($start);
+                                    ->orderBy('USULAN_ID');
         }
         elseif(substr(Auth::user()->mod,6,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',2)
                                     ->where('USULAN_TAHUN',$tahun)            
                                     ->where('USULAN_STATUS',0)
                                     ->where('USER_POST',null)
-                                    ->orderBy('USULAN_ID')
-                                    ->limit($length)
-                                    ->offset($start);
+                                    ->orderBy('USULAN_ID');
         }
         elseif(substr(Auth::user()->mod,4,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',2)
                                     ->where('USULAN_TAHUN',$tahun)            
                                     ->where('USULAN_STATUS',0)
                                     ->where('USER_POST',Auth::user()->id)                                    
-                                    ->orderBy('USULAN_ID')
-                                    ->limit($length)
-                                    ->offset($start);
+                                    ->orderBy('USULAN_ID');
         }elseif(substr(Auth::user()->mod,5,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',5)
                                     ->where('USULAN_TAHUN',$tahun)            
                                     ->where('USULAN_STATUS',0)
-                                    ->orderBy('USULAN_ID')
-                                    ->limit($length)
-                                    ->offset($start);
+                                    ->orderBy('USULAN_ID');
         }elseif(substr(Auth::user()->mod,0,1) == 1){
             $data   = UsulanKomponen::where('USULAN_POSISI',4)
                                     ->where('USULAN_TAHUN',$tahun)            
                                     ->where('USULAN_STATUS',0)
                                     ->whereRaw('"SURAT_ID" IS NOT NULL')                                    
-                                    ->orderBy('USULAN_ID')
-                                    ->limit($length)
-                                    ->offset($start);
+                                    ->orderBy('USULAN_ID');
         }elseif(Auth::user()->level == 2){
             $skpd      = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->first();
             $user      = UserBudget::where('SKPD_ID',$skpd->SKPD_ID)->pluck('USER_ID')->toArray();
@@ -201,15 +191,11 @@ class usulanController extends Controller
                                         ->where('USULAN_POSISI',3)
                                         ->where('USULAN_STATUS',0)
                                         ->where('USULAN_TAHUN',$tahun)
-                                        ->orderBy('USULAN_ID')
-                                        ->limit($length)
-                                        ->offset($start);
+                                        ->orderBy('USULAN_ID');
         }else if(Auth::user()->level == 8){
             $data   = UsulanKomponen::where('USULAN_STATUS',0)
                                         ->where('USULAN_TAHUN',$tahun)
-                                        ->orderBy('USULAN_ID')
-                                        ->limit($length)
-                                        ->offset($start);
+                                        ->orderBy('USULAN_ID');
         }
         //dd($data);
 
@@ -255,8 +241,9 @@ class usulanController extends Controller
                 }
             }
         }
-	$display = $data->get()->count();
-        $data = $data->get();
+
+        $count = $data->get()->count();
+        $data = $data->limit($length)->offset($start)->get();
     	$display = $data->count();
         $i 		= $start+1;
     	$view 	= array();
@@ -376,7 +363,7 @@ class usulanController extends Controller
             $i++;
         }
         
-        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => intval($display),"aaData"=>$view); 
+        $out = array("iTotalRecords" => intval($display), "iTotalDisplayRecords"  => intval($count),"aaData"=>$view); 
         return Response::JSON($out);
     }
 
