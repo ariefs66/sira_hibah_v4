@@ -24,3 +24,6 @@ Alt+A   Mark
 Alt+\   First Line
 Alt+/   Last Line
 Alt+K   Delete Block
+
+\DB::enableQueryLog();
+dd(\DB::getQueryLog());

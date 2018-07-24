@@ -81,107 +81,58 @@ class apiController extends Controller
     }
 
 	public function apiSiraBL($tahun,$status, Request $req){
-	$skpd = ($req->SKPD == "")? 0 : $req->SKPD;
-        if($skpd>0){
-            $skpd = SKPD::where('SKPD_KODE', $req->SKPD)->where('SKPD_TAHUN', $tahun)->value('SKPD_ID');
-            if(!$skpd){
-                return "SKPD Tidak Valid!";
-            }
-        }
-        $filter = "";
-        $pagu_foot    = 0;
-        $rincian_foot = 0;
-        $now = date('Y-m-d H:m:s');
-        $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->orderBy('TAHAPAN_ID','desc')->first();
-        if($tahapan){
-            if($now > $tahapan->TAHAPAN_AWAL && $now < $tahapan->TAHAPAN_AKHIR){
-                $thp    = 1;
-            }else{
-                $thp    = 0;
-            }
-        }else{
-            $thp = 0;
-        }
-        
-        if($skpd>0){
-            $data       = BL::whereHas('subunit',function($q) use ($skpd){
-                            $q->where('SKPD_ID',$skpd);
-                        })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
-
-            $pagu_foot       = BL::whereHas('subunit',function($q) use ($skpd){
-                                    $q->where('SKPD_ID',$skpd);
-                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
-
-            $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                                ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                                ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)
-                                ->WHERE('REF_SUB_UNIT.SKPD_ID',$skpd)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
+        $kode = ($req->kode == "")? "" : $req->kode;
+        $view           = array();
+        if(strlen($kode)>0){
+            $data = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+            ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+            ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+            ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+            ->JOIN('REFERENSI.REF_URUSAN','REF_PROGRAM.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+            ->where('BL_TAHUN',$tahun)
+            ->where('BL_DELETED',0)
+            ->where('BL_VALIDASI',1)
+            ->whereRaw("\"SKPD_KODE\"||'.'||\"PROGRAM_KODE\"||'.'||\"KEGIATAN_KODE\" LIKE ?", [$kode])
+            ->groupBy("REF_URUSAN_KATEGORI1.URUSAN_KAT1_KODE","REF_URUSAN_KATEGORI1.URUSAN_KAT1_NAMA","REF_URUSAN.URUSAN_KODE","REF_URUSAN.URUSAN_NAMA","SKPD_KODE","SKPD_NAMA","REF_PROGRAM.PROGRAM_ID","REF_PROGRAM"."PROGRAM_NAMA","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
+            ->orderBy('URUSAN_KAT1_KODE','KEGIATAN_KODE')
+            ->selectRaw('"REF_URUSAN_KATEGORI1"."URUSAN_KAT1_KODE","REF_URUSAN_KATEGORI1"."URUSAN_KAT1_NAMA","REF_URUSAN"."URUSAN_KODE","REF_URUSAN"."URUSAN_NAMA","SKPD_KODE","SKPD_NAMA","PROGRAM_KODE","PROGRAM_NAMA","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA",SUM ( "BL_PAGU" ) AS pagu')
+            ->get();
         } else {
-            $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->get();
-
-            $pagu_foot       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
-
-            $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
-                                ->join('REFERENSI.REF_SUB_UNIT','REF_SUB_UNIT.SUB_ID','=','DAT_BL.SUB_ID')
-                                ->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)->where('BL_VALIDASI',1)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
+            $data = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
+            ->JOIN('REFERENSI.REF_SKPD','REF_SKPD.SKPD_ID','=','REF_SUB_UNIT.SKPD_ID')
+            ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
+            ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
+            ->JOIN('REFERENSI.REF_URUSAN','REF_PROGRAM.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+            ->JOIN('REFERENSI.REF_URUSAN_KATEGORI1','REF_URUSAN.URUSAN_KAT1_ID','=','REF_URUSAN_KATEGORI1.URUSAN_KAT1_ID')
+            ->where('BL_TAHUN',$tahun)
+            ->where('BL_DELETED',0)
+            ->where('BL_VALIDASI',1)
+            ->groupBy("REF_URUSAN_KATEGORI1.URUSAN_KAT1_KODE","REF_URUSAN_KATEGORI1.URUSAN_KAT1_NAMA","REF_URUSAN.URUSAN_KODE","REF_URUSAN.URUSAN_NAMA","SKPD_KODE","SKPD_NAMA","REF_PROGRAM.PROGRAM_ID","PROGRAM_NAMA","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
+            ->orderBy('URUSAN_KAT1_KODE','KEGIATAN_KODE')
+            ->selectRaw('"REF_URUSAN_KATEGORI1"."URUSAN_KAT1_KODE","REF_URUSAN_KATEGORI1"."URUSAN_KAT1_NAMA","REF_URUSAN"."URUSAN_KODE","REF_URUSAN"."URUSAN_NAMA","SKPD_KODE","SKPD_NAMA","PROGRAM_KODE","PROGRAM_NAMA","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA",SUM ( "BL_PAGU" ) AS pagu')
+            ->get();
         }
 
-        $view       = array();
-        $i          = 1;
-        $kunci      = '';
-        $rincian    = '';
-        $validasi   = '';
         foreach ($data as $data) {
-            $urgensi    = Urgensi::where('BL_ID',$data->BL_ID)->first();
-            if( (
-                empty($urgensi->URGENSI_LATAR_BELAKANG) or
-                empty($urgensi->URGENSI_DESKRIPSI) or
-                empty($urgensi->URGENSI_TUJUAN) or
-                empty($urgensi->URGENSI_PENERIMA_1) or
-                empty($urgensi->URGENSI_PELAKSANAAN)) and $urgensi and ($skpd == 24 or $skpd == 15 or $skpd == 22 or $skpd == 14))
-
-            $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';
-
-            else
-            $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
-			
-            if(!isset($data->kunci)){
-				$app = app();
-                $obj = $app->make('stdClass');
-                $obj->KUNCI_GIAT = 0;
-                $obj->KUNCI_RINCIAN = 0;
-                $data->setAttribute('kunci',$obj);
-            }
-			
-            if($data->kunci->KUNCI_GIAT == 0 and $thp == 1){
-                    $kunci     = '<span class="text-success"><i class="fa fa-unlock kunci-giat"></i></span>';
-            }else{
-                    $kunci      = '<span class="text-danger"><i class="fa fa-lock kunci-giat"></i></span>';
-            }
-
-            //kunci rincian
-            if ($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1 ) {
-                    $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
-            }else{
-                    $rincian    = '<span class="text-danger"><i class="fa fa-lock kunci-rincian"></i></span>';
-            }
-
-            if(empty($data->rincian)) $totalRincian = 0;
-            else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,'.',',');
-            array_push($view, array( 'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
-                                     'PAGU'           =>number_format($data->BL_PAGU,0,'.',','),
-                                     'RINCIAN'        =>$totalRincian,
-                                     'STATUS'         =>$kunci.' Kegiatan<br>'.$rincian.' Rincian<br>'.$validasi.' Validasi'));
-            //$pagu_foot    =+ $data->BL_PAGU;
-            //$rincian_foot =+ $data->rincian->sum('RINCIAN_TOTAL');
-            $i++;
+            array_push($view, array( 
+                'KODE_URUSAN'       => $data->URUSAN_KAT1_KODE,
+                'NAMA_URUSAN'       => $data->URUSAN_KAT1_NAMA,
+                'KODE_BIDANG'       => $data->URUSAN_KODE,
+                'NAMA_BIDANG'       => $data->URUSAN_NAMA,
+                'KODE_SKPD'       => $data->SKPD_KODE,
+                'NAMA_SKPD'       => $data->SKPD_NAMA,
+                'KODE_PROGRAM'       => $data->PROGRAM_KODE,
+                'NAMA_PROGRAM'       => $data->PROGRAM_NAMA,
+                'KODE_KEGIATAN'       => $data->KEGIATAN_KODE,
+                'NAMA_KEGIATAN'       => $data->KEGIATAN_NAMA,
+                'KODE_KEGIATAN'       => $data->KEGIATAN_KODE,
+                'JENIS_BELANJA'       => 'Belanja Langsung',
+                'NAMA_REKENING'       => $data->KEGIATAN_NAMA,
+                'ANGGARAN_KEGIATAN'          => $data->pagu                                 
+            ));
+        
         }
-        $out = array("aaData"=>$view,
-                    "pagu_foot"=>number_format($pagu_foot,0,'.',','),
-                    "rincian_foot"=>number_format($rincian_foot,0,'.',','),
-            );      
-        return Response::JSON($out);
-        return $view;
+        return Response::JSON($view);
     }
 
 	public function apiSiraBTL($tahun,$status, Request $req){
@@ -577,9 +528,9 @@ class apiController extends Controller
             ->where('BL_DELETED',0)
             ->where('BL_VALIDASI',1)
             ->whereRaw("\"SKPD_KODE\"||'.'||\"PROGRAM_KODE\"||'.'||\"KEGIATAN_KODE\" LIKE ?", [$kode])
-            ->groupBy("REF_PROGRAM.PROGRAM_ID","SKPD_KODE","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
-            ->orderBy('KEGIATAN_KODE')
-            ->selectRaw('"PROGRAM_KODE","SKPD_KODE","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA", SUM("BL_PAGU") AS pagu')
+            ->groupBy("REF_URUSAN_KATEGORI1.URUSAN_KAT1_KODE","REF_URUSAN_KATEGORI1.URUSAN_KAT1_NAMA","REF_URUSAN.URUSAN_KODE","REF_URUSAN.URUSAN_NAMA","SKPD_KODE","SKPD_NAMA","REF_PROGRAM.PROGRAM_ID","REF_PROGRAM"."PROGRAM_NAMA","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
+            ->orderBy('URUSAN_KAT1_KODE','KEGIATAN_KODE')
+            ->selectRaw('"REF_URUSAN_KATEGORI1"."URUSAN_KAT1_KODE","REF_URUSAN_KATEGORI1"."URUSAN_KAT1_NAMA","REF_URUSAN"."URUSAN_KODE","REF_URUSAN"."URUSAN_NAMA","SKPD_KODE","SKPD_NAMA","PROGRAM_KODE","PROGRAM_NAMA","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA",SUM ( "BL_PAGU" ) AS pagu')
             ->get();
         } else {
             $data = BL::JOIN('REFERENSI.REF_SUB_UNIT','DAT_BL.SUB_ID','=','REF_SUB_UNIT.SUB_ID')
@@ -587,19 +538,29 @@ class apiController extends Controller
             ->JOIN('REFERENSI.REF_KEGIATAN','REF_KEGIATAN.KEGIATAN_ID','=','DAT_BL.KEGIATAN_ID')
             ->JOIN('REFERENSI.REF_PROGRAM','REF_KEGIATAN.PROGRAM_ID','=','REF_PROGRAM.PROGRAM_ID')
             ->JOIN('REFERENSI.REF_URUSAN','REF_PROGRAM.URUSAN_ID','=','REF_URUSAN.URUSAN_ID')
+            ->JOIN('REFERENSI.REF_URUSAN_KATEGORI1','REF_URUSAN.URUSAN_KAT1_ID','=','REF_URUSAN_KATEGORI1.URUSAN_KAT1_ID')
             ->where('BL_TAHUN',$tahun)
             ->where('BL_DELETED',0)
             ->where('BL_VALIDASI',1)
-            ->groupBy("REF_PROGRAM.PROGRAM_ID","SKPD_KODE","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
-            ->orderBy('KEGIATAN_KODE')
-            ->selectRaw('"PROGRAM_KODE","SKPD_KODE","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA", SUM("BL_PAGU") AS pagu')
+            ->groupBy("REF_URUSAN_KATEGORI1.URUSAN_KAT1_KODE","REF_URUSAN_KATEGORI1.URUSAN_KAT1_NAMA","REF_URUSAN.URUSAN_KODE","REF_URUSAN.URUSAN_NAMA","SKPD_KODE","SKPD_NAMA","REF_PROGRAM.PROGRAM_ID","PROGRAM_NAMA","KEGIATAN_KODE","KEGIATAN_NAMA","REF_KEGIATAN.KEGIATAN_ID")
+            ->orderBy('URUSAN_KAT1_KODE','KEGIATAN_KODE')
+            ->selectRaw('"REF_URUSAN_KATEGORI1"."URUSAN_KAT1_KODE","REF_URUSAN_KATEGORI1"."URUSAN_KAT1_NAMA","REF_URUSAN"."URUSAN_KODE","REF_URUSAN"."URUSAN_NAMA","SKPD_KODE","SKPD_NAMA","PROGRAM_KODE","PROGRAM_NAMA","REF_KEGIATAN"."KEGIATAN_ID","KEGIATAN_KODE","KEGIATAN_NAMA",SUM ( "BL_PAGU" ) AS pagu')
             ->get();
         }
 
         foreach ($data as $data) {
             array_push($view, array( 
-                'KODE_REKENING'           =>$data->SKPD_KODE.'.'.$data->PROGRAM_KODE.'.'.$data->KEGIATAN_KODE,
-                'URAIAN'           => $data->KEGIATAN_NAMA,
+                'KODE_URUSAN'       => $data->URUSAN_KAT1_KODE,
+                'NAMA_URUSAN'       => $data->URUSAN_KAT1_NAMA,
+                'KODE_BIDANG'       => $data->URUSAN_KODE,
+                'NAMA_BIDANG'       => $data->URUSAN_NAMA,
+                'KODE_SKPD'       => $data->SKPD_KODE,
+                'NAMA_SKPD'       => $data->SKPD_NAMA,
+                'KODE_PROGRAM'       => $data->PROGRAM_KODE,
+                'NAMA_PROGRAM'       => $data->PROGRAM_NAMA,
+                'KODE_KEGIATAN'       => $data->KEGIATAN_KODE,
+                'NAMA_KEGIATAN'       => $data->KEGIATAN_NAMA,
+                'JENIS_BELANJA'       => 'Belanja Langsung',
                 'ANGGARAN'          => $data->pagu                                 
             ));
         
