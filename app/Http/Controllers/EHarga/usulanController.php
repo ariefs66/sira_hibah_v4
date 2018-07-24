@@ -47,8 +47,9 @@ class usulanController extends Controller
                             })->value('SKPD_JENIS');
         if($jenis == 2 or $jenis == 4) $jenis = 1;
         else $jenis = 0;
+        $skpd 	= SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
         // print_r($jenis);exit();
-    	return View('eharga.usulan',['tahun'=>$tahun,'rekening'=>$Rekening,'satuan'=>$Satuan,'komponen'=>$komponen,'user'=>$user,'datadukung'=>$dataDukung,'status'=>'murni','jenis'=>$jenis]);
+    	return View('eharga.usulan',['skpd'=>$skpd,'tahun'=>$tahun,'rekening'=>$Rekening,'satuan'=>$Satuan,'komponen'=>$komponen,'user'=>$user,'datadukung'=>$dataDukung,'status'=>'murni','jenis'=>$jenis]);
     }
 
     public function showSurat($tahun){
@@ -108,6 +109,7 @@ class usulanController extends Controller
         $start = ($req->iDisplayStart == "")? 0 : $req->iDisplayStart;
         $length = ($req->iDisplayLength == "")? 10 : $req->iDisplayLength;
         $kategori = ($req->sSearch == "")? FALSE : urldecode($req->sSearch);
+        $opd = ($req->skpd == "")? "" : $req->skpd;
         //GET USULAN STAFF
         $data='';
         if(substr(Auth::user()->mod,3,1) == 1){
@@ -240,6 +242,11 @@ class usulanController extends Controller
                     $count = UsulanKomponen::where('USULAN_NAMA','ilike','%'.$kategori.'%')->where('USULAN_TAHUN',$tahun)->where('USULAN_STATUS',0)->where('USER_CREATED',Auth::user()->id)->get()->count();    
                 }
             }
+        }
+
+        if($opd){
+            $user  = UserBudget::where('SKPD_ID',$opd)->pluck('USER_ID')->toArray();
+            $data      = $data->whereIn('USER_CREATED',$user);
         }
 
         $count = $data->get()->count();

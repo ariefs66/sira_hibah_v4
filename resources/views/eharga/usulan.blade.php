@@ -44,6 +44,18 @@
                       <option value="500">500</option>
                       <option value="1000">1000</option>
                     </select>
+                  </div>
+                  <div class="col-sm-3 pull-right">
+                    @if(substr(Auth::user()->mod,3,1) == 1 or Auth::user()->level == 2)
+                    <select ui-jq="chosen" class="w-full" id="opd" disabled="">
+                    @else
+                    <select ui-jq="chosen" class="w-full" id="opd">
+                    @endif                    
+                      <option value="x" selected="">Pilih Perangkat Daerah</option>
+                      @foreach($skpd as $opd)
+                      <option value="{{ $opd->SKPD_ID }}">{{ $opd->SKPD_KODE }} - {{ $opd->SKPD_NAMA }}</option>
+                      @endforeach
+                    </select>
                   </div>                    
                 </div>
                 <!-- Main tab -->
@@ -850,6 +862,7 @@
   })
 </script>
 <script type="text/javascript">
+  $("#opd").change(function(e, params){filter();});
   $("#jeniskomponen").change(function(e, params){
     getKategori4();
   });
@@ -1566,6 +1579,29 @@
         Tidak: function () {
         }
       }
+    });
+  }
+
+  function filter(){
+    opd     = $('#opd').val();
+    $('#table-usulan').DataTable().destroy();
+    $('#table-usulan').DataTable({
+      processing: true,
+      serverSide: true,
+      sAjaxSource: '{{ url('/') }}/harga/{{$tahun}}/usulan/getData?skpd='+opd,
+      aoColumns: [
+      { mData: 'ID',class:'hide'}, 
+      { mData: 'CB',class:'text-center', bSortable: false},
+      { mData: 'PD'},
+      { mData: 'TIPE'},
+      { mData: 'KATEGORI'},
+      { mData: 'NAMA'},
+      { mData: 'REKENING'},
+      { mData: 'HARGAAWAL',class:'text-right'},
+      { mData: 'HARGA',class:'text-right'},
+      { mData: 'DD'},
+      { mData: 'OPSI', bSortable: false}
+      ]
     });
   }
 </script>
