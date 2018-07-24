@@ -583,16 +583,6 @@ class usulanController extends Controller
             $usulan->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
             $usulan->save();
         }else{
-            $cek = UsulanKomponen::where('USULAN_NAMA','ilike',Input::get('USULAN_NAMA'))
-        ->where('USULAN_SPESIFIKASI','ilike',Input::get('USULAN_SPESIFIKASI'))->where('USULAN_ID','!=',$idUsulan)->first();
-        if($cek){
-            return "Anda tidak bisa mengusulkan komponen yang sudah tersedia!";
-        }
-        $cek = Komponen::where('KOMPONEN_NAMA','ilike',Input::get('USULAN_NAMA'))
-        ->where('KOMPONEN_SPESIFIKASI','ilike',Input::get('USULAN_SPESIFIKASI'))->first();
-        if($cek){
-            return "Anda tidak bisa mengusulkan komponen yang sudah didaftarkan!";
-        }
             if(substr(Auth::user()->mod,4,1)==1){
                 $usulan     = UsulanKomponen::where('USULAN_ID',Input::get('USULAN_ID'))->first();
                 // print_r(substr($usulan->katkom->KATEGORI_KODE,0,1));exit();
