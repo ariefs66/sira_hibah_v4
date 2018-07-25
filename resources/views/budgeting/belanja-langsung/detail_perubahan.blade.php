@@ -532,7 +532,7 @@
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
       <h5>Tambah / Edit Rincian</h5>
-      <div class="form-group">
+      <div class="form-group edit">
         <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
         <div class="col-sm-7">
           <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="" >
@@ -546,7 +546,7 @@
           <button class="btn btn-warning col-md-1 w-full" data-toggle="modal" type="button" data-target="#pilih-paket-modal" id="pilih-paket"><i class="fa fa-plus"></i> Tambah</button>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group edit">
         <label class="col-sm-3">Jenis</label>
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="jenis-pekerjaan" required="">
@@ -557,7 +557,7 @@
           </select>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group edit">
         <label class="col-sm-3">Kategori</label>
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="kategori-belanja" required="">
@@ -568,7 +568,7 @@
           </select>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group edit">
         <label class="col-sm-3">Rekening</label>
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="rekening-belanja" required="">
@@ -578,7 +578,7 @@
       </div>
 
 
-      <div class="form-group">
+      <div class="form-group edit">
         <label for="no_spp" class="col-md-3">Komponen</label>          
         <div class="col-md-6">
           <input type="text" class="form-control" placeholder="Komponen" id="nama-komponen" readonly="">          
@@ -1191,6 +1191,11 @@
       $('#harga-free').addClass('hide');
       $('#pilih-komponen').removeClass('hide');
     };
+    @if($status=="perubahan")
+      $('.edit').hide();
+    @else
+    $('.edit').show();
+    @endif
 	$('#id-komponen').val(data['DATA']['KOMPONEN_ID']);
         $('#id-rincian').val(data['DATA']['RINCIAN_ID']);
         $('#kategori-belanja').val(id_komponen).trigger('chosen:updated');
@@ -1360,7 +1365,8 @@
   $('.open-rincian').on('click',function(){
     $(document).ready(function(){
         interval = setInterval(function(){getpagu();}, 1000);
-        //clearInterval(interval);              
+        //clearInterval(interval);
+        $('.edit').show();              
         $('#id-rincian').val('');
         $('#jenis-pekerjaan').val('').trigger('chosen:updated');
         $('#kategori-belanja').val('').trigger('chosen:updated');
