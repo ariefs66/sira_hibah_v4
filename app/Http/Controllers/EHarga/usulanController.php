@@ -40,7 +40,7 @@ class usulanController extends Controller
     						->get();
     	$Satuan 	= Satuan::all();
     	$komponen 	= Komponen::all();
-        $dataDukung = DataDukung::where('SKPD_ID',$skpd)->get();
+        $dataDukung = DataDukung::where('SKPD_ID',$skpd)->where('DD_TAHUN',$tahun)->get();
         $user       = User::whereRaw("substring(mod from 5 for 1) = '1'")->get();
         $jenis      = SKPD::whereHas('userbudget',function($q) use ($id){
                                 $q->where('USER_ID',$id);
@@ -706,6 +706,7 @@ class usulanController extends Controller
         $dd     = new DataDukung;
         $dd->DD_PATH    = $destinationPath;
         $dd->DD_NAMA    = Input::get('dd-nama');
+        $dd->DD_TAHUN    = $tahun;
         $dd->SKPD_ID    = $skpd;
         $dd->save();
 
