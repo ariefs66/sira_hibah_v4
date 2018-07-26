@@ -827,6 +827,42 @@
                 </a>                
                  <ul class="nav nav-sub dk">
                   <li>
+                    <a href="#" class="padding-l-r-lg">                  
+                    <span class="pull-right">
+                      <i class="text8 icon-bdg_arrow1 text"></i>
+                      <i class="text8 icon-bdg_arrow2 text-active"></i>
+                    </span>
+                    <span>APBD</span>
+                  </a>                
+                   <ul class="nav nav-sub dk">
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/siraBL" class="padding-l-r-lg " target="_blank">
+                         <span>Belanja Langsung</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/siraBTL" class="padding-l-r-lg " target="_blank">
+                         <span>Belanja Tidak Langsung</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/siraPendapatan" class="padding-l-r-lg " target="_blank">
+                         <span>Pendapatan</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/siraPembiayaan" class="padding-l-r-lg " target="_blank">
+                         <span>Pembiayaan</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/api/anggaran" class="padding-l-r-lg " target="_blank">
+                         <span>Anggaran</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                  <li>
                     <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/usulan/api" class="padding-l-r-lg " target="_blank">
                        <span>MUSRENBANG</span>
                     </a>
@@ -889,6 +925,13 @@
                   <span class="font-semibold">Rekap Pivot</span>
                 </a>                
                  <ul class="nav nav-sub dk">
+                  @if($status=='pergeseran' || $status=='perubahan')
+                  <li>
+                    <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/rekapRealisasi" class="padding-l-r-lg " target="_blank">
+                       <span>Rekap Realisasi BL</span>
+                    </a>
+                  </li>
+                  @endif
                   <li>
                     <a href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/rekapAll" class="padding-l-r-lg " target="_blank">
                        <span>Rekap Semua</span>

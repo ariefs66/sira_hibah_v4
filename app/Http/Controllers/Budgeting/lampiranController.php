@@ -3546,6 +3546,30 @@ class lampiranController extends Controller
     }
 
 
+    public function rekapRealisasi($tahun,$status){
+
+            
+            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, sum(bl."BL_PAGU") AS "PAGU", sum(realisasi."REALISASI_TOTAL") as "REALISASI"
+                                    from "BUDGETING"."DAT_BL_PERUBAHAN" bl
+                                    inner JOIN "BUDGETING"."DAT_BL_REALISASI" realisasi
+                                    on bl."BL_ID" = realisasi."BL_ID"
+                                    inner join "REFERENSI"."REF_SKPD" skpd
+                                    on bl."SKPD_ID" = skpd."SKPD_ID"
+                                    WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
+                                    GROUP BY SKPD
+                                    ORDER BY SKPD');
+               //dd($data);
+            $data = array_map(function ($value) {
+                    return (array)$value;
+                }, $data);
+            Excel::create('REALISASI PERUBAHAN '.Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+                    $excel->sheet('REALISASI', function($sheet) use ($data) {
+                        $sheet->fromArray($data);
+                    });
+            })->download('xls');
+        
+    }
+
     public function rekapAll($tahun,$status){
 
         if($status == 'murni'){
