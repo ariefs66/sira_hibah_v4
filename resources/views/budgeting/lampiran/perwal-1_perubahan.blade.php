@@ -80,8 +80,8 @@
 <div class="cetak">
 	<div style="margin-left: 330px;">
 	<h5>LAMPIRAN I &nbsp; &nbsp; &nbsp; Rancangan Peraturan Wali Kota Bandung</h5>
-	<h5>NOMOR : 756 Tahun 2018</h5>
-	<h5>TANGGAL : 30 Mei 2018</h5>
+	<h5>NOMOR : {{(isset($nomor_ttd) ? (strlen($nomor_ttd)>0?$nomor_ttd:'756 Tahun 2018') : '756 Tahun 2018')}}</h5>
+	<h5>TANGGAL : {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:'30 Mei 2018') : '30 Mei 2018')}}</h5>
 	</div>
 	<br>
 	
@@ -1955,7 +1955,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>PJs WALIKOTA BANDUNG</b></td>
+		<td><b>{{(isset($jabatan_ttd) ? (strlen($jabatan_ttd)>0?$jabatan_ttd:'PJs WALIKOTA BANDUNG') : 'PJs WALIKOTA BANDUNG')}}</b></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -1963,7 +1963,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>MUHAMAD SOLIHIN</b></td>
+		<td><b>{{(isset($nama_ttd) ? (strlen($nama_ttd)>0?$nama_ttd:'MUHAMAD SOLIHIN') : 'MUHAMAD SOLIHIN')}}</b></td>
 	</tr>
 	<tr>
 		<td></td>

@@ -80,8 +80,8 @@
 <div class="cetak">
 	<div style="margin-left: 330px;">
 	<h5>LAMPIRAN Ia &nbsp; &nbsp; &nbsp; Rancangan Peraturan Wali Kota Bandung</h5>
-	<h5>NOMOR : </h5>
-	<h5>TANGGAL : {{ $tgl }} {{ $bln }} {{ $thn }}</h5>
+	<h5>NOMOR : {{(isset($nomor_ttd) ? (strlen($nomor_ttd)>0?$nomor_ttd:'') : '')}}</h5>
+	<h5>TANGGAL : {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : $tgl.' '.$bln.' '.$thn)}}</h5>
 	</div>
 	<br>
 	
@@ -1018,11 +1018,11 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, {{ $tgl }} {{ $bln }} {{ $thn }}</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : $tgl.' '.$bln.' '.$thn)}}</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>WALIKOTA BANDUNG</b></td>
+		<td><b>{{(isset($jabatan_ttd) ? (strlen($jabatan_ttd)>0?$jabatan_ttd:'WALIKOTA BANDUNG') : 'WALIKOTA BANDUNG')}}</b></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -1030,7 +1030,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>MOCHAMAD RIDWAN KAMIL</b></td>
+		<td><b>{{(isset($nama_ttd) ? (strlen($nama_ttd)>0?$nama_ttd:'MOCHAMAD RIDWAN KAMIL') : 'MOCHAMAD RIDWAN KAMIL')}}</b></td>
 	</tr>
 	<tr>
 		<td></td>

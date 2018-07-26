@@ -31,6 +31,8 @@ use App\Model\RekapBL;
 use App\Model\RekapRincian;
 use App\Model\UserBudget;
 use App\Model\Tahapan;
+use App\Model\TahunAnggaran;
+use App\Model\TTD;
 use App\Model\RincianPerubahan;
 use App\Model\RincianLog;
 use App\Model\RincianHistory;
@@ -7409,14 +7411,38 @@ public function updatePerwal1($tahun,$status){
             $pmb1           = Pembiayaan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.1%');})->where('PEMBIAYAAN_TAHUN',$tahun)->get();         
     
             $pmb2           = Pembiayaan::whereHas('rekening',function($q){$q->where('REKENING_KODE','like','6.2%');})->where('PEMBIAYAAN_TAHUN',$tahun)->get();                                
-
+            $id_ttd = TahunAnggaran::where('TAHUN',$tahun)->where('STATUS',$status)->value('ID');
+            $tgl_ttd    = '';
+            $nomor_ttd = '';
+            $jabatan_ttd = '';
+            $nama_ttd = '';
+            $nip_ttd = '';
+            if($id_ttd){
+                $ttd = TTD::where('KEY','PERWAL1')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+                if($ttd){
+                    $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
+                    $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
+                    $bln        = $this->bulan($gbln*1);
+                    $thn        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('Y');
+                    $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
+                    $nomor_ttd = $ttd->NOMOR;
+                    $jabatan_ttd = $ttd->PEJABAT;
+                    $nama_ttd = $ttd->NAMA_PEJABAT;
+                    $nip_ttd = $ttd->NIP_PEJABAT;
+                }
+            }
 
         if($status=="murni"){
             $data       = array('tahun'         =>$tahun,
                         'status'        =>$status,
                         'tgl'           =>$tgl,
                         'bln'           =>$bln,
-                        'thn'           =>$thn,        
+                        'thn'           =>$thn,
+                        'tgl_ttd'       =>$tgl_ttd,     
+                        'nomor_ttd'     =>$nomor_ttd,     
+                        'jabatan_ttd'   =>$jabatan_ttd,     
+                        'nama_ttd'      =>$nama_ttd,     
+                        'nip_ttd'       =>$nip_ttd,        
                         'skpd'          =>$skpd,        
                         'urusan'        =>$urusan,        
                         'bl_rek'        =>$bl_rek,        
@@ -8111,6 +8137,27 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
             $perubahanBelanjaModal= $value;
             $selisihBelanjaModal= $value;
 
+            $id_ttd = TahunAnggaran::where('TAHUN',$tahun)->where('STATUS',$status)->value('ID');
+            $tgl_ttd    = '';
+            $nomor_ttd = '';
+            $jabatan_ttd = '';
+            $nama_ttd = '';
+            $nip_ttd = '';
+            if($id_ttd){
+                $ttd = TTD::where('KEY','PERWAL1')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+                if($ttd){
+                    $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
+                    $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
+                    $bln        = $this->bulan($gbln*1);
+                    $thn        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('Y');
+                    $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
+                    $nomor_ttd = $ttd->NOMOR;
+                    $jabatan_ttd = $ttd->PEJABAT;
+                    $nama_ttd = $ttd->NAMA_PEJABAT;
+                    $nip_ttd = $ttd->NIP_PEJABAT;
+                }
+            }
+
             $data       = array('tahun'         =>$tahun,
                         'btlfull'           =>$btlfull,
                         'blfull'           =>$blfull,
@@ -8133,7 +8180,12 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
                         'status'        =>$status,
                         'tgl'           =>$tgl,
                         'bln'           =>$bln,
-                        'thn'           =>$thn,        
+                        'thn'           =>$thn,
+                        'tgl_ttd'       =>$tgl_ttd,     
+                        'nomor_ttd'     =>$nomor_ttd,     
+                        'jabatan_ttd'   =>$jabatan_ttd,     
+                        'nama_ttd'      =>$nama_ttd,     
+                        'nip_ttd'       =>$nip_ttd,         
                         'skpd'          =>$skpd,        
                         'urusan'        =>$urusan,        
                         'bl_rek'        =>$bl_rek,        

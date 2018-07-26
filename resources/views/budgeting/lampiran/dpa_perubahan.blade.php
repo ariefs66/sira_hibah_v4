@@ -623,7 +623,7 @@
   	  </td>
 	  @else
 	  <td class="border-rincian">
-	  	<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{$k->komponen->KOMPONEN_NAMA}}--> 
+	  	<!--&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{(!empty($k->komponen->KOMPONEN_NAMA) ? $k->komponen->KOMPONEN_NAMA : '')}}--> 
 	  	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>- {{$k->RINCIAN_KOMPONEN}} 
 	  	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;({{ $k->RINCIAN_KOEFISIEN }})</i>
 	  	  	  </td>
@@ -658,7 +658,7 @@
 	  <td class="border-rincian tengah">{{ preg_replace("/[^A-Za-z]/"," ",$k->RINCIAN_KOEFISIEN) }}</td>
 
 	  @if($k->BL_ID == 4327 || $k->BL_ID == 6295 || $k->BL_ID ==6296 || $k->BL_ID==6292 || $k->BL_ID==6546 || $k->BL_ID==6209 || $k->BL_ID==295 ||  $k->BL_ID==3754 ||  $k->BL_ID==3376 )
-	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA,0,',','.') }},00</td>
+	  <td class="border-rincian kanan">{{ (!empty($k->komponen->KOMPONEN_HARGA) ? number_format($k->komponen->KOMPONEN_HARGA,0,',','.') : 0) }},00</td>
 	  @else
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA,0,',','.') }},00</td>
 	  @endif
@@ -666,10 +666,10 @@
 	  @if($k->RINCIAN_PAJAK == 0)
 	  <td class="border-rincian kanan">0,00</td>
 	  @elseif($k->BL_ID==3754)
-	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA/10,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">{{ (!empty($k->komponen->KOMPONEN_HARGA) ? number_format($k->komponen->KOMPONEN_HARGA/10,0,',','.') : 0) }},00 </td>
 	  @else
 	  <!-- <td class="border-rincian kanan">{{ number_format($k->RINCIAN_HARGA/10,0,',','.') }},00 </td> -->
-	  <td class="border-rincian kanan">{{ number_format($k->komponen->KOMPONEN_HARGA/10,0,',','.') }},00 </td>
+	  <td class="border-rincian kanan">{{ (!empty($k->komponen->KOMPONEN_HARGA) ? number_format($k->komponen->KOMPONEN_HARGA/10,0,',','.') : 0) }},00 </td>
 	  @endif
 	  <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td>
 	  <!-- <td class="border-rincian kanan">{{ number_format($k->RINCIAN_TOTAL,0,',','.') }},00 </td> -->
