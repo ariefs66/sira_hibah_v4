@@ -4263,9 +4263,9 @@ $rincian->RINCIAN_ID              = ($get_id+1);
             }
 
             //dpa
-            if($tahapan->TAHAPAN_NAMA == 'APBD'){
+            //if($tahapan->TAHAPAN_NAMA == 'APBD'){
                 $no        .= '<li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>';
-            }
+           // }
             
             //info    
             $no        .= '<li class="divider"></li>
