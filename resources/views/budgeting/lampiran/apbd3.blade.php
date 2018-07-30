@@ -104,7 +104,12 @@
 <table class="rincian">
 	<tbody>
 	<tr class="border "> 
-		<td colspan="14"><b>Urusan Pemerintah : </b> {{$urusan->URUSAN_KODE}} &nbsp; &nbsp; &nbsp; {{$urusan->URUSAN_KAT1_NAMA}}<br> 
+		<td colspan="14"><b>Urusan Pemerintah : </b>
+		@if(!empty($urusan))
+		 {{$urusan->URUSAN_KODE}} &nbsp; &nbsp; &nbsp; {{$urusan->URUSAN_KAT1_NAMA}}<br> 
+		@else
+		 &nbsp; &nbsp; &nbsp; <br>
+		@endif 
 		<b>Organisasi &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;: </b>{{$skpd->SKPD_KODE}} &nbsp; {{$skpd->SKPD_NAMA}} </td> 
 	</tr>	
 	<tr class="border headrincian">
