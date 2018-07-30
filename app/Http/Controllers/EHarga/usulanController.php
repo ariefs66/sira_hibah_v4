@@ -474,6 +474,7 @@ class usulanController extends Controller
         $view   = array();
         $display = $data->count();
         foreach ($data as $data) {
+            $dd     = '';
             if(substr(Auth::user()->mod, 3,1) == 1){
                 $opsi   = '<div class="action visible">
                                 <a onclick="return cancel(\''.$data->USULAN_ID.'\')"><i class="mi-trash"></i></a>
