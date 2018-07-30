@@ -484,6 +484,11 @@ class usulanController extends Controller
                                 <a onclick="return acc(\''.$data->USULAN_ID.'\')"><i class="glyphicon glyphicon-ok"></i></a>
                             </div>';
             }elseif(substr(Auth::user()->mod, 4,1) == 1){
+                    if(empty($data->DD_ID)){
+                        $dd     = '';
+                    }else{
+                        $dd         = '<a href="/uploads/komponen/'.$tahun.'/'.$data->datadukung->DD_PATH.'/dd.pdf" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
+                    }
                 $opsi   = '<div class="action visible">
                                 <a onclick="return acc(\''.$data->USULAN_ID.'\')"><i class="glyphicon glyphicon-ok"></i></a>
                             </div>';
@@ -512,7 +517,7 @@ class usulanController extends Controller
                                      'NO'       =>$i,
                                      'PD'       =>$pd->skpd->SKPD_NAMA,
                                      'KATEGORI' =>$data->katkom->KATEGORI_NAMA,
-                                     'NAMA'     =>$data->USULAN_NAMA."<br><p class='text-orange'>".$data->USULAN_SPESIFIKASI.'</p>',
+                                     'NAMA'     =>$data->USULAN_NAMA."<br><p class='text-orange'>".$data->USULAN_SPESIFIKASI.'<br>'.$dd .'</p>',
                                      'REKENING' =>$rekening,
                                      'OPSI'     =>$opsi,
                                      'TIPE'     =>$tipe,
