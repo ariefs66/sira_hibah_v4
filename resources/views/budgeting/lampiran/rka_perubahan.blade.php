@@ -560,7 +560,7 @@
 	</tr>
 	</tbody>	
 </table>
-<table class="ttd">
+<table class="ttd" style="page-break-inside: avoid;">
 	<tr>
 		<td width="75%"></td>
 		<td>Bandung, 15 Maret 2018</td>

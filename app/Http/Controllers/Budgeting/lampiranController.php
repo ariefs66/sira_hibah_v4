@@ -716,8 +716,54 @@ class lampiranController extends Controller
                         ->first(); 
 
 
+                        $id_ttd = TahunAnggaran::where('TAHUN',$tahun)->where('STATUS',$status)->value('ID');
+                        $tgl_ttd    = '';
+                        $nomor_ttd = '';
+                        $jabatan_ttd = '';
+                        $nama_ttd = '';
+                        $nip_ttd = '';
+                        if($id_ttd){
+                            $ttd = TTD::where('KEY','PERWAL1')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+                            if($ttd){
+                                $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
+                                $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
+                                $bln        = $this->bulan($gbln*1);
+                                $thn        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('Y');
+                                $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
+                                $nomor_ttd = $ttd->NOMOR;
+                                $jabatan_ttd = $ttd->PEJABAT;
+                                $nama_ttd = $ttd->NAMA_PEJABAT;
+                                $nip_ttd = $ttd->NIP_PEJABAT;
+                            }
+                        }
 
-            return View('budgeting.lampiran.dpa',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke,'akb_bl'=>$akb_bl, 'urusan'=>$urusan,'skpd'=>$skpd ]);
+            return View('budgeting.lampiran.dpa',['tahun'=>$tahun,
+            'status'=>$status,
+            'bl'=>$bl,
+            'indikator'=>$indikator,
+            'rekening'=>$rekening,
+            'tgl'=>$tgl,
+            'bln'=>$bln,
+            'thn'=>$thn,
+            'tgl_ttd'       =>$tgl_ttd,     
+            'nomor_ttd'     =>$nomor_ttd,     
+            'jabatan_ttd'   =>$jabatan_ttd,     
+            'nama_ttd'      =>$nama_ttd,     
+            'nip_ttd'       =>$nip_ttd,
+            'total'=>$total,
+            'paket'=>$paket,
+            'm'=>0,
+            'komponen'=>$komponen,
+            'totalbl'=>$totalBL,
+            'rek'=>$rek,
+            'q'=>0,
+            's'=>0,
+            'reke'=>$reke,
+            'totalrek'=>$totalrek,
+            'totalreke'=>$totalreke,
+            'akb_bl'=>$akb_bl,
+             'urusan'=>$urusan,
+             'skpd'=>$skpd ]);
 
         }else{
             $bl    = BLPerubahan::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
@@ -861,7 +907,26 @@ class lampiranController extends Controller
                         ->first(); 
 
                       // dd($akb_bl);
-
+                      $id_ttd = TahunAnggaran::where('TAHUN',$tahun)->where('STATUS',$status)->value('ID');
+                      $tgl_ttd    = '';
+                      $nomor_ttd = '';
+                      $jabatan_ttd = '';
+                      $nama_ttd = '';
+                      $nip_ttd = '';
+                      if($id_ttd){
+                          $ttd = TTD::where('KEY','DPA')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+                          if($ttd){
+                              $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
+                              $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
+                              $bln        = $this->bulan($gbln*1);
+                              $thn        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('Y');
+                              $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
+                              $nomor_ttd = $ttd->NOMOR;
+                              $jabatan_ttd = $ttd->PEJABAT;
+                              $nama_ttd = $ttd->NAMA_PEJABAT;
+                              $nip_ttd = $ttd->NIP_PEJABAT;
+                          }
+                      }
            return View('budgeting.lampiran.dpa_perubahan',
                 [   'tahun'             =>$tahun,
                     'status'            =>$status,
@@ -871,6 +936,11 @@ class lampiranController extends Controller
                     'tgl'               =>$tgl,
                     'bln'               =>$bln,
                     'thn'               =>$thn,
+                    'tgl_ttd'       =>$tgl_ttd,     
+                    'nomor_ttd'     =>$nomor_ttd,     
+                    'jabatan_ttd'   =>$jabatan_ttd,     
+                    'nama_ttd'      =>$nama_ttd,     
+                    'nip_ttd'       =>$nip_ttd,    
                     'total'             =>$total,
                     'paket'             =>$paket,
                     'm'                 =>0,
@@ -3551,10 +3621,8 @@ class lampiranController extends Controller
     public function rekapRealisasi($tahun,$status){
 
             
-            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, sum(bl."BL_PAGU") AS "PAGU", sum(realisasi."REALISASI_TOTAL") as "REALISASI"
+            $data   = DB::select('select "SKPD_KODE"||\'-\'||"SKPD_NAMA" AS SKPD, sum(bl."BL_PAGU") AS "PAGU", (SELECT SUM(r."REALISASI_TOTAL") from "BUDGETING"."DAT_BL_REALISASI" r WHERE r."BL_ID" = ANY(array_agg(bl."BL_ID"))) AS "REALISASI"
                                     from "BUDGETING"."DAT_BL_PERUBAHAN" bl
-                                    inner JOIN "BUDGETING"."DAT_BL_REALISASI" realisasi
-                                    on bl."BL_ID" = realisasi."BL_ID"
                                     inner join "REFERENSI"."REF_SKPD" skpd
                                     on bl."SKPD_ID" = skpd."SKPD_ID"
                                     WHERE "BL_TAHUN" = '.$tahun.' and "BL_DELETED" = 0
