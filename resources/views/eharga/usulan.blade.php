@@ -22,7 +22,7 @@
                 <div class="wrapper-lg">
                   <!-- if((substr(Auth::user()->mod,3,1)==1) and Auth::user()->active == 20) -->
                   <div class="dropdown dropdown-blend pull-right m-t-n-sm">
-                  @if($tahun>=2020)
+                  <!--@if($tahun>=2020)-->
                     <button class="btn btn-default dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Tambah Usulan <i class="fa fa-chevron-down"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -30,7 +30,7 @@
                       <li><a class="open-ubah-komponen">Ubah Komponen</a></li>
                       <li><a class="open-tambah-rekening">Tambah Rekening</a></li>
                     </ul>
-                    @endif
+                    <!--@endif-->
                   </div>
                   <!-- endif -->
                   <h5 class="inline font-semibold text-orange m-n">Usulan Komponen</h5>
