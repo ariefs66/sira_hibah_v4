@@ -65,7 +65,7 @@ $view 	.= '<option value="'.$tahun.'/'.$status.'" id="o'.$tahun.$status.'" selec
 		
 		foreach($data as $data){
 				
-			if($data->TAHUN == '2018' && $data->STATUS == 'pergeseran'){
+			/*if($data->TAHUN == '2018' && $data->STATUS == 'pergeseran'){
 				if($tahun == '2018' && $status == 'pergeseran'){
 				} else {
 					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
@@ -76,7 +76,7 @@ $view 	.= '<option value="'.$tahun.'/'.$status.'" id="o'.$tahun.$status.'" selec
 				} else {
 					$view 	.= '<option value="'.$data->TAHUN.'/'.$data->STATUS.'" id="o'.$data->TAHUN.$data->STATUS.'">'.$data->TAHUN.'-'.$data->STATUS.'</option>';
 				}
-			}
+			}*/
 			if($data->TAHUN == '2018' && $data->STATUS == 'perubahan'){
 				if($tahun == '2018' && $status == 'perubahan'){
 				} else {
