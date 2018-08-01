@@ -603,6 +603,7 @@ class usulanController extends Controller
                     'USULAN_NAMA'           => Input::get('USULAN_NAMA'),
                     'USULAN_SPESIFIKASI'    => Input::get('USULAN_SPESIFIKASI'),
                     'USULAN_SATUAN'         => Input::get('USULAN_SATUAN'),
+                    'USULAN_HARGA'         => Input::get('USULAN_HARGA'),
                     // 'USULAN_TANGGAL'        => Input::get('USULAN_TANGGAL'),
                     'USULAN_STATUS'         => 0,
                     'USULAN_POSISI'         => $posisi,
