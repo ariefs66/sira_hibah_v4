@@ -589,17 +589,20 @@
         <div class="col-md-1 m-l-n-md">
         <a class="btn btn-warning" data-toggle="modal" data-target="#kode-komponen" id="pilih-komponen" disabled="true">Pilih</a>
         </div>
-        <div class="col-md-2">
-          <label for="no_spp" class="m-l-xl">Pajak</label>          
-          <div class="checkbox-remember pull-right m-t-n-xs">
-           <div class="checkbox">
-            <label class="checkbox-inline i-checks">
-              <input type="checkbox" id="pajak">
-              <i></i>  
-            </label>
-           </div>
+    @if($status=="perubahan")
+    @else
+    <div class="col-md-2">
+        <label for="no_spp" class="m-l-xl">Pajak</label>          
+        <div class="checkbox-remember pull-right m-t-n-xs">
+          <div class="checkbox">
+          <label class="checkbox-inline i-checks">
+            <input type="checkbox" id="pajak">
+            <i></i>  
+          </label>
           </div>
         </div>
+      </div>
+    @endif
     </div>
 
     <div class="form-group hide" id="harga-free">
@@ -611,9 +614,26 @@
 
     <div class="form-group">
       <label for="no_spp" class="col-md-3">Keterangan</label>          
+      @if($status=="perubahan")
+      <div class="col-sm-7">
+        <input type="text" id="ket-belanja" class="form-control" placeholder="Masukan Keterangan" >          
+      </div> 
+      <div class="col-md-2">
+          <label for="no_spp" class="m-l-xl">Pajak</label>          
+          <div class="checkbox-remember pull-right m-t-n-xs">
+           <div class="checkbox">
+            <label class="checkbox-inline i-checks">
+              <input type="checkbox" id="pajak">
+              <i></i>  
+            </label>
+           </div>
+          </div>
+      </div>
+      @else
       <div class="col-sm-9">
         <input type="text" id="ket-belanja" class="form-control" placeholder="Masukan Keterangan" >          
       </div> 
+      @endif
     </div>
 
     <div class="form-group" id="koef1">
