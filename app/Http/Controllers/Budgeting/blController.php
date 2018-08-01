@@ -166,6 +166,8 @@ class blController extends Controller
 
             $pagu      = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
 
+            dd($pagu);
+
             $rincian   = RincianPerubahan::whereHas('bl',function($r) use($id){
                             $r->whereHas('subunit',function($s) use ($id){
                                     $s->where('SKPD_ID',$id);
@@ -1901,7 +1903,7 @@ class blController extends Controller
         $nowOPD     = RincianPerubahan::whereHas('bl',function($q) use($skpd){
                             $q->whereHas('subunit',function($r) use($skpd){
                                 $r->where('SKPD_ID',$skpd);
-                            });
+                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0);
                         })->sum('RINCIAN_TOTAL');
         $hargakomponen  = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');
 
