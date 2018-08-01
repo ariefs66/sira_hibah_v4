@@ -1899,11 +1899,18 @@ class blController extends Controller
         $skpd       = $this->getSKPD($tahun);
         $totalOPD   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_PAGU');
         $now        = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
-        $nowOPD     = RincianPerubahan::whereHas('bl',function($q) use($skpd,$tahun){
+       /* $nowOPD     = RincianPerubahan::whereHas('bl',function($q) use($skpd,$tahun){
                             $q->whereHas('subunit',function($r) use($skpd){
                                 $r->where('SKPD_ID',$skpd);
                             })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0);
+                        })->sum('RINCIAN_TOTAL');*/
+
+        $nowOPD     = RincianPerubahan::whereHas('bl',function($q) use($skpd,$tahun){
+                            $q->where('SKPD_ID',$skpd);
+                            $q->where('BL_DELETED',0);
+                            $q->where('BL_TAHUN',$tahun);
                         })->sum('RINCIAN_TOTAL');
+
         $hargakomponen  = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA');
 
         //mode cek total jenis belanja per 1 sub unit
