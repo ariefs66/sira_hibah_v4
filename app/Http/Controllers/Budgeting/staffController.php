@@ -42,7 +42,7 @@ class staffController extends Controller
                             ->where('TAHUN',$tahun)
                             ->whereHas('user',function($q){
                                 $q->where('level',1);
-                                $q->where('mod','00000000000');
+                                //$q->where('mod','00000000000');
                             })->orderBy('USER_ID')->get();            
         }elseif(Auth::user()->level == 8){
             $data   = UserBudget::whereHas('user',function($q){
