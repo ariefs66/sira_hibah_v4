@@ -110,7 +110,8 @@
 	<tr class="border headrincian">
 		<td class="border tengah" colspan="10" >KODE <br> REKENING </td>
 		<td class="border tengah" >URAIAN</td>
-		<td class="border tengah" >JUMLAH</td>
+		<td class="border tengah" >SEBELUM</td>
+		<td class="border tengah" >SESUDAH</td>
 		<td class="border tengah" >DASAR HUKUM</td>
 	</tr>		
 	<tr class="border headrincian">
@@ -118,10 +119,12 @@
 		<td class="border">2</td>
 		<td class="border">3</td>
 		<td class="border">4</td>
+		<td class="border">5</td>
 	</tr>
 	<tr style="font-size: 5px;">
 		<td class="border-rincian" colspan="10">&nbsp;</td>
 		<td class="border-rincian"></td>
+		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
 	</tr>

@@ -162,14 +162,14 @@ class blController extends Controller
         if(Auth::user()->level == 1 or Auth::user()->level == 2){
             $blpagu    = BLPerubahan::whereHas('subunit',function($q) use ($id){
                                     $q->where('SKPD_ID',$id);
-                            })->where('BL_TAHUN',$tahun)->sum('BL_PAGU');
+                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
 
             $pagu      = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
 
-            $rincian   = RincianPerubahan::whereHas('bl',function($r) use($id){
-                            $r->whereHas('subunit',function($s) use ($id){
+            $rincian   = RincianPerubahan::whereHas('bl',function($r) use($id,$tahun){
+                            $r->whereHas('subunit',function($s) use ($id, $tahun){
                                     $s->where('SKPD_ID',$id);
-                            });
+                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0);
                         })->sum('RINCIAN_TOTAL');
 
         }else{
