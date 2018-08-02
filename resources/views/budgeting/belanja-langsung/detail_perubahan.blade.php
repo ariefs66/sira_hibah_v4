@@ -1224,7 +1224,7 @@
           $('#pajak').prop('checked',true);
         }
         $('#vol1').val(data['VOL1']);
-        $('#satuan-1').find('option').remove().end().append('<option value="'+data['SATUAN1']+'">'+data['SATUAN1']+'</option>').trigger('chosen:updated');
+        $('#satuan-1').append('<option value="'+data['SATUAN1']+'" selected>'+data['SATUAN1']+'</option>').trigger('chosen:updated');
         $('#vol2').val(data['VOL2']);
         $('#satuan-2').append('<option value="'+data['SATUAN2']+'" selected>'+data['SATUAN2']+'</option>').trigger('chosen:updated');
         $('#vol3').val(data['VOL3']);
