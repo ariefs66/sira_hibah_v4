@@ -3432,7 +3432,11 @@ $rincian->RINCIAN_ID              = ($get_id+1);
                     ]);
             // BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>0]);
             $totalrincian   = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
-
+            if(strlen($totalrincian)>0){
+                if($totalrincian==0){
+                    $totalrincian=1;
+                }
+            }
             $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
             $log                = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
