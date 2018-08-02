@@ -4833,7 +4833,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
 
             array_push($view, array('KODE'      => $data_->rekening->REKENING_KODE,
                                     'URAIAN'    => $data_->rekening->REKENING_NAMA,
-                                    'CLASS'   => ($realisasi>$data->total?1:0),
+                                    'CLASS'   => ($realisasi>$data_->total?1:0),
                                     'SEBELUM'   => number_format($data_->total,0,'.',','),
                                     'REALISASI' => number_format($realisasi,0,'.',','),
                                     'SELISIH'   => number_format(0 - $realisasi,0,'.',','),                                    
