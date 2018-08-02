@@ -23,25 +23,11 @@ class ttdController extends Controller
 
 	public function index($tahun,$status){
 		$urusan 	= '';
-        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->get();
-        $skpd_      = array(); 
         $i = 0;
-        foreach($skpd as $s){
-        $skpd_[$i]   = $s->SKPD_ID;
-        $i++;
-        }
-
-        if(Auth::user()->level == 8){
-            $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();    
-        }elseif(Auth::user()->mod == '01000000000'){
-            $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
-        }else{            
-            $skpdz       = $this->getSKPD($tahun);   
-            $skpd       = SKPD::where('SKPD_ID',$skpdz)->first(); 
-        }
+        $tahunanggaran = TahunAnggaran::orderBy('TAHUN','asc')->orderBy('ID','asc')->get();
 		$rekening 	= '';
         $satuan     = '';
-    	return View('budgeting.referensi.ttd',['tahun'=>$tahun,'status'=>$status,'rekening'=>$rekening,'urusan'=>$urusan,'skpd'=>$skpd,'satuan'=>$satuan]);
+    	return View('budgeting.referensi.ttd',['tahun'=>$tahun,'status'=>$status,'rekening'=>$rekening,'urusan'=>$urusan,'tahunanggaran'=>$tahunanggaran,'satuan'=>$satuan]);
     }
 
     public function getData($tahun, $status, Request $req){

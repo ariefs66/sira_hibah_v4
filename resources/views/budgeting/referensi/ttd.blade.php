@@ -38,7 +38,7 @@
                      <option value="">- Pilih Tahun Anggaran-</option>
                        @if(!empty($tahunanggaran))
                        @foreach($tahunanggaran as $th)
-                       <option value="{{ $th->ID }}">{{ $th->TAHUN . '-' . $th->MURNI }}</option>
+                       <option value="{{ $th->ID }}">{{ $th->TAHUN . '-' . $th->STATUS }}</option>
                        @endforeach
                        @endif
                    </select>
@@ -105,35 +105,17 @@
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
     <form id="form-prioritas" class="form-horizontal">
       <div class="input-wrapper">
-        <h5 id="judul-prioritas">Ubah Program Prioritas</h5>
+        <h5 id="judul-prioritas">Setting Data TTD</h5>
 
           <div class="form-group">
-            <label for="nama_program_prioritas" class="col-md-3">Tahun Program</label>          
-            <div class="col-sm-9">        
-              <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">        
-              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="{{$tahun}}" disabled> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_program_prioritas" class="col-md-3">Kode Program</label>          
+            <label for="tahun_anggaran" class="col-md-3">Tahun Anggaran</label>          
             <div class="col-sm-9">
-              <input type="text" class="form-control" readonly placeholder="Kode Program Otomatis Melanjutkan Kode Terakhir" name="kode_program_prioritas" id="kode_program_prioritas" value="" disabled> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_program" class="col-md-3">Nama Program</label>          
-            <div class="col-sm-9">
-              <input type="text" class="form-control" readonly placeholder="Masukan Nama Program" name="nama_program" id="nama_program_prioritas" value=""> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_program" class="col-md-3">Program Prioritas</label>          
-            <div class="col-sm-9">
-              <select ui-jq="chosen" class="w-full" id="prioritas_program_prioritas" name="prioritas_program_prioritas">
-              <option value="0">Silahkan Pilih Program Prioritas</option>
+              <select ui-jq="chosen" class="w-full" id="tahun_anggaran" name="tahun_anggaran">
+              @if(!empty($tahunanggaran))
+              @foreach($tahunanggaran as $th)
+              <option value="{{ $th->ID }}">{{ $th->TAHUN . '-' . $th->STATUS }}</option>
+              @endforeach
+              @endif
               </select>
             </div> 
           </div>

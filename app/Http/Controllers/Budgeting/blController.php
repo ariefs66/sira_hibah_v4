@@ -2370,14 +2370,16 @@ $rincian->RINCIAN_ID              = ($get_id+1);
     public function kuncirincianskpd($tahun,$status){
         $skpd   = Input::get('SKPD_ID');
         if($status=='murni'){
-            $bl     = BL::whereHas('subunit',function($q) use ($skpd){
+            $bl = BL::where('SKPD_ID',$skpd)->pluck('BL_ID')->toArray();
+            /*$bl     = BL::whereHas('subunit',function($q) use ($skpd){
                         $q->where('SKPD_ID',$skpd);
-                    })->where('BL_TAHUN',$tahun)->select('BL_ID')->get()->toArray();
+                    })->where('BL_TAHUN',$tahun)->select('BL_ID')->get()->toArray();*/
             Kunci::whereIn('BL_ID',$bl)->update(['KUNCI_RINCIAN'=>Input::get('STATUS')]);
         }else{
-            $bl     = BLPERUBAHAN::whereHas('subunit',function($q) use ($skpd){
+            $bl = BLPERUBAHAN::where('SKPD_ID',$skpd)->pluck('BL_ID')->toArray();
+            /*$bl     = BLPERUBAHAN::whereHas('subunit',function($q) use ($skpd){
                         $q->where('SKPD_ID',$skpd);
-                    })->where('BL_TAHUN',$tahun)->select('BL_ID')->get()->toArray();
+                    })->where('BL_TAHUN',$tahun)->select('BL_ID')->get()->toArray();*/
             Kunciperubahan::whereIn('BL_ID',$bl)->update(['KUNCI_RINCIAN'=>Input::get('STATUS')]);
         }
         
