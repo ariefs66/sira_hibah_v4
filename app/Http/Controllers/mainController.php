@@ -18,13 +18,13 @@ class mainController extends Controller
     }
 
 	public function index(){
-		$tahun 	= Carbon\Carbon::now()->format('Y')+1;
+		$tahun 	= Carbon\Carbon::now()->format('Y');
 		if(Auth::user()->app == 3) {
 			if(substr(Auth::user()->mod, 4,1) == 1 || substr(Auth::user()->mod, 5,1) == 1 || substr(Auth::user()->mod, 6,1) == 1){
 				return Redirect('harga/'.$tahun);		
 			}else{
 				// return View('maintenence');
-				return Redirect('main/'.$tahun.'/murni');		
+				return Redirect('main/'.$tahun.'/perubahan');		
 			}
 		}
 		else if(Auth::user()->app == 4) return Redirect('harga/'.$tahun);
