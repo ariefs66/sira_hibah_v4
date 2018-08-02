@@ -1235,7 +1235,8 @@
     });
     $('.overlay').fadeIn('fast',function(){
       $('.input-rincian').animate({'right':'0'},"linear");  
-        interval = setInterval(function(){getpagu();}, 1000);
+      getpagu();
+      //interval = setInterval(function(){getpagu();}, 1000);
       $("html, body").animate({ scrollTop: 0 }, "slow");
     });
 
@@ -1384,7 +1385,7 @@
 
   $('.open-rincian').on('click',function(){
     $(document).ready(function(){
-        interval = setInterval(function(){getpagu();}, 1000);
+        getpagu();
         //clearInterval(interval);
         $('.edit').show();              
         $('#id-rincian').val('');
@@ -1410,11 +1411,11 @@
 
 
     $('.overlay').on('click',function(){      
-        clearInterval(interval);
+        //clearInterval(interval);
     }); 
 
     $('.close').click(function(){
-        clearInterval(interval);
+        //clearInterval(interval);
         $('.input-sidebar').animate({'right':'-1050px'},"linear",function(){
           $('.overlay').fadeOut('fast');
         });

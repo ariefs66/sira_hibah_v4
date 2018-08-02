@@ -22,18 +22,14 @@
               <div class="col-md-12">
                 <div class="panel bg-white">
                   <div class="wrapper-lg">
-                    @if($tutup == 1)
-                    <button class="pull-right btn m-t-n-sm btn-success open-tahapan" id="btn-tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Tahapan</button>
-                    @else
-                    <button class="pull-right btn m-t-n-sm btn-success open-tahapan" id="btn-tambah"><i class="m-r-xs fa fa-plus"></i> Tambah Tahapan</button>                    
-                    @endif
-                    <h5 class="inline font-semibold text-orange m-n ">Tahapan Tahun {{ $tahun }}</h5>
+                    <button class="pull-right btn m-t-n-sm btn-success open-tahapan" id="btn-tambah"><i class="m-r-xs fa fa-plus"></i> Tambah TTD</button>
+                    <h5 class="inline font-semibold text-orange m-n ">Setting TTD Tahun {{ $tahun }}</h5>
                   </div>           
                   <div class="tab-content tab-content-alt-1 bg-white">
                         <div role="tabpanel" class="active tab-pane" id="tab-1">  
                             <div class="table-responsive dataTables_wrapper">
                              <table ui-jq="dataTable" ui-options="{
-                                    sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/tahapan/getData',
+                                    sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/ttd/getData',
                                     aoColumns: [
                                     { mData: 'TAHAPAN_ID',class:'hide' },
                                     { mData: 'STATUS',class:'hide' },
