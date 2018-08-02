@@ -62,7 +62,7 @@ class ttdController extends Controller
             $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
     		array_push($view, array( 'id_ttd'		=>$data->TTD_ID,
                                      'OPSI'				=>$aksi,
-                                     'DATA'				=>'Tanggal: '. $tgl_ttd.'<br/>Jabatan: ' . $data->JABATAN.'<br/>Nama: '.$data->NAMA_PEJABAT,
+                                     'DATA'				=>'Tanggal: '. $tgl_ttd.'<br/>Jabatan: ' . $data->JABATAN.'<br/>Nama: '.$data->NAMA_PEJABAT.'<br/>NIP: '.$data->NIP_PEJABAT,
                                      'TAHUN'			=>$tahapan->TAHUN . '-' . $tahapan->STATUS,
                                      'KEY'				=>$data->KEY,
                                      'PROGRAM'			=>"<i class='mi-caret-down m-r-sm'></i>".$data->PROGRAM_KODE." - ".$data->PROGRAM_NAMA));

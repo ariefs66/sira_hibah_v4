@@ -4828,8 +4828,8 @@ $rincian->RINCIAN_ID              = ($get_id+1);
         foreach($data_ as $data_){
             $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data_->REKENING_ID)->sum('REALISASI_TOTAL');
             
-            $aksi = '<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->REKENING_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
-            $aksi       .= '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
+            $aksi = '<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data_->REKENING_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
+            $aksi       .= '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data_->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
 
             array_push($view, array('KODE'      => $data_->rekening->REKENING_KODE,
                                     'URAIAN'    => $data_->rekening->REKENING_NAMA,
