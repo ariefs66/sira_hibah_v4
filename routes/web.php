@@ -344,6 +344,14 @@ Route::post('/main/{tahun}/{status}/pengaturan/subunit/delete', 'Budgeting\Refer
 Route::post('/main/{tahun}/{status}/pengaturan/subunit/add/submit', 'Budgeting\Referensi\subunitController@submitAdd');
 Route::post('/main/{tahun}/{status}/pengaturan/subunit/edit/submit', 'Budgeting\Referensi\subunitController@submitEdit');
 
+//TTD
+Route::get('/main/{tahun}/{status}/pengaturan/ttd', 'Budgeting\Referensi\ttdController@index');
+Route::get('/main/{tahun}/{status}/pengaturan/ttd/getData', 'Budgeting\Referensi\ttdController@getData');
+Route::get('/main/{tahun}/{status}/pengaturan/ttd/getData/{id}', 'Budgeting\Referensi\ttdController@getDetail');
+Route::get('/main/{tahun}/{status}/pengaturan/ttd/getDataDetail/{id}', 'Budgeting\Referensi\ttdController@getDataDetail');
+Route::post('/main/{tahun}/{status}/pengaturan/ttd/submitTTD', 'Budgeting\Referensi\ttdController@submitTTD');
+Route::post('/main/{tahun}/{status}/pengaturan/ttd/hapusTTD', 'Budgeting\Referensi\ttdController@hapusTTD');
+
 //NOMENKLATUR
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur', 'Budgeting\Referensi\nomenklaturController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData', 'Budgeting\Referensi\nomenklaturController@getData');

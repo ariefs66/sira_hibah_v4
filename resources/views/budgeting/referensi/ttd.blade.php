@@ -14,7 +14,7 @@
                 </a>   </li>
                 <li><a href= "{{ url('/') }}/main">Dashboard</a></li>
                 <li><a>Pengaturan</a></li>
-                <li class="active"><i class="fa fa-angle-right"></i>TTD</li>                                
+                <li class="active"><i class="fa fa-angle-right"></i>Setting TTD</li>                                
               </ul>
           </div>
           <div class="wrapper-lg">
@@ -22,37 +22,51 @@
               <div class="col-md-12">
                 <div class="panel bg-white">
                   <div class="wrapper-lg">
-                    <button class="pull-right btn m-t-n-sm btn-success open-tahapan" id="btn-tambah"><i class="m-r-xs fa fa-plus"></i> Tambah TTD</button>
-                    <h5 class="inline font-semibold text-orange m-n ">Setting TTD Tahun {{ $tahun }}</h5>
+                    @if(Auth::user()->level == 8 && Auth::user()->active == 1) 
+                    <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+                      <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Tambah <i class="fa fa-chevron-down"></i>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                        <li><a class="open-form-ttd">Tambah Data TTD</a></li>
+                      </ul>
+                    </div>
+                    @endif
+  
+                    <h5 class="inline font-semibold text-orange m-n ">Setting Data TTD</h5>
+          					<div class="col-sm-1 pull-right m-t-n-sm">
+                    	<select class="form-control dtSelect" id="dtSelect">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>                      
                   </div>           
                   <div class="tab-content tab-content-alt-1 bg-white">
                         <div role="tabpanel" class="active tab-pane" id="tab-1">  
-                            <div class="table-responsive dataTables_wrapper">
+                            <div class="table-responsive dataTables_wrapper table-ttd">
                              <table ui-jq="dataTable" ui-options="{
                                     sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/ttd/getData',
                                     aoColumns: [
-                                    { mData: 'TAHAPAN_ID',class:'hide' },
-                                    { mData: 'STATUS',class:'hide' },
-                                    { mData: 'no',class:'text-center' },
-                                    { mData: 'TAHAPAN_NAMA' },
-                                    { mData: 'TAHAPAN_AWAL' },
-                                    { mData: 'TAHAPAN_AKHIR' }
-                                    ]}" class="table table-striped b-t b-b" id="table-tahapan">
+                                    { mData: 'id_ttd',class:'hide' },
+                                    { mData: 'TAHUN' },
+                                    { mData: 'KEY' },
+                                    { mData: 'DATA' },
+                                    { mData: 'OPSI' }
+                                    ]}" class="table table-ttd-head table-striped b-t b-b">
                                     <thead>
                                       <tr>
-                                        <th class="hide"></th>
-                                        <th class="hide"></th>
-                                        <th>No</th>
+                                        <th class="hide">No</th>
                                         <th>Tahapan</th>
-                                        <th>Awal</th>
-                                        <th>Akhir</th>
+                                        <th>Lampiran</th>
+                                        <th>Pengaturan</th>
+                                        <th width="20%">#</th>
                                       </tr>
                                       <tr>
                                         <th class="hide"></th>
-                                        <th class="hide"></th>
                                         <th colspan="4" class="th_search">
                                             <i class="icon-bdg_search"></i>
-                                            <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Tahapan" aria-controls="DataTables_Table_0">
+                                            <input type="search" class="table-search form-control b-none w-full" placeholder="Cari Lampiran" aria-controls="DataTables_Table_0">
                                         </th>
                                       </tr>
                                     </thead>
@@ -73,137 +87,97 @@
 </div>
 
 <div class="overlay"></div>
-<div class="bg-white wrapper-lg input-sidebar input-tahapan">
+<div class="bg-white wrapper-lg input-sidebar input-ttd">
 <a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
-    <form id="form-urusan" class="form-horizontal">
+    <form id="form-prioritas" class="form-horizontal">
       <div class="input-wrapper">
-        <h5 id="judul-form">Tambah Tahapan</h5>
+        <h5 id="judul-prioritas">Ubah Program Prioritas</h5>
+
           <div class="form-group">
-            <label for="kode_urusan" class="col-md-3">Tahapan</label>          
-            <div class="col-sm-9">
-              <input type="text" class="form-control" id="tahapan" value="{{ $tahapan }}" readonly="">
-              <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token">          
-              <input type="hidden" class="form-control" name="id_tahapan" id="id_tahapan">          
+            <label for="nama_program_prioritas" class="col-md-3">Tahun Program</label>          
+            <div class="col-sm-9">        
+              <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">        
+              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="{{$tahun}}" disabled> 
             </div> 
           </div>
 
           <div class="form-group">
-            <label for="awal" class="col-md-3">Tanggal Awal</label>          
+            <label for="nama_program_prioritas" class="col-md-3">Kode Program</label>          
             <div class="col-sm-9">
-            <input type="text" ui-jq="daterangepicker" ui-options="{singleDatePicker:true,timePicker24Hour:true,format:'YYYY-MM-DD H:mm:ss',timePicker: true}" placeholder="Tanggal Awal" class="form-control" id="awal">
+              <input type="text" class="form-control" readonly placeholder="Kode Program Otomatis Melanjutkan Kode Terakhir" name="kode_program_prioritas" id="kode_program_prioritas" value="" disabled> 
             </div> 
           </div>
+
           <div class="form-group">
-            <label for="awal" class="col-md-3">Kunci Pagu OPD</label>          
+            <label for="nama_program" class="col-md-3">Nama Program</label>          
             <div class="col-sm-9">
-            <label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" id="kunci-opd"><i></i></label>
+              <input type="text" class="form-control" readonly placeholder="Masukan Nama Program" name="nama_program" id="nama_program_prioritas" value=""> 
             </div> 
           </div>
+
           <div class="form-group">
-            <label for="awal" class="col-md-3">Kunci Pagu Kegiatan</label>          
+            <label for="nama_program" class="col-md-3">Program Prioritas</label>          
             <div class="col-sm-9">
-            <label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" id="kunci-giat"><i></i></label>
+              <select ui-jq="chosen" class="w-full" id="prioritas_program_prioritas" name="prioritas_program_prioritas">
+              <option value="0">Silahkan Pilih Program Prioritas</option>
+              </select>
             </div> 
           </div>
 
           <hr class="m-t-xl">
-          <a class="btn input-xl m-t-md btn-warning pull-left" onclick="return tutupTahapan()" disabled="true" id="btn-tutup"><i class="fa fa-close m-r-xs "></i>Tutup Tahapan</a>
-          <a class="btn input-xl m-t-md btn-info pull-left m-l-md" onclick="return subTahapan()"><i class="fa fa-close m-r-xs "></i>Sub Tahapan</a>
-          <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanTahapan()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPrioritas()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
       </div>
     </form>
   </div>
  </div>
-
- <div class="modal fade " id="modal_subtahapan" tabindex="-1" role="dialog">
-  <div class="modal-dialog bg-white">
-    <div class="panel panel-default">
-      <div class="wrapper-lg">
-        <h5 class="inline font-semibold text-orange m-n text16 ">Sub Tahapan {{ $tahapan }}</h5>
-        <hr>
-        <div class="input-wrapper">
-          <div class="form-group col-md-12">
-          <label for="kode_urusan" class="col-md-3">Sub Tahapan</label>          
-          <div class="col-sm-9">
-            <input type="text" class="form-control" id="text_sub_tahapan">  
-          </div> 
-        </div>
-        <div class="form-group col-md-12">
-          <label for="awal" class="col-md-3">Tanggal Akhir</label>          
-          <div class="col-sm-9">
-            <input type="text" ui-jq="daterangepicker" ui-options="{singleDatePicker:true,timePicker24Hour:true,format:'YYYY-MM-DD H:mm:ss',timePicker: true}" placeholder="Tanggal Akhir" class="form-control" id="text_akhir_subtahapan">
-          </div> 
-        </div>
-        <div class="form-group col-md-12">
-          <button class="btn btn-success pull-right" onclick="return simpanSubTahapan()">Simpan</button>
-        </div>
-        </div>
-      </div>
-      <br><br>
-      <br><br>
-      <br><br>
-      <br><br>
-      <div class="table-responsive">
-        <table class="table table-popup table-striped b-t b-b table-komponen" id="tabel_subtahapan">
-          <thead>
-            <tr>
-              <th>Subtahapan</th>
-              <th>Tanggal Berakhir</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 
 @section('plugin')
 <script type="text/javascript">
-  function simpanTahapan(){
-    var id_tahapan   = $('#id_tahapan').val();
-    var awal         = $('#awal').val();
-    var token        = $('#token').val();
-    var tahapan      = $('#tahapan').val();
-    if($('#kunci-giat').is(':checked')) giat = 1;
-    else giat = 0;
-    if($('#kunci-opd').is(':checked')) opd = 1;
-    else opd = 0;
-    if(awal == "" || akhir == "" || tahapan == ""){
-      $.alert('Form harap diisi!');
+  $('.open-form-ttd').on('click',function(){
+      $('.overlay').fadeIn('fast',function(){
+        $('.input-ttd').animate({'right':'0'},"linear"); 
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+      }); 
+  });
+
+  function simpanTTD(){
+    var urusan        = $('#urusan').val();
+    var nama_program  = $('#nama_program').val();
+    var skpd          = $('#skpd').val();
+    var id_program    = $('#id_program').val();
+    var token         = $('#token').val();
+    if(urusan == "0" || nama_program == "" ){
+      $.alert('Form harap dilengkapi!');
     }else{
-      if(id_tahapan == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/tahapan/add/submit";
-      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/tahapan/edit/submit";
+      if(id_program == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/add/submit";
+      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/edit/submit";
+      //console.log(uri);
       $.ajax({
         url: uri,
         type: "POST",
         data: {'_token'         : token,
-              'id_tahapan'      : id_tahapan,
+              'urusan'          : urusan, 
+              'skpd'            : skpd,
               'tahun'           : '{{$tahun}}', 
-              'status'          : '{{$status}}', 
-              'tahapan'         : tahapan, 
-              'giat'            : giat, 
-              'opd'             : opd, 
-              'awal'            : awal},
+              'id_program'      : id_program, 
+              'nama_program'    : nama_program},
         success: function(msg){
             if(msg == 1){
-              $('#tahapan').val('');
-              $('#awal').val('');
-              $('#akhir').val('');
-              $('#btn-tambah').addClass('hide');
-              $('#table-tahapan').DataTable().ajax.reload();              
+              $('#urusan select').val('0').trigger("chosen:updated");
+              $('#skpd').val('').trigger("chosen:updated");
+              $('#nama_program').val('');
+              $('#id_program').val('');
+              $('.table-program-head').DataTable().ajax.reload();              
               $.alert({
                 title:'Info',
                 content: 'Data berhasil disimpan',
                 autoClose: 'ok|1000',
                 buttons: {
                     ok: function () {
-                      $('.input-sidebar,.input-tahapan').animate({'right':'-1050px'},function(){
+                      $('.input-spp,.input-spp-langsung,.input-sidebar').animate({'right':'-1050px'},function(){
                         $('.overlay').fadeOut('fast');
-                      });
-                      $('#table-tahapan').DataTable().ajax.reload();                      
+                      });                      
                     }
                 }
               });
@@ -214,44 +188,46 @@
         });
     }
   }
-
-  function tutupTahapan(){
-    var id_tahapan   = $('#id_tahapan').val();
-    var token        = $('#token').val();
-    $.ajax({
-        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/tahapan/tutup",
-        type: "POST",
-        data: {'_token'         : token,
-              'TAHAPAN_ID'      : id_tahapan},
-        success: function(msg){
-              $.alert({
-                title:'Info',
-                content: msg,
-                autoClose: 'ok|1000',
-                buttons: {
-                    ok: function () {
-                      $('.input-sidebar,.input-tahapan').animate({'right':'-1050px'},function(){
-                        $('.overlay').fadeOut('fast');
-                      });
-                      $('#table-tahapan').DataTable().ajax.reload();
-                      location.reload();                      
-                      $('#btn-tambah').removeClass('hide');                       
-                    }
+  function hapusProgram(id){
+    var token        = $('#token').val();    
+    $.confirm({
+        title: 'Hapus Data!',
+        content: 'Yakin hapus data?',
+        buttons: {
+            Ya: {
+                btnClass: 'btn-danger',
+                action: function(){
+                  $.ajax({
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/delete",
+                      type: "POST",
+                      data: {'_token'         : token,
+                            'id_program'      : id},
+                      success: function(msg){
+                          $.alert(msg);
+                          $('.table-program-head').DataTable().ajax.reload();                          
+                        }
+                  });
                 }
-              });
-          }
-        });  
+            },
+            Tidak: function () {
+            }
+        }
+    });
   }
 
-  function ubah(id) {
-    $('#judul-form').text('Ubah Urusan');        
+  function ubahProgram(id) {
+    $('#judul-form').text('Ubah Program');        
     $.ajax({
-      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/urusan/getData/"+id,
+      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
       type: "GET",
       success: function(msg){
-        $('#kode_urusan').val(msg[0]['URUSAN_KODE']);
-        $('#nama_urusan').val(msg[0]['URUSAN_NAMA']);
-        $('#id_urusan').val(msg[0]['URUSAN_ID']);
+        $('select#skpd').append(msg['skpd']).trigger("chosen:updated");
+        $('select#urusan').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
+        $('#id_program').val(msg['data'][0]['PROGRAM_ID']);
+        $('#tahun_program').val(msg['data'][0]['PROGRAM_TAHUN']);
+        $('#kode_program').val(msg['data'][0]['PROGRAM_KODE']);
+        $('#nama_program').val(msg['data'][0]['PROGRAM_NAMA']);
+        $('#prioritas_program').val(msg['data'][0]['PROGRAM_PRIORITAS']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-btl').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -259,97 +235,35 @@
       }
     });    
   }
-
   $('a.tutup-form').click(function(){
-        $('#awal').val('');
-        $('#akhir').val('');
-        $('#id_tahapan').val('');
-        $('#btn-tutup').attr('disabled',true);        
+      $('select#urusan').val('0').trigger("chosen:updated");
+      $('select#skpd').val('').trigger("chosen:updated");
+      $('select#skpd_').val('').trigger("chosen:updated");
+      $('#nama_program').val('');
+      $('#kode_program').val('');
+      $('#prioritas_program').val('');
+      $('#id_program').val('');
+      $('#nama_kegiatan').val('');
+      $('#kode_kegiatan').val('');
+      $('#kunci_kegiatan').val('');
+      $('#prioritas_kegiatan').val('');
+      $('#id_giat').val('');
   }); 
-
-  $('#table-tahapan').on('click','tbody > tr', function(){
-      if($(this).children('td').eq(1).html() != 1){
-        $('#btn-tutup').attr('disabled',false);
-        kode = $(this).children('td').eq(0).html();
-        
-        $.ajax({
-          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/tahapan/getData/"+kode,
-          type: "GET",
-          success: function(msg){
-            $('#tahapan').val(msg[0]['TAHAPAN_NAMA']);
-            $('#id_tahapan').val(msg[0]['TAHAPAN_ID']);
-            $('#awal').val(msg[0]['TAHAPAN_AWAL']);
-            $('#akhir').val(msg[0]['TAHAPAN_AKHIR']);
-            if(msg[0]['TAHAPAN_KUNCI_GIAT'] == 1){
-              $('#kunci-giat').attr('checked',true);
-            }else{
-              $('#kunci-giat').attr('checked',false);
-            }
-            if(msg[0]['TAHAPAN_KUNCI_OPD'] == 1){
-              $('#kunci-opd').attr('checked',true);
-            }else{
-              $('#kunci-opd').attr('checked',false);
-            }
-            $('#awal').attr('readonly',true);
-            $('.overlay').fadeIn('fast',function(){
-              $('.input-tahapan').animate({'right':'0'},"linear");  
-              $("html, body").animate({ scrollTop: 0 }, "slow");
-            });
-          }
-        });
-      }
-  })
-
-  $('.overlay').on('click',function(){      
-      $('.input-sidebar').animate({'right':'-1050px'},"linear",function(){
-        $('.overlay').fadeOut('fast');
-      }); 
-        $('#awal').val('');
-        $('#akhir').val('');
-        $('#id_tahapan').val('');
-        $('#btn-tutup').attr('disabled',true);  
-  });
-
-  function subTahapan(){
-    $('#modal_subtahapan').modal('show');
-    loadTableSub();
-  }
-
-  function simpanSubTahapan(){
-    var id_tahapan   = $('#id_tahapan').val();
-    var token        = $('#token').val();
-    var tahapan      = $('#text_sub_tahapan').val();
-    var akhir      = $('#text_akhir_subtahapan').val();
-    if(tahapan == "" || akhir == ""){
-      $.alert('Form harap diisi!');
-    }else{
-      $.ajax({
-        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/subtahapan/add/submit",
-        type: "POST",
-        data: {'_token'         : token,
-              'TAHAPAN_ID'      : id_tahapan,
-              'TAHAPAN_NAMA'    : tahapan, 
-              'TAHAPAN_AKHIR'   : akhir},
-        success: function(msg){
-              $.alert('OK!');
-              loadTableSub();
-          }
-      });
-    }    
-  }
-
-  function loadTableSub(){
-    id  = $('#id_tahapan').val();
-    $('#tabel_subtahapan').DataTable().destroy();
-    $('#tabel_subtahapan').DataTable({
-      sAjaxSource     : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/subtahapan/getData/"+id,
-          aoColumns       : [
-                              { mData: 'NAMA' },
-                              { mData: 'TGL'}
-                            ]
-      });    
-  }
+  $('.overlay').click(function(){
+      $('select#urusan').val('0').trigger("chosen:updated");
+      $('select#urusan_').val('0').trigger("chosen:updated");
+      $('select#skpd').val('').trigger("chosen:updated");
+      $('select#skpd_').val('').trigger("chosen:updated");
+      $('select#program_').val('').trigger("chosen:updated");
+      $('#nama_program').val('');
+      $('#kode_program').val('');
+      $('#prioritas_program').val('');
+      $('#id_program').val('');
+      $('#nama_kegiatan').val('');
+      $('#kode_kegiatan').val('');
+      $('#kunci_kegiatan').val('');
+      $('#prioritas_kegiatan').val('');
+      $('#id_giat').val('');
+  }); 
 </script>
 @endsection
-
-

@@ -4465,8 +4465,8 @@ $rincian->RINCIAN_ID              = ($get_id+1);
             }
             if(empty($data->rincian)) $totalRincian = 0;
             else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,'.',',');
-            $datasebelum        = BL::where('BL_ID',$data->BL_ID)->first();
-            $rinciansebelum     = Rincian::where('BL_ID',$data->BL_ID)->sum('RINCIAN_TOTAL');
+            $datasebelum        = BL::where('BL_ID',$data->BL_ID)->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->first();
+            $rinciansebelum     = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->where('DAT_BL.BL_ID',$data->BL_ID)->where('DAT_BL.BL_TAHUN',$tahun)->where('DAT_BL.BL_DELETED',0)->sum('DAT_RINCIAN.RINCIAN_TOTAL');
             // if(empty($rinciansebelum)) $rinciansebelum = 0;
             // else $rinciansebelum = number_format($rinciansebelum,0,'.',',');
             $realisasi  = Realisasi::where('BL_ID',$data->BL_ID)->sum('REALISASI_TOTAL');
