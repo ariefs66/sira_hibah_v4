@@ -4786,13 +4786,13 @@ $rincian->RINCIAN_ID              = ($get_id+1);
     }
 
     public function getringkasanrekening($tahun,$status,$id){
-        $data   = RincianPerubahan::where('BL_ID',$id)
+        $data   = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('DAT_BL_PERUBAHAN.BL_ID',$id)
                         ->groupBy('REKENING_ID')
                         ->select('REKENING_ID')
                         ->selectRaw('SUM("RINCIAN_TOTAL") as total')
                         ->get();
         $data1  = RincianPerubahan::where('BL_ID',$id)->selectRaw('DISTINCT("REKENING_ID")')->get()->toArray();
-        $data_  = Rincian::where('BL_ID',$id)
+        $data_  = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('DAT_BL.BL_ID',$id)
                         ->whereNotIn('REKENING_ID',$data1)
                         ->groupBy('REKENING_ID')
                         ->select('REKENING_ID')
@@ -4801,8 +4801,8 @@ $rincian->RINCIAN_ID              = ($get_id+1);
         $view   = array();
         $total   = array('SEBELUM' => 0,'SESUDAH' => 0,'REALISASI' => 0);
         foreach($data as $data){
-            $sebelum    = Rincian::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->sum('RINCIAN_TOTAL');
-            $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->sum('REALISASI_TOTAL');
+            $sebelum    = Rincian::where('DAT_BL.BL_ID',$id)->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('REKENING_ID',$data->REKENING_ID)->sum('RINCIAN_TOTAL');
+            $realisasi  = Realisasi::where('DAT_BL_REALISASI.BL_ID',$id)->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_BL_REALISASI.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('REKENING_ID',$data->REKENING_ID)->sum('REALISASI_TOTAL');
 
             //jika kode skpd 4.02.01 (bpka) dan 4.05.02 (sekda tp bagian orpad dan balap)
 

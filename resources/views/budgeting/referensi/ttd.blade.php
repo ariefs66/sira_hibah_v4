@@ -32,20 +32,18 @@
                     </div>
                     @endif
   
+                    @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
                     <div class="col-sm-4 pull-right m-t-n-sm">
                    <select ui-jq="chosen" class="form-control" id="filter-skpd">
                      <option value="">- Pilih Tahun Anggaran-</option>
-                     @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
-                       @if(!empty($skpd))
-                       @foreach($skpd as $pd)
-                       <option value="{{ $pd->SKPD_ID }}">{{ $pd->SKPD_NAMA }}</option>
+                       @if(!empty($tahunanggaran))
+                       @foreach($tahunanggaran as $th)
+                       <option value="{{ $th->ID }}">{{ $th->TAHUN . '-' . $th->MURNI }}</option>
                        @endforeach
                        @endif
-                     @elseif(Auth::user()->level == 2)
-                        <option value="{{ $skpd->SKPD_ID }}">{{ $skpd->SKPD_NAMA }}</option>
-                     @endif
                    </select>
                  </div>
+                 @endif
 
 
                     <h5 class="inline font-semibold text-orange m-n ">Setting Data TTD</h5>
