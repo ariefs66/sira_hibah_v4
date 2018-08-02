@@ -497,11 +497,11 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 2 Januari 2018</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : '2 Januari 2018')}}</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>SEKERTARIS DAERAH</td>
+		<td>{{(isset($jabatan_ttd) ? (strlen($jabatan_ttd)>0?$jabatan_ttd:'SEKRETARIS DAERAH') : 'SEKRETARIS DAERAH')}}</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -510,11 +510,11 @@
 	<tr>
 		<td></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
-		Dr. H. YOSSI IRIANTO, M.Si</span></td>
+		{{(isset($nama_ttd) ? (strlen($nama_ttd)>0?$nama_ttd:'Dr. H. YOSSI IRIANTO, M.Si') : 'Dr. H. YOSSI IRIANTO, M.Si')}}</span></td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>NIP. 19620429 198509 1 001</td>
+		<td>{{(isset($nip_ttd) ? (strlen($nip_ttd)>0?'NIP. '.$nip_ttd:'NIP. 19620429 198509 1 001') : 'NIP. 19620429 198509 1 001')}}</td>
 	</tr>
 </table>
 </div>

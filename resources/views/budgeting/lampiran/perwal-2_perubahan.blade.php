@@ -80,8 +80,8 @@
 <div class="cetak">
 	<div style="margin-left: 330px;">
 	<h5 style="margin-right: -450px;">LAMPIRAN II Peraturan Wali Kota Bandung</h5>
-	<h5 style="margin-right: -525px;">NOMOR &nbsp; &nbsp; : <!-- 475 Tahun 2018 --></h5>
-	<h5 style="margin-right: -530px;">TANGGAL &nbsp;: <!-- 16 Maret 2018 --></h5>
+	<h5 style="margin-right: -525px;">NOMOR &nbsp; &nbsp; : {{(isset($nomor_ttd) ? (strlen($nomor_ttd)>0?$nomor_ttd:'') : '')}}<!-- 475 Tahun 2018 --></h5>
+	<h5 style="margin-right: -530px;">TANGGAL &nbsp;: {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:'') : '')}}<!-- 16 Maret 2018 --></h5>
 	</div>
 	<br>
 <table class="header">
@@ -518,11 +518,11 @@
 	</tr>
 	<tr>
 		<td width="60%"></td>
-		<td>Bandung, 30 Mei <!--{{ $bln }}--> {{ $thn }}</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : $tgl.' '.$bln.' '.$thn)}}</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>PJs WALIKOTA BANDUNG</b></td>
+		<td><b>{{(isset($jabatan_ttd) ? (strlen($jabatan_ttd)>0?$jabatan_ttd:'PJs WALIKOTA BANDUNG') : 'PJs WALIKOTA BANDUNG')}}</b></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -530,7 +530,7 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>MUHAMAD SOLIHIN</b></td>
+		<td><b>{{(isset($nama_ttd) ? (strlen($nama_ttd)>0?$nama_ttd:'MUHAMAD SOLIHIN') : 'MUHAMAD SOLIHIN')}}</b></td>
 	</tr>
 	<tr>
 		<td></td>

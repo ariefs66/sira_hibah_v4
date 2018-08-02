@@ -190,7 +190,7 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 28 Desember 2017</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : '28 Desember 2017')}}</td>
 	</tr>
 	<tr>
 		<td></td>

@@ -274,11 +274,11 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 20 Maret 2018</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : '20 Maret 2018')}}</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td><b>Plh. Pejabat Pengelola Keuangan Daerah</b></td>
+		<td><b>{{(isset($jabatan_ttd) ? (strlen($jabatan_ttd)>0?$jabatan_ttd:'Plh. Pejabat Pengelola Keuangan Daerah') : 'Plh. Pejabat Pengelola Keuangan Daerah')}}</b></td>
 	</tr>
 	<tr>
 		<td></td>
@@ -288,14 +288,14 @@
 		<td></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
 			<!-- Drs. DADANG SUPRIATNA, MH  -->
-			Drs. R Budhi Rukmana, M.AP
+			{{(isset($nama_ttd) ? (strlen($nama_ttd)>0?$nama_ttd:'Drs. R Budhi Rukmana, M.AP') : 'Drs. R Budhi Rukmana, M.AP')}}
 			 </span></td>
 	</tr>
 	<tr>
 		<td></td>
 		<td>
 			<!-- NIP. 19610308 199103 1 009 -->
-			NIP. 19690712 198910 1 001
+			{{(isset($nip_ttd) ? (strlen($nip_ttd)>0?'NIP. '.$nip_ttd:'NIP. 19690712 198910 1 001') : 'NIP. 19690712 198910 1 001')}}
 		</td>
 	</tr>
 </table>

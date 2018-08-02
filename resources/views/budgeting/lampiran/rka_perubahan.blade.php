@@ -563,7 +563,7 @@
 <table class="ttd" style="page-break-inside: avoid;">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 15 Maret 2018</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:'15 Maret 2018') : '15 Maret 2018')}}</td>
 	</tr>
 	<tr>
 		<td></td>

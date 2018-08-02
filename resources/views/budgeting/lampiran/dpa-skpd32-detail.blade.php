@@ -275,13 +275,13 @@
 		<td class="tengah">Triwulan I</td>
 		<td class="kiri">Rp. {{ number_format($akb_peng->tri1,0,',','.') }}</td>
 		<td width="50%"> </td>
-		<td>Bandung, 2 Januari 2018</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : '2 Januari 2018')}}</td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan II</td>
 		<td class="kiri">Rp. {{ number_format($akb_peng->tri2,0,',','.') }}</td>
 		<td width="50%"> </td>
-		<td><b>Pejabat Pengelola Keuangan Daerah</b></td>
+		<td><b>{{(isset($jabatan_ttd) ? (strlen($jabatan_ttd)>0?$jabatan_ttd:'Pejabat Pengelola Keuangan Daerah') : 'Pejabat Pengelola Keuangan Daerah')}}</b></td>
 	</tr>
 	<tr>
 		<td class="tengah">Triwulan III</td>
@@ -306,8 +306,8 @@
 		<td class="kiri"> </td>
 		<td width="50%"> <br><br><br><br><br><br></td>
 		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
-			Drs. DADANG SUPRIATNA, MH <br>
-			<br> </span> NIP. 19610308 199103 1 009</td>
+		{{(isset($nama_ttd) ? (strlen($nama_ttd)>0?$nama_ttd:'Drs. DADANG SUPRIATNA, MH') : 'Drs. DADANG SUPRIATNA, MH')}} <br>
+			<br> </span> {{(isset($nip_ttd) ? (strlen($nip_ttd)>0?'NIP. '.$nip_ttd:'NIP. 19610308 199103 1 009') : 'NIP. 19610308 199103 1 009')}}</td>
 	</tr>
 </table>
 </div>

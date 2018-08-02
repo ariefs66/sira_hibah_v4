@@ -667,13 +667,13 @@
 		<td class="kiri"></td>
 		<td width="50%"> </td>
 		<!--td>Bandung, 20 Maret 2018</td-->
-		<td>Bandung, 31 Mei 2018<br>Mengesahkan</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : $tgl.' '.$bln.' '.$thn)}}<br>Mengesahkan</td>
 	</tr>
 	<tr>
                 <td class="tengah">Triwulan I</td>
                 <td class="kiri">Rp. {{ number_format($akb_btl->tri1,0,',','.') }}</td>
                 <td width="50%"> </td>
-                <td><b>Pejabat Pengelola Keuangan Daerah</b></td>
+                <td><b>{{(isset($jabatan_ttd) ? (strlen($jabatan_ttd)>0?$jabatan_ttd:'Pejabat Pengelola Keuangan Daerah') : 'Pejabat Pengelola Keuangan Daerah')}}</b></td>
         </tr>
 	<tr>
 		<td class="tengah">Triwulan II</td>
@@ -714,8 +714,8 @@
 		<td class="kiri"> </td>
 		<td class="kiri"> </td>
 		<td width="50%"> <br><br><br><br><br><br></td>
-		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. DADANG SUPRIATNA, MH <br>
-			<br> </span> NIP. 19610308 199103 1 009</td>
+		<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">{{(isset($nama_ttd) ? (strlen($nama_ttd)>0?$nama_ttd:'Drs. DADANG SUPRIATNA, MH ') : 'Drs. DADANG SUPRIATNA, MH ')}}<br>
+			<br> </span>{{(isset($nip_ttd) ? (strlen($nip_ttd)>0?'NIP. '.$nip_ttd:' NIP. 19610308 199103 1 009') : ' NIP. 19610308 199103 1 009')}}</td>
 		<!--td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">Drs. R Budhi Rukmana, M.AP <br><br> </span> NIP. 19690712 198910 1 001  </td-->
 	
 	</tr>

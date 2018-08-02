@@ -1098,11 +1098,11 @@
 <table class="ttd">
 	<tr>
 		<td width="75%"></td>
-		<td>Bandung, 31 Mei 2018</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : '31 Mei 2018')}}</td>
 	</tr>
 	<tr>
 		<td></td>
-		<td>Menyetujui<br>Pj. SEKRETARIS DAERAH</td>
+		<td>Menyetujui<br>{{(isset($jabatan_ttd) ? (strlen($jabatan_ttd)>0?$jabatan_ttd:'Pj. SEKRETARIS DAERAH') : 'Pj. SEKRETARIS DAERAH')}}</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -1113,12 +1113,12 @@
 		<!--<td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
 		Dr. Hj. Evi Syaefini Shaleha, M.Pd</span></td>-->
                 <td><span style="border-bottom: 1px solid #000;padding-bottom: 1px;">
-                Drs. DADANG SUPRIATNA, MH </span></td>
+                {{(isset($nama_ttd) ? (strlen($nama_ttd)>0?$nama_ttd:'Drs. DADANG SUPRIATNA, MH ') : 'Drs. DADANG SUPRIATNA, MH ')}}</span></td>
 	</tr>
 	<tr>
 		<td></td>
 		<!--<td>NIP. 19581228 197804 2 002 </td>-->
-                <td>NIP. 19610308 199103 1 009 </td>
+                <td>{{(isset($nip_ttd) ? (strlen($nip_ttd)>0?'NIP. '.$nip_ttd:'NIP. 19610308 199103 1 009 ') : 'NIP. 19610308 199103 1 009 ')}}</td>
 	</tr>
 </table>
 </div>
