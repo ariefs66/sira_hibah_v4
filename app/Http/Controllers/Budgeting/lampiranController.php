@@ -6231,8 +6231,32 @@ class lampiranController extends Controller
     public function dpaSKPD221($tahun,$status){
         $tipe = 'Lampiran DPA-SKPD 2.2.1'; 
         $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
-        $data       = ['tahun'=>$tahun,'status'=>$status,'tipe'=>$tipe,'skpd'=>$skpd,'i'=>1];
+        $id_ttd = TahunAnggaran::where('TAHUN',$tahun)->where('STATUS',$status)->value('ID');
+            $tgl_ttd    = '';
+            $nomor_ttd = '';
+            $jabatan_ttd = '';
+            $nama_ttd = '';
+            $nip_ttd = '';
+            if($id_ttd){
+                $ttd = TTD::where('KEY','PERWAL1')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+                if($ttd){
+                    $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
+                    $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
+                    $bln        = $this->bulan($gbln*1);
+                    $thn        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('Y');
+                    $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
+                    $nomor_ttd = $ttd->NOMOR;
+                    $jabatan_ttd = $ttd->PEJABAT;
+                    $nama_ttd = $ttd->NAMA_PEJABAT;
+                    $nip_ttd = $ttd->NIP_PEJABAT;
+                }
+            }
         
+            $data       = ['tahun'=>$tahun,'status'=>$status,'tipe'=>$tipe,'skpd'=>$skpd,'i'=>1, 'tgl_ttd'       =>$tgl_ttd,     
+            'nomor_ttd'     =>$nomor_ttd,     
+            'jabatan_ttd'   =>$jabatan_ttd,     
+            'nama_ttd'      =>$nama_ttd,     
+            'nip_ttd'       =>$nip_ttd];
         return View('budgeting.lampiran.dpa-skpd221',$data);
     }
 

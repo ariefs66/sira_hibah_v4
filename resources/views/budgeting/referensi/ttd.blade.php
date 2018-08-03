@@ -121,31 +121,74 @@
           </div>
 
           <div class="form-group">
-            <label for="tahun_anggaran" class="col-md-3">LAMPIRAN</label>          
+            <label for="tahun_anggaran" class="col-md-3">Lampiran</label>          
             <div class="col-sm-9">
               <select ui-jq="chosen" class="w-full" id="tahun_anggaran" name="tahun_anggaran">
-              <option value="PERDA1">Peraturan Daerah 1</option>
-              <option value="PERDA2">Peraturan Daerah 2</option>
-              <option value="PERDA3">Peraturan Daerah 3</option>
-              <option value="PERDA4">Peraturan Daerah 4</option>
-              <option value="PERDA5">Peraturan Daerah 5</option>
-              <option value="PERWAL1">Peraturan Walikota 1</option>
-              <option value="PERWAL2">Peraturan Walikota 2</option>
-              <option value="PERWAL3">Peraturan Walikota 3</option>
-              <option value="PERWAL4">Peraturan Walikota 4</option>
-              <option value="PERWAL5">Peraturan Walikota 5</option>
-              <option value="">Dokumen Pelaksanaan Anggaran 2.1</option>
-              <option value="">Dokumen Pelaksanaan Anggaran 2.2</option>
-              <option value="">Dokumen Pelaksanaan Anggaran 2.3</option>
-              <option value="">- Pilih Tahun Anggaran-</option>
-              <option value="">- Pilih Tahun Anggaran-</option>
+                <option value="PERDA1">Peraturan Daerah 1</option>
+                <option value="PERDA2">Peraturan Daerah 2</option>
+                <option value="PERDA3">Peraturan Daerah 3</option>
+                <option value="PERDA4">Peraturan Daerah 4</option>
+                <option value="PERDA5">Peraturan Daerah 5</option>
+                <option value="PERWAL1">Peraturan Walikota 1</option>
+                <option value="PERWAL2">Peraturan Walikota 2</option>
+                <option value="PERWAL3">Peraturan Walikota 3</option>
+                <option value="PERWAL4">Peraturan Walikota 4</option>
+                <option value="PERWAL5">Peraturan Walikota 5</option>
+                <option value="RKAP">Rencana Kerja dan Anggaran Perubahan</option>
+                <option value="RKAP1">Rencana Kerja dan Anggaran Perubahan 1</option>
+                <option value="RKAP2.1">Rencana Kerja dan Anggaran Perubahan 2.1</option>
+                <option value="RKAP2.2">Rencana Kerja dan Anggaran Perubahan 2.2</option>
+                <option value="RKAP2.2.1">Rencana Kerja dan Anggaran Perubahan 2.2.1</option>
+                <option value="RKAP3.1">Rencana Kerja dan Anggaran Perubahan 3.1</option>
+                <option value="RKAP3.2">Rencana Kerja dan Anggaran Perubahan 3.2</option>
+                <option value="DPPA">Dokumen Pelaksanaan Perubahan Anggaran</option>
+                <option value="DPPA1">Dokumen Pelaksanaan Perubahan Anggaran 1</option>
+                <option value="DPPA2.1">Dokumen Pelaksanaan Perubahan Anggaran 2.1</option>
+                <option value="DPPA2.2">Dokumen Pelaksanaan Perubahan Anggaran 2.2</option>
+                <option value="DPPA2.2.1">Dokumen Pelaksanaan Perubahan Anggaran 2.2.1</option>
+                <option value="DPPA3.1">Dokumen Pelaksanaan Perubahan Anggaran 3.1</option>
+                <option value="DPPA3.2">Dokumen Pelaksanaan Perubahan Anggaran 3.2</option>
               </select>
             </div> 
           </div>
 
+          <div class="form-group">
+            <label for="nomor" class="col-md-3">Nomor</label>          
+            <div class="col-sm-9">
+            <input type="text" placeholder="Setting Nomor" class="form-control" id="nomor">
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="tanggal" class="col-md-3">Tanggal</label>          
+            <div class="col-sm-9">
+            <input type="text" ui-jq="daterangepicker" ui-options="{singleDatePicker:true,timePicker24Hour:false,format:'YYYY-MM-DD',timePicker: false}" placeholder="Setting Tanggal" class="form-control" id="tanggal">
+            </div> 
+          </div>
+          
+          <div class="form-group">
+            <label for="nama" class="col-md-3">Nama Penanda Tangan</label>          
+            <div class="col-sm-9">
+            <input type="text" placeholder="Setting Nama" class="form-control" id="nama">
+            </div> 
+          </div>
+
+          <div class="form-group">
+            <label for="jabatan" class="col-md-3">Jabatan Penanda Tangan</label>          
+            <div class="col-sm-9">
+            <input type="text" placeholder="Setting Jabatan" class="form-control" id="jabatan">
+            </div> 
+          </div>
+          
+          <div class="form-group">
+            <label for="nip" class="col-md-3">NIP Penanda Tangan</label>          
+            <div class="col-sm-9">
+            <input type="text" placeholder="Setting NIP" class="form-control" id="nip">
+            </div> 
+          </div>
 
           <hr class="m-t-xl">
-         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPrioritas()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanTTD()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
       </div>
     </form>
   </div>
@@ -208,7 +251,7 @@
         });
     }
   }
-  function hapusProgram(id){
+  function hapusTTD(id){
     var token        = $('#token').val();    
     $.confirm({
         title: 'Hapus Data!',
@@ -235,21 +278,16 @@
     });
   }
 
-  function ubahProgram(id) {
-    $('#judul-form').text('Ubah Program');        
+  function ubahTTD(id) {
+    $('#judul-form').text('Setting Data TTD');        
     $.ajax({
-      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
+      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd/getData/"+id,
       type: "GET",
       success: function(msg){
-        $('select#skpd').append(msg['skpd']).trigger("chosen:updated");
-        $('select#urusan').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
-        $('#id_program').val(msg['data'][0]['PROGRAM_ID']);
-        $('#tahun_program').val(msg['data'][0]['PROGRAM_TAHUN']);
-        $('#kode_program').val(msg['data'][0]['PROGRAM_KODE']);
-        $('#nama_program').val(msg['data'][0]['PROGRAM_NAMA']);
-        $('#prioritas_program').val(msg['data'][0]['PROGRAM_PRIORITAS']);
+        $('select#lampiran').val(msg['data'][0]['KEY']).trigger("chosen:updated");
+        $('#id_ttd').val(msg['data'][0]['TTD_ID']);
         $('.overlay').fadeIn('fast',function(){
-          $('.input-btl').animate({'right':'0'},"linear");  
+          $('.input-ttd').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
         });
       }
