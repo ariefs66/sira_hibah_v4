@@ -256,7 +256,7 @@
                 }
               });
             }else{
-              $.alert('Data telah tersedia!');
+              $.alert('Gagal!');
             }
           }
         });

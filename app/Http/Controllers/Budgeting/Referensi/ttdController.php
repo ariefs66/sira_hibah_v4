@@ -69,13 +69,35 @@ class ttdController extends Controller
     }
 
     public function submitTTD($tahun,$status){
-        $o  = new Rekgiat;
-        $o->REKGIAT_ID  = Rekgiat::max('REKGIAT_ID')+1;
-        $o->KEGIATAN_ID = Input::get('idkegiatan');
-        $o->REKENING_ID = Input::get('idrekening');
-        $o->TAHUN       = $tahun;
-        $o->save();            
-        return 'Berhasil!';
+        $id = Input::get('id');
+        $tahun_anggaran = Input::get('tahun_anggaran');
+        $lampiran = Input::get('lampiran');
+        $nomor = Input::get('nomor');
+        $tanggal = Input::get('tanggal');
+        $nama = Input::get('nama');
+        $jabatan = Input::get('jabatan');
+        $nip = Input::get('nip');
+        if(strlen($id)>0){
+         $ttd = TTD::find($id);
+         $ttd->TAHUN_ANGGARAN_ID = $tahun_anggaran;
+         $ttd->KEY = $lampiran;
+         $ttd->VALUE = $tanggal;
+         $ttd->NOMOR = $nomor;
+         $ttd->JABATAN = $jabatan;
+         $ttd->NAMA_PEJABAT = $nama;
+         $ttd->NIP_PEJABAT = $nip;
+        }else{
+         $ttd = new TTD;
+         $ttd->TAHUN_ANGGARAN_ID = $tahun_anggaran;
+         $ttd->KEY = $lampiran;
+         $ttd->VALUE = $tanggal;
+         $ttd->NOMOR = $nomor;
+         $ttd->JABATAN = $jabatan;
+         $ttd->NAMA_PEJABAT = $nama;
+         $ttd->NIP_PEJABAT = $nip;
+        }
+        $ttd->save(); 
+        return 1;
     }
 
     public function hapusTTD($tahun,$status){
