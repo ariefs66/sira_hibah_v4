@@ -709,7 +709,7 @@
 		<td class="kiri" width="25%"><br/>Rp. {{ number_format($akb_bl->tri1,0,',','.') }}</td>
 		<td width="20%"> </td>
 		<!-- <td>Bandung, 20 Maret 2018</td> -->
-		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:'31 Juli 2018') : '31 Juli 2018')}}<br>Mengesahkan</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:'1 Agustus 2018') : '1 Agustus 2018')}}<br>Mengesahkan</td>
 	</tr>
 	<tr>
 		<td class="tengah" width="15%">Triwulan II</td>
