@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        Commands\Integrasi\GetRealisasiSimda::class,
+        Commands\Integrasi\GetRealisasiBtlSimda::class
     ];
 
     /**

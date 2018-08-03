@@ -12,12 +12,42 @@
   <link rel="stylesheet" href="{{ url('/') }}/libs_dashboard/jquery/jquery.confirm/css/jquery-confirm.css" type="text/css" />
   <link rel="stylesheet" href="{{ url('/') }}/assets/css/font.css" type="text/css" />
   <link rel="stylesheet" href="{{ url('/') }}/assets/css/style.css" type="text/css" />
+  <style type="text/css">
+    /*----------------------- Preloader -----------------------*/
+    body.preloader-site {
+        overflow: hidden;
+    }
+
+    .preloader-wrapper {
+        height: 100%;
+        width: 100%;
+        background: #FFF;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999999;
+    }
+
+    .preloader-wrapper .preloader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        width: 120px;
+    }
+  </style>
 </head>
 @if(Auth::user()->password == '$2y$10$oDOpQp8JIQkStQxRKP/uPuLOg8qYYBRWyblH95odj0.ngqlF93ysS')
 <body class="bg-light" onload="return showaccountsetting()" id="budgeting">
 @else
 <body class="bg-light" id="budgeting">
 @endif
+<div class="preloader-wrapper" style="display: none;">
+  <div class="preloader">
+    <img src="{{ URL::asset('assets/img/load.gif') }}" alt="NILA">
+  </div>
+</div>
 <div class="app app-header-fixed">
     <!-- header -->
   <header id="header" class="app-header navbar" role="menu">
@@ -961,7 +991,23 @@
                   <span class="font-semibold">Log RAPBD </span>
                 </a>                
               </li>
-              
+              <li >
+              <a href="#" class="auto padding-l-r-lg parent">                  
+                <i class="fa fa-refresh"></i>
+                <span class="pull-right text-heading">
+                  <i class="text8 icon-bdg_arrow1 text"></i>
+                  <i class="text8 icon-bdg_arrow2 text-active"></i>
+                </span>
+                <span class="font-semibold">Integrasi</span>
+              </a>                
+               <ul class="nav nav-sub dk"> 
+                <li>
+                  <a href="{{route('realisasi-index', ['2018'])}}" class="padding-l-r-lg ">              
+                     <span >Realisasi Simda</span>
+                  </a>
+                </li>            
+                </ul>
+              </li>
               @endif
 
         <!-- aktif fitur     -->

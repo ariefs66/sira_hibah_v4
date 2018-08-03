@@ -680,3 +680,9 @@ Route::post('/monev/sinkronisasi/{tahun}/hapus/{id}', 'Monev\editorController@ha
 Route::post('/monev/sinkronisasi/{tahun}/kegiatan/simpan/{mode}', 'Monev\editorController@simpanKegiatan');
 Route::post('/monev/sinkronisasi/{tahun}/faktor/simpan', 'Monev\editorController@simpanFaktor');
 
+//INTEGRASI
+Route::group(['prefix' => 'integrasi', 'namespace' => 'Integrasi', 'middleware' => 'auth'], function () {
+	Route::get('{tahun}/realisasi', 'RealisasiBelanjaController@index')->name('realisasi-index');
+	Route::post('{tahun}/realisasi/sync', 'RealisasiBelanjaController@syncRealisasi')->name('realisasi-sync');
+	Route::get('/{tahun}/realisasi/getData', 'RealisasiBelanjaController@getData')->name('realisasi-get');
+});
