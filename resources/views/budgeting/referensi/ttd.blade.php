@@ -311,7 +311,7 @@
     });    
   }
   $('a.tutup-form').click(function(){
-    $('#id_ttd').val(msg['data'][0]['TTD_ID']);
+    $('#id_ttd').val('');
     $('select#tahun_anggaran').val('').trigger("chosen:updated");
     $('select#lampiran').val('').trigger("chosen:updated");
     $('#nomor').val('');
@@ -321,7 +321,7 @@
     $('#nip').val('');
   }); 
   $('.overlay').click(function(){
-    $('#id_ttd').val(msg['data'][0]['TTD_ID']);
+    $('#id_ttd').val('');
     $('select#tahun_anggaran').val('').trigger("chosen:updated");
     $('select#lampiran').val('').trigger("chosen:updated");
     $('#nomor').val('');
