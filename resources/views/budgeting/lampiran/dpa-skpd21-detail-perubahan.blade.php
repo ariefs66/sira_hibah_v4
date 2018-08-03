@@ -667,7 +667,7 @@
 		<td class="kiri"></td>
 		<td width="50%"> </td>
 		<!--td>Bandung, 20 Maret 2018</td-->
-		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : $tgl.' '.$bln.' '.$thn)}}<br>Mengesahkan</td>
+		<td>Bandung, {{(isset($tgl_ttd) ? (strlen($tgl_ttd)>0?$tgl_ttd:$tgl.' '.$bln.' '.$thn) : '31 Juli 2018')}}<br>Mengesahkan</td>
 	</tr>
 	<tr>
                 <td class="tengah">Triwulan I</td>
