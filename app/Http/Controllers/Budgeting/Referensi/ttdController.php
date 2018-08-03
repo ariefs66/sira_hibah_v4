@@ -70,9 +70,9 @@ class ttdController extends Controller
 
     public function submitTTD($tahun,$status){
         $o  = new Rekgiat;
-        $o->REKGIAT_ID           = Rekgiat::max('REKGIAT_ID')+1;
-        $o->KEGIATAN_ID         = Input::get('idkegiatan');
-        $o->REKENING_ID   = Input::get('idrekening');
+        $o->REKGIAT_ID  = Rekgiat::max('REKGIAT_ID')+1;
+        $o->KEGIATAN_ID = Input::get('idkegiatan');
+        $o->REKENING_ID = Input::get('idrekening');
         $o->TAHUN       = $tahun;
         $o->save();            
         return 'Berhasil!';

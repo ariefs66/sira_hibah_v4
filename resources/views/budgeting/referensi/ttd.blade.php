@@ -209,39 +209,47 @@
   function simpanTTD(){
     var id            = $('#id_ttd').val();
     var tahun_anggaran= $('#tahun_anggaran').val();
+    var lampiran      = $('#lampiran').val();
+    var nomor         = $('#nomor').val();
+    var tanggal       = $('#tanggal').val();
     var nama          = $('#nama').val();
     var jabatan       = $('#jabatan').val();
     var nip           = $('#nip').val();
-    var skpd          = $('#skpd').val();
     var token         = $('#token').val();
-    if(urusan == "0" || nama_program == "" ){
+    if(tahun_anggaran == "0" || tahun_anggaran == "" || lampiran == "0" || lampiran == "" ){
       $.alert('Form harap dilengkapi!');
     }else{
-      if(id_program == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd/submitTTD";
-      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd/editTTD";
+      uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd/submitTTD";
       $.ajax({
         url: uri,
         type: "POST",
         data: {'_token'         : token,
-              'urusan'          : urusan, 
-              'skpd'            : skpd,
-              'tahun'           : '{{$tahun}}', 
-              'id_program'      : id_program, 
-              'nama_program'    : nama_program},
+              'id'              : id, 
+              'tahun_anggaran'  : tahun_anggaran,
+              'lampiran'        : lampiran, 
+              'nomor'           : nomor, 
+              'tanggal'         : tanggal, 
+              'nama'            : nama, 
+              'jabatan'         : jabatan, 
+              'nip'             : nip},
         success: function(msg){
             if(msg == 1){
-              $('#urusan select').val('0').trigger("chosen:updated");
-              $('#skpd').val('').trigger("chosen:updated");
-              $('#nama_program').val('');
-              $('#id_program').val('');
-              $('.table-program-head').DataTable().ajax.reload();              
+              $('#id_ttd').val('');
+              $('select#tahun_anggaran').val('').trigger("chosen:updated");
+              $('select#lampiran').val('').trigger("chosen:updated");
+              $('#nomor').val('');
+              $('#tanggal').val('');
+              $('#nama').val('');
+              $('#jabatan').val('');
+              $('#nip').val('');
+              $('.table-ttd-head').DataTable().ajax.reload();              
               $.alert({
                 title:'Info',
                 content: 'Data berhasil disimpan',
                 autoClose: 'ok|1000',
                 buttons: {
                     ok: function () {
-                      $('.input-spp,.input-spp-langsung,.input-sidebar').animate({'right':'-1050px'},function(){
+                      $('.input-ttd,.input-sidebar').animate({'right':'-1050px'},function(){
                         $('.overlay').fadeOut('fast');
                       });                      
                     }
