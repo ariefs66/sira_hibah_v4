@@ -6238,7 +6238,7 @@ class lampiranController extends Controller
             $nama_ttd = '';
             $nip_ttd = '';
             if($id_ttd){
-                $ttd = TTD::where('KEY','PERWAL1')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+                $ttd = TTD::where('KEY','DPA2.2.1')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
                 if($ttd){
                     $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
                     $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
