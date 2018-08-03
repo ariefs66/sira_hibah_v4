@@ -43,7 +43,7 @@ class ttdController extends Controller
     	$view 			= array();
     	foreach ($data as $data) {
             if(Auth::user()->level == 8){
-                $aksi       = '<div class="action visible pull-right"><a title="Ubah" onclick="return ubahTTD(\''.$data->TTD_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a><a title="Hapus Program" onclick="return hapusTTD(\''.$data->TTD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+                $aksi       = '<div class="action visible pull-right"><a title="Ubah" onclick="return ubahTTD(\''.$data->TTD_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a><a title="Hapus Data" onclick="return hapusTTD(\''.$data->TTD_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
             }else{
                  $aksi = '';
             }
@@ -54,7 +54,7 @@ class ttdController extends Controller
             $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
     		array_push($view, array( 'id_ttd'		=>$data->TTD_ID,
                                      'OPSI'				=>$aksi,
-                                     'DATA'				=>'Tanggal: '. $tgl_ttd.'<br/>Jabatan: ' . $data->JABATAN.'<br/>Nama: '.$data->NAMA_PEJABAT.'<br/>NIP: '.$data->NIP_PEJABAT,
+                                     'DATA'				=>'Tanggal: <strong>'. $tgl_ttd.'</strong><br/>Jabatan: <strong>' . $data->JABATAN.'</strong><br/>Nama: <strong>'.$data->NAMA_PEJABAT.'</strong><br/>NIP: <strong>'.$data->NIP_PEJABAT.'</strong>',
                                      'TAHUN'			=>$tahapan->TAHUN . '-' . $tahapan->STATUS,
                                      'KEY'				=>$data->KEY,
                                      'PROGRAM'			=>"<i class='mi-caret-down m-r-sm'></i>".$data->PROGRAM_KODE." - ".$data->PROGRAM_NAMA));
@@ -68,9 +68,7 @@ class ttdController extends Controller
     	return ['data'=>$data];
     }
 
-    
-
-    public function submitRekGiat($tahun,$status){
+    public function submitTTD($tahun,$status){
         $o  = new Rekgiat;
         $o->REKGIAT_ID           = Rekgiat::max('REKGIAT_ID')+1;
         $o->KEGIATAN_ID         = Input::get('idkegiatan');
@@ -80,8 +78,8 @@ class ttdController extends Controller
         return 'Berhasil!';
     }
 
-    public function hapusRekGiat($tahun,$status){
-        Rekgiat::where('REKGIAT_ID',Input::get('id'))->delete();
+    public function hapusTTD($tahun,$status){
+        TTD::where('TTD_ID',Input::get('id'))->delete();
         return 'Berhasil!';
     }
 

@@ -455,6 +455,11 @@
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/penyelia" class="padding-l-r-lg ">
                        <span >Penyelia</span>
                     </a>
+                  </li>
+                  <li>
+                    <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd" class="padding-l-r-lg ">            
+                       <span >TTD</span>
+                    </a>
                   </li>                 
                   @endif
                   @if(Auth::user()->level == 2)                 

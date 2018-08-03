@@ -471,8 +471,8 @@
 	@endif
 	@else
 	<tr>
-		<td class="border-rincian kiri"><b>{{ $reke[$s]->REKENING_KODE }}</b></td>
-		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;{{ $reke[$s]->REKENING_NAMA }}</b></td>
+		<td class="border-rincian kiri"><b>{{ (!empty($reke[$s]->REKENING_KODE) ? $reke[$s]->REKENING_KODE : '') }}</b></td>
+		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;{{ (!empty($reke[$s]->REKENING_NAMA) ? $reke[$s]->REKENING_NAMA : '') }}</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
@@ -499,8 +499,8 @@
 	@if($q != 0)
 	@if($rek[$q-1]->REKENING_KODE != $rek[$q]->REKENING_KODE)
 	<tr>
-		<td class="border-rincian kiri"><b>{{ $rek[$q]->REKENING_KODE }}</b></td>
-		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;&nbsp;{{ $rek[$q]->REKENING_NAMA }}</b></td>
+		<td class="border-rincian kiri"><b>{{ (!empty($rek[$q]->REKENING_KODE) ? $rek[$q]->REKENING_KODE : '') }}</b></td>
+		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;&nbsp;{{ (!empty($rek[$q]->REKENING_NAMA) ? $rek[$q]->REKENING_NAMA : '') }}</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
@@ -525,17 +525,22 @@
 	@endif
 	@else
 	<tr>
-		<td class="border-rincian kiri"><b>{{ $rek[$q]->REKENING_KODE }}</b></td>
-		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $rek[$q]->REKENING_NAMA }}</b></td>
+		<td class="border-rincian kiri"><b>{{ (!empty($rek[$q]->REKENING_KODE) ? $rek[$q]->REKENING_KODE : '') }}</b></td>
+		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ (!empty($rek[$q]->REKENING_NAMA) ? $rek[$q]->REKENING_NAMA : '') }}</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
-		<td class="border-rincian kanan border"><b>{{ number_format($totalrek_murni[$q],0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ (!empty($totalrek_murni[$q]) ? number_format($totalrek_murni[$q],0,',','.') : 0) }},00</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
 		<td class="border-rincian kanan"></td>
+		@if(empty($totalrek[$q]))
+		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }},00</b></td>
+		<td class="border-rincian kanan border"><b>{{ number_format(0,0,',','.') }},00</b></td>
+		<td class="border-rincian tengah"><b> - </b></td>
+		@else
 		<td class="border-rincian kanan border"><b>{{ number_format($totalrek[$q],0,',','.') }},00</b></td>
 		@if($totalrek[$q] - $totalrek_murni[$q]<0)
 		<td class="border-rincian kanan border"><b>({{ number_format( abs($totalrek[$q] - $totalrek_murni[$q]),0,',','.') }},00)</b></td>
@@ -546,6 +551,7 @@
 		<td class="border-rincian tengah"><b> - </b></td>
 		@else
 		<td class="border-rincian tengah"><b> {{ trim(number_format( ( ( $totalrek[$q] - $totalrek_murni[$q] ) * 100)/$totalrek_murni[$q], 2, ',', ' '),"-") }}% </b></td>
+		@endif
 		@endif
 	</tr>
 	@endif

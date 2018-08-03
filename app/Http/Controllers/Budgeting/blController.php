@@ -1942,7 +1942,7 @@ class blController extends Controller
         }
         
 
-        $get_id      = RincianPerubahan::max('RINCIAN_ID');
+        //$get_id      = RincianPerubahan::max('RINCIAN_ID');
 
         if($tahapan->TAHAPAN_KUNCI_GIAT == 1){
             if(Input::get('PEKERJAAN_ID') == '4' || Input::get('PEKERJAAN_ID') == '5' || Input::get('PEKERJAAN_ID') == '6' || Input::get('PEKERJAAN_ID') == '7' || Input::get('PEKERJAAN_ID') == '8'){
@@ -1951,7 +1951,7 @@ class blController extends Controller
                 if($total+$now <= $totalBL){
                 // if($total < $totalBL){
                     $rincian    = new RincianPerubahan;
-                   $rincian->RINCIAN_ID              = ($get_id+1);
+                    //$rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
                     $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
@@ -2015,7 +2015,7 @@ class blController extends Controller
                 if($total+$now <= $totalBL){
                 // if($total < $totalBL){
                     $rincian    = new RincianPerubahan;
-                   $rincian->RINCIAN_ID              = ($get_id+1);
+                   //$rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
                     $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
@@ -2087,7 +2087,7 @@ class blController extends Controller
                 // if($total < $totalOPD){
 
                     $rincian    = new RincianPerubahan;
-                    $rincian->RINCIAN_ID              = ($get_id+1);
+                    //$rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
                     $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
@@ -2152,7 +2152,7 @@ class blController extends Controller
                 if($total+$nowOPD <= $totalOPD){
                 // if($total < $totalOPD){
                     $rincian    = new RincianPerubahan;
-$rincian->RINCIAN_ID              = ($get_id+1);
+                    //$rincian->RINCIAN_ID              = ($get_id+1);
                     $rincian->BL_ID                         = Input::get('BL_ID');
                     $rincian->REKENING_ID                   = Input::get('REKENING_ID');
                     $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');
@@ -2214,7 +2214,7 @@ $rincian->RINCIAN_ID              = ($get_id+1);
             }
         }else{
             $rincian    = new RincianPerubahan;
-$rincian->RINCIAN_ID              = ($get_id+1);
+            //$rincian->RINCIAN_ID              = ($get_id+1);
             $rincian->BL_ID                         = Input::get('BL_ID');
             $rincian->REKENING_ID                   = Input::get('REKENING_ID');
             $rincian->KOMPONEN_ID                   = Input::get('KOMPONEN_ID');

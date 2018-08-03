@@ -334,8 +334,8 @@
 	@endif
 	@else
 	<tr>
-		<td class="border-rincian kiri"><b>{{ $reke[$s]->REKENING_KODE }}</b></td>
-		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;{{ $reke[$s]->REKENING_NAMA }}</b></td>
+		<td class="border-rincian kiri"><b>{{ ((!empty($reke[$s]->REKENING_KODE)) ? $reke[$s]->REKENING_KODE : '') }}</b></td>
+		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;{{ (!empty($reke[$s]->REKENING_NAMA) ? $reke[$s]->REKENING_NAMA : '') }}</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>
@@ -388,8 +388,8 @@
 	@endif
 	@else
 	<tr>
-		<td class="border-rincian kiri"><b>{{ $rek[$q]->REKENING_KODE }}</b></td>
-		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $rek[$q]->REKENING_NAMA }}</b></td>
+		<td class="border-rincian kiri"><b>{{ (!empty($rek[$q]->REKENING_KODE) ? $rek[$q]->REKENING_KODE : '') }}</b></td>
+		<td class="border-rincian"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ (!empty($rek[$q]->REKENING_NAMA) ? $rek[$q]->REKENING_NAMA : '') }}</b></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian tengah"></td>
 		<td class="border-rincian kanan"></td>

@@ -34,7 +34,7 @@
   
                     @if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0 or substr(Auth::user()->mod,1,1) == 1)
                     <div class="col-sm-4 pull-right m-t-n-sm">
-                   <select ui-jq="chosen" class="form-control" id="filter-skpd">
+                   <select ui-jq="chosen" class="form-control" id="filter_tahun">
                      <option value="">- Pilih Tahun Anggaran-</option>
                        @if(!empty($tahunanggaran))
                        @foreach($tahunanggaran as $th)
@@ -110,12 +110,14 @@
           <div class="form-group">
             <label for="tahun_anggaran" class="col-md-3">Tahun Anggaran</label>          
             <div class="col-sm-9">
+              <input type="hidden" placeholder="ID TTD" class="hide" id="id_ttd">
+              <input type="hidden" class="form-control" value="{{ csrf_token() }}" name="_token" id="token"> 
               <select ui-jq="chosen" class="w-full" id="tahun_anggaran" name="tahun_anggaran">
-              @if(!empty($tahunanggaran))
-              @foreach($tahunanggaran as $th)
-              <option value="{{ $th->ID }}">{{ $th->TAHUN . '-' . $th->STATUS }}</option>
-              @endforeach
-              @endif
+                @if(!empty($tahunanggaran))
+                @foreach($tahunanggaran as $th)
+                <option value="{{ $th->ID }}">{{ $th->TAHUN . '-' . $th->STATUS }}</option>
+                @endforeach
+                @endif
               </select>
             </div> 
           </div>
@@ -123,7 +125,7 @@
           <div class="form-group">
             <label for="tahun_anggaran" class="col-md-3">Lampiran</label>          
             <div class="col-sm-9">
-              <select ui-jq="chosen" class="w-full" id="tahun_anggaran" name="tahun_anggaran">
+              <select ui-jq="chosen" class="w-full" id="lampiran" name="lampiran">
                 <option value="PERDA1">Peraturan Daerah 1</option>
                 <option value="PERDA2">Peraturan Daerah 2</option>
                 <option value="PERDA3">Peraturan Daerah 3</option>
@@ -134,20 +136,20 @@
                 <option value="PERWAL3">Peraturan Walikota 3</option>
                 <option value="PERWAL4">Peraturan Walikota 4</option>
                 <option value="PERWAL5">Peraturan Walikota 5</option>
-                <option value="RKAP">Rencana Kerja dan Anggaran Perubahan</option>
-                <option value="RKAP1">Rencana Kerja dan Anggaran Perubahan 1</option>
-                <option value="RKAP2.1">Rencana Kerja dan Anggaran Perubahan 2.1</option>
-                <option value="RKAP2.2">Rencana Kerja dan Anggaran Perubahan 2.2</option>
-                <option value="RKAP2.2.1">Rencana Kerja dan Anggaran Perubahan 2.2.1</option>
-                <option value="RKAP3.1">Rencana Kerja dan Anggaran Perubahan 3.1</option>
-                <option value="RKAP3.2">Rencana Kerja dan Anggaran Perubahan 3.2</option>
-                <option value="DPPA">Dokumen Pelaksanaan Perubahan Anggaran</option>
-                <option value="DPPA1">Dokumen Pelaksanaan Perubahan Anggaran 1</option>
-                <option value="DPPA2.1">Dokumen Pelaksanaan Perubahan Anggaran 2.1</option>
-                <option value="DPPA2.2">Dokumen Pelaksanaan Perubahan Anggaran 2.2</option>
-                <option value="DPPA2.2.1">Dokumen Pelaksanaan Perubahan Anggaran 2.2.1</option>
-                <option value="DPPA3.1">Dokumen Pelaksanaan Perubahan Anggaran 3.1</option>
-                <option value="DPPA3.2">Dokumen Pelaksanaan Perubahan Anggaran 3.2</option>
+                <option value="RKA">Rencana Kerja dan Anggaran</option>
+                <option value="RKA1">Rencana Kerja dan Anggaran 1</option>
+                <option value="RKA2.1">Rencana Kerja dan Anggaran 2.1</option>
+                <option value="RKA2.2">Rencana Kerja dan Anggaran 2.2</option>
+                <option value="RKA2.2.1">Rencana Kerja dan Anggaran 2.2.1</option>
+                <option value="RKA3.1">Rencana Kerja dan Anggaran 3.1</option>
+                <option value="RKA3.2">Rencana Kerja dan Anggaran 3.2</option>
+                <option value="DPA">Dokumen Pelaksanaan Anggaran</option>
+                <option value="DPA1">Dokumen Pelaksanaan Anggaran 1</option>
+                <option value="DPA2.1">Dokumen Pelaksanaan Anggaran 2.1</option>
+                <option value="DPA2.2">Dokumen Pelaksanaan Anggaran 2.2</option>
+                <option value="DPA2.2.1">Dokumen Pelaksanaan Anggaran 2.2.1</option>
+                <option value="DPA3.1">Dokumen Pelaksanaan Anggaran 3.1</option>
+                <option value="DPA3.2">Dokumen Pelaksanaan Anggaran 3.2</option>
               </select>
             </div> 
           </div>
@@ -205,17 +207,18 @@
   });
 
   function simpanTTD(){
-    var urusan        = $('#urusan').val();
-    var nama_program  = $('#nama_program').val();
+    var id            = $('#id_ttd').val();
+    var tahun_anggaran= $('#tahun_anggaran').val();
+    var nama          = $('#nama').val();
+    var jabatan       = $('#jabatan').val();
+    var nip           = $('#nip').val();
     var skpd          = $('#skpd').val();
-    var id_program    = $('#id_program').val();
     var token         = $('#token').val();
     if(urusan == "0" || nama_program == "" ){
       $.alert('Form harap dilengkapi!');
     }else{
-      if(id_program == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/add/submit";
-      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/edit/submit";
-      //console.log(uri);
+      if(id_program == '') uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd/submitTTD";
+      else uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd/editTTD";
       $.ajax({
         url: uri,
         type: "POST",
@@ -261,13 +264,13 @@
                 btnClass: 'btn-danger',
                 action: function(){
                   $.ajax({
-                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/delete",
+                      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd/hapusTTD",
                       type: "POST",
                       data: {'_token'         : token,
-                            'id_program'      : id},
+                            'id'      : id},
                       success: function(msg){
                           $.alert(msg);
-                          $('.table-program-head').DataTable().ajax.reload();                          
+                          $('.table-ttd-head').DataTable().ajax.reload();                          
                         }
                   });
                 }
@@ -284,8 +287,14 @@
       url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/ttd/getData/"+id,
       type: "GET",
       success: function(msg){
-        $('select#lampiran').val(msg['data'][0]['KEY']).trigger("chosen:updated");
         $('#id_ttd').val(msg['data'][0]['TTD_ID']);
+        $('select#tahun_anggaran').val(msg['data'][0]['TAHUN_ANGGARAN_ID']).trigger("chosen:updated");
+        $('select#lampiran').val(msg['data'][0]['KEY']).trigger("chosen:updated");
+        $('#nomor').val(msg['data'][0]['NOMOR']);
+        $('#tanggal').val(msg['data'][0]['VALUE']);
+        $('#nama').val(msg['data'][0]['NAMA_PEJABAT']);
+        $('#jabatan').val(msg['data'][0]['JABATAN']);
+        $('#nip').val(msg['data'][0]['NIP_PEJABAT']);
         $('.overlay').fadeIn('fast',function(){
           $('.input-ttd').animate({'right':'0'},"linear");  
           $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -294,34 +303,24 @@
     });    
   }
   $('a.tutup-form').click(function(){
-      $('select#urusan').val('0').trigger("chosen:updated");
-      $('select#skpd').val('').trigger("chosen:updated");
-      $('select#skpd_').val('').trigger("chosen:updated");
-      $('#nama_program').val('');
-      $('#kode_program').val('');
-      $('#prioritas_program').val('');
-      $('#id_program').val('');
-      $('#nama_kegiatan').val('');
-      $('#kode_kegiatan').val('');
-      $('#kunci_kegiatan').val('');
-      $('#prioritas_kegiatan').val('');
-      $('#id_giat').val('');
+    $('#id_ttd').val(msg['data'][0]['TTD_ID']);
+    $('select#tahun_anggaran').val('').trigger("chosen:updated");
+    $('select#lampiran').val('').trigger("chosen:updated");
+    $('#nomor').val('');
+    $('#tanggal').val('');
+    $('#nama').val('');
+    $('#jabatan').val('');
+    $('#nip').val('');
   }); 
   $('.overlay').click(function(){
-      $('select#urusan').val('0').trigger("chosen:updated");
-      $('select#urusan_').val('0').trigger("chosen:updated");
-      $('select#skpd').val('').trigger("chosen:updated");
-      $('select#skpd_').val('').trigger("chosen:updated");
-      $('select#program_').val('').trigger("chosen:updated");
-      $('#nama_program').val('');
-      $('#kode_program').val('');
-      $('#prioritas_program').val('');
-      $('#id_program').val('');
-      $('#nama_kegiatan').val('');
-      $('#kode_kegiatan').val('');
-      $('#kunci_kegiatan').val('');
-      $('#prioritas_kegiatan').val('');
-      $('#id_giat').val('');
+    $('#id_ttd').val(msg['data'][0]['TTD_ID']);
+    $('select#tahun_anggaran').val('').trigger("chosen:updated");
+    $('select#lampiran').val('').trigger("chosen:updated");
+    $('#nomor').val('');
+    $('#tanggal').val('');
+    $('#nama').val('');
+    $('#jabatan').val('');
+    $('#nip').val('');
   }); 
 </script>
 @endsection

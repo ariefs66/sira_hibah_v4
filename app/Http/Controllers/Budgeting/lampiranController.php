@@ -92,7 +92,7 @@ class lampiranController extends Controller
             $i          = 0;
             $q          = 0;
             $s          = 0;
-            $komponen   = "";
+            $komponen   = array();
             $rek        = "";
             $reke       = "";
             $rek4       = "";
@@ -142,8 +142,27 @@ class lampiranController extends Controller
            
             $totalBL    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
 
-
-            return View('budgeting.lampiran.rka',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke]);
+            $id_ttd = TahunAnggaran::where('TAHUN',$tahun)->where('STATUS',$status)->value('ID');
+            $tgl_ttd    = '';
+            $nomor_ttd = '';
+            $jabatan_ttd = '';
+            $nama_ttd = '';
+            $nip_ttd = '';
+            if($id_ttd){
+                $ttd = TTD::where('KEY','RKA')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+                if($ttd){
+                    $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
+                    $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
+                    $bln        = $this->bulan($gbln*1);
+                    $thn        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('Y');
+                    $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
+                    $nomor_ttd = $ttd->NOMOR;
+                    $jabatan_ttd = $ttd->PEJABAT;
+                    $nama_ttd = $ttd->NAMA_PEJABAT;
+                    $nip_ttd = $ttd->NIP_PEJABAT;
+                }
+            }
+            return View('budgeting.lampiran.rka',['tahun'=>$tahun,'tgl_ttd' =>$tgl_ttd,'nomor_ttd'     =>$nomor_ttd,'jabatan_ttd'   =>$jabatan_ttd,'nama_ttd'      =>$nama_ttd,'nip_ttd'       =>$nip_ttd,'status'=>$status,'bl'=>$bl,'indikator'=>$indikator,'rekening'=>$rekening,'tgl'=>$tgl,'bln'=>$bln,'thn'=>$thn,'total'=>$total,'paket'=>$paket,'m'=>0,'komponen'=>$komponen,'totalbl'=>$totalBL,'rek'=>$rek,'q'=>0,'s'=>0,'reke'=>$reke,'totalrek'=>$totalrek,'totalreke'=>$totalreke]);
 
         }else{
 
@@ -175,7 +194,7 @@ class lampiranController extends Controller
         $i          = 0;
         $q          = 0;
         $s          = 0;
-        $komponen   = "";
+        $komponen   = array();
         $rek        = "";
         $reke       = "";
         $rek4       = "";
@@ -190,40 +209,50 @@ class lampiranController extends Controller
             $reke[$s]    = Rekening::where('REKENING_KODE',substr($r->rekening->REKENING_KODE,0,5))->first();
             $rek4        = $rek[$q];
             $rek3        = $reke[$s];    
-            
-            $totalrek[$q]= RincianPerubahan::whereHas('rekening', function($x) use ($rek4){
-                                $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
-                            })
-                            ->where('BL_ID',$id)
-                            ->whereHas('bl', function($x) use ($tahun){
-                                $x->where('BL_TAHUN','=',$tahun);
-                            })
-                            ->sum('RINCIAN_TOTAL');
-            $totalrek_murni[$q]= Rincian::whereHas('rekening', function($x) use ($rek4){
-                                $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
-                            })
-                            ->where('BL_ID',$id)
-                            ->whereHas('bl', function($x) use ($tahun){
-                                $x->where('BL_TAHUN','=',$tahun);
-                            })
-                            ->sum('RINCIAN_TOTAL');
+            if(empty($rek4->REKENING_KODE)){
+                $totalrek[$q]=0;
+                $totalrek_murni[$q]=0;
+            }else{
+                $totalrek[$q]= RincianPerubahan::whereHas('rekening', function($x) use ($rek4){
+                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                })
+                ->where('BL_ID',$id)
+                ->whereHas('bl', function($x) use ($tahun){
+                    $x->where('BL_TAHUN','=',$tahun);
+                })
+                ->sum('RINCIAN_TOTAL');
+                $totalrek_murni[$q]= Rincian::whereHas('rekening', function($x) use ($rek4){
+                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                })
+                ->where('BL_ID',$id)
+                ->whereHas('bl', function($x) use ($tahun){
+                    $x->where('BL_TAHUN','=',$tahun);
+                })
+                ->sum('RINCIAN_TOTAL');
 
-            $totalreke[$s]= RincianPerubahan::whereHas('rekening', function($x) use ($rek3,$tahun){
-                                $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
-                            })
-                            ->where('BL_ID',$id)
-                            ->whereHas('bl', function($x) use ($tahun){
-                                $x->where('BL_TAHUN','=',$tahun);
-                            })
-                            ->sum('RINCIAN_TOTAL');
-            $totalreke_murni[$s]= Rincian::whereHas('rekening', function($x) use ($rek3,$tahun){
-                                $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
-                            })
-                            ->where('BL_ID',$id)
-                            ->whereHas('bl', function($x) use ($tahun){
-                                $x->where('BL_TAHUN','=',$tahun);
-                            })
-                            ->sum('RINCIAN_TOTAL');
+            }
+
+            if(empty($rek4->REKENING_KODE)){
+                $totalreke[$s]=0;
+                $totalreke_murni[$s]=0;
+            }else{
+                $totalreke[$s]= RincianPerubahan::whereHas('rekening', function($x) use ($rek3,$tahun){
+                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
+                })
+                ->where('BL_ID',$id)
+                ->whereHas('bl', function($x) use ($tahun){
+                    $x->where('BL_TAHUN','=',$tahun);
+                })
+                ->sum('RINCIAN_TOTAL');
+                $totalreke_murni[$s]= Rincian::whereHas('rekening', function($x) use ($rek3,$tahun){
+                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
+                })
+                ->where('BL_ID',$id)
+                ->whereHas('bl', function($x) use ($tahun){
+                    $x->where('BL_TAHUN','=',$tahun);
+                })
+                ->sum('RINCIAN_TOTAL');
+            }
             
             $paket[$i]   = RincianPerubahan::leftJoin('BUDGETING.DAT_RINCIAN',function($join){
                                 $join->on('BUDGETING.DAT_RINCIAN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID')
@@ -278,7 +307,26 @@ class lampiranController extends Controller
         }else {
             $persen = 0;
         }
-
+        $id_ttd = TahunAnggaran::where('TAHUN',$tahun)->where('STATUS',$status)->value('ID');
+        $tgl_ttd    = '';
+        $nomor_ttd = '';
+        $jabatan_ttd = '';
+        $nama_ttd = '';
+        $nip_ttd = '';
+        if($id_ttd){
+            $ttd = TTD::where('KEY','RKA')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+            if($ttd){
+                $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
+                $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
+                $bln        = $this->bulan($gbln*1);
+                $thn        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('Y');
+                $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
+                $nomor_ttd = $ttd->NOMOR;
+                $jabatan_ttd = $ttd->PEJABAT;
+                $nama_ttd = $ttd->NAMA_PEJABAT;
+                $nip_ttd = $ttd->NIP_PEJABAT;
+            }
+        }
         return View('budgeting.lampiran.rka_perubahan',
             [   'tahun'             =>$tahun,
                 'status'            =>$status,
@@ -288,6 +336,11 @@ class lampiranController extends Controller
                 'tgl'               =>$tgl,
                 'bln'               =>$bln,
                 'thn'               =>$thn,
+                'tgl_ttd'       =>$tgl_ttd,     
+                'nomor_ttd'     =>$nomor_ttd,     
+                'jabatan_ttd'   =>$jabatan_ttd,     
+                'nama_ttd'      =>$nama_ttd,     
+                'nip_ttd'       =>$nip_ttd,
                 'total'             =>$total,
                 'paket'             =>$paket,
                 'm'                 =>0,
@@ -657,7 +710,7 @@ class lampiranController extends Controller
             $i          = 0;
             $q          = 0;
             $s          = 0;
-            $komponen   = "";
+            $komponen   = array();
             $rek        = "";
             $reke       = "";
             $rek4       = "";
@@ -723,7 +776,7 @@ class lampiranController extends Controller
                         $nama_ttd = '';
                         $nip_ttd = '';
                         if($id_ttd){
-                            $ttd = TTD::where('KEY','PERWAL1')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+                            $ttd = TTD::where('KEY','DPA')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
                             if($ttd){
                                 $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
                                 $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
@@ -794,7 +847,7 @@ class lampiranController extends Controller
             $i          = 0;
             $q          = 0;
             $s          = 0;
-            $komponen   = "";
+            $komponen   = array();
             $rek        = "";
             $reke       = "";
             $rek4       = "";
@@ -810,39 +863,50 @@ class lampiranController extends Controller
                 $rek4        = $rek[$q];
                 $rek3        = $reke[$s];    
                 
-                $totalrek[$q]= RincianPerubahan::whereHas('rekening', function($x) use ($rek4){
-                                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
-                                })
-                               ->where('BL_ID',$id)
-                               ->whereHas('bl', function($x) use ($tahun){
-                                    $x->where('BL_TAHUN','=',$tahun);
-                                })
-                               ->sum('RINCIAN_TOTAL');
-                $totalrek_murni[$q]= Rincian::whereHas('rekening', function($x) use ($rek4){
-                                    $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
-                                })
-                               ->where('BL_ID',$id)
-                               ->whereHas('bl', function($x) use ($tahun){
-                                    $x->where('BL_TAHUN','=',$tahun);
-                                })
-                               ->sum('RINCIAN_TOTAL');
+                if(empty($rek4->REKENING_KODE)){
+                    $totalreke[$q]=0;
+                    $totalreke_murni[$q]=0;
+                }else{
+                    $totalrek[$q]= RincianPerubahan::whereHas('rekening', function($x) use ($rek4){
+                        $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                    })
+                   ->where('BL_ID',$id)
+                   ->whereHas('bl', function($x) use ($tahun){
+                        $x->where('BL_TAHUN','=',$tahun);
+                    })
+                   ->sum('RINCIAN_TOTAL');
+                    $totalrek_murni[$q]= Rincian::whereHas('rekening', function($x) use ($rek4){
+                        $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
+                    })
+                   ->where('BL_ID',$id)
+                   ->whereHas('bl', function($x) use ($tahun){
+                        $x->where('BL_TAHUN','=',$tahun);
+                    })
+                   ->sum('RINCIAN_TOTAL');
+                }
 
-                $totalreke[$s]= RincianPerubahan::whereHas('rekening', function($x) use ($rek3,$tahun){
-                                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
-                                })
-                                ->where('BL_ID',$id)
-                                ->whereHas('bl', function($x) use ($tahun){
-                                    $x->where('BL_TAHUN','=',$tahun);
-                                })
-                                ->sum('RINCIAN_TOTAL');
-                $totalreke_murni[$s]= Rincian::whereHas('rekening', function($x) use ($rek3,$tahun){
-                                    $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
-                                })
-                                ->where('BL_ID',$id)
-                                ->whereHas('bl', function($x) use ($tahun){
-                                    $x->where('BL_TAHUN','=',$tahun);
-                                })
-                                ->sum('RINCIAN_TOTAL');
+                if(empty($rek3->REKENING_KODE)){
+                    $totalreke[$s]=0;
+                    $totalreke_murni[$s]=0;
+                }else{
+                    $totalreke[$s]= RincianPerubahan::whereHas('rekening', function($x) use ($rek3,$tahun){
+                        $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
+                    })
+                    ->where('BL_ID',$id)
+                    ->whereHas('bl', function($x) use ($tahun){
+                        $x->where('BL_TAHUN','=',$tahun);
+                    })
+                    ->sum('RINCIAN_TOTAL');
+                    $totalreke_murni[$s]= Rincian::whereHas('rekening', function($x) use ($rek3,$tahun){
+                        $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
+                    })
+                    ->where('BL_ID',$id)
+                    ->whereHas('bl', function($x) use ($tahun){
+                        $x->where('BL_TAHUN','=',$tahun);
+                    })
+                    ->sum('RINCIAN_TOTAL');
+                }
+
                 
                 $paket[$i]   = RincianPerubahan::leftJoin('BUDGETING.DAT_RINCIAN',function($join){
                                     $join->on('BUDGETING.DAT_RINCIAN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID')
@@ -8842,11 +8906,37 @@ $bl1p     = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHA
         $pendapatan3s = 0;
         $pendapatan4s = 0;   
 
+        $id_ttd = TahunAnggaran::where('TAHUN',$tahun)->where('STATUS',$status)->value('ID');
+        $tgl_ttd    = '';
+        $nomor_ttd = '';
+        $jabatan_ttd = '';
+        $nama_ttd = '';
+        $nip_ttd = '';
+        if($id_ttd){
+            $ttd = TTD::where('KEY','PERWAL2')->where('TAHUN_ANGGARAN_ID',$id_ttd)->first();
+            if($ttd){
+                $tgl        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('d');
+                $gbln       = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('m');
+                $bln        = $this->bulan($gbln*1);
+                $thn        = Carbon\Carbon::createFromFormat('Y-m-d', $ttd->VALUE)->format('Y');
+                $tgl_ttd    = $tgl . ' ' . $bln . ' ' . $thn;
+                $nomor_ttd = $ttd->NOMOR;
+                $jabatan_ttd = $ttd->PEJABAT;
+                $nama_ttd = $ttd->NAMA_PEJABAT;
+                $nip_ttd = $ttd->NIP_PEJABAT;
+            }
+        }
+
         $data       = array('tahun'         =>$tahun,
                             'status'        =>$status,
                             'tgl'           =>$tgl,
                             'bln'           =>$bln,
-                            'thn'           =>$thn,        
+                            'thn'           =>$thn, 
+                            'tgl_ttd'       =>$tgl_ttd,     
+                            'nomor_ttd'     =>$nomor_ttd,     
+                            'jabatan_ttd'   =>$jabatan_ttd,     
+                            'nama_ttd'      =>$nama_ttd,     
+                            'nip_ttd'       =>$nip_ttd,       
                             'skpd'          =>$skpd,        
                             'urusan'        =>$urusan,  
                             'bl_progp'       =>$bl_progp,        
