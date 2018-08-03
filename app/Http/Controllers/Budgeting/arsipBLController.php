@@ -21,6 +21,7 @@ use App\Model\Tag;
 use App\Model\Lokasi;
 use App\Model\Satuan;
 use App\Model\BL;
+use App\Model\BLPerubahan;
 use App\Model\Indikator;
 use App\Model\Kunci;
 use App\Model\Pekerjaan;
@@ -28,12 +29,14 @@ use App\Model\Rekening;
 use App\Model\Komponen;
 use App\Model\Rekom;
 use App\Model\Rincian;
+use App\Model\RincianPerubahan;
 use App\Model\User;
 use App\Model\Staff;
 use App\Model\UserBudget;
 use App\Model\Tahapan;
 use App\Model\Log;
 use App\Model\Subrincian;
+use App\Model\SubrincianPerubahan;
 use App\Model\RekapRincian;
 use App\Model\Progunit;
 use App\Model\Output;
@@ -55,13 +58,17 @@ class arsipBLController extends Controller
     }
 
     public function getData($tahun,$status){
-        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
-        $data       = BL::whereHas('subunit',function($q) use ($skpd){
-                                $q->where('SKPD_ID',$skpd);
-                        })->where('BL_TAHUN',$tahun)->where('BL_DELETED',1)->get();
-        if(Auth::user()->level == 8){
-            $data   = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',1)->get();
+        $skpd       = $this->getSKPD($tahun);
+        if($status=="murni"){
+            $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',1);
+        }else{
+            $data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',1);
         }
+        if(Auth::user()->level != 8){
+            $data     = $data->where('SKPD_ID',$skpd);
+        }
+        $data = $data->get();
+
         $view       = array();
         $i          = 1;
         $kunci      = '';
@@ -77,11 +84,20 @@ class arsipBLController extends Controller
                        </div>';  
             if(empty($data->rincian)) $totalRincian = 0;
             else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,',','.');
-            array_push($view, array( 'NO'             =>$i,
-                                     'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
-                                     'PAGU'           =>number_format($data->BL_PAGU,0,',','.'),
-                                     'RINCIAN'        =>$totalRincian,
-                                     'STATUS'         =>$aksi));
+            if(is_array($data->kegiatan->program)){
+                array_push($view, array( 'NO'             =>$i,
+                'KEGIATAN'       =>'.'.$data->subunit->skpd->SKPD_KODE.'.'.' - '.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
+                'PAGU'           =>number_format($data->BL_PAGU,0,',','.'),
+                'RINCIAN'        =>$totalRincian,
+                'STATUS'         =>$aksi));
+            }else{
+                array_push($view, array( 'NO'             =>$i,
+                'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
+                'PAGU'           =>number_format($data->BL_PAGU,0,',','.'),
+                'RINCIAN'        =>$totalRincian,
+                'STATUS'         =>$aksi));
+            }
+
             $i++;
         }
         $out = array("aaData"=>$view);      
@@ -90,7 +106,11 @@ class arsipBLController extends Controller
     }
 
     public function restore($tahun,$status){
-    	BL::where('BL_ID',Input::get('id'))->update(['BL_DELETED'=>0]);
+        if($status=="murni"){
+            BL::where('BL_ID',Input::get('id'))->update(['BL_DELETED'=>0]);
+        }else{
+            BLPerubahan::where('BL_ID',Input::get('id'))->update(['BL_DELETED'=>0]);
+        }
         $log                = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
         $log->USER_ID                           = Auth::user()->id;
@@ -101,10 +121,17 @@ class arsipBLController extends Controller
     }
 
     public function delete($tahun,$status){
-    	BL::where('BL_ID',Input::get('id'))->delete();
-    	Rincian::where('BL_ID',Input::get('id'))->delete();
-    	Kunci::where('BL_ID',Input::get('id'))->delete();
-        Subrincian::where('BL_ID',Input::get('id'))->delete();
+        if($status=="murni"){
+            BL::where('BL_ID',Input::get('id'))->delete();
+            Rincian::where('BL_ID',Input::get('id'))->delete();
+            Kunci::where('BL_ID',Input::get('id'))->delete();
+            Subrincian::where('BL_ID',Input::get('id'))->delete();
+        }else{
+            BLPerubahan::where('BL_ID',Input::get('id'))->delete();
+            RincianPerubahan::where('BL_ID',Input::get('id'))->delete();
+            KunciPerubahan::where('BL_ID',Input::get('id'))->delete();
+            SubrincianPerubahan::where('BL_ID',Input::get('id'))->delete();
+        }
     	Staff::where('BL_ID',Input::get('id'))->delete();
 
         $log                = new Log;
