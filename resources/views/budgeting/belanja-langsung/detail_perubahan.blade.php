@@ -532,7 +532,7 @@
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
       <h5>Tambah / Edit Rincian</h5>
-      <div class="form-group">
+      <div class="form-group edit">
         <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
         <div class="col-sm-7">
           <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="" >
