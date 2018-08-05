@@ -166,13 +166,11 @@ class blController extends Controller
 
             $pagu      = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
 
-
-            $rincian   = RincianPerubahan::whereHas('bl',function($r) use($id,$tahun){
-                            $r->whereHas('subunit',function($s) use ($id, $tahun){
-                                    $s->where('SKPD_ID',$id);
-                            })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0);
-                        })->sum('RINCIAN_TOTAL');
-
+            $rincian   = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')
+                        ->where('BL_TAHUN',$tahun)
+                        ->where('BL_DELETED',0)
+                        ->where('SKPD_ID',$id)
+                        ->sum('RINCIAN_TOTAL');
         }else{
             $blpagu     = 0;
             $pagu       = 0;
