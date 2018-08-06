@@ -1323,6 +1323,7 @@ class blController extends Controller
             $bl->SASARAN_ID         = Input::get('sasaran');
             $bl->LOKASI_ID          = Input::get('lokasi');
             $bl->SUB_ID             = Input::get('sub_id');
+            $bl->SKPD_ID            = $skpd;
             $bl->BL_TAG             = $tag_;
             $bl->BL_STATUS          = $s;
             $bl->BL_VALIDASI        = '0';
