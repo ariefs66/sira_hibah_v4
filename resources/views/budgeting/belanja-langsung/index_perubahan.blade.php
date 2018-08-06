@@ -66,7 +66,18 @@
                           { mData: 'PAGU_SESUDAH' },
                           { mData: 'RINCIAN_SESUDAH' },
                           { mData: 'SELISIH' },
-                          { mData: 'STATUS' }]
+                          { mData: 'STATUS' }],
+                        aoColumnDefs: [ 
+                          { aTargets: [6],
+                          fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+                            if ( sData != '0' ) { $(nTd).css( 'color', 'red' ) }
+                          }} ],
+                        initComplete: function(setting,json){
+                          $('#pagu_murni').html(json.pagu_murni);
+                          $('#pagu_realisasi').html(json.pagu_realisasi);
+                          $('#pagu_perubahan').html(json.pagu_perubahan);
+                          $('#pagu_rincian').html(json.pagu_rincian);
+                          $('#pagu_selisih').html(json.pagu_selisih); }
                       }" class="table table-jurnal table-striped b-t b-b" id="table-index">
                     <thead>
                       <tr>
