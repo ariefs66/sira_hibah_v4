@@ -4322,6 +4322,7 @@ class blController extends Controller
 
         if((Auth::user()->level == 1 and substr(Auth::user()->mod,1,1) == 0)or Auth::user()->level == 2){
             $skpd       = $this->getSKPD($tahun);
+            $filter     = $this->getSKPD($tahun);
             $data       = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
