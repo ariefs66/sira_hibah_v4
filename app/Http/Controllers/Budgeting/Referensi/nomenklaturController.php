@@ -40,9 +40,9 @@ class nomenklaturController extends Controller
         }
 
         if(Auth::user()->level == 8){
-            $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();    
+            $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID','ASC')->get();    
         }elseif(Auth::user()->mod == '01000000000'){
-            $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
+            $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID','ASC')->get();
         }else{            
             $skpdz       = $this->getSKPD($tahun);   
             $skpd       = SKPD::where('SKPD_ID',$skpdz)->first(); 
@@ -52,18 +52,45 @@ class nomenklaturController extends Controller
     	return View('budgeting.referensi.nomenklatur',['tahun'=>$tahun,'status'=>$status,'rekening'=>$rekening,'urusan'=>$urusan,'skpd'=>$skpd,'satuan'=>$satuan]);
     }
 
+    public function indexAdum($tahun,$status){
+		$urusan 	= Urusan::where('URUSAN_TAHUN',$tahun)->get();
+        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->get();
+        $skpd_      = array(); 
+        $i = 0;
+        foreach($skpd as $s){
+        $skpd_[$i]   = $s->SKPD_ID;
+        $i++;
+        }
+
+        if(Auth::user()->level == 8){
+            $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID','ASC')->get();    
+        }elseif(Auth::user()->mod == '01000000000'){
+            $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->orderBy('SKPD_ID','ASC')->get();
+        }else{            
+            $skpdz       = $this->getSKPD($tahun);   
+            $skpd       = SKPD::where('SKPD_ID',$skpdz)->first(); 
+        }
+		$rekening 	= Rekening::where('REKENING_TAHUN',$tahun)->where('REKENING_KODE','like','5.2%')->get();
+        $satuan     = Satuan::orderBy('SATUAN_NAMA')->get();
+    	return View('budgeting.referensi.nomenklaturadum',['tahun'=>$tahun,'status'=>$status,'rekening'=>$rekening,'urusan'=>$urusan,'skpd'=>$skpd,'satuan'=>$satuan]);
+    }
+
     public function getData($tahun, Request $req){
         if($req->skpd){
             $skpd           = Progunit::where('SKPD_ID',$req->skpd)->pluck('PROGRAM_ID');
-            $data 			= Program::where('PROGRAM_TAHUN',$tahun)->wherein('PROGRAM_ID',$skpd)
-            ->orderBy('URUSAN_ID','PROGRAM_KODE')
-            ->get();
+            $data 			= Program::where('PROGRAM_TAHUN',$tahun)->wherein('PROGRAM_ID',$skpd)->orderBy('URUSAN_ID','PROGRAM_KODE');
         } elseif(Auth::user()->level == 8 or Auth::user()->level == 9) {
-            $data 			= Program::where('PROGRAM_TAHUN',$tahun)
-    							->orderBy('URUSAN_ID','PROGRAM_KODE')
-    							->get();
-        } else {
+            $data 			= Program::where('PROGRAM_TAHUN',$tahun)->orderBy('URUSAN_ID','PROGRAM_KODE');
+        }else{
             $data = array();
+        }
+        if(!is_array($data)){
+            if($req->tipe=="adum"){
+                $data 			= $data->whereIn('PROGRAM_KODE',['01','02','03','04','05','06','07','08','09']);
+            }elseif($req->tipe=="nonurusan"){
+                $data 			= $data->whereNotIn('PROGRAM_KODE',['01','02','03','04','05','06','07','08','09']);
+            }
+            $data 			= $data->get();
         }
         $aksi           = '';
     	$view 			= array();

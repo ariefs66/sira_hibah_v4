@@ -302,11 +302,11 @@
                   <span class="font-semibold">Nomenklatur</span>
                 </a>                
                  <ul class="nav nav-sub dk"> 
-                 <!-- <li>
+                 <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/adum" class="padding-l-r-lg ">              
                        <span >Program & Kegiatan Adum</span>
                     </a>
-                  </li>-->
+                  </li>
                   <li>
                     <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur" class="padding-l-r-lg ">              
                        <span >Program & Kegiatan Urusan</span>

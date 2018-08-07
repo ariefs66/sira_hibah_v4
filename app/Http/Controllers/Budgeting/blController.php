@@ -1093,6 +1093,12 @@ class blController extends Controller
         }else{
             $pekerjaan=$data->pekerjaan->PEKERJAAN_NAMA;
         }
+
+        if(empty($data->pekerjaan->PEKERJAAN_ID)){
+            $komponen='';
+        }else{
+            $komponen=$data->pekerjaan->PEKERJAAN_ID>5?explode('#',$data->RINCIAN_KETERANGAN)[0]:$data->komponen->KOMPONEN_NAMA;
+        }
 	
         $satuan_kesatu = explode(' ',$koef[0])[1];
         if (strlen($satuan_kesatu) < 1){
@@ -1103,7 +1109,7 @@ class blController extends Controller
                     'REKENING_KODE' => $data->rekening->REKENING_KODE,
                     'REKENING_NAMA' => $data->rekening->REKENING_NAMA,
                     'KOMPONEN_KODE' => $data->komponen->KOMPONEN_KODE,
-                    'KOMPONEN_NAMA' => ($data->pekerjaan->PEKERJAAN_ID>5?explode('#',$data->RINCIAN_KETERANGAN)[0]:$data->komponen->KOMPONEN_NAMA),
+                    'KOMPONEN_NAMA' => ($komponen),
                     'VOL1'          => explode(' ',$koef[0])[0],
                     'SATUAN1'       => $satuan_kesatu,
                     'VOL2'          => $v1,
