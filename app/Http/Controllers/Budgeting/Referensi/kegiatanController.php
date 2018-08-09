@@ -206,6 +206,7 @@ class kegiatanController extends Controller
         $o->BL_ID               = Input::get('id');
         $o->OUTPUT_TOLAK_UKUR   = Input::get('tolakukur');
         $o->OUTPUT_TARGET       = Input::get('target');
+        $o->OUTPUT_TAHUN        = $tahun;
         $o->SATUAN_ID           = Input::get('satuan');
         $o->save();            
         return 'Berhasil!';
@@ -230,12 +231,14 @@ class kegiatanController extends Controller
             Output::where('OUTPUT_ID',Input::get('idindikator'))->update([
                 'OUTPUT_TOLAK_UKUR'    => Input::get('tolakukur'),
                 'OUTPUT_TARGET'        => Input::get('target'),
+                'OUTPUT_TAHUN'        => $tahun,
                 'SATUAN_ID'            => Input::get('satuan')
                 ]);
         }else{
             OutputPerubahan::where('OUTPUT_ID',Input::get('idindikator'))->update([
                 'OUTPUT_TOLAK_UKUR'    => Input::get('tolakukur'),
                 'OUTPUT_TARGET'        => Input::get('target'),
+                'OUTPUT_TAHUN'        => $tahun,
                 'SATUAN_ID'            => Input::get('satuan')
                 ]);
         }
