@@ -4444,7 +4444,7 @@ class blController extends Controller
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
-            if((Auth::user()->level == 2 && Auth::user()->active==1) or Auth::user()->level == 8){
+            if((Auth::user()->level == 12 && Auth::user()->active==1) or Auth::user()->level == 8){
                 $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>';
             }
 
