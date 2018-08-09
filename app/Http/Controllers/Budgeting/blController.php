@@ -1093,6 +1093,12 @@ class blController extends Controller
         }else{
             $pekerjaan=$data->pekerjaan->PEKERJAAN_NAMA;
         }
+
+        if(empty($data->pekerjaan->PEKERJAAN_ID)){
+            $komponen='';
+        }else{
+            $komponen=$data->pekerjaan->PEKERJAAN_ID>5?explode('#',$data->RINCIAN_KETERANGAN)[0]:$data->komponen->KOMPONEN_NAMA;
+        }
 	
         $satuan_kesatu = explode(' ',$koef[0])[1];
         if (strlen($satuan_kesatu) < 1){
@@ -1103,7 +1109,7 @@ class blController extends Controller
                     'REKENING_KODE' => $data->rekening->REKENING_KODE,
                     'REKENING_NAMA' => $data->rekening->REKENING_NAMA,
                     'KOMPONEN_KODE' => $data->komponen->KOMPONEN_KODE,
-                    'KOMPONEN_NAMA' => ($data->pekerjaan->PEKERJAAN_ID>5?explode('#',$data->RINCIAN_KETERANGAN)[0]:$data->komponen->KOMPONEN_NAMA),
+                    'KOMPONEN_NAMA' => ($komponen),
                     'VOL1'          => explode(' ',$koef[0])[0],
                     'SATUAN1'       => $satuan_kesatu,
                     'VOL2'          => $v1,
@@ -3219,6 +3225,27 @@ class blController extends Controller
 
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                 if($total <= $totalBL){
+                    $rekap = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->first();
+                    $arcRincian                         = new RincianArsipPerubahan;
+                    $arcRincian->RINCIAN_ID             = $rekap->RINCIAN_ID;
+                    $arcRincian->SUBRINCIAN_ID          = $rekap->SUBRINCIAN_ID;
+                    $arcRincian->REKENING_ID            = $rekap->REKENING_ID;
+                    $arcRincian->KOMPONEN_ID            = $rekap->KOMPONEN_ID;
+                    $arcRincian->RINCIAN_PAJAK          = $rekap->RINCIAN_PAJAK;
+                    $arcRincian->RINCIAN_VOLUME         = $rekap->RINCIAN_VOLUME;
+                    $arcRincian->RINCIAN_KOEFISIEN      = $rekap->RINCIAN_KOEFISIEN;
+                    $arcRincian->RINCIAN_TOTAL          = $rekap->RINCIAN_TOTAL;
+                    $arcRincian->RINCIAN_KETERANGAN     = $rekap->RINCIAN_KETERANGAN;
+                    $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+                    $arcRincian->BL_ID                  = $rekap->BL_ID;
+                    $arcRincian->RINCIAN_HARGA          = $rekap->RINCIAN_HARGA;
+                    $arcRincian->RINCIAN_KOMPONEN       = $rekap->RINCIAN_KOMPONEN;
+                    $arcRincian->RINCIAN_LOCK           = $rekap->RINCIAN_LOCK;
+                    $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+                    $arcRincian->TAHAPAN_ID             = $tahapan->TAHAPAN_ID;
+                    $arcRincian->CREATED_AT             = Carbon\Carbon::now();
+                    $arcRincian->TIPE                   = 2;
+                    $arcRincian->save();
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
@@ -3273,6 +3300,27 @@ class blController extends Controller
                 }
             }else{
                 if($total+$now <= $totalBL+2){
+                    $rekap = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->first();
+                    $arcRincian                         = new RincianArsipPerubahan;
+                    $arcRincian->RINCIAN_ID             = $rekap->RINCIAN_ID;
+                    $arcRincian->SUBRINCIAN_ID          = $rekap->SUBRINCIAN_ID;
+                    $arcRincian->REKENING_ID            = $rekap->REKENING_ID;
+                    $arcRincian->KOMPONEN_ID            = $rekap->KOMPONEN_ID;
+                    $arcRincian->RINCIAN_PAJAK          = $rekap->RINCIAN_PAJAK;
+                    $arcRincian->RINCIAN_VOLUME         = $rekap->RINCIAN_VOLUME;
+                    $arcRincian->RINCIAN_KOEFISIEN      = $rekap->RINCIAN_KOEFISIEN;
+                    $arcRincian->RINCIAN_TOTAL          = $rekap->RINCIAN_TOTAL;
+                    $arcRincian->RINCIAN_KETERANGAN     = $rekap->RINCIAN_KETERANGAN;
+                    $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+                    $arcRincian->BL_ID                  = $rekap->BL_ID;
+                    $arcRincian->RINCIAN_HARGA          = $rekap->RINCIAN_HARGA;
+                    $arcRincian->RINCIAN_KOMPONEN       = $rekap->RINCIAN_KOMPONEN;
+                    $arcRincian->RINCIAN_LOCK           = $rekap->RINCIAN_LOCK;
+                    $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+                    $arcRincian->TAHAPAN_ID             = $tahapan->TAHAPAN_ID;
+                    $arcRincian->CREATED_AT             = Carbon\Carbon::now();
+                    $arcRincian->TIPE                   = 2;
+                    $arcRincian->save();
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
@@ -3331,6 +3379,27 @@ class blController extends Controller
 
                 $total  = (Input::get('HARGA') * $vol)+((Input::get('RINCIAN_PAJAK')*(Input::get('HARGA')*$vol))/100);
                 if($total+$nowOPD <= $totalOPD){
+                    $rekap = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->first();
+                    $arcRincian                         = new RincianArsipPerubahan;
+                    $arcRincian->RINCIAN_ID             = $rekap->RINCIAN_ID;
+                    $arcRincian->SUBRINCIAN_ID          = $rekap->SUBRINCIAN_ID;
+                    $arcRincian->REKENING_ID            = $rekap->REKENING_ID;
+                    $arcRincian->KOMPONEN_ID            = $rekap->KOMPONEN_ID;
+                    $arcRincian->RINCIAN_PAJAK          = $rekap->RINCIAN_PAJAK;
+                    $arcRincian->RINCIAN_VOLUME         = $rekap->RINCIAN_VOLUME;
+                    $arcRincian->RINCIAN_KOEFISIEN      = $rekap->RINCIAN_KOEFISIEN;
+                    $arcRincian->RINCIAN_TOTAL          = $rekap->RINCIAN_TOTAL;
+                    $arcRincian->RINCIAN_KETERANGAN     = $rekap->RINCIAN_KETERANGAN;
+                    $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+                    $arcRincian->BL_ID                  = $rekap->BL_ID;
+                    $arcRincian->RINCIAN_HARGA          = $rekap->RINCIAN_HARGA;
+                    $arcRincian->RINCIAN_KOMPONEN       = $rekap->RINCIAN_KOMPONEN;
+                    $arcRincian->RINCIAN_LOCK           = $rekap->RINCIAN_LOCK;
+                    $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+                    $arcRincian->TAHAPAN_ID             = $tahapan->TAHAPAN_ID;
+                    $arcRincian->CREATED_AT             = Carbon\Carbon::now();
+                    $arcRincian->TIPE                   = 2;
+                    $arcRincian->save();
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
@@ -3361,6 +3430,27 @@ class blController extends Controller
                 }
             }else{
                 if($total+$nowOPD <= $totalOPD){
+                    $rekap = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->first();
+                    $arcRincian                         = new RincianArsipPerubahan;
+                    $arcRincian->RINCIAN_ID             = $rekap->RINCIAN_ID;
+                    $arcRincian->SUBRINCIAN_ID          = $rekap->SUBRINCIAN_ID;
+                    $arcRincian->REKENING_ID            = $rekap->REKENING_ID;
+                    $arcRincian->KOMPONEN_ID            = $rekap->KOMPONEN_ID;
+                    $arcRincian->RINCIAN_PAJAK          = $rekap->RINCIAN_PAJAK;
+                    $arcRincian->RINCIAN_VOLUME         = $rekap->RINCIAN_VOLUME;
+                    $arcRincian->RINCIAN_KOEFISIEN      = $rekap->RINCIAN_KOEFISIEN;
+                    $arcRincian->RINCIAN_TOTAL          = $rekap->RINCIAN_TOTAL;
+                    $arcRincian->RINCIAN_KETERANGAN     = $rekap->RINCIAN_KETERANGAN;
+                    $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+                    $arcRincian->BL_ID                  = $rekap->BL_ID;
+                    $arcRincian->RINCIAN_HARGA          = $rekap->RINCIAN_HARGA;
+                    $arcRincian->RINCIAN_KOMPONEN       = $rekap->RINCIAN_KOMPONEN;
+                    $arcRincian->RINCIAN_LOCK           = $rekap->RINCIAN_LOCK;
+                    $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+                    $arcRincian->TAHAPAN_ID             = $tahapan->TAHAPAN_ID;
+                    $arcRincian->CREATED_AT             = Carbon\Carbon::now();
+                    $arcRincian->TIPE                   = 2;
+                    $arcRincian->save();
                     RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                         ->update([
                             'BL_ID'                         => Input::get('BL_ID'),
@@ -3415,6 +3505,27 @@ class blController extends Controller
                 }
             }
         }else{
+            $rekap = RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))->first();
+            $arcRincian                         = new RincianArsipPerubahan;
+            $arcRincian->RINCIAN_ID             = $rekap->RINCIAN_ID;
+            $arcRincian->SUBRINCIAN_ID          = $rekap->SUBRINCIAN_ID;
+            $arcRincian->REKENING_ID            = $rekap->REKENING_ID;
+            $arcRincian->KOMPONEN_ID            = $rekap->KOMPONEN_ID;
+            $arcRincian->RINCIAN_PAJAK          = $rekap->RINCIAN_PAJAK;
+            $arcRincian->RINCIAN_VOLUME         = $rekap->RINCIAN_VOLUME;
+            $arcRincian->RINCIAN_KOEFISIEN      = $rekap->RINCIAN_KOEFISIEN;
+            $arcRincian->RINCIAN_TOTAL          = $rekap->RINCIAN_TOTAL;
+            $arcRincian->RINCIAN_KETERANGAN     = $rekap->RINCIAN_KETERANGAN;
+            $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+            $arcRincian->BL_ID                  = $rekap->BL_ID;
+            $arcRincian->RINCIAN_HARGA          = $rekap->RINCIAN_HARGA;
+            $arcRincian->RINCIAN_KOMPONEN       = $rekap->RINCIAN_KOMPONEN;
+            $arcRincian->RINCIAN_LOCK           = $rekap->RINCIAN_LOCK;
+            $arcRincian->PEKERJAAN_ID           = $rekap->PEKERJAAN_ID;
+            $arcRincian->TAHAPAN_ID             = $tahapan->TAHAPAN_ID;
+            $arcRincian->CREATED_AT             = Carbon\Carbon::now();
+            $arcRincian->TIPE                   = 2;
+            $arcRincian->save();
             RincianPerubahan::where('RINCIAN_ID',Input::get('RINCIAN_ID'))
                 ->update([
                     'BL_ID'                         => Input::get('BL_ID'),
@@ -3468,7 +3579,6 @@ class blController extends Controller
             $rincian_rkp->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
             $rincian_rkp->save();
             return number_format($totalrincian,0,'.',',');
-            // return $this->setpaguBL(Input::get('BL_ID'));
         }
     }
 

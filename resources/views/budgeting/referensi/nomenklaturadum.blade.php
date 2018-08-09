@@ -64,7 +64,7 @@
                         <div role="tabpanel" class="active tab-pane" id="tab-1">  
                             <div class="table-responsive dataTables_wrapper table-program-nomenklatur">
                              <table ui-jq="dataTable" ui-options="{
-                                    sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/getData?tipe=nonurusan',
+                                    sAjaxSource: '{{ url('/') }}/main/{{$tahun}}/{{$status}}/pengaturan/nomenklatur/getData?tipe=adum',
                                     aoColumns: [
                                     { mData: 'id_program',class:'hide' },
                                     { mData: 'URUSAN' },
@@ -565,7 +565,7 @@
   $('#filter-skpd').change(function(e, params){
       var id  = $('#filter-skpd').val();
       if(id>0){
-        id = "tipe=nonurusan&skpd="+id;
+        id = "tipe=adum&skpd="+id;
       }
       $.fn.dataTable.ext.errMode = 'none';
       $('.table-program-head').DataTable().destroy();

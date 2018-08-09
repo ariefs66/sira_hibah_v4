@@ -354,6 +354,7 @@ Route::post('/main/{tahun}/{status}/pengaturan/ttd/hapusTTD', 'Budgeting\Referen
 
 //NOMENKLATUR
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur', 'Budgeting\Referensi\nomenklaturController@index');
+Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/adum', 'Budgeting\Referensi\nomenklaturController@indexAdum');
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData', 'Budgeting\Referensi\nomenklaturController@getData');
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getData/{id}', 'Budgeting\Referensi\nomenklaturController@getDetail');
 Route::get('/main/{tahun}/{status}/pengaturan/nomenklatur/getDataDetail/{id}', 'Budgeting\Referensi\nomenklaturController@getDataDetail');

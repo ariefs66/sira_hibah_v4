@@ -84,15 +84,23 @@ class arsipBLController extends Controller
                        </div>';  
             if(empty($data->rincian)) $totalRincian = 0;
             else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,',','.');
-            if(is_array($data->kegiatan->program)){
-                array_push($view, array( 'NO'             =>$i,
-                'KEGIATAN'       =>'.'.$data->subunit->skpd->SKPD_KODE.'.'.' - '.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
-                'PAGU'           =>number_format($data->BL_PAGU,0,',','.'),
-                'RINCIAN'        =>$totalRincian,
-                'STATUS'         =>$aksi));
+            if(!empty($data->kegiatan->program)){
+                if(is_array($data->kegiatan->program)){
+                    array_push($view, array( 'NO'             =>$i,
+                    'KEGIATAN'       =>'.'.$data->subunit->skpd->SKPD_KODE.'.'.' - '.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
+                    'PAGU'           =>number_format($data->BL_PAGU,0,',','.'),
+                    'RINCIAN'        =>$totalRincian,
+                    'STATUS'         =>$aksi));
+                }else{
+                    array_push($view, array( 'NO'             =>$i,
+                    'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
+                    'PAGU'           =>number_format($data->BL_PAGU,0,',','.'),
+                    'RINCIAN'        =>$totalRincian,
+                    'STATUS'         =>$aksi));
+                }    
             }else{
                 array_push($view, array( 'NO'             =>$i,
-                'KEGIATAN'       =>$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.' - '.$data->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$data->kegiatan->program->urusan->URUSAN_KODE.'.'.$data->subunit->skpd->SKPD_KODE.'.'.$data->kegiatan->program->PROGRAM_KODE.'.'.$data->kegiatan->KEGIATAN_KODE.' - '.$data->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
+                'KEGIATAN'       =>$data->subunit->skpd->SKPD_KODE.'<br><p class="text-orange">Kegiatan</p><span class="text-success">'.$data->subunit->skpd->SKPD_KODE.'.'.$data->subunit->SUB_KODE.' - '.$data->subunit->SUB_NAMA.'</span>',
                 'PAGU'           =>number_format($data->BL_PAGU,0,',','.'),
                 'RINCIAN'        =>$totalRincian,
                 'STATUS'         =>$aksi));
