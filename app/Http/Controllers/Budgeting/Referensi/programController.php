@@ -11,7 +11,9 @@ use App\Model\Kegiatan;
 use App\Model\SKPD;
 use App\Model\Satuan;
 use App\Model\Outcome;
+use App\Model\OutcomePerubahan;
 use App\Model\Impact;
+use App\Model\ImpactPerubahan;
 use View;
 use Carbon;
 use Response;
@@ -211,8 +213,13 @@ class programController extends Controller
     }
 
     public function getCapaian($tahun,$status,$id){
-        $dataCapaian       = Outcome::where('PROGRAM_ID',$id)->get();
-        $dataHasil         = Impact::where('PROGRAM_ID',$id)->get();
+        if($status=="murni"){
+            $dataCapaian       = Outcome::where('PROGRAM_ID',$id)->get();
+            $dataHasil         = Impact::where('PROGRAM_ID',$id)->get();
+        }else{
+            $dataCapaian       = OutcomePerubahan::where('PROGRAM_ID',$id)->get();
+            $dataHasil         = ImpactPerubahan::where('PROGRAM_ID',$id)->get();
+        }
         $view               = array();
         foreach ($dataCapaian as $dc) {
             $aksi       = '<div class="action visible pull-right"><a onclick="return editOutcome(\''.$dc->OUTCOME_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusOutcome(\''.$dc->OUTCOME_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
@@ -246,7 +253,11 @@ class programController extends Controller
 
     public function submitCapaian($tahun,$status){
         if(Input::get('tipe') == 'CAPAIAN'){
-            $o  = new Outcome;
+            if($status=="murni"){
+                $o  = new Outcome;
+            }else{
+                $o  = new OutcomePerubahan;
+            }
             $o->PROGRAM_ID  = Input::get('id');
             $o->OUTCOME_TOLAK_UKUR  = Input::get('tolakukur');
             $o->OUTCOME_TARGET      = Input::get('target');
@@ -254,7 +265,11 @@ class programController extends Controller
             $o->STATUS           = 0;
             $o->save();
         }else{
-            $o  = new Impact;
+            if($status=="murni"){
+                $o  = new Impact;
+            }else{
+                $o  = new ImpactPerubahan;
+            }
             $o->PROGRAM_ID  = Input::get('id');
             $o->IMPACT_TOLAK_UKUR  = Input::get('tolakukur');
             $o->IMPACT_TARGET       = Input::get('target');
@@ -265,19 +280,35 @@ class programController extends Controller
     }
 
     public function hapusOutcome($tahun,$status){
-        Outcome::where('OUTCOME_ID',Input::get('id'))->delete();
+        if($status=="murni"){
+            Outcome::where('OUTCOME_ID',Input::get('id'))->delete();
+        }else{
+            OutcomePerubahan::where('OUTCOME_ID',Input::get('id'))->delete();
+        }
         return 'Berhasil!';
     }
     public function hapusImpact($tahun,$status){
-        Impact::where('IMPACT_ID',Input::get('id'))->delete();
+        if($status=="murni"){
+            Impact::where('IMPACT_ID',Input::get('id'))->delete();
+        }else{
+            ImpactPerubahan::where('IMPACT_ID',Input::get('id'))->delete();
+        }
         return 'Berhasil!';
     }
 
     public function detailCapaian($tahun,$status,$tipe,$id){
         if($tipe == 'outcome'){
-            $data   = Outcome::where('OUTCOME_ID',$id)->first();
+            if($status=="murni"){
+                $data   = Outcome::where('OUTCOME_ID',$id)->first();
+            }else{
+                $data   = OutcomePerubahan::where('OUTCOME_ID',$id)->first();
+            }
         }else{
-            $data   = Impact::where('IMPACT_ID',$id)->first();
+            if($status=="murni"){
+                $data   = Impact::where('IMPACT_ID',$id)->first();
+            }else{
+                $data   = ImpactPerubahan::where('IMPACT_ID',$id)->first();
+            }
         }
         return Response::JSON($data);
     }
@@ -285,27 +316,55 @@ class programController extends Controller
     public function editCapaian($tahun,$status){
         if(Input::get('tipe') == 'CAPAIAN'){
             if(strlen(Input::get('status')) > 0){
-            Outcome::where('OUTCOME_ID',Input::get('idindikator'))->update([
-                'OUTCOME_TOLAK_UKUR'    => Input::get('tolakukur'),
-                'OUTCOME_TARGET'        => Input::get('target'),
-                'SATUAN_ID'             => Input::get('satuan'),
-                'STATUS'                => Input::get('status'),
-                'CATATAN'               => Input::get('catatan'),
-                ]);
+                if($status=="murni"){
+                    Outcome::where('OUTCOME_ID',Input::get('idindikator'))->update([
+                        'OUTCOME_TOLAK_UKUR'    => Input::get('tolakukur'),
+                        'OUTCOME_TARGET'        => Input::get('target'),
+                        'SATUAN_ID'             => Input::get('satuan'),
+                        'STATUS'                => Input::get('status'),
+                        'CATATAN'               => Input::get('catatan'),
+                        ]);
+                }else{
+                    OutcomePerubahan::where('OUTCOME_ID',Input::get('idindikator'))->update([
+                        'OUTCOME_TOLAK_UKUR'    => Input::get('tolakukur'),
+                        'OUTCOME_TARGET'        => Input::get('target'),
+                        'SATUAN_ID'             => Input::get('satuan'),
+                        'STATUS'                => Input::get('status'),
+                        'CATATAN'               => Input::get('catatan'),
+                        ]);
+                }
             }else{
-            Outcome::where('OUTCOME_ID',Input::get('idindikator'))->update([
-                'OUTCOME_TOLAK_UKUR'    => Input::get('tolakukur'),
-                'OUTCOME_TARGET'        => Input::get('target'),
-                'SATUAN_ID'             => Input::get('satuan'),
-                'STATUS'                => 0
-                ]);
+                if($status=="murni"){
+                    Outcome::where('OUTCOME_ID',Input::get('idindikator'))->update([
+                        'OUTCOME_TOLAK_UKUR'    => Input::get('tolakukur'),
+                        'OUTCOME_TARGET'        => Input::get('target'),
+                        'SATUAN_ID'             => Input::get('satuan'),
+                        'STATUS'                => 0
+                        ]);
+                }else{
+                    OutcomePerubahan::where('OUTCOME_ID',Input::get('idindikator'))->update([
+                        'OUTCOME_TOLAK_UKUR'    => Input::get('tolakukur'),
+                        'OUTCOME_TARGET'        => Input::get('target'),
+                        'SATUAN_ID'             => Input::get('satuan'),
+                        'STATUS'                => 0
+                        ]);
+                }
             }
         }else{
-            Impact::where('IMPACT_ID',Input::get('idindikator'))->update([
-                'IMPACT_TOLAK_UKUR'    => Input::get('tolakukur'),
-                'IMPACT_TARGET'        => Input::get('target'),
-                'SATUAN_ID'            => Input::get('satuan')
-                ]);          
+            if($status=="murni"){
+                Impact::where('IMPACT_ID',Input::get('idindikator'))->update([
+                    'IMPACT_TOLAK_UKUR'    => Input::get('tolakukur'),
+                    'IMPACT_TARGET'        => Input::get('target'),
+                    'SATUAN_ID'            => Input::get('satuan')
+                    ]);
+            }else{
+                ImpactPerubahan::where('IMPACT_ID',Input::get('idindikator'))->update([
+                    'IMPACT_TOLAK_UKUR'    => Input::get('tolakukur'),
+                    'IMPACT_TARGET'        => Input::get('target'),
+                    'SATUAN_ID'            => Input::get('satuan')
+                    ]);
+            }
+                      
         }
         return 'Berhasil!';
     }

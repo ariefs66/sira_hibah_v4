@@ -10,11 +10,9 @@ use App\Model\Urusan;
 use App\Model\Kegiatan;
 use App\Model\SKPD;
 use App\Model\Satuan;
-use App\Model\Outcome;
 use App\Model\OutputMaster;
 use App\Model\Rekgiat;
 use App\Model\Rekening;
-use App\Model\Impact;
 use App\Model\UserBudget;
 use View;
 use Carbon;
@@ -125,9 +123,17 @@ class nomenklaturController extends Controller
     	$view 			= array();
     	foreach ($data as $data) {
                 if(Auth::user()->level == 8){
-                $aksi       = '<div class="action visible pull-right"><a onclick="return showRekeningGiat(\''.$data->KEGIATAN_ID.'\')" title="Cek Rekening" class="action-edit"><i class="icon-bdg_form"></i></a><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Kegiatan" onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Kegiatan" onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
-           }elseif(Auth::user()->level == 9 || Auth::user()->level == 1 || Auth::user()->level == 2){
-                $aksi       = '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a></div>';
+                    if($tahun>2018){
+                        $aksi       = '<div class="action visible pull-right"><a onclick="return showRekeningGiat(\''.$data->KEGIATAN_ID.'\')" title="Cek Rekening" class="action-edit"><i class="icon-bdg_form"></i></a><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a><a title="Ubah Kegiatan" onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Kegiatan" onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+                    }else{
+                        $aksi       = '<div class="action visible pull-right"><a onclick="return showRekeningGiat(\''.$data->KEGIATAN_ID.'\')" title="Cek Rekening" class="action-edit"><i class="icon-bdg_form"></i></a><a title="Ubah Kegiatan" onclick="return ubahGiat(\''.$data->KEGIATAN_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a title="Hapus Kegiatan" onclick="return hapusGiat(\''.$data->KEGIATAN_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
+                    }
+                }elseif(Auth::user()->level == 9 || Auth::user()->level == 1 || Auth::user()->level == 2){
+                    if($tahun>2018){
+                        $aksi       = '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data->KEGIATAN_ID.'\')" title="Ubah Output" class="action-edit"><i class="mi-eye"></i></a></div>';
+                    }else{
+                        $aksi       = '-';
+                    }
             }else{
                 $aksi       = '-';
             }

@@ -177,7 +177,11 @@ class kegiatanController extends Controller
     }
 
     public function getCapaian($tahun,$status,$id){
-        $dataCapaian       = Output::where('KEGIATAN_ID',$id)->get();
+        if($status=="murni"){
+            $dataCapaian       = Output::where('BL_ID',$id)->get();
+        }else{
+            $dataCapaian       = OutputPerubahan::where('BL_ID',$id)->get();
+        }
         $view               = array();
         foreach ($dataCapaian as $dc) {
             $aksi       = '<div class="action visible pull-right"><a onclick="return editOutput(\''.$dc->OUTPUT_ID.'\')" class="action-edit"><i class="mi-edit"></i></a><a onclick="return hapusOutput(\''.$dc->OUTPUT_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
@@ -191,12 +195,12 @@ class kegiatanController extends Controller
     }
 
     public function submitCapaian($tahun,$status){
-        if($status=="pergeseran" || $status=="perubahan"){
-            $o  = new OutputPerubahan;
-            $get_id = OutputPerubahan::max('OUTPUT_ID');
-        }else{
+        if($status=="murni"){
             $o  = new Output;
             $get_id  = Output::max('OUTPUT_ID');
+        }else{
+            $o  = new OutputPerubahan;
+            $get_id = OutputPerubahan::max('OUTPUT_ID');
         }
         $o->OUTPUT_ID           = $get_id+1;
         $o->BL_ID               = Input::get('id');
@@ -208,10 +212,10 @@ class kegiatanController extends Controller
     }
 
     public function hapusOutput($tahun,$status){
-        if($status=="pergeseran"){
-            OutputPerubahan::where('OUTPUT_ID',Input::get('id'))->delete();
-        }else{
+        if($status=="murni"){
             Output::where('OUTPUT_ID',Input::get('id'))->delete();
+        }else{
+            OutputPerubahan::where('OUTPUT_ID',Input::get('id'))->delete();
         }
         return 'Berhasil!';
     }
@@ -222,11 +226,19 @@ class kegiatanController extends Controller
     }
 
     public function editCapaian($tahun,$status){
+        if($status=="murni"){
             Output::where('OUTPUT_ID',Input::get('idindikator'))->update([
                 'OUTPUT_TOLAK_UKUR'    => Input::get('tolakukur'),
                 'OUTPUT_TARGET'        => Input::get('target'),
                 'SATUAN_ID'            => Input::get('satuan')
                 ]);
+        }else{
+            OutputPerubahan::where('OUTPUT_ID',Input::get('idindikator'))->update([
+                'OUTPUT_TOLAK_UKUR'    => Input::get('tolakukur'),
+                'OUTPUT_TARGET'        => Input::get('target'),
+                'SATUAN_ID'            => Input::get('satuan')
+                ]);
+        }
         return 'Berhasil!';
     }
 }
