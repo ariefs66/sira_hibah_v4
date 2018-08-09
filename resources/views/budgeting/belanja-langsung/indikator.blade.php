@@ -153,8 +153,8 @@
               $('#target-capaian').val(msg['OUTPUT_TARGET']);
               $('#satuan-capaian').val(msg['SATUAN_ID']);
               $('#id-indikator').val(msg['OUTPUT_ID']);
-              $('#tolak-ukur').hide();
-              $('#satuan-capaian').hide();
+              //$('#tolak-ukur').hide();
+              //$('#satuan-capaian').hide();
               $('#tambah-output').removeClass('btn-success').addClass('btn-warning').html('<i class="mi-edit"></i>');
             }else{
               $('#id-indikator').val(null);
