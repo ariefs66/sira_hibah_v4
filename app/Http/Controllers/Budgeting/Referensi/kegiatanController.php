@@ -222,7 +222,11 @@ class kegiatanController extends Controller
     }
 
     public function detailOutput($tahun,$status,$id){
-        $data   = Output::where('OUTPUT_ID',$id)->first();
+        if($status=="murni"){
+            $data   = Output::where('OUTPUT_ID',$id)->first();
+        }else{
+            $data   = OutputPerubahan::where('OUTPUT_ID',$id)->first();
+        }
         return Response::JSON($data);
     }
 
