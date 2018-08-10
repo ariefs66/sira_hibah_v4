@@ -64,8 +64,8 @@
 <h4>Plafon Anggaran Sementara Berdasarkan Program dan Kegiatan Tahun Anggaran {{ $tahun }}</h4>
 <table class="header">
 	<tr class="noborder">
-		<td class="noborder"><b>Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}</b></td>
-		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }}</b></td>
+		<td class="noborder"><b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
+		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
 	</tr>
 </table>
 <table class="detail">
@@ -126,22 +126,22 @@
 		<td width="1%"><b></b></td>
 		<td width="29%">&nbsp;&nbsp;<b>{{ $p->PROGRAM_NAMA }}</b></td>
 		@if(count($p->impact) != '0')
+		@php $target = ' '; @endphp
 		<td width="24%">
 		@foreach($p->impact as $o)
-			<b>- {{ $o->IMPACT_TOLAK_UKUR }}<br></b>
+			<b>{{ $o->IMPACT_TOLAK_UKUR }}</b><br/>
+			@php $target .= '<b>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</b><br/>'; @endphp
 		@endforeach
 		</td>
 		<td width="10%">
-		@foreach($p->impact as $o)
-			<b>- {{ $o->IMPACT_TARGET }} {{ $o->satuan->SATUAN_NAMA }}<br></b>
-		@endforeach			
+			{!! $target !!}
 		</td>
 		@else
-		<td width="24%"><b>-</b></td>
-		<td width="10%"><b>-</b></td>
+		<td width="24%"><b></b></td>
+		<td width="10%"><b></b></td>
 		@endif
-		<td width="10%"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
-		<td width="10%"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
+		<td width="10%" class="kanan"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
+		<td width="10%" class="kanan"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan">
 			@if(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))<0)
 			<b>({{ number_format(abs(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu'))),0,',','.') }})</b>
@@ -149,7 +149,6 @@
 			<b>{{ number_format(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
 			@endif
 		</td>
-
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
 	<tr>
@@ -159,32 +158,37 @@
 		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
 		<td style="padding-left: 15px"><i>{{ $pp->kegiatan->KEGIATAN_NAMA }}</i></td>
 		<td>
+		@php $targetmurni='';$target='';$pagumurni=0;$pagu=0; @endphp
 			@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i>- {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
+				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
+				@php $target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				$pagu = $pp->pagu; @endphp
 			@endforeach
 			@endif
 		</td>
 		<td>
-			@if(count($pp->kegiatan->bl[0]->output) != '0')
-			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i>- {{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
-			@endforeach
-			@endif
+			{!! $target !!}
 		</td>
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
-		<td>Rp.{{ number_format($ppm->pagu,0,',','.') }}</td>
-		<td><i> Rp.{{ number_format($pp->pagu,0,',','.') }} </i></td>
-		<td class="kanan">
-			@if(($pp->pagu - $ppm->pagu)<0)
-			<i>({{ number_format(abs($pp->pagu - $ppm->pagu),0,',','.') }})</i>
-			@else
-			<i>{{ number_format($pp->pagu - $ppm->pagu,0,',','.') }}</i>
+		@if(count($ppm->kegiatan->bl[0]->output) != '0')
+			@foreach($ppm->kegiatan->bl[0]->output as $out)
+				@php $targetmurni = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				$pagumurni = $ppm->pagu; @endphp
+			@endforeach
 			@endif
-		</td>
 		@endif
 		@endforeach
+		<td class="kanan"><i>Rp.{{ number_format($pagumurni,0,',','.') }}</i></td>
+		<td class="kanan"><i>Rp.{{ number_format($pagu,0,',','.') }} </i></td>
+		<td class="kanan">
+			@if(($pagu - $pagumurni)<0)
+			<i>({{ number_format(abs($pagu - $pagumurni),0,',','.') }})</i>
+			@else
+			<i>{{ number_format($pagu - $pagumurni,0,',','.') }}</i>
+			@endif
+		</td>
 	</tr>
 	@endforeach
 	<?php $i++;?>

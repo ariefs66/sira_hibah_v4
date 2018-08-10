@@ -89,7 +89,7 @@
 		<td colspan="2">Sumber Dana</td>
 		<td rowspan="2">Target Capaian Kinerja</td>
 		<td rowspan="2">Pagu Indikatif</td>
-		<td rowspan="2">Lama/Baru</td>
+		<td rowspan="2">A/B/C</td>
 	</tr>
 	<tr>
 		<td>Sebelum Perubahan</td>
