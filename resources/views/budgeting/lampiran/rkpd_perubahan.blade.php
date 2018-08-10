@@ -152,47 +152,60 @@
 		<td width="1%"><b>{{ $p->PROGRAM_KODE }}</b></td>
 		<td width="1%"><b></b></td>
 		<td width="29%">&nbsp;&nbsp;<b>{{ $p->PROGRAM_NAMA }}</b></td>
-		@if(count($p->impact) != '0')
-		<td width="24%" style="padding: 0">
+		@foreach($programmurni as $pm)
+		@if($pm->PROGRAM_ID==$p->PROGRAM_ID)
+		@if(count($pm->impact) != '0')
+		<td width="15%" style="padding: 0">
 			<table>
-				<?php $index = 0?>
-		@foreach($p->impact as $o)
-				@if($index != count($p->impact)-1)
+				<?php $index = 0; $targetmurni = '<table>';?>
+		@foreach($pm->impact as $o)
+				@if($index != count($pm->impact)-1)
 				<tr style="border-bottom: 1px solid">
+				@php $targetmurni .= '<tr style="border-bottom: 1px solid">'; @endphp
 				@else
 				<tr>
+				@php $targetmurni .= '<tr>'; @endphp
 				@endif
 					<td>{{ $o->IMPACT_TOLAK_UKUR }}</td>
-					<td>{{ $o->IMPACT_TARGET }} {{ $o->satuan->SATUAN_NAMA }}</td>
+					@php $targetmurni .= '<td>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</td></tr>'; @endphp
 				</tr>
 				<?php $index++ ?>
-			{{-- <b>- {{ $o->IMPACT_TOLAK_UKUR }}<br></b> --}}
 		@endforeach
 			</table>
 		</td>
-		{{-- <td width="10%">
-		@foreach($p->impact as $o)
-			<b><br></b>
-		@endforeach			
-		</td> --}}
 		@else
 		<td width="24%"><b>-</b></td>
-		<td width="10%"><b>-</b></td>
 		@endif
-		<td width="10%" class="kanan"> </td>
+		@endif
+		@endforeach
 		@if(count($p->impact) != '0')
-		<td width="10%">
-				@foreach($p->impact as $o)
-					<b>{{ $o->IMPACT_TARGET }} {{ $o->satuan->SATUAN_NAMA }}<br></b>
-				@endforeach
+		<td width="15%" style="padding: 0">
+			<table>
+				<?php $index = 0; $target = '<table>';?>
+		@foreach($p->impact as $o)
+				@if($index != count($p->impact)-1)
+				<tr style="border-bottom: 1px solid">
+				@php $target .= '<tr style="border-bottom: 1px solid">'; @endphp
+				@else
+				<tr>
+				@php $target .= '<tr>'; @endphp
+				@endif
+					<td>{{ $o->IMPACT_TOLAK_UKUR }}</td>
+					@php $target .= '<td>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</td></tr>'; @endphp
+				</tr>
+				<?php $index++ ?>
+		@endforeach
+			</table>
 		</td>
 		@else
-		<td width="10%"><b>-</b></td>
+		<td width="24%"><b>-</b></td>
 		@endif
 		<td width="10%" class="kanan"> </td>
+		<td width="10%"><b> </b></td>
+		<td width="10%" class="kanan"> </td>
 		<td></td>
-		<td></td>
-		<td></td>
+		<td>{!! $targetmurni.'</table>' !!}</td>
+		<td>{!! $target.'</table>' !!}</td>
 		<td><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan">
@@ -210,44 +223,45 @@
 		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
 		<td style="padding-left: 15px"><i>{{ $pp->kegiatan->KEGIATAN_NAMA }}</i></td>
 		<td>
-			@if(count($pp->kegiatan->bl[0]->output) != '0')
-			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i>- {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
-			@endforeach
-			@endif
-		</td>
-		<td>
-			@if(count($pp->kegiatan->bl[0]->output) != '0')
-			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i>- {{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
-			@endforeach
-			@endif
-		</td>
-		<td class="kanan"> </td>
-		<td>
-			@if(count($pp->kegiatan->bl[0]->output) != '0')
-			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i>{{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
-			@endforeach
-			@endif
-		</td>
-		<td class="kanan"></td>
-		<td></td>
-		<td></td>
-		<td></td>
+		@php $targetmurni='';$target='';$pagumurni=0;$pagu=0; @endphp
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
-		<td><i>{{ number_format($ppm->pagu,0,',','.') }}</i></td>
-		<td><i>{{ number_format($pp->pagu,0,',','.') }} </i></td>
-		<td class="kanan">
-			@if(($pp->pagu - $ppm->pagu)<0)
-			<i>({{ number_format(abs($pp->pagu - $ppm->pagu),0,',','.') }})</i>
-			@else
-			<i>{{ number_format($pp->pagu - $ppm->pagu,0,',','.') }}</i>
+		@if(count($ppm->kegiatan->bl[0]->output) != '0')
+			@foreach($ppm->kegiatan->bl[0]->output as $out)
+				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
+				@php $targetmurni = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				$pagumurni = $ppm->pagu; @endphp
+			@endforeach
 			@endif
-		</td>
 		@endif
 		@endforeach
+		</td>
+		<td>@if(count($pp->kegiatan->bl[0]->output) != '0')
+			@foreach($pp->kegiatan->bl[0]->output as $out)
+				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
+				@php $target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				$pagu = $pp->pagu; @endphp
+			@endforeach
+			@endif</td>
+		<td></td>
+		<td class="kanan"></td>
+		<td></td>
+		<td class="kanan"> </td>
+		<td>
+			{!! $targetmurni !!}
+		</td>
+		<td>
+			{!! $target !!}
+		</td>
+		<td><i>{{ number_format($pagumurni,0,',','.') }}</i></td>
+		<td><i>{{ number_format($pagu,0,',','.') }} </i></td>
+		<td class="kanan">
+			@if(($pagu - $pagumurni)<0)
+			<i>({{ number_format(abs($pagu - $pagumurni),0,',','.') }})</i>
+			@else
+			<i>{{ number_format($pagu - $pagumurni,0,',','.') }}</i>
+			@endif
+		</td>
 		<td></td>
 		<td></td>
 		<td></td>
