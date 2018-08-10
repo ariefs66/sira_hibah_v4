@@ -152,7 +152,7 @@
 		<td width="1%"><b>{{ $p->PROGRAM_KODE }}</b></td>
 		<td width="1%"><b></b></td>
 		<td width="29%">&nbsp;&nbsp;<b>{{ $p->PROGRAM_NAMA }}</b></td>
-		@php $targetmurni = ''; $target = ''; @endphp
+		@php $targetmurni = '<table>'; $target = '<table>'; @endphp
 		@foreach($programmurni as $pm)
 		@if($pm->PROGRAM_ID==$p->PROGRAM_ID)
 		@if(count($pm->impact) != '0')
