@@ -44,7 +44,9 @@ use App\Model\Progunit;
 use App\Model\Output;
 use App\Model\OutputPerubahan;
 use App\Model\Outcome;
+use App\Model\OutcomePerubahan;
 use App\Model\Impact;
+use App\Model\ImpactPerubahan;
 use App\Model\RincianArsip;
 use App\Model\RincianArsipPerubahan;
 use App\Model\Urgensi;
@@ -4044,11 +4046,13 @@ class blController extends Controller
         $program    = Kegiatan::whereHas('bl',function($x) use($id){
                                             $x->where('BL_ID',$id);
                                         })->value('PROGRAM_ID');
-        $outcome    = Outcome::where('PROGRAM_ID',$program)->get();
-        $impact     = Impact::where('PROGRAM_ID',$program)->get();
         if ($status=="murni"){
+            $outcome    = Outcome::where('PROGRAM_ID',$program)->get();
+            $impact     = Impact::where('PROGRAM_ID',$program)->get();
             $output     = Output::where('BL_ID',$id)->get();
         }else{
+            $outcome    = OutcomePerubahan::where('PROGRAM_ID',$program)->get();
+            $impact     = ImpactPerubahan::where('PROGRAM_ID',$program)->get();
             $output     = OutputPerubahan::where('BL_ID',$id)->get();
         }
         $view           = array();

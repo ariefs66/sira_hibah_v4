@@ -283,11 +283,18 @@
 	</tr>	
 	@if($bl->kegiatan->program->outcome)
 	@foreach($bl->kegiatan->program->outcome as $oc)
+	@php $outcome=""; $target=""; @endphp
 	<tr>
 		<td>Capaian Program</td>
+		@foreach($bl_murni->kegiatan->program->outcome as $oc_murni)
+		@if($oc_murni->OUTPUT_ID==$oc->OUTCOME_ID)
+			@php $outcome=$oc_murni->OUTPUT_TOLAK_UKUR; @endphp
+			@php $target=$oc_murni->OUTCOME_TARGET .' '. $oc_murni->satuan->SATUAN_NAMA; @endphp
+		@endif
+		@endforeach	
+		<td>{{(empty($outcome) ? '-' : $outcome)}}</td>
 		<td>{{ $oc->OUTCOME_TOLAK_UKUR }}</td>
-		<td>{{ $oc->OUTCOME_TOLAK_UKUR }}</td>
-		<td>{{ $oc->OUTCOME_TARGET }} {{ $oc->satuan->SATUAN_NAMA }}</td>
+		<td>{{(empty($target) ? '-' : $target)}}</td>
 		<td>{{ $oc->OUTCOME_TARGET }} {{ $oc->satuan->SATUAN_NAMA }}</td>
 	</tr>
 	@endforeach
@@ -312,7 +319,6 @@
 		@endforeach	
 		<td>{{(empty($output) ? '-' : $output)}}</td>
 		<td>{{ $out->OUTPUT_TOLAK_UKUR }}</td>
-		
 		<td>{{(empty($target) ? '-' : $target)}}</td>
 		<td>{{ $out->OUTPUT_TARGET }} {{ $out->satuan->SATUAN_NAMA }}</td>
 	</tr>
@@ -320,11 +326,18 @@
 	@endif
 	@if($bl->kegiatan->program->impact)
 	@foreach($bl->kegiatan->program->impact as $im)
+	@php $impact=""; $target=""; @endphp
 	<tr>
 		<td>Hasil</td>
+		@foreach($bl_murni->kegiatan->program->impact as $im_murni)
+		@if($im_murni->IMPACT_ID==$im->IMPACT_ID)
+			@php $impact= $im_murni->IMPACT_TOLAK_UKUR; @endphp
+			@php $target= $im_murni->IMPACT_TARGET .' '. $im_murni->satuan->SATUAN_NAMA; @endphp
+		@endif
+		@endforeach	
+		<td>{{(empty($impact) ? '-' : $impact)}}</td>
 		<td>{{ $im->IMPACT_TOLAK_UKUR }}</td>
-		<td>{{ $im->IMPACT_TOLAK_UKUR }}</td>
-		<td>{{ $im->IMPACT_TARGET }} {{ $im->satuan->SATUAN_NAMA }}</td>
+		<td>{{(empty($target) ? '-' : $target)}}</td>
 		<td>{{ $im->IMPACT_TARGET }} {{ $im->satuan->SATUAN_NAMA }}</td>
 	</tr>
 	@endforeach	
@@ -442,7 +455,7 @@
 	</tr>
 	
 	@foreach($rekening as $r)
-	@if($s != 0)
+	@if($s != 0 and !empty($rek[$s-1]->REKENING_KODE))
 	@if($reke[$s-1]->REKENING_KODE != $reke[$s]->REKENING_KODE)
 	<tr>
 		<td class="border-rincian kiri"><b>{{ $reke[$s]->REKENING_KODE }}</b></td>
@@ -496,7 +509,7 @@
 	</tr>
 	@endif
 
-	@if($q != 0)
+	@if($q != 0 and !empty($rek[$q-1]->REKENING_KODE))
 	@if($rek[$q-1]->REKENING_KODE != $rek[$q]->REKENING_KODE)
 	<tr>
 		<td class="border-rincian kiri"><b>{{ (!empty($rek[$q]->REKENING_KODE) ? $rek[$q]->REKENING_KODE : '') }}</b></td>
