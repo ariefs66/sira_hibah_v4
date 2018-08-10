@@ -12,7 +12,7 @@ class OutcomePerubahan extends Model
     public $incrementing 	= false;
 
     public function program(){
-    	return $this->belongsTo('App\Model\Program','PROGRAM_ID');
+    	return $this->belongsTo('App\Model\ProgramPerubahan','PROGRAM_ID');
     }
     public function satuan(){
     	return $this->belongsTo('App\Model\Satuan','SATUAN_ID');

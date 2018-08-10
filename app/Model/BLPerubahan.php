@@ -18,7 +18,7 @@ class BLPerubahan extends Model
         return $this->belongsTo('App\Model\Subunit', 'SUB_ID');
     }
     public function kegiatan(){
-        return $this->belongsTo('App\Model\Kegiatan', 'KEGIATAN_ID');
+        return $this->belongsTo('App\Model\KegiatanPerubahan', 'KEGIATAN_ID');
     }
     public function jenis(){
         return $this->belongsTo('App\Model\JenisGiat', 'JENIS_ID');
@@ -45,7 +45,7 @@ class BLPerubahan extends Model
         return $this->belongsTo('App\Model\Tag', 'BL_TAG_3');
     }
     public function indikator(){
-        return $this->hasMany('App\Model\Indikator', 'BL_ID');
+        return $this->hasMany('App\Model\IndikatorPerubahan', 'BL_ID');
     }
     public function kunci(){
         return $this->hasOne('App\Model\Kunciperubahan', 'BL_ID');
