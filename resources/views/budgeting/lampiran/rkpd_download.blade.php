@@ -65,7 +65,7 @@
 	Program dan Kegiatan Pada Perubahan Rencana Kerja Perangkat Daerah Tahun {{ $tahun }}<br>Kota Bandung</h4>
 <table class="header">
 	<tr class="noborder">
-		<td class="noborder"> <b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
+		<td class="noborder" colspan=19> <b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
 		<td class="kanan noborder"> <b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
 	</tr>
 </table>
@@ -105,7 +105,7 @@
 		<td>Sesudah Perubahan</td>
 	</tr>
 	<tr class="tengah header">
-		<td class="tengah" colspan="4">(1)</td>
+		<td class="tengah" colspan="4">1</td>
 		<td class="tengah">2</td>
 		<td class="tengah">3</td>
 		<td class="tengah">4</td>
