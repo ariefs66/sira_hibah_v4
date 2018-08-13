@@ -1368,6 +1368,12 @@ class lampiranController extends Controller
                             ->orderBy('URUSAN_ID')
                             ->orderBy('PROGRAM_KODE')
                             ->get();          
+                            $programmurni        = Program::whereHas('kegiatan',function($q) use($prog){
+                                                    $q->whereIn('KEGIATAN_ID',$prog);
+                                                })
+                                                ->orderBy('URUSAN_ID')
+                                                ->orderBy('PROGRAM_KODE')
+                                                ->get();
                         }
         $paguprogram    = array();
         $paguprogrammurni    = array();
@@ -1419,7 +1425,7 @@ class lampiranController extends Controller
         if($status=='murni'){
             return View('budgeting.lampiran.ppas',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
         }else{
-            return View('budgeting.lampiran.ppas_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'pagu_murni'=>$pagu_murni,'idm'=>0,'urusankode'=>'xxx','bidangkode'=>'xxx' ]);
+            return View('budgeting.lampiran.ppas_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'pagu_murni'=>$pagu_murni,'idm'=>0,'urusankode'=>'xxx','bidangkode'=>'xxx' ]);
         }
     }
 
@@ -1464,6 +1470,12 @@ class lampiranController extends Controller
             ->get();
         } else{
             $program        = ProgramPerubahan::whereHas('kegiatan',function($q) use($prog){
+                $q->whereIn('KEGIATAN_ID',$prog);
+            })
+            ->orderBy('URUSAN_ID')
+            ->orderBy('PROGRAM_KODE')
+            ->get();
+            $programmurni        = Program::whereHas('kegiatan',function($q) use($prog){
                 $q->whereIn('KEGIATAN_ID',$prog);
             })
             ->orderBy('URUSAN_ID')
@@ -1606,7 +1618,7 @@ class lampiranController extends Controller
         if($status == 'murni'){
             return View('budgeting.lampiran.ppas_rincian',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx','ppp'=>$ppp,'pppp'=>$pppp,'j'=>0]);
         }else{    
-            return View('budgeting.lampiran.ppas_rincian_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx','ppp'=>$ppp,'pppp'=>$pppp,'j'=>0 ,'paguprogrammurni'=>$paguprogram_murni, 'ppp_murni'=>$ppp_murni,'k'=>0,'pppp_murni'=>$pppp_murni ]);
+            return View('budgeting.lampiran.ppas_rincian_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx','ppp'=>$ppp,'pppp'=>$pppp,'j'=>0 ,'paguprogrammurni'=>$paguprogram_murni, 'ppp_murni'=>$ppp_murni,'k'=>0,'pppp_murni'=>$pppp_murni ]);
         }
 
     }
@@ -1652,6 +1664,12 @@ class lampiranController extends Controller
                         ->get();
         }else{
 
+            $programmurni        = Program::whereHas('kegiatan',function($q) use($prog){
+                $q->whereIn('KEGIATAN_ID',$prog);
+            })
+            ->orderBy('URUSAN_ID')
+            ->orderBy('PROGRAM_KODE')
+            ->get();
             $program        = ProgramPerubahan::whereHas('kegiatan',function($q) use($prog){
                 $q->whereIn('KEGIATAN_ID',$prog);
             })
@@ -1697,7 +1715,7 @@ class lampiranController extends Controller
         if($status == 'murni'){
             return View('budgeting.lampiran.ppas_download',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
         }else{
-            return View('budgeting.lampiran.ppas_download_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'pagu_murni'=>$pagu_murni,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+            return View('budgeting.lampiran.ppas_download_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'pagu_murni'=>$pagu_murni,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'urusankode'=>'xxx','bidangkode'=>'xxx']);
         }
     }
 
