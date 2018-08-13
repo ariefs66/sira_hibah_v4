@@ -75,7 +75,7 @@
 		<td rowspan="3">Urusan/Bidang Urusan Pemerintahan Daerah dan Program/Kegiatan</td>
 		<td colspan="2">Indikator Kinerja Program / Kegiatan</td>
 		<td colspan="11">Rencana Tahun {{ $tahun }}</td>
-		<td colspan="2">Prakiraan Maju Tahun 2017</td>
+		<td colspan="2">Prakiraan Maju Tahun {{ $tahun+1 }}</td>
 		<td width="5px">Jenis Kegiatan</td>
 	</tr>
 	<tr class="tengah header">
@@ -220,8 +220,8 @@
 		</td>
 		<td>{{ $sumbermurni}}</td>
 		<td>{{ $sumber}}</td>
-		<td></td>
-		<td></td>
+		<td>{!! $target.'</table>' !!}</td>
+		<td>{{ number_format($paguprogram[$i]->sum('pagu')*(110/100),0,',','.') }}</td>
 		<td></td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
@@ -275,8 +275,8 @@
 		</td>
 		<td>{{ $sumbermurni}}</td>
 		<td>{{ $sumber}}</td>
-		<td></td>
-		<td></td>
+		<td>{!! $target !!}</td>
+		<td>{{ number_format($pagu*(110/100),0,',','.') }}</td>
 		<td></td>
 	</tr>
 	@endforeach

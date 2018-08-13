@@ -221,8 +221,8 @@
 		</td>
 		<td>{{ $sumbermurni}}</td>
 		<td>{{ $sumber}}</td>
-		<td></td>
-		<td></td>
+		<td>{!! $target.'</table>' !!}</td>
+		<td>{{ number_format($paguprogram[$i]->sum('pagu')*(110/100),0,',','.') }}</td>
 		<td></td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
@@ -276,8 +276,8 @@
 		</td>
 		<td>{{ $sumbermurni}}</td>
 		<td>{{ $sumber}}</td>
-		<td></td>
-		<td></td>
+		<td>{!! $target !!}</td>
+		<td>{{ number_format($pagu*(110/100),0,',','.') }}</td>
 		<td></td>
 	</tr>
 	@endforeach

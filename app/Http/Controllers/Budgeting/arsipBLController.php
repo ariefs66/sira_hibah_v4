@@ -30,6 +30,8 @@ use App\Model\Komponen;
 use App\Model\Rekom;
 use App\Model\Rincian;
 use App\Model\RincianPerubahan;
+use App\Model\RincianArsip;
+use App\Model\RincianArsipPerubahan;
 use App\Model\User;
 use App\Model\Staff;
 use App\Model\UserBudget;
@@ -60,9 +62,11 @@ class arsipBLController extends Controller
     public function getData($tahun,$status){
         $skpd       = $this->getSKPD($tahun);
         if($status=="murni"){
-            $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',1);
+            $edit       = RincianArsip::orderBy('BL_ID','desc')->pluck('BL_ID')->toArray();
+            $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',1)->orWhereIn('DAT_BL.BL_ID',$edit);
         }else{
-            $data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',1);
+            $edit       = RincianArsipPerubahan::orderBy('BL_ID','desc')->pluck('BL_ID')->toArray();
+            $data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',1)->orWhereIn('DAT_BL_PERUBAHAN.BL_ID',$edit);
         }
         if(Auth::user()->level != 8){
             $data     = $data->where('SKPD_ID',$skpd);

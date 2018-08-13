@@ -1087,7 +1087,7 @@ class lampiranController extends Controller
                 ->orderBy('PROGRAM_KODE')
                 ->get();
         }
-            
+        
         $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
                         })
@@ -1507,14 +1507,14 @@ class lampiranController extends Controller
                 foreach($paguprogram[$i] as $r){
                     $idprog     = $pr->PROGRAM_ID;
                     $keg        = $r->KEGIATAN_ID;
-                    $ppp[$i][$j]        = Rincian::whereHas('bl',function($bl) use($tahun,$id,$keg){
+                    $ppp[$i][$j]        = RincianPerubahan::whereHas('bl',function($bl) use($tahun,$id,$keg){
                                         $bl->where('BL_TAHUN',$tahun)->where('KEGIATAN_ID',$keg)
                                            ->whereHas('subunit',function($sub) use($id){
                                             $sub->where('SKPD_ID',$id);
                                         });
                                     })->sum('RINCIAN_TOTAL');
 
-                    $pppp[$i] = Rincian::whereHas('bl',function($bl) use($tahun,$id,$idprog){
+                    $pppp[$i] = RincianPerubahan::whereHas('bl',function($bl) use($tahun,$id,$idprog){
                                     $bl->where('BL_TAHUN',$tahun)
                                        ->where('BL_DELETED',0)
                                        ->where('BL_PAGU','!=',0)

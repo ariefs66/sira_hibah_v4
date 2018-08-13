@@ -177,10 +177,10 @@
 		</td>
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
-		<td class="kanan"><i>{{ number_format($ppp_murni[$i][$j],0,',','.') }}</i></td>
-		<td class="kanan"><i>{{ number_format($ppp[$i][$j],0,',','.') }}</i></td>
+		<td class="kanan"><i>{{ number_format( (!empty($ppp_murni[$i][$j])?$ppp_murni[$i][$j]:0),0,',','.') }}</i></td>
+		<td class="kanan"><i>{{ number_format((!empty($ppp[$i][$j])?$ppp[$i][$j]:0),0,',','.') }}</i></td>
 		<td class="kanan">
-			@if(($ppp[$i][$j] - $ppp_murni[$i][$j])<0)
+			@if(($ppp[$i][$j] - (!empty($ppp_murni[$i][$j])?$ppp_murni[$i][$j]:0))<0)
 			<i>({{ number_format(abs($ppp[$i][$j] - $ppp_murni[$i][$j]),0,',','.') }})</i>
 			@else
 			<i>{{ number_format(($ppp[$i][$j] - $ppp_murni[$i][$j]),0,',','.') }}</i>
