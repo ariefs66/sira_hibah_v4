@@ -73,7 +73,7 @@
 		<td rowspan="2">Program/Kegiatan</td>
 		<td rowspan="2">Sasaran</td>
 		<td rowspan="2">Target</td>
-		<td colspan="3">Plafon Anggaran Sementara ﴾Rp.﴿</td>
+		<td colspan="3">Plafon Anggaran Sementara (Rp.)</td>
 	</tr>
 	<tr>
 		<td class="tengah">Sebelum Perubahan</td>	
