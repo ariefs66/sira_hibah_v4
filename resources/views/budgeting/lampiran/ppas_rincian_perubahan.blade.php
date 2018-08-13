@@ -174,20 +174,25 @@
 				&nbsp;<i>- {{ $out->OUTPUT_TARGET }}{{ $out->satuan->SATUAN_NAMA }}</i><br>
 			@endforeach
 			@endif
-		</td>
+		</td>@php $count=0; @endphp
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
 		<td class="kanan"><i>{{ number_format( (!empty($ppp_murni[$i][$j])?$ppp_murni[$i][$j]:0),0,',','.') }}</i></td>
 		<td class="kanan"><i>{{ number_format((!empty($ppp[$i][$j])?$ppp[$i][$j]:0),0,',','.') }}</i></td>
 		<td class="kanan">
 			@if(($ppp[$i][$j] - (!empty($ppp_murni[$i][$j])?$ppp_murni[$i][$j]:0))<0)
-			<i>({{ number_format(abs($ppp[$i][$j] - $ppp_murni[$i][$j]),0,',','.') }})</i>
+			<i>({{ number_format(abs($ppp[$i][$j] - (!empty($ppp_murni[$i][$j])?$ppp_murni[$i][$j]:0)),0,',','.') }})</i>
 			@else
-			<i>{{ number_format(($ppp[$i][$j] - $ppp_murni[$i][$j]),0,',','.') }}</i>
+			<i>{{ number_format(($ppp[$i][$j] - (!empty($ppp_murni[$i][$j])?$ppp_murni[$i][$j]:0)),0,',','.') }}</i>
 			@endif
-		</td>
+		</td>@php $count++; @endphp
 		@endif
 		@endforeach
+		@if($count <1)
+		<td class="kanan"><i>0</i></td>
+		<td class="kanan"><i>{{ number_format((!empty($ppp[$i][$j])?$ppp[$i][$j]:0),0,',','.') }}</i></td>
+		<td class="kanan"><i>{{ number_format((!empty($ppp[$i][$j])?$ppp[$i][$j]:0),0,',','.') }}</i></td>
+		@endif
 	</tr>
 	<?php $j++;?>
 	@endforeach

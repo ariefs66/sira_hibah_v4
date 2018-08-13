@@ -1455,14 +1455,21 @@ class lampiranController extends Controller
                                 ->where('BL_PAGU','!=',0)                        
                                 ->get()->toArray();  
 
-
-        $program        = Program::whereHas('kegiatan',function($q) use($prog){
-                                $q->whereIn('KEGIATAN_ID',$prog);
-                            })
-                            ->orderBy('URUSAN_ID')
-                            ->orderBy('PROGRAM_KODE')
-                            ->get();
-
+        if($status == 'murni'){
+            $program        = Program::whereHas('kegiatan',function($q) use($prog){
+                $q->whereIn('KEGIATAN_ID',$prog);
+            })
+            ->orderBy('URUSAN_ID')
+            ->orderBy('PROGRAM_KODE')
+            ->get();
+        } else{
+            $program        = ProgramPerubahan::whereHas('kegiatan',function($q) use($prog){
+                $q->whereIn('KEGIATAN_ID',$prog);
+            })
+            ->orderBy('URUSAN_ID')
+            ->orderBy('PROGRAM_KODE')
+            ->get();
+        }
 
         $paguprogram    = array();
         $paguprogram_murni    = array();
