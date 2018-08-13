@@ -1095,12 +1095,19 @@ class lampiranController extends Controller
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)
                         ->get();
-
-        $pagu1           = BLPerubahan::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
-        ->where('BL_VALIDASI',1)
-        ->where('BL_DELETED',0)
-        ->where('BL_PAGU','!=',0)
-        ->get();
+        if($status=='murni'){
+            $pagu1           = BL::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
+            ->where('BL_VALIDASI',1)
+            ->where('BL_DELETED',0)
+            ->where('BL_PAGU','!=',0)
+            ->get();    
+        }else{
+            $pagu1           = BLPerubahan::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
+            ->where('BL_VALIDASI',1)
+            ->where('BL_DELETED',0)
+            ->where('BL_PAGU','!=',0)
+            ->get();    
+        }
 
         
         $paguprogram    = array();
@@ -1292,7 +1299,20 @@ class lampiranController extends Controller
             }
             $i++;
         }
-        return View('budgeting.lampiran.rkpd_download',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'pagu_murni'=>$pagu_murni,'idm'=>0,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+        if($status=='murni'){
+            $pagu1           = BL::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
+            ->where('BL_VALIDASI',1)
+            ->where('BL_DELETED',0)
+            ->where('BL_PAGU','!=',0)
+            ->get();    
+        }else{
+            $pagu1           = BLPerubahan::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
+            ->where('BL_VALIDASI',1)
+            ->where('BL_DELETED',0)
+            ->where('BL_PAGU','!=',0)
+            ->get();    
+        }
+        return View('budgeting.lampiran.rkpd_download',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu1,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'pagu_murni'=>$pagu_murni,'idm'=>0,'urusankode'=>'xxx','bidangkode'=>'xxx']);
     }
 
     public function ppas($tahun,$status,$id){
