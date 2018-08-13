@@ -1096,6 +1096,12 @@ class lampiranController extends Controller
                         ->where('BL_PAGU','!=',0)
                         ->get();
 
+        $pagu1           = BLPerubahan::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
+        ->where('BL_VALIDASI',1)
+        ->where('BL_DELETED',0)
+        ->where('BL_PAGU','!=',0)
+        ->get();
+
         
         $paguprogram    = array();
         $paguprogrammurni    = array();
@@ -1154,9 +1160,9 @@ class lampiranController extends Controller
         }
 
         if($status == 'murni'){
-            return View('budgeting.lampiran.rkpd',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+            return View('budgeting.lampiran.rkpd',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu1,'program'=>$program,'i'=>0,'paguprogram'=>$paguprogram,'urusankode'=>'xxx','bidangkode'=>'xxx']);
         }else{
-            return View('budgeting.lampiran.rkpd_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'pagu_murni'=>$pagu_murni,'idm'=>0,'urusankode'=>'xxx','bidangkode'=>'xxx']);
+            return View('budgeting.lampiran.rkpd_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu1,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'pagu_murni'=>$pagu_murni,'idm'=>0,'urusankode'=>'xxx','bidangkode'=>'xxx']);
         }
 
         
