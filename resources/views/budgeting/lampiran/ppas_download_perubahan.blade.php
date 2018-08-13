@@ -26,7 +26,7 @@
 		}
 		.detail > tbody > tr > td{
 			padding: 3px;
-			border : 1px solid;
+			border:1px solid black;
 		}
 		.header{
 			margin-top: 20px;
@@ -64,11 +64,11 @@
 <h4>Plafon Anggaran Sementara Berdasarkan Program dan Kegiatan Tahun Anggaran {{ $tahun }}</h4>
 <table class="header">
 	<tr class="noborder">
-		<td class="noborder"><b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
-		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
+		<td colspan=16 class="noborder"><b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
+		<td colspan=2 class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
 	</tr>
 </table>
-<table class="detail">
+<table class="detail" border="1px">
 	<tbody>
 	<tr class="tengah">
 		<td colspan="4" rowspan="2">Nomor</td>
@@ -83,13 +83,13 @@
 		<td class="tengah">Bertambah / Berkurang</td>	
 	</tr>
 	<tr class="tengah">
-		<td class="tengah" colspan="4">(1)</td>
-		<td class="tengah">(2)</td>
-		<td class="tengah">(3)</td>
-		<td class="tengah">(4)</td>
-		<td class="tengah">(5)</td>
-		<td class="tengah">(6)</td>
-		<td class="tengah">(7)</td>
+		<td class="tengah" colspan="4">1</td>
+		<td class="tengah">2</td>
+		<td class="tengah">3</td>
+		<td class="tengah">4</td>
+		<td class="tengah">5</td>
+		<td class="tengah">6</td>
+		<td class="tengah">7</td>
 	</tr>
 	<tr>
 	@foreach($program as $p)
@@ -116,7 +116,7 @@
 		<td width="1%"><b>{{ substr($p->urusan->URUSAN_KODE,2,3) }}</b></td>
 		<td width="1%"><b></b></td>
 		<td width="1%"><b></b></td>
-		<td colspan="6">&nbsp;<b>{{ $p->urusan->URUSAN_NAMA }}</b></td>
+		<td colspan="6"> <b>{{ $p->urusan->URUSAN_NAMA }}</b></td>
 	</tr>
 	@endif
 	<tr>
@@ -124,7 +124,7 @@
 		<td width="1%"><b>{{ substr($p->urusan->URUSAN_KODE,2,3) }}</b></td>
 		<td width="1%"><b>{{ $p->PROGRAM_KODE }}</b></td>
 		<td width="1%"><b></b></td>
-		<td width="29%">&nbsp;&nbsp;<b>{{ $p->PROGRAM_NAMA }}</b></td>
+		<td width="29%">  <b>{{ $p->PROGRAM_NAMA }}</b></td>
 		@if(count($p->impact) != '0')
 		@php $target = ' '; @endphp
 		<td width="24%">
@@ -161,8 +161,8 @@
 		@php $targetmurni='';$target='';$pagumurni=0;$pagu=0; @endphp
 			@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
-				@php $target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				 <i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
+				@php $target = " <i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
 				$pagu = $pp->pagu; @endphp
 			@endforeach
 			@endif
@@ -174,7 +174,7 @@
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
 		@if(count($ppm->kegiatan->bl[0]->output) != '0')
 			@foreach($ppm->kegiatan->bl[0]->output as $out)
-				@php $targetmurni = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				@php $targetmurni = " <i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
 				$pagumurni = $ppm->pagu; @endphp
 			@endforeach
 			@endif
@@ -200,17 +200,25 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		  $("#btnExport").click(function(e) {
-		    e.preventDefault();
+			e.preventDefault();
 		    console.log(e);
 		    //getting data from our table
 		    var data_type = 'data:application/vnd.ms-excel';
 		    var table_div = document.getElementById('table_wrapper');
 		    var table_html = table_div.outerHTML.replace(/ /g, '%20');
+			var header = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+			header = header + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';
+			header = header + '<x:Name>Error Messages</x:Name>';
+
+			header = header + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+			header = header + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+			var footer = '</body></html>';
+
 
 		    var a = document.createElement('a');
-		    a.href = data_type + ', ' + table_html;
+		    a.href = data_type + ', ' + header + table_html +footer;
 		    a.download = 'PPAS {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }}.xls';
-		    a.click();
+			a.click();
 		  });
 	});
 

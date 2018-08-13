@@ -68,7 +68,7 @@
 		<td class="kanan noborder">Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }}</td>
 	</tr>
 </table>
-<table class="detail">
+<table class="detail" border="1px">
 	<tbody>
 	<tr class="tengah">
 		<td colspan="4">Nomor</td>

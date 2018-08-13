@@ -25,8 +25,8 @@
 			margin-top: 5px;
 		}
 		.detail > tbody > tr > td{
-			padding: 3px;			
-			border : 1px solid;
+			padding: 3px;		
+			border:thin solid black;
 		}
 		.header{
 			margin-top: 20px;
@@ -69,7 +69,7 @@
 		<td class="kanan noborder" colspan=2> <b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
 	</tr>
 </table>
-<table class="detail">
+<table class="detail" border="1px">
 	<tbody>
 	<tr class="tengah header">
 		<td rowspan="3" colspan="4">Kode</td>
