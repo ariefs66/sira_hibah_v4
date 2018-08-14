@@ -68,7 +68,7 @@
 		<td class="kanan noborder"><b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
 	</tr>
 </table>
-<table class="detail">
+<table class="detail" border="1px">
 	<tbody>
 	<tr class="tengah">
 		<td colspan="4" rowspan="3">Nomor</td>
@@ -90,15 +90,15 @@
 		<td class="tengah">Jumlah Perubahan (+/-)</td>	
 	</tr>
 	<tr class="tengah">
-		<td class="tengah" colspan="4">(1)</td>
-		<td class="tengah">(2)</td>
-		<td class="tengah">(3)</td>
-		<td class="tengah">(4)</td>
-		<td class="tengah">(5)</td>
-		<td class="tengah">(6)</td>
-		<td class="tengah">(7)</td>
-		<td class="tengah">(8)</td>
-		<td class="tengah">(9)</td>
+		<td class="tengah" colspan="4">1</td>
+		<td class="tengah">2</td>
+		<td class="tengah">3</td>
+		<td class="tengah">4</td>
+		<td class="tengah">5</td>
+		<td class="tengah">6</td>
+		<td class="tengah">7</td>
+		<td class="tengah">8</td>
+		<td class="tengah">9</td>
 	</tr>
 	<tr>
 	@foreach($program as $p)
