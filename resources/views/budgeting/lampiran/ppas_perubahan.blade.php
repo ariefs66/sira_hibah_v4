@@ -163,7 +163,6 @@
 		</td>
 		@else
 		<td width="24%"><b></b></td>
-		<td width="24%"><b></b></td>
 		<td width="10%"><b></b></td>
 		<td width="10%"><b></b></td>
 		@endif

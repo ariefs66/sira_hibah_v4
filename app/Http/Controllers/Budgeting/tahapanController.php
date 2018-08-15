@@ -91,6 +91,33 @@ class tahapanController extends Controller
         return View('budgeting.referensi.tahapan',['tahun'=>$tahun,'status'=>$status,'tutup'=>$tutup,'tahapan'=>$tahapan]);        
     }
 
+    public function rincian($tahun,$status){
+        $tahap        = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->orderBy('TAHAPAN_ID','desc')->get();
+        $tutup        = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+            ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_SELESAI');
+        if($tutup != '0') $tutup = 1;
+           $tahapan     = Tahapan::where('TAHAPAN_TAHUN',$tahun)
+        ->where(function($q) {
+                                  $q->where('TAHAPAN_STATUS', 'perubahan')
+                                    ->orWhere('TAHAPAN_STATUS', 'pergeseran');
+                              })->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_NAMA');
+        if(empty($tahapan)){
+            $tahapan    = 'RKPD';
+        }elseif ($tahapan == 'RKPD') {
+            $tahapan    = 'RKUA/PPAS';
+        }elseif ($tahapan == 'RKUA/PPAS') {
+            $tahapan    = 'KUA/PPAS';
+        }elseif ($tahapan == 'KUA/PPAS') {
+            $tahapan    = 'RAPBD';
+        }elseif ($tahapan == 'RAPBD') {
+            $tahapan    = 'APBD';
+        }
+        return View('budgeting.referensi.rincian',['tahap'=>$tahap,'tahun'=>$tahun,'status'=>$status,'tutup'=>$tutup,'tahapan'=>$tahapan]);        
+    }
+
     public function getData($tahun,$status){
         if($status == 'murni')
         $data           = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID')->get();
@@ -145,6 +172,22 @@ class tahapanController extends Controller
     	Tahapan::where('TAHAPAN_ID',Input::get('id_tahapan'))
     			->update(['TAHAPAN_KUNCI_GIAT' => Input::get('giat'),
                           'TAHAPAN_KUNCI_OPD' => Input::get('opd')]);
+        return 1;
+    }
+
+    public function submitTrigger(){
+        $tahapan = Input::get('id_tahapan');
+        $query = DB::delete('DELETE FROM "BUDGETING"."RKP_RINCIAN"
+        WHERE "TAHAPAN_ID" = ?', [$tahapan]);
+        /*$ada = DB::update('UPDATE "BUDGETING"."RKP_RINCIAN" R
+        SET "RINCIAN_ID"=RKP."RINCIAN_ID", "SUBRINCIAN_ID"=RKP."SUBRINCIAN_ID", "REKENING_ID"=RKP."REKENING_ID", "KOMPONEN_ID"=RKP."KOMPONEN_ID", "RINCIAN_PAJAK"=RKP."RINCIAN_PAJAK", "RINCIAN_VOLUME"=RKP."RINCIAN_VOLUME", "RINCIAN_KOEFISIEN"=RKP."RINCIAN_KOEFISIEN", "RINCIAN_TOTAL"=RKP."RINCIAN_TOTAL", "RINCIAN_KETERANGAN"=RKP."RINCIAN_KETERANGAN", "PEKERJAAN_ID"=RKP."PEKERJAAN_ID", "BL_ID"=RKP."BL_ID", "RINCIAN_KOMPONEN"=RKP."RINCIAN_KOMPONEN", "RINCIAN_HARGA"=RKP."RINCIAN_HARGA"
+        FROM (SELECT "RINCIAN_ID", "SUBRINCIAN_ID", "REKENING_ID", "KOMPONEN_ID", "RINCIAN_PAJAK", "RINCIAN_VOLUME", "RINCIAN_KOEFISIEN", "RINCIAN_TOTAL", "RINCIAN_KETERANGAN", "PEKERJAAN_ID", "BL_ID", "RINCIAN_KOMPONEN", "RINCIAN_HARGA", ?
+        FROM "BUDGETING"."DAT_RINCIAN") AS RKP
+        WHERE RKP."RINCIAN_ID"=R."RINCIAN_ID" AND R."TAHAPAN_ID"=?', [$tahapan,$tahapan]);*/
+        DB::insert('INSERT INTO "BUDGETING"."RKP_RINCIAN"
+        SELECT "RINCIAN_ID", "SUBRINCIAN_ID", "REKENING_ID", "KOMPONEN_ID", "RINCIAN_PAJAK", "RINCIAN_VOLUME", "RINCIAN_KOEFISIEN", "RINCIAN_TOTAL", "RINCIAN_KETERANGAN", "PEKERJAAN_ID", "BL_ID", "RINCIAN_KOMPONEN", "RINCIAN_HARGA", ?
+        FROM "BUDGETING"."DAT_RINCIAN"
+        WHERE "RINCIAN_ID" NOT IN (SELECT "RINCIAN_ID" FROM "BUDGETING"."RKP_RINCIAN" WHERE "TAHAPAN_ID"= ?)', [$tahapan, $tahapan]);
         return 1;
     }
 

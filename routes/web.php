@@ -303,6 +303,7 @@ Route::post('/main/{tahun}/{status}/pengaturan/tahapan/add/submit', 'Budgeting\t
 Route::post('/main/{tahun}/{status}/pengaturan/subtahapan/add/submit', 'Budgeting\tahapanController@submitSubTahapan');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/edit/submit', 'Budgeting\tahapanController@submitEdit');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/tutup', 'Budgeting\tahapanController@tutupTahapan');
+Route::post('/main/{tahun}/{status}/pengaturan/tahapan/trigger', 'Budgeting\tahapanController@submitTrigger');
 
 //URUSAN
 Route::get('/main/{tahun}/{status}/pengaturan/urusan', 'Budgeting\Referensi\urusanController@index');
@@ -345,6 +346,7 @@ Route::post('/main/{tahun}/{status}/pengaturan/subunit/add/submit', 'Budgeting\R
 Route::post('/main/{tahun}/{status}/pengaturan/subunit/edit/submit', 'Budgeting\Referensi\subunitController@submitEdit');
 
 //TTD
+Route::get('/main/{tahun}/{status}/pengaturan/rincian', 'Budgeting\tahapanController@rincian');
 Route::get('/main/{tahun}/{status}/pengaturan/ttd', 'Budgeting\Referensi\ttdController@index');
 Route::get('/main/{tahun}/{status}/pengaturan/ttd/getData', 'Budgeting\Referensi\ttdController@getData');
 Route::get('/main/{tahun}/{status}/pengaturan/ttd/getData/{id}', 'Budgeting\Referensi\ttdController@getDetail');
