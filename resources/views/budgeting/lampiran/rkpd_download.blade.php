@@ -174,8 +174,8 @@
 				<tr>
 				@php $targetmurni .= '<tr>'; @endphp
 				@endif
-					<td>{{ $o->IMPACT_TOLAK_UKUR }}</td>
-					@php $targetmurni .= '<td>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</td></tr>'; @endphp
+					<td><b>{{ $o->IMPACT_TOLAK_UKUR }}</b></td>
+					@php $targetmurni .= '<td><b>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</b></td></tr>'; @endphp
 				</tr>
 				<?php $index++ ?>
 		@endforeach
@@ -198,8 +198,8 @@
 				<tr>
 				@php $target .= '<tr>'; @endphp
 				@endif
-					<td>{{ $o->IMPACT_TOLAK_UKUR }}</td>
-					@php $target .= '<td>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</td></tr>'; @endphp
+					<td><b>{{ $o->IMPACT_TOLAK_UKUR }}</b></td>
+					@php $target .= '<td><b>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</b></td></tr>'; @endphp
 				</tr>
 				<?php $index++ ?>
 		@endforeach
@@ -226,7 +226,7 @@
 		<td>{{ $sumbermurni}}</td>
 		<td>{{ $sumber}}</td>
 		<td>{!! $target.'</table>' !!}</td>
-		<td>{{ number_format($paguprogram[$i]->sum('pagu')*(110/100),0,',','.') }}</td>
+		<td><b>{{ number_format($paguprogram[$i]->sum('pagu')*(110/100),0,',','.') }}</b></td>
 		<td></td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
@@ -307,7 +307,6 @@
 			header = header + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
 			header = header + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
 			var footer = '</body></html>';
-
 
 		    var a = document.createElement('a');
 		    a.href = data_type + ', ' + header + table_html +footer;

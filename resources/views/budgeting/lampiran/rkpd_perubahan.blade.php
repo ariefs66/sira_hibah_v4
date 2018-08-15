@@ -173,8 +173,8 @@
 				<tr>
 				@php $targetmurni .= '<tr>'; @endphp
 				@endif
-					<td>{{ $o->IMPACT_TOLAK_UKUR }}</td>
-					@php $targetmurni .= '<td>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</td></tr>'; @endphp
+					<td><b>{{ $o->IMPACT_TOLAK_UKUR }}</b></td>
+					@php $targetmurni .= '<td><b>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</b></td></tr>'; @endphp
 				</tr>
 				<?php $index++ ?>
 		@endforeach
@@ -197,8 +197,8 @@
 				<tr>
 				@php $target .= '<tr>'; @endphp
 				@endif
-					<td>{{ $o->IMPACT_TOLAK_UKUR }}</td>
-					@php $target .= '<td>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</td></tr>'; @endphp
+					<td><b>{{ $o->IMPACT_TOLAK_UKUR }}</b></td>
+					@php $target .= '<td><b>'.$o->IMPACT_TARGET.' '.$o->satuan->SATUAN_NAMA.'</b></td></tr>'; @endphp
 				</tr>
 				<?php $index++ ?>
 		@endforeach
@@ -216,7 +216,7 @@
 		<td width="10%" class="kanan"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan">
-			@if($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')<0)
+			@if($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')<=-1)
 			<b>({{ number_format(abs($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }})</b>
 			@else
 			<b>{{ number_format(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
@@ -225,7 +225,7 @@
 		<td>{{ $sumbermurni}}</td>
 		<td>{{ $sumber}}</td>
 		<td>{!! $target.'</table>' !!}</td>
-		<td>{{ number_format($paguprogram[$i]->sum('pagu')*(110/100),0,',','.') }}</td>
+		<td><b>{{ number_format($paguprogram[$i]->sum('pagu')*(110/100),0,',','.') }}</b></td>
 		<td></td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
