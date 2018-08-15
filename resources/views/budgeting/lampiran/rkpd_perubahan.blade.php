@@ -216,7 +216,11 @@
 		<td width="10%" class="kanan"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan">
+			@if(($pagu - $pagumurni)<0)
+			<b>{{ number_format(abs($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
+			@else
 			<b>{{ number_format(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
+			@endif
 		</td>
 		<td>{{ $sumbermurni}}</td>
 		<td>{{ $sumber}}</td>
