@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use View;
 use Response;
+use Excel;
 use Auth;
 use DB;
+use Carbon;
 use App\Model\SKPD;
 use App\Model\Program;
 use App\Model\Kegiatan;
@@ -189,6 +191,19 @@ class tahapanController extends Controller
         FROM "BUDGETING"."DAT_RINCIAN"
         WHERE "RINCIAN_ID" NOT IN (SELECT "RINCIAN_ID" FROM "BUDGETING"."RKP_RINCIAN" WHERE "TAHAPAN_ID"= ?)', [$tahapan, $tahapan]);
         return 1;
+    }
+
+    public function rekapRincian($tahun,$status, Request $req){
+        $tahapan =  (!empty($req->tahapan))? $req->tahapan : 0;
+        $data   = DB::select('SELECT * from "BUDGETING"."RKP_RINCIAN" rkp WHERE rkp."TAHAPAN_ID" = '.$tahapan);
+        $data = array_map(function ($value) {
+                return (array)$value;
+            }, $data);
+        Excel::create('REKAP RINCIAN '.Carbon\Carbon::now()->format('d M Y - H'), function($excel) use($data){
+                $excel->sheet('RINCIAN', function($sheet) use ($data) {
+                    $sheet->fromArray($data);
+                });
+        })->download('xls');
     }
 
     public function delete(){

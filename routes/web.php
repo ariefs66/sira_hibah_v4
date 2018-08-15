@@ -304,6 +304,7 @@ Route::post('/main/{tahun}/{status}/pengaturan/subtahapan/add/submit', 'Budgetin
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/edit/submit', 'Budgeting\tahapanController@submitEdit');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/tutup', 'Budgeting\tahapanController@tutupTahapan');
 Route::post('/main/{tahun}/{status}/pengaturan/tahapan/trigger', 'Budgeting\tahapanController@submitTrigger');
+Route::get('/main/{tahun}/{status}/pengaturan/tahapan/rincian', 'Budgeting\tahapanController@rekapRincian');
 
 //URUSAN
 Route::get('/main/{tahun}/{status}/pengaturan/urusan', 'Budgeting\Referensi\urusanController@index');
