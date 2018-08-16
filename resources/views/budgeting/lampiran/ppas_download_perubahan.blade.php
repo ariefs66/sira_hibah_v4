@@ -90,15 +90,15 @@
 		<td class="tengah">Jumlah Perubahan (+/-)</td>	
 	</tr>
 	<tr class="tengah">
-		<td class="tengah" colspan="4">(1)</td>
-		<td class="tengah">(2)</td>
-		<td class="tengah">(3)</td>
-		<td class="tengah">(4)</td>
-		<td class="tengah">(5)</td>
-		<td class="tengah">(6)</td>
-		<td class="tengah">(7)</td>
-		<td class="tengah">(8)</td>
-		<td class="tengah">(9)</td>
+		<td class="tengah" colspan="4">1</td>
+		<td class="tengah">2</td>
+		<td class="tengah">3</td>
+		<td class="tengah">4</td>
+		<td class="tengah">5</td>
+		<td class="tengah">6</td>
+		<td class="tengah">7</td>
+		<td class="tengah">8</td>
+		<td class="tengah">9</td>
 	</tr>
 	<tr>
 	@foreach($program as $p)
@@ -204,18 +204,18 @@
 		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,2,3) }}</td>
 		<td width="1%">{{ $p->PROGRAM_KODE }}</td>
 		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
-		<td style="padding-left: 15px"><i>{{ $pp->kegiatan->KEGIATAN_NAMA }}</i></td>
+		<td style="padding-left: 15px">{{ $pp->kegiatan->KEGIATAN_NAMA }}</td>
 		<td>{!! $indikatormurni !!}</td>
 		<td>{!! $indikator !!}</td>
 		<td>{!! $targetmurni !!}</td>
 		<td>{!! $target !!}</td>
-		<td class="kanan"><i>Rp.{{ number_format($pagumurni,0,',','.') }}</i></td>
-		<td class="kanan"><i>Rp.{{ number_format($pagu,0,',','.') }} </i></td>
+		<td class="kanan">Rp.{{ number_format($pagumurni,0,',','.') }}</td>
+		<td class="kanan">Rp.{{ number_format($pagu,0,',','.') }}</td>
 		<td class="kanan">
 			@if(($pagu - $pagumurni)<0)
-			<i>({{ number_format(abs($pagu - $pagumurni),0,',','.') }})</i>
+			({{ number_format(abs($pagu - $pagumurni),0,',','.') }})
 			@else
-			<i>{{ number_format($pagu - $pagumurni,0,',','.') }}</i>
+			{{ number_format($pagu - $pagumurni,0,',','.') }}
 			@endif
 		</td>
 	</tr>
