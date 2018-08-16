@@ -192,7 +192,7 @@
 		@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				@php $indikator = "&nbsp;".$out->OUTPUT_TOLAK_UKUR."<br>";
-					$target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+					$target = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
 				$pagu = $pp->pagu; @endphp
 			@endforeach
 			@endif		

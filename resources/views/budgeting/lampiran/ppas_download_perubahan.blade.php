@@ -90,15 +90,15 @@
 		<td class="tengah">Jumlah Perubahan (+/-)</td>	
 	</tr>
 	<tr class="tengah">
-		<td class="tengah" colspan="4">1</td>
-		<td class="tengah">2</td>
-		<td class="tengah">3</td>
-		<td class="tengah">4</td>
-		<td class="tengah">5</td>
-		<td class="tengah">6</td>
-		<td class="tengah">7</td>
-		<td class="tengah">8</td>
-		<td class="tengah">9</td>
+		<td class="tengah" colspan="4">(1)</td>
+		<td class="tengah">(2)</td>
+		<td class="tengah">(3)</td>
+		<td class="tengah">(4)</td>
+		<td class="tengah">(5)</td>
+		<td class="tengah">(6)</td>
+		<td class="tengah">(7)</td>
+		<td class="tengah">(8)</td>
+		<td class="tengah">(9)</td>
 	</tr>
 	<tr>
 	@foreach($program as $p)
@@ -194,7 +194,7 @@
 		@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				@php $indikator = "&nbsp;".$out->OUTPUT_TOLAK_UKUR."<br>";
-					$target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+					$target = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
 				$pagu = $pp->pagu; @endphp
 			@endforeach
 			@endif		
