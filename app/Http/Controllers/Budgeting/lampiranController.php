@@ -1125,6 +1125,7 @@ class lampiranController extends Controller
                                 ->where('BL_PAGU','!=',0)                                
                                 ->groupBy('KEGIATAN_ID')
                                 ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID"')
+                                ->orderBy('KEGIATAN_ID')
                                 ->get();
             }
             else {
@@ -1139,6 +1140,7 @@ class lampiranController extends Controller
                                 ->where('BL_PAGU','!=',0)
                                 ->groupBy('KEGIATAN_ID')
                                 ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID"')
+                                ->orderBy('KEGIATAN_ID')
                                 ->get();
                 $idprog            = $pr->PROGRAM_ID;
                 $paguprogrammurni[$i]   = BL::where('BL_TAHUN',$tahun)->whereHas('kegiatan',function($q) use ($idprog){
@@ -1150,6 +1152,7 @@ class lampiranController extends Controller
                                 ->where('BL_PAGU','!=',0)
                                 ->groupBy('KEGIATAN_ID')
                                 ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID"')
+                                ->orderBy('KEGIATAN_ID')
                                 ->get();                               
             }
             $i++;
