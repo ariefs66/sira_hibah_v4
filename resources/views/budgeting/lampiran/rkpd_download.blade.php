@@ -104,7 +104,7 @@
 		<td>Sesudah Perubahan</td>
 	</tr>
 	<tr class="tengah header">
-		<td class="tengah" colspan="4">(1)</td>
+		<td class="tengah" colspan="4">1</td>
 		<td class="tengah">2</td>
 		<td class="tengah">3</td>
 		<td class="tengah">4</td>
@@ -229,45 +229,42 @@
 		<td></td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
-	<tr>
-		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,0,1) }}</td>
-		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,2,3) }}</td>
-		<td width="1%">{{ $p->PROGRAM_KODE }}</td>
-		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
-		<td style="padding-left: 15px">{{ $pp->kegiatan->KEGIATAN_NAMA }}</td>
-		<td>
-		@php $targetmurni='';$target='';$pagumurni=0;$pagu=0;
+	@php $indikatormurni='';$indikator='';$targetmurni='';$target='';$pagumurni=0;$pagu=0;
 		$lokasi=''; $sasaran=''; $sumber='';
 		$lokasimurni=''; $sasaranmurni=''; $sumbermurni=''; @endphp
 		@foreach($paguprogrammurni[$i] as $ppm)
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
 		@if(count($ppm->kegiatan->bl[0]->output) != '0')
 			@foreach($ppm->kegiatan->bl[0]->output as $out)
-				&nbsp; {{ $out->OUTPUT_TOLAK_UKUR }}<br>
-				@php $targetmurni = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
+				@php $indikatormurni .= "&nbsp;".$out->OUTPUT_TOLAK_UKUR."<br>";
+				$targetmurni = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
 				$pagumurni = $ppm->pagu; $lokasimurni = $ppm->kegiatan->bl[0]->lokasi->LOKASI_NAMA; $sasaranmurni = $ppm->kegiatan->bl[0]->sasaran->SASARAN_NAMA; $sumbermurni = $ppm->kegiatan->bl[0]->sumber->DANA_NAMA;  @endphp
 			@endforeach
 			@endif
 		@endif
 		@endforeach
-		</td>
-		<td>@if(count($pp->kegiatan->bl[0]->output) != '0')
-			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp; {{ $out->OUTPUT_TOLAK_UKUR }}<br>
-				@php $target = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
-				$pagu = $pp->pagu; $lokasi=$pp->kegiatan->bl[0]->lokasi->LOKASI_NAMA;  $sasaran=$pp->kegiatan->bl[0]->sasaran->SASARAN_NAMA; $sumber=$pp->kegiatan->bl[0]->sumber->DANA_NAMA; @endphp
-			@endforeach
-			@endif</td>
+	@if(count($pp->kegiatan->bl[0]->output) != '0')
+		@foreach($pp->kegiatan->bl[0]->output as $out)
+			@php $indikator .= "&nbsp;".$out->OUTPUT_TOLAK_UKUR."<br>";
+			$target = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
+			$pagu = $pp->pagu; $lokasi=$pp->kegiatan->bl[0]->lokasi->LOKASI_NAMA;  $sasaran=$pp->kegiatan->bl[0]->sasaran->SASARAN_NAMA; $sumber=$pp->kegiatan->bl[0]->sumber->DANA_NAMA; @endphp
+		@endforeach
+		@endif
+	@if($pagumurni > 0 or $pagu > 0)
+	<tr>
+		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,0,1) }}</td>
+		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,2,3) }}</td>
+		<td width="1%">{{ $p->PROGRAM_KODE }}</td>
+		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
+		<td style="padding-left: 15px">{{ $pp->kegiatan->KEGIATAN_NAMA }}</td>
+		<td>{!! $indikatormurni !!}</td>
+		<td>{!! $indikator !!}</td>
 		<td>{{ $sasaranmurni}}</td>
 		<td>{{ $sasaran}}</td>
 		<td>{{ $lokasimurni}}</td>
 		<td>{{ $lokasi}}</td>
-		<td>
-			{!! $targetmurni !!}
-		</td>
-		<td>
-			{!! $target !!}
-		</td>
+		<td>{!! $targetmurni !!}</td>
+		<td>{!! $target !!}</td>
 		<td class="kanan">{{ number_format($pagumurni,0,',','.') }}</td>
 		<td class="kanan">{{ number_format($pagu,0,',','.') }} </td>
 		<td class="kanan">
@@ -283,6 +280,7 @@
 		<td>{{ number_format($pagu*(110/100),0,',','.') }}</td>
 		<td></td>
 	</tr>
+	@endif
 	@endforeach
 	<?php $i++;?>
 	@endforeach
