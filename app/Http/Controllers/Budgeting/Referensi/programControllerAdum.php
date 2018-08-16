@@ -12,6 +12,8 @@ use App\Model\SKPD;
 use App\Model\Satuan;
 use App\Model\Outcome;
 use App\Model\Impact;
+use App\Model\OutcomePerubahan;
+use App\Model\ImpactPerubahan;
 use View;
 use Carbon;
 use Response;
@@ -171,8 +173,13 @@ class programControllerAdum extends Controller
     }
 
     public function getCapaian($tahun,$status,$id){
-        $dataCapaian       = Outcome::where('PROGRAM_ID',$id)->get();
-        $dataHasil         = Impact::where('PROGRAM_ID',$id)->get();
+        if($status=="murni"){
+            $dataCapaian       = Outcome::where('PROGRAM_ID',$id)->get();
+            $dataHasil         = Impact::where('PROGRAM_ID',$id)->get();
+        }else{
+            $dataCapaian       = OutcomePerubahan::where('PROGRAM_ID',$id)->get();
+            $dataHasil         = ImpactPerubahan::where('PROGRAM_ID',$id)->get();
+        }
         $view               = array();
         foreach ($dataCapaian as $dc) {
             $aksi       = '<div class="action visible pull-right"><a onclick="return hapusOutcome(\''.$dc->OUTCOME_ID.'\')" class="action-delete"><i class="mi-trash"></i></a></div>';
@@ -194,14 +201,22 @@ class programControllerAdum extends Controller
 
     public function submitCapaian($tahun,$status){
         if(Input::get('tipe') == 'CAPAIAN'){
-            $o  = new Outcome;
+            if($status=="murni"){
+                $o  = new Outcome;
+            }else{
+                $o  = new OutcomePerubahan;
+            }
             $o->PROGRAM_ID  = Input::get('id');
             $o->OUTCOME_TOLAK_UKUR  = Input::get('tolakukur');
             $o->OUTCOME_TARGET      = Input::get('target');
             $o->SATUAN_ID           = Input::get('satuan');
             $o->save();
         }else{
-            $o  = new Impact;
+            if($status=="murni"){
+                $o  = new Impact;
+            }else{
+                $o  = new ImpactPerubahan;
+            }
             $o->PROGRAM_ID  = Input::get('id');
             $o->IMPACT_TOLAK_UKUR  = Input::get('tolakukur');
             $o->IMPACT_TARGET       = Input::get('target');
