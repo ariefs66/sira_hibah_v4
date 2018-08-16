@@ -234,7 +234,7 @@
 		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,2,3) }}</td>
 		<td width="1%">{{ $p->PROGRAM_KODE }}</td>
 		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
-		<td style="padding-left: 15px"><i>{{ $pp->kegiatan->KEGIATAN_NAMA }}</i></td>
+		<td style="padding-left: 15px">{{ $pp->kegiatan->KEGIATAN_NAMA }}</td>
 		<td>
 		@php $targetmurni='';$target='';$pagumurni=0;$pagu=0;
 		$lokasi=''; $sasaran=''; $sumber='';
@@ -243,8 +243,8 @@
 		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
 		@if(count($ppm->kegiatan->bl[0]->output) != '0')
 			@foreach($ppm->kegiatan->bl[0]->output as $out)
-				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
-				@php $targetmurni = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				&nbsp; {{ $out->OUTPUT_TOLAK_UKUR }}<br>
+				@php $targetmurni = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
 				$pagumurni = $ppm->pagu; $lokasimurni = $ppm->kegiatan->bl[0]->lokasi->LOKASI_NAMA; $sasaranmurni = $ppm->kegiatan->bl[0]->sasaran->SASARAN_NAMA; $sumbermurni = $ppm->kegiatan->bl[0]->sumber->DANA_NAMA;  @endphp
 			@endforeach
 			@endif
@@ -253,8 +253,8 @@
 		</td>
 		<td>@if(count($pp->kegiatan->bl[0]->output) != '0')
 			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
-				@php $target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				&nbsp; {{ $out->OUTPUT_TOLAK_UKUR }}<br>
+				@php $target = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
 				$pagu = $pp->pagu; $lokasi=$pp->kegiatan->bl[0]->lokasi->LOKASI_NAMA;  $sasaran=$pp->kegiatan->bl[0]->sasaran->SASARAN_NAMA; $sumber=$pp->kegiatan->bl[0]->sumber->DANA_NAMA; @endphp
 			@endforeach
 			@endif</td>
@@ -268,13 +268,13 @@
 		<td>
 			{!! $target !!}
 		</td>
-		<td class="kanan"><i>{{ number_format($pagumurni,0,',','.') }}</i></td>
-		<td class="kanan"><i>{{ number_format($pagu,0,',','.') }} </i></td>
+		<td class="kanan">{{ number_format($pagumurni,0,',','.') }}</td>
+		<td class="kanan">{{ number_format($pagu,0,',','.') }} </td>
 		<td class="kanan">
 			@if(($pagu - $pagumurni)<=-1)
-			<i>({{ number_format(abs($pagu - $pagumurni),0,',','.') }})</i>
+			({{ number_format(abs($pagu - $pagumurni),0,',','.') }})
 			@else
-			<i>{{ number_format($pagu - $pagumurni,0,',','.') }}</i>
+			{{ number_format($pagu - $pagumurni,0,',','.') }}
 			@endif
 		</td>
 		<td>{{ $sumbermurni}}</td>
