@@ -4374,6 +4374,8 @@ class blController extends Controller
                 $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>';
             }
 
+            $no  .= '<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>';
+
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
                 if(Auth::user()->level == 8 || Auth::user()->level == 2){
