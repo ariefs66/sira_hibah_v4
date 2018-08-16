@@ -65,11 +65,11 @@
 	Program dan Kegiatan Pada Perubahan Rencana Kerja Perangkat Daerah Tahun {{ $tahun }}<br>Kota Bandung</h4>
 <table class="header">
 	<tr class="noborder">
-		<td class="noborder" colspan=19> <b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
-		<td class="kanan noborder" colspan=2> <b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
+		<td class="noborder"> <b> Nama Perangkat Daerah : {{ $skpd->SKPD_KODE }} {{ $skpd->SKPD_NAMA }} </b></td>
+		<td class="kanan noborder"> <b>Total Pagu : {{ number_format($pagu->sum('BL_PAGU'),0,',','.') }} </b></td>
 	</tr>
 </table>
-<table class="detail" border="1px">
+<table class="detail">
 	<tbody>
 	<tr class="tengah header">
 		<td rowspan="3" colspan="4">Kode</td>
@@ -105,7 +105,7 @@
 		<td>Sesudah Perubahan</td>
 	</tr>
 	<tr class="tengah header">
-		<td class="tengah" colspan="4">1</td>
+		<td class="tengah" colspan="4">(1)</td>
 		<td class="tengah">2</td>
 		<td class="tengah">3</td>
 		<td class="tengah">4</td>
@@ -217,11 +217,11 @@
 		<td width="10%" class="kanan"><b>{{ number_format($paguprogrammurni[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan"><b>{{ number_format($paguprogram[$i]->sum('pagu'),0,',','.') }}</b></td>
 		<td width="10%" class="kanan">
-		@if($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')<0)
+			@if($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')<=-1)
 			<b>({{ number_format(abs($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }})</b>
-		@else
+			@else
 			<b>{{ number_format(($paguprogram[$i]->sum('pagu') - $paguprogrammurni[$i]->sum('pagu')),0,',','.') }}</b>
-		@endif
+			@endif
 		</td>
 		<td>{{ $sumbermurni}}</td>
 		<td>{{ $sumber}}</td>
@@ -246,7 +246,7 @@
 			@foreach($ppm->kegiatan->bl[0]->output as $out)
 				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
 				@php $targetmurni = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
-				$pagumurni = $ppm->pagu; $lokasimurni = $ppm->LOKASI_NAMA; $sasaranmurni = $ppm->SASARAN_NAMA; $sumbermurni = $ppm->DANA_NAMA;  @endphp
+				$pagumurni = $ppm->pagu; $lokasimurni = $ppm->kegiatan->bl[0]->lokasi->LOKASI_NAMA; $sasaranmurni = $ppm->kegiatan->bl[0]->sasaran->SASARAN_NAMA; $sumbermurni = $ppm->kegiatan->bl[0]->sumber->DANA_NAMA;  @endphp
 			@endforeach
 			@endif
 		@endif
@@ -256,7 +256,7 @@
 			@foreach($pp->kegiatan->bl[0]->output as $out)
 				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
 				@php $target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
-				$pagu = $pp->pagu; $lokasi=$pp->LOKASI_NAMA;  $sasaran=$pp->SASARAN_NAMA; $sumber=$pp->DANA_NAMA; @endphp
+				$pagu = $pp->pagu; $lokasi=$pp->kegiatan->bl[0]->lokasi->LOKASI_NAMA;  $sasaran=$pp->kegiatan->bl[0]->sasaran->SASARAN_NAMA; $sumber=$pp->kegiatan->bl[0]->sumber->DANA_NAMA; @endphp
 			@endforeach
 			@endif</td>
 		<td>{{ $sasaranmurni}}</td>
@@ -272,7 +272,7 @@
 		<td class="kanan"><i>{{ number_format($pagumurni,0,',','.') }}</i></td>
 		<td class="kanan"><i>{{ number_format($pagu,0,',','.') }} </i></td>
 		<td class="kanan">
-			@if(($pagu - $pagumurni)<0)
+			@if(($pagu - $pagumurni)<=-1)
 			<i>({{ number_format(abs($pagu - $pagumurni),0,',','.') }})</i>
 			@else
 			<i>{{ number_format($pagu - $pagumurni,0,',','.') }}</i>

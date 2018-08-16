@@ -1057,11 +1057,10 @@ class lampiranController extends Controller
                             ->get();
         } else { 
             $stat  = BLPerubahan::where('BL_TAHUN',$tahun);
-            $pagu_murni = BL::where('BL_TAHUN',$tahun)->whereHas('subunit',function($x) use ($id){
-                                $x->where('SKPD_ID',$id);
-                        })
+            $pagu_murni = BL::where('BL_TAHUN',$tahun)
                         ->where('BL_VALIDASI',1)
                         ->where('BL_DELETED',0)
+                        ->where('SKPD_ID',$id)
                         ->where('BL_PAGU','!=',0)
                         ->get();
 
@@ -1108,7 +1107,6 @@ class lampiranController extends Controller
             ->where('BL_PAGU','!=',0)
             ->get();    
         }
-
         
         $paguprogram    = array();
         $paguprogrammurni    = array();
@@ -1134,34 +1132,25 @@ class lampiranController extends Controller
                 $idprog            = $pr->PROGRAM_ID;
                 $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
-                                })->whereHas('subunit',function($x) use ($id){
-                                    $x->where('SKPD_ID',$id);
                                 })
                                 ->where('BL_VALIDASI',1)
                                 ->where('BL_DELETED',0)
-                                ->where('BL_PAGU','!=',0)  
-                                ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL_PERUBAHAN.LOKASI_ID')
-                                ->join('REFERENSI.REF_SASARAN','REF_SASARAN.SASARAN_ID','=','DAT_BL_PERUBAHAN.SASARAN_ID')
-                                ->join('REFERENSI.REF_SUMBER_DANA','REF_SUMBER_DANA.DANA_ID','=','DAT_BL_PERUBAHAN.SUMBER_ID')
-                                ->groupBy('KEGIATAN_ID','LOKASI_NAMA','SASARAN_NAMA', 'DANA_NAMA')
-                                ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID", "LOKASI_NAMA", "SASARAN_NAMA", "DANA_NAMA"')
+                                ->where('SKPD_ID',$id)
+                                ->where('BL_PAGU','!=',0)
+                                ->groupBy('KEGIATAN_ID')
+                                ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID"')
                                 ->get();
-                //$stat  = BL::where('BL_TAHUN',$tahun);
                 $idprog            = $pr->PROGRAM_ID;
                 $paguprogrammurni[$i]   = BL::where('BL_TAHUN',$tahun)->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
-                                })->whereHas('subunit',function($x) use ($id){
-                                    $x->where('SKPD_ID',$id);
                                 })
                                 ->where('BL_VALIDASI',1)
                                 ->where('BL_DELETED',0)
+                                ->where('SKPD_ID',$id)
                                 ->where('BL_PAGU','!=',0)
-                                ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL.LOKASI_ID')
-                                ->join('REFERENSI.REF_SASARAN','REF_SASARAN.SASARAN_ID','=','DAT_BL.SASARAN_ID')
-                                ->join('REFERENSI.REF_SUMBER_DANA','REF_SUMBER_DANA.DANA_ID','=','DAT_BL.SUMBER_ID')
-                                ->groupBy('KEGIATAN_ID','LOKASI_NAMA','SASARAN_NAMA', 'DANA_NAMA')
-                                ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID", "LOKASI_NAMA", "SASARAN_NAMA", "DANA_NAMA"')
-                                ->get();                                
+                                ->groupBy('KEGIATAN_ID')
+                                ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID"')
+                                ->get();                               
             }
             $i++;
         }
@@ -1171,10 +1160,6 @@ class lampiranController extends Controller
         }else{
             return View('budgeting.lampiran.rkpd_perubahan',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu1,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'pagu_murni'=>$pagu_murni,'idm'=>0,'urusankode'=>'xxx','bidangkode'=>'xxx']);
         }
-
-        
-
-
     }
 
     public function rkpdDownload($tahun,$status,$id){
@@ -1199,16 +1184,12 @@ class lampiranController extends Controller
                             ->orderBy('URUSAN_ID')
                             ->orderBy('PROGRAM_KODE')
                             ->get();
-                            
-            $pagu_murni    = array();
-            $programmurni    = array();
         } else { 
             $stat  = BLPerubahan::where('BL_TAHUN',$tahun);
-            $pagu_murni = BL::where('BL_TAHUN',$tahun)->whereHas('subunit',function($x) use ($id){
-                                $x->where('SKPD_ID',$id);
-                        })
+            $pagu_murni = BL::where('BL_TAHUN',$tahun)
                         ->where('BL_VALIDASI',1)
                         ->where('BL_DELETED',0)
+                        ->where('SKPD_ID',$id)
                         ->where('BL_PAGU','!=',0)
                         ->get();
 
@@ -1234,7 +1215,7 @@ class lampiranController extends Controller
                 ->orderBy('PROGRAM_KODE')
                 ->get();
         }
-            
+        
         $pagu           = $stat->whereHas('subunit',function($x) use ($id){
                                 $x->where('SKPD_ID',$id);
                         })
@@ -1242,7 +1223,19 @@ class lampiranController extends Controller
                         ->where('BL_DELETED',0)
                         ->where('BL_PAGU','!=',0)
                         ->get();
-
+        if($status=='murni'){
+            $pagu1           = BL::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
+            ->where('BL_VALIDASI',1)
+            ->where('BL_DELETED',0)
+            ->where('BL_PAGU','!=',0)
+            ->get();    
+        }else{
+            $pagu1           = BLPerubahan::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
+            ->where('BL_VALIDASI',1)
+            ->where('BL_DELETED',0)
+            ->where('BL_PAGU','!=',0)
+            ->get();    
+        }
         
         $paguprogram    = array();
         $paguprogrammurni    = array();
@@ -1268,50 +1261,29 @@ class lampiranController extends Controller
                 $idprog            = $pr->PROGRAM_ID;
                 $paguprogram[$i]   = $stat->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
-                                })->whereHas('subunit',function($x) use ($id){
-                                    $x->where('SKPD_ID',$id);
                                 })
                                 ->where('BL_VALIDASI',1)
                                 ->where('BL_DELETED',0)
-                                ->where('BL_PAGU','!=',0)  
-                                ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL_PERUBAHAN.LOKASI_ID')
-                                ->join('REFERENSI.REF_SASARAN','REF_SASARAN.SASARAN_ID','=','DAT_BL_PERUBAHAN.SASARAN_ID')
-                                ->join('REFERENSI.REF_SUMBER_DANA','REF_SUMBER_DANA.DANA_ID','=','DAT_BL_PERUBAHAN.SUMBER_ID')
-                                ->groupBy('KEGIATAN_ID','LOKASI_NAMA','SASARAN_NAMA', 'DANA_NAMA')
-                                ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID", "LOKASI_NAMA", "SASARAN_NAMA", "DANA_NAMA"')
+                                ->where('SKPD_ID',$id)
+                                ->where('BL_PAGU','!=',0)
+                                ->groupBy('KEGIATAN_ID')
+                                ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID"')
                                 ->get();
-                //$stat  = BL::where('BL_TAHUN',$tahun);
                 $idprog            = $pr->PROGRAM_ID;
                 $paguprogrammurni[$i]   = BL::where('BL_TAHUN',$tahun)->whereHas('kegiatan',function($q) use ($idprog){
                                     $q->where('PROGRAM_ID',$idprog);
-                                })->whereHas('subunit',function($x) use ($id){
-                                    $x->where('SKPD_ID',$id);
                                 })
                                 ->where('BL_VALIDASI',1)
                                 ->where('BL_DELETED',0)
+                                ->where('SKPD_ID',$id)
                                 ->where('BL_PAGU','!=',0)
-                                ->join('REFERENSI.REF_LOKASI','REF_LOKASI.LOKASI_ID','=','DAT_BL.LOKASI_ID')
-                                ->join('REFERENSI.REF_SASARAN','REF_SASARAN.SASARAN_ID','=','DAT_BL.SASARAN_ID')
-                                ->join('REFERENSI.REF_SUMBER_DANA','REF_SUMBER_DANA.DANA_ID','=','DAT_BL.SUMBER_ID')
-                                ->groupBy('KEGIATAN_ID','LOKASI_NAMA','SASARAN_NAMA', 'DANA_NAMA')
-                                ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID", "LOKASI_NAMA", "SASARAN_NAMA", "DANA_NAMA"')
-                                ->get();                                
+                                ->groupBy('KEGIATAN_ID')
+                                ->selectRaw('SUM("BL_PAGU") AS pagu, "KEGIATAN_ID"')
+                                ->get();                               
             }
             $i++;
         }
-        if($status=='murni'){
-            $pagu1           = BL::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
-            ->where('BL_VALIDASI',1)
-            ->where('BL_DELETED',0)
-            ->where('BL_PAGU','!=',0)
-            ->get();    
-        }else{
-            $pagu1           = BLPerubahan::where('BL_TAHUN',$tahun)->where('SKPD_ID',$id)
-            ->where('BL_VALIDASI',1)
-            ->where('BL_DELETED',0)
-            ->where('BL_PAGU','!=',0)
-            ->get();    
-        }
+
         return View('budgeting.lampiran.rkpd_download',['tahun'=>$tahun,'status'=>$status,'skpd'=>$idSKPD,'pagu'=>$pagu1,'program'=>$program,'programmurni'=>$programmurni,'i'=>0,'paguprogram'=>$paguprogram,'paguprogrammurni'=>$paguprogrammurni,'pagu_murni'=>$pagu_murni,'idm'=>0,'urusankode'=>'xxx','bidangkode'=>'xxx']);
     }
 
