@@ -431,19 +431,6 @@
       $('#id_program').val('');
   }); 
 
-  function hapusImpact(id){
-      token       = $('#token').val();
-      $.ajax({
-          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/hapusImpact",
-          type: "POST",
-          data: {'_token'         : token,
-                'id'              : id},
-          success: function(msg){
-            $.alert(msg);
-            $('#table-capaian').DataTable().ajax.reload();
-          }
-      }); 
-
   function showCapaian(id){
     $('#id-capaian').val(id);
     $('#table-capaian').DataTable().destroy();
@@ -457,7 +444,21 @@
     });
     $('#set-capaian-modal').modal('show');
   }
-  
+
+  function hapusImpact(id){
+    token       = $('#token').val();
+    $.ajax({
+        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/hapusImpact",
+        type: "POST",
+        data: {'_token'         : token,
+              'id'              : id},
+        success: function(msg){
+          $.alert(msg);
+          $('#table-capaian').DataTable().ajax.reload();
+        }
+    });
+  } 
+
   function simpanCapaian(){
     id          = $('#id-capaian').val();
     tipe        = $('#indikator-capaian').val();
