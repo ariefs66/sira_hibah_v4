@@ -177,41 +177,36 @@
 		</td>
 	</tr>
 	@foreach($paguprogram[$i] as $pp)
+	@php $indikator='';$indikatormurni='';$targetmurni='';$target='';$pagumurni=0;$pagu=0; @endphp
+		@foreach($paguprogrammurni[$i] as $ppm)
+		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
+		@if(count($ppm->kegiatan->bl[0]->output) != '0')
+			@foreach($ppm->kegiatan->bl[0]->output as $out)
+				@php $indikatormurni = "&nbsp;".$out->OUTPUT_TOLAK_UKUR."<br>";
+					 $targetmurni = "&nbsp;".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."<br/>";
+				$pagumurni = $ppm->pagu; @endphp
+			@endforeach
+			@endif
+		@endif
+		@endforeach
+		@if(count($pp->kegiatan->bl[0]->output) != '0')
+			@foreach($pp->kegiatan->bl[0]->output as $out)
+				@php $indikator = "&nbsp;".$out->OUTPUT_TOLAK_UKUR."<br>";
+					$target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
+				$pagu = $pp->pagu; @endphp
+			@endforeach
+			@endif		
+	@if($pagumurni > 0 or $pagu > 0)
 	<tr>
 		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,0,1) }}</td>
 		<td width="1%">{{ substr($p->urusan->URUSAN_KODE,2,3) }}</td>
 		<td width="1%">{{ $p->PROGRAM_KODE }}</td>
 		<td width="1%">{{ $pp->kegiatan->KEGIATAN_KODE }}</td>
 		<td style="padding-left: 15px"><i>{{ $pp->kegiatan->KEGIATAN_NAMA }}</i></td>
-		<td>
-		@php $targetmurni='';$target='';$pagumurni=0;$pagu=0; @endphp
-		@foreach($paguprogrammurni[$i] as $ppm)
-		@if($ppm->KEGIATAN_ID == $pp->KEGIATAN_ID)
-		@if(count($ppm->kegiatan->bl[0]->output) != '0')
-			@foreach($ppm->kegiatan->bl[0]->output as $out)
-				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
-				@php $targetmurni = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
-				$pagumurni = $ppm->pagu; @endphp
-			@endforeach
-			@endif
-		@endif
-		@endforeach
-		</td>
-		<td>
-		@if(count($pp->kegiatan->bl[0]->output) != '0')
-			@foreach($pp->kegiatan->bl[0]->output as $out)
-				&nbsp;<i> {{ $out->OUTPUT_TOLAK_UKUR }}</i><br>
-				@php $target = "&nbsp;<i>".$out->OUTPUT_TARGET." ".$out->satuan->SATUAN_NAMA."</i><br/>";
-				$pagu = $pp->pagu; @endphp
-			@endforeach
-			@endif		
-		</td>
-		<td>
-			{!! $targetmurni !!}
-		</td>
-		<td>
-			{!! $target !!}
-		</td>
+		<td>{!! $indikatormurni !!}</td>
+		<td>{!! $indikator !!}</td>
+		<td>{!! $targetmurni !!}</td>
+		<td>{!! $target !!}</td>
 		<td class="kanan"><i>Rp.{{ number_format($pagumurni,0,',','.') }}</i></td>
 		<td class="kanan"><i>Rp.{{ number_format($pagu,0,',','.') }} </i></td>
 		<td class="kanan">
@@ -222,6 +217,7 @@
 			@endif
 		</td>
 	</tr>
+	@endif
 	@endforeach
 	<?php $i++;?>
 	@endforeach
