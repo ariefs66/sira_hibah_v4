@@ -174,7 +174,7 @@
 		<td>Masukan</td>
 		<td>Dana yang dibutuhkan</td>
 		<td>-</td>
-			<td>Rp. {{ number_format($bl_murni->BL_PAGU,0,',','.') }},00</td>
+			<td>Rp. {{ number_format((empty($bl_murni->BL_PAGU) ? 0 : $bl_murni->BL_PAGU),0,',','.') }},00</td>
 		<td>Rp. {{ number_format($bl->BL_PAGU,0,',','.') }},00</td>
 	</tr>
 	@if($bl->output)
