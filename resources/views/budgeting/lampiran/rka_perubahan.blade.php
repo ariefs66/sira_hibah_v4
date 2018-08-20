@@ -182,12 +182,14 @@
 	@php $output=""; $target=""; @endphp
 	<tr>
 		<td>Keluaran</td>
+		@if($bl_murni->output)
 		@foreach($bl_murni->output as $out_murni)
 		@if($out_murni->OUTPUT_ID==$out->OUTPUT_ID)
 			@php $output=$out_murni->OUTPUT_TOLAK_UKUR; @endphp
 			@php $target=$out_murni->OUTPUT_TARGET .' '. $out_murni->satuan->SATUAN_NAMA; @endphp
 		@endif
-		@endforeach	
+		@endforeach		
+		@endif
 		<td>{{(empty($output) ? '-' : $output)}}</td>
 		<td>{{ $out->OUTPUT_TOLAK_UKUR }}</td>
 		<td>{{(empty($target) ? '-' : $target)}}</td>
@@ -200,12 +202,14 @@
 	@php $impact=""; $target=""; @endphp
 	<tr>
 		<td>Hasil</td>
+		@if($bl_murni->kegiatan)
 		@foreach($bl_murni->kegiatan->program->impact as $im_murni)
 		@if($im_murni->IMPACT_ID==$im->IMPACT_ID)
 			@php $impact= $im_murni->IMPACT_TOLAK_UKUR; @endphp
 			@php $target= $im_murni->IMPACT_TARGET .' '. $im_murni->satuan->SATUAN_NAMA; @endphp
 		@endif
-		@endforeach	
+		@endforeach		
+		@endif
 		<td>{{(empty($impact) ? '-' : $impact)}}</td>
 		<td>{{ $im->IMPACT_TOLAK_UKUR }}</td>
 		<td>{{(empty($target) ? '-' : $target)}}</td>
