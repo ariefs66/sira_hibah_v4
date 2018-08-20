@@ -182,7 +182,7 @@
 	@php $output=""; $target=""; @endphp
 	<tr>
 		<td>Keluaran</td>
-		@if(!empty($bl_murni)
+		@if(!empty($bl_murni))
 		@foreach($bl_murni->output as $out_murni)
 		@if($out_murni->OUTPUT_ID==$out->OUTPUT_ID)
 			@php $output=$out_murni->OUTPUT_TOLAK_UKUR; @endphp
@@ -202,7 +202,7 @@
 	@php $impact=""; $target=""; @endphp
 	<tr>
 		<td>Hasil</td>
-		@if(!empty($bl_murni)
+		@if(!empty($bl_murni))
 		@foreach($bl_murni->kegiatan->program->impact as $im_murni)
 		@if($im_murni->IMPACT_ID==$im->IMPACT_ID)
 			@php $impact= $im_murni->IMPACT_TOLAK_UKUR; @endphp
