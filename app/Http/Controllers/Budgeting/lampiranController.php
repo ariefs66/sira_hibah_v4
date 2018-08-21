@@ -299,8 +299,12 @@ class lampiranController extends Controller
         }
         //print_r($komponen);exit;
         $totalBL    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-
-        $totalBLMurni = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+        if($status == 'murni'){
+            $totalBLMurni = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+        } else{
+            $subrinci   = RincianPerubahan::where('BL_ID',$id)->pluck('SUBRINCIAN_ID')->toArray();
+            $totalBLMurni = Rincian::where('BL_ID',$id)->whereIn('SUBRINCIAN_ID',$subrinci)->sum('RINCIAN_TOTAL');
+        }
 
         $selisih = $totalBL-$totalBLMurni;
 
