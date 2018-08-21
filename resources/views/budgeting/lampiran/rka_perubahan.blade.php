@@ -496,7 +496,7 @@
 	  @else
 	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL-$p->TOTAL_MURNI,0,',','.') }},00</td>
 	  @endif
-	  <td class="border-rincian kanan">0,00%</td>
+	  <td class="border-rincian tengah">0,00%</td>
 	 </tr>
 
 
