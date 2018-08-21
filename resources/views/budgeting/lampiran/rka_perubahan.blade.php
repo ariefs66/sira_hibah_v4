@@ -496,7 +496,21 @@
 	  @else
 	  <td class="border-rincian kanan rekening">{{ number_format($p->TOTAL-$p->TOTAL_MURNI,0,',','.') }},00</td>
 	  @endif
-	  <td class="border-rincian tengah">0,00%</td>
+	  @if((empty($p->TOTAL_MURNI) or $p->TOTAL_MURNI==0) and (!empty($p->TOTAL) and $p->TOTAL!=0))
+		<td class="border-rincian tengah">{{ trim(number_format( ( ( $p->TOTAL) * 100)/$p->TOTAL , 2, ',', ' '),"-") }}%</td>
+		@elseif((!empty($p->TOTAL_MURNI) and $p->TOTAL_MURNI!=0) and (empty($p->TOTAL) or $p->TOTAL==0))
+		<td class="border-rincian tengah">
+			@if(!empty($p->TOTAL_MURNI) && $p->TOTAL_MURNI !== 0 )
+			{{ trim(number_format( ( ( $p->TOTAL_MURNI) * 100)/$p->TOTAL_MURNI , 2, ',', ' '),"-") }}
+			@else
+			-
+			@endif
+			%</td>
+		@elseif((empty($p->TOTAL_MURNI) or $p->TOTAL_MURNI==0) and (empty($p->TOTAL) or $p->TOTAL==0))
+		<td class="border-rincian tengah">0%</td>
+		@else
+		<td class="border-rincian tengah">{{ trim(number_format( ( ( $p->TOTAL - $p->TOTAL_MURNI) * 100)/$p->TOTAL_MURNI , 2, ',', ' '),"-") }}%</td>
+		@endif
 	 </tr>
 
 
