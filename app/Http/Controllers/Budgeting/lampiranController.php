@@ -190,7 +190,7 @@ class lampiranController extends Controller
 
         $bl_murni       = BL::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
         (empty($bl_murni))?$bl_murni=0:$bl_murni=$bl_murni;//print_r($bl_murni);exit;
-        $total_murni    = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+        $total_murni    = Rincian::where('BL_ID',$id)->whereIn('SUBRINCIAN_ID',$subrinci)->sum('RINCIAN_TOTAL');
         (empty($total_murni))?$total_murni=0:$total_murni=$total_murni;
 
         $paket      = array();
