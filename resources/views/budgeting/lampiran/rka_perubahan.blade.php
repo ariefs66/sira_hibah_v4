@@ -573,7 +573,7 @@
 
 	  @if(empty($k->RINCIAN_TOTAL_MURNI))
 	  <td class="border-rincian kanan">{{ number_format(( $k->RINCIAN_TOTAL),0,',','.') }},00 </td>
-	  <td class="border tengah">100,00%</td>
+	  <td class="border-rincian tengah">100,00%</td>
 	  @else
 	  @if($k->RINCIAN_TOTAL - $k->RINCIAN_TOTAL_MURNI<0)
 	  <td class="border-rincian kanan">({{ number_format(abs( $k->RINCIAN_TOTAL - $k->RINCIAN_TOTAL_MURNI),0,',','.') }},00)</td>
