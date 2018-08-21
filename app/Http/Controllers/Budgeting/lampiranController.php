@@ -170,6 +170,7 @@ class lampiranController extends Controller
 
         $bl    = BLPerubahan::where('BL_ID',$id)->where('BL_TAHUN',$tahun)->first();
         $total = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
+        $subrinci   = RincianPerubahan::where('BL_ID',$id)->pluck('SUBRINCIAN_ID')->toArray();
         $rekening       = RincianPerubahan::leftJoin('BUDGETING.DAT_RINCIAN',function($join){
                             $join->on('BUDGETING.DAT_RINCIAN.RINCIAN_ID','=','DAT_RINCIAN_PERUBAHAN.RINCIAN_ID')
                                     ->on('BUDGETING.DAT_RINCIAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID');
@@ -227,6 +228,7 @@ class lampiranController extends Controller
                     $x->where('REKENING_KODE','like',$rek4->REKENING_KODE.'%');
                 })
                 ->where('BL_ID',$id)
+                ->whereIn('SUBRINCIAN_ID',$subrinci)
                 ->whereHas('bl', function($x) use ($tahun){
                     $x->where('BL_TAHUN','=',$tahun);
                 })
@@ -250,6 +252,7 @@ class lampiranController extends Controller
                     $x->where('REKENING_KODE','like',$rek3->REKENING_KODE.'%');
                 })
                 ->where('BL_ID',$id)
+                ->whereIn('SUBRINCIAN_ID',$subrinci)
                 ->whereHas('bl', function($x) use ($tahun){
                     $x->where('BL_TAHUN','=',$tahun);
                 })
@@ -299,12 +302,7 @@ class lampiranController extends Controller
         }
         //print_r($komponen);exit;
         $totalBL    = RincianPerubahan::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-        if($status == 'murni'){
-            $totalBLMurni = Rincian::where('BL_ID',$id)->sum('RINCIAN_TOTAL');
-        } else{
-            $subrinci   = RincianPerubahan::where('BL_ID',$id)->pluck('SUBRINCIAN_ID')->toArray();
-            $totalBLMurni = Rincian::where('BL_ID',$id)->whereIn('SUBRINCIAN_ID',$subrinci)->sum('RINCIAN_TOTAL');
-        }
+        $totalBLMurni = Rincian::where('BL_ID',$id)->whereIn('SUBRINCIAN_ID',$subrinci)->sum('RINCIAN_TOTAL');
 
         $selisih = $totalBL-$totalBLMurni;
 
