@@ -38,7 +38,12 @@
         <ul class="nav-menu">
           <!-- <li><a href="#">FAQ</a></li> -->
          <!--  <li><a href="http://apbd.bandung.go.id:8000/">APBD 2017</a></li> -->
-          <li><a href="#">APBD 2017</a></li>
+         <li class="sub-menu">
+            <a href="#">APBD <i class="mi-caret-down"></i></a>
+
+            <ul id="tahun-anggaran">
+            </ul>
+          </li>
           <li class="sub-menu">
             <a href="#">Download <i class="mi-caret-down"></i></a>
 
@@ -137,8 +142,14 @@
 </body>
 <script type="text/javascript">
   $(function(){
-    // $('#info').modal('show');
-  })
+    $.ajax({
+      type  : "get",
+      url   : "{{ url('/') }}/public/gettahun",
+      success : function(data){
+        $('#tahun-anggaran').append(data);
+      }
+    }); 
+  });
 </script>
 @if(count($errors) > 0)
     <script type="text/javascript">

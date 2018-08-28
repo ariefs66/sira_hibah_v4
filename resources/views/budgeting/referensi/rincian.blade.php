@@ -109,6 +109,11 @@
       $.alert('Form harap diisi!');
     }else{
       uri = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/tahapan/trigger";
+      $.alert({
+        title:'Info',
+        content: 'Mohon Tunggu',
+        autoClose: 'ok|5000'
+      });
       $.ajax({
         url: uri,
         type: "POST",

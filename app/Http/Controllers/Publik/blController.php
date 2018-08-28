@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Budgeting;
+namespace App\Http\Controllers\Publik;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -60,10 +60,6 @@ use App\Model\OutputMaster;
 
 class blController extends Controller
 {
-	public function __construct(){
-        $this->middleware('auth');
-    }
-    //SHOW
     public function index($tahun,$status){
 
         if($status == 'murni') return $this->showMurni($tahun,$status);
@@ -71,6 +67,8 @@ class blController extends Controller
     }
 
     public function showMurni($tahun,$status){
+        $id=2441;
+        $level=8;
         //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
@@ -86,28 +84,28 @@ class blController extends Controller
             $thp    = 0;
         }
         $bl         = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
-        $skpd_      = $this->getSKPD($tahun);
+        $skpd_      = 1;
 
         $user       = User::whereHas('userbudget', function($q) use ($skpd_,$tahun){
                             $q->where('SKPD_ID',$skpd_);
                             $q->where('TAHUN',$tahun);
                         })->where('app',3)->where('level',1)->get();
 
-        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->get();
+        $skpd       = UserBudget::where('USER_ID',$id)->where('TAHUN',$tahun)->get();
         $skpd_      = array();
         $i = 0;
         foreach($skpd as $s){
             $skpd_[$i]   = $s->SKPD_ID;
             $i++;
         }
-        if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
+        if($level == 8 or $level == 9 or $level == 0){
             $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();
         }else{
             $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
         }
 
-        $id        = $this->getSKPD($tahun);
-        if(Auth::user()->level == 1 or Auth::user()->level == 2){
+        $id        = 1;
+        if($level == 1 or $level == 2){
             $blpagu    = BL::whereHas('subunit',function($q) use ($id){
                                     $q->where('SKPD_ID',$id);
                             })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
@@ -123,10 +121,12 @@ class blController extends Controller
             $rincian    = 0;
         }
 
-        return View('budgeting.belanja-langsung.index',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
+        return View('public.bl',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
     }
 
     public function showPerubahan($tahun,$status){
+        $id=2441;
+        $level=8;
         //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
@@ -142,27 +142,27 @@ class blController extends Controller
             $thp    = 0;
         }
         $bl         = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
-        $skpd_      = $this->getSKPD($tahun);
+        $skpd_      = 1;
         $user       = User::whereHas('userbudget', function($q) use ($skpd_){
                             $q->where('SKPD_ID',$skpd_);
                         })->where('app',3)->where('level',1)->get();
 
-        $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+        $skpd       = UserBudget::where('USER_ID',$id)->get();
         $skpd_      = array(); 
         $i = 0;
         foreach($skpd as $s){
             $skpd_[$i]   = $s->SKPD_ID;
             $i++;
         }
-        if(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
+        if($level == 8 or $level == 9 or $level == 0){
             $skpd       = SKPD::where('SKPD_TAHUN',$tahun)->get();
         }else{
             $skpd       = SKPD::whereIn('SKPD_ID',$skpd_)->where('SKPD_TAHUN',$tahun)->get();
         }
 
-        $id        = $this->getSKPD($tahun);
+        $id        = 1;
 
-        if(Auth::user()->level == 1 or Auth::user()->level == 2){
+        if($level == 1 or $level == 2){
             $blpagu    = BLPerubahan::whereHas('subunit',function($q) use ($id){
                                     $q->where('SKPD_ID',$id);
                             })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('BL_PAGU');
@@ -182,7 +182,7 @@ class blController extends Controller
 
        // $kunci = Kunciperubahan::
 
-        return View('budgeting.belanja-langsung.index_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
+        return View('public.bl_perubahan',['tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'skpd'=>$skpd,'user'=>$user,'thp'=>$thp,'blpagu'=>$blpagu,'rincian'=>$rincian,'pagu'=>$pagu]);
     }
 
     public function showDetail($tahun,$status,$id){
@@ -216,7 +216,7 @@ class blController extends Controller
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
-            if($s->USER_ID == Auth::user()->id) $mod = 1;
+            if($s->USER_ID == $id) $mod = 1;
         }
 
         if($status == 'murni') $tag         = BL::where('BL_TAHUN',$tahun)->where('BL_ID',$id)->value('BL_TAG');
@@ -330,16 +330,16 @@ class blController extends Controller
             $JB_523 = $JB_523_murni - $JB_523;  
         }                                
 
-        $skpd       = $this->getSKPD($tahun);
+        $skpd       = 1;
         $paguOPD      = SKPD::where('SKPD_ID',$skpd)->value('SKPD_PAGU');
                                                              
         $rekening = Rekgiat::join('REFERENSI.REF_REKENING','REF_REKENING.REKENING_ID','=','REF_REKGIAT.REKENING_ID')
                     ->where('KEGIATAN_ID',$bl->KEGIATAN_ID)->orderBy('REKENING_KODE')->get();
 
         if($status == 'murni')
-        return View('budgeting.belanja-langsung.detail',['mode'=>$mode,'tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r, 'rekening'=>$rekening,'paguOPD'=>$paguOPD]);
+        return View('public.detailbl',['mode'=>$mode,'tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'log_r'=>$log_r, 'rekening'=>$rekening,'paguOPD'=>$paguOPD]);
         else
-        return View('budgeting.belanja-langsung.detail_perubahan',['mode'=>$mode,'tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'JB_521'=>$JB_521,'JB_522'=>$JB_522,'JB_523'=>$JB_523,'paguOPD'=>$paguOPD]);
+        return View('public.detailbl_perubahan',['mode'=>$mode,'tahun'=>$tahun,'status'=>$status,'bl'=>$bl,'pekerjaan'=>$pekerjaan,'BL_ID'=>$id,'rinciantotal'=>$rincian,'satuan'=>$satuan,'mod'=>$mod,'thp'=>$thp,'rkpd'=>$totalRKPD,'ppas'=>$totalPPAS,'rapbd'=>$totalRAPBD,'apbd'=>$totalAPBD,'tag'=>$tagView,'subrincian'=>$subrincian,'outcome'=>$outcome,'output'=>$output,'impact'=>$impact,'JB_521'=>$JB_521,'JB_522'=>$JB_522,'JB_523'=>$JB_523,'paguOPD'=>$paguOPD]);
     }
 
     public function showAKB($tahun,$status,$id){
@@ -372,7 +372,7 @@ class blController extends Controller
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
-            if($s->USER_ID == Auth::user()->id) $mod = 1;
+            if($s->USER_ID == $id) $mod = 1;
         }
 
         if($status == 'murni') $tag         = BL::where('BL_TAHUN',$tahun)->where('BL_ID',$id)->value('BL_TAG');
@@ -470,13 +470,13 @@ class blController extends Controller
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
-            if($s->USER_ID == Auth::user()->id) $mod = 1;
+            if($s->USER_ID == $id) $mod = 1;
         }
         $view       = array();
         $i         = 1;
         $pajak      = '';
         foreach ($data as $data) {
-            if((($data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8 )and Auth::user()->active == 1) { //Auth::user()->email == '196202041986031016'
+            if((($data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or $level == 8 )and Auth::user()->active == 1) { //Auth::user()->email == '196202041986031016'
                 if($data->REKENING_ID == 0 or empty($data->subrincian)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -514,7 +514,7 @@ class blController extends Controller
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->RINCIAN_KOMPONEN.'</p>';
                 $hargakomponen  = number_format($data->komponen->KOMPONEN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
             }
-            if(Auth::user()->level == 8){
+            if($level == 8){
                  $checkbox = '<div class="m-t-n-lg">
                                   <label class="i-checks">
                                     <input type="checkbox" value="'.$data->RINCIAN_ID.'" class="cb" id="cb-'.$data->RINCIAN_ID.'"/><i></i>
@@ -549,6 +549,7 @@ class blController extends Controller
 
     public function showRincianPerubahan($tahun,$status,$id){
         //$now        = Carbon\Carbon::now()->format('Y-m-d H:m:s');
+        $level = 1;
         $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
         ->where(function($q) {
@@ -571,15 +572,15 @@ class blController extends Controller
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
-            if($s->USER_ID == Auth::user()->id) $mod = 1;
+            if($s->USER_ID == $id) $mod = 1;
         }
         $view       = array();
         $i         = 1;
         $pajak      = '';
         //print_r($data);exit;
         foreach ($data as $data) {
-            if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 and Auth::user()->active == 1) or Auth::user()->level == 8 ){
-            //if(( $thp == 1 and Auth::user()->active == 1) or Auth::user()->level == 8 ){
+            if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1) or $level == 8 ){
+            //if(( $thp == 1 and Auth::user()->active == 1) or $level == 8 ){
                 if($data->REKENING_ID == 0 or empty($data->SUBRINCIAN_ID)){
                 /*$no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success">
                 <i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -645,7 +646,7 @@ class blController extends Controller
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->RINCIAN_KOMPONEN.'</p>';
                 $hargakomponen  = number_format($data->RINCIAN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
             }
-            if(Auth::user()->level == 8){
+            if($level == 8){
                  $checkbox = '<div class="m-t-n-lg">
                                   <label class="i-checks">
                                     <input type="checkbox" value="'.$data->RINCIAN_ID.'" class="cb" id="cb-'.$data->RINCIAN_ID.'"/><i></i>
@@ -667,7 +668,7 @@ class blController extends Controller
                 }
                 if($data->RINCIAN_TOTAL != $rinciansebelum->RINCIAN_TOTAL) $tanda = "<span class='text text-danger'><i class='fa fa-asterisk'></i></span>";
                 else $tanda = "";
-                array_push($view, array( 'NO'             =>$tanda."<br>".$no,
+                array_push($view, array( 'NO'             =>$tanda."<br>",
                                          'REKENING'       =>$data->rekening->REKENING_KODE.'<br><p class="text-orange">'.$data->rekening->REKENING_NAMA.'</p>',
                                          'KOMPONEN'       =>$namakomponen,
                                          'SUB'            =>$sub."<br><span class='text-orange'>".$data->RINCIAN_KETERANGAN."</span>",
@@ -679,7 +680,7 @@ class blController extends Controller
                                          'TOTAL_SEBELUM'  =>number_format($rinciansebelum->RINCIAN_TOTAL,0,'.',',')));
             }else{
                 $tanda = "<span class='text text-danger'><i class='fa fa-asterisk'></i></span>";
-                array_push($view, array( 'NO'             =>$tanda."<br>".$no,
+                array_push($view, array( 'NO'             =>$tanda."<br>",
                                          'REKENING'       =>$data->rekening->REKENING_KODE.'<br><p class="text-orange">'.$data->rekening->REKENING_NAMA.'</p>',
                                          'KOMPONEN'       =>$namakomponen,
                                          'SUB'            =>$sub."<br><span class='text-orange'>".$data->RINCIAN_KETERANGAN."</span>",
@@ -693,7 +694,7 @@ class blController extends Controller
         }
 
         foreach ($data_ as $data_) {
-            if(( $data_->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 and Auth::user()->active == 1) or Auth::user()->level == 8){
+            if(( $data_->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 and Auth::user()->active == 1) or $level == 8){
                 if($data_->REKENING_ID == 0 or empty($data_->SUBRINCIAN_ID)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data_->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -714,7 +715,7 @@ class blController extends Controller
                 $namakomponen   = $data_->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data_->RINCIAN_KOMPONEN.'</p>';
                 $hargakomponen  = number_format($data_->RINCIAN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data_->RINCIAN_KOEFISIEN.'</p>';
             }
-            if(Auth::user()->level == 8){
+            if($level == 8){
                  $checkbox = '<div class="m-t-n-lg">
                                   <label class="i-checks">
                                     <input type="checkbox" value="'.$data_->RINCIAN_ID.'" class="cb" id="cb-'.$data_->RINCIAN_ID.'"/><i></i>
@@ -761,14 +762,14 @@ class blController extends Controller
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
-            if($s->USER_ID == Auth::user()->id) $mod = 1;
+            if($s->USER_ID == $id) $mod = 1;
         }
         $view       = array();
         $i         = 1;
         $pajak      = '';
         
         foreach ($data as $data) {
-            if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
+            if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or $level == 8){
                 if($data->REKENING_ID == 0 or empty($data->subrincian)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -789,7 +790,7 @@ class blController extends Controller
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->komponen->KOMPONEN_NAMA.'</p>';
                 $hargakomponen  = number_format($data->komponen->KOMPONEN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
             }
-            if(Auth::user()->level == 8){
+            if($level == 8){
                  $checkbox = '<div class="m-t-n-lg">
                                   <label class="i-checks">
                                     <input type="checkbox" value="'.$data->ARSIP_ID.'" class="cb" id="cb-'.$data->ARSIP_ID.'"/><i></i>
@@ -831,15 +832,15 @@ class blController extends Controller
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
-            if($s->USER_ID == Auth::user()->id) $mod = 1;
+            if($s->USER_ID == $id) $mod = 1;
         }
         $view       = array();
         $i         = 1;
         $pajak      = '';
         
         foreach ($data as $data) {
-            //if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){
-            if(( $mod == 1 and $thp == 1 ) or Auth::user()->level == 8){    
+            //if(( $data->bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 ) or $level == 8){
+            if(( $mod == 1 and $thp == 1 ) or $level == 8){    
                 if($data->REKENING_ID == 0 or empty($data->subrincian)){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return rinci(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-pencil-square"></i>Ubah</a></li><li><a onclick="return hapus(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-close"></i>Hapus</a></li><li class="divider"></li><li><a onclick="return info(\''.$data->RINCIAN_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
                 }else{
@@ -860,7 +861,7 @@ class blController extends Controller
                 $namakomponen   = $data->komponen->KOMPONEN_KODE.'<br><p class="text-orange">'.$data->komponen->KOMPONEN_NAMA.'</p>';
                 $hargakomponen  = number_format($data->komponen->KOMPONEN_HARGA,0,'.',',').'<br><p class="text-orange">'.$data->RINCIAN_KOEFISIEN.'</p>';
             }
-            if(Auth::user()->level == 8){
+            if($level == 8){
                  $checkbox = '<div class="m-t-n-lg">
                                   <label class="i-checks">
                                     <input type="checkbox" value="'.$data->ARSIP_ID.'" class="cb" id="cb-'.$data->ARSIP_ID.'"/><i></i>
@@ -907,7 +908,7 @@ class blController extends Controller
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
-            if($s->USER_ID == Auth::user()->id) $mod = 1;
+            if($s->USER_ID == $id) $mod = 1;
         }
         $view       = array();
         $i         = 1;
@@ -916,7 +917,7 @@ class blController extends Controller
 
             $getAkb = AKB_BL::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
 
-            if((( $data->bl->kunci->KUNCI_RINCIAN == 1 and $thp == 1 ) and Auth::user()->active == 5) or Auth::user()->level == 8 ){
+            if((( $data->bl->kunci->KUNCI_RINCIAN == 1 and $thp == 1 ) and Auth::user()->active == 5) or $level == 8 ){
                 if(empty($getAkb) ){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -930,7 +931,7 @@ class blController extends Controller
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
             }
 
-            if(Auth::user()->level == 8){
+            if($level == 8){
                  $checkbox = '<div class="m-t-n-lg">
                                   <label class="i-checks">
                                     <input type="checkbox" value="'.$data->REKENING_ID.'" class="cb" id="cb-'.$data->REKENING_ID.'"/><i></i>
@@ -1000,7 +1001,7 @@ class blController extends Controller
         $staff      = Staff::where('BL_ID',$id)->get();
         $mod        = 0;
         foreach($staff as $s){
-            if($s->USER_ID == Auth::user()->id) $mod = 1;
+            if($s->USER_ID == $id) $mod = 1;
         }
         $view       = array();
         $i         = 1;
@@ -1009,7 +1010,7 @@ class blController extends Controller
 
             $getAkb = AKB_BL_Perubahan::where('BL_ID',$id)->where('REKENING_ID',$data->REKENING_ID)->value('AKB_ID');            
 
-            if((( $data->bl->kunci->KUNCI_RINCIAN == 1 and Auth::user()->level == 2) or Auth::user()->level == 8 ) and Auth::user()->active == 10 ){
+            if((( $data->bl->kunci->KUNCI_RINCIAN == 1 and $level == 2) or $level == 8 ) and Auth::user()->active == 10 ){
                 if(empty($getAkb) ){
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return ubah(\''.$data->BL_ID.'\',\''.$data->REKENING_ID.'\')"><i class="fa fa-pencil-square"></i>Tambah</a></li>
                     <li class="divider"></li><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';
@@ -1023,7 +1024,7 @@ class blController extends Controller
                 $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return info(\''.$data->REKENING_ID.'\')"><i class="fa fa-info-circle"></i>Info</a></li></ul></div>';                
             }
 
-            if(Auth::user()->level == 8){
+            if($level == 8){
                  $checkbox = '<div class="m-t-n-lg">
                                   <label class="i-checks">
                                     <input type="checkbox" value="'.$data->REKENING_ID.'" class="cb" id="cb-'.$data->REKENING_ID.'"/><i></i>
@@ -1218,7 +1219,7 @@ class blController extends Controller
 
     //ADD
     public function add($tahun,$status){
-        $skpd           = $this->getSKPD($tahun);
+        $skpd           = 1;
         $subunit        = Subunit::where('SKPD_ID',$skpd)->where('SUB_TAHUN',$tahun)->orderBy('SUB_KODE')->get();
         $program        = Progunit::join('REFERENSI.REF_PROGRAM','REF_PROGRAM.PROGRAM_ID','=','DAT_PROGUNIT.PROGRAM_ID')->where('SKPD_ID',$skpd)->where('TAHUN',$tahun)->orderBy('PROGRAM_KODE')->get();
         $jenis          = JenisGiat::all();
@@ -1280,7 +1281,7 @@ class blController extends Controller
         if($status == 'murni') $s = 1;
         else $s = 2;
 
-        $skpd           = $this->getSKPD($tahun);
+        $skpd           = 1;
 
         if($status == 'murni'){
            // $keg_id      = BL::where('BL_TAHUN',$tahun)->where('KEGIATAN_ID',Input::get('kegiatan'))->where('SUB_ID',Input::get('sub_id'))->where('SKPD_ID',$skpd)->get();
@@ -1305,7 +1306,7 @@ class blController extends Controller
             $bl->BL_STATUS          = $s;
             $bl->BL_VALIDASI        = '0';
             $bl->BL_DELETED         = '0';
-            $bl->USER_CREATED       = Auth::user()->id;
+            $bl->USER_CREATED       = $id;
             $bl->TIME_CREATED       = Carbon\Carbon::now();
             $bl->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
             $bl->save();
@@ -1339,7 +1340,7 @@ class blController extends Controller
             $bl->BL_STATUS          = $s;
             $bl->BL_VALIDASI        = '0';
             $bl->BL_DELETED         = '0';
-            $bl->USER_CREATED       = Auth::user()->id;
+            $bl->USER_CREATED       = $id;
             $bl->TIME_CREATED       = Carbon\Carbon::now();
             $bl->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
             $bl->save();
@@ -1358,7 +1359,7 @@ class blController extends Controller
 
         $log        = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
-        $log->USER_ID                           = Auth::user()->id;
+        $log->USER_ID                           = $id;
         $log->LOG_ACTIVITY                      = 'Menambahkan Belanja Langsung';
         $log->LOG_DETAIL                        = 'BL#'.$id;
         $log->save();
@@ -1394,7 +1395,7 @@ class blController extends Controller
         $total      = ( Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA') * $vol ) + (( Input::get('RINCIAN_PAJAK')*(Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->value('KOMPONEN_HARGA')*$vol))/100);
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         $totalBL    = BL::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
-        $skpd       = $this->getSKPD($tahun);
+        $skpd       = 1;
         $totalOPD   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_PAGU');
         $now        = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
         $nowOPD     = Rincian::whereHas('bl',function($q) use($skpd,$tahun){
@@ -1456,7 +1457,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                     $log->save();        
@@ -1481,7 +1482,7 @@ class blController extends Controller
                     $rincian_log->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
                     $rincian_log->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
 
-                    $rincian_log->USER_ID                       = Auth::user()->id;
+                    $rincian_log->USER_ID                       = $id;
                     $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
                     $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
                     $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -1544,7 +1545,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                     $log->save();        
@@ -1569,7 +1570,7 @@ class blController extends Controller
                     $rincian_log->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
                     $rincian_log->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
 
-                    $rincian_log->USER_ID                       = Auth::user()->id;
+                    $rincian_log->USER_ID                       = $id;
                     $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
                     $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
                     $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -1637,7 +1638,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                     $log->save();        
@@ -1662,7 +1663,7 @@ class blController extends Controller
                     $rincian_log->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
                     $rincian_log->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
 
-                    $rincian_log->USER_ID                       = Auth::user()->id;
+                    $rincian_log->USER_ID                       = $id;
                     $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
                     $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
                     $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -1727,7 +1728,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                     $log->save();        
@@ -1752,7 +1753,7 @@ class blController extends Controller
                     $rincian_log->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
                     $rincian_log->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
 
-                    $rincian_log->USER_ID                       = Auth::user()->id;
+                    $rincian_log->USER_ID                       = $id;
                     $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
                     $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
                     $rincian_log->TAHAPAN_ID                    = $tahapan->TAHAPAN_ID;
@@ -1816,7 +1817,7 @@ class blController extends Controller
             $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
             $log        = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
             $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
             $log->save();        
@@ -1841,7 +1842,7 @@ class blController extends Controller
             $rincian_log->RINCIAN_KOMPONEN              = Input::get('KOMPONEN_NAMA');            
             $rincian_log->PEKERJAAN_ID                  = Input::get('PEKERJAAN_ID');
 
-            $rincian_log->USER_ID                       = Auth::user()->id;
+            $rincian_log->USER_ID                       = $id;
             $rincian_log->RINCIAN_ID                    = Rincian::max('RINCIAN_ID');
             $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
             $rincian_log->RINCIAN_TAHUN                 = $tahun;
@@ -1906,7 +1907,7 @@ class blController extends Controller
                               })->orderBy('TAHAPAN_ID','desc')->first();
 
         $totalBL    = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
-        $skpd       = $this->getSKPD($tahun);
+        $skpd       = 1;
         $totalOPD   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_PAGU');
         $now        = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
        /* $nowOPD     = RincianPerubahan::whereHas('bl',function($q) use($skpd,$tahun){
@@ -1988,7 +1989,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -2054,7 +2055,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -2126,7 +2127,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -2190,7 +2191,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -2253,7 +2254,7 @@ class blController extends Controller
             $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
             $log        = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Menambahkan Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
             $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
             $log->save();        
@@ -2292,7 +2293,7 @@ class blController extends Controller
             $subrincian->BL_ID              = Input::get('BL_ID');
             $subrincian->SUBRINCIAN_ID      = Subrincian::max('SUBRINCIAN_ID')+1;
             $subrincian->SUBRINCIAN_NAMA    = Input::get('SUBRINCIAN_NAMA');
-            $subrincian->USER_CREATED       = Auth::user()->id;
+            $subrincian->USER_CREATED       = $id;
             $subrincian->TIME_CREATED       = Carbon\Carbon::now();
             $subrincian->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
             $subrincian->save();
@@ -2309,7 +2310,7 @@ class blController extends Controller
             $subrincian->BL_ID              = Input::get('BL_ID');
             $subrincian->SUBRINCIAN_ID      = SubrincianPerubahan::max('SUBRINCIAN_ID')+1;
             $subrincian->SUBRINCIAN_NAMA    = Input::get('SUBRINCIAN_NAMA');
-            $subrincian->USER_CREATED       = Auth::user()->id;
+            $subrincian->USER_CREATED       = $id;
             $subrincian->TIME_CREATED       = Carbon\Carbon::now();
             $subrincian->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
             $subrincian->save();
@@ -2358,7 +2359,7 @@ class blController extends Controller
             else $act = "Mengunci";
             $log                = new Log;
             $log->LOG_TIME                     = Carbon\Carbon::now();
-            $log->USER_ID                      = Auth::user()->id;
+            $log->USER_ID                      = $id;
             $log->LOG_ACTIVITY                 = $act." Rincian Belanja";
             $log->LOG_DETAIL                   = 'BL#'.Input::get('BL_ID');
             $log->save();
@@ -2369,7 +2370,7 @@ class blController extends Controller
             else $act = "Mengunci";
             $log                = new Log;
             $log->LOG_TIME                     = Carbon\Carbon::now();
-            $log->USER_ID                      = Auth::user()->id;
+            $log->USER_ID                      = $id;
             $log->LOG_ACTIVITY                 = $act." Rincian Belanja";
             $log->LOG_DETAIL                   = 'BLPERUBAHAN#'.Input::get('BL_ID');
             $log->save();
@@ -2408,7 +2409,7 @@ class blController extends Controller
 
     //EDIT
     public function edit($tahun,$status,$id){
-        $skpd           = $this->getSKPD($tahun);
+        $skpd           = 1;
         $subunit        = Subunit::where('SKPD_ID',$skpd)->where('SUB_TAHUN',$tahun)->orderBy('SUB_ID')->get();         
         $program        = Progunit::where('SKPD_ID',$skpd)->where('TAHUN',$tahun)->orderBy('PROGRAM_ID')->get();
         $jenis          = JenisGiat::all();
@@ -2471,7 +2472,7 @@ class blController extends Controller
     }
 
     public function indikator($tahun,$status,$id){
-        $skpd           = $this->getSKPD($tahun);
+        $skpd           = 1;
         $subunit        = Subunit::where('SKPD_ID',$skpd)->orderBy('SUB_ID')->get();         
         $program        = Progunit::where('SKPD_ID',$skpd)->orderBy('PROGRAM_ID')->get();
         $jenis          = JenisGiat::all();
@@ -2561,7 +2562,7 @@ class blController extends Controller
                 'BL_STATUS'     => $s,
                 'BL_VALIDASI'   => '0',
                 'BL_DELETED'    => '0',
-                'USER_UPDATED'  => Auth::user()->id,
+                'USER_UPDATED'  => $id,
                 'TIME_UPDATED'  => Carbon\Carbon::now(),
                 'IP_UPDATED'    => $_SERVER['REMOTE_ADDR']]);
         }else{
@@ -2581,7 +2582,7 @@ class blController extends Controller
                     'BL_STATUS'     => $s,
                     'BL_VALIDASI'   => '0',
                     'BL_DELETED'    => '0',
-                    'USER_UPDATED'  => Auth::user()->id,
+                    'USER_UPDATED'  => $id,
                     'TIME_UPDATED'  => Carbon\Carbon::now(),
                     'IP_UPDATED'    => $_SERVER['REMOTE_ADDR']]);    
             }else{
@@ -2598,7 +2599,7 @@ class blController extends Controller
                     'BL_STATUS'     => $s,
                     'BL_VALIDASI'   => '0',
                     'BL_DELETED'    => '0',
-                    'USER_UPDATED'  => Auth::user()->id,
+                    'USER_UPDATED'  => $id,
                     'TIME_UPDATED'  => Carbon\Carbon::now(),
                     'IP_UPDATED'    => $_SERVER['REMOTE_ADDR']]);
             }
@@ -2606,7 +2607,7 @@ class blController extends Controller
         
         $log        = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
-        $log->USER_ID                           = Auth::user()->id;
+        $log->USER_ID                           = $id;
         $log->LOG_ACTIVITY                      = 'Mengubah Belanja Langsung';
         $log->LOG_DETAIL                        = 'BL#'.Input::get('bl_id');
         $log->save();
@@ -2640,7 +2641,7 @@ class blController extends Controller
                 $akb->AKB_OKT            = Input::get('okt');
                 $akb->AKB_NOV            = Input::get('nov');
                 $akb->AKB_DES            = Input::get('des');
-                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->USER_CREATED       = $id;
                 $akb->TIME_CREATED       = Carbon\Carbon::now();
                 $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
                 $akb->save(); 
@@ -2691,7 +2692,7 @@ class blController extends Controller
                 $akb->AKB_OKT            = Input::get('okt');
                 $akb->AKB_NOV            = Input::get('nov');
                 $akb->AKB_DES            = Input::get('des');
-                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->USER_CREATED       = $id;
                 $akb->TIME_CREATED       = Carbon\Carbon::now();
                 $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
                 $akb->save(); 
@@ -2735,8 +2736,8 @@ class blController extends Controller
                 $akb = new AKB_BL;
                 $akb->BL_ID              = $id;
                 $akb->REKENING_ID        = $r->REKENING_ID;
-                $akb->USER_CREATED       = Auth::user()->id;
-                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->USER_CREATED       = $id;
+                $akb->USER_CREATED       = $id;
                 $akb->TIME_CREATED       = Carbon\Carbon::now();
                 $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
                 $akb->save(); 
@@ -2753,8 +2754,8 @@ class blController extends Controller
                 $akb = new AKB_BL_Perubahan;
                 $akb->BL_ID              = $id;
                 $akb->REKENING_ID        = $r->REKENING_ID;
-                $akb->USER_CREATED       = Auth::user()->id;
-                $akb->USER_CREATED       = Auth::user()->id;
+                $akb->USER_CREATED       = $id;
+                $akb->USER_CREATED       = $id;
                 $akb->TIME_CREATED       = Carbon\Carbon::now();
                 $akb->IP_CREATED         = $_SERVER['REMOTE_ADDR'];
                 $akb->save(); 
@@ -2787,7 +2788,7 @@ class blController extends Controller
         $rincian_log->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
         $rincian_log->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
         $rincian_log->PEKERJAAN_ID                  = $rincian->PEKERJAAN_ID;
-        $rincian_log->USER_ID                       = Auth::user()->id;
+        $rincian_log->USER_ID                       = $id;
         $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
         $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
         $rincian_log->RINCIAN_TAHUN                 = $tahun;
@@ -2820,7 +2821,7 @@ class blController extends Controller
         
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS','murni')->orderBy('TAHAPAN_ID','desc')->first();
         $totalBL    = BL::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
-        // $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        // $skpd       = UserBudget::where('USER_ID',$id)->value('SKPD_ID');
         $skpd       = BL::where('BL_ID',Input::get('BL_ID'))->first();
         $skpd       = $skpd->subunit->SKPD_ID;
         $totalOPD   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_PAGU');
@@ -2901,7 +2902,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                     $log->save();        
@@ -2953,7 +2954,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                     $log->save();        
@@ -3008,7 +3009,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                     $log->save();        
@@ -3061,7 +3062,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                     $log->save();        
@@ -3115,7 +3116,7 @@ class blController extends Controller
             $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
             $log                = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
             $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
             $log->save();        
@@ -3160,7 +3161,7 @@ class blController extends Controller
                               })->orderBy('TAHAPAN_ID','desc')->first();
         
         $totalBL    = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->value('BL_PAGU');
-        // $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->value('SKPD_ID');
+        // $skpd       = UserBudget::where('USER_ID',$id)->value('SKPD_ID');
         $skpd       = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->first();
         $skpd       = $skpd->subunit->SKPD_ID;
         $totalOPD   = SKPD::where('SKPD_ID',$skpd)->where('SKPD_TAHUN',$tahun)->value('SKPD_PAGU');
@@ -3270,7 +3271,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();     
@@ -3344,7 +3345,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -3422,7 +3423,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -3472,7 +3473,7 @@ class blController extends Controller
                     $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
                     $log                = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -3550,7 +3551,7 @@ class blController extends Controller
             $dataKomponen   = Komponen::where('KOMPONEN_ID',Input::get('KOMPONEN_ID'))->first();
             $log                = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Mengubah Komponen '.$dataKomponen->KOMPONEN_NAMA.' '.$koef.' Total Rp. '.number_format(round($total),0,',','.');
             $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
             $log->save();        
@@ -3608,7 +3609,7 @@ class blController extends Controller
         BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_DELETED'=>1]);
         $log                = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
-        $log->USER_ID                           = Auth::user()->id;
+        $log->USER_ID                           = $id;
         $log->LOG_ACTIVITY                      = 'Mengarsipkan Belanja';
         $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
         $log->save();
@@ -3656,7 +3657,7 @@ class blController extends Controller
 
         $log        = new Log;
         $log->LOG_TIME                          = Carbon\Carbon::now();
-        $log->USER_ID                           = Auth::user()->id;
+        $log->USER_ID                           = $id;
         $log->LOG_ACTIVITY                      = 'Menghapus komponen '.$komponen->KOMPONEN_NAMA.' '.$rincian->RINCIAN_KOEFISIEN.' Total Rp. '.number_format($rincian->RINCIAN_TOTAL,0,',','.');
         $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
         $log->save();    
@@ -3676,7 +3677,7 @@ class blController extends Controller
         $rincian_log->RINCIAN_HARGA                 = $rincian->RINCIAN_HARGA;
         $rincian_log->RINCIAN_KOMPONEN              = $rincian->RINCIAN_KOMPONEN;
         $rincian_log->PEKERJAAN_ID                  = $rincian->PEKERJAAN_ID;
-        $rincian_log->USER_ID                       = Auth::user()->id;
+        $rincian_log->USER_ID                       = $id;
         $rincian_log->RINCIAN_ID                    = $rincian->RINCIAN_ID;
         $rincian_log->RINCIAN_TAHAPAN               = $tahapan->TAHAPAN_NAMA;
         $rincian_log->RINCIAN_TAHUN                 = $tahun;
@@ -3732,7 +3733,7 @@ class blController extends Controller
 
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menghapus komponen '.$komponen->KOMPONEN_NAMA.' '.$rincian->RINCIAN_KOEFISIEN.' Total Rp. '.number_format($rincian->RINCIAN_TOTAL,0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -3766,7 +3767,7 @@ class blController extends Controller
 
                     $log        = new Log;
                     $log->LOG_TIME                          = Carbon\Carbon::now();
-                    $log->USER_ID                           = Auth::user()->id;
+                    $log->USER_ID                           = $id;
                     $log->LOG_ACTIVITY                      = 'Menghapus komponen '.$komponen->KOMPONEN_NAMA.' '.$rincian->RINCIAN_KOEFISIEN.' Total Rp. '.number_format($rincian->RINCIAN_TOTAL,0,',','.');
                     $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                     $log->save();        
@@ -3796,7 +3797,7 @@ class blController extends Controller
 
                 $log        = new Log;
                 $log->LOG_TIME                          = Carbon\Carbon::now();
-                $log->USER_ID                           = Auth::user()->id;
+                $log->USER_ID                           = $id;
                 $log->LOG_ACTIVITY                      = 'Menghapus komponen '.$komponen->KOMPONEN_NAMA.' '.$rincian->RINCIAN_KOEFISIEN.' Total Rp. '.number_format($rincian->RINCIAN_TOTAL,0,',','.');
                 $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                 $log->save();        
@@ -3829,7 +3830,7 @@ class blController extends Controller
 
             $log        = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Menghapus komponen '.$komponen->KOMPONEN_NAMA.' '.$rincian->RINCIAN_KOEFISIEN.' Total Rp. '.number_format($rincian->RINCIAN_TOTAL,0,',','.');
             $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
             $log->save();
@@ -3891,7 +3892,7 @@ class blController extends Controller
             }
             $log        = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Mengembalikan komponen '.$komponen->KOMPONEN_NAMA.' '.$rincian->RINCIAN_KOEFISIEN.' Total Rp. '.number_format($rincian->RINCIAN_TOTAL,0,',','.');
             $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
             $log->save();
@@ -3949,7 +3950,7 @@ class blController extends Controller
 
             $log        = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Mengembalikan komponen '.$komponen->KOMPONEN_NAMA.' '.$rincian->RINCIAN_KOEFISIEN.' Total Rp. '.number_format($rincian->RINCIAN_TOTAL,0,',','.');
             $log->LOG_DETAIL                        = 'BLP#'.Input::get('BL_ID');
             $log->save();
@@ -3964,14 +3965,14 @@ class blController extends Controller
         if($status=='murni'){
             $totalrincian   = Rincian::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
             BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
-            $skpd           = $this->getSKPD($tahun);
+            $skpd           = 1;
             $totalPagu      = BL::whereHas('subunit',function($q) use($skpd){
                                     $q->where('SKPD_ID',$skpd);
                                 })->where('BL_VALIDASI',1)->sum('BL_PAGU');
             // SKPD::where('SKPD_ID',$skpd)->update(['SKPD_PAGU'=>$totalPagu]);
             $log        = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
             $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
             $log->save();
@@ -3979,14 +3980,14 @@ class blController extends Controller
         }else{
             $totalrincian   = RincianPerubahan::where('BL_ID',Input::get('BL_ID'))->sum('RINCIAN_TOTAL');
             BLPerubahan::where('BL_ID',Input::get('BL_ID'))->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
-            $skpd           = $this->getSKPD($tahun);
+            $skpd           = 1;
             $totalPagu      = BLPerubahan::whereHas('subunit',function($q) use($skpd){
                                     $q->where('SKPD_ID',$skpd);
                                 })->where('BL_VALIDASI',1)->sum('BL_PAGU');
             // SKPD::where('SKPD_ID',$skpd)->update(['SKPD_PAGU'=>$totalPagu]);
             $log        = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
             $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
             $log->save();
@@ -4005,7 +4006,7 @@ class blController extends Controller
                 BL::where('BL_ID',$data->BL_ID)->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
                 $log        = new Log;
                 $log->LOG_TIME                          = Carbon\Carbon::now();
-                $log->USER_ID                           = Auth::user()->id;
+                $log->USER_ID                           = $id;
                 $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
                 $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                 $log->save();
@@ -4020,7 +4021,7 @@ class blController extends Controller
                 BLPerubahan::where('BL_ID',$data->BL_ID)->update(['BL_VALIDASI'=>'1','BL_PAGU'=>$totalrincian]);
                 $log        = new Log;
                 $log->LOG_TIME                          = Carbon\Carbon::now();
-                $log->USER_ID                           = Auth::user()->id;
+                $log->USER_ID                           = $id;
                 $log->LOG_ACTIVITY                      = 'Validasi Belanja Langsung';
                 $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
                 $log->save();
@@ -4034,7 +4035,7 @@ class blController extends Controller
     //API
 
     public function getKegiatan($tahun, $status, $id,$sub){
-        $skpd   = $this->getSKPD($tahun);
+        $skpd   = 1;
         $program = Program::where('PROGRAM_ID',$id)->first();
         if( $program->PROGRAM_KODE == '01' || 
             $program->PROGRAM_KODE == '02' || 
@@ -4211,22 +4212,22 @@ class blController extends Controller
         }
 
         //print_r(substr(Auth::user()->mod,1,1));exit;
-        //print_r(Auth::user()->level);exit;
+        //print_r($level);exit;
 
-        if(Auth::user()->level == 1 and substr(Auth::user()->mod,1,1) == 0){
+        if($level == 1 and substr(Auth::user()->mod,1,1) == 0){
 
-            $skpd       = $this->getSKPD($tahun);
+            $skpd       = 1;
             $data       = BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
                            ->where('SKPD_ID',$skpd)
                            ->where('BL_TAHUN',$tahun)
                            ->where('BL_DELETED',0)
-                           ->where('USER_ID',Auth::user()->id)->get();
+                           ->where('USER_ID',$id)->get();
 
             $pagu_foot       = BL::join('BUDGETING.DAT_STAFF','DAT_STAFF.BL_ID','=','DAT_BL.BL_ID')
                                ->where('SKPD_ID',$skpd)
                                ->where('BL_TAHUN',$tahun)
                                ->where('BL_DELETED',0)
-                               ->where('USER_ID',Auth::user()->id)
+                               ->where('USER_ID',$id)
                                ->sum('BL_PAGU');
 
             $rincian_foot       = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')
@@ -4234,11 +4235,11 @@ class blController extends Controller
                                     ->where('DAT_BL.BL_TAHUN',$tahun)
                                     ->where('DAT_BL.BL_DELETED',0)
                                     ->WHERE('SKPD_ID',$skpd)
-                                    ->where('USER_ID',Auth::user()->id)->sum('DAT_RINCIAN.RINCIAN_TOTAL');                      
+                                    ->where('USER_ID',$id)->sum('DAT_RINCIAN.RINCIAN_TOTAL');                      
         }
-        elseif(Auth::user()->level == 2){
+        elseif($level == 2){
             
-            $skpd       = $this->getSKPD($tahun);
+            $skpd       = 1;
             $data       = BL::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
@@ -4254,7 +4255,7 @@ class blController extends Controller
 
 
 
-        }elseif(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
+        }elseif($level == 8 or $level == 9 or $level == 0){
             if($filter == 0){
                 //$data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
                 $data       = BL::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take(1000)->get();
@@ -4276,7 +4277,7 @@ class blController extends Controller
 
             }
         }else{
-            $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->get();
+            $skpd       = UserBudget::where('USER_ID',$id)->get();
             $skpd_      = array(); 
             $i = 0;
             foreach($skpd as $s){
@@ -4322,7 +4323,7 @@ class blController extends Controller
         $validasi   = '';
         foreach ($data as $data) {
             $urgensi    = Urgensi::where('BL_ID',$data->BL_ID)->first();
-            if(((Auth::user()->level == 1 and substr(Auth::user()->mod,1,1) == 0)or Auth::user()->level == 2) and (
+            if((($level == 1 and substr(Auth::user()->mod,1,1) == 0)or $level == 2) and (
                 empty($urgensi->URGENSI_LATAR_BELAKANG) or
                 empty($urgensi->URGENSI_DESKRIPSI) or
                 empty($urgensi->URGENSI_TUJUAN) or
@@ -4344,29 +4345,29 @@ class blController extends Controller
             }
 			
             if($data->kunci->KUNCI_GIAT == 0 and $thp == 1){
-                if(Auth::user()->level == 8){
+                if($level == 8){
                     $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
                 }else{
                     $kunci     = '<span class="text-success"><i class="fa fa-unlock kunci-giat"></i></span>';
                 }
-                //if(Auth::user()->level == 4){
+                //if($level == 4){
                 //$no        .='<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/ubah/'.$data->BL_ID.'"><i class="fa fa-pencil-square"></i> Ubah</a></li>';
                 //}
             }else{
-                if(Auth::user()->level == 8){
+                if($level == 8){
                     $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
                 }else{
                     $kunci      = '<span class="text-danger"><i class="fa fa-lock kunci-giat"></i></span>';
                 }             
-                //if(Auth::user()->level == 4){
+                //if($level == 4){
                 //    $no        .='<li><a><i class="fa fa-pencil-square"></i> Ubah <i class="fa fa-lock"></i></a></li>';   
                 //}
             }
 
             //kunci rincian
             if ($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1 ) {
-                //if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8){
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
+                //if(substr(Auth::user()->mod,1,1) == 1 or $level == 8){
+                if(substr(Auth::user()->mod,1,1) == 1 or $level == 9){
                     /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
                     <i></i></label>';*/
                     $rincian    ='<label class="i-switch bg-danger m-t-xs m-r">
@@ -4375,7 +4376,7 @@ class blController extends Controller
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
                 }                
             }else{
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
+                if(substr(Auth::user()->mod,1,1) == 1 or $level == 9){
                     /*$rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
                     <i></i></label>';*/
                     $rincian    = '<label class="i-switch bg-danger m-t-xs m-r">
@@ -4385,7 +4386,7 @@ class blController extends Controller
                 }             
             }
 
-            if((Auth::user()->level ==2 and $data->kunci->KUNCI_GIAT == 0) or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
+            if(($level ==2 and $data->kunci->KUNCI_GIAT == 0) or $level == 8 or substr(Auth::user()->mod,1,1) == 1){
                 //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
                 
                 /* menu indikator*/
@@ -4395,7 +4396,7 @@ class blController extends Controller
                 //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li>';
             }
 
-            if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){
+            if($level == 2 or $level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){
                /* $no            .= '<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
 <li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';*/
                 $no            .= '<li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
@@ -4403,13 +4404,13 @@ class blController extends Controller
 
             //HAPUS BL
             //<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
-           if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8) && Auth::user()->active == 1) {
+           if((substr(Auth::user()->mod,1,1) == 1 or $level == 8) && Auth::user()->active == 1) {
                 $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
             }
 
             if(Auth::user()->active == 1){
                 $tahunnow   = Carbon\Carbon::now()->format('Y');
-                if($tahun < $tahunnow+1 and Auth::user()->level == 2){
+                if($tahun < $tahunnow+1 and $level == 2){
                     $no   .= '<li><a onclick="return trftoperubahan(\''.$data->BL_ID.'\')"><i class="fa fa-repeat"></i> Perubahan</a></li>';
                 }
             }
@@ -4422,7 +4423,7 @@ class blController extends Controller
 
             if($data->BL_VALIDASI == 0){
                 $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                if(Auth::user()->level == 8 || Auth::user()->level == 2){
+                if($level == 8 || $level == 2){
                     $no  .= '<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>';
                 }
             }elseif($data->BL_VALIDASI == 1){
@@ -4465,6 +4466,7 @@ class blController extends Controller
     }
 
     public function getDataPerubahan($tahun,$status,$filter){
+        $level=8;
         //$now        = Carbon\Carbon::now()->format('Y-m-d h:m:s');
         $now = date('Y-m-d H:m:s');
         $tahapan    = Tahapan::where('TAHAPAN_TAHUN',$tahun)
@@ -4480,14 +4482,14 @@ class blController extends Controller
             $thp    = 0;
         }
 
-        if((Auth::user()->level == 1 and substr(Auth::user()->mod,1,1) == 0)or Auth::user()->level == 2){
-            $skpd       = $this->getSKPD($tahun);
-            $filter     = $this->getSKPD($tahun);
+        if($level == 1 or $level == 2){
+            $skpd       = 1;
+            $filter     = 1;
             $data       = BLPerubahan::whereHas('subunit',function($q) use ($skpd){
                                 $q->where('SKPD_ID',$skpd);
                         })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
 
-        }elseif(Auth::user()->level == 8 or Auth::user()->level == 9 or Auth::user()->level == 0){
+        }elseif($level == 8 or $level == 9 or $level == 0){
             if($filter == 0){
                 //$data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();
                 $data       = BLPerubahan::where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->take('500')->get();
@@ -4497,7 +4499,7 @@ class blController extends Controller
                                 })->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->get();                
             }
         }else{
-            $skpd       = UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->get();
+            $skpd       = UserBudget::where('USER_ID',$id)->where('TAHUN',$tahun)->get();
             $skpd_      = array(); 
             $i = 0;
             foreach($skpd as $s){
@@ -4542,7 +4544,7 @@ class blController extends Controller
         $total_realisasi = 0;
         foreach ($data as $data) {
             $urgensi    = Urgensi::where('BL_ID',$data->BL_ID)->first();
-          /*  if((Auth::user()->level == 1 or Auth::user()->level == 2) and (
+          /*  if(($level == 1 or $level == 2) and (
                 empty($urgensi->URGENSI_LATAR_BELAKANG) or
                 empty($urgensi->URGENSI_DESKRIPSI) or
                 empty($urgensi->URGENSI_TUJUAN) or
@@ -4552,84 +4554,25 @@ class blController extends Controller
           $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a onclick="return seturgensi(\''.$data->BL_ID.'\')"><i class="fa fa-search"></i> Detail</a></li>';
          
           else */
-            $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
+            $no = '<div class="dropdown dropdown-blend" style="float:right;"><a class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text text-success"><i class="fa fa-chevron-down"></i></span></a><ul class="dropdown-menu" aria-labelledby="dropdownMenu2"><li><a href="/public/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$data->BL_ID.'"><i class="fa fa-search"></i> Detail</a></li>';                
 
             if($data->Kunci->KUNCI_GIAT == 0 and $thp == 1){
-                if(Auth::user()->level == 8){
-                    $kunci     = '<label class="i-switch bg-danger m-t-xs m-r buka-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'"><i></i></label>';
-                }else{
-                    $kunci     = '<span class="text-success"><i class="fa fa-unlock kunci-giat"></i></span>';
-                }
-                //if(Auth::user()->level == 4){
-                //$no        .='<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/ubah/'.$data->BL_ID.'"><i class="fa fa-pencil-square"></i> Ubah</a></li>';
-                //}
+                      $kunci     = '<span class="text-success"><i class="fa fa-unlock kunci-giat"></i></span>';
+                
             }else{
-                if(Auth::user()->level == 8){
-                    $kunci      = '<label class="i-switch bg-danger m-t-xs m-r kunci-giat"><input type="checkbox" onchange="return kuncigiat(\''.$data->BL_ID.'\')" id="kuncigiat-'.$data->BL_ID.'" checked><i></i></label>';
-                }else{
                     $kunci      = '<span class="text-danger"><i class="fa fa-lock kunci-giat"></i></span>';
-                }             
-                //if(Auth::user()->level == 4){
-                //    $no        .='<li><a><i class="fa fa-pencil-square"></i> Ubah <i class="fa fa-lock"></i></a></li>';   
-                //}
             }
 
             if($data->kunci->KUNCI_RINCIAN == 0 and $thp == 1){
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
-                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'"><i></i></label>';
-                }else{
+               
                     $rincian    = '<span class="text-success"><i class="fa fa-unlock kunci-rincian"></i></span>';
-                }                
+                             
             }else{
-                if(substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 9){
-                    $rincian    = '<label class="i-switch bg-danger m-t-xs m-r"><input type="checkbox" onchange="return kuncirincian(\''.$data->BL_ID.'\')" id="kuncirincian-'.$data->BL_ID.'" checked><i></i></label>';
-                }else{
+                
                     $rincian    = '<span class="text-danger"><i class="fa fa-lock kunci-rincian"></i></span>';
-                }             
+                            
             }
 
-            if(($thp == 1 && Auth::user()->level == 2 and $data->kunci->KUNCI_GIAT == 0) or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1){
-                //$no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li><li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li><li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
-                $no            .= '<li><a href="belanja-langsung/ubah/'.$data->BL_ID.'" target="_blank"><i class="mi-edit m-r-xs"></i> Ubah</button></li>
-                <li><a href="belanja-langsung/indikator/'.$data->BL_ID.'" target="_blank"><i class="fa fa-info-circle m-r-xs"></i> Indikator</button></li>';
-            }
-
-            if(Auth::user()->level == 2 or Auth::user()->level == 8 or substr(Auth::user()->mod,1,1) == 1 and $thp == 1){
-                $no            .= '<li><a onclick="return staff(\''.$data->BL_ID.'\')"><i class="icon-bdg_people m-r-xs"></i> Atur Staff</a></li>';
-            }
-
-            //HAPUS BL
-            //<li><a onclick="return hapus(\''.$data->BL_ID.'\')"><i class="mi-trash m-r-xs"></i> Hapus</button></li>
-            if((substr(Auth::user()->mod,1,1) == 1 or Auth::user()->level == 8) and $thp == 1){
-                $no            .= '<li><a onclick="return setpagu(\''.$data->BL_ID.'\')"><i class="fa fa-money m-r-xs"></i> Set Pagu</button></li>';
-            }
-
-            if((Auth::user()->level == 12 && Auth::user()->active==1) or Auth::user()->level == 8){
-                $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/akb/'.$data->BL_ID.'" target="_blank"><i class="fa fa-pencil-square"></i> AKB</a></li>';
-            }
-
-            if($tahapan->TAHAPAN_NAMA != "APBD" && Auth::user()->active==1){
-                $no  .= '<li><a href="/main/'.$tahun.'/'.$status.'/belanja-langsung/rka/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>';
-            }
-
-            if(($data->BL_VALIDASI == 0 && Auth::user()->active==1 ) || Auth::user()->level==8){
-                $validasi  = '<span class="text-danger"><i class="fa fa-close"></i></span>';
-                $no        .= '<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
-                <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>                
-                <li class="divider"></li>
-                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>'; 
-                /*<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>*/
-                /* $no        .= '<li class="divider"></li>
-                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>'; */
-            }else{
-                $validasi  = '<span class="text-success"><i class="fa fa-check"></i></span>';
-                $no        .= '<li><a onclick="return validasi(\''.$data->BL_ID.'\')"><i class="fa fa-key"></i> Validasi </a></li>
-                <li><a href="/main/'.$tahun.'/'.$status.'/lampiran/dpa/skpd221/'.$data->SKPD_ID.'/'.$data->BL_ID.'" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
-                <li class="divider"></li>
-                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';
-               /*$no        .= '<li class="divider"></li>
-                <li><a onclick="return log(\''.$data->BL_ID.'\')"><i class="fa fa-info-circle"></i> Info</a></li></ul></div>';*/
-            }
             if(empty($data->rincian)) $totalRincian = 0;
             else $totalRincian = number_format($data->rincian->sum('RINCIAN_TOTAL'),0,'.',',');
             $datasebelum        = BL::where('BL_ID',$data->BL_ID)->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->first();
@@ -4850,14 +4793,14 @@ class blController extends Controller
             BL::where('BL_ID',Input::get('BL_ID'))->update(['BL_PAGU'=>Input::get('BL_PAGU'),'BL_VALIDASI'=>0,'BL_PAGU_CATATAN'=>Input::get('BL_PAGU_CATATAN')]);
             $log                = new Log;
             $log->LOG_TIME                          = Carbon\Carbon::now();
-            $log->USER_ID                           = Auth::user()->id;
+            $log->USER_ID                           = $id;
             $log->LOG_ACTIVITY                      = 'Set Pagu Total Rp. '.number_format(round(Input::get('BL_PAGU')),0,',','.');
             $log->LOG_DETAIL                        = 'BL#'.Input::get('BL_ID');
             $log->save();
       
 
         }else{
-            if(Auth::user()->level == 2){
+            if($level == 2){
                BLPerubahan::where('BL_ID',Input::get('BL_ID'))
                         ->update(['BL_PAGU_USULAN'  => Input::get('BL_PAGU_USULAN'),
                                   'BL_VALIDASI'     => 0,
@@ -4872,7 +4815,7 @@ class blController extends Controller
                                   'BL_PAGU_CATATAN' => Input::get('BL_PAGU_CATATAN')]);                
                 $log                = new Log;
                 $log->LOG_TIME                          = Carbon\Carbon::now();
-                $log->USER_ID                           = Auth::user()->id;
+                $log->USER_ID                           = $id;
                 $log->LOG_ACTIVITY                      = 'Set Pagu Total Rp. '.number_format(round(Input::get('BL_PAGU')),0,',','.');
                 $log->LOG_DETAIL                        = 'BLPERUBAHAN#'.Input::get('BL_ID');
                 $log->save();
@@ -4894,7 +4837,7 @@ class blController extends Controller
                 $rekrealisasi = 0;
             }
     
-            $id        = $this->getSKPD($tahun);
+            $id        = 1;
             $skpdpagu  = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
             $skpdtotal   = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('DAT_BL.SKPD_ID',$id)->sum('RINCIAN_TOTAL');    
         }else{
@@ -4909,7 +4852,7 @@ class blController extends Controller
                 $rekrealisasi = 0;
             }
     
-            $id        = $this->getSKPD($tahun);
+            $id        = 1;
             $skpdpagu  = SKPD::where('SKPD_ID',$id)->value('SKPD_PAGU');
             $skpdtotal   = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->where('DAT_BL_PERUBAHAN.SKPD_ID',$id)->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->sum('RINCIAN_TOTAL');    
         }

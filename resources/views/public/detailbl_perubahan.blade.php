@@ -1,19 +1,19 @@
-@extends('budgeting.layout')
+@extends('public.layout')
 
 @section('content')
-<div id="content" class="app-content" role="main">
+<div id="content" class="" role="main">
   <div class="hbox hbox-auto-xs hbox-auto-sm ng-scope">
     <div class="col">
       <div class="app-content-body ">
 
         <div class="bg-light lter">    
           <ul class="breadcrumb bg-white m-b-none">
-            <li><a href="#" class="btn no-shadow" ui-toggle-class="app-aside-folded" target=".app" id="app">
+          <li>
+            <a href="{{ url('/') }}/public/{{$tahun}}/{{$status}}/belanja-langsung" class="btn no-shadow">
               <i class="icon-bdg_expand1 text"></i>
-              <i class="icon-bdg_expand2 text-active"></i>
             </a>   
           </li>
-          <li><a href= "{{ url('/') }}/main">Dashboard</a></li>
+          <li><a href= "{{ url('/') }}/public/{{$tahun}}/{{$status}}">Dashboard</a></li>
           <li><i class="fa fa-angle-right"></i>Belanja</li>                               
           <li><i class="fa fa-angle-right"></i>Belanja Langsung</li>                                
           <li class="active"><i class="fa fa-angle-right"></i>{{ $bl->kegiatan->KEGIATAN_NAMA }}</li>                                
@@ -26,39 +26,7 @@
             <div class="panel bg-white">
               <div class="panel-heading wrapper-lg">
                 <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung : {{ $bl->kegiatan->KEGIATAN_NAMA }}</h5>
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a>
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{$bl->subunit->SKPD_ID}}/{{$bl->BL_ID}}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a>
               </div>
-               <!-- <div class="dropdown dropdown-blend pull-right m-t-n-sm">
-                  <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD </a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd1/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd21/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 2.1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd22/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 2.2</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" target="_blank">RKA-SKPD 2.2.1</a></li>
-                   
-                   @if(Auth::user()->level == 8 || Auth::user()->level == 9)
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd31/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 3.1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/rka/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">RKA-SKPD 3.2</a></li>
-                    @endif
-                  </ul>
-                </div> -->
-                <!-- <div class="dropdown dropdown-blend pull-right m-t-n-sm">
-                  <button class="btn btn-info dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak DPA <i class="fa fa-chevron-down"></i>
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD </a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd1/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd21/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 2.1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd22/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 2.2</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{ $bl->subunit->SKPD_ID}}/{{ $bl->BL_ID}}" target="_blank">DPA-SKPD 2.2.1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd31/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.1</a></li>
-                    <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.2</a></li>
-                  </ul>
-                </div> -->
               <div class="tab-content tab-content-alt-1 bg-white">
                 <div class="bg-white wrapper-lg">
                   <div class="input-wrapper">
@@ -178,7 +146,7 @@
                   <div role="tabpanel" class="active tab-pane" id="tab-1">
                     <div class="table-responsive dataTables_wrapper">
                      <table ui-jq="dataTable" ui-options="{
-                           sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/ringkasanrekening/{{ $BL_ID }}',
+                           sAjaxSource: '{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/ringkasanrekening/{{ $BL_ID }}',
                            aoColumns: [
                            { mData: 'KODE' },
                            { mData: 'URAIAN' },
@@ -186,7 +154,6 @@
                            { mData: 'SESUDAH',class:'text text-right' },
                            { mData: 'REALISASI',class:'text text-right' },
                            { mData: 'SELISIH',class:'text text-right' },
-                           { mData: 'RIVIEW',class:'text text-right' },
                            { mData: 'CLASS',class:'hide' }],
                            aoColumnDefs: [ {
                               aTargets: [6],
@@ -211,7 +178,6 @@
                             <th class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif<br>(4)</th>                                      
                             <th class="text text-center">REALISASI<br>(5)</th>                                      
                             <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>    
-                            <th class="text text-center">Aksi<br></th>    
                             <th class="hide">Warna<br>(0)</th>                                  
                           </tr>
                           <tr>
@@ -254,26 +220,7 @@
                   Selisih Belanja Modal : {{ number_format($JB_523,0,'.',',') }}<br> -->
                 </span></h5>
 
-                @if(($bl->kunci->KUNCI_RINCIAN == 0  and $mod == 1 and $thp == 1 and Auth::user()->active == 1) or Auth::user()->level == 8)
-                <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
-                @elseif($thp == 0)
-                <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
-                @elseif(Auth::user()->active == 0)
-                <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> User Tidak Aktif!</h5>
-                @endif
-                @if(Auth::user()->level == 8)
-                <a class="pull-right btn m-t-n-sm btn-warning" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/detail/arsip/{{$BL_ID}}" target="_blank"><i class="fa fa-archive"></i></a>
-
-                <!-- <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button> -->
-                @endif
-                <!-- @if(($BL_ID == 5718 ) 
-                    and $mod == 1 
-                    and $thp == 1 
-                    and $bl->kunci->KUNCI_RINCIAN == 0)
-                @else
-                <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Rincian Hanya Bisa dirubah / dihapus!</h5>
-                @endif -->
-                <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekaprincian/{{$bl->BL_ID}}"><i class="m-r-xs fa fa-download"></i> Download</a>
+                
                 <div class="col-sm-1 pull-right m-t-n-sm">
                   <select class="form-control selectrincian" id="selectrincian">
                     <option value="10">10</option>
@@ -307,7 +254,7 @@
               <div role="tabpanel" class="active tab-pane" id="tab-1">  
                 <div class="table-responsive dataTables_wrapper">
                  <table ui-jq="dataTable" ui-options="{
-                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/{{ $BL_ID }}',
+                 sAjaxSource: '{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
                  { mData: 'REKENING' },
@@ -348,22 +295,9 @@
               </tbody>                        
             </table>
           </div>
-          @if(Auth::user()->level == 8)
-          <!-- <a class="btn input-xl m-t-md btn-danger pull-right m-r-md" onclick="return hapuscb()"><i class="fa fa-trash m-r-xs"></i>Hapus</a> -->
-          @endif
           <div class="tab-content" style="min-height: 75px;">                    
             <div class="form-group">
               <div class="col-md-12">
-               {{-- @if(Auth::user()->level == 2)
-               @if($bl->BL_VALIDASI == 0)
-               <a class="btn input-xl m-t-md btn-success pull-left" type="button" id="btn-validasi"><i class="fa fa-check m-r-xs"></i>Validasi</a>
-               @else
-               <a class="btn input-xl m-t-md btn-success pull-left disabled" type="button" id="btn-validasi"><i class="fa fa-check m-r-xs"></i>Validasi</a>
-               @endif
-               @endif
-               @if(Auth::user()->level == 5 or Auth::user()->level == 6)
-               <button class="btn input-xl m-t-md btn-warning pull-left"><i class="fa fa-send m-r-xs"></i>Rekomendasi</button>
-               @endif --}}
              </div>
            </div>
          </div>
@@ -372,7 +306,7 @@
        <div role="tabpanel" class="tab-pane" id="tab-2">  
                 <div class="table-responsive dataTables_wrapper">
                  <table ui-jq="dataTable" ui-options="{
-                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/rkpd/{{ $BL_ID }}',
+                 sAjaxSource: '{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/rkpd/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
                  { mData: 'REKENING' },
@@ -409,7 +343,7 @@
        <div role="tabpanel" class="tab-pane" id="tab-3">  
                 <div class="table-responsive dataTables_wrapper">
                 <table ui-jq="dataTable" ui-options="{
-                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/ppas/{{ $BL_ID }}',
+                 sAjaxSource: '{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/ppas/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
                  { mData: 'REKENING' },
@@ -446,7 +380,7 @@
        <div role="tabpanel" class="tab-pane" id="tab-4">  
                 <div class="table-responsive dataTables_wrapper">
                 <table ui-jq="dataTable" ui-options="{
-                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/rapbd/{{ $BL_ID }}',
+                 sAjaxSource: '{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/rapbd/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
                  { mData: 'REKENING' },
@@ -483,7 +417,7 @@
        <div role="tabpanel" class="tab-pane" id="tab-5">  
                 <div class="table-responsive dataTables_wrapper">
                  <!-- <table ui-jq="dataTable" ui-options="{
-                 sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/apbd/{{ $BL_ID }}',
+                 sAjaxSource: '{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/apbd/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
                  { mData: 'REKENING' },
@@ -972,7 +906,7 @@
     $('#rekening-belanja').find('option').remove().end().append('<option>Pilih Rekening</option>');
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rekening/"+id,
+      url   : "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rekening/"+id,
       success : function (data) {
         $('#rekening-belanja').append(data).trigger('chosen:updated');
       }
@@ -984,7 +918,7 @@
     $('#pilih-komponen').attr('disabled',false);
     $('.table-komponen').DataTable().destroy();
     $('.table-komponen').DataTable({
-      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/komponen/"+id+"/{{ $BL_ID }}",
+      sAjaxSource: "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/komponen/"+id+"/{{ $BL_ID }}",
       aoColumns: [
       { mData: 'KOMPONEN_ID',class:'hide' },
       { mData: 'KOMPONEN_SHOW',class:'hide' },
@@ -1047,7 +981,7 @@
           btnClass: 'btn-success',
           action: function(){
             $.ajax({
-              url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/validasi",
+              url: "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/validasi",
               type: "POST",
               data: {'_token':token, 'BL_ID' : id},
               success: function(msg){
@@ -1110,8 +1044,8 @@
       //if(HARGA == "" || KOMPONEN_NAMA == "") {
         $.alert('Form harap diisi-!');
       }else{
-        if($('#id-rincian').val() == "") url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/simpan";
-        else url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/ubah";
+        if($('#id-rincian').val() == "") url = "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/simpan";
+        else url = "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/ubah";
         $.ajax({
           url: url,
           type: "POST",
@@ -1186,7 +1120,7 @@
   function ubah(id){
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/detail/"+id,
+      url   : "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/detail/"+id,
       success : function (data) {
         console.log(data);
         $('#nama-komponen').val(data['KOMPONEN_NAMA']);
@@ -1252,7 +1186,7 @@
           btnClass: 'btn-danger',
           action: function(){
             $.ajax({
-              url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/hapus",
+              url: "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/hapus",
               type: "POST",
               data: {'_token'         : token,
               'BL_ID'           : '{{ $BL_ID }}',
@@ -1277,7 +1211,7 @@
     $('#rekening-belanja-musrenbang').find('option').remove().end().append('<option>Pilih Rekening</option>');
     $.ajax({
       type  : "get",
-      url   : "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rekening-musrenbang/"+id,
+      url   : "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rekening-musrenbang/"+id,
       success : function (data) {
         $('#rekening-belanja-musrenbang').append(data).trigger('chosen:updated');
         $('#idmusren').val(id);
@@ -1300,7 +1234,7 @@
     }else{
       console.log(PEKERJAAN_ID);
       $.ajax({
-        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian-musrenbang/simpan",
+        url: "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian-musrenbang/simpan",
         type: "POST",
         data: {'_token'         : token,
               'RINCIAN_ID'      : RINCIAN_ID, 
@@ -1330,7 +1264,7 @@
     paket  = $('#paket-nama').val();
     
     $.ajax({
-        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanpaket",
+        url: "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanpaket",
         type: "POST",
         data: {'_token'         : token,
               'SUBRINCIAN_NAMA' : paket, 
@@ -1363,7 +1297,7 @@
               $.alert('Pilih Komponen!');
             }else{
               $.ajax({
-                url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/hapus-cb",
+                url: "{{ url('/') }}/public/{{$tahun}}/{{$status}}/belanja-langsung/rincian/hapus-cb",
                 type: "POST",
                 data: {'_token'            : token,
                       'BL_ID'              : '{{$BL_ID}}',
@@ -1422,7 +1356,7 @@
     }); 
   function getpagu(){
     $.ajax({
-        url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu/{{$BL_ID}}",
+        url: "{{ url('/') }}/public/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu/{{$BL_ID}}",
         type: "GET",
         success: function(msg){
           harga     = $('#harga-komponen').val();
@@ -1517,7 +1451,7 @@
   function inputRiview(id) {
     $('#judul-prioritas').text('Form Keterangan Asistensi');        
     $.ajax({
-      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
+      url: "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
       type: "GET",
       success: function(msg){
         /*$('select#urusan_prioritas').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
@@ -1526,7 +1460,7 @@
         $('#kode_program_prioritas').val(msg['data'][0]['PROGRAM_KODE']);
         $('#nama_program_prioritas').val(msg['data'][0]['PROGRAM_NAMA']);
         $.ajax({
-          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getPrioritas/"+msg['data'][0]['PROGRAM_ID'],
+          url: "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getPrioritas/"+msg['data'][0]['PROGRAM_ID'],
           type: "GET",
           success: function(data){
             $('#prioritas_program_prioritas').find('option').remove().end().append(data['data']).trigger('chosen:updated');
@@ -1544,7 +1478,7 @@
     $('#id-kegiatan').val(id);
     $('#table-output').DataTable().destroy();
     $('#table-output').DataTable({
-      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/"+id,
+      sAjaxSource: "{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/"+id,
       aoColumns: [
       { mData: 'INDIKATOR' },
       { mData: 'TOLAK_UKUR' },

@@ -26,10 +26,14 @@
             <div class="panel bg-white">
               <div class="panel-heading wrapper-lg">
                 <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung : {{ $bl->kegiatan->KEGIATAN_NAMA }}</h5>
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a>
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{$bl->subunit->SKPD_ID}}/{{$bl->BL_ID}}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a>
-              </div>
-               <!-- <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+                @if($log_r == 1)
+                <!-- <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/log/{{ $bl->BL_ID }}" class="btn btn-danger pull-right m-t-n-sm" target="_blank"><i class="fa fa-download"></i> Log RKA</a> &nbsp;
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/sebelum/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> RKA  </a>-->
+                @endif
+
+
+                <!-- RKA
+                <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                   <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -46,7 +50,8 @@
                     @endif
                   </ul>
                 </div> -->
-                <!-- <div class="dropdown dropdown-blend pull-right m-t-n-sm">
+<!--
+                <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                   <button class="btn btn-info dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak DPA <i class="fa fa-chevron-down"></i>
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
@@ -58,7 +63,9 @@
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd31/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.1</a></li>
                     <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd32/{{ $bl->subunit->SKPD_ID }}" target="_blank">DPA-SKPD 3.2</a></li>
                   </ul>
-                </div> -->
+                </div>
+              -->
+              </div>
               <div class="tab-content tab-content-alt-1 bg-white">
                 <div class="bg-white wrapper-lg">
                   <div class="input-wrapper">
@@ -167,79 +174,6 @@
         </div>
       </div>
 
-      <div class="wrapper-lg m-t-n-xxl">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="panel bg-white">
-                <div class="wrapper-lg">
-                  <h5 class="inline font-semibold text-orange m-n ">Ringkasan Rekening</h5>
-                </div>
-                <div class="tab-content bg-white">
-                  <div role="tabpanel" class="active tab-pane" id="tab-1">
-                    <div class="table-responsive dataTables_wrapper">
-                     <table ui-jq="dataTable" ui-options="{
-                           sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/ringkasanrekening/{{ $BL_ID }}',
-                           aoColumns: [
-                           { mData: 'KODE' },
-                           { mData: 'URAIAN' },
-                           { mData: 'SEBELUM',class:'text text-right' },
-                           { mData: 'SESUDAH',class:'text text-right' },
-                           { mData: 'REALISASI',class:'text text-right' },
-                           { mData: 'SELISIH',class:'text text-right' },
-                           { mData: 'RIVIEW',class:'text text-right' },
-                           { mData: 'CLASS',class:'hide' }],
-                           aoColumnDefs: [ {
-                              aTargets: [6],
-                              fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
-                                if ( sData == '1' ) {
-                                  $(nTd).siblings('td').css( 'background-color', 'yellow' )
-                                }
-                              }
-                            } ],
-                          initComplete:function(setting,json){
-                              $('#sebelum').html(json.sebelum);
-                              $('#sesudah').html(json.sesudah);
-                              $('#realisasi').html(json.realisasi);
-                              $('#selisih').html(json.selisih);
-                          }
-                         }" class="table table-jurnal table-striped b-t b-b" id="table-rekening">
-                         <thead>
-                          <tr>
-                            <th style="width: 1%" class="text text-center">Kode<br>(1)</th>
-                            <th class="text text-center">Uraian<br>(2)</th>
-                            <th class="text text-center">Murni<br>(3)</th>                                      
-                            <th class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif<br>(4)</th>                                      
-                            <th class="text text-center">REALISASI<br>(5)</th>                                      
-                            <th class="text text-center">Selisih<br>(6 = 4 - 5)</th>    
-                            <th class="text text-center">Aksi<br></th>    
-                            <th class="hide">Warna<br>(0)</th>                                  
-                          </tr>
-                          <tr>
-                            <th colspan="8" class="th_search">
-                              <i class="icon-bdg_search"></i>
-                              <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>  
-                    <tfoot>
-                      <tr>
-                        <td class="text text-right" colspan="2"> <b>TOTAL</b></td>
-                        <td class="text text-right"><b>Rp. <text id="sebelum"></text></b></td>                                      
-                        <td class="text text-right"><b>Rp. <text id="sesudah"></text></b></td>                                      
-                        <td class="text text-right"><b>Rp. <text id="realisasi"></text></b></td>                                      
-                        <td class="text text-right"><b>Rp. <text id="selisih"></text></b></td>
-                      </tr>  
-                    </tfoot>                                    
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
       <div class="wrapper-lg" style="margin-top: -75px;">
         <div class="row">
@@ -247,24 +181,24 @@
             <div class="panel bg-white">
               <div class="wrapper-lg">
                 <!-- <h5 class="inline font-semibold text-orange m-n ">Rincian</h5> -->
-                <h5 class="inline font-semibold text-orange m-n">Pagu &nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>Rincian : <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}<br>
-                  Selisih Total: {{ number_format($bl->BL_PAGU-$rinciantotal,0,'.',',') }} <br>
-                  <!-- Selisih Belanja Pegawai : {{ number_format($JB_521,0,'.',',') }}<br>
-                  Selisih Belanja Barang & Jasa : {{ number_format($JB_522,0,'.',',') }}<br>
-                  Selisih Belanja Modal : {{ number_format($JB_523,0,'.',',') }}<br> -->
-                </span></h5>
+                <h5 class="inline font-semibold text-orange m-n">
+                  Pagu OPD : <span style="color: #000" id="rincian-pagu">{{ number_format($paguOPD,0,'.',',') }}</span><br>                  
+                  Pagu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-pagu">{{ number_format($bl->BL_PAGU,0,'.',',') }}</span><br>
+                  Rincian &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <span style="color: #000" id="rincian-total">{{ number_format($rinciantotal,0,'.',',') }}</span></h5>
 
-                @if(($bl->kunci->KUNCI_RINCIAN == 0  and $mod == 1 and $thp == 1 and Auth::user()->active == 1) or Auth::user()->level == 8)
+
+                @if($bl->kunci->KUNCI_RINCIAN == 0 and $mod == 1 and $thp == 1 
+                and Auth::user()->active == 1) 
                 <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button>
                 @elseif($thp == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Tahapan masih ditutup!</h5>
                 @elseif(Auth::user()->active == 0)
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> User Tidak Aktif!</h5>
                 @endif
+
+
                 @if(Auth::user()->level == 8)
                 <a class="pull-right btn m-t-n-sm btn-warning" href="{{url('/')}}/main/{{$tahun}}/{{$status}}/belanja-langsung/detail/arsip/{{$BL_ID}}" target="_blank"><i class="fa fa-archive"></i></a>
-
-                <!-- <button class="open-rincian pull-right btn m-t-n-sm btn-success input-xl"><i class="m-r-xs fa fa-plus"></i> Tambah Komponen</button> -->
                 @endif
                 <!-- @if(($BL_ID == 5718 ) 
                     and $mod == 1 
@@ -273,6 +207,7 @@
                 @else
                 <h5 class="pull-right font-semibold text-info m-t-n-xs"><i class="fa fa-info-circle"></i> Rincian Hanya Bisa dirubah / dihapus!</h5>
                 @endif -->
+               
                 <a class="pull-right btn btn-info m-t-n-sm m-r-sm" href="{{ url('/') }}/main/{{$tahun}}/{{$status}}/download/rekaprincian/{{$bl->BL_ID}}"><i class="m-r-xs fa fa-download"></i> Download</a>
                 <div class="col-sm-1 pull-right m-t-n-sm">
                   <select class="form-control selectrincian" id="selectrincian">
@@ -287,17 +222,17 @@
 
               <div class="nav-tabs-alt tabs-alt-1 b-t four-row" id="tab-jurnal" >
                 <ul class="nav nav-tabs" role="tablist">
-                 <li class="{{(($mode=='RKPD') ? 'active' : '')}}">
-                  <a data-target="#tab-1" role="tab" data-toggle="tab">RKPD/RKUA<br><span class="text-success" id="rincian-total-1">Rincian : {{ number_format((($mode=="RKPD") ? $rinciantotal : $rkpd),0,'.',',') }}</span></a>
+                 <li class="active">
+                  <a data-target="#tab-1" role="tab" data-toggle="tab">RKPD/RKUA<br><span class="text-success" id="rincian-total-1">Rincian : {{ number_format($rinciantotal,0,'.',',') }}</span></a>
                 </li>
-                <li class="{{(($mode=='KUA/PPAS') ? 'active' : '')}}">
-                  <a data-target="#tab-3" role="tab" data-toggle="tab">KUA/PPAS<br><span class="text-success">Rincian : {{ number_format((($mode=="KUA/PPAS") ? $rinciantotal : $ppas),0,'.',',') }}</span></a>
+                <li>
+                  <a data-target="#tab-3" role="tab" data-toggle="tab">KUA/PPAS<br><span class="text-success">Rincian : {{ number_format($ppas,0,'.',',') }}</span></a>
                 </li>
-                <li class="{{(($mode=='RAPBD') ? 'active' : '')}}"> 
-                  <a data-target="#tab-4" role="tab" data-toggle="tab">RAPBD<br><span class="text-success">Rincian : {{ number_format((($mode=="RAPBD") ? $rinciantotal : $rapbd),0,'.',',') }}</span></a>
+                <li>
+                  <a data-target="#tab-4" role="tab" data-toggle="tab">RAPBD<br><span class="text-success">Rincian : {{ number_format($rapbd,0,'.',',') }}</span></a>
                 </li>
-                <li class="{{(($mode=='APBD') ? 'active' : '')}}">
-                  <a data-target="#tab-4" role="tab" data-toggle="tab">APBD<br><span class="text-success">Rincian : {{ number_format((($mode=="APBD") ? $rinciantotal : $apbd),0,'.',',') }}</span></a> 
+                <li>
+                  <a data-target="#tab-4" role="tab" data-toggle="tab">APBD<br><span class="text-success">Rincian : {{ number_format($apbd,0,'.',',') }}</span></a> 
                 </li>
               </ul>
             </div>
@@ -313,32 +248,23 @@
                  { mData: 'REKENING' },
                  { mData: 'KOMPONEN' },
                  { mData: 'SUB' },
-                 { mData: 'HARGA_SEBELUM' },
-                 { mData: 'PAJAK_SEBELUM' },
-                 { mData: 'TOTAL_SEBELUM',class:'text text-right' },
-                 { mData: 'HARGA_SESUDAH' },
-                 { mData: 'PAJAK_SESUDAH' },
-                 { mData: 'TOTAL_SESUDAH',class:'text text-right' }]
+                 { mData: 'HARGA' },
+                 { mData: 'PAJAK' },
+                 { mData: 'TOTAL' } ]
                }" class="table table-striped b-t b-b tabel-detail">
                <thead>
                 <tr>
-                  <th style="width: 1%" rowspan="2">#</th>
-                  <th rowspan="2">Rekening</th>
-                  <th rowspan="2">Komponen</th>
-                  <th rowspan="2">Paket Pekerjaan<br>Keterangan</th>
-                  <th colspan="3" class="text text-center">Murni</th>
-                  <th colspan="3" class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif</th>
-                </tr>
-                <tr>
+                  <th style="width: 1%">#</th>
+                  <th>Rekening</th>
+                  <th>Komponen</th>
+                  <th>Paket Pekerjaan<br>Keterangan</th>
                   <th style="width: 10%">Harga / Koefisien</th>
-                  <th style="width: 1%">Pjk</th>
+                  <th style="width: 5%">Pajak</th>
                   <th style="width: 5%">Total</th>
-                  <th style="width: 10%">Harga / Koefisien</th>
-                  <th style="width: 1%">Pjk</th>
-                  <th style="width: 5%">Total</th>                  
+                  <!-- <th style="width: 5%">Status</th> -->
                 </tr>
                 <tr>
-                  <th colspan="10" class="th_search">
+                  <th colspan="7" class="th_search">
                     <i class="icon-bdg_search"></i>
                     <input type="search" class="cari-detail form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
                   </th>
@@ -348,7 +274,7 @@
               </tbody>                        
             </table>
           </div>
-          @if(Auth::user()->level == 8)
+          @if(Auth::user()->email == 8)
           <!-- <a class="btn input-xl m-t-md btn-danger pull-right m-r-md" onclick="return hapuscb()"><i class="fa fa-trash m-r-xs"></i>Hapus</a> -->
           @endif
           <div class="tab-content" style="min-height: 75px;">                    
@@ -371,7 +297,7 @@
        <!-- Tab2 -->
        <div role="tabpanel" class="tab-pane" id="tab-2">  
                 <div class="table-responsive dataTables_wrapper">
-                 <table ui-jq="dataTable" ui-options="{
+                 <!-- <table ui-jq="dataTable" ui-options="{
                  sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/rkpd/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
@@ -381,7 +307,7 @@
                  { mData: 'HARGA' },
                  { mData: 'PAJAK' },
                  { mData: 'TOTAL' }]
-               }" class="table table-striped b-t b-b tabel-detail-rkpd">
+               }" class="table table-striped b-t b-b tabel-detail-rkpd"> -->
                <table class="table table-striped b-t b-b tabel-detail-rkpd">
                <thead>
                 <tr>
@@ -408,7 +334,7 @@
        <!-- Tab3 -->
        <div role="tabpanel" class="tab-pane" id="tab-3">  
                 <div class="table-responsive dataTables_wrapper">
-                <table ui-jq="dataTable" ui-options="{
+                <!--  <table ui-jq="dataTable" ui-options="{
                  sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/ppas/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
@@ -418,7 +344,7 @@
                  { mData: 'HARGA' },
                  { mData: 'PAJAK' },
                  { mData: 'TOTAL' }]
-               }" class="table table-striped b-t b-b tabel-detail-ppas">
+               }" class="table table-striped b-t b-b tabel-detail-ppas"> -->
                <table class="table table-striped b-t b-b tabel-detail-rkpd">               
                <thead>
                 <tr>
@@ -445,7 +371,7 @@
        <!-- Tab4 -->
        <div role="tabpanel" class="tab-pane" id="tab-4">  
                 <div class="table-responsive dataTables_wrapper">
-                <table ui-jq="dataTable" ui-options="{
+                 <!-- <table ui-jq="dataTable" ui-options="{
                  sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincianrekap/rapbd/{{ $BL_ID }}',
                  aoColumns: [
                  { mData: 'NO',class:'text-center' },
@@ -455,7 +381,7 @@
                  { mData: 'HARGA' },
                  { mData: 'PAJAK' },
                  { mData: 'TOTAL' }]
-               }" class="table table-striped b-t b-b tabel-detail-rapbd">
+               }" class="table table-striped b-t b-b tabel-detail-rapbd"> -->
                <table class="table table-striped b-t b-b tabel-detail-rkpd">               
                <thead>
                 <tr>
@@ -525,17 +451,17 @@
 </div>
 </div>
 
-<!--SIMPAN RINCIAN-->
+
 <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-rincian">
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
   <form id="simpan-komponen" class="form-horizontal">
     <div class="input-wrapper">
-      <h5>Tambah / Edit Rincian</h5>
-      <div class="form-group edit">
+      <h5>Tambah Komponen</h5>
+      <div class="form-group">
         <label class="col-sm-3">Sub Rincian / Paket Pekerjaan / Subtitle</label>
         <div class="col-sm-7">
-          <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="" >
+          <select ui-jq="chosen" class="w-full" id="paket-pekerjaan" required="">
             <option value="">Silahkan Pilih</option>
             @foreach($subrincian as $sr)
             <option value="{{ $sr->SUBRINCIAN_ID }}">{{ $sr->SUBRINCIAN_NAMA }}</option>
@@ -546,7 +472,7 @@
           <button class="btn btn-warning col-md-1 w-full" data-toggle="modal" type="button" data-target="#pilih-paket-modal" id="pilih-paket"><i class="fa fa-plus"></i> Tambah</button>
         </div>
       </div>
-      <div class="form-group edit">
+      <div class="form-group">
         <label class="col-sm-3">Jenis</label>
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="jenis-pekerjaan" required="">
@@ -557,7 +483,7 @@
           </select>
         </div>
       </div>
-      <div class="form-group edit">
+      <div class="form-group">
         <label class="col-sm-3">Kategori</label>
         <div class="col-sm-9">
           <select ui-jq="chosen" class="w-full" id="kategori-belanja" required="">
@@ -568,17 +494,20 @@
           </select>
         </div>
       </div>
-      <div class="form-group edit">
+      <div class="form-group">
         <label class="col-sm-3">Rekening</label>
         <div class="col-sm-9">
-          <select ui-jq="chosen" class="w-full" id="rekening-belanja" required="">
+          <!--  TANPA NOMENKLATUR -->
+            <select ui-jq="chosen" class="w-full" id="rekening-belanja" required="">
+          <!-- <select ui-jq="chosen" class="w-full" required=""> -->
             <option value="">Silahkan Pilih Rekening</option>
+            
           </select>
         </div>
       </div>
 
 
-      <div class="form-group edit">
+      <div class="form-group">
         <label for="no_spp" class="col-md-3">Komponen</label>          
         <div class="col-md-6">
           <input type="text" class="form-control" placeholder="Komponen" id="nama-komponen" readonly="">          
@@ -589,36 +518,7 @@
         <div class="col-md-1 m-l-n-md">
         <a class="btn btn-warning" data-toggle="modal" data-target="#kode-komponen" id="pilih-komponen" disabled="true">Pilih</a>
         </div>
-    @if($status=="perubahan")
-    @else
-    <div class="col-md-2">
-        <label for="no_spp" class="m-l-xl">Pajak</label>          
-        <div class="checkbox-remember pull-right m-t-n-xs">
-          <div class="checkbox">
-          <label class="checkbox-inline i-checks">
-            <input type="checkbox" id="pajak">
-            <i></i>  
-          </label>
-          </div>
-        </div>
-      </div>
-    @endif
-    </div>
-
-    <div class="form-group hide" id="harga-free">
-      <label for="no_spp" class="col-md-3">Harga</label>          
-      <div class="col-sm-9">
-        <input type="text" id="harga-free-input" class="form-control" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Masukan Harga">
-      </div> 
-    </div>
-
-    <div class="form-group">
-      <label for="no_spp" class="col-md-3">Keterangan</label>          
-      @if($status=="perubahan")
-      <div class="col-sm-7">
-        <input type="text" id="ket-belanja" class="form-control" placeholder="Masukan Keterangan" >          
-      </div> 
-      <div class="col-md-2">
+        <div class="col-md-2">
           <label for="no_spp" class="m-l-xl">Pajak</label>          
           <div class="checkbox-remember pull-right m-t-n-xs">
            <div class="checkbox">
@@ -628,18 +528,27 @@
             </label>
            </div>
           </div>
-      </div>
-      @else
+        </div>
+    </div>
+
+    <div class="form-group hide" id="harga-free">
+      <label for="no_spp" class="col-md-3">Harga</label>          
+      <div class="col-sm-9">
+        <input type="number" id="harga-free-input" class="form-control" min="0" placeholder="Masukan Harga" >          
+      </div> 
+    </div>
+
+    <div class="form-group">
+      <label for="no_spp" class="col-md-3">Keterangan</label>          
       <div class="col-sm-9">
         <input type="text" id="ket-belanja" class="form-control" placeholder="Masukan Keterangan" >          
       </div> 
-      @endif
     </div>
 
     <div class="form-group" id="koef1">
       <label for="no_spp" class="col-md-3">Koefisien</label>          
       <div class="col-sm-5">
-        <input type="text" onkeypress="return event.charCode >= 45 && event.charCode <= 57" id="vol1" class="form-control" placeholder="Masukan Jumlah" required="">      
+        <input type="number" id="vol1" class="form-control" min="0" placeholder="Masukan Jumlah" required="">      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-1">
@@ -652,7 +561,7 @@
     <div class="form-group" id="koef2">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="vol2" class="form-control" placeholder="Masukan Jumlah" required="">           
+        <input type="number" id="vol2" min="0" class="form-control" placeholder="Masukan Jumlah" >      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-2">
@@ -666,7 +575,7 @@
     <div class="form-group" id="koef3">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="vol3" class="form-control" placeholder="Masukan Jumlah" required="">      
+        <input type="number" id="vol3" min="0" class="form-control" placeholder="Masukan Jumlah" >      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-3">
@@ -680,7 +589,7 @@
     <div class="form-group" id="koef4">
       <label for="no_spp" class="col-md-3"></label>          
       <div class="col-sm-5">
-        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="vol4" class="form-control" placeholder="Masukan Jumlah" required="">      
+        <input type="number" id="vol4" min="0" class="form-control" placeholder="Masukan Jumlah" >      
       </div> 
       <div class="col-sm-4">
         <select ui-jq="chosen" class="w-full" id="satuan-4">
@@ -693,68 +602,28 @@
     </div>          
     <hr class="m-t-xl">
     <div class="form-group" id="koef4">
-      <label for="no_spp" class="col-md-1">Pagu SKPD</label>          
-      <div class="col-sm-3">
-        <input type="text" id="pagu-skpd" class="form-control" readonly="">      
-        <input type="hidden" id="pagu-skpd_" class="form-control" readonly="">      
-      </div>
-      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian SKPD</label>          
+      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian Kegiatan</label>          
       <div class="col-sm-3">
         <input type="text" id="rincian-skpd" class="form-control" readonly="">      
         <input type="hidden" id="rincian-skpd_" class="form-control" readonly="">      
       </div> 
-      <label for="no_spp" class="col-md-1">Selisih</label>          
+      <label for="no_spp" class="col-md-1">Pagu Kegiatan</label>          
+      <div class="col-sm-3">
+        <input type="text" id="pagu-skpd" class="form-control" readonly="">      
+        <input type="hidden" id="pagu-skpd_" class="form-control" readonly="">      
+      </div>
+      <label for="no_spp" class="col-md-1">Sisa Anggaran Kegiatan</label>          
       <div class="col-sm-3">
         <input type="text" id="sisa-skpd" class="form-control" readonly="">      
         <input type="hidden" id="sisa-skpd_" class="form-control" readonly="">      
       </div> 
     </div>
-    <hr class="m-t-xl">
-    <div class="form-group" id="koef5">
-      <label for="no_spp" class="col-md-1">Pagu Kegiatan</label>          
-      <div class="col-sm-3">
-        <input type="text" id="pagu-kegiatan" class="form-control" readonly="">      
-        <input type="hidden" id="pagu-kegiatan_" class="form-control" readonly="">      
-      </div>
-      <label for="no_spp" class="col-md-1 m-t-n-xxl">Rincian Kegiatan</label>          
-      <div class="col-sm-3">
-        <input type="text" id="rincian-kegiatan" class="form-control" readonly="">      
-        <input type="hidden" id="rincian-kegiatan_" class="form-control" readonly="">      
-      </div> 
-      <label for="no_spp" class="col-md-1">Selisih</label>          
-      <div class="col-sm-3">
-        <input type="text" id="sisa-kegiatan" class="form-control" readonly="">      
-        <input type="hidden" id="sisa-kegiatan_" class="form-control" readonly="">      
-      </div> 
-    </div>
-    <hr class="m-t-xl">
-    <div class="form-group" id="koef6">
-      <label for="no_spp" class="col-md-1">Total Rekening</label>          
-      <div class="col-sm-3">
-        <input type="text" id="pagu-realisasi" class="form-control" readonly="">      
-        <input type="hidden" id="pagu-realisasi_" class="form-control" readonly="">      
-      </div>
-      <label for="no_spp" class="col-md-1 m-t-n-xxl">Total Realisasi</label>          
-      <div class="col-sm-3">
-        <input type="text" id="rincian-realisasi" class="form-control" readonly="">      
-        <input type="hidden" id="rincian-realisasi_" class="form-control" readonly="">      
-      </div> 
-      <label for="no_spp" class="col-md-1">Selisih</label>          
-      <div class="col-sm-3">
-        <input type="text" id="sisa-realisasi" class="form-control" readonly="">      
-        <input type="hidden" id="sisa-realisasi_" class="form-control" readonly="">      
-      </div> 
-    </div>
-    <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Simpan Rincian</a>
+    <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanKomponen()" ><i class="fa fa-plus m-r-xs "></i>Tambah Komponen</a>
   </div>
 </form>
 </div>
 </div>
-<!--SIMPAN RINCIAN-->
 
-
-
-<!--PILIH KOMPONEN-->
 <div class="plih-komponen modal fade " id="kode-komponen" tabindex="-1" role="dialog">
   <div class="modal-dialog bg-white modal-lg">
     <div class="panel panel-default">
@@ -791,9 +660,7 @@
     </div>
   </div>
 </div>
-<!--END PILIH KOMPONEN-->
 
-<!--PAKET PEKERJAAN-->
 <div class="pilih-paket modal fade " id="pilih-paket-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog bg-white">
     <div class="panel panel-default">
@@ -810,10 +677,7 @@
     </div>
   </div>
 </div>
-<!--END PAKET PEKERJAAN-->
 
-
-<!--EDIT MUSRENBANG-->
 <div class="overlay"></div>
 <div class="bg-white wrapper-lg input-sidebar input-musrenbang">
   <a href="#" class="close"><i class="icon-bdg_cross"></i></a>
@@ -859,78 +723,6 @@
     </div>
   </form>
 </div>
-<!--END EDIT MUSRENBANG-->
-
-
-<div class="overlay"></div>
-<div class="bg-white wrapper-lg input-sidebar input-riview">
-<a href="#" class="tutup-form"><i class="icon-bdg_cross"></i></a>
-    <form id="form-prioritas" class="form-horizontal">
-      <div class="input-wrapper">
-        <h5 id="judul-prioritas">Masukan Asistensi</h5>
-          
-         
-          <div class="form-group">
-            <label for="nama_program_prioritas" class="col-md-3">Rekening</label>          
-            <div class="col-sm-9">        
-              <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">        
-              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="" disabled> 
-            </div> 
-          </div>
-
-          <div class="form-group">
-            <label for="nama_program_prioritas" class="col-md-3">Anggaran</label>          
-            <div class="col-sm-9">
-              <input type="text" class="form-control" readonly placeholder="Anngaran Rekening" name="kode_program_prioritas" id="kode_program_prioritas" value="" disabled> 
-            </div> 
-          </div>
-
-           <div class="form-group">
-            <label for="nama_program" class="col-md-3">Komentar</label>          
-            <div class="col-sm-9">
-              <select ui-jq="chosen" class="w-full" id="prioritas_program" name="prioritas_program">
-                    <option value="1">Tinjau ulang / rasionalisasi</option>
-                    <option value="2">Formulasikan kembali</option>
-                    <option value="3">lainya</option>
-              </select>
-            </div> 
-          </div>
-
-          <hr class="m-t-xl">
-         <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPrioritas()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
-      </div>
-    </form>
-  </div>
- </div>
-
- <div class="set-output modal fade " id="set-output-modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog bg-white modal-lg">
-    <div class="panel panel-default">
-      <div class="wrapper-lg">
-        <h5 class="inline font-semibold text-orange m-n text16 ">Daftar Komponen</h5>
-      </div>        
-      <div class="table-responsive">
-        <table class="table table-popup table-striped b-t b-b table-output" id="table-output">
-          <thead>
-            <tr>
-              <th width="1%">Rekening</th>
-              <th>Komponen</th>
-              <th width="10%">Paket Pekerjaan</th>  
-              <th width="10%">Volume</th> 
-              <th width="10%">Harga</th> 
-              <th width="10%">Pajak</th> 
-              <th width="10%">Total</th>                         
-              <th width="1%">#</th>                          
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
 </div>
 <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
 @endsection
@@ -944,6 +736,7 @@
 </script>
 
 <script type="text/javascript">
+
   $("select.selectrincian").on('click',function() {
     $('.table').DataTable().page.len($('.selectrincian').val()).draw();
   });
@@ -968,7 +761,10 @@
   });
 
   $("#kategori-belanja").change(function(e, params){
+    /*tanpa nomenklatur*/
     var id  = $('#kategori-belanja').val();
+    /*nomenklatur*/
+    var id  = {{$bl->BL_ID}};
     $('#rekening-belanja').find('option').remove().end().append('<option>Pilih Rekening</option>');
     $.ajax({
       type  : "get",
@@ -998,16 +794,11 @@
 
   $("#jenis-pekerjaan").change(function(e, params){
     var id  = $('#jenis-pekerjaan').val();
-    if(id == '4' || id == '5' || id == '6' || id == '7' || id == '8'){
+    if(id == '4' || id == '5' || id == '6' || id == '7'){
       $('#nama-komponen').attr('readonly',false);
-      $('#ket-belanja').attr('readonly',true);
+      $('#ket-belanja').attr('readonly',false);
       $('#harga-free').removeClass('hide');
       $('#pilih-komponen').addClass('hide');
-    }else{
-      $('#nama-komponen').attr('readonly',true);
-      $('#ket-belanja').attr('readonly',false);
-      $('#harga-free').addClass('hide');
-      $('#pilih-komponen').removeClass('hide');
     };
   });
 
@@ -1073,13 +864,6 @@
     var KOMPONEN_ID     = $('#id-komponen').val();
     var KOMPONEN_NAMA   = $('#nama-komponen').val();
     var VOL1            = $('#vol1').val();
-    
-    /*if($('#id-rincian').val() == ""){
-      var VOL1            = $('#vol1').val();
-    }else {
-      var VOL1            = $('#vol1-u').val();
-    }*/
-
     var SAT1            = $('#satuan-1').val();
     var VOL2            = $('#vol2').val();
     var SAT2            = $('#satuan-2').val();
@@ -1095,20 +879,16 @@
     var HARGA           = $('#harga-free-input').val();
     if($('#pajak').is(':checked')) RINCIAN_PAJAK = 10;
     else RINCIAN_PAJAK = 0;
-    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8' ){
+    if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7'){
       KOMPONEN_ID   = '0';
-      RINCIAN_KET = KOMPONEN_NAMA + '#'+ HARGA;
     }
     console.log(KOMPONEN_ID);
-    //if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SAT1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
-    //if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){
-    if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SUBRINCIAN_ID == ""){
-      //if(REKENING_ID == "" || VOL1 == "" || SUBRINCIAN_ID == ""){
+    /*if(REKENING_ID == "" || KOMPONEN_ID == "" || VOL1 == "" || SAT1 == "" || PEKERJAAN_ID == "" || SUBRINCIAN_ID == ""){*/
+      if(REKENING_ID == "" || SUBRINCIAN_ID == ""){
       $.alert('Form harap diisi!');
     }else{
-      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8') && (HARGA == "" || KOMPONEN_NAMA == "")){
-      //if(HARGA == "" || KOMPONEN_NAMA == "") {
-        $.alert('Form harap diisi-!');
+      if((PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7') && (HARGA == "" || KOMPONEN_NAMA == "")){
+        $.alert('Form harap diisi!');
       }else{
         if($('#id-rincian').val() == "") url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/simpan";
         else url = "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rincian/ubah";
@@ -1137,15 +917,14 @@
           success: function(msg){
             if(msg == 0){
               $.alert('Lebih Dari Pagu');
+            }else if(msg == 115){
+              $.alert('Melebihi Dari Pagu Prioritas');
             }else if(msg == 99){
               $.alert('Volume Tidak Bisa Ditambahkan');
             }else if(msg == 98){
-              $total = 0;
-              $.alert('Anggaran Kurang dr realisasi Rp.'+total);
-            }else if(msg == 101){
-              $.alert('Total Rincian Melebihi Total Per Jenis Belanja');
+              $.alert('Rekening Kurang Dari Realisasi');
             }else if(msg != 0){
-              if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '7' || PEKERJAAN_ID == '8') location.reload();
+              if(PEKERJAAN_ID == '4' || PEKERJAAN_ID == '5' || PEKERJAAN_ID == '6' || PEKERJAAN_ID == '7') location.reload();
               $('.input-rincian,.input-sidebar').animate({'right':'-1050px'},function(){
                 $('.overlay').fadeOut('fast');
               });
@@ -1172,7 +951,6 @@
               $('#rincian-total-1').text(msg);
               $('#masukan').text(msg);
               $('.tabel-detail').DataTable().ajax.reload();
-              $('#table-rekening').DataTable().ajax.reload();              
               $('#btn-validasi').removeClass('disabled');
             }
           }
@@ -1180,8 +958,6 @@
       }
     }
   }
-
-  
 
   function ubah(id){
     $.ajax({
@@ -1194,29 +970,7 @@
         $('#ket-belanja').val(data['DATA']['RINCIAN_KETERANGAN']);
         $('#jenis-pekerjaan').val(data['DATA']['PEKERJAAN_ID']).trigger('chosen:updated');
         id_komponen   = data['KOMPONEN_KODE'].substring(0,1);
-        if(id_komponen < 1){
-          id_komponen = 1;
-        }
-        var id  = $('#jenis-pekerjaan').val();
-    if(id == '4' || id == '5' || id == '6' || id == '7' || id == '8'){
-      $('#nama-komponen').attr('readonly',false);
-      $('#ket-belanja').attr('readonly',true);
-      $('#harga-free').removeClass('hide');
-      result = $('#ket-belanja').val().split('#');
-      $('#harga-free-input').val(result[1]);
-      $('#pilih-komponen').addClass('hide');
-    }else{
-      $('#nama-komponen').attr('readonly',true);
-      $('#ket-belanja').attr('readonly',false);
-      $('#harga-free').addClass('hide');
-      $('#pilih-komponen').removeClass('hide');
-    };
-    @if($status=="perubahan")
-      $('.edit').hide();
-    @else
-    $('.edit').show();
-    @endif
-	$('#id-komponen').val(data['DATA']['KOMPONEN_ID']);
+        $('#id-komponen').val(data['DATA']['KOMPONEN_ID']);
         $('#id-rincian').val(data['DATA']['RINCIAN_ID']);
         $('#kategori-belanja').val(id_komponen).trigger('chosen:updated');
         $('#rekening-belanja').find('option').remove().end().append('<option value="'+data['DATA']['REKENING_ID']+'">'+data['REKENING_NAMA']+'</option>').trigger('chosen:updated');
@@ -1224,7 +978,7 @@
           $('#pajak').prop('checked',true);
         }
         $('#vol1').val(data['VOL1']);
-        $('#satuan-1').append('<option value="'+data['SATUAN1']+'" selected>'+data['SATUAN1']+'</option>').trigger('chosen:updated');
+        $('#satuan-1').find('option').remove().end().append('<option value="'+data['SATUAN1']+'">'+data['SATUAN1']+'</option>').trigger('chosen:updated');
         $('#vol2').val(data['VOL2']);
         $('#satuan-2').append('<option value="'+data['SATUAN2']+'" selected>'+data['SATUAN2']+'</option>').trigger('chosen:updated');
         $('#vol3').val(data['VOL3']);
@@ -1235,11 +989,8 @@
     });
     $('.overlay').fadeIn('fast',function(){
       $('.input-rincian').animate({'right':'0'},"linear");  
-      getpagu();
-      //interval = setInterval(function(){getpagu();}, 1000);
       $("html, body").animate({ scrollTop: 0 }, "slow");
     });
-
   }
 
   function hapus(id){
@@ -1259,9 +1010,7 @@
               'RINCIAN_ID'      : id},
               success: function(msg){
                 $('.tabel-detail').DataTable().ajax.reload();                          
-                $('#table-rekening').DataTable().ajax.reload(); 
-                if(msg == 'FAIL') $.alert('Hapus Gagal, Rekening Kurang Dari Realisasi!');
-                else $.alert('Hapus Berhasil');
+                $.alert('Hapus Berhasil!');
                 $('#rincian-total').text(msg);
               }
             });
@@ -1328,13 +1077,15 @@
   function simpanPaket(){
     token  = $('#token').val();
     paket  = $('#paket-nama').val();
-    
+    bl_id  = {{ $BL_ID }};
+    //alert(bl_id);
     $.ajax({
         url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanpaket",
         type: "POST",
         data: {'_token'         : token,
               'SUBRINCIAN_NAMA' : paket, 
-              'BL_ID'           : '{{ $BL_ID }}'},
+              'BL_ID'           : bl_id
+            },
         success: function(msg){
           $('#paket-nama').val('');
           $.alert('Input Berhasil!');
@@ -1385,9 +1136,7 @@
 
   $('.open-rincian').on('click',function(){
     $(document).ready(function(){
-        getpagu();
-        //clearInterval(interval);
-        $('.edit').show();              
+        interval = setInterval(function(){getpagu();}, 1000);
         $('#id-rincian').val('');
         $('#jenis-pekerjaan').val('').trigger('chosen:updated');
         $('#kategori-belanja').val('').trigger('chosen:updated');
@@ -1407,22 +1156,19 @@
         $('#pilih-komponen').attr('disabled',true);
     });
   });
-
-
-
     $('.overlay').on('click',function(){      
-        //clearInterval(interval);
+        clearInterval(interval);
     }); 
 
     $('.close').click(function(){
-        //clearInterval(interval);
+        clearInterval(interval);
         $('.input-sidebar').animate({'right':'-1050px'},"linear",function(){
           $('.overlay').fadeOut('fast');
         });
     }); 
   function getpagu(){
     $.ajax({
-        url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu/{{$BL_ID}}",
+        url: "{{ url('/') }}/main/{{$tahun}}/{{$status}}/belanja-langsung/rincian/pagu/getpagu/{{$bl->BL_ID}}",
         type: "GET",
         success: function(msg){
           harga     = $('#harga-komponen').val();
@@ -1435,14 +1181,8 @@
           if(vol3 == "") vol3 = 0;
           if(vol4 == "") vol4 = 0;
           if(harga == "") harga = 0;
-          rincian   = msg['skpdtotal'];
-          pagu      = msg['skpdpagu'];
-          kegpagu   = msg['kegpagu'];
-          kegtotal      = msg['kegtotal'];
-          kegsisa      = msg['kegsisa'];
-          rekpagu   = msg['rekpagu'];
-          rekrl      = msg['rektotal'];
-          reksisa      = msg['reksisa'];
+          rincian   = msg['rincian'];
+          pagu      = msg['pagu'];
           total1     = parseInt(vol1) * parseInt(harga);
           total2     = parseInt(vol2) * parseInt(harga);
           total3     = parseInt(vol3) * parseInt(harga);
@@ -1450,27 +1190,15 @@
           total      = total1 + total2 + total3 + total4;
           anggaran  = parseInt(rincian)+ parseInt(total);
           sisa      = parseInt(pagu) - parseInt(anggaran);
-          //console.log(rincian);
-          //console.log(total);
-          //console.log(pagu);
+          console.log(rincian);
+          console.log(total);
+          console.log(pagu);
           $('#rincian-skpd').val(anggaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
           $('#pagu-skpd').val(pagu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
           $('#sisa-skpd').val(sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
           $('#rincian-skpd_').val(anggaran);
           $('#pagu-skpd_').val(pagu);
-          $('#sisa-skpd_').val(sisa); 
-          $('#rincian-kegiatan').val(kegtotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-          $('#pagu-kegiatan').val(kegpagu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-          $('#sisa-kegiatan').val(kegsisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-          $('#rincian-kegiatan_').val(kegtotal);
-          $('#pagu-kegiatan_').val(kegpagu);
-          $('#sisa-kegiatan_').val(kegsisa);
-          $('#rincian-realisasi').val(rekrl.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-          $('#pagu-realisasi').val(rekpagu.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-          $('#sisa-realisasi').val(reksisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-          $('#rincian-realisasi_').val(rekrl);
-          $('#pagu-realisasi_').val(rekpagu);
-          $('#sisa-realisasi_').val(reksisa); 
+          $('#sisa-skpd_').val(sisa);          
         }     
       });
   }
@@ -1513,50 +1241,5 @@
     $('#rincian-skpd').val(anggaran.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     $('#sisa-skpd').val(sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")); 
   }
-
-  function inputRiview(id) {
-    $('#judul-prioritas').text('Form Keterangan Asistensi');        
-    $.ajax({
-      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
-      type: "GET",
-      success: function(msg){
-        /*$('select#urusan_prioritas').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
-        $('#id_program_prioritas').val(msg['data'][0]['PROGRAM_ID']);
-        $('#tahun_program_prioritas').val(msg['data'][0]['PROGRAM_TAHUN']);
-        $('#kode_program_prioritas').val(msg['data'][0]['PROGRAM_KODE']);
-        $('#nama_program_prioritas').val(msg['data'][0]['PROGRAM_NAMA']);
-        $.ajax({
-          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getPrioritas/"+msg['data'][0]['PROGRAM_ID'],
-          type: "GET",
-          success: function(data){
-            $('#prioritas_program_prioritas').find('option').remove().end().append(data['data']).trigger('chosen:updated');
-          }
-        });   */ 
-        $('.overlay').fadeIn('fast',function(){
-          $('.input-riview').animate({'right':'0'},"linear");  
-          $("html, body").animate({ scrollTop: 0 }, "slow");
-        });
-      }
-    });    
-  }
-
-  function showKomponen(id){
-    $('#id-kegiatan').val(id);
-    $('#table-output').DataTable().destroy();
-    $('#table-output').DataTable({
-      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/"+id,
-      aoColumns: [
-      { mData: 'INDIKATOR' },
-      { mData: 'TOLAK_UKUR' },
-      { mData: 'TARGET' },
-      { mData: 'STATUS' },
-      { mData: 'OUTPUT_STATUS' },
-      { mData: 'LOKASI' },
-      { mData: 'CATATAN' },
-      { mData: 'AKSI' }]
-    });
-    $('#set-output-modal').modal('show');
-  }
-
 </script>
 @endsection

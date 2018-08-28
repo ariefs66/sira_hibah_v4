@@ -111,7 +111,7 @@
     });
   }
 
-  function restore(id){
+  function restore(id,created_at){
     var token        = $('#token').val();    
     $.confirm({
       title: 'Kembalikan Data!',
@@ -124,7 +124,8 @@
               url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/arsip/belanja-langsung/restore",
               type: "POST",
               data: {'_token'         : token,
-              'id'              : id},
+              'id'              : id,
+              'created_at'              : created_at},
               success: function(msg){
                 $('#table-index').DataTable().ajax.reload();                          
                 $.alert(msg);

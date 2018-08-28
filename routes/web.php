@@ -21,7 +21,31 @@ Route::get('/aktif/{id}', 'mainController@aktifuser');
 Route::get('/off/{id}', 'mainController@offuser');
 Route::post('/chpass', 'mainController@chpass');
 Route::post('/chprofile', 'mainController@chprofile');
-Route::get('/gettahun/{tahun}/{status}', 'mainController@getTABudgeting');		
+Route::get('/gettahun/{tahun}/{status}', 'mainController@getTABudgeting');	
+
+//PUBLIC
+Route::get('public/gettahun', 'publicController@getTahun');	
+Route::get('public/gettahun/{tahun}/{status}', 'publicController@getTABudgeting');	
+Route::get('/public/{tahun}/{status}', 'publicController@index');
+Route::get('/public/{tahun}/{status}/belanja-langsung', 'Publik\blController@index');
+Route::get('/public/{tahun}/{status}/belanja-langsung/getMurni/{filter}', 'Publik\blController@getMurni');
+Route::get('/public/{tahun}/{status}/belanja-langsung/detail/{id}', 'Publik\blController@showDetail');
+Route::get('/public/{tahun}/{status}/belanja-langsung/rincian/{id}', 'Publik\blController@showRincian');
+Route::get('/public/{tahun}/{status}/belanja-langsung/ringkasanrekening/{id}', 'Publik\blController@getringkasanrekening');
+Route::get('/public/{tahun}/{status}/belanja-langsung/rincianrekap/{tipe}/{id}', 'Publik\blController@showRekap');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/', 'Publik\btlController@index');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/subunit/{id}', 'Publik\pendapatanController@getsubunit');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/pegawai', 'Publik\btlController@getPegawai');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/subsidi', 'Publik\btlController@getSubsidi');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/hibah', 'Publik\btlController@getHibah');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/bantuan', 'Publik\btlController@getBantuan');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/btt', 'Publik\btlController@getBTT');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/getRekening/{id}', 'Publik\btlController@getRekening');					
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/getDetail/{skpd}/{id}', 'Publik\btlController@getDetail');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/akb/{id}', 'Publik\btlController@showAKB');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/data/akb/{id}', 'Publik\btlController@showDataAKB');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/akb/detail/{btl_id}/{rek_id}', 'Publik\btlController@detailAKB');
+Route::get('/public/{tahun}/{status}/belanja-tidak-langsung/getpagu/{skpd}', 'Publik\btlController@getPagu');
 
 //BUDGETING
 Route::get('/main/{tahun}/{status}', 'Budgeting\dashboardController@index');		
