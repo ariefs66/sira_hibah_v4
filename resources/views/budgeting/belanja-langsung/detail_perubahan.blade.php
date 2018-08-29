@@ -873,26 +873,35 @@
           <div class="form-group">
             <label for="nama_program_prioritas" class="col-md-3">Rekening</label>          
             <div class="col-sm-9">        
-              <input type="hidden" class="form-control" name="id_program_prioritas" id="id_program_prioritas">        
-              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="tahun_program_prioritas" id="tahun_program_prioritas" value="" disabled> 
+              <input type="hidden" class="form-control" name="asistensi_id" id="asistensi_id">        
+              <input type="hidden" class="form-control" name="asistensi_blid" id="asistensi_blid" value="{{$BL_ID}}">        
+              <input type="hidden" class="form-control" name="asistensi_rekening_id" id="asistensi_rekening_id">        
+              <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="asistensi_rekening" id="asistensi_rekening" value="" disabled> 
             </div> 
           </div>
 
           <div class="form-group">
             <label for="nama_program_prioritas" class="col-md-3">Anggaran</label>          
             <div class="col-sm-9">
-              <input type="text" class="form-control" readonly placeholder="Anngaran Rekening" name="kode_program_prioritas" id="kode_program_prioritas" value="" disabled> 
+              <input type="text" class="form-control" readonly placeholder="Anngaran Rekening" name="asistensi_anggaran" id="asistensi_anggaran" value="" disabled> 
             </div> 
           </div>
 
            <div class="form-group">
             <label for="nama_program" class="col-md-3">Komentar</label>          
             <div class="col-sm-9">
-              <select ui-jq="chosen" class="w-full" id="prioritas_program" name="prioritas_program">
+              <select ui-jq="chosen" class="w-full" id="asistensi_komentar" name="asistensi_komentar">
                     <option value="1">Tinjau ulang / rasionalisasi</option>
                     <option value="2">Formulasikan kembali</option>
                     <option value="3">lainya</option>
               </select>
+            </div> 
+          </div>
+
+          <div id="asistensi_catatan" class="form-group hide">
+            <label for="nama_program_prioritas" class="col-md-3">Pesan</label>          
+            <div class="col-sm-9">
+              <input type="text" class="form-control" placeholder="Catatan" name="catatan" id="catatan" value="Tinjau ulang / rasionalisasi"> 
             </div> 
           </div>
 
@@ -911,16 +920,22 @@
       </div>        
       <div class="table-responsive">
         <table class="table table-popup table-striped b-t b-b table-output" id="table-output">
-          <thead>
+        <thead>
             <tr>
-              <th width="1%">Rekening</th>
+              <th class="hide">ID</th>
+              <th class="">Volume</th>
+              <th class="">Paket Pekerjaan</th>
+              <th class="">Satuan</th>
+              <th>Rekening</th>
               <th>Komponen</th>
-              <th width="10%">Paket Pekerjaan</th>  
-              <th width="10%">Volume</th> 
-              <th width="10%">Harga</th> 
-              <th width="10%">Pajak</th> 
-              <th width="10%">Total</th>                         
-              <th width="1%">#</th>                          
+              <th>Harga</th>                          
+            </tr>
+            <tr>
+              <th class="hide"></th>
+              <th colspan="6" class="th_search">
+                <i class="icon-bdg_search"></i>
+                <input type="search" id="cari-komponen" class="cari-komponen form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -977,6 +992,17 @@
         $('#rekening-belanja').append(data).trigger('chosen:updated');
       }
     });
+  });
+
+  $("#asistensi_komentar").change(function(e, params){
+    var id  = $('#asistensi_komentar option:selected').text();
+    if($('#asistensi_komentar').val()<3){
+      $('#catatan').val(id);
+      $('#asistensi_catatan').addClass('hide');
+    }else{
+      $('#catatan').val('');
+      $('#asistensi_catatan').removeClass('hide');
+    }
   });
 
   $("#rekening-belanja").change(function(e, params){
@@ -1346,6 +1372,32 @@
       });
   }
 
+  function simpanPrioritas(){
+    token  = $('#token').val();
+    id  = $('#asistensi_id').val();
+    rekid  = $('#asistensi_rekening_id').val();
+    catatan  = $('#catatan').val();
+    $.ajax({
+        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanasistensi",
+        type: "POST",
+        data: {'_token'         : token,
+              'ID' : id, 
+              'BL_ID'           : '{{ $BL_ID }}',
+              'REKENING_ID'           : rekid,
+              'CATATAN'           : catatan,
+              },
+        success: function(msg){
+          $('#asistensi_id').val('');
+          $('#asistensi_rekening_id').val('');
+          $('#catatan').val('Tinjau ulang / rasionalisasi');
+          $.alert('Input Berhasil!');
+          $('.input-riview').animate({'right':'-1050px'},function(){
+                $('.overlay').fadeOut('fast');
+          });
+        }          
+      });
+  }
+
   function hapuscb(){
     var token        = $('#token').val();    
     $.confirm({
@@ -1515,25 +1567,16 @@
   }
 
   function inputRiview(id) {
-    $('#judul-prioritas').text('Form Keterangan Asistensi');        
+    $('#judul-prioritas').text('Form Keterangan Asistensi');
+    $('#asistensi_rekening_id').val(id);
     $.ajax({
-      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getData/"+id,
+      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rekening/{{ $BL_ID }}/"+id,
       type: "GET",
       success: function(msg){
-        /*$('select#urusan_prioritas').val(msg['data'][0]['URUSAN_ID']).trigger("chosen:updated");
-        $('#id_program_prioritas').val(msg['data'][0]['PROGRAM_ID']);
-        $('#tahun_program_prioritas').val(msg['data'][0]['PROGRAM_TAHUN']);
-        $('#kode_program_prioritas').val(msg['data'][0]['PROGRAM_KODE']);
-        $('#nama_program_prioritas').val(msg['data'][0]['PROGRAM_NAMA']);
-        $.ajax({
-          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getPrioritas/"+msg['data'][0]['PROGRAM_ID'],
-          type: "GET",
-          success: function(data){
-            $('#prioritas_program_prioritas').find('option').remove().end().append(data['data']).trigger('chosen:updated');
-          }
-        });   */ 
+        $('#asistensi_rekening').val(msg['aaData'][0]['KODE']+' '+msg['aaData'][0]['URAIAN']); 
+        $('#asistensi_anggaran').val(msg['aaData'][0]['SESUDAH']); 
         $('.overlay').fadeIn('fast',function(){
-          $('.input-riview').animate({'right':'0'},"linear");  
+          $('.input-riview').animate({'right':'0'},"linear"); 
           $("html, body").animate({ scrollTop: 0 }, "slow");
         });
       }
@@ -1544,16 +1587,15 @@
     $('#id-kegiatan').val(id);
     $('#table-output').DataTable().destroy();
     $('#table-output').DataTable({
-      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/nomenklatur/getOutput/"+id,
+      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/komponenterpakai/"+id+"/{{ $BL_ID }}",
       aoColumns: [
-      { mData: 'INDIKATOR' },
-      { mData: 'TOLAK_UKUR' },
-      { mData: 'TARGET' },
-      { mData: 'STATUS' },
-      { mData: 'OUTPUT_STATUS' },
-      { mData: 'LOKASI' },
-      { mData: 'CATATAN' },
-      { mData: 'AKSI' }]
+      { mData: 'KOMPONEN_ID',class:'hide' },
+      { mData: 'KOMPONEN_SATUAN',class:'' },
+      { mData: 'KOMPONEN_SHOW',class:'' },
+      { mData: 'KOMPONEN_HARGA_',class:'' },
+      { mData: 'KOMPONEN_KODE',class:'text-center' },
+      { mData: 'KOMPONEN_NAMA' },
+      { mData: 'KOMPONEN_HARGA' }]
     });
     $('#set-output-modal').modal('show');
   }

@@ -38,7 +38,7 @@
                 <div role="tabpanel" class="active tab-pane" id="tab-1">
                   <div class="table-responsive dataTables_wrapper">
                   <table ui-jq="dataTable" ui-options="{
-                        sAjaxSource: '{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/getMurni/0',
+                        sAjaxSource: '{{ url('/') }}/public/{{ $tahun }}/{{ $status }}/belanja-langsung/getMurni/1',
                         aoColumns: [
                           { mData: 'NO',class:'text-center' },
                           { mData: 'KEGIATAN' },
