@@ -261,14 +261,23 @@ class blController extends Controller
         //                 })->sum('RINCIAN_TOTAL');
         $totalAPBD  = RekapRincian::where('BL_ID',$id)->where('TAHAPAN_ID',$anggaran->TAHAP_4)->sum('RINCIAN_TOTAL');
         $program    = Kegiatan::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->value('PROGRAM_ID');
-        $outcome    = Outcome::where('PROGRAM_ID',$program)->get();
-        $impact     = Impact::where('PROGRAM_ID',$program)->get();
+        if($status=="murni"){
+            $outcome    = Outcome::where('PROGRAM_ID',$program)->get();
+            $impact     = Impact::where('PROGRAM_ID',$program)->get();
+        }else{
+            $outcome    = OutcomePerubahan::where('PROGRAM_ID',$program)->get();
+            $impact     = ImpactPerubahan::where('PROGRAM_ID',$program)->get();
+        }
         $referensi  = FALSE;
 
        if($tahun>2018 && $referensi){
             $output     = OutputMaster::where('KEGIATAN_ID',$bl->KEGIATAN_ID)->get();
         }else{
-            $output     = Output::where('BL_ID',$id)->get();     
+            if($status=="murni"){
+                $output     = Output::where('BL_ID',$id)->get(); 
+            }else{
+                $output     = OutputPerubahan::where('BL_ID',$id)->get(); 
+            }
         }
         
 
@@ -2324,16 +2333,107 @@ class blController extends Controller
         }
     }
 
-    public function setAsistensi($tahun,$status){
+    public function getAsistensi($tahun, $status, $skpd,$tipe){
+        $tahapan = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->where('TAHAPAN_SELESAI',0)->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_ID');
+        $dt       = Asistensi::where('TAHAPAN_ID',$tahapan);
+        $view           = array();
+        if($tipe==0){
+            $dt = $dt->where('ASISTENSI_STATUS', 0)->where('SKPD_ID', $skpd);
+        }else{
+            $dt = $dt->where('ASISTENSI_STATUS', 1)->where('SUB_ID', $skpd);
+        }
         
-            $asistensi     = new Asistensi;
-            $asistensi->BL_ID              = Input::get('BL_ID');
-            $asistensi->REKENING_ID      = Input::get('REKENING_ID');
-            $asistensi->CATATAN    = Input::get('CATATAN');
-            $asistensi->USER_CREATED       = Auth::user()->id;
-            $asistensi->CREATED_AT       = Carbon\Carbon::now();
-            $asistensi->save();
-            return 'Berhasil!';
+        $dt = $dt->get();
+        foreach ($dt as $dt) {
+            if($dt->ASISTENSI_TIPE=="REKENING_ID"){
+                $blid = $dt->BL_ID;
+                $id = $dt->VALUE;
+                if($status=='murni'){
+                    $kompbl     = Rincian::where('BL_ID',$blid)->where('REKENING_ID',$id)->select('KOMPONEN_ID')->get();
+                }else{
+                    $kompbl     = RincianPerubahan::where('BL_ID',$blid)->where('REKENING_ID',$id)->select('KOMPONEN_ID')->get();
+                }
+                
+                $komp       = array();
+                $i          = 0;
+                foreach($kompbl as $k){
+                    $komp[$i]   = $k->KOMPONEN_ID;
+                    $i++;
+                }
+                $data       = Komponen::whereHas('rekom', function($q) use ($id){
+                    $q->whereHas('rekening',function($x) use ($id){
+                        $x->where('REKENING_ID',$id);
+                    }); 
+                })->whereIn('KOMPONEN_ID',$komp)->where('KOMPONEN_KUNCI',0)->orderBy('KOMPONEN_KODE')->get();
+                foreach ($data as $data) {
+                    if($status=='murni'){
+                        $databl     = BL::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
+                    }else{
+                        $databl     = BLPerubahan::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
+                    }
+                    $nama       = $data->KOMPONEN_KODE."<br>".$data->KOMPONEN_NAMA."<br><p class='text-orange'>Spesifikasi : ".$data->KOMPONEN_SPESIFIKASI."</p>";
+                    array_push($view, array( 'ASISTENSI_ID'      =>$dt->ASISTENSI_ID,
+                                             'SKPD'      =>Subunit::where('SUB_ID',$dt->SUB_ID)->value('SUB_NAMA'),
+                                             'URAIAN'    =>$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.' - '.$databl->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.'.'.$databl->kegiatan->KEGIATAN_KODE.' - '.$databl->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->subunit->SUB_KODE.' - '.$databl->subunit->SUB_NAMA.'</span>',
+                                             'KONTEN'    =>$nama,
+                                             'CATATAN'  =>$dt->CATATAN,
+                                             'AKSI'    => '<a href="'.url('main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$blid).'"  title="Detail" class="action-edit"><i class="mi-eye"></i></a>'
+                                            ));
+                }
+            }
+        }
+        
+        $out = array("aaData"=>$view);      
+        return Response::JSON($out);
+    }    
+
+    public function setAsistensi($tahun,$status){
+        $tahapan = Tahapan::where('TAHAPAN_SELESAI',0)->first();
+        $asistensi     = new Asistensi;
+        $asistensi->BL_ID              = Input::get('BL_ID');
+        $asistensi->VALUE      = Input::get('REKENING_ID');
+        $asistensi->CATATAN    = Input::get('CATATAN');
+        $asistensi->USER_CREATED       = Auth::user()->id;
+        $asistensi->CREATED_AT       = Carbon\Carbon::now();
+        if($status=='murni'){
+            $skpd           = BL::where('BL_ID',Input::get('BL_ID'))->where('BL_TAHUN',$tahun)->value('SKPD_ID');
+        }else{
+            $skpd           = BLPerubahan::where('BL_ID',Input::get('BL_ID'))->where('BL_TAHUN',$tahun)->value('SKPD_ID');
+        }
+        //$skpd           = $this->getSKPD($tahun);
+        $asistensi->SKPD_ID       = $skpd;
+        $asistensi->ASISTENSI_STATUS       = 0;
+        $asistensi->TAHAPAN_ID       = $tahapan->TAHAPAN_ID;
+        $tipe       =Input::get('TIPE');
+        if(!isset($tipe)){
+            $tipe       = 'rekening';
+        }
+        if($tipe=="rekening"){
+            $asistensi->ASISTENSI_TIPE       = 'REKENING_ID';
+        }elseif($tipe=="impact"){
+            $asistensi->ASISTENSI_TIPE       = 'IMPACT_ID';
+        }elseif($tipe=="output"){
+            $asistensi->ASISTENSI_TIPE       = 'OUTPUT_ID';
+        }elseif($tipe=="outcome"){
+            $asistensi->ASISTENSI_TIPE       = 'OUTCOME_ID';
+        }
+        if(substr(Auth::user()->mod,7,1) == 0){
+            $asistensi->SUB_ID       = 327;
+        }elseif(substr(Auth::user()->mod,7,1) == 1){
+            $asistensi->SUB_ID       = 341;
+        }elseif(substr(Auth::user()->mod,7,1) == 2){
+            $asistensi->SUB_ID       = 395;
+        }elseif(substr(Auth::user()->mod,7,1) == 3){
+            $asistensi->SUB_ID       = 396;
+        }elseif(substr(Auth::user()->mod,7,1) == 4){
+            $asistensi->SUB_ID       = 394;
+        }elseif(substr(Auth::user()->mod,7,1) == 5){
+            $asistensi->SUB_ID       = 391;
+        }else{
+            $asistensi->SUB_ID       = 115;
+        }
+        $asistensi->save();
+        return 'Berhasil!';
     }
 
     public function kuncigiat($tahun,$status){
@@ -5024,7 +5124,7 @@ class blController extends Controller
             $aksi = '<div class="action visible pull-right">';
            // $aksi .='<span class="text-danger"><i class="fa fa-close"></i></span>';
             $aksi .='<span class="text-success"><i class="fa fa-check"></i></span>';
-            $aksi .='<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->REKENING_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
+            $aksi .='<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->REKENING_ID.'\',\'rekening\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
             $aksi       .= '<a onclick="return showKomponen(\''.$data->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
 
             array_push($view, array('KODE'      => $data->rekening->REKENING_KODE,
@@ -5043,7 +5143,7 @@ class blController extends Controller
         foreach($data_ as $data_){
             $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data_->REKENING_ID)->sum('REALISASI_TOTAL');
             
-            $aksi = '<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data_->REKENING_ID.'\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
+            $aksi = '<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data_->REKENING_ID.'\',\'rekening\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
             $aksi       .= '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data_->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
 
             array_push($view, array('KODE'      => $data_->rekening->REKENING_KODE,
@@ -5057,6 +5157,74 @@ class blController extends Controller
                                 ));
             $total['SEBELUM'] = $total['SEBELUM'] + $data_->total;
             $total['REALISASI'] = $total['REALISASI'] + $realisasi;
+        }
+        $out = array("aaData"=>$view,
+        "sebelum"=>number_format($total['SEBELUM'],0,'.',','),
+        "sesudah"=>number_format($total['SESUDAH'],0,'.',','),
+        "realisasi"=>number_format($total['REALISASI'],0,'.',','),     
+        "selisih"=>number_format($total['SESUDAH']-$total['REALISASI'],0,'.',','));      
+        return Response::JSON($out);
+    }
+
+    public function getringkasanrekening200($tahun,$status,$id){
+        $data   = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('DAT_BL_PERUBAHAN.BL_ID',$id)
+                        ->groupBy('SUBRINCIAN_ID','RINCIAN_KETERANGAN')
+                        ->select('SUBRINCIAN_ID','RINCIAN_KETERANGAN')
+                        ->selectRaw('SUM("RINCIAN_TOTAL") as total')
+                        ->get();
+        $data1  = RincianPerubahan::where('BL_ID',$id)->selectRaw('DISTINCT("SUBRINCIAN_ID")')->get()->toArray();
+        $data_  = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('DAT_BL.BL_ID',$id)
+                        ->whereNotIn('SUBRINCIAN_ID',$data1)
+                        ->groupBy('SUBRINCIAN_ID','RINCIAN_KETERANGAN')
+                        ->select('RINCIAN_KETERANGAN','SUBRINCIAN_ID')
+                        ->selectRaw('SUM("RINCIAN_TOTAL") as total')
+                        ->get();
+        $view   = array();
+        $total   = array('SEBELUM' => 0,'SESUDAH' => 0,'REALISASI' => 0);
+        foreach($data as $data){
+            $sebelum    = Rincian::where('DAT_BL.BL_ID',$id)->join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('DAT_RINCIAN.SUBRINCIAN_ID',$data->SUBRINCIAN_ID)->sum('RINCIAN_TOTAL');
+
+            //jika kode skpd 4.02.01 (bpka) dan 4.05.02 (sekda tp bagian orpad dan balap)
+
+            $aksi = '<div class="action visible pull-right">';
+           // $aksi .='<span class="text-danger"><i class="fa fa-close"></i></span>';
+            $aksi .='<span class="text-success"><i class="fa fa-check"></i></span>';
+            $aksi .='<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->SUBRINCIAN_ID.'\',\'rekening\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
+            $aksi       .= '<a onclick="return showKomponen(\''.$data->SUBRINCIAN_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
+            //if($data->total>200000000){
+                array_push($view, array(
+                'URAIAN'    => $data->subrincian->SUBRINCIAN_NAMA."<br><span class='text-orange'>".$data->RINCIAN_KETERANGAN."</span>",
+                'CLASS'   => ($realisasi>$data->total?1:0),
+                'SEBELUM'   => number_format($sebelum,0,'.',','),
+                'REALISASI' => number_format($realisasi,0,'.',','),
+                'SELISIH'   => number_format($data->total - $realisasi,0,'.',','),
+                'SESUDAH'   => number_format($data->total,0,'.',','),
+                'RIVIEW'   => $aksi
+            ));
+            $total['SEBELUM'] = $total['SEBELUM'] + $sebelum;
+            $total['SESUDAH'] = $total['SESUDAH'] + $data->total;
+            $total['REALISASI'] = $total['REALISASI'] + $realisasi;
+            //}
+        }
+        foreach($data_ as $data_){
+            $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data_->SUBRINCIAN_ID)->sum('REALISASI_TOTAL');
+            
+            $aksi = '<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data_->SUBRINCIAN_ID.'\',\'rekening\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
+            $aksi       .= '<div class="action visible pull-right"><a onclick="return showIndikatorGiat(\''.$data_->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
+            //if($data_->total>200000000){
+                array_push($view, array(
+                                    'URAIAN'    => $data_->subrincian->SUBRINCIAN_NAMA."<br><span class='text-orange'>".$data_->RINCIAN_KETERANGAN."</span>",
+                                    'CLASS'   => ($realisasi>$data_->total?1:0),
+                                    'SEBELUM'   => number_format($data_->total,0,'.',','),
+                                    'REALISASI' => number_format($realisasi,0,'.',','),
+                                    'SELISIH'   => number_format(0 - $realisasi,0,'.',','),                                    
+                                    'SESUDAH'   => number_format(0,0,'.',','),
+                                    'RIVIEW'   => $aksi
+                                ));
+                                $total['SEBELUM'] = $total['SEBELUM'] + $data_->total;
+                                $total['REALISASI'] = $total['REALISASI'] + $realisasi;
+            //}
+            
         }
         $out = array("aaData"=>$view,
         "sebelum"=>number_format($total['SEBELUM'],0,'.',','),

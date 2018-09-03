@@ -75,8 +75,67 @@
                   
         </div>
         <!-- / buttons -->
-
-        
+        @php 
+        $tahap = \App\Model\Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->where('TAHAPAN_SELESAI',0)->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_ID');
+        if(Auth::user()->level==0){
+          if(substr(Auth::user()->mod,7,1) == 0){
+            $asisten_skpd       = 327;
+          }elseif(substr(Auth::user()->mod,7,1) == 1){
+            $asisten_skpd       = 341;
+          }elseif(substr(Auth::user()->mod,7,1) == 2){
+            $asisten_skpd       = 395;
+          }elseif(substr(Auth::user()->mod,7,1) == 3){
+            $asisten_skpd       = 396;
+          }elseif(substr(Auth::user()->mod,7,1) == 4){
+            $asisten_skpd       = 394;
+          }elseif(substr(Auth::user()->mod,7,1) == 5){
+            $asisten_skpd       = 391;
+          }else{
+            $asisten_skpd      = 115;
+          }
+          $asisten_tipe = 1;
+          $asistensi = \App\Model\Asistensi::where('TAHAPAN_ID',$tahap)->where('SUB_ID',$asisten_skpd)->where('ASISTENSI_STATUS',1)->count(); 
+        }elseif(Auth::user()->level==1 || Auth::user()->level==2){
+          $asisten_skpd=\App\Model\UserBudget::where('USER_ID',Auth::user()->id)->where('TAHUN',$tahun)->value('SKPD_ID');
+          $asistensi = \App\Model\Asistensi::where('TAHAPAN_ID',$tahap)->where('SKPD_ID',$asisten_skpd)->where('ASISTENSI_STATUS',0)->count(); 
+          $asisten_tipe = 2;
+        }else{
+          $asisten_skpd=0;
+          $asisten_tipe = 0;
+        }
+        @endphp
+        @if(isset($asistensi))
+        @if($asistensi>0)
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+              <i class="icon-bdg_alert text14"></i>
+              <span class="visible-xs-inline">Notifikasi</span>
+              <span class="badge badge-sm up bg-danger pull-right-xs">{{$asistensi}}</span>
+            </a>
+            <!-- dropdown -->
+            <div class="dropdown-menu w-xl animated fadeIn">
+              <div class="panel bg-white">
+                <div class="panel-heading b-light bg-light">
+                  <strong>Kamu Punya <span>{{$asistensi}}</span> Asistensi</strong>
+                </div>
+                <div class="list-group">
+                  <a onclick="return showAsistensi('{{$asisten_skpd}}','{{$asisten_tipe}}')" class="list-group-item">
+                    <span class="clear block m-b-none">
+                      Asistensi Belanja Langsung<br>
+                      <!--small class="text-muted">1 hour ago</small-->
+                    </span>
+                  </a>
+                </div>
+                <div class="panel-footer text-sm">
+                </div>
+              </div>
+            </div>
+            <!-- / dropdown -->
+          </li>
+        </ul>
+        @endif
+        @endif
 
         <!-- nabar right -->
         <ul class="nav navbar-nav navbar-right">
@@ -1059,6 +1118,41 @@
     </div>
   </div>
 </div>
+
+@if(isset($asistensi))
+<div class="set-asistensi modal fade " id="set-asistensi-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog bg-white modal-lg">
+    <div class="panel panel-default">
+      <div class="wrapper-lg">
+        <h5 class="inline font-semibold text-orange m-n text16 ">Daftar Asistensi</h5>
+      </div>        
+      <div class="table-responsive">
+        <table class="table table-popup table-striped b-t b-b table-asistensi" id="table-asistensi">
+        <thead>
+            <tr>
+              <th class="hide">ID</th>
+              <th>SKPD</th>
+              <th>Kegiatan / Program</th>
+              <th>Asistensi</th>
+              <th>Catatan</th>  
+              <th>Detail</th>                       
+            </tr>
+            <tr>
+              <th class="hide"></th>
+              <th colspan="5" class="th_search">
+                <i class="icon-bdg_search"></i>
+                <input type="search" id="cari-asistensi" class="cari-komponen form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+@endif
 {{-- {{ Auth::user() }} --}}
  <!-- Popup Belanja Komponen -->
 <script src="{{ url('/') }}/libs_dashboard/jquery/jquery/dist/jquery.js"></script>
@@ -1119,6 +1213,22 @@
         });
     }
   }
+
+  function showAsistensi(id,tipe){
+    $('#table-asistensi').DataTable().destroy();
+    $('#table-asistensi').DataTable({
+      sAjaxSource: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/asistensi/"+id+"/"+tipe,
+      aoColumns: [
+      { mData: 'ASISTENSI_ID',class:'hide' },
+      { mData: 'SKPD',class:'' },
+      { mData: 'URAIAN',class:'' },
+      { mData: 'KONTEN',class:'' },
+      { mData: 'CATATAN',class:'text-center' },
+      { mData: 'AKSI',class:'text-center' }]
+    });
+    $('#set-asistensi-modal').modal('show');
+  }
+
   $( "#budgeting" ).mousemove(function( event ) {
     
   });

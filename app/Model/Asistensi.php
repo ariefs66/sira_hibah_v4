@@ -16,6 +16,6 @@ class Asistensi extends Model
     }
 
     public function rekening(){
-        return $this->hasMany('App\Model\Rekening', 'REKENING_ID');
+        return $this->hasMany('App\Model\Rekening', 'VALUE');
     }
 }

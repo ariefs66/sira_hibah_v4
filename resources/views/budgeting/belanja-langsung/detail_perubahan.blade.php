@@ -112,14 +112,67 @@
                         <label class="col-sm-10 font-semibold">: {{ $bl->lokasi->LOKASI_NAMA }}</label>
                       </div>                                  
                       <hr class="m-t-xl">
+                      @if(substr(Auth::user()->mod,7,1) == 1 or substr(Auth::user()->mod,7,1) == 3 or substr(Auth::user()->mod,7,1) == 5)
                       <div class="form-group">
                         <h5 class="text-orange">Indikator Kegiatan</h5>
                         <table class="table">
                           <thead>
                             <tr>
                               <th width="20%">Indikator</th>
-                              <th width="60%">Tolak Ukur</th>
-                              <th width="20%">Target</th>
+                              <th width="40%">Tolak Ukur</th>
+                              <th width="15%">Target</th>
+                              <th width="5%">Aksi</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            @if($outcome)
+                            @foreach($outcome as $outcome)
+                            <tr>
+                              <td>Capaian Program / Sasaran</td>
+                              <td>{{ $outcome->OUTCOME_TOLAK_UKUR }}</td>
+                              <td>{{ $outcome->OUTCOME_TARGET }} {{ $outcome->satuan->SATUAN_NAMA }}</td>
+                              <td><span class="text-success"><i class="fa fa-check"></i></span>&nbsp;<a title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a onclick="" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></td>
+                            </tr>
+                            @endforeach
+                            @endif
+                            <tr>
+                              <td>Masukan / Input</td>
+                              <td>Dana Yang Dibutuhan</td>
+                              <td id="masukan">Rp. {{ number_format($rinciantotal,0,'.',',') }}</td>
+                              <td id="masukan"></td>
+                            </tr>
+                            @if($output)
+                            @foreach($output as $output)
+                            <tr>
+                              <td>Keluaran / Output</td>
+                              <td>{{ $output->OUTPUT_TOLAK_UKUR }}</td>
+                              <td>{{ $output->OUTPUT_TARGET }} {{ $output->satuan->SATUAN_NAMA }}</td>
+                              <td><span class="text-success"><i class="fa fa-check"></i></span>&nbsp;<a title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a onclick="" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></td>
+                            </tr>
+                            @endforeach
+                            @endif
+                            @if($impact)                            
+                            @foreach($impact as $impact)
+                            <tr>
+                              <td>Hasil / Outcome</td>
+                              <td>{{ $impact->IMPACT_TOLAK_UKUR }}</td>
+                              <td>{{ $impact->IMPACT_TARGET }} {{ $impact->satuan->SATUAN_NAMA }}</td>
+                              <td><span class="text-success"><i class="fa fa-check"></i></span>&nbsp;<a title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a onclick="" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></td>
+                            </tr>
+                            @endforeach
+                            @endif                            
+                          </tbody>
+                        </table>
+                      </div>
+                      @else
+                      <div class="form-group">
+                        <h5 class="text-orange">Indikator Kegiatan</h5>
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th width="20%">Indikator</th>
+                              <th width="40%">Tolak Ukur</th>
+                              <th width="15%">Target</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -158,6 +211,8 @@
                           </tbody>
                         </table>
                       </div>
+                      @endif
+                      
                     </form>
                   </div>
                 </div>
@@ -167,6 +222,7 @@
         </div>
       </div>
 
+@if(substr(Auth::user()->mod,7,1) == 0)
       <div class="wrapper-lg m-t-n-xxl">
           <div class="row">
             <div class="col-md-12">
@@ -240,6 +296,65 @@
             </div>
           </div>
         </div>
+@elseif(substr(Auth::user()->mod,7,1) == 2 or substr(Auth::user()->mod,7,1) == 4)
+<div class="wrapper-lg m-t-n-xxl">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="panel bg-white">
+                <div class="wrapper-lg">
+                  <h5 class="inline font-semibold text-orange m-n ">Ringkasan Paket Pekerjaan Diatas 200 Juta</h5>
+                </div>
+                <div class="tab-content bg-white">
+                  <div role="tabpanel" class="active tab-pane" id="tab-1">
+                    <div class="table-responsive dataTables_wrapper">
+                     <table ui-jq="dataTable" ui-options="{
+                           sAjaxSource: '{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/ringkasanrekening200/{{ $BL_ID }}',
+                           aoColumns: [
+                           { mData: 'URAIAN' },
+                           { mData: 'SEBELUM',class:'text text-right' },
+                           { mData: 'SESUDAH',class:'text text-right' },
+                           { mData: 'RIVIEW',class:'text text-right' },
+                           { mData: 'CLASS',class:'hide' }],
+                          initComplete:function(setting,json){
+                              $('#sebelum').html(json.sebelum);
+                              $('#sesudah').html(json.sesudah);
+                              $('#selisih').html(json.selisih);
+                          }
+                         }" class="table table-jurnal table-striped b-t b-b" id="table-rekening">
+                         <thead>
+                          <tr>
+                            <th class="text text-center">Uraian Paket Pekerjaan / Subrincian <br>(1)</th>
+                            <th class="text text-center">Murni<br>(2)</th>                                      
+                            <th class="text text-center">@if($status=='pergeseran') Pergeseran @else Perubahan @endif<br>(3)</th>
+                            <th class="text text-center">Aksi<br></th>    
+                            <th class="hide">Warna<br>(0)</th>                                  
+                          </tr>
+                          <tr>
+                            <th colspan="6" class="th_search">
+                              <i class="icon-bdg_search"></i>
+                              <input type="search" class="table-search form-control b-none w-full" placeholder="Cari" aria-controls="DataTables_Table_0">
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>  
+                    <tfoot>
+                      <tr>
+                        <td class="text text-right" colspan="2"> <b>TOTAL</b></td>
+                        <td class="text text-right"><b>Rp. <text id="sebelum"></text></b></td>                                      
+                        <td class="text text-right"><b>Rp. <text id="sesudah"></text></b></td>                                                                          
+                        <td class="text text-right"><b>Rp. <text id="selisih"></text></b></td>
+                      </tr>  
+                    </tfoot>                                    
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+@endif
 
       <div class="wrapper-lg" style="margin-top: -75px;">
         <div class="row">
@@ -871,17 +986,18 @@
           
          
           <div class="form-group">
-            <label for="nama_program_prioritas" class="col-md-3">Rekening</label>          
+            <label for="asistensi_rekening" id="asistensi_rekening_text" class="col-md-3">Rekening</label>          
             <div class="col-sm-9">        
               <input type="hidden" class="form-control" name="asistensi_id" id="asistensi_id">        
               <input type="hidden" class="form-control" name="asistensi_blid" id="asistensi_blid" value="{{$BL_ID}}">        
-              <input type="hidden" class="form-control" name="asistensi_rekening_id" id="asistensi_rekening_id">        
+              <input type="hidden" class="form-control" name="asistensi_rekening_id" id="asistensi_rekening_id">         
+              <input type="hidden" class="form-control" name="asistensi_tipe" id="asistensi_tipe">          
               <input type="text" class="form-control" readonly placeholder="Masukan Tahun Program" name="asistensi_rekening" id="asistensi_rekening" value="" disabled> 
             </div> 
           </div>
 
           <div class="form-group">
-            <label for="nama_program_prioritas" class="col-md-3">Anggaran</label>          
+            <label for="asistensi_anggaran" id="asistensi_anggaran_text" class="col-md-3">Anggaran</label>          
             <div class="col-sm-9">
               <input type="text" class="form-control" readonly placeholder="Anngaran Rekening" name="asistensi_anggaran" id="asistensi_anggaran" value="" disabled> 
             </div> 
@@ -1376,16 +1492,18 @@
     token  = $('#token').val();
     id  = $('#asistensi_id').val();
     rekid  = $('#asistensi_rekening_id').val();
+    tipe  = $('#asistensi_tipe').val();
     catatan  = $('#catatan').val();
     $.ajax({
         url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/simpanasistensi",
         type: "POST",
         data: {'_token'         : token,
-              'ID' : id, 
+              'ID'              : id, 
               'BL_ID'           : '{{ $BL_ID }}',
-              'REKENING_ID'           : rekid,
-              'CATATAN'           : catatan,
-              },
+              'REKENING_ID'     : rekid,
+              'CATATAN'         : catatan,
+              'TIPE'  : tipe,
+        },
         success: function(msg){
           $('#asistensi_id').val('');
           $('#asistensi_rekening_id').val('');
@@ -1566,21 +1684,58 @@
     $('#sisa-skpd').val(sisa.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")); 
   }
 
-  function inputRiview(id) {
+  function inputRiview(id, tipe) {
     $('#judul-prioritas').text('Form Keterangan Asistensi');
     $('#asistensi_rekening_id').val(id);
-    $.ajax({
+    if(tipe=="rekening"){
+      $.ajax({
       url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rekening/{{ $BL_ID }}/"+id,
       type: "GET",
       success: function(msg){
+        $('#asistensi_rekening_text').text('Rekening');
+        $('#asistensi_anggaran_text').text('Anggaran');
         $('#asistensi_rekening').val(msg['aaData'][0]['KODE']+' '+msg['aaData'][0]['URAIAN']); 
-        $('#asistensi_anggaran').val(msg['aaData'][0]['SESUDAH']); 
+        $('#asistensi_anggaran').val(msg['aaData'][0]['SESUDAH']);
+        $('#asistensi_tipe').val('rekening'); 
         $('.overlay').fadeIn('fast',function(){
           $('.input-riview').animate({'right':'0'},"linear"); 
           $("html, body").animate({ scrollTop: 0 }, "slow");
         });
       }
-    });    
+      });    
+    }else if(tipe=="impact"){
+      $.ajax({
+      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/program/"+tipe+"/"+id,
+      type: "GET",
+      success: function(msg){
+        $('#asistensi_rekening_text').text('Tolak Ukur');
+        $('#asistensi_anggaran_text').text('Target');
+        $('#asistensi_rekening').val(msg['IMPACT_TOLAK_UKUR']);
+        $('#asistensi_anggaran').val(msg['IMPACT_TARGET']+' '); 
+        $('#asistensi_tipe').val('impact');
+        $('.overlay').fadeIn('fast',function(){
+          $('.input-riview').animate({'right':'0'},"linear"); 
+          $("html, body").animate({ scrollTop: 0 }, "slow");
+        });
+      }
+      }); 
+    }else if(tipe=="output"){
+      $.ajax({
+      url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/pengaturan/kegiatan/"+tipe+"/"+id,
+      type: "GET",
+      success: function(msg){
+        $('#asistensi_rekening_text').text('Tolak Ukur');
+        $('#asistensi_anggaran_text').text('Target');
+        $('#asistensi_rekening').val(msg['OUTPUT_TOLAK_UKUR']); 
+        $('#asistensi_anggaran').val(msg['OUTPUT_TARGET']+' '); 
+        $('#asistensi_tipe').val('output');
+        $('.overlay').fadeIn('fast',function(){
+          $('.input-riview').animate({'right':'0'},"linear"); 
+          $("html, body").animate({ scrollTop: 0 }, "slow");
+        });
+      }
+      }); 
+    }
   }
 
   function showKomponen(id){
