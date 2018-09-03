@@ -2337,41 +2337,61 @@ class blController extends Controller
         $tahapan = Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->where('TAHAPAN_SELESAI',0)->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_ID');
         $dt       = Asistensi::where('TAHAPAN_ID',$tahapan);
         $view           = array();
-        if($tipe==0){
+        if($tipe==2){
             $dt = $dt->where('ASISTENSI_STATUS', 0)->where('SKPD_ID', $skpd);
-        }else{
+        }elseif($tipe==1){
             $dt = $dt->where('ASISTENSI_STATUS', 1)->where('SUB_ID', $skpd);
         }
         
         $dt = $dt->get();
         foreach ($dt as $dt) {
             if($dt->ASISTENSI_TIPE=="REKENING_ID"){
+
                 $blid = $dt->BL_ID;
                 $id = $dt->VALUE;
                 if($status=='murni'){
-                    $kompbl     = Rincian::where('BL_ID',$blid)->where('REKENING_ID',$id)->select('KOMPONEN_ID')->get();
-                }else{
-                    $kompbl     = RincianPerubahan::where('BL_ID',$blid)->where('REKENING_ID',$id)->select('KOMPONEN_ID')->get();
+                    $data  = Rincian::join('BUDGETING.DAT_BL','DAT_BL.BL_ID','=','DAT_RINCIAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('DAT_BL.BL_ID',$blid)
+                    ->where('REKENING_ID',$id)
+                    ->groupBy('REKENING_ID')
+                    ->select('REKENING_ID')
+                    ->selectRaw('SUM("RINCIAN_TOTAL") as total')
+                    ->get();
+                } else {
+                    $data   = RincianPerubahan::join('BUDGETING.DAT_BL_PERUBAHAN','DAT_BL_PERUBAHAN.BL_ID','=','DAT_RINCIAN_PERUBAHAN.BL_ID')->where('BL_TAHUN',$tahun)->where('BL_DELETED',0)->where('DAT_BL_PERUBAHAN.BL_ID',$blid)
+                    ->where('REKENING_ID',$id)
+                    ->groupBy('REKENING_ID')
+                    ->select('REKENING_ID')
+                    ->selectRaw('SUM("RINCIAN_TOTAL") as total')
+                    ->get();
                 }
-                
-                $komp       = array();
-                $i          = 0;
-                foreach($kompbl as $k){
-                    $komp[$i]   = $k->KOMPONEN_ID;
-                    $i++;
-                }
-                $data       = Komponen::whereHas('rekom', function($q) use ($id){
-                    $q->whereHas('rekening',function($x) use ($id){
-                        $x->where('REKENING_ID',$id);
-                    }); 
-                })->whereIn('KOMPONEN_ID',$komp)->where('KOMPONEN_KUNCI',0)->orderBy('KOMPONEN_KODE')->get();
-                foreach ($data as $data) {
+                foreach($data as $data){
                     if($status=='murni'){
                         $databl     = BL::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
                     }else{
                         $databl     = BLPerubahan::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
                     }
-                    $nama       = $data->KOMPONEN_KODE."<br>".$data->KOMPONEN_NAMA."<br><p class='text-orange'>Spesifikasi : ".$data->KOMPONEN_SPESIFIKASI."</p>";
+                    $nama       = $data->rekening->REKENING_KODE . " - " . $data->rekening->REKENING_NAMA . "<br><p class='text-orange'> Anggaran: " . number_format($data->total,0,'.',',')."</p>";
+                    array_push($view, array( 'ASISTENSI_ID'      =>$dt->ASISTENSI_ID,
+                                            'SKPD'      =>Subunit::where('SUB_ID',$dt->SUB_ID)->value('SUB_NAMA'),
+                                            'URAIAN'    =>$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.' - '.$databl->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.'.'.$databl->kegiatan->KEGIATAN_KODE.' - '.$databl->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->subunit->SUB_KODE.' - '.$databl->subunit->SUB_NAMA.'</span>',
+                                            'KONTEN'    =>$nama,
+                                            'CATATAN'  =>$dt->CATATAN,
+                                            'AKSI'    => '<a href="'.url('main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$blid).'"  title="Detail" class="action-edit"><i class="mi-eye"></i></a>'
+                                                    ));
+                }
+
+            }elseif($dt->ASISTENSI_TIPE=="IMPACT_ID"){
+                $blid = $dt->BL_ID;
+                $id = $dt->VALUE;
+                if ($status=="murni"){
+                    $impact     = Impact::where('IMPACT_ID',$id)->get();
+                    $databl     = BL::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
+                    }else{
+                    $impact     = ImpactPerubahan::where('IMPACT_ID',$id)->get();
+                    $databl     = BLPerubahan::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
+                    }
+                    foreach ($impact as $data) {
+                        $nama = $data->IMPACT_TOLAK_UKUR . ' : '. $data->IMPACT_TARGET." ".$data->satuan->SATUAN_NAMA;
                     array_push($view, array( 'ASISTENSI_ID'      =>$dt->ASISTENSI_ID,
                                              'SKPD'      =>Subunit::where('SUB_ID',$dt->SUB_ID)->value('SUB_NAMA'),
                                              'URAIAN'    =>$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.' - '.$databl->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.'.'.$databl->kegiatan->KEGIATAN_KODE.' - '.$databl->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->subunit->SUB_KODE.' - '.$databl->subunit->SUB_NAMA.'</span>',
@@ -2379,7 +2399,47 @@ class blController extends Controller
                                              'CATATAN'  =>$dt->CATATAN,
                                              'AKSI'    => '<a href="'.url('main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$blid).'"  title="Detail" class="action-edit"><i class="mi-eye"></i></a>'
                                             ));
-                }
+                    }
+            }elseif($dt->ASISTENSI_TIPE=="OUTCOME_ID"){
+                $blid = $dt->BL_ID;
+                $id = $dt->VALUE;
+                if ($status=="murni"){
+                    $impact     = Outcome::where('OUTCOME_ID',$id)->get();
+                    $databl     = BL::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
+                    }else{
+                    $impact     = OutcomePerubahan::where('OUTCOME_ID',$id)->get();
+                    $databl     = BLPerubahan::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
+                    }
+                    foreach ($impact as $data) {
+                        $nama = $data->IMPACT_TOLAK_UKUR . ' : '. $data->OUTCOME_TARGET." ".$data->satuan->SATUAN_NAMA;
+                    array_push($view, array( 'ASISTENSI_ID'      =>$dt->ASISTENSI_ID,
+                                             'SKPD'      =>Subunit::where('SUB_ID',$dt->SUB_ID)->value('SUB_NAMA'),
+                                             'URAIAN'    =>$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.' - '.$databl->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.'.'.$databl->kegiatan->KEGIATAN_KODE.' - '.$databl->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->subunit->SUB_KODE.' - '.$databl->subunit->SUB_NAMA.'</span>',
+                                             'KONTEN'    =>$nama,
+                                             'CATATAN'  =>$dt->CATATAN,
+                                             'AKSI'    => '<a href="'.url('main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$blid).'"  title="Detail" class="action-edit"><i class="mi-eye"></i></a>'
+                                            ));
+                    }
+            }elseif($dt->ASISTENSI_TIPE=="OUTPUT_ID"){
+                $blid = $dt->BL_ID;
+                $id = $dt->VALUE;
+                if ($status=="murni"){
+                    $impact     = Output::where('OUTPUT_ID',$id)->get();
+                    $databl     = BL::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
+                    }else{
+                    $impact     = OutputPerubahan::where('OUTPUT_ID',$id)->get();
+                    $databl     = BLPerubahan::where('BL_ID',$blid)->where('BL_TAHUN',$tahun)->first();
+                    }
+                    foreach ($impact as $data) {
+                        $nama = $data->OUTPUT_TOLAK_UKUR . ' : '. $data->OUTPUT_TARGET." ".$data->satuan->SATUAN_NAMA;
+                    array_push($view, array( 'ASISTENSI_ID'      =>$dt->ASISTENSI_ID,
+                                             'SKPD'      =>Subunit::where('SUB_ID',$dt->SUB_ID)->value('SUB_NAMA'),
+                                             'URAIAN'    =>$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.' - '.$databl->kegiatan->program->PROGRAM_NAMA.'<br><p class="text-orange">'.$databl->kegiatan->program->urusan->URUSAN_KODE.'.'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->kegiatan->program->PROGRAM_KODE.'.'.$databl->kegiatan->KEGIATAN_KODE.' - '.$databl->kegiatan->KEGIATAN_NAMA.'</p><span class="text-success">'.$databl->subunit->skpd->SKPD_KODE.'.'.$databl->subunit->SUB_KODE.' - '.$databl->subunit->SUB_NAMA.'</span>',
+                                             'KONTEN'    =>$nama,
+                                             'CATATAN'  =>$dt->CATATAN,
+                                             'AKSI'    => '<a href="'.url('main/'.$tahun.'/'.$status.'/belanja-langsung/detail/'.$blid).'"  title="Detail" class="action-edit"><i class="mi-eye"></i></a>'
+                                            ));
+                    }
             }
         }
         

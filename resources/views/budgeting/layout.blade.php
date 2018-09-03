@@ -1119,7 +1119,6 @@
   </div>
 </div>
 
-@if(isset($asistensi))
 <div class="set-asistensi modal fade " id="set-asistensi-modal" tabindex="-1" role="dialog">
   <div class="modal-dialog bg-white modal-lg">
     <div class="panel panel-default">
@@ -1127,7 +1126,7 @@
         <h5 class="inline font-semibold text-orange m-n text16 ">Daftar Asistensi</h5>
       </div>        
       <div class="table-responsive">
-        <table class="table table-popup table-striped b-t b-b table-asistensi" id="table-asistensi">
+        <table ui-jq="dataTable" class="table table-popup table-striped b-t b-b table-asistensi" id="table-asistensi">
         <thead>
             <tr>
               <th class="hide">ID</th>
@@ -1152,7 +1151,7 @@
     </div>
   </div>
 </div>
-@endif
+
 {{-- {{ Auth::user() }} --}}
  <!-- Popup Belanja Komponen -->
 <script src="{{ url('/') }}/libs_dashboard/jquery/jquery/dist/jquery.js"></script>
