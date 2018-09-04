@@ -428,7 +428,8 @@ class statistikController extends Controller{
         $Kd_bidang    = substr($skpd->SKPD_KODE, 2,2)*1;
         $Kd_unit      = substr($skpd->SKPD_KODE, 5,2)*1;
         $tahunmin     = $tahun-1;
-        $t2017        = DB::connection('sqlsrv')
+        
+        /*$t2017        = DB::connection('sqlsrv')
                         ->select("SELECT sum(Total) as Total 
                                   FROM dbo.Ta_RASK_Arsip rincian
                                   where rincian.Kd_Urusan = ".$Kd_urusan." 
@@ -457,7 +458,10 @@ class statistikController extends Controller{
           }
         }else{
           $ket  = "100";          
-        }
+        }*/
+        $ket  = "-";          
+        $total2017  = "0";          
+
         
     		array_push($view, array( 'ID'        		=>$skpd->SKPD_ID,
                                      'KODE'       		=>$skpd->SKPD_KODE,
@@ -527,6 +531,7 @@ class statistikController extends Controller{
 
     public function urusanApi($tahun,$status){
       $urusan   = Urusan::where('URUSAN_TAHUN',$tahun)->get();
+
       $view     = array();      
       foreach ($urusan as $u) {
         $id         = $u->URUSAN_ID;
@@ -535,6 +540,7 @@ class statistikController extends Controller{
                             $s->where('URUSAN_ID',$id);
                           });
                         })->selectRaw('COUNT(DISTINCT("KEGIATAN_ID")) AS total')->first();
+
         $totalgiat = $totalgiat->total;
         $totalgiatvalidasi  = $this->setStatusBL($tahun,$status)->whereHas('kegiatan',function($r) use($id){
                           $r->whereHas('program',function($s) use($id){
@@ -559,7 +565,9 @@ class statistikController extends Controller{
                       ->sum('BL_PAGU');
         $idprog     = str_replace(".","",$u->URUSAN_KODE);
         $tahunmin   = $tahun-1;
-        $t2017        = DB::connection('sqlsrv')
+        
+        
+        /*$t2017        = DB::connection('sqlsrv')
                         ->select("SELECT sum(Total) as Total 
                                   FROM dbo.Ta_RASK_Arsip rincian
                                   where rincian.Id_Prog = ".$idprog."
@@ -590,7 +598,9 @@ class statistikController extends Controller{
           }
         }else{
           $ket  = "100";          
-        }
+        }*/
+        $ket  = "-";          
+        $total2017  = 0;          
 
         array_push($view, array('ID'        =>$u->URUSAN_ID,
                                 'KODE'      =>$u->URUSAN_KODE,
@@ -1190,6 +1200,16 @@ class statistikController extends Controller{
                       $x->where('KEGIATAN_ID',$id)->where('BL_DELETED',0);
                     })->sum('RINCIAN_TOTAL');
         $pagu     = $this->setStatusBL($tahun,$status)->where('KEGIATAN_ID',$id)->where('BL_DELETED',0)->where('BL_VALIDASI',1)->sum('BL_PAGU');
+        
+        //inisialisasi 
+        if($pd=="" || $id=="" || $bl->kegiatan->KEGIATAN_NAMA=="" || $pagu=="" || $rincian==""){
+          $pd = "-";
+          $id = "-";
+          $bl->kegiatan->KEGIATAN_NAMA = "-";
+          $pagu = 0;
+          $rincian = 0;
+        }
+
         array_push($view, array('NO'        => $i++,
                                 'ID'        => $id,
                                 'NAMA'      => $bl->kegiatan->KEGIATAN_NAMA,
