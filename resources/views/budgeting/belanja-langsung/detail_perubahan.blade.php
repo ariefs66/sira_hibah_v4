@@ -1516,6 +1516,56 @@
       });
   }
 
+  function setAsistensi(id){
+      var token        = $('#token').val();
+      @if(Auth::user()->level == 0)
+      var status       = 2;
+      var back       = 1;
+      @else
+      var status       = 1;
+      var back         = 0;
+      @endif
+      
+      $.confirm({
+          title: 'Validasi Asistensi!',
+          content: 'Yakin validasi data?',
+          buttons: {
+              Ya: {
+                  btnClass: 'btn-success',
+                  action: function(){
+                    $.ajax({
+                        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/statusasistensi",
+                        type: "POST",
+                        data: {'_token'         : token,
+                              'ASISTENSI_ID'           : id,
+                              'STATUS'           : status},
+                        success: function(msg){
+                            $('#table-rekening').DataTable().ajax.reload();                          
+                            $.alert(msg);
+                          }
+                    });
+                  }
+              },
+              Tidak: {
+                btnClass: 'btn-warning',
+                  action: function(){
+                    $.ajax({
+                        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/statusasistensi",
+                        type: "POST",
+                        data: {'_token'         : token,
+                              'ASISTENSI_ID'      : id,
+                              'STATUS'           : back},
+                        success: function(msg){
+                            $('#table-rekening').DataTable().ajax.reload();                          
+                            $.alert(msg);
+                          }
+                    });
+                  }
+              }
+          }
+      });
+  }
+
   function hapuscb(){
     var token        = $('#token').val();    
     $.confirm({

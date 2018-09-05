@@ -2447,6 +2447,21 @@ class blController extends Controller
         return Response::JSON($out);
     }    
 
+    public function setAsistensiStatus($tahun,$status,Request $req){
+        $asistensi_id=Input::get('ASISTENSI_ID');
+        $asistensi_status=Input::get('STATUS');
+        if(isset($asistensi_id) && $asistensi_id>0){
+            $asistensi = Asistensi::find($asistensi_id);
+            $asistensi->ASISTENSI_STATUS   = $asistensi_status;
+            $asistensi->USER_UPDATED       = Auth::user()->id;
+            $asistensi->UPDATED_AT       = Carbon\Carbon::now();
+            $asistensi->save();
+            return 'Berhasil!';
+        }else{
+            return 'Terjadi Kesalahan!';
+        }
+    }
+
     public function setAsistensi($tahun,$status){
         $tahapan = Tahapan::where('TAHAPAN_SELESAI',0)->first();
         $asistensi     = new Asistensi;
@@ -5183,7 +5198,17 @@ class blController extends Controller
 
             $aksi = '<div class="action visible pull-right">';
            // $aksi .='<span class="text-danger"><i class="fa fa-close"></i></span>';
-            $aksi .='<span class="text-success"><i class="fa fa-check"></i></span>';
+            $asistensi = Asistensi::where('VALUE',$data->REKENING_ID)->where('BL_ID',$id)->first();
+            if(!empty($asistensi)){
+                if($asistensi->ASISTENSI_STATUS == 2){
+                    $aksi .='<span class="text-success"><i class="fa fa-check" onclick="return setAsistensi(\''.$asistensi->ASISTENSI_ID.'\')"></i></span>';
+                }elseif($asistensi->ASISTENSI_STATUS == 1){
+                    $aksi .='<span class="text-warning"><i class="fa fa-asterisk" onclick="return setAsistensi(\''.$asistensi->ASISTENSI_ID.'\')"></i></span>';
+                }elseif($asistensi->ASISTENSI_STATUS == 0){
+                    $aksi .='<span class="text-danger"><i class="fa fa-close" onclick="return setAsistensi(\''.$asistensi->ASISTENSI_ID.'\')"></i></span>';
+                }
+            }
+            
             $aksi .='<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->REKENING_ID.'\',\'rekening\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
             $aksi       .= '<a onclick="return showKomponen(\''.$data->REKENING_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
 

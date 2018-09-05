@@ -102,6 +102,7 @@ Route::post('/main/{tahun}/{status}/belanja-langsung/akb/hapus', 'Budgeting\blCo
 
 Route::post('/main/{tahun}/{status}/belanja-langsung/simpanpaket', 'Budgeting\blController@setPaket');
 Route::post('/main/{tahun}/{status}/belanja-langsung/simpanasistensi', 'Budgeting\blController@setAsistensi');
+Route::post('/main/{tahun}/{status}/belanja-langsung/statusasistensi', 'Budgeting\blController@setAsistensiStatus');
 Route::post('/main/{tahun}/{status}/belanja-langsung/setpagu', 'Budgeting\blController@setPagu');
 Route::post('/main/{tahun}/{status}/belanja-langsung/urgensi/simpan', 'Budgeting\blController@setUrgensi');
 Route::post('/main/{tahun}/{status}/belanja-langsung/usulan-pagu/terima', 'Budgeting\blController@usulanpaguterima');
