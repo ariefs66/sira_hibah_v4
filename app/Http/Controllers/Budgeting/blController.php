@@ -5204,7 +5204,7 @@ class blController extends Controller
                     $aksi .='<span class="text-success"><i class="fa fa-check" onclick="return setAsistensi(\''.$asistensi->ASISTENSI_ID.'\')"></i></span>';
                 }elseif($asistensi->ASISTENSI_STATUS == 1){
                     $aksi .='<span class="text-warning"><i class="fa fa-asterisk" onclick="return setAsistensi(\''.$asistensi->ASISTENSI_ID.'\')"></i></span>';
-                }elseif($asistensi->ASISTENSI_STATUS == 0){
+                }elseif($asistensi->ASISTENSI_STATUS == 0 && Auth::user()->level != 0){
                     $aksi .='<span class="text-danger"><i class="fa fa-close" onclick="return setAsistensi(\''.$asistensi->ASISTENSI_ID.'\')"></i></span>';
                 }
             }
