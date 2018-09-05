@@ -76,6 +76,7 @@
                                 </div>
                               </div>
                   </div>
+
                 <div class="col-xs-6">
                   <div class="wrapper text-left">
                     <p class="border-bottom border-bottom padder-v m-b-md m-t-sm"><span class="m-b-xs">Total Belanja Pegawai</span> <br/> 
@@ -88,6 +89,126 @@
                 </div>
                 </div>
               </div>
+
+
+               <div class="col-md-4">
+              <div class="panel panel-default" style="height: 490px;overflow: scroll;">
+                <div class="panel-body no-padder">
+                  <div class="wrapper-lg m-t-n-sm">
+                    <h5 class="inline font-semibold text-orange m-n ">Info Statistik</h5>
+                  </div>
+                  <div class="tab-content tab-content-alt bg-white m-t-n-md">
+                  <table class="table">
+                    <tr>
+                      <th>No</th>
+                      <th>Menu</th>
+                      <th>Tinjau</th>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>Urusan</td>
+                      <td class="text-info"><a href="" target="_blank"><i class="fa fa-pencil"> Detail</i></a></td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Perangkat Daerah</td>
+                      <td class="text-info"><i class="fa fa-pencil"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Program</td>
+                      <td class="text-info"><i class="fa fa-pencil"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Kegiatan</td>
+                      <td class="text-info"><i class="fa fa-pencil"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>Kegiatan Non Urusan</td>
+                      <td class="text-info"><i class="fa fa-pencil"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>6</td>
+                      <td>Paket</td>
+                      <td class="text-info"><i class="fa fa-pencil"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>7</td>
+                      <td>Indikator</td>
+                      <td class="text-info"><i class="fa fa-check"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>8</td>
+                      <td>Musrenbang</td>
+                      <td class="text-info"><i class="fa fa-check"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>9</td>
+                      <td>Tagging</td>
+                      <td class="text-info"><i class="fa fa-check"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>10</td>
+                      <td>Kategori Pagu</td>
+                      <td class="text-info"><i class="fa fa-check"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>11</td>
+                      <td>Rekening</td>
+                      <td class="text-info"><i class="fa fa-check"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>12</td>
+                      <td>Komponen</td>
+                      <td class="text-info"><i class="fa fa-check"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>13</td>
+                      <td>Porsi APBD</td>
+                      <td class="text-info"><i class="fa fa-check"> Klik</i></td>
+                    </tr>
+                    <tr>
+                      <td>14</td>
+                      <td>Input PD</td>
+                      <td class="text-info"><i class="fa fa-check"> Klik</i></td>
+                    </tr>
+                  </table>
+                  </div>                  
+                </div>
+              </div>
+            </div>
+
+
+             <div class="col-md-8">
+              <div class="panel panel-default">
+                 <div class="panel panel-default" style="height: 490px;overflow: scroll;">
+                <div class="panel-body no-padder">
+                  <div class="wrapper-lg m-t-n-sm">
+                    <h5 class="inline font-semibold text-orange m-n ">Daftar Lampiran PD </h5>
+                  </div>
+                  <div class="tab-content tab-content-alt bg-white m-t-n-md">
+                  <table class="table">
+                    <tr>
+                      <th>No</th>
+                      <th>Nama OPD</th>
+                      <th>Lampiran</th>
+                    </tr>
+                    @foreach($skpd as $skpd)
+                    <tr>
+                      <td>{{$skpd->SKPD_ID}}</td>
+                      <td>{{$skpd->SKPD_KODE}} - {{$skpd->SKPD_NAMA}}</td>
+                      <td class="text-info"><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/apbd/perwal/2/{{$skpd->SKPD_ID}}" target="_blank"><i class="fa fa-file"> Tinjau</i></a></td>
+                    </tr>
+                    @endforeach
+                  </table>
+                  </div>                  
+                </div>
+              </div>
+              </div>
+            </div>
+
             </div>
           </div>
         </div>

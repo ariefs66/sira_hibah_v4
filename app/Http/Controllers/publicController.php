@@ -371,7 +371,9 @@ class publicController extends Controller
             $thp    = 0;
         }
 
-    	return View('public.index',['tahun'=>$tahun, 'info'=>$info, 'status'=>$status,'pagu'=>$pagu,'btl'=>$btl,'pdp'=>$pdp,'pby'=>$pby,'blv'=>$blv,'bln'=>$bln,'rkpd'=>$rkpd,'ppas'=>$ppas,'rapbd'=>$rapbd,'apbd'=>$apbd,'staff'=>$staff,'b1'=>$b1,'b2'=>$b2,'b3'=>$b3,'jabatan'=>$jabatan,'alamat'=>$alamat,'musren'=>$musren,'musrenin'=>$musrenIn,'musrentotal'=>$musrenTotal,'musrentotalin'=>$musrenTotalIn,'musrentotal'=>$musrenTotal,'rkua'=>$rkua,'pengumuman'=>$pengumuman,'thp'=>$thp]);
+        $skpd = Skpd::where('SKPD_TAHUN',$tahun)->orderBy('SKPD_KODE')->get();
+
+    	return View('public.index',['tahun'=>$tahun, 'info'=>$info, 'status'=>$status,'pagu'=>$pagu,'btl'=>$btl,'pdp'=>$pdp,'pby'=>$pby,'blv'=>$blv,'bln'=>$bln,'rkpd'=>$rkpd,'ppas'=>$ppas,'rapbd'=>$rapbd,'apbd'=>$apbd,'staff'=>$staff,'b1'=>$b1,'b2'=>$b2,'b3'=>$b3,'jabatan'=>$jabatan,'alamat'=>$alamat,'musren'=>$musren,'musrenin'=>$musrenIn,'musrentotal'=>$musrenTotal,'musrentotalin'=>$musrenTotalIn,'musrentotal'=>$musrenTotal,'rkua'=>$rkua,'pengumuman'=>$pengumuman,'thp'=>$thp, 'skpd'=>$skpd]);
     }
 
     public function getTahun(){
