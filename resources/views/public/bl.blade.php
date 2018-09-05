@@ -1,10 +1,10 @@
-@extends('budgeting.layout')
+@extends('public.layout')
 
 @section('content')
-<div id="content" class="app-content" role="main">
+<div id="content" role="main">
   <div class="hbox hbox-auto-xs hbox-auto-sm ng-scope">
     <div class="col">
-      <div class="app-content-body ">
+      <div class="app-content-body">
 
         <div class="bg-light lter">    
           <ul class="breadcrumb bg-white m-b-none">

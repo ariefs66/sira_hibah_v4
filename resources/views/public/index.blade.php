@@ -25,7 +25,11 @@
                   <div class="panel panel-default">
                     <div class="panel-body wrapper-sm">
                       <h2 class="m-t-xs text-orange font-semibold m-b-sm">{{ number_format($pagu,0,',','.') }}</h2>
+                      @if($pagu>0)
                       <p> <a href= "{{ url('/') }}/public/{{$tahun}}/{{$status}}/belanja-langsung">Belanja Langsung</a></p>
+                      @else
+                      <p> <a href= "{{ url('/') }}/public/{{$tahun}}/{{$status}}/belanja-langsung">Belanja Langsung</a></p>
+                      @endif
                     </div>
                   </div>
                 </div>
@@ -33,7 +37,12 @@
                   <div class="panel panel-default">
                     <div class="panel-body wrapper-sm">
                       <h2 class="m-t-xs text-orange font-semibold m-b-sm">{{ number_format($btl,0,',','.') }}</h2>
+                      @if($btl>0)
                       <p><a href= "{{ url('/') }}/public/{{$tahun}}/{{$status}}/belanja-tidak-langsung">Belanja Tidak Langsung</a></p>
+                      @else
+                      <p>Belanja Tidak Langsung</p>
+                      @endif
+                      
                     </div>
                   </div>
                 </div>
