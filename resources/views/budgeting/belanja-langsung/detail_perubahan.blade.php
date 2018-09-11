@@ -26,6 +26,9 @@
             <div class="panel bg-white">
               <div class="panel-heading wrapper-lg">
                 <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung : {{ $bl->kegiatan->KEGIATAN_NAMA }}</h5>
+                @if(Auth::user()->level == 0 || substr(Auth::user()->mod,7,1) == 0)
+                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/asistensi/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak Asistensi</a>
+                @endif
                 <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a>
                 <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{$bl->subunit->SKPD_ID}}/{{$bl->BL_ID}}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a>
               </div>
@@ -112,6 +115,9 @@
                         <label class="col-sm-10 font-semibold">: {{ $bl->lokasi->LOKASI_NAMA }}</label>
                       </div>                                  
                       <hr class="m-t-xl">
+                      @php
+                              $tahapan = \App\Model\Tahapan::where('TAHAPAN_TAHUN',$tahun)->where('TAHAPAN_STATUS',$status)->where('TAHAPAN_SELESAI',0)->orderBy('TAHAPAN_ID','desc')->value('TAHAPAN_ID');
+                            @endphp
                       @if(substr(Auth::user()->mod,7,1) == 1 or substr(Auth::user()->mod,7,1) == 3 or substr(Auth::user()->mod,7,1) == 5)
                       <div class="form-group">
                         <h5 class="text-orange">Indikator Kegiatan</h5>
@@ -131,8 +137,21 @@
                               <td>Capaian Program / Sasaran</td>
                               <td>{{ $outcome->OUTCOME_TOLAK_UKUR }}</td>
                               <td>{{ $outcome->OUTCOME_TARGET }} {{ $outcome->satuan->SATUAN_NAMA }}</td>
-                              <td><span class="text-success"><i class="fa fa-check"></i></span>&nbsp;<a title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a onclick="" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></td>
-                            </tr>
+                              @php
+                              $asis = \App\Model\Asistensi::where('TAHAPAN_ID',$tahapan)->where('VALUE',$outcome->OUTCOME_ID)->where('ASISTENSI_TIPE','OUTCOME_ID')->value('ASISTENSI_STATUS');
+                              @endphp
+                              @if(!empty($asis))
+                                @if($asis->ASISTENSI_STATUS==2)
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @elseif($asis->ASISTENSI_STATUS==1)
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @else
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @endif
+                              @else
+                              <td></td>
+                              @endif
+                              </tr>
                             @endforeach
                             @endif
                             <tr>
@@ -147,7 +166,20 @@
                               <td>Keluaran / Output</td>
                               <td>{{ $output->OUTPUT_TOLAK_UKUR }}</td>
                               <td>{{ $output->OUTPUT_TARGET }} {{ $output->satuan->SATUAN_NAMA }}</td>
-                              <td><span class="text-success"><i class="fa fa-check"></i></span>&nbsp;<a title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a onclick="" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></td>
+                              @php
+                              $asis = \App\Model\Asistensi::where('TAHAPAN_ID',$tahapan)->where('VALUE',$output->OUTPUT_ID)->where('ASISTENSI_TIPE','OUTPUT_ID')->first();
+                              @endphp
+                              @if(!empty($asis))
+                                @if($asis->ASISTENSI_STATUS==2)
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @elseif($asis->ASISTENSI_STATUS==1)
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @else
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @endif
+                              @else
+                              <td></td>
+                              @endif
                             </tr>
                             @endforeach
                             @endif
@@ -157,7 +189,20 @@
                               <td>Hasil / Outcome</td>
                               <td>{{ $impact->IMPACT_TOLAK_UKUR }}</td>
                               <td>{{ $impact->IMPACT_TARGET }} {{ $impact->satuan->SATUAN_NAMA }}</td>
-                              <td><span class="text-success"><i class="fa fa-check"></i></span>&nbsp;<a title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a onclick="" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></td>
+                              @php
+                              $asis = \App\Model\Asistensi::where('TAHAPAN_ID',$tahapan)->where('VALUE',$impact->IMPACT_ID)->where('ASISTENSI_TIPE','IMPACT_ID')->first();
+                              @endphp
+                              @if(!empty($asis))
+                                @if($asis->ASISTENSI_STATUS==2)
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @elseif($asis->ASISTENSI_STATUS==1)
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @else
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @endif
+                              @else
+                              <td></td>
+                              @endif
                             </tr>
                             @endforeach
                             @endif                            
@@ -173,6 +218,7 @@
                               <th width="20%">Indikator</th>
                               <th width="40%">Tolak Ukur</th>
                               <th width="15%">Target</th>
+                              <th width="5%">Keterangan</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -182,6 +228,20 @@
                               <td>Capaian Program / Sasaran</td>
                               <td>{{ $outcome->OUTCOME_TOLAK_UKUR }}</td>
                               <td>{{ $outcome->OUTCOME_TARGET }} {{ $outcome->satuan->SATUAN_NAMA }}</td>
+                              @php
+                              $asis = \App\Model\Asistensi::where('TAHAPAN_ID',$tahapan)->where('VALUE',$outcome->OUTCOME_ID)->where('ASISTENSI_TIPE','OUTCOME_ID')->first();
+                              @endphp
+                              @if(!empty($asis))
+                                @if($asis->ASISTENSI_STATUS==2)
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @elseif($asis->ASISTENSI_STATUS==1)
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @else
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @endif
+                              @else
+                              <td></td>
+                              @endif
                             </tr>
                             @endforeach
                             @endif
@@ -189,6 +249,7 @@
                               <td>Masukan / Input</td>
                               <td>Dana Yang Dibutuhan</td>
                               <td id="masukan">Rp. {{ number_format($rinciantotal,0,'.',',') }}</td>
+                              <td></td>
                             </tr>
                             @if($output)
                             @foreach($output as $output)
@@ -196,6 +257,20 @@
                               <td>Keluaran / Output</td>
                               <td>{{ $output->OUTPUT_TOLAK_UKUR }}</td>
                               <td>{{ $output->OUTPUT_TARGET }} {{ $output->satuan->SATUAN_NAMA }}</td>
+                              @php
+                              $asis = \App\Model\Asistensi::where('TAHAPAN_ID',$tahapan)->where('VALUE',$output->OUTPUT_ID)->where('ASISTENSI_TIPE','OUTPUT_ID')->first();
+                              @endphp
+                              @if(!empty($asis))
+                                @if($asis->ASISTENSI_STATUS==2)
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @elseif($asis->ASISTENSI_STATUS==1)
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @else
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @endif
+                              @else
+                              <td></td>
+                              @endif
                             </tr>
                             @endforeach
                             @endif
@@ -205,6 +280,20 @@
                               <td>Hasil / Outcome</td>
                               <td>{{ $impact->IMPACT_TOLAK_UKUR }}</td>
                               <td>{{ $impact->IMPACT_TARGET }} {{ $impact->satuan->SATUAN_NAMA }}</td>
+                              @php
+                              $asis = \App\Model\Asistensi::where('TAHAPAN_ID',$tahapan)->where('VALUE',$impact->IMPACT_ID)->where('ASISTENSI_TIPE','IMPACT_ID')->first();
+                              @endphp
+                              @if(!empty($asis))
+                                @if($asis->ASISTENSI_STATUS==2)
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @elseif($asis->ASISTENSI_STATUS==1)
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @else
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                                @endif
+                              @else
+                              <td></td>
+                              @endif
                             </tr>
                             @endforeach
                             @endif                            
@@ -212,7 +301,6 @@
                         </table>
                       </div>
                       @endif
-                      
                     </form>
                   </div>
                 </div>
@@ -1004,7 +1092,8 @@
           </div>
 
            <div class="form-group">
-            <label for="nama_program" class="col-md-3">Komentar</label>          
+            <label for="nama_program" class="col-md-3">Komentar</label>      
+           @if(Auth::user()->level == 0)    
             <div class="col-sm-9">
               <select ui-jq="chosen" class="w-full" id="asistensi_komentar" name="asistensi_komentar">
                     <option value="1">Tinjau ulang / rasionalisasi</option>
@@ -1012,6 +1101,11 @@
                     <option value="3">lainya</option>
               </select>
             </div> 
+            @else
+            <div class="col-sm-9">
+              <input type="text" class="form-control" readonly placeholder="Komentar" name="asistensi_anggaran" id="asistensi_komentar" name="asistensi_komentar" value="" disabled> 
+            </div> 
+            @endif
           </div>
 
           <div id="asistensi_catatan" class="form-group hide">
@@ -1021,8 +1115,10 @@
             </div> 
           </div>
 
+           @if(Auth::user()->level == 0)
           <hr class="m-t-xl">
          <a class="btn input-xl m-t-md btn-success pull-right" onclick="return simpanPrioritas()"><i class="fa fa-plus m-r-xs "></i>Simpan</a>
+         @endif
       </div>
     </form>
   </div>
@@ -1560,6 +1656,57 @@
                             $.alert(msg);
                           }
                     });
+                  }
+              }
+          }
+      });
+  }
+
+  function setIndikator(id){
+      var token        = $('#token').val();
+      @if(Auth::user()->level == 0)
+      var status       = 2;
+      var back       = 1;
+      @else
+      var status       = 1;
+      var back         = 0;
+      @endif
+      
+      $.confirm({
+          title: 'Validasi Asistensi!',
+          content: 'Yakin validasi data?',
+          buttons: {
+              Ya: {
+                  btnClass: 'btn-success',
+                  action: function(){
+                    $.ajax({
+                        url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/statusasistensi",
+                        type: "POST",
+                        data: {'_token'         : token,
+                              'ASISTENSI_ID'           : id,
+                              'STATUS'           : status},
+                        success: function(msg){                        
+                            $.alert(msg);
+                            location.reload();
+                          }
+                    });
+                  }
+              },
+              Tidak: {
+                btnClass: 'btn-warning',
+                  action: function(){
+                    if(back!=0){
+                      $.ajax({
+                          url: "{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/statusasistensi",
+                          type: "POST",
+                          data: {'_token'         : token,
+                                'ASISTENSI_ID'      : id,
+                                'STATUS'           : back},
+                          success: function(msg){                        
+                              $.alert(msg);
+                            }
+                      });
+                    }
                   }
               }
           }
