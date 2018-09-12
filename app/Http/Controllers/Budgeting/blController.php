@@ -2341,6 +2341,8 @@ class blController extends Controller
             $dt = $dt->where('ASISTENSI_STATUS', 0)->where('SKPD_ID', $skpd);
         }elseif($tipe==1){
             $dt = $dt->where('ASISTENSI_STATUS', 1)->where('SUB_ID', $skpd);
+        }elseif($tipe==0){
+            $dt = $dt->where('BL_ID', $skpd);
         }
         
         $dt = $dt->get();
@@ -5278,7 +5280,7 @@ class blController extends Controller
             $aksi .='<span class="text-success"><i class="fa fa-check"></i></span>';
             $aksi .='<a title="Masuk Keterangan" onclick="return inputRiview(\''.$data->SUBRINCIAN_ID.'\',\'rekening\')" class="action-edit"><i class="fa fa-bookmark-o"></i></a>';
             $aksi       .= '<a onclick="return showKomponen(\''.$data->SUBRINCIAN_ID.'\')" title="Daftar Komponen" class="action-edit"><i class="mi-eye"></i></a></div>';
-            //if($data->total>200000000){
+            if($data->total>200000000){
                 array_push($view, array(
                 'URAIAN'    => $data->subrincian->SUBRINCIAN_NAMA."<br><span class='text-orange'>".$data->RINCIAN_KETERANGAN."</span>",
                 'CLASS'   => ($realisasi>$data->total?1:0),
@@ -5291,7 +5293,7 @@ class blController extends Controller
             $total['SEBELUM'] = $total['SEBELUM'] + $sebelum;
             $total['SESUDAH'] = $total['SESUDAH'] + $data->total;
             $total['REALISASI'] = $total['REALISASI'] + $realisasi;
-            //}
+            }
         }
         foreach($data_ as $data_){
             $realisasi  = Realisasi::where('BL_ID',$id)->where('REKENING_ID',$data_->SUBRINCIAN_ID)->sum('REALISASI_TOTAL');

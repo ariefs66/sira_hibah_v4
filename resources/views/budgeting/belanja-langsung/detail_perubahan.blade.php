@@ -26,12 +26,25 @@
             <div class="panel bg-white">
               <div class="panel-heading wrapper-lg">
                 <h5 class="inline font-semibold text-orange m-n ">Belanja Langsung : {{ $bl->kegiatan->KEGIATAN_NAMA }}</h5>
-                @if(Auth::user()->level == 0 || substr(Auth::user()->mod,7,1) == 0)
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/asistensi/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak Asistensi</a>
-                @endif
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="btn btn-success pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a>
-                <a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{$bl->subunit->SKPD_ID}}/{{$bl->BL_ID}}" class="btn btn-info pull-right m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a>
+                
+                @if(Auth::user()->level == 0 && substr(Auth::user()->mod,7,1) == 6)
+                <div class="btn-group dropdown pull-right">
+                <button class="btn m-b-sm m-r-sm btn-info btn-addon" onclick="return showAsistensi('{{ $bl->BL_ID }}','0')" >Asistensi</button>
               </div>
+              @endif
+                <div class="btn-group dropdown pull-right">
+              <button class="btn m-b-sm m-r-sm btn-success btn-addon" data-toggle="dropdown">Cetak <i class="pull-right fa fa-sort-desc"></i></button>
+              <ul class="dropdown-menu">
+                <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/rka/{{ $bl->BL_ID }}" class="m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak RKA</a></li>
+                <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/lampiran/dpa/skpd221/{{$bl->subunit->SKPD_ID}}/{{$bl->BL_ID}}" class="m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak DPA</a></li>
+                @if(Auth::user()->level == 0 && substr(Auth::user()->mod,7,1) == 6)
+                <li class="divider"></li>
+                <li><a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/asistensi/{{ $bl->BL_ID }}" class="m-t-n-sm" target="_blank"><i class="fa fa-print"></i> Cetak Asistensi</a></li>
+                @endif
+              </ul>
+            </div>
+
+                </div>
                <!-- <div class="dropdown dropdown-blend pull-right m-t-n-sm">
                   <button class="btn btn-success dropdown-toggle " type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Cetak RKA <i class="fa fa-chevron-down"></i>
                   </button>
@@ -142,11 +155,11 @@
                               @endphp
                               @if(!empty($asis))
                                 @if($asis->ASISTENSI_STATUS==2)
-                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @elseif($asis->ASISTENSI_STATUS==1)
-                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @else
-                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $outcome->OUTCOME_ID }}','outcome');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @endif
                               @else
                               <td></td>
@@ -171,11 +184,11 @@
                               @endphp
                               @if(!empty($asis))
                                 @if($asis->ASISTENSI_STATUS==2)
-                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @elseif($asis->ASISTENSI_STATUS==1)
-                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @else
-                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $output->OUTPUT_ID }}','output');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @endif
                               @else
                               <td></td>
@@ -194,11 +207,11 @@
                               @endphp
                               @if(!empty($asis))
                                 @if($asis->ASISTENSI_STATUS==2)
-                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-success"><i class="fa fa-check" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @elseif($asis->ASISTENSI_STATUS==1)
-                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-warning"><i class="fa fa-asterisk" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @else
-                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
+                              <td><span class="text-danger"><i class="fa fa-close" onclick="return setIndikator('{{$asis->ASISTENSI_ID}}')"></i></span>&nbsp;<a target="_blank" title="Masuk Keterangan" onclick="return inputRiview('{{ $impact->IMPACT_ID }}','impact');" class="action-edit"><i class="fa fa-bookmark-o"></i></a>&nbsp;<a href="{{ url('/') }}/main/{{ $tahun }}/{{ $status }}/belanja-langsung/indikator/{{ $BL_ID }}" target="_blank" title="Indikator" class="action-edit"><i class="mi-eye"></i></a></td>
                                 @endif
                               @else
                               <td></td>
