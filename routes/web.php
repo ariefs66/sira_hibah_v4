@@ -119,6 +119,7 @@ Route::get('/main/{tahun}/{status}/belanja-langsung/rekening/{id}', 'Budgeting\b
 Route::get('/main/{tahun}/{status}/belanja-langsung/komponen/{id}/{blid}', 'Budgeting\blController@getKomponen');
 Route::get('/main/{tahun}/{status}/belanja-langsung/komponenterpakai/{id}/{blid}', 'Budgeting\blController@getKomponenTerpakai');
 Route::get('/main/{tahun}/{status}/belanja-langsung/asistensi/{id}/{tipe}', 'Budgeting\blController@getAsistensi');
+Route::get('/main/{tahun}/{status}/belanja-langsung/asistensi/{bl_id}', 'Budgeting\blController@cetakAsistensi');
 Route::get('/main/{tahun}/{status}/belanja-langsung/staff/{id}', 'Budgeting\blController@getStaff');
 Route::get('/main/{tahun}/{status}/belanja-langsung/log/{id}', 'Budgeting\blController@getLog');
 Route::get('/main/{tahun}/{status}/belanja-langsung/rekening-musrenbang/{id}', 'Budgeting\blController@getRekMusren');
